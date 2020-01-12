@@ -1,14 +1,16 @@
 package edu.imi.ir.eduimiws.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
 
 
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_CAR_ID",allocationSize = 1)
 @Table(schema = "CRM",name = "TBL_CAR")
-public class Car extends BaseEntity{
+public class Car extends BaseEntity implements Serializable {
 
 /*    @Id
     @Column(name = "ID")
