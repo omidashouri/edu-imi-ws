@@ -1,6 +1,7 @@
-package edu.imi.ir.eduimiws.domain;
+package edu.imi.ir.eduimiws.domain.crm;
 
 
+import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,11 +18,19 @@ import java.util.List;
 @Table(schema = "CRM",name = "TBL_CONTACT")
 public class ContactEntity extends BaseEntity {
 
-  @Column(name="ACCOUNT_ID")
-  private String accountId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "ACCOUNT_ID")
+  private AccountEntity accountId;
 
-  @Column(name="SALUTATION_ID")
-  private String salutationId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "SALUTATION_ID")
+  private ParameterEntity salutationId;
 
   @Column(name="FIRST_NAME")
   private String firstName;
@@ -53,8 +62,12 @@ public class ContactEntity extends BaseEntity {
   @Column(name="EMAIL")
   private String email;
 
-  @Column(name="CURRENCY_ID")
-  private String currencyId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "CURRENCY_ID")
+  private ParameterEntity currencyId;
 
   @Column(name="DEPARTMENT")
   private String department;
@@ -62,14 +75,16 @@ public class ContactEntity extends BaseEntity {
   @Column(name="ROLE")
   private String role;
 
-  @Column(name="MANAGER_ID")
-  private String managerId;
+  @OneToOne(optional = true)
+  @JoinColumn(name = "MANAGER_ID")
+  private ContactEntity managerId;
 
   @Column(name="MANAGER_PHONE")
   private String managerPhone;
 
-  @Column(name="ASSISTANT_ID")
-  private String assistantId;
+  @OneToOne(optional = true)
+  @JoinColumn(name = "ASSISTANT_ID")
+  private ContactEntity assistantId;
 
   @Column(name="ASSISTANT_PHONE")
   private String assistantPhone;
@@ -92,17 +107,30 @@ public class ContactEntity extends BaseEntity {
   @Column(name="DESCRIPTION")
   private String description;
 
-  @Column(name="PARENT_ID")
-  private String parentId;
+  @OneToOne(optional = true)
+  @JoinColumn(name = "PARENT_ID")
+  private ContactEntity parentId;
 
-  @Column(name="COUNTRY_ID")
-  private String countryId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "COUNTRY_ID")
+  private ParameterEntity countryId;
 
-  @Column(name="STATE_ID")
-  private String stateId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "STATE_ID")
+  private ParameterEntity stateId;
 
-  @Column(name="CITY_ID")
-  private String cityId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "CITY_ID")
+  private ParameterEntity cityId;
 
   @Column(name="ADDRESS_PHONE")
   private String addressPhone;
@@ -110,20 +138,31 @@ public class ContactEntity extends BaseEntity {
   @Column(name="ADDRESS")
   private String address;
 
-  @Column(name="COMPANY_ID")
-  private String companyId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "COMPANY_ID")
+  private CompanyEntity companyId;
 
-  @Column(name="ORGANIZATION_ID")
-  private String organizationId;
 
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "ORGANIZATION_ID")
+  private OrganizationEntity organizationId;
+
+//  TBL_LEAD
   @Column(name="LEAD_SOURCE_ID")
-  private String leadSourceId;
+  private Long leadSourceId;
 
+//  TBL_CAMPAIGNS
   @Column(name="CAMPAIGN_ID")
-  private String campaignId;
+  private Long campaignId;
 
   @Column(name="TEAM_ID")
-  private String teamId;
+  private Long teamId;
 
   @Column(name="SYNC_OUT_LOOK")
   private String syncOutLook;
@@ -146,11 +185,19 @@ public class ContactEntity extends BaseEntity {
   @Column(name="ALLOW_MAIL")
   private String allowMail;
 
-  @Column(name="ADDRESS_TYPE_ID")
-  private String addressTypeId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "ADDRESS_TYPE_ID")
+  private ParameterEntity addressTypeId;
 
-  @Column(name="USER_CREATOR_ID")
-  private String userCreatorId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "USER_CREATOR_ID")
+  private PersonEntity userCreatorId;
 
   @Column(name="FROM_CITY")
   private String fromCity;
@@ -164,8 +211,12 @@ public class ContactEntity extends BaseEntity {
   @Column(name="FATHER_NAME")
   private String fatherName;
 
-  @Column(name="BIRTH_CITY_ID")
-  private String birthCityId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "BIRTH_CITY_ID")
+  private ParameterEntity birthCityId;
 
   @Column(name="ACCESS_TYPE")
   private String accessType;
@@ -179,14 +230,26 @@ public class ContactEntity extends BaseEntity {
   @Column(name="LLAST_NAME")
   private String llastName;
 
-  @Column(name="RELIGION_ID")
-  private String religionId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "RELIGION_ID")
+  private ParameterEntity religionId;
 
-  @Column(name="MILITARY_SERVICE_ID")
-  private String militaryServiceId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "MILITARY_SERVICE_ID")
+  private ParameterEntity militaryServiceId;
 
-  @Column(name="EDU_LEVEL_ID")
-  private String eduLevelId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "EDU_LEVEL_ID")
+  private ParameterEntity eduLevelId;
 
   @Column(name="FIELD_NAME")
   private String fieldName;
@@ -206,17 +269,29 @@ public class ContactEntity extends BaseEntity {
   @Column(name="ENTRANCE_DATE")
   private String entranceDate;
 
-  @Column(name="CONTRACT_TYPE_ID")
-  private String contractTypeId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "CONTRACT_TYPE_ID")
+  private ParameterEntity contractTypeId;
 
   @Column(name="UNIVERSITY")
   private String university;
 
-  @Column(name="INSURANCE_KIND_ID")
-  private String insuranceKindId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "INSURANCE_KIND_ID")
+  private ParameterEntity insuranceKindId;
 
-  @Column(name="INSURANCE_BOX_ID")
-  private String insuranceBoxId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "INSURANCE_BOX_ID")
+  private ParameterEntity insuranceBoxId;
 
   @Column(name="GENDER1")
   private String gender1;
@@ -245,8 +320,12 @@ public class ContactEntity extends BaseEntity {
   @Column(name="CREATE_DATE")
   private String createDate;
 
-  @Column(name="USER_EDITOR_ID")
-  private String userEditorId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "USER_EDITOR_ID")
+  private PersonEntity userEditorId;
 
   @Column(name="CONVERT_DATE_WHO")
   private String convertDateWho;
@@ -257,8 +336,12 @@ public class ContactEntity extends BaseEntity {
   @Column(name="LFATHER_NAME")
   private String lfatherName;
 
-  @Column(name="LFROM_CITY")
-  private String lfromCity;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "LFROM_CITY")
+  private ParameterEntity lfromCity;
 
   @Column(name="LFROM_CITY_ID")
   private String lfromCityId;

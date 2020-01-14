@@ -1,12 +1,14 @@
-package edu.imi.ir.eduimiws.domain;
+package edu.imi.ir.eduimiws.domain.crm;
 
+
+import edu.imi.ir.eduimiws.domain.BaseEntity;
 
 import javax.persistence.*;
 
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "CRM", sequenceName = "SEQ_CAR_DETAIL_ID", allocationSize = 1)
 @Table(schema = "CRM", name = "TBL_CAR_DETAIL")
-public class CarDetail extends BaseEntity{
+public class CarDetail extends BaseEntity {
 
 
 /*    Unidirectional OneToMany, Just this side

@@ -1,6 +1,7 @@
-package edu.imi.ir.eduimiws.domain;
+package edu.imi.ir.eduimiws.domain.crm;
 
 
+import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_PERSON_INFO_COMMERCE_ID",allocationSize = 1)
+@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_PERSON_INFO_COMMERCE",allocationSize = 1)
 @Table(schema = "CRM",name = "TBL_PERSON_INFO_COMMERCE")
 public class PersonInfoCommerceEntity extends BaseEntity {
 

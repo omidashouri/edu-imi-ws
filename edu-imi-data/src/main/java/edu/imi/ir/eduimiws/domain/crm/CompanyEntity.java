@@ -1,11 +1,10 @@
-package edu.imi.ir.eduimiws.domain;
+package edu.imi.ir.eduimiws.domain.crm;
 
 
+import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -42,25 +41,37 @@ public class CompanyEntity extends BaseEntity {
   private String annualRevenue;
 
   @Column(name="EMPLOYEES")
-  private String employees;
+  private Long employees;
 
   @Column(name="OWNERSHIP")
   private String ownership;
 
-  @Column(name="PAREMETER_ID")
-  private String paremeterId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "PAREMETER_ID")
+  private ParameterEntity paremeterId;
 
   @Column(name="TERRITORY")
   private String territory;
 
-  @Column(name="LANGUAGE_ID")
-  private String languageId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "LANGUAGE_ID")
+  private LanguageEntity languageId;
 
   @Column(name="CALENDER_TYPE")
   private String calenderType;
 
-  @Column(name="MAIN_ACCOUNT_ID")
-  private String mainAccountId;
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "MAIN_ACCOUNT_ID")
+  private AccountEntity mainAccountId;
 
   @Column(name="IS_MAIN")
   private String isMain;
@@ -68,11 +79,10 @@ public class CompanyEntity extends BaseEntity {
   @Column(name="LOGO")
   private String logo;
 
-
-  @EqualsAndHashCode.Exclude
+/*  @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToMany(mappedBy = "companyId",cascade = CascadeType.PERSIST)   //with cascade when save user the address information also saved
-  private List<PersonEntity> personEntities= new ArrayList<>();
+  @OneToMany(mappedBy = "companyId",cascade = CascadeType.PERSIST)
+  private List<PersonEntity> personEntities= new ArrayList<>();*/
 
 
 

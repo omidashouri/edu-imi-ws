@@ -1,11 +1,14 @@
-package edu.imi.ir.eduimiws.domain;
+package edu.imi.ir.eduimiws.domain.crm;
 
 
+import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 
 @Getter
 @Setter
@@ -36,10 +39,10 @@ public class LanguageEntity extends BaseEntity {
   @Column(name="ENCODING")
   private String encoding;
 
-  @EqualsAndHashCode.Exclude
+/*  @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToMany(mappedBy = "selectedLanguage",cascade = CascadeType.PERSIST)   //with cascade when save user the address information also saved
-  private List<PersonEntity> personEntities= new ArrayList<>();
+  @OneToMany(mappedBy = "selectedLanguage",cascade = CascadeType.PERSIST)
+  private List<PersonEntity> personEntities= new ArrayList<>();*/
 
 
 }

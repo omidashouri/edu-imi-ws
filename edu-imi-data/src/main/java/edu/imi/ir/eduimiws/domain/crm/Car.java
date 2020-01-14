@@ -1,4 +1,6 @@
-package edu.imi.ir.eduimiws.domain;
+package edu.imi.ir.eduimiws.domain.crm;
+
+import edu.imi.ir.eduimiws.domain.BaseEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,0 +1,302 @@
+package edu.imi.ir.eduimiws.domain.crm;
+
+
+import edu.imi.ir.eduimiws.domain.BaseEntity;
+import lombok.*;
+
+import javax.persistence.*;
+
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@Entity
+@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_ACCOUNT_ID",allocationSize = 1)
+@Table(schema = "CRM",name="TBL_ACCOUNT")
+public class AccountEntity extends BaseEntity {
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "COMPANY_ID",nullable = false,columnDefinition = " long default 4 ")
+  private CompanyEntity companyId;
+
+  @OneToOne(optional = true)
+  @JoinColumn(name = "PARENT_ACCOUNT_ID")
+  private AccountEntity parentAccountId;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "PRIMARY_CONTACT_ID")
+  private ContactEntity primaryContactId;
+
+//  TBL_CATEGORY
+  @Column(name="RELATION_TYPE_ID")
+  private Long relationTypeId;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "LANGUAGE_ID")
+  private LanguageEntity languageId;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "CURRENCY_ID")
+  private ParameterEntity currencyId;
+
+  @Column(name="ACCOUNT_NAME")
+  private String accountName;
+
+  @Column(name="ACCOUNT_NUMBER")
+  private String accountNumber;
+
+  @Column(name="OWNERSHIP")
+  private String ownership;
+
+  @Column(name="ACCOUNT_TYPE")
+  private String accountType;
+
+  @Column(name="MAIN_PHONE")
+  private String mainPhone;
+
+  @Column(name="OTHER_PHONE")
+  private String otherPhone;
+
+  @Column(name="FAX_NUMBER")
+  private String faxNumber;
+
+  @Column(name="WEB_SITE")
+  private String webSite;
+
+  @Column(name="EMAIL")
+  private String email;
+
+  @Column(name="TICKER_SYMBOL")
+  private String tickerSymbol;
+
+  @Column(name="EMPLOYEES")
+  private String employees;
+
+  @Column(name="ANNUAL_REVENUE")
+  private String annualRevenue;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "COUNTRY_ID")
+  private ParameterEntity countryId;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "STATE_ID")
+  private ParameterEntity stateId;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "CITY_ID")
+  private ParameterEntity cityId;
+
+  @Column(name="ADDRESS_PHONE")
+  private String addressPhone;
+
+  @Column(name="ADDRESS")
+  private String address;
+
+  @Column(name="DESCRIPTION")
+  private String description;
+
+//  TBL_INDUSTRY
+  @Column(name="INDUSTRY_ID")
+  private Long industryId;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "ADDRESS_TYPE")
+  private ParameterEntity addressType;
+
+  @Column(name="ACCOUNT_LOGO")
+  private String accountLogo;
+
+  @Column(name="PRINT_LOGO")
+  private String printLogo;
+
+  @Column(name="PRINT_TITLE1")
+  private String printTitle1;
+
+  @Column(name="PRINT_TITLE2")
+  private String printTitle2;
+
+  @Column(name="PRINT_TITLE3")
+  private String printTitle3;
+
+  @Column(name="PRINT_ADDRESS_TITLE")
+  private String printAddressTitle;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "REGION_ID")
+  private ParameterEntity regionId;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "USER_CREATOR_ID")
+  private PersonEntity userCreatorId;
+
+  @Column(name="CREATE_DATE")
+  private String createDate;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "USER_LAST_EDITOR_ID")
+  private PersonEntity userLastEditorId;
+
+  @Column(name="LAST_EDIT_DATE")
+  private String lastEditDate;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "USER_FOLLOWER_ID")
+  private ContactEntity userFollowerId;
+
+  @Column(name="GENERAL_CODE")
+  private String generalCode;
+
+  @Column(name="SPECIFIC_CODE")
+  private String specificCode;
+
+  @Column(name="DETAILED_CODE")
+  private String detailedCode;
+
+  @Column(name="PRIMARY_SALES_MAN_ID")
+  private String primarySalesManId;
+
+  @Column(name="SECONDARY_SALES_MAN_ID")
+  private String secondarySalesManId;
+
+  @Column(name="PATH_ID")
+  private String pathId;
+
+  @Column(name="ACCESS_TYPE")
+  private String accessType;
+
+  @Column(name="VERIFIED")
+  private String verified;
+
+//  TBL_ACCOUNT_ADDITIONAL_INFO
+  @Column(name="ACCOUNT_ADDITIONAL_INFO_ID")
+  private Long accountAdditionalInfoId;
+
+  @Column(name="ADDRESS2")
+  private String address2;
+
+  @Column(name="ADDRESS3")
+  private String address3;
+
+  @Column(name="ACCOUNT_EN_NAME")
+  private String accountEnName;
+
+  @Column(name="STOCK_TYPE")
+  private String stockType;
+
+  @Column(name="IS_HOLDING")
+  private String isHolding;
+
+//  TBL_ORGANIZATION_TYPE
+  @Column(name="ORG_TYPE_ID")
+  private Long orgTypeId;
+
+  @Column(name="TYPE_OF_ACTIVITY")
+  private String typeOfActivity;
+
+  @Column(name="IS_IN_STOCK")
+  private String isInStock;
+
+  @Column(name="UTILIZATION_YEAR")
+  private String utilizationYear;
+
+  @Column(name="SITE_PHONE")
+  private String sitePhone;
+
+  @Column(name="SITE_FAX")
+  private String siteFax;
+
+  @Column(name="SITE_ADDRESS")
+  private String siteAddress;
+
+  @Column(name="STOCK_HOLDERS")
+  private String stockHolders;
+
+//  TBL_INPEA_ADDITIONAL_INFO
+  @Column(name="INPEA_ADDITIONAL_INFO")
+  private Long inpeaAdditionalInfo;
+
+  @Column(name="SUB_SYS")
+  private String subSys;
+
+  @Column(name="IBMC_ADDITIONAL_INFO")
+  private String ibmcAdditionalInfo;
+
+//  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "SITE_CITY_ID")
+  private ParameterEntity siteCityId;
+
+  @Column(name="SITE_STATE_ID")
+  private String siteStateId;
+
+  @Column(name="STOCK_OTHER_TYPE")
+  private String stockOtherType;
+
+  @Column(name="POST_CODE")
+  private String postCode;
+
+  @Column(name="PRE_PHONE")
+  private String prePhone;
+
+  @Column(name="ECONOMICAL_CODE")
+  private String economicalCode;
+
+  @Column(name="ORG_NATIONAL_CODE")
+  private String orgNationalCode;
+
+  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "EMPLOYEE_ID")
+  private ParameterEntity employeeId;
+
+  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "ANNUAL_REVENUE_ID")
+  private ParameterEntity annualRevenueId;
+
+}

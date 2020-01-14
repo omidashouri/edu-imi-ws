@@ -1,5 +1,6 @@
-package edu.imi.ir.eduimiws.domain;
+package edu.imi.ir.eduimiws.domain.crm;
 
+import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_PERSON_ID",allocationSize = 1)
 @Table(schema = "CRM",name = "TBL_PERSON")
-public class PersonEntity extends BaseEntity{
+public class PersonEntity extends BaseEntity {
 
     @Column(name="FIRST_NAME")
     private String firstName;
@@ -47,14 +48,14 @@ public class PersonEntity extends BaseEntity{
     @Column(name="LASTLOGINDATE")
     private String lastlogindate;
 
-    @Getter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "COMPANY_ID")
+    @JoinColumn(name = "COMPANY_ID",nullable = false,columnDefinition = " long default 4 ")
     private CompanyEntity companyId;
 
-    @Getter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
@@ -64,11 +65,11 @@ public class PersonEntity extends BaseEntity{
     @Column(name="SELECTED_SKIN")
     private String selectedSkin;
 
-    @Getter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "SELECTED_LANGUAGE")
+    @JoinColumn(name = "SELECTED_LANGUAGE",nullable = false,columnDefinition = " long default 1 ")
     private LanguageEntity selectedLanguage;
 
     @Column(name="EMAIL_PROCESS_TYPE")
@@ -83,7 +84,7 @@ public class PersonEntity extends BaseEntity{
     @Column(name="KIND")
     private String kind;
 
-    @Getter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
@@ -94,8 +95,12 @@ public class PersonEntity extends BaseEntity{
     @JoinColumn(name = "OWNER_ID")
     private PersonEntity ownerId;
 
-    @Column(name="ORGANIZATION_CLASS_ID")
-    private Long organizationClassId;
+//    @Getter(AccessLevel.NONE)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name="ORGANIZATION_CLASS_ID")
+    private OrganizationClassEntity organizationClassId;
 
     @Column(name="NOE_ESTEKHDAM")
     private String noeEstekhdam;
@@ -106,6 +111,10 @@ public class PersonEntity extends BaseEntity{
     @Column(name="SIGNATURE_IMG")
     private String signatureImg;
 
-    @Column(name="COMMERCE_ADDITIONAL_INFO")
-    private String commerceAdditionalInfo;
+//    @Getter(AccessLevel.NONE)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name="COMMERCE_ADDITIONAL_INFO")
+    private PersonInfoCommerceEntity commerceAdditionalInfo;
 }

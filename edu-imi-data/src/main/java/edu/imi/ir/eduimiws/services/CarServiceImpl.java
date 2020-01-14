@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.services;
 
 
-import edu.imi.ir.eduimiws.domain.Car;
+import edu.imi.ir.eduimiws.domain.crm.Car;
 import edu.imi.ir.eduimiws.repositories.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

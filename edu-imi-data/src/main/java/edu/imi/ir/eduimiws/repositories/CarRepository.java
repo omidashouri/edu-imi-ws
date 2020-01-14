@@ -1,5 +1,5 @@
 package edu.imi.ir.eduimiws.repositories;
-import edu.imi.ir.eduimiws.domain.Car;
+import edu.imi.ir.eduimiws.domain.crm.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

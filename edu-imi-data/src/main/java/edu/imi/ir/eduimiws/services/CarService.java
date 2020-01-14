@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.services;
 
-import edu.imi.ir.eduimiws.domain.Car;
+import edu.imi.ir.eduimiws.domain.crm.Car;
 
 import java.util.List;
 

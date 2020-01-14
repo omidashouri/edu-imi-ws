@@ -1,8 +1,8 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 
-import edu.imi.ir.eduimiws.domain.Car;
-import edu.imi.ir.eduimiws.domain.CarDetail;
+import edu.imi.ir.eduimiws.domain.crm.Car;
+import edu.imi.ir.eduimiws.domain.crm.CarDetail;
 import edu.imi.ir.eduimiws.services.CarDetailService;
 import edu.imi.ir.eduimiws.services.CarService;
 import org.springframework.web.bind.annotation.RequestMapping;
