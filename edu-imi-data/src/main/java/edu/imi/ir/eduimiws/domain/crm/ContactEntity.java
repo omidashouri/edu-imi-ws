@@ -5,8 +5,6 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -346,10 +344,10 @@ public class ContactEntity extends BaseEntity {
   @Column(name="LFROM_CITY_ID")
   private String lfromCityId;
 
-  @EqualsAndHashCode.Exclude
+/*  @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToMany(mappedBy = "contactId",cascade = CascadeType.PERSIST)   //with cascade when save user the address information also saved
-  private List<PersonEntity> personEntities= new ArrayList<>();
+  @OneToMany(mappedBy = "contactId",cascade = CascadeType.PERSIST)
+  private List<PersonEntity> personEntities= new ArrayList<>();*/
 
 
 }
