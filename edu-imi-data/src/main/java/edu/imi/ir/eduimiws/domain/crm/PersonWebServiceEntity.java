@@ -19,12 +19,21 @@ public class PersonWebServiceEntity extends BaseEntity {
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name = "PERSON_ID")
   private PersonEntity personId;
 
   @Column(name="PERSON_PUBLIC_ID")
   private String personPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @OneToOne
+  @JoinColumn(name = "CONTACT_ID")
+  private ContactEntity contactId;
+
+  @Column(name="CONTACT_PUBLIC_ID")
+  private String contactPublicId;
 
   @Column(name="ENCRYPTED_PASSWORD")
   private String encryptedPassword;

@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto implements Serializable {
+public class UserLoginDto implements Serializable {
 
     private static final long serialVersionUID = -1531319631086735618L;
     private Long id;
@@ -18,6 +18,7 @@ public class UserDto implements Serializable {
     @JsonProperty("user_public_id")
     private String personPublicId;
 
+    @JsonProperty("contact_public_id")
     private String contactPublicId;
 
     @JsonProperty("first_name")
