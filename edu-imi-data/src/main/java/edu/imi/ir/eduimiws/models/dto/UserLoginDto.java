@@ -13,7 +13,6 @@ import java.io.Serializable;
 public class UserLoginDto implements Serializable {
 
     private static final long serialVersionUID = -1531319631086735618L;
-    private Long id;
 
     @JsonProperty("user_public_id")
     private String personPublicId;

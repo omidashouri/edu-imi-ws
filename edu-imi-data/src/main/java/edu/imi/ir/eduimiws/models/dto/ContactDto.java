@@ -1,6 +1,5 @@
 package edu.imi.ir.eduimiws.models.dto;
 
-import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ContactDto implements Serializable {
 
-    private AccountEntity accountId;
+    private static final long serialVersionUID = 7055740784295092359L;
+
+    private AccountDto accountId;
 
     private ParameterDto salutationId;
 

@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonRepository extends PagingAndSortingRepository<PersonEntity,Long> {
+
+    PersonEntity findByPersonalCode(String userName);
+
+    PersonEntity findByContactId(Long contactId);
 }

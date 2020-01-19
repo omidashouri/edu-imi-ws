@@ -1,6 +1,5 @@
 package edu.imi.ir.eduimiws.models.dto;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,7 +53,7 @@ public class PersonDto implements Serializable {
 
     private OrganizationClassDto organizationPositionId;
 
-    private PersonEntity ownerId;
+    private PersonDto ownerId;
 
     private OrganizationClassDto organizationClassId;
 

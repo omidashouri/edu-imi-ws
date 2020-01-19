@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.security;
 
+import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
-import ir.omidashouri.mobileappws.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

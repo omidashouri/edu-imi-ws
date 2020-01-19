@@ -1,6 +1,13 @@
 package edu.imi.ir.eduimiws.services.crm;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 
-public interface PersonWebServiceService extends UserDetailsService {
+public interface PersonWebServiceService  {
+
+    PersonWebServiceEntity findByPersonId(Long personId);
+
+    PersonWebServiceEntity savePersonWebServiceEntity(PersonWebServiceEntity personWebServiceEntity);
+
+    PersonWebServiceEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity);
 }

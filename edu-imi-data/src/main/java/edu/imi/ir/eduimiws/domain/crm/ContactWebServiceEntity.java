@@ -20,6 +20,13 @@ public class ContactWebServiceEntity extends BaseEntity {
   @Column(name="CONTACT_PUBLIC_ID")
   private String contactPublicId;
 
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @OneToOne
+  @JoinColumn(name = "CONTACT_ID")
+  private ContactEntity contactId;
+
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
