@@ -2,8 +2,10 @@ package edu.imi.ir.eduimiws.configurations;
 
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+@Configuration
 public class AppConfig {
 
     @Bean

@@ -35,6 +35,9 @@ public class PersonWebServiceEntity extends BaseEntity {
   @Column(name="CONTACT_PUBLIC_ID")
   private String contactPublicId;
 
+  @Column(name = "USERNAME")
+  private String userName;
+
   @Column(name="ENCRYPTED_PASSWORD")
   private String encryptedPassword;
 
@@ -43,6 +46,9 @@ public class PersonWebServiceEntity extends BaseEntity {
 
   @Column(name="EMAIL_VERIFICATION_STATUS")
   private Boolean emailVerificationStatus;
+
+  @Column(name="MOBILE_VERIFICATION_STATUS")
+  private Boolean mobileVerificationStatus;
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude

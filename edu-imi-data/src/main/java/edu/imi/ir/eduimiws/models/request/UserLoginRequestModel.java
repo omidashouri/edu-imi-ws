@@ -14,6 +14,6 @@ public class UserLoginRequestModel {
 
 //    create this for user sign in request
 
-    private String email;
+    private String username;
     private String password;
 }

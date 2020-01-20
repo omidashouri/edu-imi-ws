@@ -4,14 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -28,19 +26,19 @@ public abstract class BaseEntity implements Serializable {
     protected Long id;
 
 //    add for test
-    @CreatedDate
+/*    @CreatedDate
     @CreationTimestamp
     @Column(updatable = false)
-    protected Instant created = Instant.now();
+    protected Instant created = Instant.now();*/
 
-    @LastModifiedDate
+/*    @LastModifiedDate
     @UpdateTimestamp
-    @Column(updatable = true)
-    protected Instant edited  = Instant.now();
+    @Column(updatable = false)
+    protected Instant edited  = Instant.now();*/
 
-    public BaseEntity(Long id) {
+/*    public BaseEntity(Long id) {
         this.id = id;
-    }
+    }*/
 
 /*   public BaseEntity() {
     }

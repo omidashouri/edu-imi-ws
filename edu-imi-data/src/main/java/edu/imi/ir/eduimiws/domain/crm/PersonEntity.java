@@ -61,6 +61,8 @@ public class PersonEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "CONTACT_ID")
     private ContactEntity contactId;
+/*    @Column(name="CONTACT_ID")
+    private Long contactId;*/
 
     @Column(name="SELECTED_SKIN")
     private String selectedSkin;

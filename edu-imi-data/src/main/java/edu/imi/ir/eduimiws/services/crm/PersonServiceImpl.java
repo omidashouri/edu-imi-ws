@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.exceptions.UserServiceException;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,11 @@ import org.springframework.stereotype.Service;
 public class PersonServiceImpl implements PersonService{
 
     private final PersonRepository personRepository;
+
+    @Override
+    public PersonEntity findById(Long id) {
+        return personRepository.findById(id).orElseThrow(()-> new UserServiceException("person not found for "+id));
+    }
 
     @Override
     public PersonEntity findByUserName(String userName) {

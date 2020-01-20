@@ -334,15 +334,16 @@ public class ContactEntity extends BaseEntity {
   @Column(name="LFATHER_NAME")
   private String lfatherName;
 
-//  @Getter(AccessLevel.NONE)
+
+  @Column(name="LFROM_CITY")
+  private String lfromCity;
+
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
-  @JoinColumn(name = "LFROM_CITY")
-  private ParameterEntity lfromCity;
-
-  @Column(name="LFROM_CITY_ID")
-  private String lfromCityId;
+  @JoinColumn(name = "LFROM_CITY_ID")
+  private ParameterEntity lfromCityId;
 
 /*  @EqualsAndHashCode.Exclude
   @ToString.Exclude

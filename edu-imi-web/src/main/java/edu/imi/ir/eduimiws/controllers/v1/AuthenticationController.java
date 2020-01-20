@@ -20,7 +20,7 @@ public class AuthenticationController {
                     @ResponseHeader(name = "authorization",
                     description = "Bearer <JWT value here>",
                     response = String.class),
-                    @ResponseHeader(name = "userID",
+                    @ResponseHeader(name = "userPublicId",
                     description = "<Public User ID value here>",
                     response = String.class)
             })

@@ -21,11 +21,15 @@ public class PersonWebServiceDto implements Serializable {
 
     private String contactPublicId;
 
+    private String userName;
+
     private String encryptedPassword;
 
     private String emailVerificationToken;
 
     private Boolean emailVerificationStatus;
+
+    private Boolean mobileVerificationStatus;
 
     private PersonDto creatorId;
 
