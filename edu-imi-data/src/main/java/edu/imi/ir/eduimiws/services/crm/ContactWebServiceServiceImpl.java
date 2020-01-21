@@ -25,7 +25,7 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
     public ContactWebServiceEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {
         ContactWebServiceEntity newContactWebService = new ContactWebServiceEntity();
         newContactWebService.setContactPublicId(publicContactId);
-//        newContactWebService.setContactId(person.getContactId());
+        newContactWebService.setContactId(person.getContactId());
         return contactWebServiceRepository.save(newContactWebService);
     }
 }

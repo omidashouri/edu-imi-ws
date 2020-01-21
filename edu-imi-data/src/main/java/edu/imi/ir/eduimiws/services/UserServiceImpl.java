@@ -63,17 +63,22 @@ public class UserServiceImpl implements UserService {
 
         PersonEntity user = personService.findByUserName(username);
 
-        if (null == user) {
+/*        if (users.isEmpty() || users.size() == 0) {
+            throw new UsernameNotFoundException("user name not found for " + username);
+        }*/
+
+        if (null==user) {
             throw new UsernameNotFoundException("user name not found for " + username);
         }
-
-
 
         PersonWebServiceEntity userWebServiceEntity = personWebServiceService.findByUserName(username);
 
         if (null == userWebServiceEntity) {
             publicContactId = generatePublicId();
             publicPersonId = generatePublicId();
+
+
+//            omiddo: check if had contact public id
 
             contactWebServiceEntity =
                     contactWebServiceService
@@ -87,14 +92,14 @@ public class UserServiceImpl implements UserService {
 //            generate public_person_id and public_contact_id
         }
 
-        if(null==userWebServiceEntity.getContactPublicId()){
+        if (null == userWebServiceEntity.getContactPublicId()) {
             publicContactId = generatePublicId();
             contactWebServiceEntity =
                     contactWebServiceService
                             .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
         }
 
-        if(null==userWebServiceEntity.getPersonPublicId()){
+        if (null == userWebServiceEntity.getPersonPublicId()) {
             publicPersonId = generatePublicId();
             userWebServiceEntity = personWebServiceService
                     .savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(publicPersonId,
@@ -128,7 +133,6 @@ public class UserServiceImpl implements UserService {
     private String generatePublicId() {
         return utils.generateUniquePublicUserId();
     }
-
 
 
 }

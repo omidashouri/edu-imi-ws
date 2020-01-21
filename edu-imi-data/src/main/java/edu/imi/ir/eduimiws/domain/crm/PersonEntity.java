@@ -51,14 +51,14 @@ public class PersonEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_ID",nullable = false,columnDefinition = " long default 4 ")
     private CompanyEntity companyId;
 
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACT_ID")
     private ContactEntity contactId;
 /*    @Column(name="CONTACT_ID")
@@ -70,7 +70,7 @@ public class PersonEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SELECTED_LANGUAGE",nullable = false,columnDefinition = " long default 1 ")
     private LanguageEntity selectedLanguage;
 
@@ -89,7 +89,7 @@ public class PersonEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="ORGANIZATION_POSITION_ID")
     private OrganizationClassEntity organizationPositionId;
 
@@ -100,7 +100,7 @@ public class PersonEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="ORGANIZATION_CLASS_ID")
     private OrganizationClassEntity organizationClassId;
 
@@ -116,7 +116,7 @@ public class PersonEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="COMMERCE_ADDITIONAL_INFO")
     private PersonInfoCommerceEntity commerceAdditionalInfo;
 }

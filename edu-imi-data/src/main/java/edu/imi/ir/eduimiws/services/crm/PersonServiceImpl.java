@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -21,9 +23,14 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     public PersonEntity findByUserName(String userName) {
-        PersonEntity personEntity = personRepository.findByPersonalCode(userName);
+        PersonEntity personEntity = personRepository.findByUsername(userName);
 //        omiddo: check person is not null or person is not duplicate
         return personEntity;
+    }
+
+    @Override
+    public List<PersonEntity> findAllByUserNameContaining(String userName) {
+        return personRepository.findAllByUserNameContaining(userName);
     }
 
     @Override
