@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 
+import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactWebServiceEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.repositories.crm.ContactWebServiceRepository;
@@ -27,5 +28,10 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
         newContactWebService.setContactPublicId(publicContactId);
         newContactWebService.setContactId(person.getContactId());
         return contactWebServiceRepository.save(newContactWebService);
+    }
+
+    @Override
+    public ContactWebServiceEntity findContactWebServiceEntityByContactEntity(ContactEntity contactEntity) {
+        return contactWebServiceRepository.findByContactId(contactEntity);
     }
 }

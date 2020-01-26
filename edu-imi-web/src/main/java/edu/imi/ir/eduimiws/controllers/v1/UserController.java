@@ -17,7 +17,7 @@ public class UserController {
     private final PersonWebServiceService personWebServiceService;
 
 
-    // http://localhost:8080/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
+    // http://localhost:8080/edu-imi-ws/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
     @GetMapping(path = "/{userPublicId}",
 //            make response as XML or JSON

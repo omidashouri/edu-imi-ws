@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.services;
 
+import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactWebServiceEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
@@ -74,25 +75,27 @@ public class UserServiceImpl implements UserService {
         PersonWebServiceEntity userWebServiceEntity = personWebServiceService.findByUserName(username);
 
         if (null == userWebServiceEntity) {
-            publicContactId = generatePublicId();
+
             publicPersonId = generatePublicId();
 
+            if(existContactPublicIdInContactWebServiceEntity(user.getContactId())){
+                publicContactId = generatePublicId();
+                contactWebServiceEntity =
+                        contactWebServiceService
+                                .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
+            } else{
+                contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntity(user.getContactId());
+            }
 
-//            omiddo: check if had contact public id
-
-            contactWebServiceEntity =
-                    contactWebServiceService
-                            .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
 
             userWebServiceEntity = personWebServiceService
                     .savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(publicPersonId,
                             contactWebServiceEntity.getContactPublicId(),
                             user);
-//                omiddo: generate exception if publicContactId or publicPersonId is null
-//            generate public_person_id and public_contact_id
         }
 
         if (null == userWebServiceEntity.getContactPublicId()) {
+
             publicContactId = generatePublicId();
             contactWebServiceEntity =
                     contactWebServiceService
@@ -127,6 +130,18 @@ public class UserServiceImpl implements UserService {
         newPersonWebService.setPersonId(user);
         newPersonWebService.setEncryptedPassword(user.getPassword());
         return personWebServiceService.savePersonWebServiceEntity(newPersonWebService);
+    }
+
+    private boolean existContactPublicIdInContactWebServiceEntity(ContactEntity contactEntity){
+        boolean exist = false;
+
+        ContactWebServiceEntity contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntity(contactEntity);
+
+        if(null==contactWebServiceEntity){
+            exist=true;
+        }
+
+        return exist;
     }
 
 

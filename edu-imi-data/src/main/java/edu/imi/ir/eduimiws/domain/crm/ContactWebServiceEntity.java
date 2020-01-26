@@ -23,13 +23,13 @@ public class ContactWebServiceEntity extends BaseEntity {
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CONTACT_ID")
   private ContactEntity contactId;
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CREATOR_ID")
   private PersonEntity creatorId;
 
@@ -38,7 +38,7 @@ public class ContactWebServiceEntity extends BaseEntity {
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "EDITOR_ID")
   private PersonEntity editorId;
 

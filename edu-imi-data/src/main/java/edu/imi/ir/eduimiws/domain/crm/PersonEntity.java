@@ -58,7 +58,7 @@ public class PersonEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "CONTACT_ID")
     private ContactEntity contactId;
 /*    @Column(name="CONTACT_ID")
