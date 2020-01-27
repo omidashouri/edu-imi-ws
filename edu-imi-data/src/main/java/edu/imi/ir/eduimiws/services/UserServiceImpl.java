@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
             publicPersonId = generatePublicId();
 
-            if(existContactPublicIdInContactWebServiceEntity(user.getContactId())){
+            if(!existContactPublicIdInContactWebServiceEntity(user.getContactId())){
                 publicContactId = generatePublicId();
                 contactWebServiceEntity =
                         contactWebServiceService
@@ -133,12 +133,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean existContactPublicIdInContactWebServiceEntity(ContactEntity contactEntity){
-        boolean exist = false;
+        boolean exist = true;
 
         ContactWebServiceEntity contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntity(contactEntity);
 
         if(null==contactWebServiceEntity){
-            exist=true;
+            exist=false;
         }
 
         return exist;

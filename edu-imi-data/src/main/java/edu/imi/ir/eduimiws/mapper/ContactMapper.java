@@ -14,7 +14,7 @@ public interface ContactMapper {
     ContactMapper INSTANCE = Mappers.getMapper(ContactMapper.class);
 
     @Mappings({
-            @Mapping(source = "accountId",target = "accountId"),
+            @Mapping(source = "accountId",target = "accountId",ignore = true),
             @Mapping(source = "salutationId",target = "salutationId"),
             @Mapping(source = "firstName",target = "firstName"),
             @Mapping(source = "middleName",target = "middleName"),

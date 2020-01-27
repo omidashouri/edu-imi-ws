@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -48,11 +51,13 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
     @Override
     public PersonWebServiceEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity) {
         PersonWebServiceEntity newPersonWebService = new PersonWebServiceEntity();
-//        newPersonWebService.setContactId(personEntity.getContactId());
+        newPersonWebService.setContactId(personEntity.getContactId());
         newPersonWebService.setContactPublicId(publicContactId);
         newPersonWebService.setPersonPublicId(publicPersonId);
         newPersonWebService.setPersonId(personEntity);
+        newPersonWebService.setUserName(personEntity.getUsername());
         newPersonWebService.setEncryptedPassword(personEntity.getPassword());
+        newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
         return personWebServiceRepository.save(newPersonWebService);
     }
 }

@@ -173,8 +173,8 @@ public class ContactDto implements Serializable {
 
     private String lfatherName;
 
-    private ParameterDto lfromCity;
+    private String lfromCity;
 
-    private String lfromCityId;
+    private ParameterDto lfromCityId;
 
 }

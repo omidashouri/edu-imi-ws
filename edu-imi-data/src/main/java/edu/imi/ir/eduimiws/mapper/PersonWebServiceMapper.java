@@ -16,16 +16,16 @@ public interface PersonWebServiceMapper {
     @Mappings({
            @Mapping(source = "personId",target = "personId"),
            @Mapping(source = "personPublicId",target = "personPublicId"),
-           @Mapping(source = "contactId",target = "contactId"),
+           @Mapping(source = "contactId",target = "contactId",ignore = true),
            @Mapping(source = "contactPublicId",target = "contactPublicId"),
            @Mapping(source = "userName",target = "userName"),
            @Mapping(source = "encryptedPassword",target = "encryptedPassword"),
            @Mapping(source = "emailVerificationToken",target = "emailVerificationToken"),
            @Mapping(source = "emailVerificationStatus",target = "emailVerificationStatus"),
            @Mapping(source = "mobileVerificationStatus",target = "mobileVerificationStatus"),
-           @Mapping(source = "creatorId",target = "creatorId"),
+           @Mapping(source = "creatorId",target = "creatorId",ignore = true),
            @Mapping(source = "createDateTs",target = "createDateTs"),
-           @Mapping(source = "editorId",target = "editorId"),
+           @Mapping(source = "editorId",target = "editorId",ignore = true),
            @Mapping(source = "editDateTs",target = "editDateTs"),
            @Mapping(source = "description",target = "description")
     })
