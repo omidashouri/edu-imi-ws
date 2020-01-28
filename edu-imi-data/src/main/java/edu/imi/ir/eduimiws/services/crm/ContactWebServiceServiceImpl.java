@@ -8,11 +8,13 @@ import edu.imi.ir.eduimiws.repositories.crm.ContactWebServiceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class ContactWebServiceServiceImpl implements ContactWebServiceService {

@@ -141,7 +141,7 @@ public class ContactEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "COMPANY_ID")
   private CompanyEntity companyId;
 

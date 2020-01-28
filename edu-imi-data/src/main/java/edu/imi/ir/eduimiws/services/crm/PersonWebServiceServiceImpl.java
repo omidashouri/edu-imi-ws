@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.Date;
 
-@Transactional
 @Service
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class PersonWebServiceServiceImpl implements PersonWebServiceService{
