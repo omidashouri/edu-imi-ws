@@ -2,10 +2,7 @@ package edu.imi.ir.eduimiws.mapper;
 
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.models.dto.ContactDto;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -14,7 +11,8 @@ public interface ContactMapper {
     ContactMapper INSTANCE = Mappers.getMapper(ContactMapper.class);
 
     @Mappings({
-            @Mapping(source = "accountId",target = "accountId",ignore = true),
+            @Mapping(source = "accountId",target = "accountId"),
+//            @Mapping(source = "accountIdT",target = "accountId.id"),
             @Mapping(source = "salutationId",target = "salutationId"),
             @Mapping(source = "firstName",target = "firstName"),
             @Mapping(source = "middleName",target = "middleName"),
@@ -97,8 +95,8 @@ public interface ContactMapper {
             @Mapping(source = "lfromCity",target = "lfromCity"),
             @Mapping(source = "lfromCityId",target = "lfromCityId")
     })
-    ContactEntity ContactDtoToContactEntity(ContactDto contactDto);
+    ContactEntity ContactDtoToContactEntity(ContactDto contactDto , @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    ContactDto ContactEntityToContactDto(ContactEntity contactEntity);
+    ContactDto ContactEntityToContactDto(ContactEntity contactEntity, @Context CycleAvoidingMappingContext context);
 }

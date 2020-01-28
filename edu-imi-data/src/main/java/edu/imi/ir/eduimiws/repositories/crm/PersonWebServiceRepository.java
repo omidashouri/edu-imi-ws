@@ -9,6 +9,7 @@ public interface PersonWebServiceRepository extends PagingAndSortingRepository<P
 
     PersonWebServiceEntity findByPersonId(Long personId);
 
+
     PersonWebServiceEntity findByUserName(String userName);
 
 }

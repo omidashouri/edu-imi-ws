@@ -5,6 +5,8 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -46,10 +48,10 @@ public class OrganizationClassEntity extends BaseEntity {
     @Column(name="EDIT_DATE")
     private String editDate;
 
-/*    @EqualsAndHashCode.Exclude
+    @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "organizationPositionId",cascade = CascadeType.PERSIST)
-    private List<PersonEntity> personEntities= new ArrayList<>();*/
+    @OneToMany(mappedBy = "organizationPositionId",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    private List<PersonEntity> personEntities= new ArrayList<>();
 
 
 }

@@ -24,6 +24,8 @@ public class AccountEntity extends BaseEntity {
   @JoinColumn(name = "COMPANY_ID",nullable = false,columnDefinition = " long default 4 ")
   private CompanyEntity companyId;
 
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
   @OneToOne(optional = true)
   @JoinColumn(name = "PARENT_ACCOUNT_ID")
   private AccountEntity parentAccountId;

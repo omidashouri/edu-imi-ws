@@ -51,7 +51,7 @@ public class PersonEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "COMPANY_ID",nullable = false,columnDefinition = " long default 4 ")
     private CompanyEntity companyId;
 
@@ -89,10 +89,12 @@ public class PersonEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="ORGANIZATION_POSITION_ID")
     private OrganizationClassEntity organizationPositionId;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToOne(optional = true)
     @JoinColumn(name = "OWNER_ID")
     private PersonEntity ownerId;

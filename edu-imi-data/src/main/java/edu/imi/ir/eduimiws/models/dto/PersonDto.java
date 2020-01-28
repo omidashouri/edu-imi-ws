@@ -13,6 +13,8 @@ public class PersonDto implements Serializable {
 
     private static final long serialVersionUID = 1906759965943558749L;
 
+    private Long id;
+
     private String firstName;
 
     private String lastName;

@@ -13,6 +13,7 @@ public class AccountDto implements Serializable {
 
     private static final long serialVersionUID = -7634450278509108686L;
 
+    private Long id;
 
     private CompanyDto companyId;
 

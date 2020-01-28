@@ -13,11 +13,15 @@ public class PersonWebServiceDto implements Serializable {
 
     private static final long serialVersionUID = 3509814162285417174L;
 
-    private PersonDto personId;
+//    private PersonDto personId;
+
+    private Long personIdT;
 
     private String personPublicId;
 
-    private ContactDto contactId;
+//    private ContactDto contactId;
+
+    private Long contactIdT;
 
     private String contactPublicId;
 
@@ -31,11 +35,15 @@ public class PersonWebServiceDto implements Serializable {
 
     private Boolean mobileVerificationStatus;
 
-    private PersonDto creatorId;
+//    private PersonDto creatorId;
+
+    private Long creatorIdT;
 
     private java.sql.Timestamp createDateTs;
 
-    private PersonDto editorId;
+//    private PersonDto editorId;
+
+    private Long editorIdT;
 
     private java.sql.Timestamp editDateTs;
 

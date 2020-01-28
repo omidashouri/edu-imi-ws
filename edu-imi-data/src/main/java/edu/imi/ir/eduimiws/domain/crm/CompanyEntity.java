@@ -5,6 +5,8 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -79,12 +81,15 @@ public class CompanyEntity extends BaseEntity {
   @Column(name="LOGO")
   private String logo;
 
-/*  @EqualsAndHashCode.Exclude
+  @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToMany(mappedBy = "companyId",cascade = CascadeType.PERSIST)
-  private List<PersonEntity> personEntities= new ArrayList<>();*/
+  @OneToMany(mappedBy = "companyId",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+  private List<PersonEntity> personEntities= new ArrayList<>();
 
-
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @OneToMany(mappedBy = "companyId",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+  private List<ContactEntity> contactEntities= new ArrayList<>();
 
 
 }

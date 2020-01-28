@@ -4,6 +4,7 @@ import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactWebServiceEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.PersonWebServiceMapper;
 import edu.imi.ir.eduimiws.models.dto.PersonWebServiceDto;
 import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("user name not found for " + userName);
         }
 
-        PersonWebServiceDto userWSDto = personWebServiceMapper.PersonWebServiceEntityToPersonWebServiceDto(userWS);
+        PersonWebServiceDto userWSDto = personWebServiceMapper.PersonWebServiceEntityToPersonWebServiceDto(userWS,new CycleAvoidingMappingContext());
         return userWSDto;
     }
 

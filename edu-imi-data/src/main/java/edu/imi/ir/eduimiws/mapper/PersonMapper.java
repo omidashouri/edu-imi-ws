@@ -2,10 +2,7 @@ package edu.imi.ir.eduimiws.mapper;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.models.dto.PersonDto;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -42,8 +39,8 @@ public interface PersonMapper {
             @Mapping(source = "commerceAdditionalInfo",target = "commerceAdditionalInfo")
 
     })
-    PersonEntity PersonDtoToPersonEntity(PersonDto personDto);
+    PersonEntity PersonDtoToPersonEntity(PersonDto personDto, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PersonDto PersonEntityToPersonDto(PersonEntity personEntity);
+    PersonDto PersonEntityToPersonDto(PersonEntity personEntity, @Context CycleAvoidingMappingContext context);
 }

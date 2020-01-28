@@ -5,6 +5,8 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -105,7 +107,7 @@ public class ContactEntity extends BaseEntity {
   @Column(name="DESCRIPTION")
   private String description;
 
-  @OneToOne(optional = true,fetch = FetchType.LAZY)
+  @OneToOne(optional = true)
   @JoinColumn(name = "PARENT_ID")
   private ContactEntity parentId;
 
@@ -139,7 +141,7 @@ public class ContactEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "COMPANY_ID")
   private CompanyEntity companyId;
 
@@ -345,10 +347,10 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "LFROM_CITY_ID")
   private ParameterEntity lfromCityId;
 
-/*  @EqualsAndHashCode.Exclude
+  @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToMany(mappedBy = "contactId",cascade = CascadeType.PERSIST)
-  private List<PersonEntity> personEntities= new ArrayList<>();*/
+  @OneToMany(mappedBy = "contactId",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+  private List<PersonEntity> personEntities= new ArrayList<>();
 
 
 }

@@ -13,7 +13,11 @@ public class ContactDto implements Serializable {
 
     private static final long serialVersionUID = 7055740784295092359L;
 
+    private Long id;
+
     private AccountDto accountId;
+
+    private Long accountIdT;
 
     private ParameterDto salutationId;
 
