@@ -18,7 +18,7 @@ public class AuthenticationController {
             message = "Response Headers",
             responseHeaders = {
                     @ResponseHeader(name = "authorization",
-                    description = "Bearer <JWT value here>",
+                    description = "IMI <JWT value here>",
                     response = String.class),
                     @ResponseHeader(name = "userPublicId",
                     description = "<Public User ID value here>",
