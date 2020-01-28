@@ -6,6 +6,22 @@ import lombok.*;
 
 import javax.persistence.*;
 
+
+@NamedEntityGraph(name = "personWebServiceUserGraph", attributeNodes = {
+        @NamedAttributeNode("personIdT"),
+        @NamedAttributeNode("personPublicId"),
+        @NamedAttributeNode("contactIdT"),
+        @NamedAttributeNode("contactPublicId"),
+        @NamedAttributeNode("userName"),
+        @NamedAttributeNode("encryptedPassword"),
+        @NamedAttributeNode("emailVerificationToken"),
+        @NamedAttributeNode("emailVerificationStatus"),
+        @NamedAttributeNode("mobileVerificationStatus"),
+        @NamedAttributeNode("creatorIdT"),
+        @NamedAttributeNode("createDateTs"),
+        @NamedAttributeNode("editorIdT"),
+        @NamedAttributeNode("editDateTs"),
+        @NamedAttributeNode("description")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +39,9 @@ public class PersonWebServiceEntity extends BaseEntity {
   @JoinColumn(name = "PERSON_ID")
   private PersonEntity personId;
 
+  @Column(name="PERSON_ID",insertable = false,updatable = false)
+  private Long personIdT;
+
   @Column(name="PERSON_PUBLIC_ID")
   private String personPublicId;
 
@@ -31,6 +50,9 @@ public class PersonWebServiceEntity extends BaseEntity {
   @OneToOne
   @JoinColumn(name = "CONTACT_ID")
   private ContactEntity contactId;
+
+  @Column(name="CONTACT_ID",insertable = false,updatable = false)
+  private Long contactIdT;
 
   @Column(name="CONTACT_PUBLIC_ID")
   private String contactPublicId;
@@ -56,6 +78,9 @@ public class PersonWebServiceEntity extends BaseEntity {
   @JoinColumn(name = "CREATOR_ID")
   private PersonEntity creatorId;
 
+  @Column(name="CREATOR_ID",insertable = false,updatable = false)
+  private Long creatorIdT;
+
   @Column(name="CREATE_DATE_TS")
   private java.sql.Timestamp createDateTs;
 
@@ -64,6 +89,9 @@ public class PersonWebServiceEntity extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "EDITOR_ID")
   private PersonEntity editorId;
+
+  @Column(name="EDITOR_ID",insertable = false,updatable = false)
+  private Long editorIdT;
 
   @Column(name="EDIT_DATE_TS")
   private java.sql.Timestamp editDateTs;

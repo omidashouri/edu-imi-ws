@@ -5,6 +5,13 @@ import lombok.*;
 
 import javax.persistence.*;
 
+
+@NamedEntityGraph(name = "personUserGraph", attributeNodes = {
+        @NamedAttributeNode("firstName"),
+        @NamedAttributeNode("lastName"),
+        @NamedAttributeNode("username"),
+        @NamedAttributeNode("contactIdT"),
+        @NamedAttributeNode("companyIdT")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -55,14 +62,18 @@ public class PersonEntity extends BaseEntity {
     @JoinColumn(name = "COMPANY_ID",nullable = false,columnDefinition = " long default 4 ")
     private CompanyEntity companyId;
 
+    @Column(name="COMPANY_ID",insertable = false,updatable = false)
+    private Long companyIdT;
+
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACT_ID")
     private ContactEntity contactId;
-/*    @Column(name="CONTACT_ID")
-    private Long contactId;*/
+
+    @Column(name="CONTACT_ID",insertable = false,updatable = false)
+    private Long contactIdT;
 
     @Column(name="SELECTED_SKIN")
     private String selectedSkin;

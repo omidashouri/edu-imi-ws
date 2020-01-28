@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.repositories.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +13,7 @@ import java.util.List;
 public interface PersonRepository extends PagingAndSortingRepository<PersonEntity,Long> {
 
 
+    @EntityGraph("personUserGraph")
     PersonEntity findByUsername(String userName);
 
     @Query(value = "Select p from PersonEntity p where p.personalCode = :username",
