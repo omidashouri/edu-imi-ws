@@ -15,11 +15,11 @@ public class ContactDto implements Serializable {
 
     private Long id;
 
-    private AccountDto accountId;
+    private AccountDto account;
 
-    private Long accountIdT;
+    private Long accountId;
 
-    private ParameterDto salutationId;
+    private ParameterDto salutation;
 
     private String firstName;
 
@@ -41,17 +41,17 @@ public class ContactDto implements Serializable {
 
     private String email;
 
-    private ParameterDto currencyId;
+    private ParameterDto currency;
 
     private String department;
 
     private String role;
 
-    private ContactDto managerId;
+    private ContactDto manager;
 
     private String managerPhone;
 
-    private ContactDto assistantId;
+    private ContactDto assistant;
 
     private String assistantPhone;
 
@@ -67,21 +67,21 @@ public class ContactDto implements Serializable {
 
     private String description;
 
-    private ContactDto parentId;
+    private ContactDto parent;
 
-    private ParameterDto countryId;
+    private ParameterDto country;
 
-    private ParameterDto stateId;
+    private ParameterDto state;
 
-    private ParameterDto cityId;
+    private ParameterDto city;
 
     private String addressPhone;
 
     private String address;
 
-    private CompanyDto companyId;
+    private CompanyDto company;
 
-    private OrganizationDto organizationId;
+    private OrganizationDto organization;
 
     private Long leadSourceId;
 
@@ -103,9 +103,9 @@ public class ContactDto implements Serializable {
 
     private String allowMail;
 
-    private ParameterDto addressTypeId;
+    private ParameterDto addressType;
 
-    private PersonDto userCreatorId;
+    private PersonDto userCreator;
 
     private String fromCity;
 
@@ -115,7 +115,7 @@ public class ContactDto implements Serializable {
 
     private String fatherName;
 
-    private ParameterDto birthCityId;
+    private ParameterDto birthCity;
 
     private String accessType;
 
@@ -125,11 +125,11 @@ public class ContactDto implements Serializable {
 
     private String llastName;
 
-    private ParameterDto religionId;
+    private ParameterDto religion;
 
-    private ParameterDto militaryServiceId;
+    private ParameterDto militaryService;
 
-    private ParameterDto eduLevelId;
+    private ParameterDto eduLevel;
 
     private String fieldName;
 
@@ -143,13 +143,13 @@ public class ContactDto implements Serializable {
 
     private String entranceDate;
 
-    private ParameterDto contractTypeId;
+    private ParameterDto contractType;
 
     private String university;
 
-    private ParameterDto insuranceKindId;
+    private ParameterDto insuranceKind;
 
-    private ParameterDto insuranceBoxId;
+    private ParameterDto insuranceBox;
 
     private String gender1;
 
@@ -169,7 +169,7 @@ public class ContactDto implements Serializable {
 
     private String createDate;
 
-    private PersonDto userEditorId;
+    private PersonDto userEditor;
 
     private String convertDateWho;
 
@@ -179,6 +179,6 @@ public class ContactDto implements Serializable {
 
     private String lfromCity;
 
-    private ParameterDto lfromCityId;
+    private ParameterDto lfromCityEntity;
 
 }

@@ -81,13 +81,13 @@ public class UserServiceImpl implements UserService {
 
             publicPersonId = generatePublicId();
 
-            if(!existContactPublicIdInContactWebServiceEntity(user.getContactId())){
+            if(!existContactPublicIdInContactWebServiceEntity(user.getContact())){
                 publicContactId = generatePublicId();
                 contactWebServiceEntity =
                         contactWebServiceService
                                 .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
             } else{
-                contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntity(user.getContactId());
+                contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntity(user.getContact());
             }
 
 
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
         newPersonWebService.setContactPublicId(publicContactId);
         newPersonWebService.setPersonPublicId(publicPersonId);
         newPersonWebService.setUserName(user.getUsername());
-        newPersonWebService.setPersonId(user);
+        newPersonWebService.setPerson(user);
         newPersonWebService.setEncryptedPassword(user.getPassword());
         return personWebServiceService.savePersonWebServiceEntity(newPersonWebService);
     }

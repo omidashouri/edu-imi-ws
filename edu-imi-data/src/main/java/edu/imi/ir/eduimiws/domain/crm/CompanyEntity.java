@@ -51,9 +51,9 @@ public class CompanyEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "PAREMETER_ID")
-  private ParameterEntity paremeterId;
+  private ParameterEntity paremeter;
 
   @Column(name="TERRITORY")
   private String territory;
@@ -61,9 +61,9 @@ public class CompanyEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "LANGUAGE_ID")
-  private LanguageEntity languageId;
+  private LanguageEntity language;
 
   @Column(name="CALENDER_TYPE")
   private String calenderType;
@@ -71,9 +71,9 @@ public class CompanyEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "MAIN_ACCOUNT_ID")
-  private AccountEntity mainAccountId;
+  private AccountEntity mainAccount;
 
   @Column(name="IS_MAIN")
   private String isMain;
@@ -83,13 +83,33 @@ public class CompanyEntity extends BaseEntity {
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToMany(mappedBy = "companyId",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "company",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
   private List<PersonEntity> personEntities= new ArrayList<>();
+
+  public void addPerson(PersonEntity person){
+    if(null != person){
+      if(null == personEntities){
+        personEntities = new ArrayList<>();
+      }
+      person.setCompany(this);
+      personEntities.add(person);
+    }
+  }
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToMany(mappedBy = "companyId",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "company",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
   private List<ContactEntity> contactEntities= new ArrayList<>();
+
+  public void addContact(ContactEntity contact){
+    if(null != contact){
+      if(null == contactEntities){
+        contactEntities = new ArrayList<>();
+      }
+      contact.setCompany(this);
+      contactEntities.add(contact);
+    }
+  }
 
 
 }

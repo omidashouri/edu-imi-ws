@@ -10,8 +10,8 @@ import javax.persistence.*;
         @NamedAttributeNode("firstName"),
         @NamedAttributeNode("lastName"),
         @NamedAttributeNode("username"),
-        @NamedAttributeNode("contactIdT"),
-        @NamedAttributeNode("companyIdT")})
+        @NamedAttributeNode("contactId"),
+        @NamedAttributeNode("companyId")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -60,20 +60,30 @@ public class PersonEntity extends BaseEntity {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_ID",nullable = false,columnDefinition = " long default 4 ")
-    private CompanyEntity companyId;
+    private CompanyEntity company;
 
     @Column(name="COMPANY_ID",insertable = false,updatable = false)
-    private Long companyIdT;
+    private Long companyId;
 
-//    @Getter(AccessLevel.NONE)
+    @Transient
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACT_ID")
-    private ContactEntity contactId;
+    private ContactEntity contact;
 
     @Column(name="CONTACT_ID",insertable = false,updatable = false)
-    private Long contactIdT;
+    private Long contactId;
+
+    @Transient
+    public Long getContactId() {
+        return contactId;
+    }
 
     @Column(name="SELECTED_SKIN")
     private String selectedSkin;
@@ -102,20 +112,20 @@ public class PersonEntity extends BaseEntity {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="ORGANIZATION_POSITION_ID")
-    private OrganizationClassEntity organizationPositionId;
+    private OrganizationClassEntity organizationPosition;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToOne(optional = true)
     @JoinColumn(name = "OWNER_ID")
-    private PersonEntity ownerId;
+    private PersonEntity owner;
 
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="ORGANIZATION_CLASS_ID")
-    private OrganizationClassEntity organizationClassId;
+    private OrganizationClassEntity organizationClass;
 
     @Column(name="NOE_ESTEKHDAM")
     private String noeEstekhdam;

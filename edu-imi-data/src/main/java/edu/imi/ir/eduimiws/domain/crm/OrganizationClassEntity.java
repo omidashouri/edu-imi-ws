@@ -31,16 +31,16 @@ public class OrganizationClassEntity extends BaseEntity {
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID")
-    private PersonEntity creatorId;
+    private PersonEntity creator;
 
 //    @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EDITOR_ID")
-    private PersonEntity editorId;
+    private PersonEntity editor;
 
     @Column(name="CREATE_DATE")
     private String createDate;
@@ -50,7 +50,7 @@ public class OrganizationClassEntity extends BaseEntity {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "organizationPositionId",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "organizationPosition",cascade = CascadeType.MERGE)
     private List<PersonEntity> personEntities= new ArrayList<>();
 
 

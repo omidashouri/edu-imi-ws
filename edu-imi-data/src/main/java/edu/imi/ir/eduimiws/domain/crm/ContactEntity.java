@@ -23,14 +23,14 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ACCOUNT_ID")
-  private AccountEntity accountId;
+  private AccountEntity account;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "SALUTATION_ID")
-  private ParameterEntity salutationId;
+  private ParameterEntity salutation;
 
   @Column(name="FIRST_NAME")
   private String firstName;
@@ -67,7 +67,7 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CURRENCY_ID")
-  private ParameterEntity currencyId;
+  private ParameterEntity currency;
 
   @Column(name="DEPARTMENT")
   private String department;
@@ -75,16 +75,16 @@ public class ContactEntity extends BaseEntity {
   @Column(name="ROLE")
   private String role;
 
-  @OneToOne(optional = true,fetch = FetchType.LAZY)
+  @OneToOne(optional = true)
   @JoinColumn(name = "MANAGER_ID")
-  private ContactEntity managerId;
+  private ContactEntity manager;
 
   @Column(name="MANAGER_PHONE")
   private String managerPhone;
 
   @OneToOne(optional = true)
   @JoinColumn(name = "ASSISTANT_ID")
-  private ContactEntity assistantId;
+  private ContactEntity assistant;
 
   @Column(name="ASSISTANT_PHONE")
   private String assistantPhone;
@@ -109,28 +109,28 @@ public class ContactEntity extends BaseEntity {
 
   @OneToOne(optional = true)
   @JoinColumn(name = "PARENT_ID")
-  private ContactEntity parentId;
+  private ContactEntity parent;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "COUNTRY_ID")
-  private ParameterEntity countryId;
+  private ParameterEntity country;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "STATE_ID")
-  private ParameterEntity stateId;
+  private ParameterEntity state;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CITY_ID")
-  private ParameterEntity cityId;
+  private ParameterEntity city;
 
   @Column(name="ADDRESS_PHONE")
   private String addressPhone;
@@ -143,7 +143,7 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "COMPANY_ID")
-  private CompanyEntity companyId;
+  private CompanyEntity company;
 
 
 //  @Getter(AccessLevel.NONE)
@@ -151,7 +151,7 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ORGANIZATION_ID")
-  private OrganizationEntity organizationId;
+  private OrganizationEntity organization;
 
 //  TBL_LEAD
   @Column(name="LEAD_SOURCE_ID")
@@ -190,14 +190,14 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ADDRESS_TYPE_ID")
-  private ParameterEntity addressTypeId;
+  private ParameterEntity addressType;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USER_CREATOR_ID")
-  private PersonEntity userCreatorId;
+  private PersonEntity userCreator;
 
   @Column(name="FROM_CITY")
   private String fromCity;
@@ -216,7 +216,7 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "BIRTH_CITY_ID")
-  private ParameterEntity birthCityId;
+  private ParameterEntity birthCity;
 
   @Column(name="ACCESS_TYPE")
   private String accessType;
@@ -235,21 +235,21 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "RELIGION_ID")
-  private ParameterEntity religionId;
+  private ParameterEntity religion;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "MILITARY_SERVICE_ID")
-  private ParameterEntity militaryServiceId;
+  private ParameterEntity militaryService;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "EDU_LEVEL_ID")
-  private ParameterEntity eduLevelId;
+  private ParameterEntity eduLevel;
 
   @Column(name="FIELD_NAME")
   private String fieldName;
@@ -274,7 +274,7 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CONTRACT_TYPE_ID")
-  private ParameterEntity contractTypeId;
+  private ParameterEntity contractType;
 
   @Column(name="UNIVERSITY")
   private String university;
@@ -284,14 +284,14 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "INSURANCE_KIND_ID")
-  private ParameterEntity insuranceKindId;
+  private ParameterEntity insuranceKind;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "INSURANCE_BOX_ID")
-  private ParameterEntity insuranceBoxId;
+  private ParameterEntity insuranceBox;
 
   @Column(name="GENDER1")
   private String gender1;
@@ -325,7 +325,7 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USER_EDITOR_ID")
-  private PersonEntity userEditorId;
+  private PersonEntity userEditor;
 
   @Column(name="CONVERT_DATE_WHO")
   private String convertDateWho;
@@ -345,12 +345,23 @@ public class ContactEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "LFROM_CITY_ID")
-  private ParameterEntity lfromCityId;
+  private ParameterEntity lfromCityEntity;
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToMany(mappedBy = "contactId",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
-  private List<PersonEntity> personEntities= new ArrayList<>();
+  @OneToMany(mappedBy = "contact",fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
+  private List<PersonEntity> persons = new ArrayList<>();
+
+  public void addPerson(PersonEntity person){
+      if(null != person){
+        if(null == persons){
+          persons = new ArrayList<>();
+        }
+        person.setContact(this);
+        persons.add(person);
+      }
+  }
+
 
 
 }

@@ -37,9 +37,9 @@ public class PersonDto implements Serializable {
 
     private String lastlogindate;
 
-    private CompanyDto companyId;
+    private CompanyDto company;
 
-    private ContactDto contactId;
+    private ContactDto contact;
 
     private String selectedSkin;
 
@@ -53,11 +53,11 @@ public class PersonDto implements Serializable {
 
     private String kind;
 
-    private OrganizationClassDto organizationPositionId;
+    private OrganizationClassDto organizationPosition;
 
-    private PersonDto ownerId;
+    private PersonDto owner;
 
-    private OrganizationClassDto organizationClassId;
+    private OrganizationClassDto organizationClass;
 
     private String noeEstekhdam;
 

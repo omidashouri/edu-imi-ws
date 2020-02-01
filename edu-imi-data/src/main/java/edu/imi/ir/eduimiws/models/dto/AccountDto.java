@@ -15,17 +15,17 @@ public class AccountDto implements Serializable {
 
     private Long id;
 
-    private CompanyDto companyId;
+    private CompanyDto company;
 
-    private AccountDto parentAccountId;
+    private AccountDto parentAccount;
 
-    private ContactDto primaryContactId;
+    private ContactDto primaryContact;
 
     private Long relationTypeId;
 
-    private LanguageDto languageId;
+    private LanguageDto language;
 
-    private ParameterDto currencyId;
+    private ParameterDto currency;
 
     private String accountName;
 
@@ -51,11 +51,11 @@ public class AccountDto implements Serializable {
 
     private String annualRevenue;
 
-    private ParameterDto countryId;
+    private ParameterDto country;
 
-    private ParameterDto stateId;
+    private ParameterDto state;
 
-    private ParameterDto cityId;
+    private ParameterDto city;
 
     private String addressPhone;
 
@@ -79,17 +79,17 @@ public class AccountDto implements Serializable {
 
     private String printAddressTitle;
 
-    private ParameterDto regionId;
+    private ParameterDto region;
 
-    private PersonDto userCreatorId;
+    private PersonDto userCreator;
 
     private String createDate;
 
-    private PersonDto userLastEditorId;
+    private PersonDto userLastEditor;
 
     private String lastEditDate;
 
-    private ContactDto userFollowerId;
+    private ContactDto userFollower;
 
     private String generalCode;
 
@@ -141,7 +141,7 @@ public class AccountDto implements Serializable {
 
     private String ibmcAdditionalInfo;
 
-    private ParameterDto siteCityId;
+    private ParameterDto siteCity;
 
     private String siteStateId;
 
@@ -155,7 +155,7 @@ public class AccountDto implements Serializable {
 
     private String orgNationalCode;
 
-    private ParameterDto employeeId;
+    private ParameterDto employee;
 
-    private ParameterDto annualRevenueId;
+    private ParameterDto annualRevenueEntity;
 }

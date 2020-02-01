@@ -21,9 +21,9 @@ public class ParameterCaptionEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "PARAMETER_ID")
-  private ParameterEntity parameterId;
+  private ParameterEntity parameter;
 
   @Column(name="CAPTION",length=130)
   private String caption;
@@ -31,8 +31,8 @@ public class ParameterCaptionEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "LANGUAGE_ID")
-  private LanguageEntity languageId;
+  private LanguageEntity language;
 
 }

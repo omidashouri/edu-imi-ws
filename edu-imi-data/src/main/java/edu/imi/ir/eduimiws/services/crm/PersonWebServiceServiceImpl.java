@@ -56,7 +56,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
         newPersonWebService.setContactId(personEntity.getContactId());
         newPersonWebService.setContactPublicId(publicContactId);
         newPersonWebService.setPersonPublicId(publicPersonId);
-        newPersonWebService.setPersonId(personEntity);
+        newPersonWebService.setPerson(personEntity);
         newPersonWebService.setUserName(personEntity.getUsername());
         newPersonWebService.setEncryptedPassword(personEntity.getPassword());
         newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));

@@ -7,6 +7,11 @@ import lombok.*;
 import javax.persistence.*;
 
 
+@NamedEntityGraph(name = "contactWebServiceUserGraph", attributeNodes = {
+        @NamedAttributeNode("contactPublicId"),
+        @NamedAttributeNode("contactId"),
+        @NamedAttributeNode("createDateTs"),
+        @NamedAttributeNode("editDateTs")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,13 +30,23 @@ public class ContactWebServiceEntity extends BaseEntity {
   @ToString.Exclude
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CONTACT_ID")
-  private ContactEntity contactId;
+  private ContactEntity contact;
+
+  @Column(name="CONTACT_ID",insertable = false,updatable = false)
+  private Long contactId;
+
+  @Transient
+  public Long getContactId() {
+    return contactId;
+  }
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CREATOR_ID")
-  private PersonEntity creatorId;
+  private PersonEntity creator;
+
+
 
   @Column(name="CREATE_DATE_TS")
   private java.sql.Timestamp createDateTs;
@@ -40,7 +55,7 @@ public class ContactWebServiceEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "EDITOR_ID")
-  private PersonEntity editorId;
+  private PersonEntity editor;
 
   @Column(name="EDIT_DATE_TS")
   private java.sql.Timestamp editDateTs;

@@ -22,20 +22,20 @@ public class AccountEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "COMPANY_ID",nullable = false,columnDefinition = " long default 4 ")
-  private CompanyEntity companyId;
+  private CompanyEntity company;
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @OneToOne(optional = true)
   @JoinColumn(name = "PARENT_ACCOUNT_ID")
-  private AccountEntity parentAccountId;
+  private AccountEntity parentAccount;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "PRIMARY_CONTACT_ID")
-  private ContactEntity primaryContactId;
+  private ContactEntity primaryContact;
 
 //  TBL_CATEGORY
   @Column(name="RELATION_TYPE_ID")
@@ -46,14 +46,14 @@ public class AccountEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "LANGUAGE_ID")
-  private LanguageEntity languageId;
+  private LanguageEntity language;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "CURRENCY_ID")
-  private ParameterEntity currencyId;
+  private ParameterEntity currency;
 
   @Column(name="ACCOUNT_NAME")
   private String accountName;
@@ -96,21 +96,21 @@ public class AccountEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "COUNTRY_ID")
-  private ParameterEntity countryId;
+  private ParameterEntity country;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "STATE_ID")
-  private ParameterEntity stateId;
+  private ParameterEntity state;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "CITY_ID")
-  private ParameterEntity cityId;
+  private ParameterEntity city;
 
   @Column(name="ADDRESS_PHONE")
   private String addressPhone;
@@ -155,14 +155,14 @@ public class AccountEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "REGION_ID")
-  private ParameterEntity regionId;
+  private ParameterEntity region;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "USER_CREATOR_ID")
-  private PersonEntity userCreatorId;
+  private PersonEntity userCreator;
 
   @Column(name="CREATE_DATE")
   private String createDate;
@@ -172,7 +172,7 @@ public class AccountEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "USER_LAST_EDITOR_ID")
-  private PersonEntity userLastEditorId;
+  private PersonEntity userLastEditor;
 
   @Column(name="LAST_EDIT_DATE")
   private String lastEditDate;
@@ -182,7 +182,7 @@ public class AccountEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "USER_FOLLOWER_ID")
-  private ContactEntity userFollowerId;
+  private ContactEntity userFollower;
 
   @Column(name="GENERAL_CODE")
   private String generalCode;
@@ -210,7 +210,7 @@ public class AccountEntity extends BaseEntity {
 
 //  TBL_ACCOUNT_ADDITIONAL_INFO
   @Column(name="ACCOUNT_ADDITIONAL_INFO_ID")
-  private Long accountAdditionalInfoId;
+  private Long accountAdditionalInfo;
 
   @Column(name="ADDRESS2")
   private String address2;
@@ -267,7 +267,7 @@ public class AccountEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "SITE_CITY_ID")
-  private ParameterEntity siteCityId;
+  private ParameterEntity siteCity;
 
   @Column(name="SITE_STATE_ID")
   private String siteStateId;
@@ -292,13 +292,13 @@ public class AccountEntity extends BaseEntity {
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "EMPLOYEE_ID")
-  private ParameterEntity employeeId;
+  private ParameterEntity employee;
 
   @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "ANNUAL_REVENUE_ID")
-  private ParameterEntity annualRevenueId;
+  private ParameterEntity annualRevenueEntity;
 
 }

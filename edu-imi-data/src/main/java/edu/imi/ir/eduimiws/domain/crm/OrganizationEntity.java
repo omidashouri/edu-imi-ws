@@ -22,7 +22,7 @@ public class OrganizationEntity extends BaseEntity {
 
   @OneToOne(optional = true)
   @JoinColumn(name = "PARENT_ID")
-  private OrganizationEntity parentId;
+  private OrganizationEntity parent;
 
   @Column(name="WEBSITE")
   private String website;
@@ -45,21 +45,21 @@ public class OrganizationEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "BILL_CITY")
   private ParameterEntity billCity;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "BILL_STATE")
   private ParameterEntity billState;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "BILL_COUNTRY")
   private ParameterEntity billCountry;
 
@@ -72,21 +72,21 @@ public class OrganizationEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "SHIP_CITY")
   private ParameterEntity shipCity;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "SHIP_STATE")
   private ParameterEntity shipState;
 
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "SHIP_COUNTRY")
   private ParameterEntity shipCountry;
 
@@ -96,9 +96,9 @@ public class OrganizationEntity extends BaseEntity {
 //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ACCOUNT_ID")
-  private AccountEntity accountId;
+  private AccountEntity account;
 
   @Column(name="IS_ACTIVE")
   private String isActive;

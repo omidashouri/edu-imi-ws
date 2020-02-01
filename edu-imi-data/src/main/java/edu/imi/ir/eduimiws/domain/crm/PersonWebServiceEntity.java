@@ -8,18 +8,18 @@ import javax.persistence.*;
 
 
 @NamedEntityGraph(name = "personWebServiceUserGraph", attributeNodes = {
-        @NamedAttributeNode("personIdT"),
+        @NamedAttributeNode("personId"),
         @NamedAttributeNode("personPublicId"),
-        @NamedAttributeNode("contactIdT"),
+        @NamedAttributeNode("contactId"),
         @NamedAttributeNode("contactPublicId"),
         @NamedAttributeNode("userName"),
         @NamedAttributeNode("encryptedPassword"),
         @NamedAttributeNode("emailVerificationToken"),
         @NamedAttributeNode("emailVerificationStatus"),
         @NamedAttributeNode("mobileVerificationStatus"),
-        @NamedAttributeNode("creatorIdT"),
+        @NamedAttributeNode("creatorId"),
         @NamedAttributeNode("createDateTs"),
-        @NamedAttributeNode("editorIdT"),
+        @NamedAttributeNode("editorId"),
         @NamedAttributeNode("editDateTs"),
         @NamedAttributeNode("description")})
 @Getter
@@ -37,22 +37,32 @@ public class PersonWebServiceEntity extends BaseEntity {
   @ToString.Exclude
   @OneToOne
   @JoinColumn(name = "PERSON_ID")
-  private PersonEntity personId;
+  private PersonEntity person;
 
   @Column(name="PERSON_ID",insertable = false,updatable = false)
-  private Long personIdT;
+  private Long personId;
+
+  @Transient
+  public Long getPersonId() {
+    return personId;
+  }
 
   @Column(name="PERSON_PUBLIC_ID")
   private String personPublicId;
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CONTACT_ID")
-  private ContactEntity contactId;
+  private ContactEntity contact;
 
   @Column(name="CONTACT_ID",insertable = false,updatable = false)
-  private Long contactIdT;
+  private Long contactId;
+
+  @Transient
+  public Long getContactId() {
+    return contactId;
+  }
 
   @Column(name="CONTACT_PUBLIC_ID")
   private String contactPublicId;
@@ -74,24 +84,34 @@ public class PersonWebServiceEntity extends BaseEntity {
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CREATOR_ID")
-  private PersonEntity creatorId;
+  private PersonEntity creator;
 
   @Column(name="CREATOR_ID",insertable = false,updatable = false)
-  private Long creatorIdT;
+  private Long creatorId;
+
+  @Transient
+  public Long getCreatorId() {
+    return creatorId;
+  }
 
   @Column(name="CREATE_DATE_TS")
   private java.sql.Timestamp createDateTs;
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "EDITOR_ID")
-  private PersonEntity editorId;
+  private PersonEntity editor;
 
   @Column(name="EDITOR_ID",insertable = false,updatable = false)
-  private Long editorIdT;
+  private Long editorId;
+
+  @Transient
+  public Long getEditorId() {
+    return editorId;
+  }
 
   @Column(name="EDIT_DATE_TS")
   private java.sql.Timestamp editDateTs;

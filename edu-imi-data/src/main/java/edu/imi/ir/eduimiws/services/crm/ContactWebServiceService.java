@@ -10,5 +10,5 @@ public interface ContactWebServiceService {
 
     ContactWebServiceEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person);
 
-    ContactWebServiceEntity findContactWebServiceEntityByContactEntity(ContactEntity contactId);
+    ContactWebServiceEntity findContactWebServiceEntityByContactEntity(ContactEntity contact);
 }

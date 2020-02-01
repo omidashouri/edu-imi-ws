@@ -12,22 +12,22 @@ public interface PersonWebServiceMapper {
 
 //    omiddo:correct ignore by removing extra joins
     @Mappings({
-//           @Mapping(source = "personId",target = "personId",ignore = true),
-           @Mapping(source = "personIdT",target = "personIdT"),
+//           @Mapping(source = "person",target = "person",ignore = true),
+           @Mapping(source = "personId",target = "personId"),
            @Mapping(source = "personPublicId",target = "personPublicId"),
-//           @Mapping(source = "contactId",target = "contactId"),
-           @Mapping(source = "contactIdT",target = "contactIdT"),
+//           @Mapping(source = "contact",target = "contact"),
+           @Mapping(source = "contactId",target = "contactId"),
            @Mapping(source = "contactPublicId",target = "contactPublicId"),
            @Mapping(source = "userName",target = "userName"),
            @Mapping(source = "encryptedPassword",target = "encryptedPassword"),
            @Mapping(source = "emailVerificationToken",target = "emailVerificationToken"),
            @Mapping(source = "emailVerificationStatus",target = "emailVerificationStatus"),
            @Mapping(source = "mobileVerificationStatus",target = "mobileVerificationStatus"),
-//           @Mapping(source = "creatorId",target = "creatorId"),
-           @Mapping(source = "creatorIdT",target = "creatorIdT"),
+//           @Mapping(source = "creator",target = "creator"),
+           @Mapping(source = "creatorId",target = "creatorId"),
            @Mapping(source = "createDateTs",target = "createDateTs"),
-//           @Mapping(source = "editorId.id",target = "editorId.id",ignore = true),
-           @Mapping(source = "editorIdT",target = "editorIdT"),
+//           @Mapping(source = "editor",target = "editor",ignore = true),
+           @Mapping(source = "editorId",target = "editorId"),
            @Mapping(source = "editDateTs",target = "editDateTs"),
            @Mapping(source = "description",target = "description")
     })

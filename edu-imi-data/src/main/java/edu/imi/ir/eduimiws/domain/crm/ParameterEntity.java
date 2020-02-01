@@ -25,6 +25,6 @@ public class ParameterEntity extends BaseEntity {
 
   @OneToOne(optional = true)
   @JoinColumn(name = "MAIN_PARAM_ID")
-  private ParameterEntity mainParamId;
+  private ParameterEntity mainParam;
 
 }
