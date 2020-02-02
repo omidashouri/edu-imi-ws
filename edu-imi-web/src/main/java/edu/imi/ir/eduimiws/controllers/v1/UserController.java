@@ -26,7 +26,7 @@ public class UserController {
 
         UserResponse returnValue = new UserResponse();
 
-/*        UserDto userDto = userService.getUserByUserPublicId(userPublicId);
+/*        UserDto userDto = personWebServiceService.getUserByUserPublicId(userPublicId);
 
         BeanUtils.copyProperties(userDto,returnValue);*/
 

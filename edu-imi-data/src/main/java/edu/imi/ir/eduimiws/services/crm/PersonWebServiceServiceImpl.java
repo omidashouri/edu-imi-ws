@@ -40,7 +40,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
     }
 
     @Override
-    public PersonWebServiceEntity findByUserName(String userName) {
+    public PersonWebServiceEntity findByUserNameFast(String userName) {
         PersonWebServiceEntity personWebServiceEntity = personWebServiceRepository.findByUserName(userName);
         return personWebServiceEntity;
     }

@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 
 
-@NamedEntityGraph(name = "personWebServiceUserGraph", attributeNodes = {
+@NamedEntityGraph(name = "personWebServiceFastGraph", attributeNodes = {
         @NamedAttributeNode("personId"),
         @NamedAttributeNode("personPublicId"),
         @NamedAttributeNode("contactId"),

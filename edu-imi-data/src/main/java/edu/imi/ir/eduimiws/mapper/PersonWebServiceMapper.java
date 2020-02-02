@@ -12,10 +12,10 @@ public interface PersonWebServiceMapper {
 
 //    omiddo:correct ignore by removing extra joins
     @Mappings({
-//           @Mapping(source = "person",target = "person",ignore = true),
+           @Mapping(source = "person",target = "person"),
            @Mapping(source = "personId",target = "personId"),
            @Mapping(source = "personPublicId",target = "personPublicId"),
-//           @Mapping(source = "contact",target = "contact"),
+           @Mapping(source = "contact",target = "contact"),
            @Mapping(source = "contactId",target = "contactId"),
            @Mapping(source = "contactPublicId",target = "contactPublicId"),
            @Mapping(source = "userName",target = "userName"),
@@ -23,10 +23,10 @@ public interface PersonWebServiceMapper {
            @Mapping(source = "emailVerificationToken",target = "emailVerificationToken"),
            @Mapping(source = "emailVerificationStatus",target = "emailVerificationStatus"),
            @Mapping(source = "mobileVerificationStatus",target = "mobileVerificationStatus"),
-//           @Mapping(source = "creator",target = "creator"),
+           @Mapping(source = "creator",target = "creator"),
            @Mapping(source = "creatorId",target = "creatorId"),
            @Mapping(source = "createDateTs",target = "createDateTs"),
-//           @Mapping(source = "editor",target = "editor",ignore = true),
+           @Mapping(source = "editor",target = "editor"),
            @Mapping(source = "editorId",target = "editorId"),
            @Mapping(source = "editDateTs",target = "editDateTs"),
            @Mapping(source = "description",target = "description")

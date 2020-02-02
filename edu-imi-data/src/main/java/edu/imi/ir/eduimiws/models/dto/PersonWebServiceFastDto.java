@@ -9,17 +9,13 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonWebServiceDto implements Serializable {
+public class PersonWebServiceFastDto implements Serializable {
 
-    private static final long serialVersionUID = 3509814162285417174L;
-
-    private PersonDto person;
+    private static final long serialVersionUID = 6161377157056013811L;
 
     private Long personId;
 
     private String personPublicId;
-
-    private ContactDto contact;
 
     private Long contactId;
 
@@ -35,18 +31,13 @@ public class PersonWebServiceDto implements Serializable {
 
     private Boolean mobileVerificationStatus;
 
-    private PersonDto creator;
-
     private Long creatorId;
 
     private java.sql.Timestamp createDateTs;
-
-    private PersonDto editor;
 
     private Long editorId;
 
     private java.sql.Timestamp editDateTs;
 
     private String description;
-
 }

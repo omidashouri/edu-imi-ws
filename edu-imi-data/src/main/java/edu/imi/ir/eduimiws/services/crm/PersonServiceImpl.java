@@ -25,7 +25,7 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public PersonEntity findByUserName(String userName) {
+    public PersonEntity findByUserNameFast(String userName) {
         PersonEntity personEntity = personRepository.findByUsername(userName);
 //        omiddo: check person is not null or person is not duplicate
         return personEntity;

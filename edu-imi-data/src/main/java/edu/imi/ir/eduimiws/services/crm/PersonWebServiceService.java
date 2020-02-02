@@ -9,7 +9,7 @@ public interface PersonWebServiceService  {
 
     PersonWebServiceEntity findByPersonEntity(PersonEntity personEntity);
 
-    PersonWebServiceEntity findByUserName(String userName);
+    PersonWebServiceEntity findByUserNameFast(String userName);
 
     PersonWebServiceEntity savePersonWebServiceEntity(PersonWebServiceEntity personWebServiceEntity);
 

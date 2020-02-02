@@ -37,7 +37,8 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
     }
 
     @Override
-    public ContactWebServiceEntity findContactWebServiceEntityByContactEntity(ContactEntity contact) {
+    public ContactWebServiceEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact) {
+//        omiddo:add NamedEntityGraph later for contact
         return contactWebServiceRepository.findByContact(contact);
     }
 }

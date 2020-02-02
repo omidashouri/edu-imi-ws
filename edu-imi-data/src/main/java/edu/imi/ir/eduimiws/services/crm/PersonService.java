@@ -9,7 +9,7 @@ public interface PersonService {
 
     PersonEntity findById(Long id);
 
-    PersonEntity findByUserName(String userName);
+    PersonEntity findByUserNameFast(String userName);
 
     List<PersonEntity> findAllByUserNameContaining(String userName);
 

@@ -5,8 +5,8 @@ import edu.imi.ir.eduimiws.domain.crm.ContactWebServiceEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.PersonWebServiceMapper;
-import edu.imi.ir.eduimiws.models.dto.PersonWebServiceDto;
+import edu.imi.ir.eduimiws.mapper.PersonWebServiceFastDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.PersonWebServiceFastDto;
 import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.services.crm.ContactWebServiceService;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final PersonWebServiceMapper personWebServiceMapper;
+    private final PersonWebServiceFastDtoMapper personWebServiceFastMapper;
     private final PersonWebServiceRepository personWebServiceRepository;
     private final PersonService personService;
     private final PersonWebServiceService personWebServiceService;
@@ -38,16 +38,16 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public PersonWebServiceDto getUserDto(String userName) {
+    public PersonWebServiceFastDto getUserFastDto(String userName) {
 
-        PersonWebServiceEntity userWS = personWebServiceService.findByUserName(userName);
+        PersonWebServiceEntity user = personWebServiceService.findByUserNameFast(userName);
 
-        if (null == userWS) {
+        if (null == user) {
             throw new UsernameNotFoundException("user name not found for " + userName);
         }
 
-        PersonWebServiceDto userWSDto = personWebServiceMapper.PersonWebServiceEntityToPersonWebServiceDto(userWS,new CycleAvoidingMappingContext());
-        return userWSDto;
+        PersonWebServiceFastDto userFastDto = personWebServiceFastMapper.PersonWebServiceEntityToPersonWebServiceFastDto(user,new CycleAvoidingMappingContext());
+        return userFastDto;
     }
 
 
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
         PersonWebServiceEntity newPersonWebServiceEntity = new PersonWebServiceEntity();
 
-        PersonEntity user = personService.findByUserName(username);
+        PersonEntity user = personService.findByUserNameFast(username);
 
 /*        if (users.isEmpty() || users.size() == 0) {
             throw new UsernameNotFoundException("user name not found for " + username);
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("user name not found for " + username);
         }
 
-        PersonWebServiceEntity userWebServiceEntity = personWebServiceService.findByUserName(username);
+        PersonWebServiceEntity userWebServiceEntity = personWebServiceService.findByUserNameFast(username);
 
         if (null == userWebServiceEntity) {
 
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
                         contactWebServiceService
                                 .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
             } else{
-                contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntity(user.getContact());
+                contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntityFast(user.getContact());
             }
 
 
@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
     private boolean existContactPublicIdInContactWebServiceEntity(ContactEntity contactEntity){
         boolean exist = true;
 
-        ContactWebServiceEntity contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntity(contactEntity);
+        ContactWebServiceEntity contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntityFast(contactEntity);
 
         if(null==contactWebServiceEntity){
             exist=false;

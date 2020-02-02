@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.imi.ir.eduimiws.configurations.SpringApplicationContext;
-import edu.imi.ir.eduimiws.models.dto.PersonWebServiceDto;
+import edu.imi.ir.eduimiws.models.dto.PersonWebServiceFastDto;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
 import edu.imi.ir.eduimiws.services.UserService;
 import io.jsonwebtoken.Jwts;
@@ -77,13 +77,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
 
 //    use for adding public user id to response header
-        PersonWebServiceDto userDto = userService.getUserDto(userName);
+        PersonWebServiceFastDto userWSFastDto = userService.getUserFastDto(userName);
 
 //    add token to response header
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 
 //    add public user id to response header
-        res.addHeader("userPublicId", userDto.getPersonPublicId());
+        res.addHeader("userPublicId", userWSFastDto.getPersonPublicId());
     }
 
 }
