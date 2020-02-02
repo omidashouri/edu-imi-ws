@@ -52,7 +52,7 @@ public class PersonWebServiceEntity extends BaseEntity {
 
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne
   @JoinColumn(name = "CONTACT_ID")
   private ContactEntity contact;
 

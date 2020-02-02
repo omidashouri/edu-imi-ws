@@ -1,5 +1,11 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
+import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.UserContactFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.UserContactResponseMapper;
+import edu.imi.ir.eduimiws.models.dto.UserContactFastDto;
+import edu.imi.ir.eduimiws.models.response.UserContactResponse;
 import edu.imi.ir.eduimiws.models.response.UserResponse;
 import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final PersonWebServiceService personWebServiceService;
+    private final UserContactFastDtoMapper userContactFastDtoMapper;
+    private final UserContactResponseMapper userContactResponseMapper;
 
 
     // http://localhost:8080/edu-imi-ws/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
@@ -26,9 +34,13 @@ public class UserController {
 
         UserResponse returnValue = new UserResponse();
 
-/*        UserDto userDto = personWebServiceService.getUserByUserPublicId(userPublicId);
+        PersonWebServiceEntity user = personWebServiceService.findPersonWebServiceEntityByUserPublicId(userPublicId);
 
-        BeanUtils.copyProperties(userDto,returnValue);*/
+        UserContactFastDto userContactFastDto = userContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDto(user,new CycleAvoidingMappingContext());
+
+        UserContactResponse userContactResponse = userContactResponseMapper.UserContactFastDtoToUserContactResponse(userContactFastDto,new CycleAvoidingMappingContext());
+
+//        BeanUtils.copyProperties(userDto,returnValue);
 
         return returnValue;
     }

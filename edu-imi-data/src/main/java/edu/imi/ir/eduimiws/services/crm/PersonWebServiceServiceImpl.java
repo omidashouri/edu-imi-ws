@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,16 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
     }
 
     @Override
+    public PersonWebServiceEntity findPersonWebServiceEntityByUserPublicId(String userPublicId) {
+        PersonWebServiceEntity userWS = personWebServiceRepository.findByPersonPublicId(userPublicId);
+        if (null == userWS) {
+            throw new UsernameNotFoundException("user can not found for " + userPublicId);
+        }
+
+        return userWS;
+    }
+
+    @Override
     public PersonWebServiceEntity savePersonWebServiceEntity(PersonWebServiceEntity personWebServiceEntity) {
         return personWebServiceRepository.save(personWebServiceEntity);
     }
@@ -54,6 +65,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
     public PersonWebServiceEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity) {
         PersonWebServiceEntity newPersonWebService = new PersonWebServiceEntity();
         newPersonWebService.setContactId(personEntity.getContactId());
+        newPersonWebService.setContact(personEntity.getContact());
         newPersonWebService.setContactPublicId(publicContactId);
         newPersonWebService.setPersonPublicId(publicPersonId);
         newPersonWebService.setPerson(personEntity);

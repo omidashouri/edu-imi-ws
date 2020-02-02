@@ -13,4 +13,6 @@ public interface PersonWebServiceRepository extends PagingAndSortingRepository<P
     @EntityGraph("personWebServiceFastGraph")
     PersonWebServiceEntity findByUserName(String userName);
 
+    PersonWebServiceEntity findByPersonPublicId(String personPublicId);
+
 }

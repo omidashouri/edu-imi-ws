@@ -11,6 +11,8 @@ public interface PersonWebServiceService  {
 
     PersonWebServiceEntity findByUserNameFast(String userName);
 
+    PersonWebServiceEntity findPersonWebServiceEntityByUserPublicId(String userPublicId);
+
     PersonWebServiceEntity savePersonWebServiceEntity(PersonWebServiceEntity personWebServiceEntity);
 
     PersonWebServiceEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity);
