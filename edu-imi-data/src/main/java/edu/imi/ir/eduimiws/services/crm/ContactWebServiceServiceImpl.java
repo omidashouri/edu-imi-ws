@@ -10,9 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -32,7 +29,8 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
         ContactWebServiceEntity newContactWebService = new ContactWebServiceEntity();
         newContactWebService.setContactPublicId(publicContactId);
         newContactWebService.setContact(person.getContact());
-        newContactWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
+        newContactWebService.setCreator(person);
+//        newContactWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
         return contactWebServiceRepository.save(newContactWebService);
     }
 

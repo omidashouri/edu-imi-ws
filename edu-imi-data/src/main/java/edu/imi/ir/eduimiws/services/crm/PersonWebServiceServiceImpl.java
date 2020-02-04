@@ -11,9 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -71,7 +68,8 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
         newPersonWebService.setPerson(personEntity);
         newPersonWebService.setUserName(personEntity.getUsername());
         newPersonWebService.setEncryptedPassword(personEntity.getPassword());
-        newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
+        newPersonWebService.setCreator(personEntity);
+//        newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
         return personWebServiceRepository.save(newPersonWebService);
     }
 }
