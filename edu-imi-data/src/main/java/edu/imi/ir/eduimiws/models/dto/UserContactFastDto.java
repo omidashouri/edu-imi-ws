@@ -16,6 +16,6 @@ public class UserContactFastDto implements Serializable {
     private String personPublicId;
     private String contactPublicId;
 
-    ContactFastDto contactFastDto;
+    UserContactResponseDto userContactResponseDto;
 
 }

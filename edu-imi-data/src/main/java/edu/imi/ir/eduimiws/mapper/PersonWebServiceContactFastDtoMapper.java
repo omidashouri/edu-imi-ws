@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.mapper;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
-import edu.imi.ir.eduimiws.models.dto.ContactFastDto;
+import edu.imi.ir.eduimiws.models.dto.UserContactResponseDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -9,9 +9,9 @@ import java.util.Collection;
 import java.util.List;
 
 @Mapper
-public interface ContactFastDtoMapper {
+public interface PersonWebServiceContactFastDtoMapper {
 
-    ContactFastDtoMapper INSTANCE = Mappers.getMapper(ContactFastDtoMapper.class);
+    PersonWebServiceContactFastDtoMapper INSTANCE = Mappers.getMapper(PersonWebServiceContactFastDtoMapper.class);
 
 
     @Mappings({
@@ -34,12 +34,12 @@ public interface ContactFastDtoMapper {
             @Mapping(source = "contact.lfatherName",target = "lfatherName"),
             @Mapping(source = "contact.lfromCity",target = "lfromCity")
     })
-    ContactFastDto PersonWebServiceEntityToContactFastDto(PersonWebServiceEntity personWebServiceEntity, @Context CycleAvoidingMappingContext context);
+    UserContactResponseDto PersonWebServiceEntityToContactFastDto(PersonWebServiceEntity personWebServiceEntity, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PersonWebServiceEntity ContactFastDtoToPersonWebServiceEntity(ContactFastDto userContactDto, @Context CycleAvoidingMappingContext context);
+    PersonWebServiceEntity ContactFastDtoToPersonWebServiceEntity(UserContactResponseDto userContactDto, @Context CycleAvoidingMappingContext context);
 
 
-    public abstract List<ContactFastDtoMapper> toTransactionDTO(
-            Collection<ContactFastDtoMapper> transactions);
+    public abstract List<PersonWebServiceContactFastDtoMapper> toTransactionDTO(
+            Collection<PersonWebServiceContactFastDtoMapper> transactions);
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactFastDto implements Serializable {
+public class UserContactResponseDto implements Serializable {
 
     private static final long serialVersionUID = 2198116635025433135L;
 

@@ -7,14 +7,14 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface UserContactFastDtoMapper {
+public interface PersonWebServiceUserContactFastDtoMapper {
 
-    UserContactFastDtoMapper INSTANCE = Mappers.getMapper(UserContactFastDtoMapper.class);
+    PersonWebServiceUserContactFastDtoMapper INSTANCE = Mappers.getMapper(PersonWebServiceUserContactFastDtoMapper.class);
 
     @Mappings({
             @Mapping(source = "personPublicId",target = "personPublicId"),
             @Mapping(source = "contactPublicId",target = "contactPublicId"),
-            @Mapping(source = "contact",target = "contactFastDto")
+            @Mapping(source = "contact",target = "userContactResponseDto")
 
     })
     UserContactFastDto PersonWebServiceEntityToUserContactFastDto(PersonWebServiceEntity personWebServiceEntity,@Context CycleAvoidingMappingContext context);
@@ -25,6 +25,6 @@ public interface UserContactFastDtoMapper {
 
     @AfterMapping
     default void handleContactFastDtoContactPublicId(PersonWebServiceEntity personWebServiceEntity, @MappingTarget UserContactFastDto userContactFastDto) {
-      userContactFastDto.getContactFastDto().setContactPublicId(personWebServiceEntity.getContactPublicId());
+      userContactFastDto.getUserContactResponseDto().setContactPublicId(personWebServiceEntity.getContactPublicId());
     }
 }
