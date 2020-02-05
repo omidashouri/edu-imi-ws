@@ -13,11 +13,18 @@ public interface UserContactFastDtoMapper {
 
     @Mappings({
             @Mapping(source = "personPublicId",target = "personPublicId"),
+            @Mapping(source = "contactPublicId",target = "contactPublicId"),
             @Mapping(source = "contact",target = "contactFastDto")
+
     })
-    UserContactFastDto PersonWebServiceEntityToUserContactFastDto(PersonWebServiceEntity personWebServiceEntity, @Context CycleAvoidingMappingContext context);
+    UserContactFastDto PersonWebServiceEntityToUserContactFastDto(PersonWebServiceEntity personWebServiceEntity,@Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
     PersonWebServiceDto UserContactFastDtoToPersonWebServiceEntity(UserContactFastDto userContactFastDto, @Context CycleAvoidingMappingContext context);
 
+
+    @AfterMapping
+    default void handleContactFastDtoContactPublicId(PersonWebServiceEntity personWebServiceEntity, @MappingTarget UserContactFastDto userContactFastDto) {
+      userContactFastDto.getContactFastDto().setContactPublicId(personWebServiceEntity.getContactPublicId());
+    }
 }

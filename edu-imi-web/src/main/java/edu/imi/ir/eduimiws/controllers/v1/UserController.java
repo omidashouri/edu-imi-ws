@@ -30,7 +30,7 @@ public class UserController {
     @GetMapping(path = "/{userPublicId}",
 //            make response as XML or JSON
             produces = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE})
-    public UserResponse getUser(@PathVariable String userPublicId){
+    public UserContactResponse getUser(@PathVariable String userPublicId){
 
         UserResponse returnValue = new UserResponse();
 
@@ -42,6 +42,6 @@ public class UserController {
 
 //        BeanUtils.copyProperties(userDto,returnValue);
 
-        return returnValue;
+        return userContactResponse;
     }
 }

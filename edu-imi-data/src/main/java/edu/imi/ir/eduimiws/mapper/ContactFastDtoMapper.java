@@ -5,6 +5,9 @@ import edu.imi.ir.eduimiws.models.dto.ContactFastDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Collection;
+import java.util.List;
+
 @Mapper
 public interface ContactFastDtoMapper {
 
@@ -12,7 +15,6 @@ public interface ContactFastDtoMapper {
 
 
     @Mappings({
-
             @Mapping(source = "contactPublicId",target = "contactPublicId"),
             @Mapping(source = "contact.firstName",target = "firstName"),
             @Mapping(source = "contact.lastName",target = "lastName"),
@@ -37,4 +39,7 @@ public interface ContactFastDtoMapper {
     @InheritInverseConfiguration
     PersonWebServiceEntity ContactFastDtoToPersonWebServiceEntity(ContactFastDto userContactDto, @Context CycleAvoidingMappingContext context);
 
+
+    public abstract List<ContactFastDtoMapper> toTransactionDTO(
+            Collection<ContactFastDtoMapper> transactions);
 }
