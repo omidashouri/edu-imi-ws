@@ -51,8 +51,22 @@ public class UserController {
             @ApiImplicitParam(name = "authorization", value = "IMI JWT token", paramType = "header")
     })
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE})
-    public List<UserResponse> getUsers(@RequestParam(value = "page",defaultValue = "1") int pageValue
+    public List<UserContactResponse> getUsers(@RequestParam(value = "page",defaultValue = "1") int pageValue
             , @RequestParam(value = "limit",defaultValue = "25") int limitValue){
+
+
+        List<PersonWebServiceEntity> users =
+                                            personWebServiceService
+                                                .findAllListByPageAndSize(pageValue,limitValue);
+
+        List<UserContactFastDto> userContactFastDtos =
+                personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users,new CycleAvoidingMappingContext());
+
+
+        List<UserContactResponse> userContactResponses =
+                            userContactResponseUserContactFastDtoMapper
+                                    .UserContactFastDtoToUserContactResponses(userContactFastDtos,new CycleAvoidingMappingContext());
+
 
 /*        List<UserDto> userDtoList = userService.getUserDtosByPageAndLimit(pageValue,limitValue);
 
@@ -65,6 +79,6 @@ public class UserController {
         }
 
         return userRestList;*/
-        return null;
+        return userContactResponses;
     }
 }

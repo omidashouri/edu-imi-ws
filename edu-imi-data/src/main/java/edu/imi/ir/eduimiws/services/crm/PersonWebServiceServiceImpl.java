@@ -7,9 +7,16 @@ import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -24,6 +31,36 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
 
     private final ContactServiceImpl contactService;
 
+
+    @Override
+    public List<PersonWebServiceEntity> findAllListByPageAndSize(int page, int size) {
+
+        if (page > 0) {
+            page--;
+        }
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<PersonWebServiceEntity> pagedResult = personWebServiceRepository.findAll(pageable);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<PersonWebServiceEntity>();
+        }
+    }
+
+    @Override
+    public Page<PersonWebServiceEntity> findAllPageByPageAndSize(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<PersonWebServiceEntity> pagedResult = personWebServiceRepository.findAll(pageable);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult;
+        } else {
+            return new PageImpl<>(new ArrayList<>());
+        }
+    }
 
     @Override
     public PersonWebServiceEntity findByPersonId(Long personId) {

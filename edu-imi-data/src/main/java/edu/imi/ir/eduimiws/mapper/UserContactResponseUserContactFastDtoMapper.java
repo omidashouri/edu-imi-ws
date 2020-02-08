@@ -5,6 +5,8 @@ import edu.imi.ir.eduimiws.models.response.UserContactResponse;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface UserContactResponseUserContactFastDtoMapper {
 
@@ -35,6 +37,10 @@ public interface UserContactResponseUserContactFastDtoMapper {
     @InheritInverseConfiguration
     UserContactFastDto UserContactResponseToUserContactFastDto(UserContactResponse userContactResponse, @Context CycleAvoidingMappingContext context);
 
+
+    List<UserContactResponse> UserContactFastDtoToUserContactResponses(List<UserContactFastDto> userContactFastDtos,@Context CycleAvoidingMappingContext context);
+
+    List<UserContactFastDto> UserContactResponseToUserContactFastDtos(List<UserContactResponse> userContactResponses,@Context CycleAvoidingMappingContext context);
 
 
 }
