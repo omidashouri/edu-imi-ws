@@ -2,8 +2,8 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.PersonWebServiceUserContactFastDtoMapper;
-import edu.imi.ir.eduimiws.mapper.UserContactResponseUserContactFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceUserContactFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.UserContactResponseUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.UserContactFastDto;
 import edu.imi.ir.eduimiws.models.response.UserContactResponse;
 import edu.imi.ir.eduimiws.models.response.UserResponse;

@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
-import edu.imi.ir.eduimiws.mapper.PersonWebServiceMapper;
+import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceMapper;
 import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;

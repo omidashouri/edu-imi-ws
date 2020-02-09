@@ -1,6 +1,7 @@
-package edu.imi.ir.eduimiws.mapper;
+package edu.imi.ir.eduimiws.mapper.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.PersonDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;

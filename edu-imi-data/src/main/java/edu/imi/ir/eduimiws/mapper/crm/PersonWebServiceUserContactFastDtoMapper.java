@@ -1,6 +1,7 @@
-package edu.imi.ir.eduimiws.mapper;
+package edu.imi.ir.eduimiws.mapper.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.PersonWebServiceDto;
 import edu.imi.ir.eduimiws.models.dto.UserContactFastDto;
 import org.mapstruct.*;

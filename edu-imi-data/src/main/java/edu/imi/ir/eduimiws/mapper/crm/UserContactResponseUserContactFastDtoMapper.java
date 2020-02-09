@@ -1,5 +1,6 @@
-package edu.imi.ir.eduimiws.mapper;
+package edu.imi.ir.eduimiws.mapper.crm;
 
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.UserContactFastDto;
 import edu.imi.ir.eduimiws.models.response.UserContactResponse;
 import org.mapstruct.*;
