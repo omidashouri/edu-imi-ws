@@ -201,4 +201,10 @@ public class PeriodEntity extends BaseEntity {
 
     @Column(name="VARIABLE_CERTIFICATE_NAME",length = 500)
     private String variableCertificateName;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "period",fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
+    private PeriodWebServiceEntity periodWebService;
+
 }
