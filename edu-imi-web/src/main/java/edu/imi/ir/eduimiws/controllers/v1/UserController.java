@@ -67,18 +67,6 @@ public class UserController {
                             userContactResponseUserContactFastDtoMapper
                                     .UserContactFastDtoToUserContactResponses(userContactFastDtos,new CycleAvoidingMappingContext());
 
-
-/*        List<UserDto> userDtoList = userService.getUserDtosByPageAndLimit(pageValue,limitValue);
-
-        List<UserRest> userRestList = new ArrayList<>();
-
-        for(UserDto userDto : userDtoList){
-            UserRest userRest = new UserRest();
-            BeanUtils.copyProperties(userDto,userRest);
-            userRestList.add(userRest);
-        }
-
-        return userRestList;*/
         return userContactResponses;
     }
 }
