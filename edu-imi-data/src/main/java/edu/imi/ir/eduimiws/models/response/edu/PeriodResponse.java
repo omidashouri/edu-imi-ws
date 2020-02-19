@@ -17,5 +17,4 @@ public class PeriodResponse extends RepresentationModel<PeriodResponse> {
 
     private PeriodFastDto periodFastDto;
 
-
 }

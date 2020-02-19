@@ -1,16 +1,12 @@
 package edu.imi.ir.eduimiws.models.dto.edu;
 
-import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
-import edu.imi.ir.eduimiws.domain.crm.CompanyEntity;
-import edu.imi.ir.eduimiws.domain.crm.OrganizationEntity;
-import edu.imi.ir.eduimiws.domain.edu.FieldEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PeriodFastDto implements Serializable {
@@ -23,7 +19,7 @@ public class PeriodFastDto implements Serializable {
 
     private String endDate;
 
-    private FieldEntity field;
+    private Long fieldId;
 
     private String type;
 
@@ -31,7 +27,11 @@ public class PeriodFastDto implements Serializable {
 
     private Long offerNumber;
 
+    private Long creatorId;
+
     private String createDate;
+
+    private Long editorId;
 
     private String editDate;
 
@@ -47,11 +47,15 @@ public class PeriodFastDto implements Serializable {
 
     private String minCapacity;
 
-    private OrganizationEntity organization;
+    private Long organizationId;
+
+    private Long executerId;
+
+    private Long academicId;
 
     private Long planId;
 
-    private AccountEntity account;
+    private Long accountId;
 
     private Long totalUnit;
 
@@ -69,6 +73,8 @@ public class PeriodFastDto implements Serializable {
 
     private Long feeForeign;
 
+    private Long currencyId;
+
     private String regStartDate;
 
     private String regEndDate;
@@ -79,7 +85,7 @@ public class PeriodFastDto implements Serializable {
 
     private Long periodOrgFee;
 
-    private CompanyEntity company;
+    private Long companyId;
 
     private String canRegisterOnline;
 
@@ -104,6 +110,8 @@ public class PeriodFastDto implements Serializable {
     private String certificateDesc;
 
     private String allowTerm;
+
+    private Long cityId;
 
     private String variableCertificateName;
 

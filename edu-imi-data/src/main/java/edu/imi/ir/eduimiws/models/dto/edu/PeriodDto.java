@@ -3,13 +3,13 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.domain.edu.FieldEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PeriodDto implements Serializable {
