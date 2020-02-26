@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
 
 
     private String generatePublicId() {
-        return utils.generateUniquePublicUserId();
+        return utils.generateUniquePublicId();
     }
 
 

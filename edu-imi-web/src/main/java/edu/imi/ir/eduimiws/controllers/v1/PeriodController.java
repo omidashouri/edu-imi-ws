@@ -14,7 +14,10 @@ import edu.imi.ir.eduimiws.services.edu.PeriodService;
 import edu.imi.ir.eduimiws.services.edu.PeriodWebServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +52,32 @@ public class PeriodController {
         return null;
     }
 
-
-    @PostMapping(path = "/update-periodWebService",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    //            ,
+//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(path = "/uPeriodWebService",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public OperationStatus updatePeriodWebService() {
 
         OperationStatus returnValue = new OperationStatus();
         boolean operationResult = false;
+        Long periodWebserviceCount;
+        List<PeriodEntity> newPeriods = new ArrayList<>();
+        List<PeriodWebServiceEntity> oldPeriodWebService = new ArrayList<>();
+
+        periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
+
+        if (0 != periodWebserviceCount) {
+            oldPeriodWebService = periodWebServiceService.findAllEntities();
+            newPeriods = periodService.findNewPeriodNotInPeriodWebService(oldPeriodWebService);
+        }
+        periodWebServiceService.generatePeriodWebServicePublicId(newPeriods);
 
 
         if (operationResult) {
             returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
         }
 
-        return returnValue;
+        return null;
     }
 
 

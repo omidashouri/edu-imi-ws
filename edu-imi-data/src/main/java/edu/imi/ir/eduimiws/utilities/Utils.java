@@ -30,7 +30,7 @@ public class Utils {
         return generateRandomString(lenght);
     }
 
-    public String generateUniquePublicUserId()  {
+    public String generateUniquePublicId()  {
 
         String uniquePublicUserId = null;
         try {
