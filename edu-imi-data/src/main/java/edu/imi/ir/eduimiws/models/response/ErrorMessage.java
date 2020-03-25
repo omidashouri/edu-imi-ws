@@ -14,7 +14,9 @@ import java.util.Date;
 @Setter
 public class ErrorMessage {
 
-    private Date timestamp;
+    private Date errorDate;
 
-    private String message;
+    private String errorCode;
+
+    private String errorMessage;
 }

@@ -1,30 +1,55 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ResponseHeader;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Login", description = "Authentication Sample API")
 public class AuthenticationController {
 
-    @ApiOperation("User Login")
-    @ApiResponses({
-            @ApiResponse(code = 200,
-            message = "Response Headers",
-            responseHeaders = {
-                    @ResponseHeader(name = "authorization",
-                    description = "IMI <JWT value here>",
-                    response = String.class),
-                    @ResponseHeader(name = "userPublicId",
-                    description = "<Public User ID value here>",
-                    response = String.class)
-            })
-    })
+    @Operation(
+        description = "User Login",
+        responses = {
+                @ApiResponse(
+                        headers = {
+                                @Header(
+                                        name = "authorization",
+                                        description = "IMI <JWT value here>",
+                                        schema = @Schema(
+                                                type = "String",
+                                                accessMode = Schema.AccessMode.READ_ONLY,
+                                                format = "uuid"
+                                        ),
+                                        required = true
+                                ),
+                                @Header(
+                                        name = "userPublicId",
+                                        description = "<Public User ID value here>",
+                                        schema = @Schema(type = "String")
+                                )
+                        },
+                        responseCode = "200",
+                        description = "",
+                        content = @Content(
+                                schema = @Schema(
+                                        implementation = UserLoginRequestModel.class
+                                )
+                        )
+                ),
+                @ApiResponse(
+                 responseCode = "404",
+                 description = "Person with such username doesn't exists"
+                )
+        }
+    )
     @PostMapping("/users/login")
     public void theFakeLogin(@RequestBody UserLoginRequestModel userLoginRequestModel){
 

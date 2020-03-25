@@ -46,7 +46,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(SecurityConstants.H2_CONSOLE)
                 .permitAll()
 
-                .antMatchers("/v2/api-docs","/configuration/**","/swagger*/**","/webjars/**")
+                .antMatchers("**/swagger-ui/**","/swagger-ui/**","/v3/api-docs/**","/v3/api-docs","/v2/api-docs/**","/configuration/**","/swagger*/**","/webjars/**")
                 .permitAll()
 
                 .anyRequest()
