@@ -28,7 +28,7 @@ public class OpenApiConfig {
 
         Server productionServer = new Server();
             productionServer.setDescription("Production Server");
-            productionServer.setUrl("www.imi.ir");
+            productionServer.setUrl("edu-imi-ws");
 
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("imi-security-key",
@@ -49,7 +49,7 @@ public class OpenApiConfig {
                             .email("info@imi.ir")
                             .url("http://imi.ir"))
                 )
-                .servers(Arrays.asList(productionServer))
+//                .servers(Arrays.asList(productionServer))
                 .addSecurityItem(
                             new SecurityRequirement().addList("imi-security-key", Arrays.asList("read", "write")));
     }
