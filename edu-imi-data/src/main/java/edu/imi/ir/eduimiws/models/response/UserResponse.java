@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.models.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,30 @@ import java.util.List;
 @AllArgsConstructor
 public class UserResponse extends RepresentationModel<UserResponse> {
 
+    @Schema(
+            description = "user unique identifier id",
+            required = true
+    )
     private String userPublicId;
+
+    @Schema(
+            description = "contact unique identifier id"
+    )
     private String contactPublicId;
 
+    @Schema(
+            description = "user first name"
+    )
     private String firstName;
+
+    @Schema(
+            description = "user last name"
+    )
     private String lastName;
+
+    @Schema(
+            description = "user name for login"
+    )
     private String userName;
 
     private List<UserContactResponse> userContactResponses = new ArrayList<>();

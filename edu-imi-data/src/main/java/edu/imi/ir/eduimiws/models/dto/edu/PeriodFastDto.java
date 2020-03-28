@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.models.dto.edu;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,22 +14,42 @@ public class PeriodFastDto implements Serializable {
 
     private static final long serialVersionUID = -1350326709463048085L;
 
+    @Schema(
+            description = "period name"
+    )
     private String name;
 
+    @Schema(
+            description = "period start date"
+    )
     private String startDate;
 
+    @Schema(
+            description = "period end date"
+    )
     private String endDate;
 
     private Long fieldId;
 
     private String type;
 
+    @Schema(
+            description = "period fee"
+    )
     private Long fee;
 
+    @Schema(
+            description = "period number"
+    )
     private Long offerNumber;
-
+    @Schema(
+            description = "creator id"
+    )
     private Long creatorId;
 
+    @Schema(
+            description = "create date"
+    )
     private String createDate;
 
     private Long editorId;
