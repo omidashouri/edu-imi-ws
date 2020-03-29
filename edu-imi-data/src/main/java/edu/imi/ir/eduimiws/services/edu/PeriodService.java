@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface PeriodService {
 
+    Long PeriodCount();
 
     List<PeriodEntity> findNewPeriodNotInPeriodWebService(List<PeriodWebServiceEntity> periodWebServiceEntities);
 

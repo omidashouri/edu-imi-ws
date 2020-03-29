@@ -9,19 +9,27 @@ import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
+import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
 import edu.imi.ir.eduimiws.services.edu.PeriodWebServiceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -55,36 +63,74 @@ public class PeriodController {
         return null;
     }
 
+    @Operation(
+            summary = "Find new period numbers",
+            description = "search for new periods that do not have period public id"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = OperationStatus.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+                    ,
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
     @GetMapping(path = "/count-new-periods",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getNewPeriodNumber() {
+    public ResponseEntity<?> getNewPeriodCount() {
 
         OperationStatus returnValue = new OperationStatus();
-        boolean operationResult = false;
         Long periodWebserviceCount;
-        Long newPeriodCount = 1L;
-        List<PeriodEntity> newPeriods = new ArrayList<>();
-        List<PeriodWebServiceEntity> oldPeriodWebService = new ArrayList<>();
+        Long periodCount;
+        Long newPeriodCount;
 
         periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
+        periodCount = periodService.PeriodCount();
 
-/*        if (0 != periodWebserviceCount) {
-            oldPeriodWebService = periodWebServiceService.findAllEntities();
-            newPeriods = periodService.findNewPeriodNotInPeriodWebService(oldPeriodWebService);
-        }*/
+        if (periodCount == null || periodCount==0) {
+            conflictPeriodCount();
+        }
+
+        if (periodWebserviceCount != null) {
+            newPeriodCount = periodCount - periodWebserviceCount;
+        } else {
+            newPeriodCount = periodCount;
+        }
 
         returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
         returnValue.setOperationName(RequestOperationName.COUNT_NEW_RECORDS.name());
-        if(newPeriodCount>0) {
+
+        if (newPeriodCount > 0) {
             returnValue.setDescription(newPeriodCount + " New Record Found. use 'generate-public-id' link");
 
             Link link = WebMvcLinkBuilder.linkTo(PeriodController.class)
                     .slash("PeriodWebService")
                     .slash("generate-public-id")
                     .withRel("generate-public-id");
-            returnValue.add(link);
 
-        }else{
+            returnValue.add(link);
+        } else {
+
             returnValue.setDescription("New Record Not Found.");
         }
         return ResponseEntity.ok(returnValue);
@@ -100,14 +146,16 @@ public class PeriodController {
         boolean operationResult = false;
         Long periodWebserviceCount;
         List<PeriodEntity> newPeriods = new ArrayList<>();
-        List<PeriodWebServiceEntity> oldPeriodWebService = new ArrayList<>();
+        List<PeriodWebServiceEntity> allPeriodWebService = new ArrayList<>();
 
         periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
 
         if (0 != periodWebserviceCount) {
-            oldPeriodWebService = periodWebServiceService.findAllEntities();
-            newPeriods = periodService.findNewPeriodNotInPeriodWebService(oldPeriodWebService);
+            allPeriodWebService = periodWebServiceService.findAllEntities();
+            newPeriods = periodService.findNewPeriodNotInPeriodWebService(allPeriodWebService);
         }
+
+//        change it to
         periodWebServiceService.generatePeriodWebServicePublicId(newPeriods);
 
 
@@ -119,7 +167,7 @@ public class PeriodController {
     }
 
 
-    @GetMapping(path = "/newPeriods",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(path = "/newPeriods", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<PeriodResponse> getNewPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
             , @RequestParam(value = "limit", defaultValue = "25") int limitValue
             , @RequestParam(value = "rtype", defaultValue = "page") String returnTypeValue) {
@@ -154,7 +202,7 @@ public class PeriodController {
     }
 
 
-    @GetMapping(path = "/periodServices",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(path = "/periodServices", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<PeriodWebServiceDto> getPeriodWebServices(@RequestParam(value = "page", defaultValue = "1") int pageValue
             , @RequestParam(value = "limit", defaultValue = "25") int limitValue
             , @RequestParam(value = "rtype", defaultValue = "page") String returnTypeValue) {
@@ -176,5 +224,12 @@ public class PeriodController {
         return periodWebServiceDtos;
     }
 
+    private ResponseEntity<?> conflictPeriodCount(){
+        return new ResponseEntity<>(
+                new ErrorMessage(new Date(),HttpStatus.INTERNAL_SERVER_ERROR.toString()
+                        ,"period count is null or zero")
+                ,HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
 
 }

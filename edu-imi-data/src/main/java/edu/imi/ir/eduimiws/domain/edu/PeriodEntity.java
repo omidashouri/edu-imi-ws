@@ -73,10 +73,10 @@ public class PeriodEntity extends BaseEntity {
     private String tempType;
 
     @Column(name="MAX_CAPACITY",precision = 3,scale = 0)
-    private String maxCapacity;
+    private Long maxCapacity;
 
     @Column(name="MIN_CAPACITY",precision = 3,scale = 0)
-    private String minCapacity;
+    private Long minCapacity;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -116,7 +116,7 @@ public class PeriodEntity extends BaseEntity {
     private Long tunit;
 
     @Column(name="PUNIT",precision = 3,scale = 0)
-    private String punit;
+    private Long punit;
 
     @Column(name="VARIABLE_NAME",length = 200)
     private String variableName;
@@ -193,7 +193,7 @@ public class PeriodEntity extends BaseEntity {
     private String certificateDesc;
 
     @Column(name="ALLOW_TERM",precision = 6,scale = 0)
-    private String allowTerm;
+    private Long allowTerm;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

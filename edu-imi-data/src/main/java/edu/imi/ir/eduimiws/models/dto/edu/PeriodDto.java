@@ -46,9 +46,9 @@ public class PeriodDto implements Serializable {
 
     private String tempType;
 
-    private String maxCapacity;
+    private Long maxCapacity;
 
-    private String minCapacity;
+    private Long minCapacity;
 
     private OrganizationEntity organization;
 
@@ -66,7 +66,7 @@ public class PeriodDto implements Serializable {
 
     private Long tunit;
 
-    private String punit;
+    private Long punit;
 
     private String variableName;
 
@@ -112,7 +112,7 @@ public class PeriodDto implements Serializable {
 
     private String certificateDesc;
 
-    private String allowTerm;
+    private Long allowTerm;
 
     private ParameterEntity city;
 

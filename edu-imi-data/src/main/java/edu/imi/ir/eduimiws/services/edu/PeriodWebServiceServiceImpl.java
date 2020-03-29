@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -82,7 +83,9 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
 
         if (!isPeriodWebServiceUpdated()) {
             periodWebServiceEntities = periodWebServiceRepository.findAll();
-            periodEntities = periodRepository.findAll();
+            periodEntities = StreamSupport
+                    .stream(periodRepository.findAll().spliterator(),false)
+                    .collect(Collectors.toList());
 
 //            periodEntities.stream().map(PeriodEntity::getPeriodWebService).collect(Collectors.toList()).removeAll(periodWebServiceEntities);
 

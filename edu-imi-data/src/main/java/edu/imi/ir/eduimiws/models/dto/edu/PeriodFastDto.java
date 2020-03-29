@@ -64,9 +64,9 @@ public class PeriodFastDto implements Serializable {
 
     private String tempType;
 
-    private String maxCapacity;
+    private Long maxCapacity;
 
-    private String minCapacity;
+    private Long minCapacity;
 
     private Long organizationId;
 
@@ -84,7 +84,7 @@ public class PeriodFastDto implements Serializable {
 
     private Long tunit;
 
-    private String punit;
+    private Long punit;
 
     private String variableName;
 
@@ -130,7 +130,7 @@ public class PeriodFastDto implements Serializable {
 
     private String certificateDesc;
 
-    private String allowTerm;
+    private Long allowTerm;
 
     private Long cityId;
 
