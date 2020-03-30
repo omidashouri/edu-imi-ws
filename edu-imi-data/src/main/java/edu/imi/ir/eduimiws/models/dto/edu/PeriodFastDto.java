@@ -12,6 +12,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class PeriodFastDto implements Serializable {
 
+//    use when define @Transient filed in Entity and select with @NamedEntityGraph
+
     private static final long serialVersionUID = -1350326709463048085L;
 
     @Schema(

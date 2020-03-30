@@ -3,9 +3,9 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 import lombok.Value;
 
 @Value
-public class PeriodIdDelStatCanRegOnlineOnly {
+public class PeriodOnly {
 
-
+// use when selecting directly from database
 
      Long id;
      Long deleteStatus;

@@ -4,7 +4,9 @@ package edu.imi.ir.eduimiws.services.edu;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodIdDelStatCanRegOnlineOnly;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodOnlyMapper;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodOnly;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -23,16 +26,25 @@ import java.util.stream.StreamSupport;
 public class PeriodServiceImpl implements PeriodService {
 
     private final PeriodRepository periodRepository;
+    private final PeriodOnlyMapper periodOnlyMapper;
 
     @Override
     public Long PeriodCount() {
         return periodRepository.count();
     }
 
+
+    /*        oldPeriods = periodRepository.findByIdIn(periodIds);
+        oldPeriods = periodRepository.findPeriodEntitiesByIdIn(periodIds);
+        oldPeriods = periodRepository.findByCreatorNotIn(personEntities);
+
+        //Ids that are not in PeriodWebService but search among data that selected query get from database
+         newPeriods = periodRepository.findAllByPeriodWebService_IdNotIn(periodWebServiceIds);
+*/
     @Override
     public List<PeriodEntity> findNewPeriodNotInPeriodWebService(List<PeriodWebServiceEntity> periodWebServiceEntities) {
-        List<PeriodIdDelStatCanRegOnlineOnly> allPeriodIdDelStatCanRegOnlineOnly;
-        List<Long> allPeriodIds;
+        List<PeriodOnly> allPeriodOnlyList = new ArrayList<>();
+        List<PeriodOnly> newPeriodOnlyList ;
         List<Long> newPeriodIds = new ArrayList<>();
         List<PeriodEntity> newPeriods = new ArrayList<>();
         List<PeriodEntity> oldPeriods = periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriod).collect(Collectors.toList());
@@ -42,27 +54,20 @@ public class PeriodServiceImpl implements PeriodService {
         List<PersonEntity> personEntities = periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriod).map(PeriodEntity::getCreator)
                 .collect(Collectors.toList());
 
+        allPeriodOnlyList = periodRepository.findBy();
 
-/*        oldPeriods = periodRepository.findByIdIn(periodIds);
-        oldPeriods = periodRepository.findPeriodEntitiesByIdIn(periodIds);
-        oldPeriods = periodRepository.findByCreatorNotIn(personEntities);
-        oldPeriods = periodRepository.findAllByPeriodWebService_IdIn(periodWebServiceIds);*/
+        Map<Long,List<PeriodOnly>>  allPeriodOnlyMap = allPeriodOnlyList.stream().collect(Collectors.groupingBy(PeriodOnly::getId));
 
-        allPeriodIdDelStatCanRegOnlineOnly = periodRepository.findBy();
-        StreamSupport
-                .stream(allPeriodIdDelStatCanRegOnlineOnly.spliterator(),false)
-                .filter(oldPeriods.stream().map(PeriodEntity::getId).collect(Collectors.toSet())::contains)
-                .map(PeriodIdDelStatCanRegOnlineOnly::getId)
-                .map(newPeriodIds::add);
+        Map<Long, List<PeriodOnly>> newPeriodOnlyMap = allPeriodOnlyMap
+                .entrySet()
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(e->!oldPeriods.stream().map(PeriodEntity::getId).collect(Collectors.toSet()).contains(e.getKey()))
+                .collect(Collectors.toMap(e->e.getKey(), e->e.getValue()));
 
-        for(Long id : newPeriodIds){
-            PeriodEntity newPeriodEntity = new PeriodEntity();
-            newPeriodEntity.setId(id);
-            newPeriods.add(newPeriodEntity);
-        }
+        newPeriodOnlyList = newPeriodOnlyMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
 
-        newPeriods = periodRepository.findAllByPeriodWebService_IdNotIn(periodWebServiceIds);
-
+        newPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(newPeriodOnlyList,new CycleAvoidingMappingContext());
 
         return newPeriods;//newPeriods oldPeriods
     }

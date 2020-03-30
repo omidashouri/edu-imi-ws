@@ -3,7 +3,7 @@ package edu.imi.ir.eduimiws.repositories.edu;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodIdDelStatCanRegOnlineOnly;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodOnly;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,7 @@ import java.util.Set;
 @Repository
 public interface PeriodRepository extends CrudRepository<PeriodEntity,Long> {
 
-    List<PeriodIdDelStatCanRegOnlineOnly> findBy();
+    List<PeriodOnly> findBy();
 
     List<PeriodEntity> findTop10By();
 
