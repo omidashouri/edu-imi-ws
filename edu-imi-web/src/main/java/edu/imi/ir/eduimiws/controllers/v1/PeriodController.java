@@ -155,7 +155,7 @@ public class PeriodController {
             newPeriods = periodService.findNewPeriodNotInPeriodWebService(allPeriodWebService);
         }
 
-//        change it to
+//        change it to work with 'periodWebServiceFastGraph' for select all in periodwebservice
         periodWebServiceService.generatePeriodWebServicePublicId(newPeriods);
 
 

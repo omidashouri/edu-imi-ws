@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws.services.edu;
 
 
-import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
@@ -45,14 +44,8 @@ public class PeriodServiceImpl implements PeriodService {
     public List<PeriodEntity> findNewPeriodNotInPeriodWebService(List<PeriodWebServiceEntity> periodWebServiceEntities) {
         List<PeriodOnly> allPeriodOnlyList = new ArrayList<>();
         List<PeriodOnly> newPeriodOnlyList ;
-        List<Long> newPeriodIds = new ArrayList<>();
         List<PeriodEntity> newPeriods = new ArrayList<>();
-        List<PeriodEntity> oldPeriods = periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriod).collect(Collectors.toList());
-        List<PeriodEntity> periods = periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriod).collect(Collectors.toList());
-        List<Long> periodWebServiceIds = periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getId).collect(Collectors.toList());
-        List<Long> periodIds = periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriod).map(PeriodEntity::getId).collect(Collectors.toList());
-        List<PersonEntity> personEntities = periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriod).map(PeriodEntity::getCreator)
-                .collect(Collectors.toList());
+        List<Long> oldPeriodIds = periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriodId).collect(Collectors.toList());
 
         allPeriodOnlyList = periodRepository.findBy();
 
@@ -62,13 +55,15 @@ public class PeriodServiceImpl implements PeriodService {
                 .entrySet()
                 .stream()
                 .filter(Objects::nonNull)
-                .filter(e->!oldPeriods.stream().map(PeriodEntity::getId).collect(Collectors.toSet()).contains(e.getKey()))
+                .filter(e->!oldPeriodIds.stream().collect(Collectors.toSet()).contains(e.getKey()))
                 .collect(Collectors.toMap(e->e.getKey(), e->e.getValue()));
 
         newPeriodOnlyList = newPeriodOnlyMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
 
         newPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(newPeriodOnlyList,new CycleAvoidingMappingContext());
 
-        return newPeriods;//newPeriods oldPeriods
+        return newPeriods;
     }
+
+
 }

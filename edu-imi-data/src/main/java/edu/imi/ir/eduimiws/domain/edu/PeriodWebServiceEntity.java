@@ -6,6 +6,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
+
+
+@NamedEntityGraph(name = "periodWebServiceFastGraph", attributeNodes = {
+        @NamedAttributeNode("periodId"),
+        @NamedAttributeNode("periodPublicId"),
+        @NamedAttributeNode("canRegisterOnline"),
+        @NamedAttributeNode("deleteTs")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +29,14 @@ public class PeriodWebServiceEntity extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "PERIOD_ID")
     private PeriodEntity period;
+
+    @Column(name = "PERIOD_ID", insertable = false, updatable = false)
+    private Long periodId;
+
+    @Transient
+    public Long getPeriodId() {
+        return periodId;
+    }
 
     @Column(name="PERIOD_PUBLIC_ID")
     private String periodPublicId;
