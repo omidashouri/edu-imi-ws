@@ -26,7 +26,7 @@ public class PeriodWebServiceEntity extends BaseEntity {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERIOD_ID")
     private PeriodEntity period;
 
@@ -37,6 +37,9 @@ public class PeriodWebServiceEntity extends BaseEntity {
     public Long getPeriodId() {
         return periodId;
     }
+
+    @Column(name = "PERIOD_EDIT_DATE", length = 10)
+    private String periodEditDate;
 
     @Column(name="PERIOD_PUBLIC_ID")
     private String periodPublicId;

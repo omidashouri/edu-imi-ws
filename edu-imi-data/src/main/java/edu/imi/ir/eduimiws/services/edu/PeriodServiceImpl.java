@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +27,11 @@ public class PeriodServiceImpl implements PeriodService {
     @Override
     public Long PeriodCount() {
         return periodRepository.count();
+    }
+
+    @Override
+    public PeriodEntity selectLastRecord() {
+        return periodRepository.findFirstByOrderByIdDesc();
     }
 
 
@@ -63,6 +65,20 @@ public class PeriodServiceImpl implements PeriodService {
         newPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(newPeriodOnlyList,new CycleAvoidingMappingContext());
 
         return newPeriods;
+    }
+
+    public List<PeriodEntity> findAllPeriodOnly(){
+        List<PeriodOnly> allPeriodOnlies = periodRepository.findAllPeriodOnly();
+        allPeriodOnlies.sort(Comparator.comparing(PeriodOnly::getId));
+        List<PeriodEntity> allPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(allPeriodOnlies,new CycleAvoidingMappingContext());
+        return allPeriods;
+    }
+
+    @Override
+    public List<PeriodEntity> findAllPeriodOnlyByIdGreaterThan(Long id) {
+        List<PeriodOnly> allPeriodOnlines = periodRepository.findPeriodOnlyByIdGreaterThan(id);
+        List<PeriodEntity> allPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(allPeriodOnlines,new CycleAvoidingMappingContext());
+        return allPeriods;
     }
 
 

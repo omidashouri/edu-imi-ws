@@ -9,6 +9,12 @@ public interface PeriodService {
 
     Long PeriodCount();
 
+    PeriodEntity selectLastRecord();
+
+    List<PeriodEntity> findAllPeriodOnly();
+
+    List<PeriodEntity> findAllPeriodOnlyByIdGreaterThan(Long id);
+
     List<PeriodEntity> findNewPeriodNotInPeriodWebService(List<PeriodWebServiceEntity> periodWebServiceEntities);
 
 }

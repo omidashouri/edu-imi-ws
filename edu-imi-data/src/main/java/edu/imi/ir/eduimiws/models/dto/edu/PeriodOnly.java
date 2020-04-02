@@ -10,6 +10,7 @@ public class PeriodOnly {
      Long id;
      Long deleteStatus;
      String canRegisterOnline;
+     String editDate;
 
 /*     String name;
 

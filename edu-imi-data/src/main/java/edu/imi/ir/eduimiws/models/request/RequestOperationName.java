@@ -6,5 +6,6 @@ public enum RequestOperationName {
     VERIFY_EMAIL,
     REQUEST_PASSWORD_RESET,
     PASSWORD_RESET,
-    COUNT_NEW_RECORDS
+    COUNT_NEW_RECORDS,
+    CREATE_NEW_RECORDS
 }

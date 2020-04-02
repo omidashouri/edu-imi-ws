@@ -2,9 +2,29 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodOnly;
 import lombok.*;
 
 import javax.persistence.*;
+
+
+
+@SqlResultSetMapping(
+        name="periodOnly",
+        classes={
+                @ConstructorResult(
+                        targetClass= edu.imi.ir.eduimiws.models.dto.edu.PeriodOnly.class,
+                        columns={
+                                @ColumnResult(name="idR", type = Long.class),
+                                @ColumnResult(name="deleteStatusR", type = Long.class),
+                                @ColumnResult(name="canRegisterOnlineR" ,type = String.class),
+                                @ColumnResult(name="periodEditDateR" ,type = String.class)
+                        }
+                )
+        }
+)
+@NamedNativeQuery(name="PeriodEntity.selectAllPeriodOnly",query="select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD", resultSetMapping="periodOnly")
+@NamedNativeQuery(name="PeriodEntity.selectPeriodOnlyByIdGreaterThan",query="select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID > :periodId ", resultSetMapping="periodOnly")
 
 @Getter
 @Setter

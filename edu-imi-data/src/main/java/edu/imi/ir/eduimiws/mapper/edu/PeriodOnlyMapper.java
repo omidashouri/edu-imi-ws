@@ -20,7 +20,8 @@ public interface PeriodOnlyMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "deleteStatus", target = "deleteStatus"),
-            @Mapping(source = "canRegisterOnline", target = "canRegisterOnline")
+            @Mapping(source = "canRegisterOnline", target = "canRegisterOnline"),
+            @Mapping(source = "editDate", target = "editDate")
     })
     PeriodEntity PeriodOnlyToPeriodEntity(PeriodOnly periodOnly, @Context CycleAvoidingMappingContext context);
 

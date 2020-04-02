@@ -18,6 +18,8 @@ public class PeriodWebServiceFastDto implements Serializable {
 
     private String periodPublicId;
 
+    private String periodEditDate;
+
     private String description;
 
     private String canRegisterOnline;

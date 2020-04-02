@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
@@ -46,15 +47,10 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
 
         List<PeriodWebServiceEntity> newPeriodWebServiceEntities = new ArrayList<>();
 
-        if (0 == newPeriodEntities.size()) {
-            newPeriodEntities = periodRepository.findTop10By();
-        } else {
-            newPeriodEntities = periodRepository.findTop20By();
-        }
-
         newPeriodEntities.forEach(p -> {
             PeriodWebServiceEntity newPeriodWebService = new PeriodWebServiceEntity();
             newPeriodWebService.setPeriod(p);
+            newPeriodWebService.setPeriodId(p.getId());
             newPeriodWebService.setPeriodPublicId(this.generatePeriodWebServicePublicId());
             if (null != p.getCanRegisterOnline()) {
                 newPeriodWebService.setCanRegisterOnline(p.getCanRegisterOnline().trim());
@@ -62,13 +58,19 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
             if (null != p.getDeleteStatus() && p.getDeleteStatus().equals(1L)) {
                 newPeriodWebService.setDeleteTs(new Timestamp(new Date().getTime()));
             }
+            if (null != p.getEditDate()) {
+                newPeriodWebService.setPeriodEditDate(p.getEditDate());
+            }
             newPeriodWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
             newPeriodWebServiceEntities.add(newPeriodWebService);
         });
 
+        newPeriodWebServiceEntities.sort(Comparator.comparing(PeriodWebServiceEntity::getPeriodId));
+
+/*        List<PeriodWebServiceEntity> temp20 = newPeriodWebServiceEntities
+                .stream().limit(20).collect(Collectors.toList());*/
 
         periodWebServiceRepository.saveAll(newPeriodWebServiceEntities);
-
 
         return newPeriodWebServiceEntities;
     }
@@ -84,7 +86,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
         if (!isPeriodWebServiceUpdated()) {
             periodWebServiceEntities = periodWebServiceRepository.findAll();
             periodEntities = StreamSupport
-                    .stream(periodRepository.findAll().spliterator(),false)
+                    .stream(periodRepository.findAll().spliterator(), false)
                     .collect(Collectors.toList());
 
 //            periodEntities.stream().map(PeriodEntity::getPeriodWebService).collect(Collectors.toList()).removeAll(periodWebServiceEntities);
@@ -100,15 +102,18 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
                     .filter(periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriod).collect(Collectors.toSet())::contains)
                     .map(newPeriodEntities::add);
 
-
             Predicate<PeriodEntity> periodPredicate = newPeriod -> newPeriod.getId().equals(newPeriod);
             Predicate<List<PeriodEntity>> periodsPredicate = (newPeriods) -> newPeriods.equals(newPeriods);
-
 
             periodWebServiceRepository.findAll();
             return null;
         }
         return null;
+    }
+
+    @Override
+    public PeriodWebServiceEntity selectLastRecord() {
+        return periodWebServiceRepository.findFirstByOrderByIdDesc();
     }
 
 

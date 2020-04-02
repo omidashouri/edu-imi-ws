@@ -107,7 +107,7 @@ public class PeriodController {
         periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
         periodCount = periodService.PeriodCount();
 
-        if (periodCount == null || periodCount==0) {
+        if (periodCount == null || periodCount == 0) {
             conflictPeriodCount();
         }
 
@@ -117,7 +117,7 @@ public class PeriodController {
             newPeriodCount = periodCount;
         }
 
-        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
         returnValue.setOperationName(RequestOperationName.COUNT_NEW_RECORDS.name());
 
         if (newPeriodCount > 0) {
@@ -140,30 +140,38 @@ public class PeriodController {
 //            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PostMapping(path = "/PeriodWebService/generate-public-id",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public OperationStatus createPeriodWebServicePublicId() {
+    public ResponseEntity<?> createPeriodWebServicePublicId() {
 
         OperationStatus returnValue = new OperationStatus();
-        boolean operationResult = false;
         Long periodWebserviceCount;
+        PeriodWebServiceEntity periodWebServiceLastRecord;
+        PeriodEntity periodLastRecord;
         List<PeriodEntity> newPeriods = new ArrayList<>();
-        List<PeriodWebServiceEntity> allPeriodWebService = new ArrayList<>();
+        List<PeriodWebServiceEntity> newPeriodWebService = new ArrayList<>();
 
         periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
 
         if (0 != periodWebserviceCount) {
-            allPeriodWebService = periodWebServiceService.findAllEntities();
-            newPeriods = periodService.findNewPeriodNotInPeriodWebService(allPeriodWebService);
+            periodWebServiceLastRecord = periodWebServiceService.selectLastRecord();
+            periodLastRecord = periodService.selectLastRecord();
+            if (periodLastRecord.getId() > periodWebServiceLastRecord.getPeriodId()) {
+                newPeriods = periodService.findAllPeriodOnlyByIdGreaterThan(periodWebServiceLastRecord.getPeriodId());
+            } else {
+                returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
+                returnValue.setOperationName(RequestOperationName.CREATE_NEW_RECORDS.name());
+                returnValue.setDescription("New Record Not Found.");
+                return ResponseEntity.ok(returnValue);
+            }
+        } else {
+            newPeriods = periodService.findAllPeriodOnly();
         }
 
-//        change it to work with 'periodWebServiceFastGraph' for select all in periodwebservice
-        periodWebServiceService.generatePeriodWebServicePublicId(newPeriods);
+        newPeriodWebService = periodWebServiceService.generatePeriodWebServicePublicId(newPeriods);
 
-
-        if (operationResult) {
-            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
-        }
-
-        return null;
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
+        returnValue.setOperationName(RequestOperationName.CREATE_NEW_RECORDS.name());
+        returnValue.setDescription(newPeriodWebService.size() + " New Public Id Generated");
+        return ResponseEntity.ok(returnValue);
     }
 
 
@@ -224,11 +232,11 @@ public class PeriodController {
         return periodWebServiceDtos;
     }
 
-    private ResponseEntity<?> conflictPeriodCount(){
+    private ResponseEntity<?> conflictPeriodCount() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(),HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        ,"period count is null or zero")
-                ,HttpStatus.INTERNAL_SERVER_ERROR
+                new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
+                        , "period count is null or zero")
+                , HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
 

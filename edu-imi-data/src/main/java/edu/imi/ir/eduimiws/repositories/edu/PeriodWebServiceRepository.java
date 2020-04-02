@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +13,7 @@ public interface PeriodWebServiceRepository extends CrudRepository<PeriodWebServ
 
     @EntityGraph("periodWebServiceFastGraph")
     List<PeriodWebServiceEntity> findAll();
+
+    PeriodWebServiceEntity findFirstByOrderByIdDesc();
 
 }

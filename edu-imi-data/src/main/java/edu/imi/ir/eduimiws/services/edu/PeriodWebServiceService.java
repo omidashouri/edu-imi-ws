@@ -9,6 +9,8 @@ public interface PeriodWebServiceService {
 
     PeriodWebServiceEntity findAll();
 
+    PeriodWebServiceEntity selectLastRecord();
+
     List<PeriodWebServiceEntity> findAllEntities();
 
     Long periodWebServiceCount();
