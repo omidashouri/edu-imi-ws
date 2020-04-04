@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.dto;
+package edu.imi.ir.eduimiws.models.dto.crm;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

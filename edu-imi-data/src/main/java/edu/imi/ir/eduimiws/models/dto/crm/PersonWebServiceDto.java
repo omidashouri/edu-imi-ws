@@ -1,5 +1,7 @@
-package edu.imi.ir.eduimiws.models.dto;
+package edu.imi.ir.eduimiws.models.dto.crm;
 
+import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

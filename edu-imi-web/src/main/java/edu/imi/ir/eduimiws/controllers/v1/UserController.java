@@ -4,7 +4,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserContactResponseUserContactFastDtoMapper;
-import edu.imi.ir.eduimiws.models.dto.UserContactFastDto;
+import edu.imi.ir.eduimiws.models.dto.crm.UserContactFastDto;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.UserContactResponse;
 import edu.imi.ir.eduimiws.models.response.UserResponse;

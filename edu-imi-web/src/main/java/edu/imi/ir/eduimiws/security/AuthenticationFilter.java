@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.imi.ir.eduimiws.configurations.SpringApplicationContext;
-import edu.imi.ir.eduimiws.models.dto.PersonWebServiceFastDto;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceFastDto;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
 import edu.imi.ir.eduimiws.services.UserService;
 import io.jsonwebtoken.Jwts;

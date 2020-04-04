@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.dto;
+package edu.imi.ir.eduimiws.models.dto.crm;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
