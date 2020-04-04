@@ -16,6 +16,8 @@ public class PeriodFastDto implements Serializable {
 
     private static final long serialVersionUID = -1350326709463048085L;
 
+    private Long periodId;
+
     @Schema(
             description = "period name"
     )
