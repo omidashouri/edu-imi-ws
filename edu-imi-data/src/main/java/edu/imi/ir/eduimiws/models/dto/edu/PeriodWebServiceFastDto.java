@@ -14,6 +14,8 @@ public class PeriodWebServiceFastDto implements Serializable {
 
     private static final long serialVersionUID = 4246939209926794747L;
 
+    private Long id;
+
     private Long periodId;
 
     private String periodPublicId;

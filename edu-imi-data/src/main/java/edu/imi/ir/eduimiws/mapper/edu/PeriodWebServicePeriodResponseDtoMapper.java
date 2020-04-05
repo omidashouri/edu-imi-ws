@@ -1,12 +1,8 @@
 package edu.imi.ir.eduimiws.mapper.edu;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceDto;
-import edu.imi.ir.eduimiws.models.dto.crm.UserContactFastDto;
-import edu.imi.ir.eduimiws.models.dto.crm.UserContactResponseDto;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodResponseDto;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodResponse;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -24,20 +20,20 @@ public interface PeriodWebServicePeriodResponseDtoMapper {
             @Mapping(source = "canRegisterOnline", target = "periodFastDto.canRegisterOnline")
 
     })
-    PeriodResponseDto PeriodWebServiceEntityToPeriodFastDto(PeriodWebServiceEntity periodWebServiceEntity, @Context CycleAvoidingMappingContext context);
+    PeriodResponse PeriodWebServiceEntityToPeriodFastDto(PeriodWebServiceEntity periodWebServiceEntity, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PeriodWebServiceEntity PeriodResponseDtoToPeriodWebServiceEntity(PeriodResponseDto periodResponseDto, @Context CycleAvoidingMappingContext context);
+    PeriodWebServiceEntity PeriodResponseDtoToPeriodWebServiceEntity(PeriodResponse periodResponse, @Context CycleAvoidingMappingContext context);
 
-    List<PeriodResponseDto> PeriodWebServiceEntitiesToPeriodResponseDtos(List<PeriodWebServiceEntity> periodWebServiceEntities, @Context CycleAvoidingMappingContext context);
+    List<PeriodResponse> PeriodWebServiceEntitiesToPeriodResponseDtos(List<PeriodWebServiceEntity> periodWebServiceEntities, @Context CycleAvoidingMappingContext context);
 
-    List<PeriodWebServiceEntity> PeriodResponseDtosToPeriodWebServiceEntites(List<PeriodResponseDto> periodResponseDtos, @Context CycleAvoidingMappingContext context);
+    List<PeriodWebServiceEntity> PeriodResponseDtosToPeriodWebServiceEntites(List<PeriodResponse> periodResponses, @Context CycleAvoidingMappingContext context);
 
     @AfterMapping
-    default void handlePeriodResponseDtoPeriodPublicId(PeriodWebServiceEntity periodWebServiceEntity, @MappingTarget PeriodResponseDto periodResponseDto) {
-        periodResponseDto.setPeriodPublicId(periodWebServiceEntity.getPeriodPublicId());
+    default void handlePeriodResponseDtoPeriodPublicId(PeriodWebServiceEntity periodWebServiceEntity, @MappingTarget PeriodResponse periodResponse) {
+        periodResponse.setPeriodPublicId(periodWebServiceEntity.getPeriodPublicId());
         if (periodWebServiceEntity.getDeleteTs() != null) {
-            periodResponseDto.getPeriodFastDto().setDeleteStatus(1L);
+            periodResponse.getPeriodFastDto().setDeleteStatus(1L);
         }
     }
 

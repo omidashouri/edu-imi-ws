@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PeriodResponseDto implements Serializable {
+public class PeriodResponse implements Serializable {
 
     private static final long serialVersionUID = 6403170931401315106L;
 

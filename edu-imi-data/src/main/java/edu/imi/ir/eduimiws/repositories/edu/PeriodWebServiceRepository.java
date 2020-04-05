@@ -1,8 +1,9 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +13,13 @@ import java.util.List;
 public interface PeriodWebServiceRepository extends CrudRepository<PeriodWebServiceEntity,Long> {
 
     @EntityGraph("periodWebServiceFastGraph")
-    List<PeriodWebServiceEntity> findAll();
+    List<PeriodWebServiceEntity> findAllPeriodWebServiceFast();
 
     PeriodWebServiceEntity findFirstByOrderByIdDesc();
+
+    @EntityGraph("periodWebServiceFastGraph")
+    Page<PeriodWebServiceEntity> findAllPeriodWebServiceFastPageable(Pageable pageable);
+
+    List<PeriodWebServiceEntity> findAllByIdIn(List<Long> periodIds);
 
 }

@@ -14,6 +14,10 @@ public class PeriodWebServiceDto implements Serializable {
 
     private static final long serialVersionUID = -3440156297947149924L;
 
+    private Long Id;
+
+    private Long PeriodId;
+
     private PeriodDto periodDto;
 
     private String periodPublicId;

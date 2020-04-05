@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceDto;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
@@ -21,6 +22,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -31,6 +35,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/v1/periods")
@@ -48,11 +54,30 @@ public class PeriodController {
     public List<PeriodResponse> getPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
             , @RequestParam(value = "limit", defaultValue = "25") int limitValue) {
 
- /*        List<PeriodWebServiceEntity> periodWebServices =
-                periodWebServiceService
-                        .findAllListByPageAndSize(pageValue,limitValue);
+//        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable paperiodPageable = PageRequest.of(pageValue,limitValue);
 
-       List<UserContactFastDto> userContactFastDtos =
+         Page<PeriodWebServiceFastDto> periodWebServiceFastDtoPages =
+                periodWebServiceService.findAllPeriodWebServiceFastDtoPageable(paperiodPageable);
+
+         List<Long> periodWebServiceIds = StreamSupport
+                 .stream(periodWebServiceFastDtoPages.spliterator(),false)
+                 .map(PeriodWebServiceFastDto::getId).collect(Collectors.toList());
+
+         List<PeriodWebServiceDto> periodWebServiceDtos = periodWebServiceService
+                 .findAllPeriodWebServiceDtoById(periodWebServiceIds);
+
+//omiddo:complete this by converting periodWebServiceDto to PeriodResponse
+//        Page<PeriodResponse> periodResponsesPages =
+
+
+
+
+//        Page<PeriodWebServiceEntity> periodWebServiceEntityPages =
+
+
+
+/*       List<UserContactFastDto> userContactFastDtos =
                 personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users,new CycleAvoidingMappingContext());
 
         List<UserContactResponse> userContactResponses =
@@ -136,8 +161,39 @@ public class PeriodController {
         return ResponseEntity.ok(returnValue);
     }
 
-    //            ,
-//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+
+    @Operation(
+            summary = "Generate Period Public Id",
+            description = "generate public id for new periods"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = OperationStatus.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+                    ,
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
     @PostMapping(path = "/PeriodWebService/generate-public-id",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createPeriodWebServicePublicId() {

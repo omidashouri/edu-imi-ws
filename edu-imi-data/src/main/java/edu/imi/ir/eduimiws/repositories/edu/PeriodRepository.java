@@ -1,6 +1,5 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodOnly;
@@ -26,11 +25,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity,Long> {
 
     PeriodEntity findFirstByOrderByIdDesc();
 
-    List<PeriodEntity> findTop10By();
-
-    List<PeriodEntity> findTop20By();
-
-    List<PeriodOnly> findByIdAfter(Long periodId);
+    List<PeriodEntity> findAllByIdIn(List<Long> periodIds);
 
     @EntityGraph(value = "PeriodEntity.periodWebServiceEntity", type = EntityGraph.EntityGraphType.LOAD)
     List<PeriodEntity>  findAllByPeriodWebServiceNotIn(Set<PeriodWebServiceEntity> periodWebServiceEntities);
@@ -42,17 +37,6 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity,Long> {
     List<PeriodEntity> findAllByPeriodWebService_IdNotIn(List<Long> periodWebServiceId);
 
 
-//    List<PeriodEntity> findAllByIdIn(List<PeriodEntity> periodIdIn);
-
-//    List<PeriodEntity> findAllByIdIn(List<PeriodEntity> periodIdIn);
-
-    List<PeriodEntity> findAllByIdIn(List<Long> periodIdIn);
-
-    List<PeriodEntity>  findPeriodEntitiesByIdIn(List<Long> periods);
-    List<PeriodEntity>  findByIdIn(List<Long> periods);
-
-//    @EntityGraph(value = "PeriodEntity.creator", type = EntityGraph.EntityGraphType.LOAD)
-    List<PeriodEntity>  findByCreatorNotIn(List<PersonEntity> personEntities);
 
 
 

@@ -2,11 +2,18 @@ package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceMapper;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceDto;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceFastDto;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodRepository;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,13 +34,15 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
 
     private final PeriodWebServiceRepository periodWebServiceRepository;
     private final PeriodRepository periodRepository;
+    private final PeriodWebServiceFastDtoMapper periodWebServiceFastDtoMapper;
+    private final PeriodWebServiceMapper periodWebServiceMapper;
     private final Utils utils;
 
 
     @Override
     public List<PeriodWebServiceEntity> findAllEntities() {
         List<PeriodWebServiceEntity> periodWebServiceEntities = new ArrayList<>();
-        periodWebServiceEntities = periodWebServiceRepository.findAll();
+        periodWebServiceEntities = periodWebServiceRepository.findAllPeriodWebServiceFast();
         return periodWebServiceEntities;
     }
 
@@ -76,6 +85,32 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
     }
 
     @Override
+    public Page<PeriodWebServiceFastDto> findAllPeriodWebServiceFastDtoPageable(Pageable pageable) {
+
+        Page<PeriodWebServiceEntity> periodWebServiceEntitiesPages = periodWebServiceRepository
+                .findAllPeriodWebServiceFastPageable(pageable);
+
+        Page<PeriodWebServiceFastDto> periodWebServiceFastDtosPages = periodWebServiceEntitiesPages
+                .map(periodWebServiceEntity -> periodWebServiceFastDtoMapper
+                        .PeriodWebServiceEntityToPeriodWebServiceFastDto(periodWebServiceEntity,
+                                new CycleAvoidingMappingContext()));
+
+        return periodWebServiceFastDtosPages;
+    }
+
+    @Override
+    public List<PeriodWebServiceDto> findAllPeriodWebServiceDtoById(List<Long> ids) {
+
+        List<PeriodWebServiceEntity> periodWebServiceEntities = periodWebServiceRepository
+                .findAllByIdIn(ids);
+
+        List<PeriodWebServiceDto> periodWebServiceDtos = periodWebServiceMapper
+                .PeriodWebServiceEntitiesToPeriodWebServiceDtos(periodWebServiceEntities, new CycleAvoidingMappingContext());
+
+        return periodWebServiceDtos;
+    }
+
+    @Override
     public PeriodWebServiceEntity findAll() {
 
         List<PeriodWebServiceEntity> periodWebServiceEntities;
@@ -84,7 +119,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
         List<PeriodWebServiceEntity> newPeriodWebServiceEntities;
 
         if (!isPeriodWebServiceUpdated()) {
-            periodWebServiceEntities = periodWebServiceRepository.findAll();
+            periodWebServiceEntities = periodWebServiceRepository.findAllPeriodWebServiceFast();
             periodEntities = StreamSupport
                     .stream(periodRepository.findAll().spliterator(), false)
                     .collect(Collectors.toList());
@@ -105,7 +140,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
             Predicate<PeriodEntity> periodPredicate = newPeriod -> newPeriod.getId().equals(newPeriod);
             Predicate<List<PeriodEntity>> periodsPredicate = (newPeriods) -> newPeriods.equals(newPeriods);
 
-            periodWebServiceRepository.findAll();
+            periodWebServiceRepository.findAllPeriodWebServiceFast();
             return null;
         }
         return null;
