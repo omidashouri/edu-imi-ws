@@ -13,12 +13,12 @@ import java.util.List;
 public interface PeriodWebServiceRepository extends CrudRepository<PeriodWebServiceEntity,Long> {
 
     @EntityGraph("periodWebServiceFastGraph")
-    List<PeriodWebServiceEntity> findAllPeriodWebServiceFast();
+    List<PeriodWebServiceEntity> findAll();
 
     PeriodWebServiceEntity findFirstByOrderByIdDesc();
 
     @EntityGraph("periodWebServiceFastGraph")
-    Page<PeriodWebServiceEntity> findAllPeriodWebServiceFastPageable(Pageable pageable);
+    Page<PeriodWebServiceEntity> findAll(Pageable pageable);
 
     List<PeriodWebServiceEntity> findAllByIdIn(List<Long> periodIds);
 

@@ -4,8 +4,10 @@ import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceDtoPeriodResponseMapper;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodResponseDto;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceDto;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -48,10 +51,11 @@ public class PeriodController {
     private final PeriodService periodService;
     private final PeriodWebServiceMapper periodWebServiceMapper;
     private final PeriodFastDtoMapper periodFastDtoMapper;
+    private final PeriodWebServiceDtoPeriodResponseMapper periodWebServiceDtoPeriodResponseMapper;
 
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<PeriodResponse> getPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
+    public Page<PeriodResponse> getPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
             , @RequestParam(value = "limit", defaultValue = "25") int limitValue) {
 
 //        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
@@ -67,25 +71,14 @@ public class PeriodController {
          List<PeriodWebServiceDto> periodWebServiceDtos = periodWebServiceService
                  .findAllPeriodWebServiceDtoById(periodWebServiceIds);
 
-//omiddo:complete this by converting periodWebServiceDto to PeriodResponse
-//        Page<PeriodResponse> periodResponsesPages =
+        Page<PeriodResponse> periodResponsesPages = PageableExecutionUtils
+                .getPage(periodWebServiceDtoPeriodResponseMapper
+                        .PeriodWebServiceDtosToPeriodResponses(periodWebServiceDtos,
+                                new CycleAvoidingMappingContext()),
+                        paperiodPageable,
+                        periodWebServiceFastDtoPages::getTotalElements);
 
-
-
-
-//        Page<PeriodWebServiceEntity> periodWebServiceEntityPages =
-
-
-
-/*       List<UserContactFastDto> userContactFastDtos =
-                personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users,new CycleAvoidingMappingContext());
-
-        List<UserContactResponse> userContactResponses =
-                userContactResponseUserContactFastDtoMapper
-                        .UserContactFastDtoToUserContactResponses(userContactFastDtos,new CycleAvoidingMappingContext());
-
-        return userContactResponses;*/
-        return null;
+        return periodResponsesPages;
     }
 
     @Operation(

@@ -12,6 +12,7 @@ import javax.persistence.*;
         @NamedAttributeNode("periodId"),
         @NamedAttributeNode("periodPublicId"),
         @NamedAttributeNode("canRegisterOnline"),
+        @NamedAttributeNode("periodEditDate"),
         @NamedAttributeNode("deleteTs")})
 @Getter
 @Setter

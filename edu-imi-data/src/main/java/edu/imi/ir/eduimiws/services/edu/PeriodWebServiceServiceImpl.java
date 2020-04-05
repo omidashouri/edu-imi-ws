@@ -42,7 +42,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
     @Override
     public List<PeriodWebServiceEntity> findAllEntities() {
         List<PeriodWebServiceEntity> periodWebServiceEntities = new ArrayList<>();
-        periodWebServiceEntities = periodWebServiceRepository.findAllPeriodWebServiceFast();
+        periodWebServiceEntities = periodWebServiceRepository.findAll();
         return periodWebServiceEntities;
     }
 
@@ -88,7 +88,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
     public Page<PeriodWebServiceFastDto> findAllPeriodWebServiceFastDtoPageable(Pageable pageable) {
 
         Page<PeriodWebServiceEntity> periodWebServiceEntitiesPages = periodWebServiceRepository
-                .findAllPeriodWebServiceFastPageable(pageable);
+                .findAll(pageable);
 
         Page<PeriodWebServiceFastDto> periodWebServiceFastDtosPages = periodWebServiceEntitiesPages
                 .map(periodWebServiceEntity -> periodWebServiceFastDtoMapper
@@ -119,7 +119,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
         List<PeriodWebServiceEntity> newPeriodWebServiceEntities;
 
         if (!isPeriodWebServiceUpdated()) {
-            periodWebServiceEntities = periodWebServiceRepository.findAllPeriodWebServiceFast();
+            periodWebServiceEntities = periodWebServiceRepository.findAll();
             periodEntities = StreamSupport
                     .stream(periodRepository.findAll().spliterator(), false)
                     .collect(Collectors.toList());
@@ -140,7 +140,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
             Predicate<PeriodEntity> periodPredicate = newPeriod -> newPeriod.getId().equals(newPeriod);
             Predicate<List<PeriodEntity>> periodsPredicate = (newPeriods) -> newPeriods.equals(newPeriods);
 
-            periodWebServiceRepository.findAllPeriodWebServiceFast();
+            periodWebServiceRepository.findAll();
             return null;
         }
         return null;

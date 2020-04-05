@@ -1,11 +1,10 @@
 package edu.imi.ir.eduimiws.mapper.edu;
 
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodResponse;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceDto;
+import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
-
 import java.util.List;
 
 @Mapper
@@ -15,7 +14,7 @@ public interface PeriodWebServiceDtoPeriodResponseMapper {
 
     @Mappings({
             @Mapping(source = "periodPublicId", target = "periodPublicId"),
-            @Mapping(source = "periodDto.academic.id", target = "periodFastDto.academicId")
+            @Mapping(source = "periodDto", target = "periodFastDto")
 
     })
     PeriodResponse PeriodWebServiceDtoToPeriodResponse(PeriodWebServiceDto periodWebServiceDto, @Context CycleAvoidingMappingContext context);
@@ -25,7 +24,7 @@ public interface PeriodWebServiceDtoPeriodResponseMapper {
 
     List<PeriodResponse> PeriodWebServiceDtosToPeriodResponses(List<PeriodWebServiceDto> periodWebServiceDtos, @Context CycleAvoidingMappingContext context);
 
-    List<PeriodWebServiceDto> PeriodResponsesToPeriodWebServiceDtos(List<PeriodResponse> periodResponses, @Context CycleAvoidingMappingContext context);
+    List<PeriodWebServiceDto> PeriodResponsesToPeriodWebServiceDtos(List<PeriodResponse> periodRespons, @Context CycleAvoidingMappingContext context);
 
 /*    @AfterMapping
     default void handlePeriodResponseDtoPeriodPublicId(PeriodWebServiceDto periodWebServiceDto, @MappingTarget PeriodResponse periodResponse) {
