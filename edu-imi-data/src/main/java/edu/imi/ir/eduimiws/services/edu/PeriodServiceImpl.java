@@ -6,12 +6,14 @@ import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodMapper;
-import edu.imi.ir.eduimiws.mapper.edu.PeriodOnlyMapper;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodOnlyMapperOld;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodOnly;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,7 @@ import java.util.stream.StreamSupport;
 public class PeriodServiceImpl implements PeriodService {
 
     private final PeriodRepository periodRepository;
-    private final PeriodOnlyMapper periodOnlyMapper;
+    private final PeriodOnlyMapperOld periodOnlyMapperOld;
     private final PeriodMapper periodMapper;
     private final PeriodFastDtoMapper periodFastDtoMapper;
 
@@ -38,6 +40,13 @@ public class PeriodServiceImpl implements PeriodService {
     @Override
     public PeriodEntity selectLastRecord() {
         return periodRepository.findFirstByOrderByIdDesc();
+    }
+
+    @Override
+    public Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable) {
+        Page<PeriodEntity> periodPages = periodRepository
+                .findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
+        return periodPages;
     }
 
 
@@ -68,7 +77,7 @@ public class PeriodServiceImpl implements PeriodService {
 
         newPeriodOnlyList = newPeriodOnlyMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
 
-        newPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(newPeriodOnlyList, new CycleAvoidingMappingContext());
+        newPeriods = periodOnlyMapperOld.PeriodOnliesToPeriodEntities(newPeriodOnlyList, new CycleAvoidingMappingContext());
 
         return newPeriods;
     }
@@ -100,14 +109,14 @@ public class PeriodServiceImpl implements PeriodService {
     public List<PeriodEntity> findAllPeriodOnly() {
         List<PeriodOnly> allPeriodOnlies = periodRepository.findAllPeriodOnly();
         allPeriodOnlies.sort(Comparator.comparing(PeriodOnly::getId));
-        List<PeriodEntity> allPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(allPeriodOnlies, new CycleAvoidingMappingContext());
+        List<PeriodEntity> allPeriods = periodOnlyMapperOld.PeriodOnliesToPeriodEntities(allPeriodOnlies, new CycleAvoidingMappingContext());
         return allPeriods;
     }
 
     @Override
     public List<PeriodEntity> findAllPeriodOnlyByIdGreaterThan(Long id) {
         List<PeriodOnly> allPeriodOnlines = periodRepository.findPeriodOnlyByIdGreaterThan(id);
-        List<PeriodEntity> allPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(allPeriodOnlines, new CycleAvoidingMappingContext());
+        List<PeriodEntity> allPeriods = periodOnlyMapperOld.PeriodOnliesToPeriodEntities(allPeriodOnlines, new CycleAvoidingMappingContext());
         return allPeriods;
     }
 

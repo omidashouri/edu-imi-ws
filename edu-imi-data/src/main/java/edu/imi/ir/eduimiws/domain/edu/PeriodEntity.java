@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
         name = "periodOnly",
         classes = {
                 @ConstructorResult(
-                        targetClass = edu.imi.ir.eduimiws.models.dto.edu.PeriodOnly.class,
+                        targetClass = PeriodOnly.class,
                         columns = {
                                 @ColumnResult(name = "idR", type = Long.class),
                                 @ColumnResult(name = "deleteStatusR", type = Long.class),

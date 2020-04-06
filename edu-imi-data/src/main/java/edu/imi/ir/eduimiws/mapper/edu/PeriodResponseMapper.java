@@ -1,10 +1,11 @@
 package edu.imi.ir.eduimiws.mapper.edu;
 
+
+
+import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodResponseDto;
-import org.mapstruct.Context;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
+import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -14,13 +15,40 @@ public interface PeriodResponseMapper {
 
     PeriodResponseMapper INSTANCE = Mappers.getMapper(PeriodResponseMapper.class);
 
-    edu.imi.ir.eduimiws.models.response.edu.PeriodResponse PeriodResponseDtoToPeriodResponse(PeriodResponseDto periodResponseDto, @Context CycleAvoidingMappingContext context);
+    @Mappings({
+            @Mapping(source = "periodWebService.periodPublicId", target = "periodPublicId"),
+            @Mapping(source = "description", target = "description"),
+            @Mapping(source = "canRegisterOnline", target = "canRegisterOnline"),
+            @Mapping(source = "editDate", target = "editDate"),
+            @Mapping(source = "activityStatus", target = "activityStatus"),
+            @Mapping(source = "createDate", target = "createDate"),
+            @Mapping(source = "deleteStatus", target = "deleteStatus"),
+            @Mapping(source = "endDate", target = "endDate"),
+            @Mapping(source = "executer.personWebServiceEntity.personPublicId", target = "executorPublicId"),
+            @Mapping(source = "fee", target = "fee"),
+            @Mapping(source = "holdingLanguage", target = "holdingLanguage"),
+            @Mapping(source = "maxCapacity", target = "maxCapacity"),
+            @Mapping(source = "holdingType", target = "holdingType"),
+            @Mapping(source = "minCapacity", target = "minCapacity"),
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "offerNumber", target = "offerNumber"),
+            @Mapping(source = "regEndDate", target = "regEndDate"),
+            @Mapping(source = "regStartDate", target = "regStartDate"),
+            @Mapping(source = "startDate", target = "startDate"),
+            @Mapping(source = "type", target = "type")
+
+    })
+    PeriodResponse PeriodEntityToPeriodResponse(PeriodEntity periodEntity, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PeriodResponseDto PeriodResponseToPeriodResponseDto(edu.imi.ir.eduimiws.models.response.edu.PeriodResponse periodResponse, @Context CycleAvoidingMappingContext context);
+    PeriodEntity PeriodResponseToPeriodEntity(PeriodResponse periodResponse, @Context CycleAvoidingMappingContext context);
 
-    List<PeriodResponseDto> PeriodResponsesToPeriodResponseDtoes(List<edu.imi.ir.eduimiws.models.response.edu.PeriodResponse> periodResponses, @Context CycleAvoidingMappingContext context);
+    List<PeriodResponse> PeriodEntitiesToPeriodResponses(List<PeriodEntity> periodEntities, @Context CycleAvoidingMappingContext context);
 
-    List<edu.imi.ir.eduimiws.models.response.edu.PeriodResponse> PeriodResponseDtoesToPeriodResponses(List<PeriodResponseDto> periodResponsDtos, @Context CycleAvoidingMappingContext context);
+    List<PeriodEntity> PeriodResponsesToPeriodEntities(List<PeriodResponse> periodResponses, @Context CycleAvoidingMappingContext context);
 
+/*    @AfterMapping
+    default void handlePeriodResponseExecutorPublicIds(PeriodEntity PeriodEntity, @MappingTarget PeriodResponse periodResponse) {
+        periodResponse.setExecutorPublicId(PeriodEntity.getExecuter().getPersonWebServiceEntity().getPersonPublicId());
+    }*/
 }

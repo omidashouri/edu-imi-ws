@@ -2,7 +2,9 @@ package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodOnly;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
@@ -19,6 +21,14 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
     List<PeriodOnly> findBy();
 
+    @Query(value = "select p from PeriodEntity p " +
+            "left join fetch p.executer ex left join fetch ex.personWebServiceEntity pw " +
+            "where p.deleteStatus = 1L ",
+            countQuery = "select count(p) from PeriodEntity p " +
+                    "left join p.executer ex left join ex.personWebServiceEntity pw " +
+                    "where p.deleteStatus = 1L "
+    )
+    Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
     @Query(name = "PeriodEntity.selectAllPeriodOnly", nativeQuery = true)
     @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},

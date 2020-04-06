@@ -158,4 +158,9 @@ public class PersonEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMMERCE_ADDITIONAL_INFO")
     private PersonInfoCommerceEntity commerceAdditionalInfo;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy="person",fetch = FetchType.LAZY)
+    private PersonWebServiceEntity personWebServiceEntity;
 }

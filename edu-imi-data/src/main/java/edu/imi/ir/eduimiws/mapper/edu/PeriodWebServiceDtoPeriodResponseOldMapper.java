@@ -2,29 +2,29 @@ package edu.imi.ir.eduimiws.mapper.edu;
 
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceDto;
-import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
+import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseOld;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper
-public interface PeriodWebServiceDtoPeriodResponseMapper {
+public interface PeriodWebServiceDtoPeriodResponseOldMapper {
 
-    PeriodWebServiceDtoPeriodResponseMapper INSTANCE = Mappers.getMapper(PeriodWebServiceDtoPeriodResponseMapper.class);
+    PeriodWebServiceDtoPeriodResponseOldMapper INSTANCE = Mappers.getMapper(PeriodWebServiceDtoPeriodResponseOldMapper.class);
 
     @Mappings({
             @Mapping(source = "periodPublicId", target = "periodPublicId"),
             @Mapping(source = "periodDto", target = "periodFastDto")
 
     })
-    PeriodResponse PeriodWebServiceDtoToPeriodResponse(PeriodWebServiceDto periodWebServiceDto, @Context CycleAvoidingMappingContext context);
+    PeriodResponseOld PeriodWebServiceDtoToPeriodResponse(PeriodWebServiceDto periodWebServiceDto, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PeriodWebServiceDto PeriodResponseToPeriodWebServiceDto(PeriodResponse periodResponse, @Context CycleAvoidingMappingContext context);
+    PeriodWebServiceDto PeriodResponseToPeriodWebServiceDto(PeriodResponseOld periodResponseOld, @Context CycleAvoidingMappingContext context);
 
-    List<PeriodResponse> PeriodWebServiceDtosToPeriodResponses(List<PeriodWebServiceDto> periodWebServiceDtos, @Context CycleAvoidingMappingContext context);
+    List<PeriodResponseOld> PeriodWebServiceDtosToPeriodResponses(List<PeriodWebServiceDto> periodWebServiceDtos, @Context CycleAvoidingMappingContext context);
 
-    List<PeriodWebServiceDto> PeriodResponsesToPeriodWebServiceDtos(List<PeriodResponse> periodRespons, @Context CycleAvoidingMappingContext context);
+    List<PeriodWebServiceDto> PeriodResponsesToPeriodWebServiceDtos(List<PeriodResponseOld> periodRespons, @Context CycleAvoidingMappingContext context);
 
 /*    @AfterMapping
     default void handlePeriodResponseDtoPeriodPublicId(PeriodWebServiceDto periodWebServiceDto, @MappingTarget PeriodResponse periodResponse) {

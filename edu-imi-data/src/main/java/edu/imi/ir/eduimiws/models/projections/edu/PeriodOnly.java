@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.dto.edu;
+package edu.imi.ir.eduimiws.models.projections.edu;
 
 import lombok.Value;
 
