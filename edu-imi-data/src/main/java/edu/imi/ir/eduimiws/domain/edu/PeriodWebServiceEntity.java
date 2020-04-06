@@ -7,13 +7,32 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 
-
-@NamedEntityGraph(name = "periodWebServiceFastGraph", attributeNodes = {
-        @NamedAttributeNode("periodId"),
-        @NamedAttributeNode("periodPublicId"),
-        @NamedAttributeNode("canRegisterOnline"),
-        @NamedAttributeNode("periodEditDate"),
-        @NamedAttributeNode("deleteTs")})
+@NamedEntityGraphs({
+    @NamedEntityGraph(name = "periodWebServiceFastGraph", attributeNodes = {
+            @NamedAttributeNode("periodId"),
+            @NamedAttributeNode("periodPublicId"),
+            @NamedAttributeNode("canRegisterOnline"),
+            @NamedAttributeNode("periodEditDate"),
+            @NamedAttributeNode("deleteTs")}),
+    @NamedEntityGraph(name = "periodWebServicePeriodFastGraph", attributeNodes = {
+            @NamedAttributeNode("periodId"),
+            @NamedAttributeNode("periodPublicId"),
+            @NamedAttributeNode("canRegisterOnline"),
+            @NamedAttributeNode("periodEditDate"),
+            @NamedAttributeNode("deleteTs"),
+            @NamedAttributeNode(value = "period", subgraph = "period-subgraph"),
+    }
+    ,subgraphs = {
+            @NamedSubgraph(
+                    name = "period-subgraph",
+                    attributeNodes = {
+                            @NamedAttributeNode("name"),
+                            @NamedAttributeNode("startDate"),
+                            @NamedAttributeNode("endDate")
+                    })
+    })
+})
+@Cacheable
 @Getter
 @Setter
 @NoArgsConstructor
