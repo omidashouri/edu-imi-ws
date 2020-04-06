@@ -8,19 +8,16 @@ import javax.persistence.*;
 
 
 @NamedEntityGraphs({
-    @NamedEntityGraph(name = "periodWebServiceFastGraph", attributeNodes = {
+    @NamedEntityGraph(name = "PeriodWebServiceEntity.periodWebServiceFastGraph", attributeNodes = {
             @NamedAttributeNode("periodId"),
             @NamedAttributeNode("periodPublicId"),
             @NamedAttributeNode("canRegisterOnline"),
             @NamedAttributeNode("periodEditDate"),
             @NamedAttributeNode("deleteTs")}),
-    @NamedEntityGraph(name = "periodWebServicePeriodFastGraph", attributeNodes = {
-            @NamedAttributeNode("periodId"),
+    @NamedEntityGraph(name = "PeriodWebServiceEntity.periodWebServicePeriodFastGraph", attributeNodes = {
             @NamedAttributeNode("periodPublicId"),
-            @NamedAttributeNode("canRegisterOnline"),
-            @NamedAttributeNode("periodEditDate"),
             @NamedAttributeNode("deleteTs"),
-            @NamedAttributeNode(value = "period", subgraph = "period-subgraph"),
+            @NamedAttributeNode(value = "period", subgraph = "period-subgraph")
     }
     ,subgraphs = {
             @NamedSubgraph(
@@ -32,7 +29,7 @@ import javax.persistence.*;
                     })
     })
 })
-@Cacheable
+//@Cacheable
 @Getter
 @Setter
 @NoArgsConstructor

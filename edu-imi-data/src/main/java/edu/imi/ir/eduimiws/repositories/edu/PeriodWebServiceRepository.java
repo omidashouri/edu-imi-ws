@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
+import org.hibernate.graph.EntityGraphs;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -17,9 +18,14 @@ public interface PeriodWebServiceRepository extends CrudRepository<PeriodWebServ
 
     PeriodWebServiceEntity findFirstByOrderByIdDesc();
 
-    @EntityGraph("periodWebServiceFastGraph")
+    @EntityGraph("PeriodWebServiceEntity.periodWebServicePeriodFastGraph")
     Page<PeriodWebServiceEntity> findAll(Pageable pageable);
 
     List<PeriodWebServiceEntity> findAllByIdIn(List<Long> periodIds);
+
+/*    @EntityGraph(value = "PeriodWebServiceEntity.periodWebServicePeriodFastGraph",type = EntityGraph.EntityGraphType.FETCH)
+    @Query(value = "select pw from PeriodWebServiceEntity pw left join pw.period p ",
+            countQuery = "select count(pw) from PeriodWebServiceEntity pw left join pw.period p")
+    Page<PeriodWebServiceEntity> findBy(Pageable pageable);*/
 
 }
