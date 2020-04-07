@@ -1,14 +1,20 @@
 package edu.imi.ir.eduimiws.models.response.edu;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.domain.edu.FieldEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+
+
+@EqualsAndHashCode(callSuper = false)
+@JsonRootName(value = "period")
+@Relation(collectionRelation = "periods")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -37,4 +43,6 @@ public class PeriodResponse extends RepresentationModel<PeriodResponse> {
     private String canRegisterOnline;
     private String holdingType;
     private String holdingLanguage;
+
+
 }
