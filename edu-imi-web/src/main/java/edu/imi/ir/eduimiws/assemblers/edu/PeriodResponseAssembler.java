@@ -5,6 +5,9 @@ import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseMapper;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -41,7 +44,8 @@ public class PeriodResponseAssembler  extends RepresentationModelAssemblerSuppor
     {
         CollectionModel<PeriodResponse> actorModels = super.toCollectionModel(entities);
 
-        actorModels.add(linkTo(methodOn(PeriodController.class).getAllPeriods()).withSelfRel());
+        Pageable defaultPageable = PageRequest.of(0,10, Sort.Direction.fromString("DESC"),"createDate");
+        actorModels.add(linkTo(methodOn(PeriodController.class).getAllPeriods(defaultPageable)).withSelfRel());
 
         return actorModels;
     }

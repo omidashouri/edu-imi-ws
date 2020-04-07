@@ -20,18 +20,25 @@ import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseOld;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
 import edu.imi.ir.eduimiws.services.edu.PeriodWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.support.PageableExecutionUtils;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.data.web.SortDefault;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
@@ -40,8 +47,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.expression.Lists;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,20 +72,15 @@ public class PeriodController {
     private final PagedResourcesAssembler<PeriodEntity> periodPagedResourcesAssembler;
 
 
-
+    @PageableAsQueryParam
     @GetMapping(path = "/main",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public PagedModel<PeriodResponse> getPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
-            , @RequestParam(value = "limit", defaultValue = "25") int limitValue
-            , @RequestParam(value = "sort", defaultValue = "createDate") String sortValue
-            , @RequestParam(value = "dir", defaultValue = "DESC") String directionValue ){
-
-//        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by("email").ascending());
-        ;
-
-        Pageable periodPageable = PageRequest.of(pageValue,limitValue, Sort.Direction.fromString(directionValue),sortValue);
+    public PagedModel<PeriodResponse> getPeriods(@Parameter(hidden = true)
+                                                      @SortDefault(sort = "createDate",direction = Sort.Direction.DESC)
+                                                      @PageableDefault(page = 0, size= 10,value = 10)
+                                                              Pageable pageable ){
 
         Page<PeriodEntity> periodPages =
-                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(periodPageable);
+                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
 
         List<PeriodEntity> periodEntities = StreamSupport
                 .stream(periodPages.spliterator(),false)
@@ -86,7 +90,7 @@ public class PeriodController {
                 .getPage(periodResponseMapper
                                 .PeriodEntitiesToPeriodResponses(periodEntities,
                                         new CycleAvoidingMappingContext()),
-                        periodPageable,
+                        pageable,
                         periodPages::getTotalElements);
 
 
@@ -96,19 +100,18 @@ public class PeriodController {
         return periodResponses;
     }
 
-
+    @Operation(hidden = true)
+    @PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriods(){
+    public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriods(
+            @Parameter(hidden = true)
+            @SortDefault(sort = "createDate",direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size= 10)
+                    Pageable pageable){
 
-//        Pageable pageable
-//        page=1&size=2&sort=title,desc
-//        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by("email").ascending());
-        ;
-
-        Pageable periodPageable = PageRequest.of(1,3, Sort.Direction.fromString("DESC"),"createDate");
-
+//  IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3MTUwMjgzfQ.26qm6KwLRDO1WZbWyF9Fqp4-6gtu-Dx7KmYqKE053sO63ZqgwsYhZhu0W3zGdT167NWQDgQnDCtuaMHBBeUzYA
         Page<PeriodEntity> periodPages =
-                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(periodPageable);
+                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
 
         List<PeriodEntity> periodEntities = StreamSupport
                 .stream(periodPages.spliterator(),false)
@@ -118,7 +121,7 @@ public class PeriodController {
                 .getPage(periodResponseMapper
                                 .PeriodEntitiesToPeriodResponses(periodEntities,
                                         new CycleAvoidingMappingContext()),
-                        periodPageable,
+                        pageable,
                         periodPages::getTotalElements);
 
 //        return periodResponsesPages;
@@ -134,8 +137,6 @@ public class PeriodController {
 //        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by("email").ascending());
 
         Pageable periodPageable = PageRequest.of(1,5);
-
-
 
         Page<PeriodEntity> periodPages =
                 periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(periodPageable);
