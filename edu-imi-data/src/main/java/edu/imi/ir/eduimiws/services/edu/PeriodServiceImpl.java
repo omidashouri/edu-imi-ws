@@ -45,8 +45,15 @@ public class PeriodServiceImpl implements PeriodService {
     @Override
     public Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable) {
         Page<PeriodEntity> periodPages = periodRepository
-                .findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
+                .findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);;
         return periodPages;
+    }
+
+    @Override
+    public PeriodEntity findPeriodEntityByPeriodWebServicePublicId(String periodPublicId) {
+
+        PeriodEntity period = periodRepository.findByPeriodWebService_PeriodPublicId(periodPublicId);
+        return period;
     }
 
 

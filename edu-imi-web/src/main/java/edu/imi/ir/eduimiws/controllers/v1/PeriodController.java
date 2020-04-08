@@ -3,7 +3,6 @@ package edu.imi.ir.eduimiws.controllers.v1;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssembler;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
-import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseMapper;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
@@ -25,10 +24,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
@@ -59,11 +56,10 @@ public class PeriodController {
     private final PeriodResponseAssembler periodResponseAssembler;
     private final PagedResourcesAssembler<PeriodEntity> periodPagedResourcesAssembler;
 
-    //  IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3MTUwMjgzfQ.26qm6KwLRDO1WZbWyF9Fqp4-6gtu-Dx7KmYqKE053sO63ZqgwsYhZhu0W3zGdT167NWQDgQnDCtuaMHBBeUzYA
     @Operation(
             summary = "find All periods",
             description = "Search period detail pageable",
-            tags = "users",
+            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -140,33 +136,56 @@ public class PeriodController {
         return ResponseEntity.ok(periodResponseCollectionModel);
     }
 
-    @GetMapping(path = "/{periodPublicId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<PeriodResponse> getPeriodByPublicId(@RequestParam(value = "page", defaultValue = "1") String pageValue
-            ){
+    //  IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3MTUwMjgzfQ.26qm6KwLRDO1WZbWyF9Fqp4-6gtu-Dx7KmYqKE053sO63ZqgwsYhZhu0W3zGdT167NWQDgQnDCtuaMHBBeUzYA
 
-//        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by("email").ascending());
+    @Operation(
+            summary = "Find Period by public ID",
+            description = "Search period by the public id"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = PeriodResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "period not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/{periodPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getPeriodByPeriodPublicId(@PathVariable String periodPublicId) {
 
-        Pageable periodPageable = PageRequest.of(1,5);
+        try {
+            PeriodEntity period = periodService.findPeriodEntityByPeriodWebServicePublicId(periodPublicId);
+            if (period == null) {
+                return this.periodNotFound();
+            }
 
-        Page<PeriodEntity> periodPages =
-                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(periodPageable);
+           PeriodResponse periodResponse =
+                    periodResponseAssembler.toModel(period);
 
-        List<PeriodEntity> periodEntities = StreamSupport
-                .stream(periodPages.spliterator(),false)
-                .collect(Collectors.toList());
+            return ResponseEntity.ok(periodResponse);
 
-        Page<PeriodResponse> periodResponsesPages = PageableExecutionUtils
-                .getPage(periodResponseMapper
-                                .PeriodEntitiesToPeriodResponses(periodEntities,
-                                        new CycleAvoidingMappingContext()),
-                        periodPageable,
-                        periodPages::getTotalElements);
-
-        return ResponseEntity.ok(new PeriodResponse());
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
     }
-
-
-
 
     @Operation(
             summary = "Find new period numbers",
@@ -213,7 +232,7 @@ public class PeriodController {
         periodCount = periodService.PeriodCount();
 
         if (periodCount == null || periodCount == 0) {
-            conflictPeriodCount();
+            this.conflictPeriodCount();
         }
 
         if (periodWebserviceCount != null) {
@@ -343,6 +362,14 @@ public class PeriodController {
                 new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
                         , "period count is null or zero")
                 , HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    private ResponseEntity<?> periodNotFound() {
+        return new ResponseEntity<>(
+                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
+                        , "requested period not found")
+                , HttpStatus.NOT_FOUND
         );
     }
 

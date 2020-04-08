@@ -34,8 +34,16 @@ public class PeriodResponseAssembler  extends RepresentationModelAssemblerSuppor
                 .add(linkTo(
                         methodOn(
                                 PeriodController.class)
-                                .getPeriodByPublicId(period.getPeriodWebService().getPeriodPublicId()))
+                                .getPeriodByPeriodPublicId(period.getPeriodWebService().getPeriodPublicId()))
                 .withSelfRel());
+
+        periodResponse.
+                add(linkTo(
+                        methodOn(
+                                PeriodController.class)
+                                .getPeriods(Pageable.unpaged()))
+                .withRel("periods"));
+
         return periodResponse;
     }
 

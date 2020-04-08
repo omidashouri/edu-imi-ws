@@ -38,7 +38,6 @@ public class AppExceptionsHandler {
         return new ResponseEntity<>(conflictMessage, HttpStatus.CONFLICT);
     }
 
-
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleOtherException(Exception exception,
                                                        WebRequest request) {
