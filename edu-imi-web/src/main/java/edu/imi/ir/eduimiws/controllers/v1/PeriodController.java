@@ -4,30 +4,23 @@ import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssembler;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseMapper;
-import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceDtoPeriodResponseOldMapper;
-import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceMapper;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceDto;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
-import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseOld;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
 import edu.imi.ir.eduimiws.services.edu.PeriodWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.PageableAsQueryParam;
@@ -47,10 +40,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.expression.Lists;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,52 +55,71 @@ public class PeriodController {
 
     private final PeriodWebServiceService periodWebServiceService;
     private final PeriodService periodService;
-    private final PeriodWebServiceMapper periodWebServiceMapper;
-    private final PeriodFastDtoMapper periodFastDtoMapper;
     private final PeriodResponseMapper periodResponseMapper;
-    private final PeriodWebServiceDtoPeriodResponseOldMapper periodWebServiceDtoPeriodResponseOldMapper;
     private final PeriodResponseAssembler periodResponseAssembler;
     private final PagedResourcesAssembler<PeriodEntity> periodPagedResourcesAssembler;
 
-
+    //  IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3MTUwMjgzfQ.26qm6KwLRDO1WZbWyF9Fqp4-6gtu-Dx7KmYqKE053sO63ZqgwsYhZhu0W3zGdT167NWQDgQnDCtuaMHBBeUzYA
+    @Operation(
+            summary = "find All periods",
+            description = "Search period detail pageable",
+            tags = "users",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                        @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PeriodResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
     @PageableAsQueryParam
-    @GetMapping(path = "/main",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public PagedModel<PeriodResponse> getPeriods(@Parameter(hidden = true)
-                                                      @SortDefault(sort = "createDate",direction = Sort.Direction.DESC)
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<PeriodResponse>> getPeriods(@Parameter(hidden = true)
+                                                      @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                       @PageableDefault(page = 0, size= 10,value = 10)
                                                               Pageable pageable ){
 
         Page<PeriodEntity> periodPages =
                 periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
 
-        List<PeriodEntity> periodEntities = StreamSupport
-                .stream(periodPages.spliterator(),false)
-                .collect(Collectors.toList());
-
-        Page<PeriodResponse> periodResponsesPages = PageableExecutionUtils
-                .getPage(periodResponseMapper
-                                .PeriodEntitiesToPeriodResponses(periodEntities,
-                                        new CycleAvoidingMappingContext()),
-                        pageable,
-                        periodPages::getTotalElements);
-
-
-        PagedModel<PeriodResponse> periodResponses = periodPagedResourcesAssembler
+        PagedModel<PeriodResponse> periodResponsePagedModel = periodPagedResourcesAssembler
                 .toModel(periodPages,periodResponseAssembler);
 
-        return periodResponses;
+        return ResponseEntity.ok(periodResponsePagedModel);
     }
 
     @Operation(hidden = true)
     @PageableAsQueryParam
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(path = "/collectionModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriods(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate",direction = Sort.Direction.DESC)
             @PageableDefault(page = 0, size= 10)
                     Pageable pageable){
 
-//  IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3MTUwMjgzfQ.26qm6KwLRDO1WZbWyF9Fqp4-6gtu-Dx7KmYqKE053sO63ZqgwsYhZhu0W3zGdT167NWQDgQnDCtuaMHBBeUzYA
         Page<PeriodEntity> periodPages =
                 periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
 
@@ -117,17 +127,17 @@ public class PeriodController {
                 .stream(periodPages.spliterator(),false)
                 .collect(Collectors.toList());
 
-        Page<PeriodResponse> periodResponsesPages = PageableExecutionUtils
+/*        Page<PeriodResponse> periodResponsesPages = PageableExecutionUtils
                 .getPage(periodResponseMapper
                                 .PeriodEntitiesToPeriodResponses(periodEntities,
                                         new CycleAvoidingMappingContext()),
                         pageable,
-                        periodPages::getTotalElements);
+                        periodPages::getTotalElements);*/
 
-//        return periodResponsesPages;
-        return new ResponseEntity<>(
-                periodResponseAssembler.toCollectionModel(periodEntities),
-                HttpStatus.OK);
+        CollectionModel<PeriodResponse> periodResponseCollectionModel =
+                periodResponseAssembler.toCollectionModel(periodEntities);
+
+        return ResponseEntity.ok(periodResponseCollectionModel);
     }
 
     @GetMapping(path = "/{periodPublicId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -156,32 +166,7 @@ public class PeriodController {
     }
 
 
-    @GetMapping(path = "/oldPeriods",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Page<PeriodResponseOld> getOldPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
-            , @RequestParam(value = "limit", defaultValue = "25") int limitValue) {
 
-//        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        Pageable paperiodPageable = PageRequest.of(pageValue,limitValue);
-
-         Page<PeriodWebServiceFastDto> periodWebServiceFastDtoPages =
-                periodWebServiceService.findAllPeriodWebServiceFastDtoPageable(paperiodPageable);
-
-         List<Long> periodWebServiceIds = StreamSupport
-                 .stream(periodWebServiceFastDtoPages.spliterator(),false)
-                 .map(PeriodWebServiceFastDto::getId).collect(Collectors.toList());
-
-         List<PeriodWebServiceDto> periodWebServiceDtos = periodWebServiceService
-                 .findAllPeriodWebServiceDtoById(periodWebServiceIds);
-
-        Page<PeriodResponseOld> periodResponsesPages = PageableExecutionUtils
-                .getPage(periodWebServiceDtoPeriodResponseOldMapper
-                        .PeriodWebServiceDtosToPeriodResponses(periodWebServiceDtos,
-                                new CycleAvoidingMappingContext()),
-                        paperiodPageable,
-                        periodWebServiceFastDtoPages::getTotalElements);
-
-        return periodResponsesPages;
-    }
 
     @Operation(
             summary = "Find new period numbers",
@@ -325,63 +310,33 @@ public class PeriodController {
         return ResponseEntity.ok(returnValue);
     }
 
-//not working
-    @GetMapping(path = "/newPeriods", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<PeriodResponseOld> getNewPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
-            , @RequestParam(value = "limit", defaultValue = "25") int limitValue
-            , @RequestParam(value = "rtype", defaultValue = "page") String returnTypeValue) {
-
-        List<PeriodWebServiceEntity> periodWebServiceEntities = new ArrayList<>();
-        List<PeriodWebServiceDto> periodWebServiceDtos = new ArrayList<>();
-        List<PeriodFastDto> periodFastDtos = new ArrayList<>();
-
-        periodWebServiceDtos = this.getPeriodWebServices(0, 0, "list");
-
-        periodWebServiceEntities = periodWebServiceMapper
-                .PeriodWebServiceDtosToPeriodWebServiceEntities(periodWebServiceDtos, new CycleAvoidingMappingContext());
-
-//        omiddo: check if it want list or pageable
-//        if(returnTypeValue=='list')
-        List<PeriodEntity> newPeriods =
-                periodService
-                        .findNewPeriodNotInPeriodWebService(periodWebServiceEntities);
-
-        periodFastDtos = periodFastDtoMapper
-                .PeriodEntitiesToPeriodFastDtoes(newPeriods, new CycleAvoidingMappingContext());
-
- /*       List<UserContactFastDto> userContactFastDtos =
-                personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users,new CycleAvoidingMappingContext());
-
-        List<UserContactResponse> userContactResponses =
-                userContactResponseUserContactFastDtoMapper
-                        .UserContactFastDtoToUserContactResponses(userContactFastDtos,new CycleAvoidingMappingContext());
-
-        return userContactResponses;*/
-        return null;
-    }
 
 //not working
-    @GetMapping(path = "/periodServices", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<PeriodWebServiceDto> getPeriodWebServices(@RequestParam(value = "page", defaultValue = "1") int pageValue
-            , @RequestParam(value = "limit", defaultValue = "25") int limitValue
-            , @RequestParam(value = "rtype", defaultValue = "page") String returnTypeValue) {
+/*    @GetMapping(path = "/oldPeriods",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public Page<PeriodResponseOld> getOldPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
+            , @RequestParam(value = "limit", defaultValue = "25") int limitValue) {
 
-        List<PeriodWebServiceEntity> periodWebServiceEntities = new ArrayList<>();
-        List<PeriodWebServiceDto> periodWebServiceDtos = new ArrayList<>();
+        Pageable paperiodPageable = PageRequest.of(pageValue,limitValue);
 
-//        omiddo: check if it want list or pageable
-//        if(returnTypeValue=='list')
-        periodWebServiceEntities =
-                periodWebServiceService
-                        .findAllEntities();
+         Page<PeriodWebServiceFastDto> periodWebServiceFastDtoPages =
+                periodWebServiceService.findAllPeriodWebServiceFastDtoPageable(paperiodPageable);
 
-        periodWebServiceDtos =
-                periodWebServiceMapper
-                        .PeriodWebServiceEntitiesToPeriodWebServiceDtos(periodWebServiceEntities,
-                                new CycleAvoidingMappingContext());
+         List<Long> periodWebServiceIds = StreamSupport
+                 .stream(periodWebServiceFastDtoPages.spliterator(),false)
+                 .map(PeriodWebServiceFastDto::getId).collect(Collectors.toList());
 
-        return periodWebServiceDtos;
-    }
+         List<PeriodWebServiceDto> periodWebServiceDtos = periodWebServiceService
+                 .findAllPeriodWebServiceDtoById(periodWebServiceIds);
+
+        Page<PeriodResponseOld> periodResponsesPages = PageableExecutionUtils
+                .getPage(periodWebServiceDtoPeriodResponseOldMapper
+                        .PeriodWebServiceDtosToPeriodResponses(periodWebServiceDtos,
+                                new CycleAvoidingMappingContext()),
+                        paperiodPageable,
+                        periodWebServiceFastDtoPages::getTotalElements);
+
+        return periodResponsesPages;
+    }*/
 
     private ResponseEntity<?> conflictPeriodCount() {
         return new ResponseEntity<>(
