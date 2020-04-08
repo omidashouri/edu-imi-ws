@@ -18,11 +18,11 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
 
 
     private final ContactWebServiceRepository contactWebServiceRepository;
-
-    @Override
+//NU
+/*    @Override
     public ContactWebServiceEntity saveContactWebServiceEntity(ContactWebServiceEntity contactWebServiceEntity) {
         return contactWebServiceRepository.save(contactWebServiceEntity);
-    }
+    }*/
 
     @Override
     public ContactWebServiceEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {

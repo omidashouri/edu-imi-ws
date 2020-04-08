@@ -8,7 +8,6 @@ import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,8 +47,8 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
             return new ArrayList<PersonWebServiceEntity>();
         }
     }
-
-    @Override
+//NU
+/*    @Override
     public Page<PersonWebServiceEntity> findAllPageByPageAndSize(int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
 
@@ -60,7 +59,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
         } else {
             return new PageImpl<>(new ArrayList<>());
         }
-    }
+    }*/
 
     @Override
     public PersonWebServiceEntity findByPersonId(Long personId) {
@@ -68,11 +67,11 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
         PersonWebServiceEntity personWebServiceEntity = personWebServiceRepository.findByPersonId(personId);
         return personWebServiceEntity;
     }
-
-    @Override
+//NU
+/*    @Override
     public PersonWebServiceEntity findByPersonEntity(PersonEntity personEntity) {
         return  this.findByPersonId(personEntity.getId());
-    }
+    }*/
 
     @Override
     public PersonWebServiceEntity findByUserNameFast(String userName) {

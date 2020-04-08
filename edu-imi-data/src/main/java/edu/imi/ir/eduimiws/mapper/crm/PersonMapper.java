@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
+//NU
 @Mapper
 public interface PersonMapper {
 

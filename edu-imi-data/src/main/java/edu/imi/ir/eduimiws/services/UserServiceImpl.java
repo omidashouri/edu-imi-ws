@@ -7,8 +7,6 @@ import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceFastDto;
-import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
-import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.services.crm.ContactWebServiceService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
@@ -29,10 +27,8 @@ import java.util.ArrayList;
 public class UserServiceImpl implements UserService {
 
     private final PersonWebServiceFastDtoMapper personWebServiceFastMapper;
-    private final PersonWebServiceRepository personWebServiceRepository;
     private final PersonService personService;
     private final PersonWebServiceService personWebServiceService;
-    private final ContactService contactService;
     private final ContactWebServiceService contactWebServiceService;
     private final Utils utils;
 

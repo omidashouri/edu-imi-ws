@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.models.dto.crm;
 
-import edu.imi.ir.eduimiws.models.dto.crm.UserContactResponseDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

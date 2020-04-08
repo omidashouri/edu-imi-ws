@@ -9,6 +9,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.Collection;
 import java.util.List;
 
+//NU
 @Mapper
 public interface PersonWebServiceContactFastDtoMapper {
 
