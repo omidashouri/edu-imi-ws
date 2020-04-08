@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.response;
+package edu.imi.ir.eduimiws.models.response.crm;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
