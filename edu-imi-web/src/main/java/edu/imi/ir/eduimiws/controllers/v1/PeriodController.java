@@ -50,9 +50,8 @@ import java.util.stream.StreamSupport;
 @Tag(name = "Periods", description = "The period API")
 public class PeriodController {
 
-    private final PeriodWebServiceService periodWebServiceService;
     private final PeriodService periodService;
-    private final PeriodResponseMapper periodResponseMapper;
+    private final PeriodWebServiceService periodWebServiceService;
     private final PeriodResponseAssembler periodResponseAssembler;
     private final PagedResourcesAssembler<PeriodEntity> periodPagedResourcesAssembler;
 
@@ -123,13 +122,6 @@ public class PeriodController {
                 .stream(periodPages.spliterator(),false)
                 .collect(Collectors.toList());
 
-/*        Page<PeriodResponse> periodResponsesPages = PageableExecutionUtils
-                .getPage(periodResponseMapper
-                                .PeriodEntitiesToPeriodResponses(periodEntities,
-                                        new CycleAvoidingMappingContext()),
-                        pageable,
-                        periodPages::getTotalElements);*/
-
         CollectionModel<PeriodResponse> periodResponseCollectionModel =
                 periodResponseAssembler.toCollectionModel(periodEntities);
 
@@ -140,7 +132,9 @@ public class PeriodController {
 
     @Operation(
             summary = "Find Period by public ID",
-            description = "Search period by the public id"
+            description = "Search period by the public id",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
             value = {
@@ -189,7 +183,9 @@ public class PeriodController {
 
     @Operation(
             summary = "Find new period numbers",
-            description = "search for new periods that do not have period public id"
+            description = "search for new periods that do not have period public id",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
             value = {
@@ -263,7 +259,9 @@ public class PeriodController {
 
     @Operation(
             summary = "Generate Period Public Id",
-            description = "generate public id for new periods"
+            description = "generate public id for new periods",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
             value = {
@@ -328,34 +326,6 @@ public class PeriodController {
         returnValue.setDescription(newPeriodWebService.size() + " New Public Id Generated");
         return ResponseEntity.ok(returnValue);
     }
-
-
-//not working
-/*    @GetMapping(path = "/oldPeriods",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Page<PeriodResponseOld> getOldPeriods(@RequestParam(value = "page", defaultValue = "1") int pageValue
-            , @RequestParam(value = "limit", defaultValue = "25") int limitValue) {
-
-        Pageable paperiodPageable = PageRequest.of(pageValue,limitValue);
-
-         Page<PeriodWebServiceFastDto> periodWebServiceFastDtoPages =
-                periodWebServiceService.findAllPeriodWebServiceFastDtoPageable(paperiodPageable);
-
-         List<Long> periodWebServiceIds = StreamSupport
-                 .stream(periodWebServiceFastDtoPages.spliterator(),false)
-                 .map(PeriodWebServiceFastDto::getId).collect(Collectors.toList());
-
-         List<PeriodWebServiceDto> periodWebServiceDtos = periodWebServiceService
-                 .findAllPeriodWebServiceDtoById(periodWebServiceIds);
-
-        Page<PeriodResponseOld> periodResponsesPages = PageableExecutionUtils
-                .getPage(periodWebServiceDtoPeriodResponseOldMapper
-                        .PeriodWebServiceDtosToPeriodResponses(periodWebServiceDtos,
-                                new CycleAvoidingMappingContext()),
-                        paperiodPageable,
-                        periodWebServiceFastDtoPages::getTotalElements);
-
-        return periodResponsesPages;
-    }*/
 
     private ResponseEntity<?> conflictPeriodCount() {
         return new ResponseEntity<>(

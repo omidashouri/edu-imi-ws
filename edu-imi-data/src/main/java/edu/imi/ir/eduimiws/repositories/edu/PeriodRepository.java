@@ -1,11 +1,9 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
-import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.QueryHint;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
@@ -41,17 +38,5 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     List<PeriodOnly> findPeriodOnlyByIdGreaterThan(@Param("periodId") Long id);
 
     PeriodEntity findFirstByOrderByIdDesc();
-
-    List<PeriodEntity> findAllByIdIn(List<Long> periodIds);
-
-    @EntityGraph(value = "PeriodEntity.periodWebServiceEntity", type = EntityGraph.EntityGraphType.FETCH)
-    List<PeriodEntity> findAllByPeriodWebServiceNotIn(Set<PeriodWebServiceEntity> periodWebServiceEntities);
-
-    @EntityGraph(value = "PeriodEntity.periodWebServiceEntity", type = EntityGraph.EntityGraphType.FETCH)
-    List<PeriodEntity> findAllByPeriodWebService_IdIn(List<Long> periodWebServiceId);
-
-    @EntityGraph(value = "PeriodEntity.periodWebServiceEntity", type = EntityGraph.EntityGraphType.FETCH)
-    List<PeriodEntity> findAllByPeriodWebService_IdNotIn(List<Long> periodWebServiceId);
-
 
 }

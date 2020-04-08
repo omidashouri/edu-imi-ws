@@ -2,18 +2,10 @@ package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
-import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceFastDtoMapper;
-import edu.imi.ir.eduimiws.mapper.edu.PeriodWebServiceMapper;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceDto;
-import edu.imi.ir.eduimiws.models.dto.edu.PeriodWebServiceFastDto;
-import edu.imi.ir.eduimiws.repositories.edu.PeriodRepository;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +14,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 
 @Service
 @Transactional
@@ -33,18 +23,7 @@ import java.util.stream.StreamSupport;
 public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
 
     private final PeriodWebServiceRepository periodWebServiceRepository;
-    private final PeriodRepository periodRepository;
-    private final PeriodWebServiceFastDtoMapper periodWebServiceFastDtoMapper;
-    private final PeriodWebServiceMapper periodWebServiceMapper;
     private final Utils utils;
-
-
-    @Override
-    public List<PeriodWebServiceEntity> findAllEntities() {
-        List<PeriodWebServiceEntity> periodWebServiceEntities = new ArrayList<>();
-        periodWebServiceEntities = periodWebServiceRepository.findAll();
-        return periodWebServiceEntities;
-    }
 
     @Override
     public Long periodWebServiceCount() {
@@ -76,95 +55,14 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
 
         newPeriodWebServiceEntities.sort(Comparator.comparing(PeriodWebServiceEntity::getPeriodId));
 
-/*        List<PeriodWebServiceEntity> temp20 = newPeriodWebServiceEntities
-                .stream().limit(20).collect(Collectors.toList());*/
-
         periodWebServiceRepository.saveAll(newPeriodWebServiceEntities);
 
         return newPeriodWebServiceEntities;
     }
 
     @Override
-    public Page<PeriodWebServiceFastDto> findAllPeriodWebServiceFastDtoPageable(Pageable pageable) {
-
-        Page<PeriodWebServiceEntity> periodWebServiceEntitiesPages = periodWebServiceRepository
-                .findAll(pageable);
-
-        Page<PeriodWebServiceFastDto> periodWebServiceFastDtosPages = periodWebServiceEntitiesPages
-                .map(periodWebServiceEntity -> periodWebServiceFastDtoMapper
-                        .PeriodWebServiceEntityToPeriodWebServiceFastDto(periodWebServiceEntity,
-                                new CycleAvoidingMappingContext()));
-
-        return periodWebServiceFastDtosPages;
-    }
-
-    @Override
-    public List<PeriodWebServiceDto> findAllPeriodWebServiceDtoById(List<Long> ids) {
-
-        List<PeriodWebServiceEntity> periodWebServiceEntities = periodWebServiceRepository
-                .findAllByIdIn(ids);
-
-        List<PeriodWebServiceDto> periodWebServiceDtos = periodWebServiceMapper
-                .PeriodWebServiceEntitiesToPeriodWebServiceDtos(periodWebServiceEntities, new CycleAvoidingMappingContext());
-
-        return periodWebServiceDtos;
-    }
-
-    @Override
-    public PeriodWebServiceEntity findAll() {
-
-        List<PeriodWebServiceEntity> periodWebServiceEntities;
-        List<PeriodEntity> periodEntities;
-        List<PeriodEntity> newPeriodEntities = new ArrayList<>();
-        List<PeriodWebServiceEntity> newPeriodWebServiceEntities;
-
-        if (!isPeriodWebServiceUpdated()) {
-            periodWebServiceEntities = periodWebServiceRepository.findAll();
-            periodEntities = StreamSupport
-                    .stream(periodRepository.findAll().spliterator(), false)
-                    .collect(Collectors.toList());
-
-//            periodEntities.stream().map(PeriodEntity::getPeriodWebService).collect(Collectors.toList()).removeAll(periodWebServiceEntities);
-
-/*            list2.stream().map(toKey)
-                    .filter(list1.stream().map(toKey).collect(Collectors.toSet())::contains)*/
-
-/*            periodEntities.stream().map(PeriodEntity::getPeriodWebService)
-                    .filter(periodWebServiceEntities.stream().collect(Collectors.toSet())::contains).map(newPeriodEntities::add);*/
-
-            periodEntities
-                    .stream()
-                    .filter(periodWebServiceEntities.stream().map(PeriodWebServiceEntity::getPeriod).collect(Collectors.toSet())::contains)
-                    .map(newPeriodEntities::add);
-
-            Predicate<PeriodEntity> periodPredicate = newPeriod -> newPeriod.getId().equals(newPeriod);
-            Predicate<List<PeriodEntity>> periodsPredicate = (newPeriods) -> newPeriods.equals(newPeriods);
-
-            periodWebServiceRepository.findAll();
-            return null;
-        }
-        return null;
-    }
-
-    @Override
     public PeriodWebServiceEntity selectLastRecord() {
         return periodWebServiceRepository.findFirstByOrderByIdDesc();
-    }
-
-
-    private boolean isPeriodWebServiceUpdated() {
-        boolean returnValue = false;
-        Long periodWebServiceSize;
-        Long periodSize;
-
-        periodWebServiceSize = periodWebServiceRepository.count();
-        periodSize = periodRepository.count();
-
-        if (periodWebServiceSize == periodSize) {
-            returnValue = true;
-        }
-
-        return returnValue;
     }
 
     private String generatePeriodWebServicePublicId() {

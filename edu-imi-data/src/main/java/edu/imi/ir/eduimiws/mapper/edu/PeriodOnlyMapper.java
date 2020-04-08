@@ -13,9 +13,9 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper
-public interface PeriodOnlyMapperOld {
+public interface PeriodOnlyMapper {
 
-    PeriodOnlyMapperOld INSTANCE = Mappers.getMapper(PeriodOnlyMapperOld.class);
+    PeriodOnlyMapper INSTANCE = Mappers.getMapper(PeriodOnlyMapper.class);
 
     @Mappings({
             @Mapping(source = "id", target = "id"),
