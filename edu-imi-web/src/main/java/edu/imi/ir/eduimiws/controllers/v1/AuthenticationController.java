@@ -7,11 +7,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
+@RequestMapping("/users/login")
 @Tag(name = "Login", description = "Authentication Sample API")
 public class AuthenticationController {
 
@@ -50,7 +54,8 @@ public class AuthenticationController {
                 )
         }
     )
-    @PostMapping("/users/login")
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE}
+            ,produces = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE})
     public void theFakeLogin(@RequestBody UserLoginRequestModel userLoginRequestModel){
 
 //        the reason to throw this exception is that this method should no really execute when calling this controller

@@ -3,7 +3,6 @@ package edu.imi.ir.eduimiws.controllers.v1;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssembler;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
-import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseMapper;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
@@ -183,7 +182,8 @@ public class PeriodController {
 
     @Operation(
             summary = "Find new period numbers",
-            description = "search for new periods that do not have period public id",
+            description = "search for new periods that do not have period public id " +
+                    "by comparing max id period and period web service entity. ",
             tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
