@@ -9,26 +9,28 @@ import javax.persistence.*;
 
 
 @SqlResultSetMapping(
-        name = "periodOnly",
-        classes = {
-                @ConstructorResult(
-                        targetClass = PeriodOnly.class,
-                        columns = {
-                                @ColumnResult(name = "idR", type = Long.class),
-                                @ColumnResult(name = "deleteStatusR", type = Long.class),
-                                @ColumnResult(name = "canRegisterOnlineR", type = String.class),
-                                @ColumnResult(name = "periodEditDateR", type = String.class)
-                        }
-                )
-        }
+    name = "periodOnly",
+    classes = {
+        @ConstructorResult(
+            targetClass = PeriodOnly.class,
+            columns = {
+                    @ColumnResult(name = "idR", type = Long.class),
+                    @ColumnResult(name = "deleteStatusR", type = Long.class),
+                    @ColumnResult(name = "canRegisterOnlineR", type = String.class),
+                    @ColumnResult(name = "periodEditDateR", type = String.class)
+            }
+        )
+    }
 )
 @NamedNativeQueries({
-        @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnly",
-                query = "select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD",
-                resultSetMapping = "periodOnly"),
-        @NamedNativeQuery(name = "PeriodEntity.selectPeriodOnlyByIdGreaterThan",
-                query = "select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID > :periodId ",
-                resultSetMapping = "periodOnly")
+    @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnly",
+        query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
+                " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD ",
+        resultSetMapping = "periodOnly"),
+    @NamedNativeQuery(name = "PeriodEntity.selectPeriodOnlyByIdGreaterThan",
+        query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
+                " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID > :periodId ",
+        resultSetMapping = "periodOnly")
 })
 @Getter
 @Setter

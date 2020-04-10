@@ -2,7 +2,9 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
-import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceMapper;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceIdProjectionMapper;
+import edu.imi.ir.eduimiws.models.projections.crm.PersonWebServiceIdProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
@@ -14,21 +16,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class PersonWebServiceServiceImpl implements PersonWebServiceService{
+public class PersonWebServiceServiceImpl implements PersonWebServiceService {
 
-    private final PersonWebServiceMapper personWebServiceMapper;
     private final PersonWebServiceRepository personWebServiceRepository;
-    private final PersonService personService;
+    private final PersonWebServiceIdProjectionMapper personWebServiceIdProjectionMapper;
+//    private final ContactWebServiceService contactWebServiceService;
     private final Utils utils;
-
-    private final ContactServiceImpl contactService;
 
 
     @Override
@@ -37,11 +40,11 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
         if (page > 0) {
             page--;
         }
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
         Page<PersonWebServiceEntity> pagedResult = personWebServiceRepository.findAll(pageable);
 
-        if(pagedResult.hasContent()) {
+        if (pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {
             return new ArrayList<PersonWebServiceEntity>();
@@ -107,5 +110,73 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService{
         newPersonWebService.setCreator(personEntity);
 //        newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
         return personWebServiceRepository.save(newPersonWebService);
+    }
+
+    @Override
+    public List<PersonWebServiceEntity> findAllPersonWebServiceIdProjection() {
+
+        List<PersonWebServiceIdProjection> personWebServiceIdProjections =
+                personWebServiceRepository.findAllPersonWebServiceIdProjection();
+
+        List<PersonWebServiceEntity> personWebServiceEntities =
+                personWebServiceIdProjectionMapper
+                        .toPersonWebServiceEntitys(personWebServiceIdProjections,
+                                new CycleAvoidingMappingContext());
+        return personWebServiceEntities;
+    }
+
+    @Override
+    public Long personWebServiceCount() {
+        return personWebServiceRepository.count();
+    }
+
+    @Override
+    public PersonWebServiceEntity selectLastRecord() {
+        return personWebServiceRepository.findFirstByOrderByIdDesc();
+    }
+
+    @Override
+    public List<PersonWebServiceEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons) {
+        List<PersonWebServiceEntity> newPersonWebServices = new ArrayList<>();
+//        List<ContactWebServiceEntity> newContactWebServices = new ArrayList<>();
+        newPersons.forEach(p->{
+            PersonWebServiceEntity newPersonWebService = new PersonWebServiceEntity();
+//            ContactWebServiceEntity newContactWebService = new ContactWebServiceEntity();
+//            newPersonWebService.setPerson(p);
+            newPersonWebService.setPersonId(p.getId());
+            newPersonWebService.setContact(p.getContact());
+            newPersonWebService.setContactId(p.getContactId());
+            if(p.getUsername() != null){
+                newPersonWebService.setUserName(p.getUsername());
+            }
+            if(p.getPassword() != null){
+                newPersonWebService.setEncryptedPassword(p.getPassword());
+            }
+            newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
+            newPersonWebService.setPersonPublicId(this.generateUniquePersonWebServicePublicId());
+            newPersonWebService.setUserName(p.getUsername());
+/*            newContactWebService.setContactId(p.getContactId());
+            newContactWebService.setContactPublicId(this.generateUniquePublicId());
+            newContactWebService.setContact(p.getContact());
+            newContactWebService.setCreateDateTs(newPersonWebService.getCreateDateTs());
+            */
+            newPersonWebServices.add(newPersonWebService);
+//            newContactWebServices.add(newContactWebService);
+        });
+
+        newPersonWebServices.sort(Comparator.comparing(PersonWebServiceEntity::getPersonId));
+//        newContactWebServices.sort(Comparator.comparing(ContactWebServiceEntity::getContactId));
+
+//        omiddo: remove bellow line
+        /*List<PersonWebServiceEntity> newPersonWebServices2 =
+         newPersonWebServices.stream().limit(30).collect(Collectors.toList());*/
+
+        personWebServiceRepository.saveAll(newPersonWebServices);
+//        contactWebServiceService.saveAllContactWebServices(newContactWebServices);
+        return newPersonWebServices;
+    }
+
+    private String generateUniquePersonWebServicePublicId() {
+        return utils.generateUniquePublicId();
     }
 }

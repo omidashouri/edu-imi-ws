@@ -1,18 +1,68 @@
 package edu.imi.ir.eduimiws.domain.crm;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
+import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.jpa.QueryHints;
 
 import javax.persistence.*;
 
 
-@NamedEntityGraph(name = "personUserGraph", attributeNodes = {
-        @NamedAttributeNode("firstName"),
-        @NamedAttributeNode("lastName"),
-        @NamedAttributeNode("username"),
-        @NamedAttributeNode("contactId"),
-        @NamedAttributeNode("companyId")})
+
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "personUserGraph", attributeNodes = {
+                @NamedAttributeNode("firstName"),
+                @NamedAttributeNode("lastName"),
+                @NamedAttributeNode("username"),
+                @NamedAttributeNode("contactId"),
+                @NamedAttributeNode("companyId")
+        }),
+        @NamedEntityGraph(name = "PersonEntity.personIdProjectionGraph", attributeNodes = {
+                @NamedAttributeNode("id")
+        })
+})
+@SqlResultSetMapping(
+    name = "personUserProjection",
+    classes = {
+        @ConstructorResult(
+            targetClass = PersonUserProjection.class,
+            columns = {
+                    @ColumnResult(name = "id", type = Long.class),
+                    @ColumnResult(name = "contactId", type = Long.class),
+                    @ColumnResult(name = "companyId", type = Long.class),
+                    @ColumnResult(name = "username", type = String.class),
+                    @ColumnResult(name = "password", type = String.class)
+            }
+        )
+    }
+)
+@NamedNativeQueries({
+    @NamedNativeQuery(name = "PersonEntity.findAllPersonUserProjection",
+        query = " select per.ID as id, " +
+                " per.CONTACT_ID as contactId, per.COMPANY_ID as companyId, " +
+                " per.USERNAME as username, per.PASSWORD as password " +
+                " from CRM.TBL_PERSON per ",
+        resultSetMapping = "personUserProjection"
+    ),
+    @NamedNativeQuery(name = "PersonEntity.findPersonUserProjectionsByIdGreaterThan",
+            query = " select per.ID as id, " +
+                    " per.CONTACT_ID as contactId, per.COMPANY_ID as companyId, " +
+                    " per.USERNAME as username, per.PASSWORD as password " +
+                    " from CRM.TBL_PERSON per where per.ID > :personId ",
+            resultSetMapping = "personUserProjection"
+    ),
+    @NamedNativeQuery(name = "PersonEntity.selectCurrentSequenceNumber",
+            query = " select SEQ_PERSON_ID.nextval from dual "
+    )
+
+})
+@NamedQueries({
+        @NamedQuery(name = "PersonEntity.selectPersonEntityByIdM",
+        query = "select per.id from PersonEntity per where per.id > :personId",
+                hints = @QueryHint(name = QueryHints.HINT_READONLY,value = "true")
+        )
+})
 @Getter
 @Setter
 @NoArgsConstructor

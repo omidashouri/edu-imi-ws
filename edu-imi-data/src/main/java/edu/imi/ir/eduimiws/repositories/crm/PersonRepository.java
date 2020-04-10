@@ -1,16 +1,39 @@
 package edu.imi.ir.eduimiws.repositories.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface PersonRepository extends CrudRepository<PersonEntity,Long> {
+public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
 
     @EntityGraph("personUserGraph")
     PersonEntity findByUsername(String userName);
+
+    PersonEntity findFirstByOrderByIdDesc();
+
+    @Query(name = "PersonEntity.findPersonUserProjectionsByIdGreaterThan", nativeQuery = true)
+    List<PersonUserProjection> findPersonUserProjectionsByIdGreaterThan(@Param("personId") Long id);
+
+    @Query(name = "PersonEntity.findAllPersonUserProjection", nativeQuery = true)
+    List<PersonUserProjection> findAllPersonUserProjection();
+
+    @Query(name = "PersonEntity.selectCurrentSequenceNumber",nativeQuery = true)
+    Long selectLastSequenceNumber();
+
+
+
+
+
+
+
 
 //NU
 /*    @Query(value = "Select p from PersonEntity p where p.personalCode = :username",

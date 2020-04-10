@@ -64,4 +64,7 @@ public class ContactWebServiceEntity extends BaseEntity {
   @Column(name="EDIT_DATE_TS")
   private java.sql.Timestamp editDateTs;
 
+  @Column(name = "CONTACT_EDIT_DATE")
+  private String contactEditDate;
+
 }

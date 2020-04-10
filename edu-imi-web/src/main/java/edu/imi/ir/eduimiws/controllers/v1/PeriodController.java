@@ -244,7 +244,6 @@ public class PeriodController {
             returnValue.setDescription(newPeriodCount + " New Record Found. use 'generate-public-id' link");
 
             Link link = WebMvcLinkBuilder.linkTo(PeriodController.class)
-                    .slash("PeriodWebService")
                     .slash("generate-public-id")
                     .withRel("generate-public-id");
 
@@ -291,7 +290,7 @@ public class PeriodController {
                     )
             }
     )
-    @PostMapping(path = "/PeriodWebService/generate-public-id",
+    @PostMapping(path = "/generate-public-id",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createPeriodWebServicePublicId() {
 

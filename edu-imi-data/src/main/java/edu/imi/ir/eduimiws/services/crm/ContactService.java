@@ -8,7 +8,6 @@ public interface ContactService {
 //NU
     List<ContactEntity> findAllByPersons(List<PersonEntity> personEntities);*/
 
-
 }
 
 

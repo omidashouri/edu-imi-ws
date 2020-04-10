@@ -10,6 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -38,5 +44,17 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
     public ContactWebServiceEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact) {
 //        omiddo:add NamedEntityGraph later for contact
         return contactWebServiceRepository.findByContact(contact);
+    }
+
+    @Override
+    public List<ContactWebServiceEntity> saveAllContactWebServices(List<ContactWebServiceEntity> contactWebServices) {
+        Iterable<ContactWebServiceEntity> iterableContactWebServices = new ArrayList<>();
+        contactWebServices.sort(Comparator.comparing(ContactWebServiceEntity::getContactId));
+        iterableContactWebServices = contactWebServiceRepository
+                .saveAll(contactWebServices);
+        List<ContactWebServiceEntity> newContactWebServices = StreamSupport
+                .stream(iterableContactWebServices.spliterator(),false)
+                .collect(Collectors.toList());
+        return newContactWebServices;
     }
 }

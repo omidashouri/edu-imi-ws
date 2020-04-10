@@ -1,11 +1,17 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.crm.PersonUserProjectionMapper;
+import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Comparator;
+import java.util.List;
 
 
 @Service
@@ -15,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PersonServiceImpl implements PersonService{
 
     private final PersonRepository personRepository;
+    private final PersonUserProjectionMapper personUserProjectionMapper;
 //NU
 /*    @Override
     public PersonEntity findById(Long id) {
@@ -27,6 +34,42 @@ public class PersonServiceImpl implements PersonService{
 //        omiddo: check person is not null or person is not duplicate
         return personEntity;
     }
+
+    @Override
+    public Long personCount() {
+        return personRepository.count();
+    }
+
+    @Override
+    public PersonEntity selectLastRecord() {
+        return personRepository.findFirstByOrderByIdDesc();
+    }
+
+    @Override
+    public List<PersonEntity> findPersonUserProjectionsByIdGreaterThan(Long id) {
+        List<PersonUserProjection> personUserProjections =
+                personRepository.findPersonUserProjectionsByIdGreaterThan(id);
+        List<PersonEntity> persons = personUserProjectionMapper
+                .toPersonEntitys(personUserProjections, new CycleAvoidingMappingContext());
+        return persons;
+    }
+
+    @Override
+    public List<PersonEntity> findAllPersonUserProjectionOrderById() {
+        List<PersonUserProjection> personUserProjections = personRepository
+                .findAllPersonUserProjection();
+        personUserProjections.sort(Comparator.comparing(edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection::getId));
+        List<PersonEntity> persons = personUserProjectionMapper
+                .toPersonEntitys(personUserProjections, new CycleAvoidingMappingContext());
+        return persons;
+    }
+
+    @Override
+    public Long selectPersonLastSequenceNumber() {
+        return personRepository.selectLastSequenceNumber();
+    }
+
+
 //NU
 /*    @Override
     public List<PersonEntity> findAllByUserNameContaining(String userName) {

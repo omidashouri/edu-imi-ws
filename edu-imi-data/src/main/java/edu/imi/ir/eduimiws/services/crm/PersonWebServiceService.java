@@ -13,6 +13,7 @@ public interface PersonWebServiceService  {
 
     List<PersonWebServiceEntity> findAllListByPageAndSize(int page,int size);
 
+//    NU
     PersonWebServiceEntity findByPersonId(Long personId);
 
     PersonWebServiceEntity findByUserNameFast(String userName);
@@ -22,4 +23,13 @@ public interface PersonWebServiceService  {
     PersonWebServiceEntity savePersonWebServiceEntity(PersonWebServiceEntity personWebServiceEntity);
 
     PersonWebServiceEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity);
+
+//    NU
+    List<PersonWebServiceEntity> findAllPersonWebServiceIdProjection();
+
+    Long personWebServiceCount();
+
+    PersonWebServiceEntity selectLastRecord();
+
+    List<PersonWebServiceEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons);
 }

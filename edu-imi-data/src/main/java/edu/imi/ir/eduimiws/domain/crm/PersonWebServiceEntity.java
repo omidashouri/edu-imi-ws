@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.domain.crm;
 
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
+import edu.imi.ir.eduimiws.models.projections.crm.PersonWebServiceIdProjection;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,21 +11,46 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 
+// add role_ID column
+
 @NamedEntityGraph(name = "personWebServiceFastGraph", attributeNodes = {
-        @NamedAttributeNode("personId"),
-        @NamedAttributeNode("personPublicId"),
-        @NamedAttributeNode("contactId"),
-        @NamedAttributeNode("contactPublicId"),
-        @NamedAttributeNode("userName"),
-        @NamedAttributeNode("encryptedPassword"),
-        @NamedAttributeNode("emailVerificationToken"),
-        @NamedAttributeNode("emailVerificationStatus"),
-        @NamedAttributeNode("mobileVerificationStatus"),
-        @NamedAttributeNode("creatorId"),
-        @NamedAttributeNode("createDateTs"),
-        @NamedAttributeNode("editorId"),
-        @NamedAttributeNode("editDateTs"),
-        @NamedAttributeNode("description")})
+  @NamedAttributeNode("personId"),
+  @NamedAttributeNode("personPublicId"),
+  @NamedAttributeNode("contactId"),
+  @NamedAttributeNode("contactPublicId"),
+  @NamedAttributeNode("userName"),
+  @NamedAttributeNode("encryptedPassword"),
+  @NamedAttributeNode("emailVerificationToken"),
+  @NamedAttributeNode("emailVerificationStatus"),
+  @NamedAttributeNode("mobileVerificationStatus"),
+  @NamedAttributeNode("creatorId"),
+  @NamedAttributeNode("createDateTs"),
+  @NamedAttributeNode("editorId"),
+  @NamedAttributeNode("editDateTs"),
+  @NamedAttributeNode("description")
+})
+@SqlResultSetMappings(
+  @SqlResultSetMapping(
+    name = "personWebServiceIdProjection",
+    classes = {
+      @ConstructorResult(
+        targetClass = PersonWebServiceIdProjection.class,
+        columns = {
+          @ColumnResult(name = "idR", type = Long.class),
+          @ColumnResult(name = "personIdR", type = Long.class),
+          @ColumnResult(name = "contactIdR", type = Long.class)
+        }
+      )
+    }
+  )
+)
+@NamedNativeQueries({
+  @NamedNativeQuery(name = "PersonWebServiceEntity.findAllPersonWebServiceIdProjection",
+          query = " select pws.ID as idR, pws.CONTACT_ID as personIdR, pws.CONTACT_ID as contactIdR " +
+                  " from CRM.TBL_PERSON_WEB_SERVICE pws ",
+          resultSetMapping = "personWebServiceIdProjection"
+  )
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -124,5 +150,14 @@ public class PersonWebServiceEntity extends BaseEntity {
 
   @Column(name="DESCRIPTION")
   private String description;
+
+  @Column(name = "AUTHORITY_ID")
+  private Long authorityId;
+
+  @Column(name = "PERSON_EDIT_DATE")
+  private String personEditDate;
+
+  @Column(name = "CONTACT_EDIT_DATE")
+  private String contactEditDate;
 
 }
