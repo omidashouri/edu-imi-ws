@@ -352,8 +352,10 @@ public class ContactEntity extends BaseEntity {
   @OneToMany(mappedBy = "contact",fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
   private List<PersonEntity> persons = new ArrayList<>();
 
-/*  @OneToOne(mappedBy="contact")
-  private PersonWebServiceEntity personWebServiceEntity;*/
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @OneToOne(mappedBy="contact",fetch = FetchType.LAZY)
+  private ContactWebServiceEntity contactWebService;
 
   public void addPerson(PersonEntity person){
       if(null != person){

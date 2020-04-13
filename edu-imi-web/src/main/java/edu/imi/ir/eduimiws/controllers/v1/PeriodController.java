@@ -238,7 +238,7 @@ public class PeriodController {
         }
 
         returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
-        returnValue.setOperationName(RequestOperationName.COUNT_NEW_RECORDS.name());
+        returnValue.setOperationName(RequestOperationName.COUNT_NEW_ENTITIES.name());
 
         if (newPeriodCount > 0) {
             returnValue.setDescription(newPeriodCount + " New Record Found. use 'generate-public-id' link");
@@ -310,7 +310,7 @@ public class PeriodController {
                 newPeriods = periodService.findAllPeriodOnlyByIdGreaterThan(periodWebServiceLastRecord.getPeriodId());
             } else {
                 returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
-                returnValue.setOperationName(RequestOperationName.CREATE_NEW_RECORDS.name());
+                returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
                 returnValue.setDescription("New Record Not Found.");
                 return ResponseEntity.ok(returnValue);
             }
@@ -321,7 +321,7 @@ public class PeriodController {
         newPeriodWebService = periodWebServiceService.generatePeriodWebServicePublicId(newPeriods);
 
         returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
-        returnValue.setOperationName(RequestOperationName.CREATE_NEW_RECORDS.name());
+        returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
         returnValue.setDescription(newPeriodWebService.size() + " New Public Id Generated");
         return ResponseEntity.ok(returnValue);
     }

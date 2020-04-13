@@ -6,6 +6,8 @@ import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 //NU
 @Mapper
 public interface PersonMapper {
@@ -45,4 +47,8 @@ public interface PersonMapper {
 
     @InheritInverseConfiguration
     PersonDto PersonEntityToPersonDto(PersonEntity personEntity, @Context CycleAvoidingMappingContext context);
+
+    List<PersonEntity> toPersonEntities(List<PersonDto> personTpPersonDtos, @Context CycleAvoidingMappingContext context);
+
+    List<PersonDto> toPersonDtos(List<PersonEntity> personEntities, @Context CycleAvoidingMappingContext context);
 }

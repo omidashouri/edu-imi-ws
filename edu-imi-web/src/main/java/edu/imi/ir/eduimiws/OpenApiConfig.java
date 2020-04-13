@@ -73,6 +73,15 @@ public class OpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi contactApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Contacts")
+                .pathsToMatch("/v1/contacts/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi periodApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Periods")

@@ -208,7 +208,7 @@ public class UserController {
         }
 
         returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
-        returnValue.setOperationName(RequestOperationName.COUNT_NEW_RECORDS.name());
+        returnValue.setOperationName(RequestOperationName.COUNT_NEW_ENTITIES.name());
 
         if (newUserCount > 0) {
             returnValue.setDescription(newUserCount + " New Record Found. use 'generate-public-id' link");
@@ -219,7 +219,7 @@ public class UserController {
 
             returnValue.add(link);
         } else {
-            returnValue.setDescription("New Record Not Found.");
+            returnValue.setDescription("New Entity Not Found");
         }
         return ResponseEntity.ok(returnValue);
     }
@@ -259,17 +259,16 @@ public class UserController {
                     )
             }
     )
-    @PostMapping(path = "/generate-public-id",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+/*    @PostMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})*/
     public ResponseEntity<?> createPersonWebServicePublicId() {
-
-        OperationStatus returnValue = new OperationStatus();
+//omiddo: later make decision about this method
+      /*  OperationStatus returnValue = new OperationStatus();
         Long personWebserviceCount;
         Long personLastSequenceNumber;
         PersonWebServiceEntity personWebServiceLastRecord;
         List<PersonEntity> newPersons;
         List<PersonWebServiceEntity> newPersonWebServices;
-//        IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3NDE1Nzg1fQ.akkwqPb2-OI6QCv13SWq0QB0qrFpvDzOPFqtrWD1inBFiuzPm7Ni0uxVtLjdOHw5LKSBVSfCjqHN9LmBDn8qTQ
         personWebserviceCount = personWebServiceService.personWebServiceCount();
 
 //        newPersonsNotInPersonWebService();
@@ -304,21 +303,9 @@ public class UserController {
                 new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
                         , "period count is null or zero")
                 , HttpStatus.INTERNAL_SERVER_ERROR
-        );
+        );*/
+      return null;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private ResponseEntity<?> conflictUserCount() {
