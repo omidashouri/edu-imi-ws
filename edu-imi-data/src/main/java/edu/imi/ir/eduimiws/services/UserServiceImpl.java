@@ -120,6 +120,11 @@ public class UserServiceImpl implements UserService {
                 new ArrayList<>());
     }
 
+/*    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
+        role = "ROLE_ADMIN";
+        return Arrays.asList(new SimpleGrantedAuthority(role));
+    }*/
+
     private PersonWebServiceEntity savePersonWebService(String publicPersonId, String publicContactId, PersonEntity user) {
         PersonWebServiceEntity newPersonWebService = new PersonWebServiceEntity();
 //        newPersonWebService.setContactId(user.getContactId());

@@ -49,8 +49,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("**/swagger-ui/**","/swagger-ui/**","/v3/api-docs/**","/v3/api-docs","/v2/api-docs/**","/configuration/**","/swagger*/**","/webjars/**")
                 .permitAll()
 
+//                or .hasAuthority("ADMIN")
+//                .antMatchers("/delete/**").hasRole("ADMIN")
+
                 .anyRequest()
                 .authenticated()
+
+//                .and().logout().permitAll()
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout","POST"))
+
         .and()
 
         .addFilter(getAuthenticationFilter())
