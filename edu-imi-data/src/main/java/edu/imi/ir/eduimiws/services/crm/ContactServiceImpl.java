@@ -42,7 +42,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Page<ContactEntity> findAllContactEntityPages(Pageable pageable) {
         Page<ContactEntity> contactPages = contactRepository
-                .findAllContactEntityPages(pageable);
+                .findAll(pageable);
         return contactPages;
     }
 

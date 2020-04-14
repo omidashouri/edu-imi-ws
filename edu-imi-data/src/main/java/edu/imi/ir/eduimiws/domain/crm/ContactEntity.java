@@ -8,6 +8,23 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+@NamedEntityGraphs({
+    @NamedEntityGraph(name = "ContactEntity.findContactEntitiesByNationCode",
+        attributeNodes = {
+              @NamedAttributeNode(value = "persons",subgraph = "persons-subGraph")
+        },
+        subgraphs = {
+                @NamedSubgraph(name = "persons-subGraph",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "personWebServiceEntity")
+                        },type = PersonWebServiceEntity.class
+                )
+        }
+    )
+})
+
 @Getter
 @Setter
 @NoArgsConstructor

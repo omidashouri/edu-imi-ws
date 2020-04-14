@@ -4,6 +4,7 @@ import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
@@ -27,6 +28,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     )
     Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
+    @EntityGraph(value = "PeriodEntity.findByPeriodWebService_PeriodPublicId",type = EntityGraph.EntityGraphType.LOAD)
     PeriodEntity findByPeriodWebService_PeriodPublicId(String periodPublicId);
 
     @Query(name = "PeriodEntity.selectAllPeriodOnly", nativeQuery = true)

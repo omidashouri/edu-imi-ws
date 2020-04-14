@@ -97,7 +97,10 @@ public interface ContactFastDtoMapper {
 
     @AfterMapping
     default void handlePersonPublicIds(ContactEntity contactEntity, @MappingTarget ContactFastDto contactFastDto) {
-        if(Hibernate.isInitialized(contactEntity.getPersons())) {
+        if(!Hibernate.isInitialized(contactEntity.getPersons())) {
+            contactEntity.setPersons(null);
+        }
+        if(contactEntity.getPersons()!=null) {
             if (contactEntity.getPersons().iterator().next().getPersonWebServiceEntity() != null) {
                 contactFastDto.setPersonPublicId(contactEntity.getPersons().iterator().next().getPersonWebServiceEntity().getPersonPublicId());
             }

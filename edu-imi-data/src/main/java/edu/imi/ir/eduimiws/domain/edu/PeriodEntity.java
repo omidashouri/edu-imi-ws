@@ -8,6 +8,26 @@ import lombok.*;
 import javax.persistence.*;
 
 
+
+
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "PeriodEntity.findByPeriodWebService_PeriodPublicId",
+                attributeNodes = {
+                @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
+                @NamedAttributeNode("periodWebService")
+                },
+                subgraphs = {
+                    @NamedSubgraph(
+                            name = "executer-subGraph",
+                            attributeNodes = {
+                                    @NamedAttributeNode(value = "personWebServiceEntity")
+                            },
+                            type = PersonWebServiceEntity.class)
+                }
+        )
+})
+
+
 @SqlResultSetMapping(
     name = "periodOnly",
     classes = {
