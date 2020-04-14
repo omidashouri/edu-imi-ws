@@ -3,8 +3,8 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.crm.ContactMapper;
-import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
+import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.repositories.crm.ContactRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +21,13 @@ import java.util.List;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
-    private final ContactMapper contactMapper;
+    private final ContactFastDtoMapper contactFastDtoMapper;
 
     @Override
-    public List<ContactDto> findContactByNationalCode(String nationalCode) {
+    public List<ContactFastDto> findContactByNationalCode(String nationalCode) {
         List<ContactEntity> contactEntities = contactRepository.findContactEntitiesByNationCode(nationalCode);
-        List<ContactDto> contactDtos = contactMapper.toContactDtos(contactEntities,new CycleAvoidingMappingContext());
-        return contactDtos;
+        List<ContactFastDto> contactFastDtos = contactFastDtoMapper.toContactFastDtos(contactEntities,new CycleAvoidingMappingContext());
+        return contactFastDtos;
     }
 
     @Override

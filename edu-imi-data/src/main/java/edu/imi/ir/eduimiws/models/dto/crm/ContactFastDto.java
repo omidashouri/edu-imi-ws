@@ -177,8 +177,8 @@ public class ContactFastDto implements Serializable {
 
     private Long lfromCityEntityPublicId;
 
-    private Long contactPublicId;
+    private String contactPublicId;
 
-    private Long personPublicId;
+    private String personPublicId;
 
 }

@@ -10,7 +10,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 
 
-@Schema(name = "periods",description = "Class representing a contact in the application.")
+@Schema(name = "periods",description = "Class representing a period in the application.")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "period")
 @Relation(collectionRelation = "periods")

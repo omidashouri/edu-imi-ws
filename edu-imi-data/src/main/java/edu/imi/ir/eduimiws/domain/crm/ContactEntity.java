@@ -32,34 +32,34 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "SALUTATION_ID")
   private ParameterEntity salutation;
 
-  @Column(name="FIRST_NAME")
+  @Column(name="FIRST_NAME",length = 500)
   private String firstName;
 
-  @Column(name="MIDDLE_NAME")
+  @Column(name="MIDDLE_NAME",length = 100)
   private String middleName;
 
-  @Column(name="LAST_NAME")
+  @Column(name="LAST_NAME",length = 100)
   private String lastName;
 
-  @Column(name="JOB_TITLE")
+  @Column(name="JOB_TITLE",length = 250)
   private String jobTitle;
 
-  @Column(name="BUSINESS_PHONE")
+  @Column(name="BUSINESS_PHONE",length = 50)
   private String businessPhone;
 
-  @Column(name="HOME_PHONE")
+  @Column(name="HOME_PHONE",length = 50)
   private String homePhone;
 
-  @Column(name="MOBILE_PHONE")
+  @Column(name="MOBILE_PHONE",length = 50)
   private String mobilePhone;
 
-  @Column(name="FAX_NUMBER")
+  @Column(name="FAX_NUMBER",length = 50)
   private String faxNumber;
 
-  @Column(name="PAGER_NUMBER")
+  @Column(name="PAGER_NUMBER",length = 50)
   private String pagerNumber;
 
-  @Column(name="EMAIL")
+  @Column(name="EMAIL",length = 100)
   private String email;
 
 //  @Getter(AccessLevel.NONE)
@@ -69,42 +69,42 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "CURRENCY_ID")
   private ParameterEntity currency;
 
-  @Column(name="DEPARTMENT")
+  @Column(name="DEPARTMENT",length = 100)
   private String department;
 
-  @Column(name="ROLE")
+  @Column(name="ROLE",length = 100)
   private String role;
 
   @OneToOne(optional = true)
   @JoinColumn(name = "MANAGER_ID")
   private ContactEntity manager;
 
-  @Column(name="MANAGER_PHONE")
+  @Column(name="MANAGER_PHONE",length = 50)
   private String managerPhone;
 
   @OneToOne(optional = true)
   @JoinColumn(name = "ASSISTANT_ID")
   private ContactEntity assistant;
 
-  @Column(name="ASSISTANT_PHONE")
+  @Column(name="ASSISTANT_PHONE",length = 50)
   private String assistantPhone;
 
-  @Column(name="GENDER")
+  @Column(name="GENDER",length = 3)
   private String gender;
 
-  @Column(name="MARITAL_STATUS")
+  @Column(name="MARITAL_STATUS",length = 1)
   private String maritalStatus;
 
-  @Column(name="PARTNER_NAME")
+  @Column(name="PARTNER_NAME",length = 200)
   private String partnerName;
 
-  @Column(name="BIRTHDATE")
+  @Column(name="BIRTHDATE",length = 20)
   private String birthdate;
 
-  @Column(name="ANNIVERSARY")
+  @Column(name="ANNIVERSARY",length = 20)
   private String anniversary;
 
-  @Column(name="DESCRIPTION")
+  @Column(name="DESCRIPTION",length = 4000)
   private String description;
 
   @OneToOne(optional = true)
@@ -132,10 +132,10 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "CITY_ID")
   private ParameterEntity city;
 
-  @Column(name="ADDRESS_PHONE")
+  @Column(name="ADDRESS_PHONE",length = 500)
   private String addressPhone;
 
-  @Column(name="ADDRESS")
+  @Column(name="ADDRESS",length = 500)
   private String address;
 
 //  @Getter(AccessLevel.NONE)
@@ -164,25 +164,25 @@ public class ContactEntity extends BaseEntity {
   @Column(name="TEAM_ID")
   private Long teamId;
 
-  @Column(name="SYNC_OUT_LOOK")
+  @Column(name="SYNC_OUT_LOOK",length = 1)
   private String syncOutLook;
 
-  @Column(name="PREFERRED_CONTACT_METHOD")
+  @Column(name="PREFERRED_CONTACT_METHOD",length = 1)
   private String preferredContactMethod;
 
-  @Column(name="ALLOW_EMAIL")
+  @Column(name="ALLOW_EMAIL",length = 1)
   private String allowEmail;
 
-  @Column(name="ALLOW_BULK_EMAIL")
+  @Column(name="ALLOW_BULK_EMAIL",length = 1)
   private String allowBulkEmail;
 
-  @Column(name="ALLOW_PHONE")
+  @Column(name="ALLOW_PHONE",length = 1)
   private String allowPhone;
 
-  @Column(name="ALLOW_FAX")
+  @Column(name="ALLOW_FAX",length = 1)
   private String allowFax;
 
-  @Column(name="ALLOW_MAIL")
+  @Column(name="ALLOW_MAIL",length = 1)
   private String allowMail;
 
 //  @Getter(AccessLevel.NONE)
@@ -199,16 +199,16 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "USER_CREATOR_ID")
   private PersonEntity userCreator;
 
-  @Column(name="FROM_CITY")
+  @Column(name="FROM_CITY",length = 100)
   private String fromCity;
 
-  @Column(name="CERTIFICATE_NO")
+  @Column(name="CERTIFICATE_NO",length = 100)
   private String certificateNo;
 
-  @Column(name="NATION_CODE")
+  @Column(name="NATION_CODE",length = 20)
   private String nationCode;
 
-  @Column(name="FATHER_NAME")
+  @Column(name="FATHER_NAME",length = 100)
   private String fatherName;
 
 //  @Getter(AccessLevel.NONE)
@@ -218,16 +218,16 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "BIRTH_CITY_ID")
   private ParameterEntity birthCity;
 
-  @Column(name="ACCESS_TYPE")
+  @Column(name="ACCESS_TYPE",length = 10)
   private String accessType;
 
-  @Column(name="IMAGE")
+  @Column(name="IMAGE",length = 200)
   private String image;
 
-  @Column(name="LFIRST_NAME")
+  @Column(name="LFIRST_NAME",length = 50)
   private String lfirstName;
 
-  @Column(name="LLAST_NAME")
+  @Column(name="LLAST_NAME",length = 50)
   private String llastName;
 
 //  @Getter(AccessLevel.NONE)
@@ -251,22 +251,22 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "EDU_LEVEL_ID")
   private ParameterEntity eduLevel;
 
-  @Column(name="FIELD_NAME")
+  @Column(name="FIELD_NAME",length = 200)
   private String fieldName;
 
-  @Column(name="BANK_NAME")
+  @Column(name="BANK_NAME",length = 50)
   private String bankName;
 
-  @Column(name="BRANCH_NAME")
+  @Column(name="BRANCH_NAME",length = 50)
   private String branchName;
 
-  @Column(name="BANK_ACCOUNT_NUMBER")
+  @Column(name="BANK_ACCOUNT_NUMBER",length = 30)
   private String bankAccountNumber;
 
-  @Column(name="BANK_ACCOOUNT_TYPE")
+  @Column(name="BANK_ACCOOUNT_TYPE",length = 50)
   private String bankAccoountType;
 
-  @Column(name="ENTRANCE_DATE")
+  @Column(name="ENTRANCE_DATE",length = 10)
   private String entranceDate;
 
 //  @Getter(AccessLevel.NONE)
@@ -276,7 +276,7 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "CONTRACT_TYPE_ID")
   private ParameterEntity contractType;
 
-  @Column(name="UNIVERSITY")
+  @Column(name="UNIVERSITY",length = 300)
   private String university;
 
 //  @Getter(AccessLevel.NONE)
@@ -293,31 +293,31 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "INSURANCE_BOX_ID")
   private ParameterEntity insuranceBox;
 
-  @Column(name="GENDER1")
+  @Column(name="GENDER1",length = 10)
   private String gender1;
 
-  @Column(name="MARITAL1")
+  @Column(name="MARITAL1",length = 10)
   private String marital1;
 
-  @Column(name="MILITARY1")
+  @Column(name="MILITARY1",length = 50)
   private String military1;
 
-  @Column(name="EDIT_TEMP_ROW_FLAG")
+  @Column(name="EDIT_TEMP_ROW_FLAG",length = 1)
   private String editTempRowFlag;
 
-  @Column(name="CREATE_TEMP_ROW_FLAG")
+  @Column(name="CREATE_TEMP_ROW_FLAG",length = 1)
   private String createTempRowFlag;
 
-  @Column(name="VERIFIED")
+  @Column(name="VERIFIED",length = 1)
   private String verified;
 
-  @Column(name="POSTAL_CODE")
+  @Column(name="POSTAL_CODE",length = 20)
   private String postalCode;
 
-  @Column(name="EDIT_DATE")
+  @Column(name="EDIT_DATE",length = 10)
   private String editDate;
 
-  @Column(name="CREATE_DATE")
+  @Column(name="CREATE_DATE",length = 10)
   private String createDate;
 
 //  @Getter(AccessLevel.NONE)
@@ -327,17 +327,17 @@ public class ContactEntity extends BaseEntity {
   @JoinColumn(name = "USER_EDITOR_ID")
   private PersonEntity userEditor;
 
-  @Column(name="CONVERT_DATE_WHO")
+  @Column(name="CONVERT_DATE_WHO",length = 30)
   private String convertDateWho;
 
-  @Column(name="CONVERT_UNIQ")
+  @Column(name="CONVERT_UNIQ",length = 20)
   private String convertUniq;
 
-  @Column(name="LFATHER_NAME")
+  @Column(name="LFATHER_NAME",length = 50)
   private String lfatherName;
 
 
-  @Column(name="LFROM_CITY")
+  @Column(name="LFROM_CITY",length = 100)
   private String lfromCity;
 
   //  @Getter(AccessLevel.NONE)
