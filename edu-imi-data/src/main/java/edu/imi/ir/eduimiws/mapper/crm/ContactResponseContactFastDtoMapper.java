@@ -77,7 +77,7 @@ public interface ContactResponseContactFastDtoMapper {
             @Mapping(source = "lfromCity",target = "lfromCity")
     })
     @BeanMapping(ignoreByDefault = true)
-    ContactResponse toContactEntity(ContactFastDto contactFastDto , @Context CycleAvoidingMappingContext context);
+    ContactResponse toContactResponse(ContactFastDto contactFastDto , @Context CycleAvoidingMappingContext context);
 
     @BeanMapping(ignoreByDefault = true)
     @InheritInverseConfiguration
