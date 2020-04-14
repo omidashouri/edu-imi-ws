@@ -127,7 +127,6 @@ public class PeriodController {
         return ResponseEntity.ok(periodResponseCollectionModel);
     }
 
-    //  IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3MTUwMjgzfQ.26qm6KwLRDO1WZbWyF9Fqp4-6gtu-Dx7KmYqKE053sO63ZqgwsYhZhu0W3zGdT167NWQDgQnDCtuaMHBBeUzYA
 
     @Operation(
             summary = "Find Period by public ID",

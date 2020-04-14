@@ -4,6 +4,7 @@ package edu.imi.ir.eduimiws.mapper.crm;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
+import org.hibernate.Hibernate;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -96,8 +97,10 @@ public interface ContactFastDtoMapper {
 
     @AfterMapping
     default void handlePersonPublicIds(ContactEntity contactEntity, @MappingTarget ContactFastDto contactFastDto) {
-        if (contactEntity.getPersons().iterator().next().getPersonWebServiceEntity() != null) {
-            contactFastDto.setPersonPublicId(contactEntity.getPersons().iterator().next().getPersonWebServiceEntity().getPersonPublicId());
+        if(Hibernate.isInitialized(contactEntity.getPersons())) {
+            if (contactEntity.getPersons().iterator().next().getPersonWebServiceEntity() != null) {
+                contactFastDto.setPersonPublicId(contactEntity.getPersons().iterator().next().getPersonWebServiceEntity().getPersonPublicId());
+            }
         }
     }
 

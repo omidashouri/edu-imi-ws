@@ -1,7 +1,10 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 
+import edu.imi.ir.eduimiws.assemblers.edu.ContactResponseAssembler;
+import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.ContactResponseContactFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
@@ -11,6 +14,7 @@ import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,6 +23,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.converters.PageableAsQueryParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +40,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/v1/contacts")
@@ -40,7 +53,40 @@ public class ContactController {
 
     private final ContactResponseContactFastDtoMapper contactResponseContactFastDtoMapper;
 
+    private final ContactFastDtoMapper contactFastDtoMapper;
+
+    private final ContactResponseAssembler contactResponseAssembler;
+
 //    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3NjI0MDE1fQ.qJgwCKe2XWNRiT7w2kEZ65WDxlNWK0mn6qUM0u_90Ha-S1qshM5npIk0T71VbVkY1e5mPA_yILbHC9Th5iU1Og
+//0453506690
+
+
+
+//    @Operation(hidden = true)
+    @PageableAsQueryParam
+    @GetMapping(path = "/collectionModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CollectionModel<ContactResponse>> getAllContacts(
+            @Parameter(hidden = true)
+            @SortDefault(sort = "createDate",direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size= 10)
+                    Pageable pageable){
+
+        Page<ContactEntity> contactPages =
+                contactService.findAllContactEntityPages(pageable);
+
+        List<ContactEntity> contactEntities = StreamSupport
+                .stream(contactPages.spliterator(),false)
+                .collect(Collectors.toList());
+
+        List<ContactFastDto> contactFastDtos = contactFastDtoMapper
+                .toContactFastDtos(contactEntities,new CycleAvoidingMappingContext());
+
+        CollectionModel<ContactResponse> contactResponseCollectionModel =
+                contactResponseAssembler.toCollectionModel(contactFastDtos);
+
+        return ResponseEntity.ok(contactResponseCollectionModel);
+    }
 
 
     @Operation(
@@ -114,7 +160,7 @@ public class ContactController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "period not found",
+                            description = "Contact not found",
                             content = @Content(
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
@@ -131,7 +177,7 @@ public class ContactController {
     @GetMapping(path = "/{nationalCode}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getContactByNationalCode(@PathVariable String nationalCode) {
-//0453506690
+
         List<ContactFastDto> contactFastDtos = contactService.findContactByNationalCode(nationalCode);
 
         if(contactFastDtos==null || contactFastDtos.size() == 0){
