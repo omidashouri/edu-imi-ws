@@ -22,7 +22,7 @@ import org.springframework.hateoas.server.core.Relation;
 @AllArgsConstructor
 public class PeriodResponse extends RepresentationModel<PeriodResponse> {
 
-    @Schema(title = "Period Public ID")
+    @Schema(title = "Period Public ID",maxLength = 36)
     private String periodPublicId;
 
     @Schema(title = "Period name", maxLength = 500)
