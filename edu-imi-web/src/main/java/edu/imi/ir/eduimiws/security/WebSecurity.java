@@ -51,6 +51,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 //                or .hasAuthority("ADMIN")
 //                .antMatchers("/delete/**").hasRole("ADMIN")
+//                .antMatchers("/secure/**").access("hasRole('ADMIN')")
+//                .antMatchers("/secure/**").access("hasAuthority('ROLE_ADMIN')")
+//                .antMatchers("/secure/**").access("request.method == 'GET'")
 
                 .anyRequest()
                 .authenticated()
@@ -75,6 +78,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder.userDetailsService(userService)
                 //omiddo: do my implementation for password encoding
                 .passwordEncoder(bCryptPasswordEncoder);
+
+/*        authenticationManagerBuilder.inMemoryAuthentication()
+                .withUser("9057").password("9057").roles("ADMIN")
+                .and()
+                .withUser("user").password("user").roles("USER");*/
     }
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception{

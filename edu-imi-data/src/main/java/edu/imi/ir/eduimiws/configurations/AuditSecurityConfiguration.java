@@ -61,5 +61,9 @@ public class AuditSecurityConfiguration {
         person.setPassword(newPassword);
         new PersonService().save(person);
 
+//for later use
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        here User is org.springframework.security.core.userdetails.User
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
  */
 

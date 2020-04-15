@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -26,6 +27,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 //    this class is import with extending  UsernamePasswordAuthenticationFilter
     private final AuthenticationManager authenticationManager;
+//omiddo:    remove later myUserDetailsService
+    MyUserDetailsService myUserDetailsService = new MyUserDetailsService();//RM
 
     private String contentType;
 
@@ -44,6 +47,19 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 //            our class model for reading username and password
             UserLoginRequestModel creds = new ObjectMapper()
                     .readValue(req.getInputStream(), UserLoginRequestModel.class);
+
+//omiddo:later remove this
+            if(creds.getUsername().equalsIgnoreCase("admin")&& // RM
+            creds.getPassword().equalsIgnoreCase("admin")){     // RM
+
+                UserDetails userDetails =  myUserDetailsService.loadUserByUsername("9057"); // RM
+                Authentication authentication = new UsernamePasswordAuthenticationToken(    // RM
+                        userDetails,                                        // RM
+                        userDetails,                                        //RM
+                        userDetails.getAuthorities());                      // RM
+                return authentication;                                      // RM
+            }                                                               // RM
+
 
 //            use the method we implement in our service to identify user
             return authenticationManager.authenticate(
