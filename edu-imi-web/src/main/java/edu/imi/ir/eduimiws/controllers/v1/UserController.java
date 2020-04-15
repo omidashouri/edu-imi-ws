@@ -2,22 +2,20 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserContactResponseUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
-import edu.imi.ir.eduimiws.models.dto.crm.UserContactFastDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
-import edu.imi.ir.eduimiws.models.response.crm.UserContactResponse;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,15 +25,29 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.converters.PageableAsQueryParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -49,9 +61,12 @@ public class UserController {
     private final UserContactResponseUserContactFastDtoMapper userContactResponseUserContactFastDtoMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserResponseAssembler userResponseAssembler;
+    private final PagedResourcesAssembler<UserFastDto> userPagedResourcesAssembler;
 
     // http://localhost:8080/edu-imi-ws/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
+
+//    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3ODMyMDEyfQ.ZmfASy43T2adVKzTahZksyQ548LdeUoSfD2edKKBKbtMx8nYnhi7IxYlrh8m7vkdlB_0rafcBBZL2GieQaZqlQ
 
     @Operation(
             summary = "Find user by public ID",
@@ -105,17 +120,91 @@ public class UserController {
         } catch (Exception ex) {
             return (ResponseEntity<?>) ResponseEntity.badRequest();
         }
-
-/*        PersonWebServiceEntity user = personWebServiceService.findPersonWebServiceEntityByUserPublicId(userPublicId);
-
-        UserContactFastDto userContactFastDto = personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDto(user, new CycleAvoidingMappingContext());
-
-        UserContactResponse userContactResponse = userContactResponseUserContactFastDtoMapper.UserContactFastDtoToUserContactResponse(userContactFastDto, new CycleAvoidingMappingContext());
-
-        return ResponseEntity.ok(userContactResponse);*/
     }
 
+
     @Operation(
+            summary = "find All users",
+            description = "Search user detail pageable",
+            tags = "users",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = UserResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<UserResponse>> getUsers(@Parameter(hidden = true)
+                                                                   @SortDefault(sort = "personalCode",
+                                                                           direction = Sort.Direction.DESC)
+                                                                   @PageableDefault(page = 0, size= 10,value = 10)
+                                                                           Pageable pageable ){
+
+        Page<PersonEntity> personPages =
+                personService.findAllPersonEntityPages (pageable);
+
+        Page<UserFastDto> userFastDtoPage = personPages
+                .map(pp->userFastDtoMapper
+                        .toUserFastDto(pp,new CycleAvoidingMappingContext()));
+
+        PagedModel<UserResponse> userResponsePagedModel = userPagedResourcesAssembler
+                .toModel(userFastDtoPage,userResponseAssembler);
+
+        return ResponseEntity.ok(userResponsePagedModel);
+    }
+
+    @Operation(hidden = true)
+    @PageableAsQueryParam
+    @GetMapping(path = "/collectionModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CollectionModel<UserResponse>> getAllUsers(
+            @Parameter(hidden = true)
+            @SortDefault(sort = "personalCode",direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size= 10)
+                    Pageable pageable){
+
+        Page<PersonEntity> personPages =
+                personService.findAllPersonEntityPages(pageable);
+
+        List<PersonEntity> personEntities = StreamSupport
+                .stream(personPages.spliterator(),false)
+                .collect(Collectors.toList());
+
+        List<UserFastDto> userFastDtos = userFastDtoMapper
+                .toUserFastDtos(personEntities,new CycleAvoidingMappingContext());
+
+        CollectionModel<UserResponse> userResponseCollectionModel =
+                userResponseAssembler.toCollectionModel(userFastDtos);
+
+        return ResponseEntity.ok(userResponseCollectionModel);
+    }
+
+   /* @Operation(
             summary = "find All users",
             description = "Search user detail",
             tags = "users",
@@ -167,7 +256,7 @@ public class UserController {
                         .UserContactFastDtoToUserContactResponses(userContactFastDtos, new CycleAvoidingMappingContext());
 
         return ResponseEntity.ok(userContactResponses);
-    }
+    }*/
 
     @Operation(
             summary = "Count new user numbers",

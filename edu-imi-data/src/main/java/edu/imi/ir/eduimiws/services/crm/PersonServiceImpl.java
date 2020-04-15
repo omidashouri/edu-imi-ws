@@ -7,6 +7,8 @@ import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +76,13 @@ public class PersonServiceImpl implements PersonService{
         PersonEntity person = personRepository
                 .findByPersonWebServiceEntity_PersonPublicId(personPublicId);
         return person;
+    }
+
+    @Override
+    public Page<PersonEntity> findAllPersonEntityPages(Pageable pageable) {
+        Page<PersonEntity> personPages = personRepository
+                .findAll(pageable);
+        return personPages;
     }
 
 

@@ -51,13 +51,12 @@ public class UserResponseAssembler extends RepresentationModelAssemblerSupport<U
                             .withRel("contact"));
         }
 
-
-/*        userResponse.
+        userResponse.
                 add(linkTo(
                         methodOn(
                                 UserController.class)
                                 .getUsers(Pageable.unpaged()))
-                        .withRel("userss"));*/
+                        .withRel("users"));
         return userResponse;
     }
 
@@ -67,8 +66,8 @@ public class UserResponseAssembler extends RepresentationModelAssemblerSupport<U
     {
         CollectionModel<UserResponse> actorModels = super.toCollectionModel(entities);
 
-        Pageable defaultPageable = PageRequest.of(0,10, Sort.Direction.fromString("DESC"),"createDate");
-//        actorModels.add(linkTo(methodOn(UserController.class).getUsers(defaultPageable)).withSelfRel());
+        Pageable defaultPageable = PageRequest.of(0,10, Sort.Direction.fromString("DESC"),"personalDate");
+        actorModels.add(linkTo(methodOn(UserController.class).getUsers(defaultPageable)).withSelfRel());
 
         return actorModels;
     }

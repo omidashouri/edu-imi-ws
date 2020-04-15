@@ -2,6 +2,8 @@ package edu.imi.ir.eduimiws.repositories.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -30,6 +32,8 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
     PersonEntity findByPersonWebServiceEntity_PersonPublicId(String personPublicId);
+
+    Page<PersonEntity> findAll(Pageable pageable);
 
 
 
