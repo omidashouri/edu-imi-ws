@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 
-import edu.imi.ir.eduimiws.assemblers.edu.ContactResponseAssembler;
+import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;

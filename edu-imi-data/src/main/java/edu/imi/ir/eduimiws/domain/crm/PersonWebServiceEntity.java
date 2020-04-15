@@ -77,7 +77,7 @@ public class PersonWebServiceEntity extends BaseEntity {
     return personId;
   }
 
-  @Column(name="PERSON_PUBLIC_ID")
+  @Column(name="PERSON_PUBLIC_ID",length = 500)
   private String personPublicId;
 
   @EqualsAndHashCode.Exclude
@@ -94,16 +94,16 @@ public class PersonWebServiceEntity extends BaseEntity {
     return contactId;
   }
 
-  @Column(name="CONTACT_PUBLIC_ID")
+  @Column(name="CONTACT_PUBLIC_ID",length = 500)
   private String contactPublicId;
 
-  @Column(name = "USERNAME")
+  @Column(name = "USERNAME",length = 500)
   private String userName;
 
-  @Column(name="ENCRYPTED_PASSWORD")
+  @Column(name="ENCRYPTED_PASSWORD",length = 500)
   private String encryptedPassword;
 
-  @Column(name="EMAIL_VERIFICATION_TOKEN")
+  @Column(name="EMAIL_VERIFICATION_TOKEN",length = 500)
   private String emailVerificationToken;
 
   @Column(name="EMAIL_VERIFICATION_STATUS")
@@ -148,16 +148,16 @@ public class PersonWebServiceEntity extends BaseEntity {
   @Column(name="EDIT_DATE_TS")
   private java.sql.Timestamp editDateTs;
 
-  @Column(name="DESCRIPTION")
+  @Column(name="DESCRIPTION",length = 500)
   private String description;
 
   @Column(name = "AUTHORITY_ID")
   private Long authorityId;
 
-  @Column(name = "PERSON_EDIT_DATE")
+  @Column(name = "PERSON_EDIT_DATE",length = 10)
   private String personEditDate;
 
-  @Column(name = "CONTACT_EDIT_DATE")
+  @Column(name = "CONTACT_EDIT_DATE",length = 10)
   private String contactEditDate;
 
 }

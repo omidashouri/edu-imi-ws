@@ -28,6 +28,10 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     @Query(name = "PersonEntity.selectCurrentSequenceNumber",nativeQuery = true)
     Long selectLastSequenceNumber();
 
+    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
+    PersonEntity findByPersonWebServiceEntity_PersonPublicId(String personPublicId);
+
+
 
 
 

@@ -69,6 +69,13 @@ public class PersonServiceImpl implements PersonService{
         return personRepository.selectLastSequenceNumber();
     }
 
+    @Override
+    public PersonEntity findPersonEntityByPersonWebServicePublicId(String personPublicId) {
+        PersonEntity person = personRepository
+                .findByPersonWebServiceEntity_PersonPublicId(personPublicId);
+        return person;
+    }
+
 
 //NU
 /*    @Override

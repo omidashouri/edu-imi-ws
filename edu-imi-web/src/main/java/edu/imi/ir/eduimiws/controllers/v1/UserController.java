@@ -1,11 +1,14 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
+import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserContactResponseUserContactFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.UserContactFastDto;
+import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
@@ -44,7 +47,8 @@ public class UserController {
     private final PersonWebServiceService personWebServiceService;
     private final PersonWebServiceUserContactFastDtoMapper personWebServiceUserContactFastDtoMapper;
     private final UserContactResponseUserContactFastDtoMapper userContactResponseUserContactFastDtoMapper;
-
+    private final UserFastDtoMapper userFastDtoMapper;
+    private final UserResponseAssembler userResponseAssembler;
 
     // http://localhost:8080/edu-imi-ws/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
@@ -60,7 +64,7 @@ public class UserController {
                             description = "successful operation",
                             content = @Content(
                                     schema = @Schema(
-                                            implementation = UserContactResponse.class
+                                            implementation = UserResponse.class
                                     )
                             )
                     ),
@@ -81,19 +85,34 @@ public class UserController {
             }
     )
     @GetMapping(path = "/{userPublicId}",
-//            make response as XML or JSON
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getUser(@PathVariable String userPublicId) {
+    public ResponseEntity<?> getUserByUserPublicId(@PathVariable String userPublicId) {
 
-        UserResponse returnValue = new UserResponse();
+        try {
+            PersonEntity person = personService.findPersonEntityByPersonWebServicePublicId(userPublicId);
+            if (person == null) {
+                return this.userNotFound();
+            }
 
-        PersonWebServiceEntity user = personWebServiceService.findPersonWebServiceEntityByUserPublicId(userPublicId);
+            UserFastDto userFastDto =
+                    userFastDtoMapper.toUserFastDto(person,new CycleAvoidingMappingContext());
+
+            UserResponse userResponse =
+                    userResponseAssembler.toModel(userFastDto);
+
+            return ResponseEntity.ok(userResponse);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+
+/*        PersonWebServiceEntity user = personWebServiceService.findPersonWebServiceEntityByUserPublicId(userPublicId);
 
         UserContactFastDto userContactFastDto = personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDto(user, new CycleAvoidingMappingContext());
 
         UserContactResponse userContactResponse = userContactResponseUserContactFastDtoMapper.UserContactFastDtoToUserContactResponse(userContactFastDto, new CycleAvoidingMappingContext());
 
-        return ResponseEntity.ok(userContactResponse);
+        return ResponseEntity.ok(userContactResponse);*/
     }
 
     @Operation(
@@ -313,6 +332,14 @@ public class UserController {
                 new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
                         , "user count is null or zero")
                 , HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    private ResponseEntity<?> userNotFound() {
+        return new ResponseEntity<>(
+                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
+                        , "requested user not found")
+                , HttpStatus.NOT_FOUND
         );
     }
 

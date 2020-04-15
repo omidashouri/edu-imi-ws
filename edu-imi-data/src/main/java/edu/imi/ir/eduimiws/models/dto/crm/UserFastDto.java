@@ -1,23 +1,16 @@
-package edu.imi.ir.eduimiws.models.response.crm;
+package edu.imi.ir.eduimiws.models.dto.crm;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.core.Relation;
 
-@Schema(name = "users", description = "Class representing a user in the application.")
-@EqualsAndHashCode(callSuper = false)
-@JsonRootName(value = "user")
-@Relation(collectionRelation = "users")
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
+//User is PersonEntity plus PersonWebServiceEntity
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse extends RepresentationModel<UserResponse> {
+public class UserFastDto {
+
+    private Long id;
 
     private String personPublicId;
 
@@ -84,4 +77,5 @@ public class UserResponse extends RepresentationModel<UserResponse> {
     private String description;
 
     private String authorityPublicId;
+
 }

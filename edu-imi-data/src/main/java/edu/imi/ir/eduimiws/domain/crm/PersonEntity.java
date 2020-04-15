@@ -20,7 +20,20 @@ import javax.persistence.*;
         }),
         @NamedEntityGraph(name = "PersonEntity.personIdProjectionGraph", attributeNodes = {
                 @NamedAttributeNode("id")
-        })
+        }),
+        @NamedEntityGraph(name = "PersonEntity.findPersonSubGraphContactContactWebService",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "contact",subgraph = "contact-subGraph")
+                },
+                subgraphs = {
+                        @NamedSubgraph(name = "contact-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "contactWebService")
+                                },type = ContactWebServiceEntity.class
+                        )
+                }
+        )
+
 })
 @SqlResultSetMapping(
     name = "personUserProjection",
@@ -87,37 +100,37 @@ public class PersonEntity extends BaseEntity {
         }
     }
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FIRST_NAME",length = 100)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "LAST_NAME",length = 100)
     private String lastName;
 
-    @Column(name = "TEL")
+    @Column(name = "TEL",length = 50)
     private String tel;
 
-    @Column(name = "ADDRESS")
+    @Column(name = "ADDRESS",length = 1000)
     private String address;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL",length = 100)
     private String email;
 
-    @Column(name = "WEBSITE")
+    @Column(name = "WEBSITE",length = 50)
     private String website;
 
-    @Column(name = "USERNAME")
+    @Column(name = "USERNAME",length = 100)
     private String username;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD",length = 100)
     private String password;
 
-    @Column(name = "LIMITATION_NUMBER")
+    @Column(name = "LIMITATION_NUMBER",precision = 10, scale = 0)
     private Long limitationNumber;
 
-    @Column(name = "SIGNATURE")
+    @Column(name = "SIGNATURE",length = 20)
     private String signature;
 
-    @Column(name = "LASTLOGINDATE")
+    @Column(name = "LASTLOGINDATE",length = 10)
     private String lastlogindate;
 
     //    @Getter(AccessLevel.NONE)
@@ -151,7 +164,7 @@ public class PersonEntity extends BaseEntity {
         return contactId;
     }
 
-    @Column(name = "SELECTED_SKIN")
+    @Column(name = "SELECTED_SKIN",length = 50)
     private String selectedSkin;
 
     //    @Getter(AccessLevel.NONE)
@@ -161,16 +174,16 @@ public class PersonEntity extends BaseEntity {
     @JoinColumn(name = "SELECTED_LANGUAGE", nullable = false)
     private LanguageEntity selectedLanguage;
 
-    @Column(name = "EMAIL_PROCESS_TYPE")
+    @Column(name = "EMAIL_PROCESS_TYPE",length = 15)
     private String emailProcessType;
 
-    @Column(name = "PERSONAL_CODE")
+    @Column(name = "PERSONAL_CODE",length = 15)
     private String personalCode;
 
-    @Column(name = "ACTIVITY_STATUS")
+    @Column(name = "ACTIVITY_STATUS",length = 1)
     private String activityStatus;
 
-    @Column(name = "KIND")
+    @Column(name = "KIND",length = 20)
     private String kind;
 
     //    @Getter(AccessLevel.NONE)
@@ -193,13 +206,13 @@ public class PersonEntity extends BaseEntity {
     @JoinColumn(name = "ORGANIZATION_CLASS_ID")
     private OrganizationClassEntity organizationClass;
 
-    @Column(name = "NOE_ESTEKHDAM")
+    @Column(name = "NOE_ESTEKHDAM",length = 50)
     private String noeEstekhdam;
 
-    @Column(name = "PWDP")
+    @Column(name = "PWDP",length = 50)
     private String pwdp;
 
-    @Column(name = "SIGNATURE_IMG")
+    @Column(name = "SIGNATURE_IMG",length = 1)
     private String signatureImg;
 
     //    @Getter(AccessLevel.NONE)

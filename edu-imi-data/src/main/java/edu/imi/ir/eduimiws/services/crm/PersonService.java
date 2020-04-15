@@ -25,4 +25,6 @@ public interface PersonService {
 
     Long selectPersonLastSequenceNumber();
 
+    PersonEntity findPersonEntityByPersonWebServicePublicId(String personPublicId);
+
 }

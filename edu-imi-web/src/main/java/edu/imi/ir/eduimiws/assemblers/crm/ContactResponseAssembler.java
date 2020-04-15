@@ -1,6 +1,7 @@
-package edu.imi.ir.eduimiws.assemblers.edu;
+package edu.imi.ir.eduimiws.assemblers.crm;
 
 import edu.imi.ir.eduimiws.controllers.v1.ContactController;
+import edu.imi.ir.eduimiws.controllers.v1.UserController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactResponseContactFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
@@ -40,12 +41,21 @@ public class ContactResponseAssembler extends RepresentationModelAssemblerSuppor
                             .withSelfRel());
         }
 
-/*        contactResponse.
+        if(contactFastDto.getPersonPublicId()!= null) {
+            contactResponse
+                    .add(linkTo(
+                            methodOn(
+                                    UserController.class)
+                                    .getUserByUserPublicId(contactFastDto.getPersonPublicId()))
+                            .withRel("user"));
+        }
+
+        contactResponse.
                 add(linkTo(
                         methodOn(
                                 ContactController.class)
-                                .getPeriods(Pageable.unpaged()))
-                        .withRel("periods"));*/
+                                .getAllContacts(Pageable.unpaged()))
+                        .withRel("contacts"));
 
         return contactResponse;
     }
