@@ -15,6 +15,7 @@ import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,8 +29,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -57,12 +60,67 @@ public class ContactController {
 
     private final ContactResponseAssembler contactResponseAssembler;
 
-//    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3NjI0MDE1fQ.qJgwCKe2XWNRiT7w2kEZ65WDxlNWK0mn6qUM0u_90Ha-S1qshM5npIk0T71VbVkY1e5mPA_yILbHC9Th5iU1Og
+    private final PagedResourcesAssembler<ContactFastDto> contactPagedResourcesAssembler;
+
+//    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3Nzg4Njk2fQ.gt3VEOf2NKU6njEwr-J8SHZnL0NdPTkYsCTWcv-tf7Hs_Q_LYD7RzDNd_leFS-Zi3wi0lgx_wlE44VV7DL4S5Q
 //0453506690
 
+    @Operation(
+            summary = "find All contacts",
+            description = "Search contact detail pageable",
+            tags = "contacts",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ContactResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ContactResponse>> getContacts(@Parameter(hidden = true)
+                                                                 @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                 @PageableDefault(page = 0, size= 10,value = 10)
+                                                                         Pageable pageable ){
+
+        Page<ContactEntity> contactPages =
+                contactService.findAllContactEntityPages (pageable);
+
+        Page<ContactFastDto> contactFastDtoPage = contactPages
+                .map(cp->contactFastDtoMapper
+                        .toContactFastDto(cp,new CycleAvoidingMappingContext()));
+
+        PagedModel<ContactResponse> contactResponsePagedModel = contactPagedResourcesAssembler
+                .toModel(contactFastDtoPage,contactResponseAssembler);
+
+        return ResponseEntity.ok(contactResponsePagedModel);
+    }
 
 
-//    @Operation(hidden = true)
+    @Operation(hidden = true)
     @PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -86,6 +144,61 @@ public class ContactController {
                 contactResponseAssembler.toCollectionModel(contactFastDtos);
 
         return ResponseEntity.ok(contactResponseCollectionModel);
+    }
+
+
+    @Operation(
+            summary = "Find Contact by public ID",
+            description = "Search contact by the public id",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = ContactResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "period not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/{contactPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getContactByContactPublicId(@PathVariable String contactPublicId) {
+
+        try {
+            ContactEntity contact = contactService.findContactEntityByContactWebServicePublicId(contactPublicId);
+            if (contact == null) {
+                return this.contactNotFound();
+            }
+
+            ContactFastDto contactFastDto =
+                    contactFastDtoMapper.toContactFastDto(contact,new CycleAvoidingMappingContext());
+
+            ContactResponse contactResponse =
+                    contactResponseAssembler.toModel(contactFastDto);
+
+            return ResponseEntity.ok(contactResponse);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
     }
 
 
@@ -174,7 +287,7 @@ public class ContactController {
                     )
             }
     )
-    @GetMapping(path = "/{nationalCode}",
+    @GetMapping(path = "/nationalCode/{nationalCode}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getContactByNationalCode(@PathVariable String nationalCode) {
 
@@ -198,4 +311,5 @@ public class ContactController {
                 , HttpStatus.NOT_FOUND
         );
     }
+
 }

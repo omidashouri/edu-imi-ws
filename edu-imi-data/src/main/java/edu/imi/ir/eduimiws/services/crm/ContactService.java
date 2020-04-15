@@ -21,6 +21,8 @@ public interface ContactService {
 
     Page<ContactEntity> findAllContactEntityPages(Pageable pageable);
 
+    ContactEntity findContactEntityByContactWebServicePublicId(String contactPublicId);
+
 }
 
 

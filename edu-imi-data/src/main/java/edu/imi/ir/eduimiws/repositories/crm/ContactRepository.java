@@ -17,8 +17,12 @@ public interface ContactRepository extends CrudRepository<ContactEntity,Long> {
 
       Long countByNationCode(String nationCode);
 
-      @EntityGraph(value = "ContactEntity.findContactEntitiesByNationCode",type = EntityGraph.EntityGraphType.LOAD)
+      @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonWebService",type = EntityGraph.EntityGraphType.LOAD)
       List<ContactEntity> findContactEntitiesByNationCode(@Param("nationCode") String nationalCode);
 
       Page<ContactEntity> findAll(Pageable pageable);
+
+
+      @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonWebService",type = EntityGraph.EntityGraphType.LOAD)
+      ContactEntity findByContactWebService_ContactPublicId(String contactPublicId);
 }

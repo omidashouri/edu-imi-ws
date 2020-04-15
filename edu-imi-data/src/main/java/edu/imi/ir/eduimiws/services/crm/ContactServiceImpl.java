@@ -27,15 +27,18 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<ContactFastDto> findContactByNationalCode(String nationalCode) {
-        List<ContactEntity> contactEntities = contactRepository.findContactEntitiesByNationCode(nationalCode);
-        List<ContactFastDto> contactFastDtos = contactFastDtoMapper.toContactFastDtos(contactEntities,new CycleAvoidingMappingContext());
+        List<ContactEntity> contactEntities = contactRepository
+                .findContactEntitiesByNationCode(nationalCode);
+        List<ContactFastDto> contactFastDtos = contactFastDtoMapper
+                .toContactFastDtos(contactEntities,new CycleAvoidingMappingContext());
         return contactFastDtos;
     }
 
     @Override
     public Long getContactNumberByNationalCode(String nationalCode) {
 
-        Long contactCount = contactRepository.countByNationCode(nationalCode);
+        Long contactCount = contactRepository
+                .countByNationCode(nationalCode);
         return contactCount;
     }
 
@@ -44,6 +47,13 @@ public class ContactServiceImpl implements ContactService {
         Page<ContactEntity> contactPages = contactRepository
                 .findAll(pageable);
         return contactPages;
+    }
+
+    @Override
+    public ContactEntity findContactEntityByContactWebServicePublicId(String contactPublicId) {
+        ContactEntity contact = contactRepository
+                .findByContactWebService_ContactPublicId(contactPublicId);
+        return contact;
     }
 
 //NU

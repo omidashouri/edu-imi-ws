@@ -5,9 +5,15 @@ import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactResponseContactFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class ContactResponseAssembler extends RepresentationModelAssemblerSupport<ContactFastDto, ContactResponse> {
@@ -24,14 +30,17 @@ public class ContactResponseAssembler extends RepresentationModelAssemblerSuppor
 
         ContactResponse contactResponse = contactResponseContactFastDtoMapper
                 .toContactResponse(contactFastDto, new CycleAvoidingMappingContext());
-/*        contactResponse
-                .add(linkTo(
-                        methodOn(
-                                ContactController.class)
-                                .getPeriodByPeriodPublicId(period.getPeriodWebService().getPeriodPublicId()))
-                        .withSelfRel());
 
-        contactResponse.
+        if(contactFastDto.getContactPublicId()!= null) {
+            contactResponse
+                    .add(linkTo(
+                            methodOn(
+                                    ContactController.class)
+                                    .getContactByContactPublicId(contactFastDto.getContactPublicId()))
+                            .withSelfRel());
+        }
+
+/*        contactResponse.
                 add(linkTo(
                         methodOn(
                                 ContactController.class)
@@ -46,10 +55,8 @@ public class ContactResponseAssembler extends RepresentationModelAssemblerSuppor
     {
         CollectionModel<ContactResponse> actorModels = super.toCollectionModel(entities);
 
-/*
         Pageable defaultPageable = PageRequest.of(0,10, Sort.Direction.fromString("DESC"),"createDate");
-        actorModels.add(linkTo(methodOn(ContactController.class).getAllPeriods(defaultPageable)).withSelfRel());
-*/
+        actorModels.add(linkTo(methodOn(ContactController.class).getAllContacts(defaultPageable)).withSelfRel());
 
         return actorModels;
     }
