@@ -41,4 +41,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
     PeriodEntity findFirstByOrderByIdDesc();
 
+    @EntityGraph(value = "PeriodEntity.findByPeriodWebService_PeriodPublicId",type = EntityGraph.EntityGraphType.LOAD)
+    Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNull();
+
 }

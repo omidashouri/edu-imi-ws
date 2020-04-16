@@ -325,9 +325,6 @@ public class UserController {
             return this.userNotFound();
         }
 
-/*        List<UserResponse> userResponses = userResponseUserFastDtoMapper
-                .toUserResponses(userFastDtos, new CycleAvoidingMappingContext());*/
-
         CollectionModel<UserResponse> userResponseCollectionModel =
                 userResponseAssembler.toCollectionModel(userFastDtos);
 
