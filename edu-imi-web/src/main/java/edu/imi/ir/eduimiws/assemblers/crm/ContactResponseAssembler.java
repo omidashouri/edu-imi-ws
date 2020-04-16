@@ -22,7 +22,7 @@ public class ContactResponseAssembler extends RepresentationModelAssemblerSuppor
     private final ContactResponseContactFastDtoMapper contactResponseContactFastDtoMapper;
 
     public ContactResponseAssembler(ContactResponseContactFastDtoMapper contactResponseContactFastDtoMapper) {
-        super(ContactController.class,ContactResponse.class);
+        super(ContactController.class, ContactResponse.class);
         this.contactResponseContactFastDtoMapper = contactResponseContactFastDtoMapper;
     }
 
@@ -32,7 +32,7 @@ public class ContactResponseAssembler extends RepresentationModelAssemblerSuppor
         ContactResponse contactResponse = contactResponseContactFastDtoMapper
                 .toContactResponse(contactFastDto, new CycleAvoidingMappingContext());
 
-        if(contactFastDto.getContactPublicId()!= null) {
+        if (contactFastDto.getContactPublicId() != null) {
             contactResponse
                     .add(linkTo(
                             methodOn(
@@ -41,7 +41,7 @@ public class ContactResponseAssembler extends RepresentationModelAssemblerSuppor
                             .withSelfRel());
         }
 
-        if(contactFastDto.getPersonPublicId()!= null) {
+        if (contactFastDto.getPersonPublicId() != null) {
             contactResponse
                     .add(linkTo(
                             methodOn(
@@ -50,25 +50,28 @@ public class ContactResponseAssembler extends RepresentationModelAssemblerSuppor
                             .withRel("user"));
         }
 
-        contactResponse.
-                add(linkTo(
-                        methodOn(
-                                ContactController.class)
-                                .getAllContacts(Pageable.unpaged()))
-                        .withRel("contacts"));
+        if(contactFastDto.getNationCode() != null){
+            contactResponse
+                    .add(linkTo(
+                            methodOn(ContactController.class)
+                            .getContactByNationalCode(contactFastDto.getNationCode()))
+                    .withRel("nationalCode"));
+        }
 
         return contactResponse;
     }
 
     @Override
-    public CollectionModel<ContactResponse> toCollectionModel(Iterable<? extends ContactFastDto> entities)
-    {
-        CollectionModel<ContactResponse> actorModels = super.toCollectionModel(entities);
+    public CollectionModel<ContactResponse> toCollectionModel(Iterable<? extends ContactFastDto> contactFastDtos) {
+        CollectionModel<ContactResponse> contactResponseCollectionModel = super.toCollectionModel(contactFastDtos);
 
-        Pageable defaultPageable = PageRequest.of(0,10, Sort.Direction.fromString("DESC"),"createDate");
-        actorModels.add(linkTo(methodOn(ContactController.class).getAllContacts(defaultPageable)).withSelfRel());
+        Pageable defaultPageable = PageRequest
+                .of(0, 10, Sort.Direction.fromString("DESC"), "createDate");
 
-        return actorModels;
+        contactResponseCollectionModel
+                .add(linkTo(methodOn(ContactController.class).getContacts(defaultPageable)).withRel("contacts"));
+
+        return contactResponseCollectionModel;
     }
 
 }

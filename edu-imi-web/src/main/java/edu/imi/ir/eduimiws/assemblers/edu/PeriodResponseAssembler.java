@@ -16,9 +16,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class PeriodResponseAssembler  extends RepresentationModelAssemblerSupport<PeriodEntity, PeriodResponse> {
+public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport<PeriodEntity, PeriodResponse> {
 
-    private final PeriodResponseMapper periodResponseMapper;;
+    private final PeriodResponseMapper periodResponseMapper;
+    ;
 
     public PeriodResponseAssembler(PeriodResponseMapper periodResponseMapper) {
         super(PeriodController.class, PeriodResponse.class);
@@ -35,26 +36,28 @@ public class PeriodResponseAssembler  extends RepresentationModelAssemblerSuppor
                         methodOn(
                                 PeriodController.class)
                                 .getPeriodByPeriodPublicId(period.getPeriodWebService().getPeriodPublicId()))
-                .withSelfRel());
+                        .withSelfRel());
 
-        periodResponse.
+/*        periodResponse.
                 add(linkTo(
                         methodOn(
                                 PeriodController.class)
                                 .getPeriods(Pageable.unpaged()))
-                .withRel("periods"));
+                .withRel("periods"));*/
 
         return periodResponse;
     }
 
     @Override
-    public CollectionModel<PeriodResponse> toCollectionModel(Iterable<? extends PeriodEntity> entities)
-    {
-        CollectionModel<PeriodResponse> actorModels = super.toCollectionModel(entities);
+    public CollectionModel<PeriodResponse> toCollectionModel(Iterable<? extends PeriodEntity> periods) {
+        CollectionModel<PeriodResponse> periodResponseCollectionModel = super.toCollectionModel(periods);
 
-        Pageable defaultPageable = PageRequest.of(0,10, Sort.Direction.fromString("DESC"),"createDate");
-        actorModels.add(linkTo(methodOn(PeriodController.class).getAllPeriods(defaultPageable)).withSelfRel());
+        Pageable defaultPageable = PageRequest
+                .of(0, 10, Sort.Direction.fromString("DESC"), "createDate");
 
-        return actorModels;
+        periodResponseCollectionModel
+                .add(linkTo(methodOn(PeriodController.class).getPeriods(defaultPageable)).withRel("periods"));
+
+        return periodResponseCollectionModel;
     }
 }

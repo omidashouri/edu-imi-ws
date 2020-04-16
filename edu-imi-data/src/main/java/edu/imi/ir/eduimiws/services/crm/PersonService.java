@@ -31,4 +31,6 @@ public interface PersonService {
 
     Page<PersonEntity> findAllPersonEntityPages(Pageable pageable);
 
+    List<PersonEntity> findPersonsByNationalCode(String nationalCode);
+
 }

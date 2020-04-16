@@ -20,6 +20,8 @@ public class UserFastDto {
 
     private String lastName;
 
+    private String nationCode;
+
     private String tel;
 
     private String address;

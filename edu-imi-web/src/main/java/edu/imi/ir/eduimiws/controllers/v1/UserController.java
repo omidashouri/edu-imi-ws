@@ -4,8 +4,8 @@ import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceUserContactFastDtoMapper;
-import edu.imi.ir.eduimiws.mapper.crm.UserContactResponseUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.UserResponseUserFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
@@ -58,10 +58,10 @@ public class UserController {
     private final PersonService personService;
     private final PersonWebServiceService personWebServiceService;
     private final PersonWebServiceUserContactFastDtoMapper personWebServiceUserContactFastDtoMapper;
-    private final UserContactResponseUserContactFastDtoMapper userContactResponseUserContactFastDtoMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserResponseAssembler userResponseAssembler;
     private final PagedResourcesAssembler<UserFastDto> userPagedResourcesAssembler;
+    private final UserResponseUserFastDtoMapper userResponseUserFastDtoMapper;
 
     // http://localhost:8080/edu-imi-ws/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
@@ -204,59 +204,6 @@ public class UserController {
         return ResponseEntity.ok(userResponseCollectionModel);
     }
 
-   /* @Operation(
-            summary = "find All users",
-            description = "Search user detail",
-            tags = "users",
-            security = @SecurityRequirement(name = "imi-security-key")
-    )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            headers = {@Header(name = "authorization", description = "authorization description"), @Header(name = "userPublicId")},
-                            responseCode = "200",
-                            description = "successful operation",
-                            content = @Content(
-                                    array = @ArraySchema(
-                                            schema = @Schema(implementation = UserContactResponse.class)
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Bad Request",
-                            content = @Content(
-                                    schema = @Schema(implementation = ErrorMessage.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal Server Error",
-                            content = @Content(
-                                    schema = @Schema(implementation = ErrorMessage.class)
-                            )
-                    )
-            })
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getUsers(@RequestParam(value = "page", defaultValue = "1") int pageValue
-            , @RequestParam(value = "limit", defaultValue = "25") int limitValue) {
-
-        List<UserContactResponse> userContactResponses;
-
-        List<PersonWebServiceEntity> users =
-                personWebServiceService
-                        .findAllListByPageAndSize(pageValue, limitValue);
-
-        List<UserContactFastDto> userContactFastDtos =
-                personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users, new CycleAvoidingMappingContext());
-
-
-        userContactResponses =
-                userContactResponseUserContactFastDtoMapper
-                        .UserContactFastDtoToUserContactResponses(userContactFastDtos, new CycleAvoidingMappingContext());
-
-        return ResponseEntity.ok(userContactResponses);
-    }*/
 
     @Operation(
             summary = "Count new user numbers",
@@ -331,6 +278,68 @@ public class UserController {
         }
         return ResponseEntity.ok(returnValue);
     }
+
+    @Operation(
+            summary = "Find user by national Code",
+            description = "Search user by the national Code",
+            tags = "users",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = UserResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Person not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/nationalCode/{nationalCode}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getUserByNationalCode(@PathVariable String nationalCode) {
+
+        List<PersonEntity> persons = personService.findPersonsByNationalCode(nationalCode);
+
+        List<UserFastDto> userFastDtos = userFastDtoMapper
+                .toUserFastDtos(persons,new CycleAvoidingMappingContext());
+
+        if(userFastDtos==null || userFastDtos.size() == 0){
+            return this.userNotFound();
+        }
+
+/*        List<UserResponse> userResponses = userResponseUserFastDtoMapper
+                .toUserResponses(userFastDtos, new CycleAvoidingMappingContext());*/
+
+        CollectionModel<UserResponse> userResponseCollectionModel =
+                userResponseAssembler.toCollectionModel(userFastDtos);
+
+        return ResponseEntity.ok(userResponseCollectionModel);
+    }
+
+
+
+
+
+
+
 
 
     @Operation(
@@ -470,4 +479,59 @@ public class UserController {
         return persons;*/
     return null;
     }
+
+
+     /* @Operation(
+            summary = "find All users",
+            description = "Search user detail",
+            tags = "users",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"), @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = UserContactResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getUsers(@RequestParam(value = "page", defaultValue = "1") int pageValue
+            , @RequestParam(value = "limit", defaultValue = "25") int limitValue) {
+
+        List<UserContactResponse> userContactResponses;
+
+        List<PersonWebServiceEntity> users =
+                personWebServiceService
+                        .findAllListByPageAndSize(pageValue, limitValue);
+
+        List<UserContactFastDto> userContactFastDtos =
+                personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users, new CycleAvoidingMappingContext());
+
+
+        userContactResponses =
+                userContactResponseUserContactFastDtoMapper
+                        .UserContactFastDtoToUserContactResponses(userContactFastDtos, new CycleAvoidingMappingContext());
+
+        return ResponseEntity.ok(userContactResponses);
+    }*/
 }

@@ -51,25 +51,31 @@ public class UserResponseAssembler extends RepresentationModelAssemblerSupport<U
                             .withRel("contact"));
         }
 
-        userResponse.
-                add(linkTo(
-                        methodOn(
-                                UserController.class)
-                                .getUsers(Pageable.unpaged()))
-                        .withRel("users"));
+        if(userFastDto.getNationCode()!= null) {
+            userResponse
+                    .add(linkTo(
+                            methodOn(
+                                    UserController.class)
+                                    .getUserByNationalCode(userFastDto.getNationCode()))
+                            .withRel("nationalCode"));
+        }
+
         return userResponse;
     }
 
 
     @Override
-    public CollectionModel<UserResponse> toCollectionModel(Iterable<? extends UserFastDto> entities)
+    public CollectionModel<UserResponse> toCollectionModel(Iterable<? extends UserFastDto> userFastDtos)
     {
-        CollectionModel<UserResponse> actorModels = super.toCollectionModel(entities);
+        CollectionModel<UserResponse> userResponseCollectionModel = super.toCollectionModel(userFastDtos);
 
-        Pageable defaultPageable = PageRequest.of(0,10, Sort.Direction.fromString("DESC"),"personalDate");
-        actorModels.add(linkTo(methodOn(UserController.class).getUsers(defaultPageable)).withSelfRel());
+        Pageable defaultPageable = PageRequest
+                .of(0,10, Sort.Direction.fromString("DESC"),"personalDate");
 
-        return actorModels;
+        userResponseCollectionModel
+                .add(linkTo(methodOn(UserController.class).getUsers(defaultPageable)).withRel("users"));
+
+        return userResponseCollectionModel;
     }
 
 }

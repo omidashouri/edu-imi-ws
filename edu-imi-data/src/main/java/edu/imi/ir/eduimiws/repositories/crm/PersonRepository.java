@@ -35,6 +35,9 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     Page<PersonEntity> findAll(Pageable pageable);
 
+    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
+    List<PersonEntity> findPersonEntitiesByContact_NationCode(@Param("nationCode") String nationalCode);
+
 
 
 

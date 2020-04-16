@@ -85,6 +85,13 @@ public class PersonServiceImpl implements PersonService{
         return personPages;
     }
 
+    @Override
+    public List<PersonEntity> findPersonsByNationalCode(String nationalCode) {
+        List<PersonEntity> personEntities = personRepository
+                .findPersonEntitiesByContact_NationCode(nationalCode);
+        return personEntities;
+    }
+
 
 //NU
 /*    @Override

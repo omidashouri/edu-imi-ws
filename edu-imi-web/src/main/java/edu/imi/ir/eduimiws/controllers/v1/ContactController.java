@@ -150,7 +150,7 @@ public class ContactController {
     @Operation(
             summary = "Find Contact by public ID",
             description = "Search contact by the public id",
-            tags = "periods",
+            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -297,10 +297,13 @@ public class ContactController {
             return this.contactNotFound();
         }
 
-        List<ContactResponse> contactResponses = contactResponseContactFastDtoMapper
-                .toContactResponses(contactFastDtos, new CycleAvoidingMappingContext());
+/*        List<ContactResponse> contactResponses = contactResponseContactFastDtoMapper
+                .toContactResponses(contactFastDtos, new CycleAvoidingMappingContext());*/
 
-        return ResponseEntity.ok(contactResponses);
+        CollectionModel<ContactResponse> contactResponseCollectionModel =
+                contactResponseAssembler.toCollectionModel(contactFastDtos);
+
+        return ResponseEntity.ok(contactResponseCollectionModel);
     }
 
 

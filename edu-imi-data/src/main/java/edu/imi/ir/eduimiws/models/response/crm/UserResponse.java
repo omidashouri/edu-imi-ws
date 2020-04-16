@@ -31,6 +31,9 @@ public class UserResponse extends RepresentationModel<UserResponse> {
     @Schema(title = "Last Name", maxLength = 100)
     private String lastName;
 
+    @Schema(title = "Last Name", maxLength = 20)
+    private String nationCode;
+
     @Schema(title = "User Telephone", maxLength = 50)
     private String tel;
 

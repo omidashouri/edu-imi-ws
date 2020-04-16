@@ -71,6 +71,9 @@ public interface UserFastDtoMapper {
             if (personEntity.getContact().getContactWebService() != null) {
                 userFastDto.setContactPublicId(personEntity.getContact().getContactWebService().getContactPublicId());
             }
+            if (personEntity.getContact().getNationCode() != null) {
+                userFastDto.setNationCode(personEntity.getContact().getNationCode());
+            }
         }
     }
 
