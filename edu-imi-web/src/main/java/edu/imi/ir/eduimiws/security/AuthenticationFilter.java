@@ -107,8 +107,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 
 
-    private Collection<? extends GrantedAuthority> getAuthorities(String role){
-        return Arrays.asList(new SimpleGrantedAuthority(role));
-    }
+    private Collection<? extends GrantedAuthority> getAuthorities(String role){ // RM
+        return Arrays.asList(new SimpleGrantedAuthority(role));                 // RM
+    }                                                                           // RM
 
 }
