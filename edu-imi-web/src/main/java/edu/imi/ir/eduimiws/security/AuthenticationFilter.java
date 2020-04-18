@@ -11,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -56,7 +60,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(    // RM
                         userDetails,                                        // RM
                         userDetails,                                        //RM
-                        userDetails.getAuthorities());                      // RM
+                        getAuthorities("ADMIN"));                      // RM
                 return authentication;                                      // RM
             }                                                               // RM
 
@@ -100,6 +104,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 //    add public user id to response header
         res.addHeader("userPublicId", userWSFastDto.getPersonPublicId());
+    }
+
+
+    private Collection<? extends GrantedAuthority> getAuthorities(String role){
+        return Arrays.asList(new SimpleGrantedAuthority(role));
     }
 
 }
