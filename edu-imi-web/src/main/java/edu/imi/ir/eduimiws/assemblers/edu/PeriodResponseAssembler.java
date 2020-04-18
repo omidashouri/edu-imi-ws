@@ -1,10 +1,12 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
 import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
+import edu.imi.ir.eduimiws.controllers.v1.UserController;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseMapper;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -38,12 +40,21 @@ public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport
                                 .getPeriodByPeriodPublicId(period.getPeriodWebService().getPeriodPublicId()))
                         .withSelfRel());
 
-/*        periodResponse.
-                add(linkTo(
-                        methodOn(
-                                PeriodController.class)
-                                .getPeriods(Pageable.unpaged()))
-                .withRel("periods"));*/
+        if (!Hibernate.isInitialized(period.getExecuter())) {
+            period.setExecuter(null);
+        }
+        if (!Hibernate.isInitialized(period.getExecuter().getPersonWebServiceEntity())) {
+            period.getExecuter().setPersonWebServiceEntity(null);
+        }
+        if (period.getExecuter().getPersonWebServiceEntity() != null) {
+            periodResponse.
+                    add(linkTo(
+                            methodOn(
+                                    UserController.class)
+                                    .getUserByUserPublicId(period.getExecuter().getPersonWebServiceEntity().getPersonPublicId()))
+                            .withRel("executors"));
+        }
+
 
         return periodResponse;
     }

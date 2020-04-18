@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.*;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @Transactional
@@ -59,6 +61,22 @@ public class PeriodServiceImpl implements PeriodService {
         List<PeriodOnly> allPeriodOnlys = periodRepository.findPeriodOnlyByIdGreaterThan(id);
         List<PeriodEntity> allPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(allPeriodOnlys, new CycleAvoidingMappingContext());
         return allPeriods;
+    }
+
+    @Override
+    public Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNull() {
+        Iterable<PeriodEntity> periodEntities =
+                periodRepository.findAllByDeleteStatusIsNotNullAndExecuterIsNotNull();
+        return periodEntities;
+    }
+
+    @Override
+    public Page<PeriodEntity> findAllPageableByExecutorPublicId(Pageable pageable,String executorPublicId) {
+        Page<PeriodEntity> pageablePeriods =
+                periodRepository
+                        .findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonWebServiceEntity_PersonPublicId
+                                (pageable,executorPublicId);
+        return pageablePeriods;
     }
 
 

@@ -1,13 +1,19 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
+import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssembler;
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
+import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
+import edu.imi.ir.eduimiws.services.UserService;
+import edu.imi.ir.eduimiws.services.crm.PersonService;
+import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
 import edu.imi.ir.eduimiws.services.edu.PeriodWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +46,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -50,9 +57,14 @@ import java.util.stream.StreamSupport;
 public class PeriodController {
 
     private final PeriodService periodService;
+    private final PersonService personService;
+    private final UserService userService;
+    private final PersonWebServiceService personWebServiceService;
     private final PeriodWebServiceService periodWebServiceService;
     private final PeriodResponseAssembler periodResponseAssembler;
+    private final UserResponseAssembler userResponseAssembler;
     private final PagedResourcesAssembler<PeriodEntity> periodPagedResourcesAssembler;
+    private final UserFastDtoMapper userFastDtoMapper;
 
     @Operation(
             summary = "find All periods",
@@ -64,7 +76,7 @@ public class PeriodController {
             value = {
                     @ApiResponse(
                             headers = {@Header(name = "authorization", description = "authorization description"),
-                                        @Header(name = "userPublicId")},
+                                    @Header(name = "userPublicId")},
                             responseCode = "200",
                             description = "successful operation",
                             content = @Content(
@@ -91,15 +103,15 @@ public class PeriodController {
     @PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriods(@Parameter(hidden = true)
-                                                      @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
-                                                      @PageableDefault(page = 0, size= 10,value = 10)
-                                                              Pageable pageable ){
+                                                                 @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                 @PageableDefault(page = 0, size = 10, value = 10)
+                                                                         Pageable pageable) {
 
         Page<PeriodEntity> periodPages =
                 periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
 
         PagedModel<PeriodResponse> periodResponsePagedModel = periodPagedResourcesAssembler
-                .toModel(periodPages,periodResponseAssembler);
+                .toModel(periodPages, periodResponseAssembler);
 
         return ResponseEntity.ok(periodResponsePagedModel);
     }
@@ -110,15 +122,15 @@ public class PeriodController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriods(
             @Parameter(hidden = true)
-            @SortDefault(sort = "createDate",direction = Sort.Direction.DESC)
-            @PageableDefault(page = 0, size= 10)
-                    Pageable pageable){
+            @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size = 10)
+                    Pageable pageable) {
 
         Page<PeriodEntity> periodPages =
                 periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
 
         List<PeriodEntity> periodEntities = StreamSupport
-                .stream(periodPages.spliterator(),false)
+                .stream(periodPages.spliterator(), false)
                 .collect(Collectors.toList());
 
         CollectionModel<PeriodResponse> periodResponseCollectionModel =
@@ -169,7 +181,7 @@ public class PeriodController {
                 return this.periodNotFound();
             }
 
-           PeriodResponse periodResponse =
+            PeriodResponse periodResponse =
                     periodResponseAssembler.toModel(period);
 
             return ResponseEntity.ok(periodResponse);
@@ -178,6 +190,107 @@ public class PeriodController {
             return (ResponseEntity<?>) ResponseEntity.badRequest();
         }
     }
+
+
+    // ---------------------------------------------------------Not complete
+
+
+    @PageableAsQueryParam
+    @GetMapping(path = "/executors/{executorPublicId}/collectionModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriodsByExecutorPublicId(@PathVariable String executorPublicId,
+                                                                                           @Parameter(hidden = true)
+                                                                                           @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                                           @PageableDefault(page = 0, size = 10)
+                                                                                                   Pageable pageable) {
+
+        Page<PeriodEntity> periodPages =
+                periodService.findAllPageableByExecutorPublicId(pageable, executorPublicId);
+
+        List<PeriodEntity> periods = StreamSupport
+                .stream(periodPages.spliterator(), false)
+                .collect(Collectors.toList());
+
+        CollectionModel<PeriodResponse> periodResponseCollectionModel =
+                periodResponseAssembler.toCollectionModel(periods);
+
+        return ResponseEntity.ok(periodResponseCollectionModel);
+    }
+
+    @Operation(
+            summary = "Generate Executor Public Id",
+            description = "generate public id for new executors",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = OperationStatus.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+                    ,
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PostMapping(path = "/executors",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> generateExecutorPublicId() {
+
+        OperationStatus returnValue = new OperationStatus();
+        Long executorCount = 0L;
+        List<PersonEntity> savedPersons = new ArrayList<>();
+
+        Iterable<PeriodEntity> periodEntities =
+                periodService.findAllByDeleteStatusIsNotNullAndExecuterIsNotNull();
+
+
+//        omiddo: remove those have public id
+
+        List<PersonEntity> executors = StreamSupport
+                .stream(periodEntities.spliterator(), false)
+                .filter(Objects::nonNull)
+                .map(PeriodEntity::getExecuter)
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (!executors.isEmpty()) {
+            savedPersons = userService.generatePersonPublicIdByPersons(executors);
+            executorCount = Long.valueOf(savedPersons.size());
+        }
+
+        if (executorCount == 0) {
+            returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
+            returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
+            returnValue.setDescription("New Record Not Found.");
+            return ResponseEntity.ok(returnValue);
+        } else {
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
+            returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
+            returnValue.setDescription(executorCount + " New Public Id Generated");
+        }
+
+        return ResponseEntity.ok(returnValue);
+    }
+
 
     @Operation(
             summary = "Find new period numbers",

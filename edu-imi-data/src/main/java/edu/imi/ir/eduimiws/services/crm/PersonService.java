@@ -33,4 +33,6 @@ public interface PersonService {
 
     List<PersonEntity> findPersonsByNationalCode(String nationalCode);
 
+    List<PersonEntity> findAllPersonEntitiesByIdIn(List<Long> personIds);
+
 }

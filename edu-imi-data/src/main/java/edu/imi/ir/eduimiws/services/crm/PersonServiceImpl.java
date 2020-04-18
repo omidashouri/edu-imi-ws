@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonUserProjectionMapper;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
+import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ public class PersonServiceImpl implements PersonService{
 
     private final PersonRepository personRepository;
     private final PersonUserProjectionMapper personUserProjectionMapper;
+    private final Utils utils;
 //NU
 /*    @Override
     public PersonEntity findById(Long id) {
@@ -92,6 +94,13 @@ public class PersonServiceImpl implements PersonService{
         return personEntities;
     }
 
+    @Override
+    public List<PersonEntity> findAllPersonEntitiesByIdIn(List<Long> personIds) {
+        List<PersonEntity> newPersons =
+                personRepository.findAllPersonEntitiesByIdIn(personIds);
+        return newPersons;
+    }
+
 
 //NU
 /*    @Override
@@ -104,5 +113,8 @@ public class PersonServiceImpl implements PersonService{
         return personRepository.findByContactId(contactId);
     }*/
 
+    private String generatePublicId() {
+        return utils.generateUniquePublicId();
+    }
 
 }

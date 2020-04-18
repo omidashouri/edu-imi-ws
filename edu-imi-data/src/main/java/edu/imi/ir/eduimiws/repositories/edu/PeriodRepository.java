@@ -28,7 +28,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     )
     Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
-    @EntityGraph(value = "PeriodEntity.findByPeriodWebService_PeriodPublicId",type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
     PeriodEntity findByPeriodWebService_PeriodPublicId(String periodPublicId);
 
     @Query(name = "PeriodEntity.selectAllPeriodOnly", nativeQuery = true)
@@ -41,7 +41,12 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
     PeriodEntity findFirstByOrderByIdDesc();
 
-    @EntityGraph(value = "PeriodEntity.findByPeriodWebService_PeriodPublicId",type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
     Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNull();
+
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
+    Page<PeriodEntity>
+    findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonWebServiceEntity_PersonPublicId
+            (Pageable pageable, String executorPublicId);
 
 }

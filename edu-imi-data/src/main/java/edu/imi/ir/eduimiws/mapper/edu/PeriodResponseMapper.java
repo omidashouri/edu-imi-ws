@@ -5,6 +5,7 @@ package edu.imi.ir.eduimiws.mapper.edu;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
+import org.hibernate.Hibernate;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -38,17 +39,33 @@ public interface PeriodResponseMapper {
             @Mapping(source = "type", target = "type")
 
     })
-    PeriodResponse PeriodEntityToPeriodResponse(PeriodEntity periodEntity, @Context CycleAvoidingMappingContext context);
+    PeriodResponse PeriodEntityToPeriodResponse(PeriodEntity periodEntity,
+                                                @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PeriodEntity PeriodResponseToPeriodEntity(PeriodResponse periodResponse, @Context CycleAvoidingMappingContext context);
+    PeriodEntity PeriodResponseToPeriodEntity(PeriodResponse periodResponse,
+                                              @Context CycleAvoidingMappingContext context);
 
-    List<PeriodResponse> PeriodEntitiesToPeriodResponses(List<PeriodEntity> periodEntities, @Context CycleAvoidingMappingContext context);
+    List<PeriodResponse> PeriodEntitiesToPeriodResponses(List<PeriodEntity> periodEntities,
+                                                         @Context CycleAvoidingMappingContext context);
 
-    List<PeriodEntity> PeriodResponsesToPeriodEntities(List<PeriodResponse> periodResponses, @Context CycleAvoidingMappingContext context);
+    List<PeriodEntity> PeriodResponsesToPeriodEntities(List<PeriodResponse> periodResponses,
+                                                       @Context CycleAvoidingMappingContext context);
 
-/*    @AfterMapping
-    default void handlePeriodResponseExecutorPublicIds(PeriodEntity PeriodEntity, @MappingTarget PeriodResponse periodResponse) {
-        periodResponse.setExecutorPublicId(PeriodEntity.getExecuter().getPersonWebServiceEntity().getPersonPublicId());
-    }*/
+    @AfterMapping
+    default void handlePeriodResponseExecutorFullName(PeriodEntity periodEntity,
+                                                      @MappingTarget PeriodResponse periodResponse) {
+
+        if(!Hibernate.isInitialized(periodEntity.getExecuter())) {
+            periodEntity.setExecuter(null);
+        }
+
+        if(periodEntity.getExecuter()!=null) {
+            periodResponse
+                    .setExecutorFullName(
+                            periodEntity.getExecuter().getFirstName()
+                                    + ' ' +
+                                    periodEntity.getExecuter().getLastName());
+        }
+    }
 }

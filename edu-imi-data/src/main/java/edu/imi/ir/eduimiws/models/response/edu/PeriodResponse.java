@@ -67,6 +67,9 @@ public class PeriodResponse extends RepresentationModel<PeriodResponse> {
     @Schema(title = "Period Executor Public ID")
     private String executorPublicId;
 
+    @Schema(title = "Period Executor Full Name")
+    private String executorFullName;
+
     @Schema(title = "Period Registration Start Date",maxLength = 10)
     private String regStartDate;
 

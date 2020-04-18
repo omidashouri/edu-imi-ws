@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -45,6 +48,75 @@ public class UserServiceImpl implements UserService {
 
         PersonWebServiceFastDto userFastDto = personWebServiceFastMapper.PersonWebServiceEntityToPersonWebServiceFastDto(user,new CycleAvoidingMappingContext());
         return userFastDto;
+    }
+
+    @Override
+    public List<PersonEntity> generatePersonContactPublicIdByPersons(List<PersonEntity> newPersons) {
+
+
+     /*   List<Long> personIds = newPersons
+                .stream()
+                .map(PersonEntity::getId)
+                .distinct()
+                .collect(Collectors.toList());
+
+        newPersons = personRepository.findAllPersonEntitiesByIdIn(personIds);
+
+        List<PersonEntity> needPersonWebContactWeb = newPersons
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(p->Objects.isNull(p.getPersonWebServiceEntity()))
+                .filter(p->Objects.nonNull(p.getContact()))
+                .filter(p->Objects.isNull(p.getContact().getContactWebService()))
+                .collect(Collectors.toList());
+
+        List<PersonEntity> needPersonWeb = newPersons
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(Predicate.not(needPersonWebContactWeb::contains))
+                .filter(p->Objects.isNull(p.getPersonWebServiceEntity()))
+                .collect(Collectors.toList());
+
+        List<PersonEntity> needContactWeb = newPersons
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(p->Objects.nonNull(p.getContact()))
+                .filter(p->Objects.isNull(p.getContact().getContactWebService()))
+                .collect(Collectors.toList());*/
+
+
+
+
+        return null;
+    }
+
+    @Override
+    public List<PersonEntity> generatePersonPublicIdByPersons(List<PersonEntity> newPersons) {
+
+        List<Long> personIds = newPersons
+                .stream()
+                .filter(Objects::nonNull)
+                .map(PersonEntity::getId)
+                .distinct()
+                .collect(Collectors.toList());
+
+        List<PersonEntity> persons = personService
+                .findAllPersonEntitiesByIdIn(personIds);
+
+        List<PersonWebServiceEntity> savedWebServices = personWebServiceService
+                .generatePersonWebServicePublicId(persons);
+
+        List<PersonEntity> savedPersons = savedWebServices
+                .stream()
+                .map(PersonWebServiceEntity::getPerson)
+                .collect(Collectors.toList());
+
+        return savedPersons;
+    }
+
+    @Override
+    public List<PersonEntity> generateContactPublicIdByPersons(List<PersonEntity> newPersons) {
+        return null;
     }
 
 

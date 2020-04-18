@@ -9,6 +9,7 @@ import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -138,42 +138,51 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
     @Override
     public List<PersonWebServiceEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons) {
         List<PersonWebServiceEntity> newPersonWebServices = new ArrayList<>();
-//        List<ContactWebServiceEntity> newContactWebServices = new ArrayList<>();
-        newPersons.forEach(p->{
-            PersonWebServiceEntity newPersonWebService = new PersonWebServiceEntity();
-//            ContactWebServiceEntity newContactWebService = new ContactWebServiceEntity();
-//            newPersonWebService.setPerson(p);
-            newPersonWebService.setPersonId(p.getId());
-            newPersonWebService.setContact(p.getContact());
-            newPersonWebService.setContactId(p.getContactId());
-            if(p.getUsername() != null){
-                newPersonWebService.setUserName(p.getUsername());
-            }
-            if(p.getPassword() != null){
-                newPersonWebService.setEncryptedPassword(p.getPassword());
-            }
-            newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
-            newPersonWebService.setPersonPublicId(this.generateUniquePersonWebServicePublicId());
-            newPersonWebService.setUserName(p.getUsername());
-/*            newContactWebService.setContactId(p.getContactId());
-            newContactWebService.setContactPublicId(this.generateUniquePublicId());
-            newContactWebService.setContact(p.getContact());
-            newContactWebService.setCreateDateTs(newPersonWebService.getCreateDateTs());
-            */
-            newPersonWebServices.add(newPersonWebService);
-//            newContactWebServices.add(newContactWebService);
+
+        newPersons
+                .stream()
+                .filter(Objects::nonNull)
+                .forEach(p->{
+                    PersonWebServiceEntity newPersonWebService = new PersonWebServiceEntity();
+                    newPersonWebService.setPerson(p);
+                    newPersonWebService.setPersonId(p.getId());
+                    if(p.getUsername() != null){
+                        newPersonWebService.setUserName(p.getUsername());
+                    }
+                    if(p.getPassword() != null){
+                        newPersonWebService.setEncryptedPassword(p.getPassword());
+                    }
+                    newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
+                    newPersonWebService.setPersonPublicId(this.generateUniquePersonWebServicePublicId());
+                    if(!Hibernate.isInitialized(p.getContact())) {
+                        p.setContact(null);
+                    }
+                    if(p.getContact()!=null){
+                        newPersonWebService.setContact(p.getContact());
+                        newPersonWebService.setContactId(p.getContactId());
+                        if(p.getContact().getContactWebService()!=null){
+                            newPersonWebService.setContactPublicId(p.getContact().getContactWebService().getContactPublicId());
+                        }
+                    }
+                    p.setPersonWebServiceEntity(newPersonWebService);
         });
 
-        newPersonWebServices.sort(Comparator.comparing(PersonWebServiceEntity::getPersonId));
-//        newContactWebServices.sort(Comparator.comparing(ContactWebServiceEntity::getContactId));
+        newPersonWebServices = newPersons
+                .stream()
+                .map(PersonEntity::getPersonWebServiceEntity)
+                .collect(Collectors.toList());
 
-//        omiddo: remove bellow line
-        /*List<PersonWebServiceEntity> newPersonWebServices2 =
-         newPersonWebServices.stream().limit(30).collect(Collectors.toList());*/
+        newPersonWebServices
+                .sort(Comparator.comparing(PersonWebServiceEntity::getPersonId));
 
-        personWebServiceRepository.saveAll(newPersonWebServices);
-//        contactWebServiceService.saveAllContactWebServices(newContactWebServices);
-        return newPersonWebServices;
+        Iterable<PersonWebServiceEntity> savedIterablePersonWebService =
+                    personWebServiceRepository.saveAll(newPersonWebServices);
+
+        List<PersonWebServiceEntity> personWebServiceEntities = StreamSupport
+                                    .stream(savedIterablePersonWebService.spliterator(),false)
+                                    .collect(Collectors.toCollection(ArrayList::new));
+
+        return personWebServiceEntities;
     }
 
     private String generateUniquePersonWebServicePublicId() {

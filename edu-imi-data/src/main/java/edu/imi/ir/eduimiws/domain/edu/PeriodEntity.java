@@ -11,7 +11,7 @@ import javax.persistence.*;
 
 
 @NamedEntityGraphs({
-        @NamedEntityGraph(name = "PeriodEntity.findByPeriodWebService_PeriodPublicId",
+        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService",
                 attributeNodes = {
                 @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
                 @NamedAttributeNode("periodWebService")

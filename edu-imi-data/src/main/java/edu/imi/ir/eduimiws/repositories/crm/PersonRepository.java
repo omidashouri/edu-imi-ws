@@ -38,6 +38,8 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
     List<PersonEntity> findPersonEntitiesByContact_NationCode(@Param("nationCode") String nationalCode);
 
+    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
+    List<PersonEntity> findAllPersonEntitiesByIdIn(List<Long> Ids);
 
 
 
