@@ -21,6 +21,7 @@ public class OpenApiConfig {
     //    http://localhost:8080/edu-imi-ws/swagger-ui.html
     //    http://localhost:8080/edu-imi-ws/swagger-ui/index.html?configUrl=/edu-imi-ws/v3/api-docs/swagger-config
     //    http://172.17.70.160:8080/edu-imi-ws/swagger-ui/index.html?configUrl=/edu-imi-ws/v3/api-docs/swagger-config
+    //    http://172.17.70.160:8080/edu-imi-ws/swagger-ui.html
 
 
     @Bean
