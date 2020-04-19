@@ -5,6 +5,8 @@ import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -75,20 +77,33 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
-        authenticationManagerBuilder.userDetailsService(userService)
+/*        authenticationManagerBuilder.userDetailsService(userService)
                 //omiddo: do my implementation for password encoding
-                .passwordEncoder(bCryptPasswordEncoder);
+                .passwordEncoder(bCryptPasswordEncoder);*/
 
-/*        authenticationManagerBuilder.inMemoryAuthentication()
-                .withUser("9057").password("9057").roles("ADMIN")
+        authenticationManagerBuilder
+                .authenticationProvider(daoAuthenticationProvider())
+
+        .inMemoryAuthentication()
+//                .passwordEncoder(bCryptPasswordEncoder)
+                .withUser("admiin").password("{noop}admiin").roles("ADMIN")
                 .and()
-                .withUser("user").password("user").roles("USER");*/
+                .withUser("useer").password("{noop}useer").roles("USER");
     }
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception{
         final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
         filter.setFilterProcessesUrl("/users/login");
         return filter;
+    }
+
+    @Bean
+    public AuthenticationProvider daoAuthenticationProvider(){
+        final DaoAuthenticationProvider daoAuthenticationProvider =
+                                                new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userService);
+        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
+        return daoAuthenticationProvider;
     }
 
     @Bean
