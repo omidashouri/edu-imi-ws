@@ -43,24 +43,26 @@ public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport
         if (!Hibernate.isInitialized(period.getExecuter())) {
             period.setExecuter(null);
         }
-        if (!Hibernate.isInitialized(period.getExecuter().getPersonWebServiceEntity())) {
-            period.getExecuter().setPersonWebServiceEntity(null);
-        }
-        if (period.getExecuter().getPersonWebServiceEntity() != null) {
-            periodResponse.
-                    add(linkTo(
-                            methodOn(
-                                    UserController.class)
-                                    .getUserByUserPublicId(period.getExecuter().getPersonWebServiceEntity().getPersonPublicId()))
-                            .withRel("executors"));
-        }
 
+        if (period.getExecuter() != null) {
+            if (!Hibernate.isInitialized(period.getExecuter().getPersonWebServiceEntity())) {
+                period.getExecuter().setPersonWebServiceEntity(null);
+            } else {
+                periodResponse.
+                        add(linkTo(
+                                methodOn(
+                                        UserController.class)
+                                        .getUserByUserPublicId(period.getExecuter().getPersonWebServiceEntity().getPersonPublicId()))
+                                .withRel("executors"));
+            }
+        }
 
         return periodResponse;
     }
 
     @Override
     public CollectionModel<PeriodResponse> toCollectionModel(Iterable<? extends PeriodEntity> periods) {
+
         CollectionModel<PeriodResponse> periodResponseCollectionModel = super.toCollectionModel(periods);
 
         Pageable defaultPageable = PageRequest

@@ -66,7 +66,7 @@ public class PeriodServiceImpl implements PeriodService {
     @Override
     public Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNull() {
         Iterable<PeriodEntity> periodEntities =
-                periodRepository.findAllByDeleteStatusIsNotNullAndExecuterIsNotNull();
+                periodRepository.findAllByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonWebServiceEntityIsNull();
         return periodEntities;
     }
 
