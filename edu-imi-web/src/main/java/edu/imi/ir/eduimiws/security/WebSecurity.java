@@ -85,7 +85,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(daoAuthenticationProvider())
 
         .inMemoryAuthentication()
-//                .passwordEncoder(bCryptPasswordEncoder)
                 .withUser("admiin").password("{noop}admiin").roles("ADMIN")
                 .and()
                 .withUser("useer").password("{noop}useer").roles("USER");
