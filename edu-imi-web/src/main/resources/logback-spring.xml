@@ -15,7 +15,7 @@
     <springProfile name="default">
 
         <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>app.log</file>
+            <file>${CATALINA_LOGS}/app.log</file>
 
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <fileNamePattern>${LOG_ARCHIVE}/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>

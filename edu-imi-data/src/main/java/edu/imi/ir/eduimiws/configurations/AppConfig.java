@@ -22,4 +22,12 @@ public class AppConfig {
     public SpringApplicationContext springApplicationContext(){
         return new SpringApplicationContext();
     }
+
+
+/*    @PostConstruct
+    public void init() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        System.out.println("Date in UTC: " + new Date().toString());
+    }*/
+
 }
