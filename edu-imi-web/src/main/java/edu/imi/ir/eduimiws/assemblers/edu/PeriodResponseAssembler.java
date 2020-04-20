@@ -2,14 +2,11 @@ package edu.imi.ir.eduimiws.assemblers.edu;
 
 import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
 import edu.imi.ir.eduimiws.controllers.v1.UserController;
-import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseMapper;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodResponsePeriodFastDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
-import org.hibernate.Hibernate;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -18,58 +15,50 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport<PeriodEntity, PeriodResponse> {
+public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport<PeriodFastDto, PeriodResponse> {
 
-    private final PeriodResponseMapper periodResponseMapper;
-    ;
+    private final PeriodResponsePeriodFastDtoMapper periodResponsePeriodFastDtoMapper;
 
-    public PeriodResponseAssembler(PeriodResponseMapper periodResponseMapper) {
+
+    public PeriodResponseAssembler(PeriodResponsePeriodFastDtoMapper periodResponsePeriodFastDtoMapper) {
         super(PeriodController.class, PeriodResponse.class);
-        this.periodResponseMapper = periodResponseMapper;
+        this.periodResponsePeriodFastDtoMapper = periodResponsePeriodFastDtoMapper;
     }
 
     @Override
-    public PeriodResponse toModel(PeriodEntity period) {
+    public PeriodResponse toModel(PeriodFastDto periodFastDto) {
 
-        PeriodResponse periodResponse = periodResponseMapper
-                .PeriodEntityToPeriodResponse(period, new CycleAvoidingMappingContext());
+        PeriodResponse periodResponse = periodResponsePeriodFastDtoMapper
+                .toPeriodResponse(periodFastDto, new CycleAvoidingMappingContext());
         periodResponse
                 .add(linkTo(
                         methodOn(
                                 PeriodController.class)
-                                .getPeriodByPeriodPublicId(period.getPeriodWebService().getPeriodPublicId()))
+                                .getPeriodByPeriodPublicId(periodFastDto.getPeriodPublicId()))
                         .withSelfRel());
 
-        if (!Hibernate.isInitialized(period.getExecuter())) {
-            period.setExecuter(null);
-        }
-
-        if (period.getExecuter() != null) {
-            if (!Hibernate.isInitialized(period.getExecuter().getPersonWebServiceEntity())) {
-                period.getExecuter().setPersonWebServiceEntity(null);
-            } else {
+        if (periodFastDto.getExecutorPublicId() != null) {
                 periodResponse.
                         add(linkTo(
                                 methodOn(
                                         UserController.class)
-                                        .getUserByUserPublicId(period.getExecuter().getPersonWebServiceEntity().getPersonPublicId()))
+                                        .getUserByUserPublicId(periodFastDto.getExecutorPublicId()))
                                 .withRel("executors"));
-            }
         }
 
         return periodResponse;
     }
 
+
     @Override
-    public CollectionModel<PeriodResponse> toCollectionModel(Iterable<? extends PeriodEntity> periods) {
+    public CollectionModel<PeriodResponse> toCollectionModel(Iterable<? extends PeriodFastDto> periodFastDtos) {
 
-        CollectionModel<PeriodResponse> periodResponseCollectionModel = super.toCollectionModel(periods);
+        CollectionModel<PeriodResponse> periodResponseCollectionModel = super.toCollectionModel(periodFastDtos);
 
-        Pageable defaultPageable = PageRequest
-                .of(0, 10, Sort.Direction.fromString("DESC"), "createDate");
+        Pageable pageable = Pageable.unpaged();
 
         periodResponseCollectionModel
-                .add(linkTo(methodOn(PeriodController.class).getPeriods(defaultPageable)).withRel("periods"));
+                .add(linkTo(methodOn(PeriodController.class).getPeriods(pageable)).withRel("periods"));
 
         return periodResponseCollectionModel;
     }

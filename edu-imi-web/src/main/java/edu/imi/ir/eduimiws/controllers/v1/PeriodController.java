@@ -2,10 +2,14 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssembler;
+import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssemblerOld;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
@@ -61,10 +65,13 @@ public class PeriodController {
     private final UserService userService;
     private final PersonWebServiceService personWebServiceService;
     private final PeriodWebServiceService periodWebServiceService;
+    private final PeriodResponseAssemblerOld periodResponseAssemblerOld;
     private final PeriodResponseAssembler periodResponseAssembler;
     private final UserResponseAssembler userResponseAssembler;
-    private final PagedResourcesAssembler<PeriodEntity> periodPagedResourcesAssembler;
+    private final PagedResourcesAssembler<PeriodEntity> periodPagedResourcesAssemblerOld;
+    private final PagedResourcesAssembler<PeriodFastDto> periodPagedResourcesAssembler;
     private final UserFastDtoMapper userFastDtoMapper;
+    private final PeriodFastDtoMapper periodFastDtoMapper;
 
     @Operation(
             summary = "find All periods",
@@ -110,8 +117,12 @@ public class PeriodController {
         Page<PeriodEntity> periodPages =
                 periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
 
+        Page<PeriodFastDto> periodFastDtoPage = periodPages
+                .map(p -> periodFastDtoMapper
+                        .toPeriodFastDto(p, new CycleAvoidingMappingContext()));
+
         PagedModel<PeriodResponse> periodResponsePagedModel = periodPagedResourcesAssembler
-                .toModel(periodPages, periodResponseAssembler);
+                .toModel(periodFastDtoPage, periodResponseAssembler);
 
         return ResponseEntity.ok(periodResponsePagedModel);
     }
@@ -133,8 +144,11 @@ public class PeriodController {
                 .stream(periodPages.spliterator(), false)
                 .collect(Collectors.toList());
 
+        List<PeriodFastDto> periodFastDtos = periodFastDtoMapper
+                .toPeriodFastDtos(periodEntities,new CycleAvoidingMappingContext());
+
         CollectionModel<PeriodResponse> periodResponseCollectionModel =
-                periodResponseAssembler.toCollectionModel(periodEntities);
+                periodResponseAssembler.toCollectionModel(periodFastDtos);
 
         return ResponseEntity.ok(periodResponseCollectionModel);
     }
@@ -181,8 +195,11 @@ public class PeriodController {
                 return this.periodNotFound();
             }
 
+            PeriodFastDto periodFastDto = periodFastDtoMapper
+                    .toPeriodFastDto(period,new CycleAvoidingMappingContext());
+
             PeriodResponse periodResponse =
-                    periodResponseAssembler.toModel(period);
+                    periodResponseAssembler.toModel(periodFastDto);
 
             return ResponseEntity.ok(periodResponse);
 
@@ -233,17 +250,21 @@ public class PeriodController {
     @GetMapping(path = "/executors/{executorPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriodExecutors(@PathVariable String executorPublicId,
-                                                                 @Parameter(hidden = true)
-                                                                 @SortDefault(sort = "createDate",
-                                                                                direction = Sort.Direction.DESC)
-                                                                 @PageableDefault(page = 0, size = 10, value = 10)
-                                                                         Pageable pageable) {
+                                                                         @Parameter(hidden = true)
+                                                                         @SortDefault(sort = "createDate",
+                                                                                 direction = Sort.Direction.DESC)
+                                                                         @PageableDefault(page = 0, size = 10, value = 10)
+                                                                                 Pageable pageable) {
 
         Page<PeriodEntity> periodPages =
-                periodService.findAllPageableByExecutorPublicId(pageable,executorPublicId);
+                periodService.findAllPageableByExecutorPublicId(pageable, executorPublicId);
+
+        Page<PeriodFastDto> periodFastDtoPage = periodPages
+                .map(p -> periodFastDtoMapper
+                        .toPeriodFastDto(p, new CycleAvoidingMappingContext()));
 
         PagedModel<PeriodResponse> periodResponsePagedModel = periodPagedResourcesAssembler
-                .toModel(periodPages, periodResponseAssembler);
+                .toModel(periodFastDtoPage, periodResponseAssembler);
 
         return ResponseEntity.ok(periodResponsePagedModel);
     }
@@ -266,8 +287,11 @@ public class PeriodController {
                 .stream(periodPages.spliterator(), false)
                 .collect(Collectors.toList());
 
+        List<PeriodFastDto> periodFastDtos = periodFastDtoMapper
+                .toPeriodFastDtos(periods,new CycleAvoidingMappingContext());
+
         CollectionModel<PeriodResponse> periodResponseCollectionModel =
-                periodResponseAssembler.toCollectionModel(periods);
+                periodResponseAssembler.toCollectionModel(periodFastDtos);
 
         return ResponseEntity.ok(periodResponseCollectionModel);
     }

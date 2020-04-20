@@ -1,62 +1,43 @@
 package edu.imi.ir.eduimiws.models.dto.edu;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-
-import java.io.Serializable;
 
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PeriodFastDto implements Serializable {
+public class PeriodFastDto {
 
-//    use when define @Transient filed in Entity and select with @NamedEntityGraph
+    private Long id;
 
-    private static final long serialVersionUID = -1350326709463048085L;
+    private String periodPublicId;
 
-    private Long periodId;
-
-    @Schema(
-            description = "period name"
-    )
     private String name;
 
-    @Schema(
-            description = "period start date"
-    )
     private String startDate;
 
-    @Schema(
-            description = "period end date"
-    )
     private String endDate;
 
     private Long fieldId;
 
+    private String fieldPublicId;
+
     private String type;
 
-    @Schema(
-            description = "period fee"
-    )
     private Long fee;
 
-    @Schema(
-            description = "period number"
-    )
     private Long offerNumber;
-    @Schema(
-            description = "creator id"
-    )
+
     private Long creatorId;
 
-    @Schema(
-            description = "create date"
-    )
+    private String creatorPublicId;
+
     private String createDate;
 
     private Long editorId;
+
+    private String editorPublicId;
 
     private String editDate;
 
@@ -74,13 +55,25 @@ public class PeriodFastDto implements Serializable {
 
     private Long organizationId;
 
+    private String organizationPublicId;
+
     private Long executerId;
+
+    private String executorPublicId;
+
+    private String executorFullName;
 
     private Long academicId;
 
+    private String academicPublicId;
+
     private Long planId;
 
+    private String planPublicId;
+
     private Long accountId;
+
+    private String accountPublicId;
 
     private Long totalUnit;
 
@@ -100,6 +93,8 @@ public class PeriodFastDto implements Serializable {
 
     private Long currencyId;
 
+    private String currencyPublicId;
+
     private String regStartDate;
 
     private String regEndDate;
@@ -111,6 +106,8 @@ public class PeriodFastDto implements Serializable {
     private Long periodOrgFee;
 
     private Long companyId;
+
+    private String companyPublicId;
 
     private String canRegisterOnline;
 
@@ -128,6 +125,8 @@ public class PeriodFastDto implements Serializable {
 
     private Long periodHoldingId;
 
+    private String periodHoldingPublicId;
+
     private String holdingType;
 
     private String holdingLanguage;
@@ -137,6 +136,8 @@ public class PeriodFastDto implements Serializable {
     private Long allowTerm;
 
     private Long cityId;
+
+    private String cityPublicId;
 
     private String variableCertificateName;
 
