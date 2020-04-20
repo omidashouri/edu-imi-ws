@@ -204,6 +204,89 @@ public class UserController {
         return ResponseEntity.ok(userResponseCollectionModel);
     }
 
+    @Operation(
+            summary = "find All users by username",
+            description = "Search user by username pageable",
+            tags = "users",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = UserResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(path = "/username/{username}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<UserResponse>> getUsersByUserName(@PathVariable String username,
+                                                                @Parameter(hidden = true)
+                                                             @SortDefault(sort = "personalCode",
+                                                                     direction = Sort.Direction.DESC)
+                                                             @PageableDefault(page = 0, size= 10,value = 10)
+                                                                     Pageable pageable ){
+
+        Page<PersonEntity> personPages =
+                personService.findAllPersonEntityPagesByUserName (pageable,username);
+
+        Page<UserFastDto> userFastDtoPage = personPages
+                .map(pp->userFastDtoMapper
+                        .toUserFastDto(pp,new CycleAvoidingMappingContext()));
+
+        PagedModel<UserResponse> userResponsePagedModel = userPagedResourcesAssembler
+                .toModel(userFastDtoPage,userResponseAssembler);
+
+        return ResponseEntity.ok(userResponsePagedModel);
+    }
+
+    @Operation(hidden = true)
+    @PageableAsQueryParam
+    @GetMapping(path = "/username/{username}/collectionModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CollectionModel<UserResponse>> getAllUsersByUserName(@PathVariable String username,
+            @Parameter(hidden = true)
+            @SortDefault(sort = "personalCode",direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size= 10)
+                    Pageable pageable){
+
+        Page<PersonEntity> personPages =
+                personService.findAllPersonEntityPagesByUserName(pageable,username);
+
+        List<PersonEntity> personEntities = StreamSupport
+                .stream(personPages.spliterator(),false)
+                .collect(Collectors.toList());
+
+        List<UserFastDto> userFastDtos = userFastDtoMapper
+                .toUserFastDtos(personEntities,new CycleAvoidingMappingContext());
+
+        CollectionModel<UserResponse> userResponseCollectionModel =
+                userResponseAssembler.toCollectionModel(userFastDtos);
+
+        return ResponseEntity.ok(userResponseCollectionModel);
+    }
+
+//    ----------------------------------------------------------------------
 
     @Operation(
             summary = "Count new user numbers",

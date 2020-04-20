@@ -88,6 +88,13 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
+    public Page<PersonEntity> findAllPersonEntityPagesByUserName(Pageable pageable, String userName) {
+        Page<PersonEntity> personPages = personRepository
+                .findAllByUsername(pageable,userName);
+        return personPages;
+    }
+
+    @Override
     public List<PersonEntity> findPersonsByNationalCode(String nationalCode) {
         List<PersonEntity> personEntities = personRepository
                 .findPersonEntitiesByContact_NationCode(nationalCode);
