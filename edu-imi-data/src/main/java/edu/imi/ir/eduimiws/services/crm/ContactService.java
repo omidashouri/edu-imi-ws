@@ -23,6 +23,8 @@ public interface ContactService {
 
     ContactEntity findContactEntityByContactWebServicePublicId(String contactPublicId);
 
+    List<ContactEntity> findCotactsByIds(List<Long> contactIds);
+
 }
 
 

@@ -15,4 +15,6 @@ public interface ContactWebServiceService {
     ContactWebServiceEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact);
 
     List<ContactWebServiceEntity> saveAllContactWebServices(List<ContactWebServiceEntity> contactWebServices);
+
+    List<ContactWebServiceEntity> generateContactWebServicePublicId(List<ContactEntity> newContacts);
 }

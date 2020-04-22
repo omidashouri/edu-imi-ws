@@ -178,11 +178,11 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
         Iterable<PersonWebServiceEntity> savedIterablePersonWebService =
                     personWebServiceRepository.saveAll(newPersonWebServices);
 
-        List<PersonWebServiceEntity> personWebServiceEntities = StreamSupport
+        List<PersonWebServiceEntity> savedPersonWebServices = StreamSupport
                                     .stream(savedIterablePersonWebService.spliterator(),false)
                                     .collect(Collectors.toCollection(ArrayList::new));
 
-        return personWebServiceEntities;
+        return savedPersonWebServices;
     }
 
     private String generateUniquePersonWebServicePublicId() {

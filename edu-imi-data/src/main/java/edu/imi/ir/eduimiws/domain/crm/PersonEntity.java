@@ -23,7 +23,8 @@ import javax.persistence.*;
         }),
         @NamedEntityGraph(name = "PersonEntity.findPersonSubGraphContactContactWebService",
                 attributeNodes = {
-                        @NamedAttributeNode(value = "contact",subgraph = "contact-subGraph")
+                        @NamedAttributeNode(value = "contact",subgraph = "contact-subGraph"),
+                        @NamedAttributeNode(value = "personWebServiceEntity")
                 },
                 subgraphs = {
                         @NamedSubgraph(name = "contact-subGraph",

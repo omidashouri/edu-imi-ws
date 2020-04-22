@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceFastDto;
+import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.services.crm.ContactWebServiceService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     private final PersonWebServiceFastDtoMapper personWebServiceFastMapper;
     private final PersonService personService;
+    private final ContactService contactService;
     private final PersonWebServiceService personWebServiceService;
     private final ContactWebServiceService contactWebServiceService;
     private final Utils utils;
@@ -54,13 +57,15 @@ public class UserServiceImpl implements UserService {
     public List<PersonEntity> generatePersonContactPublicIdByPersons(List<PersonEntity> newPersons) {
 
 
-     /*   List<Long> personIds = newPersons
+        List<PersonEntity> savedPersons = new ArrayList<>();
+
+        List<Long> personIds = newPersons
                 .stream()
                 .map(PersonEntity::getId)
                 .distinct()
                 .collect(Collectors.toList());
 
-        newPersons = personRepository.findAllPersonEntitiesByIdIn(personIds);
+        newPersons = personService.findAllPersonEntitiesByIdIn(personIds);
 
         List<PersonEntity> needPersonWebContactWeb = newPersons
                 .stream()
@@ -80,9 +85,13 @@ public class UserServiceImpl implements UserService {
         List<PersonEntity> needContactWeb = newPersons
                 .stream()
                 .filter(Objects::nonNull)
+                .filter(Predicate.not(needPersonWebContactWeb::contains))
                 .filter(p->Objects.nonNull(p.getContact()))
                 .filter(p->Objects.isNull(p.getContact().getContactWebService()))
-                .collect(Collectors.toList());*/
+                .collect(Collectors.toList());
+
+
+
 
 
 
@@ -103,10 +112,10 @@ public class UserServiceImpl implements UserService {
         List<PersonEntity> persons = personService
                 .findAllPersonEntitiesByIdIn(personIds);
 
-        List<PersonWebServiceEntity> savedWebServices = personWebServiceService
+        List<PersonWebServiceEntity> savedPersonWebServices = personWebServiceService
                 .generatePersonWebServicePublicId(persons);
 
-        List<PersonEntity> savedPersons = savedWebServices
+        List<PersonEntity> savedPersons = savedPersonWebServices
                 .stream()
                 .map(PersonWebServiceEntity::getPerson)
                 .collect(Collectors.toList());
@@ -116,7 +125,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<PersonEntity> generateContactPublicIdByPersons(List<PersonEntity> newPersons) {
-        return null;
+        List<Long> contactIds = newPersons
+                .stream()
+                .filter(Objects::nonNull)
+                .map(PersonEntity::getContact)
+                .filter(Objects::nonNull)
+                .filter(c->Objects.isNull(c.getContactWebService()))
+                .map(ContactEntity::getId)
+                .distinct()
+                .collect(Collectors.toList());
+
+        List<ContactEntity> newContacts = contactService
+                .findCotactsByIds(contactIds);
+
+        List<ContactWebServiceEntity> savedContactWebServices = contactWebServiceService
+                        .generateContactWebServicePublicId(newContacts);
+
+        List<PersonEntity> savedPersons =
+                savedContactWebServices
+                .stream()
+                .map(p->p.getContact())
+                .filter(Objects::nonNull)
+                .map(ContactEntity::getPersons)
+                        .flatMap(List::stream)
+                .collect(Collectors.toList());
+        return savedPersons;
     }
 
 

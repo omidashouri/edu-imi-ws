@@ -9,6 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "ContactEntity.findContactSubGraphPersonsPersonWebServiceAndContactWebService",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "persons",subgraph = "persons-subGraph"),
+                        @NamedAttributeNode(value = "contactWebService")
+                },
+                subgraphs = {
+                        @NamedSubgraph(name = "persons-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "personWebServiceEntity")
+                                },type = PersonWebServiceEntity.class
+                        )
+                }
+        )
+})
 
 @NamedEntityGraphs({
     @NamedEntityGraph(name = "ContactEntity.findContactSubGraphPersonsPersonWebService",

@@ -56,6 +56,13 @@ public class ContactServiceImpl implements ContactService {
         return contact;
     }
 
+    @Override
+    public List<ContactEntity> findCotactsByIds(List<Long> contactIds) {
+        List<ContactEntity> contacts = contactRepository
+                .findByIdIn(contactIds);
+        return contacts;
+    }
+
 //NU
 /*    @Override
     public ContactEntity findContactEntityById(Long id) {
