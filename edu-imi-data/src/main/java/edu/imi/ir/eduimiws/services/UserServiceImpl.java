@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -49,12 +50,12 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("user name not found for " + userName);
         }
 
-        PersonWebServiceFastDto userFastDto = personWebServiceFastMapper.PersonWebServiceEntityToPersonWebServiceFastDto(user,new CycleAvoidingMappingContext());
+        PersonWebServiceFastDto userFastDto = personWebServiceFastMapper.PersonWebServiceEntityToPersonWebServiceFastDto(user, new CycleAvoidingMappingContext());
         return userFastDto;
     }
 
     @Override
-    public List<PersonEntity> generatePersonContactPublicIdByPersons(List<PersonEntity> newPersons) {
+    public List<PersonEntity> generateContactPersonPublicIdByPersons(List<PersonEntity> newPersons) {
 
 
         List<PersonEntity> savedPersons = new ArrayList<>();
@@ -67,36 +68,50 @@ public class UserServiceImpl implements UserService {
 
         newPersons = personService.findAllPersonEntitiesByIdIn(personIds);
 
-        List<PersonEntity> needPersonWebContactWeb = newPersons
+        List<PersonEntity> needContactWebPersonWeb = newPersons
                 .stream()
                 .filter(Objects::nonNull)
-                .filter(p->Objects.isNull(p.getPersonWebServiceEntity()))
-                .filter(p->Objects.nonNull(p.getContact()))
-                .filter(p->Objects.isNull(p.getContact().getContactWebService()))
+                .filter(p -> Objects.isNull(p.getPersonWebServiceEntity()))
+                .filter(p -> Objects.nonNull(p.getContact()))
+                .filter(p -> Objects.isNull(p.getContact().getContactWebService()))
                 .collect(Collectors.toList());
 
         List<PersonEntity> needPersonWeb = newPersons
                 .stream()
                 .filter(Objects::nonNull)
-                .filter(Predicate.not(needPersonWebContactWeb::contains))
-                .filter(p->Objects.isNull(p.getPersonWebServiceEntity()))
+                .filter(Predicate.not(needContactWebPersonWeb::contains))
+                .filter(p -> Objects.isNull(p.getPersonWebServiceEntity()))
                 .collect(Collectors.toList());
 
         List<PersonEntity> needContactWeb = newPersons
                 .stream()
                 .filter(Objects::nonNull)
-                .filter(Predicate.not(needPersonWebContactWeb::contains))
-                .filter(p->Objects.nonNull(p.getContact()))
-                .filter(p->Objects.isNull(p.getContact().getContactWebService()))
+                .filter(Predicate.not(needContactWebPersonWeb::contains))
+                .filter(p -> Objects.nonNull(p.getContact()))
+                .filter(p -> Objects.isNull(p.getContact().getContactWebService()))
                 .collect(Collectors.toList());
 
 
+        if (!needContactWebPersonWeb.isEmpty() || needContactWebPersonWeb.size() > 0) {
 
+            this.generateContactPublicIdByPersons(needContactWebPersonWeb).addAll(savedPersons);
 
+            this.generatePersonPublicIdByPersons(needContactWebPersonWeb).addAll(savedPersons);
 
+            this.distinctSortPersonsById(savedPersons);
+        }
 
+        if (!needContactWeb.isEmpty() || needContactWeb.size() > 0) {
+            this.generateContactPublicIdByPersons(needContactWeb).addAll(savedPersons);
+            this.distinctSortPersonsById(savedPersons);
+        }
 
-        return null;
+        if (!needPersonWeb.isEmpty() || needPersonWeb.size() > 0) {
+            this.generatePersonPublicIdByPersons(needPersonWeb).addAll(savedPersons);
+            this.distinctSortPersonsById(savedPersons);
+        }
+
+        return savedPersons;
     }
 
     @Override
@@ -130,7 +145,7 @@ public class UserServiceImpl implements UserService {
                 .filter(Objects::nonNull)
                 .map(PersonEntity::getContact)
                 .filter(Objects::nonNull)
-                .filter(c->Objects.isNull(c.getContactWebService()))
+                .filter(c -> Objects.isNull(c.getContactWebService()))
                 .map(ContactEntity::getId)
                 .distinct()
                 .collect(Collectors.toList());
@@ -139,16 +154,16 @@ public class UserServiceImpl implements UserService {
                 .findCotactsByIds(contactIds);
 
         List<ContactWebServiceEntity> savedContactWebServices = contactWebServiceService
-                        .generateContactWebServicePublicId(newContacts);
+                .generateContactWebServicePublicId(newContacts);
 
         List<PersonEntity> savedPersons =
                 savedContactWebServices
-                .stream()
-                .map(p->p.getContact())
-                .filter(Objects::nonNull)
-                .map(ContactEntity::getPersons)
+                        .stream()
+                        .map(p -> p.getContact())
+                        .filter(Objects::nonNull)
+                        .map(ContactEntity::getPersons)
                         .flatMap(List::stream)
-                .collect(Collectors.toList());
+                        .collect(Collectors.toList());
         return savedPersons;
     }
 
@@ -173,7 +188,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("user name not found for " + username);
         }*/
 
-        if (null==user) {
+        if (null == user) {
             throw new UsernameNotFoundException("user name not found for " + username);
         }
 
@@ -183,12 +198,12 @@ public class UserServiceImpl implements UserService {
 
             publicPersonId = generatePublicId();
 
-            if(!existContactPublicIdInContactWebServiceEntity(user.getContact())){
+            if (!existContactPublicIdInContactWebServiceEntity(user.getContact())) {
                 publicContactId = generatePublicId();
                 contactWebServiceEntity =
                         contactWebServiceService
                                 .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
-            } else{
+            } else {
                 contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntityFast(user.getContact());
             }
 
@@ -242,13 +257,13 @@ public class UserServiceImpl implements UserService {
         return personWebServiceService.savePersonWebServiceEntity(newPersonWebService);
     }
 
-    private boolean existContactPublicIdInContactWebServiceEntity(ContactEntity contactEntity){
+    private boolean existContactPublicIdInContactWebServiceEntity(ContactEntity contactEntity) {
         boolean exist = true;
 
         ContactWebServiceEntity contactWebServiceEntity = contactWebServiceService.findContactWebServiceEntityByContactEntityFast(contactEntity);
 
-        if(null==contactWebServiceEntity){
-            exist=false;
+        if (null == contactWebServiceEntity) {
+            exist = false;
         }
 
         return exist;
@@ -257,6 +272,13 @@ public class UserServiceImpl implements UserService {
 
     private String generatePublicId() {
         return utils.generateUniquePublicId();
+    }
+
+    private void distinctSortPersonsById(List<PersonEntity> persons) {
+        persons
+                .stream()
+                .distinct()
+                .sorted(Comparator.comparing(PersonEntity::getId));
     }
 
 
