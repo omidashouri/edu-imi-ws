@@ -15,7 +15,6 @@ import org.springframework.hateoas.server.core.Relation;
 @JsonRootName(value = "period")
 @Relation(collectionRelation = "periods")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor

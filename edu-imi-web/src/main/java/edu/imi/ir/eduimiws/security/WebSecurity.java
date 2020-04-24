@@ -12,6 +12,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,7 +31,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception{
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors().and()
 
@@ -63,14 +67,21 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //                .and().logout().permitAll()
 //                .logoutRequestMatcher(new AntPathRequestMatcher("/logout","POST"))
 
-        .and()
+/*                .and().sessionManagement()
+                .maximumSessions(1).sessionRegistry(sessionRegistry())
+                .and().sessionFixation().none()*/
 
-        .addFilter(getAuthenticationFilter())
+                .and()
 
-        .addFilter(new AuthorizationFilter(authenticationManager()))
+                .addFilter(getAuthenticationFilter())
 
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .addFilter(new AuthorizationFilter(authenticationManager()))
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .maximumSessions(2).sessionRegistry(sessionRegistry())
+                .and().sessionFixation().none();
+/*                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);*/
 
         httpSecurity.headers().frameOptions().disable();
     }
@@ -92,9 +103,20 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception{
         final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
+        filter.setAllowSessionCreation(true);
+        filter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy());
         filter.setFilterProcessesUrl("/users/login");
         return filter;
     }
+
+    @Bean
+    public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(sessionRegistry());
+    }
+
+/*    public CsrfTokenRepository csrfTokenRepository() {
+        return new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository());
+    }*/
 
     @Bean
     public AuthenticationProvider daoAuthenticationProvider(){
@@ -121,5 +143,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
         return urlBasedCorsConfigurationSource;
         }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl() ;
+    }
 
 }

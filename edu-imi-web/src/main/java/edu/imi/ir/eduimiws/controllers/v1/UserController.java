@@ -12,6 +12,7 @@ import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
+import edu.imi.ir.eduimiws.security.ActiveUserService2;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,12 +62,44 @@ public class UserController {
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserResponseAssembler userResponseAssembler;
     private final PagedResourcesAssembler<UserFastDto> userPagedResourcesAssembler;
+    private final ActiveUserService2 activeUserService;
     private final UserResponseUserFastDtoMapper userResponseUserFastDtoMapper;
 
     // http://localhost:8080/edu-imi-ws/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
 
 //    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3ODMyMDEyfQ.ZmfASy43T2adVKzTahZksyQ548LdeUoSfD2edKKBKbtMx8nYnhi7IxYlrh8m7vkdlB_0rafcBBZL2GieQaZqlQ
+
+
+
+    @GetMapping(path = "/activeUsers",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<UserResponse>> getAllActive(){
+
+        List<String> activeUserNames = activeUserService.getAllActiveUserNames();
+
+        List<UserResponse> userResponses =
+        activeUserNames
+                .stream()
+                .map(u->new UserResponse(u))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(userResponses);
+       /* Page<PersonEntity> personPages =
+                personService.findAllPersonEntityPagesByUserName(pageable,username);
+
+        List<PersonEntity> personEntities = StreamSupport
+                .stream(personPages.spliterator(),false)
+                .collect(Collectors.toList());
+
+        List<UserFastDto> userFastDtos = userFastDtoMapper
+                .toUserFastDtos(personEntities,new CycleAvoidingMappingContext());
+
+        CollectionModel<UserResponse> userResponseCollectionModel =
+                userResponseAssembler.toCollectionModel(userFastDtos);
+
+        return ResponseEntity.ok(userResponseCollectionModel);*/
+    }
 
     @Operation(
             summary = "Find user by public ID",

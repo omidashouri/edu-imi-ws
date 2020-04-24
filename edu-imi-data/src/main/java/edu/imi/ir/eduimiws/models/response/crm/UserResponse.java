@@ -19,6 +19,11 @@ import org.springframework.hateoas.server.core.Relation;
 @AllArgsConstructor
 public class UserResponse extends RepresentationModel<UserResponse> {
 
+
+    public UserResponse(String username){
+        this.username = username;
+    }
+
     @Schema(title = "Person Public ID",maxLength = 36)
     private String personPublicId;
 
