@@ -455,8 +455,8 @@ public class UserController {
 
 
     @Operation(
-            summary = "Generate User Public Id",
-            description = "generate public id for new users",
+            summary = "Register User",
+            description = "register User",
             tags = "users",
             security = @SecurityRequirement(name = "imi-security-key")
     )
@@ -467,7 +467,7 @@ public class UserController {
                             description = "successful operation",
                             content = @Content(
                                     schema = @Schema(
-                                            implementation = OperationStatus.class
+                                            implementation = UserResponse.class
                                     )
                             )
                     ),
@@ -477,8 +477,14 @@ public class UserController {
                             content = @Content(
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
-                    )
-                    ,
+                    ),
+                    @ApiResponse(
+                            responseCode = "406",
+                            description = "Not Acceptable",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Bad Request",
@@ -488,8 +494,6 @@ public class UserController {
                     )
             }
     )
-
-
     @PostMapping(path = "/register",
             consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
