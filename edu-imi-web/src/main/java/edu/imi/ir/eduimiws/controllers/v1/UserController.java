@@ -5,14 +5,16 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
-import edu.imi.ir.eduimiws.mapper.crm.UserResponseUserFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.UserRegisterUserFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
+import edu.imi.ir.eduimiws.models.request.UserRegister;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
 import edu.imi.ir.eduimiws.security.ActiveUserService2;
+import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +23,7 @@ import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,11 +43,10 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,12 +60,13 @@ public class UserController {
 
     private final PersonService personService;
     private final PersonWebServiceService personWebServiceService;
+    private final UserService userService;
     private final PersonWebServiceUserContactFastDtoMapper personWebServiceUserContactFastDtoMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserResponseAssembler userResponseAssembler;
     private final PagedResourcesAssembler<UserFastDto> userPagedResourcesAssembler;
     private final ActiveUserService2 activeUserService;
-    private final UserResponseUserFastDtoMapper userResponseUserFastDtoMapper;
+    private final UserRegisterUserFastDtoMapper userRegisterUserFastDtoMapper;
 
     // http://localhost:8080/edu-imi-ws/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
@@ -211,6 +214,7 @@ public class UserController {
         return ResponseEntity.ok(userResponsePagedModel);
     }
 
+
     @Operation(hidden = true)
     @PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
@@ -236,6 +240,7 @@ public class UserController {
 
         return ResponseEntity.ok(userResponseCollectionModel);
     }
+
 
     @Operation(
             summary = "find All users by username",
@@ -395,6 +400,7 @@ public class UserController {
         return ResponseEntity.ok(returnValue);
     }
 
+
     @Operation(
             summary = "Find user by national Code",
             description = "Search user by the national Code",
@@ -448,13 +454,6 @@ public class UserController {
     }
 
 
-
-
-
-
-
-
-
     @Operation(
             summary = "Generate User Public Id",
             description = "generate public id for new users",
@@ -489,52 +488,48 @@ public class UserController {
                     )
             }
     )
-/*    @PostMapping(
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})*/
-    public ResponseEntity<?> createPersonWebServicePublicId() {
-//omiddo: later make decision about this method
-      /*  OperationStatus returnValue = new OperationStatus();
-        Long personWebserviceCount;
-        Long personLastSequenceNumber;
-        PersonWebServiceEntity personWebServiceLastRecord;
-        List<PersonEntity> newPersons;
-        List<PersonWebServiceEntity> newPersonWebServices;
-        personWebserviceCount = personWebServiceService.personWebServiceCount();
 
-//        newPersonsNotInPersonWebService();
 
-        if (0 != personWebserviceCount) {
-            personLastSequenceNumber = personService.selectPersonLastSequenceNumber();
-            personWebServiceLastRecord = personWebServiceService.selectLastRecord();
-            if(personLastSequenceNumber>personWebServiceLastRecord.getPersonId()){
-                newPersons = personService.
-                    findPersonUserProjectionsByIdGreaterThan(703484L);
-            }else {
-                returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
-                returnValue.setOperationName(RequestOperationName.CREATE_NEW_RECORDS.name());
-                returnValue.setDescription("New Record Not Found.");
-                return ResponseEntity.ok(returnValue);
-            }
+    @PostMapping(path = "/register",
+            consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> createUser(@RequestBody UserRegister userRegister) {
+
+        UserResponse returnValue = new UserResponse();
+        List<PersonEntity> savedPersons = new ArrayList<>();
+        String nationalCode = null;
+        Long userCount;
+
+        if(userRegister.getNationCode().isEmpty()){
+            return this.nationalCodeIsEmpty();
         }else{
-            newPersons = personService.findAllPersonUserProjectionOrderById();
+            nationalCode = userRegister.getNationCode();
         }
 
-        newPersonWebServices = personWebServiceService
-                .generatePersonWebServicePublicId(newPersons);
+        List<PersonEntity> duplicatePersons = personService
+                .findPersonsByNationalCode(nationalCode);
 
-        returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
-        returnValue.setOperationName(RequestOperationName.CREATE_NEW_RECORDS.name());
-        returnValue.setDescription(newPersonWebServices.size() + " New Public Id Generated");
-        return ResponseEntity.ok(returnValue);
-    }
 
-    private ResponseEntity<?> conflictPeriodCount() {
-        return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        , "period count is null or zero")
-                , HttpStatus.INTERNAL_SERVER_ERROR
-        );*/
-      return null;
+        if(duplicatePersons.size()>0){
+            return this.nationalCodeRedundant();
+        }
+
+        UserFastDto userFastDto = userRegisterUserFastDtoMapper
+                .toUserFastDto(userRegister,new CycleAvoidingMappingContext());
+
+        PersonEntity newPerson = personService
+                .savePersonByUserFastDto(userFastDto);
+
+        savedPersons = userService
+                .generateContactPersonPublicIdByPersons(Arrays.asList(newPerson));
+
+        List<UserFastDto> savedUserFastDto = userFastDtoMapper
+                .toUserFastDtos(savedPersons,new CycleAvoidingMappingContext());
+
+        CollectionModel<UserResponse> userResponseCollectionModel =
+                userResponseAssembler.toCollectionModel(savedUserFastDto);
+
+        return ResponseEntity.ok(userResponseCollectionModel);
     }
 
 
@@ -551,6 +546,22 @@ public class UserController {
                 new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
                         , "requested user not found")
                 , HttpStatus.NOT_FOUND
+        );
+    }
+
+    private ResponseEntity<?> nationalCodeIsEmpty() {
+        return new ResponseEntity<>(
+                new ErrorMessage(new Date(), HttpStatus.BAD_REQUEST.toString()
+                        , "national code is null")
+                , HttpStatus.BAD_REQUEST
+        );
+    }
+
+    private ResponseEntity<?> nationalCodeRedundant() {
+        return new ResponseEntity<>(
+                new ErrorMessage(new Date(), HttpStatus.NOT_ACCEPTABLE.toString()
+                        , "national code is redundant")
+                , HttpStatus.BAD_REQUEST
         );
     }
 

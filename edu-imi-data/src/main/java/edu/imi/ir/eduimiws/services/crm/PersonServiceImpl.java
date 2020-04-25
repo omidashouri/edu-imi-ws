@@ -1,8 +1,12 @@
 package edu.imi.ir.eduimiws.services.crm;
 
+import edu.imi.ir.eduimiws.domain.crm.CompanyEntity;
+import edu.imi.ir.eduimiws.domain.crm.LanguageEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonUserProjectionMapper;
+import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
@@ -21,10 +25,11 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class PersonServiceImpl implements PersonService{
+public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
     private final PersonUserProjectionMapper personUserProjectionMapper;
+    private final UserFastDtoMapper userFastDtoMapper;
     private final Utils utils;
 //NU
 /*    @Override
@@ -90,7 +95,7 @@ public class PersonServiceImpl implements PersonService{
     @Override
     public Page<PersonEntity> findAllPersonEntityPagesByUserName(Pageable pageable, String userName) {
         Page<PersonEntity> personPages = personRepository
-                .findAllByUsername(pageable,userName);
+                .findAllByUsername(pageable, userName);
         return personPages;
     }
 
@@ -106,6 +111,29 @@ public class PersonServiceImpl implements PersonService{
         List<PersonEntity> newPersons =
                 personRepository.findAllPersonEntitiesByIdIn(personIds);
         return newPersons;
+    }
+
+    @Override
+    public PersonEntity savePersonByUserFastDto(UserFastDto userFastDto) {
+
+        PersonEntity newPerson = userFastDtoMapper
+                .toPersonEntity(userFastDto, new CycleAvoidingMappingContext());
+
+        if(newPerson.getSelectedLanguage()==null){
+            LanguageEntity language = new LanguageEntity();
+            language.setId(1l);
+            newPerson.setSelectedLanguage(language);
+        }
+
+        if(newPerson.getCompany() == null){
+            CompanyEntity company = new CompanyEntity();
+            company.setId(4l);
+            newPerson.setCompany(company);
+        }
+
+        PersonEntity savedPerson =  personRepository.save(newPerson);
+
+        return savedPerson;
     }
 
 
