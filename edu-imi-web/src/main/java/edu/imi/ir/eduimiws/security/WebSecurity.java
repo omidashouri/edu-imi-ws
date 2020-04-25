@@ -4,6 +4,8 @@ import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,8 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
+@ComponentScans({@ComponentScan("edu.imi.ir.eduimiws.*")})
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
@@ -76,12 +77,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .addFilter(getAuthenticationFilter())
 
                 .addFilter(new AuthorizationFilter(authenticationManager()))
-                .sessionManagement()
+/*                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .maximumSessions(2).sessionRegistry(sessionRegistry())
-                .and().sessionFixation().none();
-/*                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);*/
+                .and().sessionFixation().none();*/
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         httpSecurity.headers().frameOptions().disable();
     }
@@ -103,16 +104,16 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception{
         final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
-        filter.setAllowSessionCreation(true);
-        filter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy());
+/*        filter.setAllowSessionCreation(true);
+        filter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy());*/
         filter.setFilterProcessesUrl("/users/login");
         return filter;
     }
 
-    @Bean
+/*    @Bean
     public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new RegisterSessionAuthenticationStrategy(sessionRegistry());
-    }
+    }*/
 
 /*    public CsrfTokenRepository csrfTokenRepository() {
         return new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository());
