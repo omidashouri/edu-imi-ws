@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -38,6 +37,6 @@ public interface PersonService {
 
     List<PersonEntity> findAllPersonEntitiesByIdIn(List<Long> personIds);
 
-    PersonEntity savePersonByUserFastDto(UserFastDto userFastDto);
+    PersonEntity savePerson(PersonEntity newPerson);
 
 }

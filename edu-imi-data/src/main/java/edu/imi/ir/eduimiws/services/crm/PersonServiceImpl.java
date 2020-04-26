@@ -1,12 +1,10 @@
 package edu.imi.ir.eduimiws.services.crm;
 
-import edu.imi.ir.eduimiws.domain.crm.CompanyEntity;
-import edu.imi.ir.eduimiws.domain.crm.LanguageEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonUserProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
-import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
+import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
@@ -30,6 +28,7 @@ public class PersonServiceImpl implements PersonService {
     private final PersonRepository personRepository;
     private final PersonUserProjectionMapper personUserProjectionMapper;
     private final UserFastDtoMapper userFastDtoMapper;
+    private final UserFastDtoSaveMapper userFastDtoSaveMapper;
     private final Utils utils;
 //NU
 /*    @Override
@@ -114,26 +113,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonEntity savePersonByUserFastDto(UserFastDto userFastDto) {
-
-        PersonEntity newPerson = userFastDtoMapper
-                .toPersonEntity(userFastDto, new CycleAvoidingMappingContext());
-
-        if(newPerson.getSelectedLanguage()==null){
-            LanguageEntity language = new LanguageEntity();
-            language.setId(1l);
-            newPerson.setSelectedLanguage(language);
-        }
-
-        if(newPerson.getCompany() == null){
-            CompanyEntity company = new CompanyEntity();
-            company.setId(4l);
-            newPerson.setCompany(company);
-        }
-
-        PersonEntity savedPerson =  personRepository.save(newPerson);
-
-        return savedPerson;
+    public PersonEntity savePerson(PersonEntity newPerson) {
+        return personRepository.save(newPerson);
     }
 
 

@@ -25,6 +25,8 @@ public interface ContactService {
 
     List<ContactEntity> findCotactsByIds(List<Long> contactIds);
 
+    ContactEntity saveContact(ContactEntity newContact);
+
 }
 
 

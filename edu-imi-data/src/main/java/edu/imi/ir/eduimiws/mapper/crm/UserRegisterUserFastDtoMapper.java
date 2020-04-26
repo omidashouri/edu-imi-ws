@@ -8,13 +8,13 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserRegisterUserFastDtoMapper {
 
     UserRegisterUserFastDtoMapper INSTANCE = Mappers.getMapper(UserRegisterUserFastDtoMapper.class);
 
     @Mappings({
-            @Mapping(source = "username",target = "username"),
+            @Mapping(source = "nationCode",target = "username"),
             @Mapping(source = "password",target = "password"),
             @Mapping(source = "firstName",target = "firstName"),
             @Mapping(source = "lastName",target = "lastName"),
@@ -23,10 +23,8 @@ public interface UserRegisterUserFastDtoMapper {
             @Mapping(source = "address",target = "address"),
             @Mapping(source = "tel",target = "tel")
     })
-    @BeanMapping(ignoreByDefault = true)
     UserFastDto toUserFastDto(UserRegister userRegister, @Context CycleAvoidingMappingContext context);
 
-    @BeanMapping(ignoreByDefault = true)
     @InheritInverseConfiguration
     UserRegister toUserRegister(UserFastDto userFastDto, @Context CycleAvoidingMappingContext context);
 

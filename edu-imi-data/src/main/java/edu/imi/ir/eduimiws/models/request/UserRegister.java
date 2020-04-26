@@ -12,11 +12,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserRegister {
 
-    private String username;
+    private String nationCode;
     private String password;
     private String firstName;
     private String lastName;
-    private String nationCode;
     private String tel;
     private String email;
     private String address;

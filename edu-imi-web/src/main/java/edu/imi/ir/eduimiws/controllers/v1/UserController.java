@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -515,14 +514,14 @@ public class UserController {
 
 
         if(duplicatePersons.size()>0){
-            return this.nationalCodeRedundant();
+//            return this.nationalCodeRedundant();
         }
 
         UserFastDto userFastDto = userRegisterUserFastDtoMapper
                 .toUserFastDto(userRegister,new CycleAvoidingMappingContext());
 
-        PersonEntity newPerson = personService
-                .savePersonByUserFastDto(userFastDto);
+        PersonEntity newPerson = userService
+                .saveUserByUserFastDto(userFastDto);
 
         savedPersons = userService
                 .generateContactPersonPublicIdByPersons(Arrays.asList(newPerson));

@@ -1,12 +1,11 @@
 package edu.imi.ir.eduimiws.services;
 
-import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
-import edu.imi.ir.eduimiws.domain.crm.ContactWebServiceEntity;
-import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceFastDto;
+import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.services.crm.ContactWebServiceService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
@@ -37,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final ContactService contactService;
     private final PersonWebServiceService personWebServiceService;
     private final ContactWebServiceService contactWebServiceService;
+    private final UserFastDtoSaveMapper userFastDtoSaveMapper;
     private final Utils utils;
 
 //    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3NzA0ODg3fQ.kIylwAPr1wk-eynP-wRdFgWefQKDSqEW0hmb1Q7LkKmheU1IYyFpYENeQtq_uGgYdu81uu-2GIsM9fdWcKu0YA
@@ -55,10 +55,52 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public PersonEntity saveUserByUserFastDto(UserFastDto userFastDto) {
+        PersonEntity newPerson = userFastDtoSaveMapper
+                .toPersonForSaveFromUserRegister(userFastDto);
+
+        if(newPerson.getSelectedLanguage()==null){
+            LanguageEntity language = new LanguageEntity();
+            language.setId(1l);
+            newPerson.setSelectedLanguage(language);
+        }
+
+        if(newPerson.getCompany() == null){
+            CompanyEntity company = new CompanyEntity();
+            company.setId(4l);
+            newPerson.setCompany(company);
+        }
+
+        ContactEntity newContact = new ContactEntity();
+        newContact = userFastDtoSaveMapper
+                .toContactForSaveFromUserRegister(userFastDto);
+
+        if(newContact.getAccount()==null){
+            AccountEntity account = new AccountEntity();
+            account.setId(1l);
+            newContact.setAccount(account);
+        }
+
+        if(newContact.getCompany()==null){
+            CompanyEntity company = new CompanyEntity();
+            company.setId(4l);
+            newContact.setCompany(company);
+        }
+
+        ContactEntity savedContact = contactService.saveContact(newContact);
+
+        newPerson.setContact(savedContact);
+        PersonEntity savedPerson =  personService.savePerson(newPerson);
+
+        return savedPerson;
+    }
+
+    @Override
     public List<PersonEntity> generateContactPersonPublicIdByPersons(List<PersonEntity> newPersons) {
 
 
         List<PersonEntity> savedPersons = new ArrayList<>();
+        List<PersonEntity> distinctSavedPerson = new ArrayList<>();
 
         List<Long> personIds = newPersons
                 .stream()
@@ -94,24 +136,30 @@ public class UserServiceImpl implements UserService {
 
         if (!needContactWebPersonWeb.isEmpty() || needContactWebPersonWeb.size() > 0) {
 
-            this.generateContactPublicIdByPersons(needContactWebPersonWeb).addAll(savedPersons);
+            this.generateContactPublicIdByPersons(needContactWebPersonWeb)
+                    .stream().forEachOrdered(savedPersons::add);
 
-            this.generatePersonPublicIdByPersons(needContactWebPersonWeb).addAll(savedPersons);
+            this.generatePersonPublicIdByPersons(needContactWebPersonWeb)
+                    .stream().forEachOrdered(savedPersons::add);
 
-            this.distinctSortPersonsById(savedPersons);
+            distinctSavedPerson = this.distinctSortPersonsById(savedPersons);
         }
 
         if (!needContactWeb.isEmpty() || needContactWeb.size() > 0) {
-            this.generateContactPublicIdByPersons(needContactWeb).addAll(savedPersons);
-            this.distinctSortPersonsById(savedPersons);
+            this.generateContactPublicIdByPersons(needContactWeb)
+                    .stream()
+                    .forEachOrdered(savedPersons::add);
+            distinctSavedPerson = this.distinctSortPersonsById(savedPersons);
         }
 
         if (!needPersonWeb.isEmpty() || needPersonWeb.size() > 0) {
-            this.generatePersonPublicIdByPersons(needPersonWeb).addAll(savedPersons);
-            this.distinctSortPersonsById(savedPersons);
+            this.generatePersonPublicIdByPersons(needPersonWeb)
+                    .stream()
+                    .forEachOrdered(savedPersons::add);
+            distinctSavedPerson = this.distinctSortPersonsById(savedPersons);
         }
 
-        return savedPersons;
+        return distinctSavedPerson;
     }
 
     @Override
@@ -274,11 +322,11 @@ public class UserServiceImpl implements UserService {
         return utils.generateUniquePublicId();
     }
 
-    private void distinctSortPersonsById(List<PersonEntity> persons) {
-        persons
-                .stream()
+    private List<PersonEntity> distinctSortPersonsById(List<PersonEntity> persons) {
+        return  persons.stream()
                 .distinct()
-                .sorted(Comparator.comparing(PersonEntity::getId));
+                .sorted(Comparator.comparing(PersonEntity::getId))
+        .collect(Collectors.toList());
     }
 
 
