@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.services;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceFastDto;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonApiFastDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -11,7 +11,7 @@ public interface UserService extends UserDetailsService {
 
 
 
-    PersonWebServiceFastDto getUserFastDto(String userName);
+    PersonApiFastDto getUserFastDto(String userName);
 
     PersonEntity saveUserByUserFastDto(UserFastDto userFastDto);
 

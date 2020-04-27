@@ -1,20 +1,20 @@
 package edu.imi.ir.eduimiws.services.crm;
 
+import edu.imi.ir.eduimiws.domain.crm.ContactApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
-import edu.imi.ir.eduimiws.domain.crm.ContactWebServiceEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 
 import java.util.List;
 
 public interface ContactWebServiceService {
 //NU
-//    ContactWebServiceEntity saveContactWebServiceEntity(ContactWebServiceEntity contactWebServiceEntity);
+//    ContactApiEntity saveContactWebServiceEntity(ContactApiEntity contactWebServiceEntity);
 
-    ContactWebServiceEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person);
+    ContactApiEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person);
 
-    ContactWebServiceEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact);
+    ContactApiEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact);
 
-    List<ContactWebServiceEntity> saveAllContactWebServices(List<ContactWebServiceEntity> contactWebServices);
+    List<ContactApiEntity> saveAllContactWebServices(List<ContactApiEntity> contactWebServices);
 
-    List<ContactWebServiceEntity> generateContactWebServicePublicId(List<ContactEntity> newContacts);
+    List<ContactApiEntity> generateContactWebServicePublicId(List<ContactEntity> newContacts);
 }

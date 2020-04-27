@@ -1,8 +1,8 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 
+import edu.imi.ir.eduimiws.domain.crm.ContactApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
-import edu.imi.ir.eduimiws.domain.crm.ContactWebServiceEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.repositories.crm.ContactWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
@@ -27,13 +27,13 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
     private final Utils utils;
 //NU
 /*    @Override
-    public ContactWebServiceEntity saveContactWebServiceEntity(ContactWebServiceEntity contactWebServiceEntity) {
+    public ContactApiEntity saveContactWebServiceEntity(ContactApiEntity contactWebServiceEntity) {
         return contactWebServiceRepository.save(contactWebServiceEntity);
     }*/
 
     @Override
-    public ContactWebServiceEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {
-        ContactWebServiceEntity newContactWebService = new ContactWebServiceEntity();
+    public ContactApiEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {
+        ContactApiEntity newContactWebService = new ContactApiEntity();
         newContactWebService.setContactPublicId(publicContactId);
         newContactWebService.setContact(person.getContact());
         newContactWebService.setCreator(person);
@@ -42,32 +42,32 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
     }
 
     @Override
-    public ContactWebServiceEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact) {
+    public ContactApiEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact) {
 //        omiddo:add NamedEntityGraph later for contact
         return contactWebServiceRepository.findByContact(contact);
     }
 
     @Override
-    public List<ContactWebServiceEntity> saveAllContactWebServices(List<ContactWebServiceEntity> contactWebServices) {
-        Iterable<ContactWebServiceEntity> iterableContactWebServices = new ArrayList<>();
-        contactWebServices.sort(Comparator.comparing(ContactWebServiceEntity::getContactId));
+    public List<ContactApiEntity> saveAllContactWebServices(List<ContactApiEntity> contactWebServices) {
+        Iterable<ContactApiEntity> iterableContactWebServices = new ArrayList<>();
+        contactWebServices.sort(Comparator.comparing(ContactApiEntity::getContactId));
         iterableContactWebServices = contactWebServiceRepository
                 .saveAll(contactWebServices);
-        List<ContactWebServiceEntity> newContactWebServices = StreamSupport
+        List<ContactApiEntity> newContactWebServices = StreamSupport
                 .stream(iterableContactWebServices.spliterator(), false)
                 .collect(Collectors.toList());
         return newContactWebServices;
     }
 
     @Override
-    public List<ContactWebServiceEntity> generateContactWebServicePublicId(List<ContactEntity> newContacts) {
-        List<ContactWebServiceEntity> newContactWebServices = new ArrayList<>();
+    public List<ContactApiEntity> generateContactWebServicePublicId(List<ContactEntity> newContacts) {
+        List<ContactApiEntity> newContactWebServices = new ArrayList<>();
 
         newContacts
                 .stream()
                 .filter(Objects::nonNull)
                 .forEach(c -> {
-                            ContactWebServiceEntity newContactWebService = new ContactWebServiceEntity();
+                            ContactApiEntity newContactWebService = new ContactApiEntity();
                             newContactWebService.setContact(c);
                             newContactWebService.setContactId(c.getId());
                             newContactWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
@@ -81,12 +81,12 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
                                 .collect(Collectors.toList());
 
         newContactWebServices
-                .sort(Comparator.comparing(ContactWebServiceEntity::getContactId));
+                .sort(Comparator.comparing(ContactApiEntity::getContactId));
 
-        Iterable<ContactWebServiceEntity> savedIterableContactWebService =
+        Iterable<ContactApiEntity> savedIterableContactWebService =
                 contactWebServiceRepository.saveAll(newContactWebServices);
 
-        List<ContactWebServiceEntity> savedContactWebServices = StreamSupport
+        List<ContactApiEntity> savedContactWebServices = StreamSupport
                 .stream(savedIterableContactWebService.spliterator(), false)
                 .collect(Collectors.toCollection(ArrayList::new));
 

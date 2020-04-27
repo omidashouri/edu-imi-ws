@@ -4,8 +4,8 @@ import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssemblerOld;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
-import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
@@ -484,10 +484,10 @@ public class PeriodController {
 
         OperationStatus returnValue = new OperationStatus();
         Long periodWebserviceCount;
-        PeriodWebServiceEntity periodWebServiceLastRecord;
+        PeriodApiEntity periodWebServiceLastRecord;
         PeriodEntity periodLastRecord;
         List<PeriodEntity> newPeriods = new ArrayList<>();
-        List<PeriodWebServiceEntity> newPeriodWebService = new ArrayList<>();
+        List<PeriodApiEntity> newPeriodWebService = new ArrayList<>();
 
         periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
 

@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
-import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
+import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PeriodWebServiceRepository extends CrudRepository<PeriodWebServiceEntity,Long> {
+public interface PeriodWebServiceRepository extends CrudRepository<PeriodApiEntity,Long> {
 
-    @EntityGraph("PeriodWebServiceEntity.periodWebServiceFastGraph")
-    List<PeriodWebServiceEntity> findAll();
+    @EntityGraph("PeriodApiEntity.periodWebServiceFastGraph")
+    List<PeriodApiEntity> findAll();
 
-    PeriodWebServiceEntity findFirstByOrderByIdDesc();
+    PeriodApiEntity findFirstByOrderByIdDesc();
 
 }

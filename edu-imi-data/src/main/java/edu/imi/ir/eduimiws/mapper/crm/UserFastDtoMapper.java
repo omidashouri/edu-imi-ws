@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-//User is PersonEntity plus PersonWebServiceEntity
+//User is PersonEntity plus PersonApiEntity
 @Mapper
 public interface UserFastDtoMapper {
 
@@ -24,20 +24,20 @@ public interface UserFastDtoMapper {
 
 
     @Mappings({
-            @Mapping(source = "personPublicId", target = "personWebServiceEntity.personPublicId"),
-            @Mapping(source = "description", target = "personWebServiceEntity.description"),
+            @Mapping(source = "personPublicId", target = "personApiEntity.personPublicId"),
+            @Mapping(source = "description", target = "personApiEntity.description"),
             @Mapping(source = "email", target = "email"),
             @Mapping(source = "emailProcessType", target = "emailProcessType"),
-            @Mapping(source = "emailVerificationStatus", target = "personWebServiceEntity.emailVerificationStatus"),
-            @Mapping(source = "emailVerificationToken", target = "personWebServiceEntity.emailVerificationToken"),
-            @Mapping(source = "encryptedPassword", target = "personWebServiceEntity.encryptedPassword"),
+            @Mapping(source = "emailVerificationStatus", target = "personApiEntity.emailVerificationStatus"),
+            @Mapping(source = "emailVerificationToken", target = "personApiEntity.emailVerificationToken"),
+            @Mapping(source = "encryptedPassword", target = "personApiEntity.encryptedPassword"),
             @Mapping(source = "firstName", target = "firstName"),
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "kind", target = "kind"),
             @Mapping(source = "lastlogindate", target = "lastlogindate"),
             @Mapping(source = "lastName", target = "lastName"),
             @Mapping(source = "limitationNumber", target = "limitationNumber"),
-            @Mapping(source = "mobileVerificationStatus", target = "personWebServiceEntity.mobileVerificationStatus"),
+            @Mapping(source = "mobileVerificationStatus", target = "personApiEntity.mobileVerificationStatus"),
             @Mapping(source = "noeEstekhdam", target = "noeEstekhdam"),
             @Mapping(source = "password", target = "password"),
             @Mapping(source = "personalCode", target = "personalCode"),

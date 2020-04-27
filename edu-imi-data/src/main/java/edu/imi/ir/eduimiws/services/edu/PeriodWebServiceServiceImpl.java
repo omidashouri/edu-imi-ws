@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.services.edu;
 
+import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
-import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodWebServiceRepository;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +31,12 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
     }
 
     @Override
-    public List<PeriodWebServiceEntity> generatePeriodWebServicePublicId(List<PeriodEntity> newPeriodEntities) {
+    public List<PeriodApiEntity> generatePeriodWebServicePublicId(List<PeriodEntity> newPeriodEntities) {
 
-        List<PeriodWebServiceEntity> newPeriodWebServiceEntities = new ArrayList<>();
+        List<PeriodApiEntity> newPeriodWebServiceEntities = new ArrayList<>();
 
         newPeriodEntities.forEach(p -> {
-            PeriodWebServiceEntity newPeriodWebService = new PeriodWebServiceEntity();
+            PeriodApiEntity newPeriodWebService = new PeriodApiEntity();
             newPeriodWebService.setPeriod(p);
             newPeriodWebService.setPeriodId(p.getId());
             newPeriodWebService.setPeriodPublicId(this.generatePeriodWebServicePublicId());
@@ -53,7 +53,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
             newPeriodWebServiceEntities.add(newPeriodWebService);
         });
 
-        newPeriodWebServiceEntities.sort(Comparator.comparing(PeriodWebServiceEntity::getPeriodId));
+        newPeriodWebServiceEntities.sort(Comparator.comparing(PeriodApiEntity::getPeriodId));
 
         periodWebServiceRepository.saveAll(newPeriodWebServiceEntities);
 
@@ -61,7 +61,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
     }
 
     @Override
-    public PeriodWebServiceEntity selectLastRecord() {
+    public PeriodApiEntity selectLastRecord() {
         return periodWebServiceRepository.findFirstByOrderByIdDesc();
     }
 

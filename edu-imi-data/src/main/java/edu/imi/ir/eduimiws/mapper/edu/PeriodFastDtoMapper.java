@@ -15,7 +15,7 @@ public interface PeriodFastDtoMapper {
     PeriodFastDtoMapper INSTANCE = Mappers.getMapper(PeriodFastDtoMapper.class);
 
     @Mappings({
-            @Mapping(source = "periodWebService.periodPublicId", target = "periodPublicId"),
+            @Mapping(source = "periodApi.periodPublicId", target = "periodPublicId"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "canRegisterOnline", target = "canRegisterOnline"),
             @Mapping(source = "editDate", target = "editDate"),
@@ -23,7 +23,7 @@ public interface PeriodFastDtoMapper {
             @Mapping(source = "createDate", target = "createDate"),
             @Mapping(source = "deleteStatus", target = "deleteStatus"),
             @Mapping(source = "endDate", target = "endDate"),
-            @Mapping(source = "executer.personWebServiceEntity.personPublicId", target = "executorPublicId"),
+            @Mapping(source = "executer.personApiEntity.personPublicId", target = "executorPublicId"),
             @Mapping(source = "fee", target = "fee"),
             @Mapping(source = "holdingLanguage", target = "holdingLanguage"),
             @Mapping(source = "maxCapacity", target = "maxCapacity"),

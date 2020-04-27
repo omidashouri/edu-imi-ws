@@ -1,8 +1,8 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceFastDto;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonApiFastDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -27,9 +27,9 @@ public interface PersonWebServiceFastDtoMapper {
             @Mapping(source = "emailVerificationToken",target = "emailVerificationToken"),
             @Mapping(source = "mobileVerificationStatus",target = "mobileVerificationStatus")
     })
-    PersonWebServiceFastDto PersonWebServiceEntityToPersonWebServiceFastDto(PersonWebServiceEntity personWebServiceEntity, @Context CycleAvoidingMappingContext context);
+    PersonApiFastDto PersonWebServiceEntityToPersonWebServiceFastDto(PersonApiEntity personApiEntity, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PersonWebServiceEntity PersonWebServiceFastDtoToPersonWebServiceEntity(PersonWebServiceFastDto userLoginMinimalDto, @Context CycleAvoidingMappingContext context);
+    PersonApiEntity PersonWebServiceFastDtoToPersonWebServiceEntity(PersonApiFastDto userLoginMinimalDto, @Context CycleAvoidingMappingContext context);
 
 }

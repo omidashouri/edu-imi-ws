@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonWebServiceIdProjection;
 import org.mapstruct.Context;
@@ -21,8 +21,8 @@ public interface PersonWebServiceIdProjectionMapper {
             @Mapping(source = "personId",target = "personId"),
             @Mapping(source = "contactId",target = "contactId")
     })
-    PersonWebServiceEntity toPersonWebServiceEntity(PersonWebServiceIdProjection personWebServiceIdProjection, @Context CycleAvoidingMappingContext context);
+    PersonApiEntity toPersonWebServiceEntity(PersonWebServiceIdProjection personWebServiceIdProjection, @Context CycleAvoidingMappingContext context);
 
-    List<PersonWebServiceEntity> toPersonWebServiceEntitys(List<PersonWebServiceIdProjection> personWebServiceIdProjections, @Context CycleAvoidingMappingContext context);
+    List<PersonApiEntity> toPersonWebServiceEntitys(List<PersonWebServiceIdProjection> personWebServiceIdProjections, @Context CycleAvoidingMappingContext context);
 
 }

@@ -1,8 +1,8 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceDto;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonApiDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserLoginDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -18,9 +18,9 @@ public interface PersonWebServiceUserLoginDtoMapper {
             @Mapping(source = "userName",target = "username"),
             @Mapping(source = "encryptedPassword",target = "encryptedPassword")
     })
-    UserLoginDto PersonWebServiceEntityToUserLoginDto(PersonWebServiceEntity personWebServiceEntity, @Context CycleAvoidingMappingContext context);
+    UserLoginDto PersonWebServiceEntityToUserLoginDto(PersonApiEntity personApiEntity, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PersonWebServiceDto UserLoginDtoToPersonWebServiceEntity(UserLoginDto userLoginDto, @Context CycleAvoidingMappingContext context);
+    PersonApiDto UserLoginDtoToPersonWebServiceEntity(UserLoginDto userLoginDto, @Context CycleAvoidingMappingContext context);
 
 }

@@ -38,6 +38,6 @@ public interface UserFastDtoSaveMapper {
     ContactEntity toContactForSaveFromUserRegister(UserFastDto userFastDto);
 
 /*    @BeanMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-    void toPersonWebServiceEntity(UserFastDto userFastDto, @MappingTarget PersonWebServiceEntity personWebService);*/
+    void toPersonWebServiceEntity(UserFastDto userFastDto, @MappingTarget PersonApiEntity personWebService);*/
 
 }

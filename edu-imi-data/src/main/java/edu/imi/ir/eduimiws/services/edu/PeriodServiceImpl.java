@@ -45,7 +45,7 @@ public class PeriodServiceImpl implements PeriodService {
     @Override
     public PeriodEntity findPeriodEntityByPeriodWebServicePublicId(String periodPublicId) {
 
-        PeriodEntity period = periodRepository.findByPeriodWebService_PeriodPublicId(periodPublicId);
+        PeriodEntity period = periodRepository.findByPeriodApi_PeriodPublicId(periodPublicId);
         return period;
     }
 
@@ -66,7 +66,7 @@ public class PeriodServiceImpl implements PeriodService {
     @Override
     public Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNull() {
         Iterable<PeriodEntity> periodEntities =
-                periodRepository.findAllByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonWebServiceEntityIsNull();
+                periodRepository.findAllByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntityIsNull();
         return periodEntities;
     }
 
@@ -74,7 +74,7 @@ public class PeriodServiceImpl implements PeriodService {
     public Page<PeriodEntity> findAllPageableByExecutorPublicId(Pageable pageable,String executorPublicId) {
         Page<PeriodEntity> pageablePeriods =
                 periodRepository
-                        .findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonWebServiceEntity_PersonPublicId
+                        .findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntity_PersonPublicId
                                 (pageable,executorPublicId);
         return pageablePeriods;
     }

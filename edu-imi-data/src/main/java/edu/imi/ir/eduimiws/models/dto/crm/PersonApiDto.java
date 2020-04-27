@@ -1,7 +1,5 @@
 package edu.imi.ir.eduimiws.models.dto.crm;
 
-import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +9,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonWebServiceDto implements Serializable {
+public class PersonApiDto implements Serializable {
 
     private static final long serialVersionUID = 3509814162285417174L;
 

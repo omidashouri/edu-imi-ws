@@ -19,8 +19,8 @@ import java.util.List;
               subgraphs = {
                       @NamedSubgraph(name = "persons-subGraph",
                               attributeNodes = {
-                                      @NamedAttributeNode(value = "personWebServiceEntity")
-                              },type = PersonWebServiceEntity.class
+                                      @NamedAttributeNode(value = "personApiEntity")
+                              },type = PersonApiEntity.class
                       )
               }
       ),
@@ -31,8 +31,8 @@ import java.util.List;
         subgraphs = {
                 @NamedSubgraph(name = "persons-subGraph",
                         attributeNodes = {
-                                @NamedAttributeNode(value = "personWebServiceEntity")
-                        },type = PersonWebServiceEntity.class
+                                @NamedAttributeNode(value = "personApiEntity")
+                        },type = PersonApiEntity.class
                 )
         }
     )
@@ -385,7 +385,7 @@ public class ContactEntity extends BaseEntity {
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @OneToOne(mappedBy="contact",fetch = FetchType.LAZY)
-  private ContactWebServiceEntity contactWebService;
+  private ContactApiEntity contactWebService;
 
   public void addPerson(PersonEntity person){
       if(null != person){

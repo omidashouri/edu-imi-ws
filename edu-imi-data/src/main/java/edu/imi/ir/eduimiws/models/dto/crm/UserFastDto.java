@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.models.dto.crm;
 
 import lombok.*;
 
-//User is PersonEntity plus PersonWebServiceEntity
+//User is PersonEntity plus PersonApiEntity
 @Data
 @Getter
 @Setter

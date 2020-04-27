@@ -64,7 +64,7 @@ public interface PeriodMapper {
             @Mapping(source = "allowTerm", target = "allowTerm"),
             @Mapping(source = "city", target = "city"),
             @Mapping(source = "variableCertificateName", target = "variableCertificateName"),
-            @Mapping(source = "periodWebService", target = "periodWebService")
+            @Mapping(source = "periodApi", target = "periodApi")
 
     })
     PeriodEntity PeriodDtoToPeriodEntity(PeriodDto periodDto, @Context CycleAvoidingMappingContext context);

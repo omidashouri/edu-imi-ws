@@ -24,7 +24,7 @@ import javax.persistence.*;
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_CONTACT_WEB_SERVICE_ID",allocationSize = 1)
 @Table(schema = "CRM",name = "TBL_CONTACT_WEB_SERVICE")
-public class ContactWebServiceEntity extends BaseEntity {
+public class ContactApiEntity extends BaseEntity {
 
   @Column(name="CONTACT_PUBLIC_ID")
   private String contactPublicId;

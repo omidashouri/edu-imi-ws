@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.crm.UserContactResponseDto;
 import org.mapstruct.*;
@@ -36,10 +36,10 @@ public interface PersonWebServiceContactFastDtoMapper {
             @Mapping(source = "contact.lfatherName",target = "lfatherName"),
             @Mapping(source = "contact.lfromCity",target = "lfromCity")
     })
-    UserContactResponseDto PersonWebServiceEntityToContactFastDto(PersonWebServiceEntity personWebServiceEntity, @Context CycleAvoidingMappingContext context);
+    UserContactResponseDto PersonWebServiceEntityToContactFastDto(PersonApiEntity personApiEntity, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PersonWebServiceEntity ContactFastDtoToPersonWebServiceEntity(UserContactResponseDto userContactDto, @Context CycleAvoidingMappingContext context);
+    PersonApiEntity ContactFastDtoToPersonWebServiceEntity(UserContactResponseDto userContactDto, @Context CycleAvoidingMappingContext context);
 
 
     public abstract List<PersonWebServiceContactFastDtoMapper> toTransactionDTO(

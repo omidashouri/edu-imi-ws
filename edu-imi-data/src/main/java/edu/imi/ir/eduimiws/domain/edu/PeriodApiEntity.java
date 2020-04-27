@@ -8,13 +8,13 @@ import javax.persistence.*;
 
 
 @NamedEntityGraphs({
-    @NamedEntityGraph(name = "PeriodWebServiceEntity.periodWebServiceFastGraph", attributeNodes = {
+    @NamedEntityGraph(name = "PeriodApiEntity.periodWebServiceFastGraph", attributeNodes = {
             @NamedAttributeNode("periodId"),
             @NamedAttributeNode("periodPublicId"),
             @NamedAttributeNode("canRegisterOnline"),
             @NamedAttributeNode("periodEditDate"),
             @NamedAttributeNode("deleteTs")}),
-    @NamedEntityGraph(name = "PeriodWebServiceEntity.periodWebServicePeriodFastGraph", attributeNodes = {
+    @NamedEntityGraph(name = "PeriodApiEntity.periodWebServicePeriodFastGraph", attributeNodes = {
             @NamedAttributeNode("periodPublicId"),
             @NamedAttributeNode("deleteTs"),
             @NamedAttributeNode(value = "period", subgraph = "period-subgraph")
@@ -39,7 +39,7 @@ import javax.persistence.*;
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "EDU",sequenceName = "SEQ_PERIOD_WEB_SERVICE",allocationSize = 1)
 @Table(schema = "EDU",name="TBL_PERIOD_WEB_SERVICE")
-public class PeriodWebServiceEntity extends BaseEntity {
+public class PeriodApiEntity extends BaseEntity {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonWebServiceFastDto implements Serializable {
+public class PersonApiFastDto implements Serializable {
 
     private static final long serialVersionUID = 6161377157056013811L;
 

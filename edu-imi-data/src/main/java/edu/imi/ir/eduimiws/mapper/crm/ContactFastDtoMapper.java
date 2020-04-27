@@ -101,8 +101,8 @@ public interface ContactFastDtoMapper {
             contactEntity.setPersons(null);
         }
         if(contactEntity.getPersons()!=null) {
-            if (contactEntity.getPersons().iterator().next().getPersonWebServiceEntity() != null) {
-                contactFastDto.setPersonPublicId(contactEntity.getPersons().iterator().next().getPersonWebServiceEntity().getPersonPublicId());
+            if (contactEntity.getPersons().iterator().next().getPersonApiEntity() != null) {
+                contactFastDto.setPersonPublicId(contactEntity.getPersons().iterator().next().getPersonApiEntity().getPersonPublicId());
             }
         }
     }

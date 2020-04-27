@@ -37,7 +37,7 @@ public class PeriodResponseAssemblerOld extends RepresentationModelAssemblerSupp
                 .add(linkTo(
                         methodOn(
                                 PeriodController.class)
-                                .getPeriodByPeriodPublicId(period.getPeriodWebService().getPeriodPublicId()))
+                                .getPeriodByPeriodPublicId(period.getPeriodApi().getPeriodPublicId()))
                         .withSelfRel());
 
         if (!Hibernate.isInitialized(period.getExecuter())) {
@@ -45,14 +45,14 @@ public class PeriodResponseAssemblerOld extends RepresentationModelAssemblerSupp
         }
 
         if (period.getExecuter() != null) {
-            if (!Hibernate.isInitialized(period.getExecuter().getPersonWebServiceEntity())) {
-                period.getExecuter().setPersonWebServiceEntity(null);
+            if (!Hibernate.isInitialized(period.getExecuter().getPersonApiEntity())) {
+                period.getExecuter().setPersonApiEntity(null);
             } else {
                 periodResponse.
                         add(linkTo(
                                 methodOn(
                                         UserController.class)
-                                        .getUserByUserPublicId(period.getExecuter().getPersonWebServiceEntity().getPersonPublicId()))
+                                        .getUserByUserPublicId(period.getExecuter().getPersonApiEntity().getPersonPublicId()))
                                 .withRel("executors"));
             }
         }

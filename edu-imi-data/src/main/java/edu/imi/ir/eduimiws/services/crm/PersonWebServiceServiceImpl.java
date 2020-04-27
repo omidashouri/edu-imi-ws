@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.services.crm;
 
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceIdProjectionMapper;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonWebServiceIdProjection;
@@ -35,27 +35,27 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
 
 
     @Override
-    public List<PersonWebServiceEntity> findAllListByPageAndSize(int page, int size) {
+    public List<PersonApiEntity> findAllListByPageAndSize(int page, int size) {
 
         if (page > 0) {
             page--;
         }
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<PersonWebServiceEntity> pagedResult = personWebServiceRepository.findAll(pageable);
+        Page<PersonApiEntity> pagedResult = personWebServiceRepository.findAll(pageable);
 
         if (pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {
-            return new ArrayList<PersonWebServiceEntity>();
+            return new ArrayList<PersonApiEntity>();
         }
     }
 //NU
 /*    @Override
-    public Page<PersonWebServiceEntity> findAllPageByPageAndSize(int page, int size) {
+    public Page<PersonApiEntity> findAllPageByPageAndSize(int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
 
-        Page<PersonWebServiceEntity> pagedResult = personWebServiceRepository.findAll(pageable);
+        Page<PersonApiEntity> pagedResult = personWebServiceRepository.findAll(pageable);
 
         if(pagedResult.hasContent()) {
             return pagedResult;
@@ -65,26 +65,26 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
     }*/
 
     @Override
-    public PersonWebServiceEntity findByPersonId(Long personId) {
+    public PersonApiEntity findByPersonId(Long personId) {
 
-        PersonWebServiceEntity personWebServiceEntity = personWebServiceRepository.findByPersonId(personId);
-        return personWebServiceEntity;
+        PersonApiEntity personApiEntity = personWebServiceRepository.findByPersonId(personId);
+        return personApiEntity;
     }
 //NU
 /*    @Override
-    public PersonWebServiceEntity findByPersonEntity(PersonEntity personEntity) {
+    public PersonApiEntity findByPersonEntity(PersonEntity personEntity) {
         return  this.findByPersonId(personEntity.getId());
     }*/
 
     @Override
-    public PersonWebServiceEntity findByUserNameFast(String userName) {
-        PersonWebServiceEntity personWebServiceEntity = personWebServiceRepository.findByUserName(userName);
-        return personWebServiceEntity;
+    public PersonApiEntity findByUserNameFast(String userName) {
+        PersonApiEntity personApiEntity = personWebServiceRepository.findByUserName(userName);
+        return personApiEntity;
     }
 
     @Override
-    public PersonWebServiceEntity findPersonWebServiceEntityByUserPublicId(String userPublicId) {
-        PersonWebServiceEntity userWS = personWebServiceRepository.findByPersonPublicId(userPublicId);
+    public PersonApiEntity findPersonWebServiceEntityByUserPublicId(String userPublicId) {
+        PersonApiEntity userWS = personWebServiceRepository.findByPersonPublicId(userPublicId);
         if (null == userWS) {
             throw new UsernameNotFoundException("user can not found for " + userPublicId);
         }
@@ -93,13 +93,13 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
     }
 
     @Override
-    public PersonWebServiceEntity savePersonWebServiceEntity(PersonWebServiceEntity personWebServiceEntity) {
-        return personWebServiceRepository.save(personWebServiceEntity);
+    public PersonApiEntity savePersonWebServiceEntity(PersonApiEntity personApiEntity) {
+        return personWebServiceRepository.save(personApiEntity);
     }
 
     @Override
-    public PersonWebServiceEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity) {
-        PersonWebServiceEntity newPersonWebService = new PersonWebServiceEntity();
+    public PersonApiEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity) {
+        PersonApiEntity newPersonWebService = new PersonApiEntity();
         newPersonWebService.setContactId(personEntity.getContactId());
         newPersonWebService.setContact(personEntity.getContact());
         newPersonWebService.setContactPublicId(publicContactId);
@@ -113,12 +113,12 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
     }
 
     @Override
-    public List<PersonWebServiceEntity> findAllPersonWebServiceIdProjection() {
+    public List<PersonApiEntity> findAllPersonWebServiceIdProjection() {
 
         List<PersonWebServiceIdProjection> personWebServiceIdProjections =
                 personWebServiceRepository.findAllPersonWebServiceIdProjection();
 
-        List<PersonWebServiceEntity> personWebServiceEntities =
+        List<PersonApiEntity> personWebServiceEntities =
                 personWebServiceIdProjectionMapper
                         .toPersonWebServiceEntitys(personWebServiceIdProjections,
                                 new CycleAvoidingMappingContext());
@@ -131,19 +131,19 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
     }
 
     @Override
-    public PersonWebServiceEntity selectLastRecord() {
+    public PersonApiEntity selectLastRecord() {
         return personWebServiceRepository.findFirstByOrderByIdDesc();
     }
 
     @Override
-    public List<PersonWebServiceEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons) {
-        List<PersonWebServiceEntity> newPersonWebServices = new ArrayList<>();
+    public List<PersonApiEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons) {
+        List<PersonApiEntity> newPersonWebServices = new ArrayList<>();
 
         newPersons
                 .stream()
                 .filter(Objects::nonNull)
                 .forEach(p->{
-                    PersonWebServiceEntity newPersonWebService = new PersonWebServiceEntity();
+                    PersonApiEntity newPersonWebService = new PersonApiEntity();
                     newPersonWebService.setPerson(p);
                     newPersonWebService.setPersonId(p.getId());
                     if(p.getUsername() != null){
@@ -164,21 +164,21 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
                             newPersonWebService.setContactPublicId(p.getContact().getContactWebService().getContactPublicId());
                         }
                     }
-                    p.setPersonWebServiceEntity(newPersonWebService);
+                    p.setPersonApiEntity(newPersonWebService);
         });
 
         newPersonWebServices = newPersons
                 .stream()
-                .map(PersonEntity::getPersonWebServiceEntity)
+                .map(PersonEntity::getPersonApiEntity)
                 .collect(Collectors.toList());
 
         newPersonWebServices
-                .sort(Comparator.comparing(PersonWebServiceEntity::getPersonId));
+                .sort(Comparator.comparing(PersonApiEntity::getPersonId));
 
-        Iterable<PersonWebServiceEntity> savedIterablePersonWebService =
+        Iterable<PersonApiEntity> savedIterablePersonWebService =
                     personWebServiceRepository.saveAll(newPersonWebServices);
 
-        List<PersonWebServiceEntity> savedPersonWebServices = StreamSupport
+        List<PersonApiEntity> savedPersonWebServices = StreamSupport
                                     .stream(savedIterablePersonWebService.spliterator(),false)
                                     .collect(Collectors.toCollection(ArrayList::new));
 

@@ -14,15 +14,15 @@ import javax.persistence.*;
         @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService",
                 attributeNodes = {
                 @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
-                @NamedAttributeNode("periodWebService")
+                @NamedAttributeNode("periodApi")
                 },
                 subgraphs = {
                     @NamedSubgraph(
                             name = "executer-subGraph",
                             attributeNodes = {
-                                    @NamedAttributeNode(value = "personWebServiceEntity")
+                                    @NamedAttributeNode(value = "personApiEntity")
                             },
-                            type = PersonWebServiceEntity.class)
+                            type = PersonApiEntity.class)
                 }
         )
 })
@@ -57,7 +57,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@NamedEntityGraph(name = "PeriodEntity.periodWebServiceEntity", attributeNodes = @NamedAttributeNode("periodWebService"))
+@NamedEntityGraph(name = "PeriodEntity.periodWebServiceEntity", attributeNodes = @NamedAttributeNode("periodApi"))
 //@NamedEntityGraph(name = "PeriodEntity.creator", attributeNodes = @NamedAttributeNode("creator"))
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "EDU", sequenceName = "SEQ_EDU_PERIOD", allocationSize = 1)
@@ -253,6 +253,6 @@ public class PeriodEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToOne(mappedBy = "period", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private PeriodWebServiceEntity periodWebService;
+    private PeriodApiEntity periodApi;
 
 }

@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 
 import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.domain.edu.FieldEntity;
-import edu.imi.ir.eduimiws.domain.edu.PeriodWebServiceEntity;
+import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import lombok.*;
 
 import java.io.Serializable;
@@ -118,7 +118,7 @@ public class PeriodDto implements Serializable {
 
     private String variableCertificateName;
 
-    private PeriodWebServiceEntity periodWebService;
+    private PeriodApiEntity periodApi;
 
 
 }

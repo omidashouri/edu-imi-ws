@@ -80,7 +80,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonEntity findPersonEntityByPersonWebServicePublicId(String personPublicId) {
         PersonEntity person = personRepository
-                .findByPersonWebServiceEntity_PersonPublicId(personPublicId);
+                .findByPersonApiEntity_PersonPublicId(personPublicId);
         return person;
     }
 

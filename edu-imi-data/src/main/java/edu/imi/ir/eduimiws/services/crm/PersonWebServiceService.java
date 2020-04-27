@@ -1,35 +1,35 @@
 package edu.imi.ir.eduimiws.services.crm;
 
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
 
 import java.util.List;
 
 public interface PersonWebServiceService  {
 //NU
-//    PersonWebServiceEntity findByPersonEntity(PersonEntity personEntity);
+//    PersonApiEntity findByPersonEntity(PersonEntity personEntity);
 //NU
-//    Page<PersonWebServiceEntity> findAllPageByPageAndSize(int page,int size);
+//    Page<PersonApiEntity> findAllPageByPageAndSize(int page,int size);
 
-    List<PersonWebServiceEntity> findAllListByPageAndSize(int page,int size);
-
-//    NU
-    PersonWebServiceEntity findByPersonId(Long personId);
-
-    PersonWebServiceEntity findByUserNameFast(String userName);
-
-    PersonWebServiceEntity findPersonWebServiceEntityByUserPublicId(String userPublicId);
-
-    PersonWebServiceEntity savePersonWebServiceEntity(PersonWebServiceEntity personWebServiceEntity);
-
-    PersonWebServiceEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity);
+    List<PersonApiEntity> findAllListByPageAndSize(int page, int size);
 
 //    NU
-    List<PersonWebServiceEntity> findAllPersonWebServiceIdProjection();
+    PersonApiEntity findByPersonId(Long personId);
+
+    PersonApiEntity findByUserNameFast(String userName);
+
+    PersonApiEntity findPersonWebServiceEntityByUserPublicId(String userPublicId);
+
+    PersonApiEntity savePersonWebServiceEntity(PersonApiEntity personApiEntity);
+
+    PersonApiEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity);
+
+//    NU
+    List<PersonApiEntity> findAllPersonWebServiceIdProjection();
 
     Long personWebServiceCount();
 
-    PersonWebServiceEntity selectLastRecord();
+    PersonApiEntity selectLastRecord();
 
-    List<PersonWebServiceEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons);
+    List<PersonApiEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons);
 }

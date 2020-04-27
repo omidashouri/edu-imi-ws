@@ -20,16 +20,16 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     List<PeriodOnly> findBy();
 
     @Query(value = "select p from PeriodEntity p " +
-            " left join fetch p.executer ex left join fetch ex.personWebServiceEntity pw " +
+            " left join fetch p.executer ex left join fetch ex.personApiEntity pw " +
             " where p.deleteStatus = 1L ",
             countQuery = "select count(p) from PeriodEntity p " +
-                    " left join p.executer ex left join ex.personWebServiceEntity pw " +
+                    " left join p.executer ex left join ex.personApiEntity pw " +
                     " where p.deleteStatus = 1L "
     )
     Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
-    PeriodEntity findByPeriodWebService_PeriodPublicId(String periodPublicId);
+    PeriodEntity findByPeriodApi_PeriodPublicId(String periodPublicId);
 
     @Query(name = "PeriodEntity.selectAllPeriodOnly", nativeQuery = true)
     @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
@@ -42,11 +42,11 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     PeriodEntity findFirstByOrderByIdDesc();
 
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
-    Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonWebServiceEntityIsNull();
+    Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntityIsNull();
 
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
     Page<PeriodEntity>
-    findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonWebServiceEntity_PersonPublicId
+    findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntity_PersonPublicId
             (Pageable pageable, String executorPublicId);
 
 }

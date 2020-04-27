@@ -24,13 +24,13 @@ import javax.persistence.*;
         @NamedEntityGraph(name = "PersonEntity.findPersonSubGraphContactContactWebService",
                 attributeNodes = {
                         @NamedAttributeNode(value = "contact",subgraph = "contact-subGraph"),
-                        @NamedAttributeNode(value = "personWebServiceEntity")
+                        @NamedAttributeNode(value = "personApiEntity")
                 },
                 subgraphs = {
                         @NamedSubgraph(name = "contact-subGraph",
                                 attributeNodes = {
                                         @NamedAttributeNode(value = "contactWebService")
-                                },type = ContactWebServiceEntity.class
+                                },type = ContactApiEntity.class
                         )
                 }
         )
@@ -226,5 +226,5 @@ public class PersonEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToOne(mappedBy="person",fetch = FetchType.LAZY)
-    private PersonWebServiceEntity personWebServiceEntity;
+    private PersonApiEntity personApiEntity;
 }

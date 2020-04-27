@@ -1,8 +1,8 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
-import edu.imi.ir.eduimiws.domain.crm.PersonWebServiceEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonWebServiceDto;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonApiDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -32,8 +32,8 @@ public interface PersonWebServiceMapper {
            @Mapping(source = "editDateTs",target = "editDateTs"),
            @Mapping(source = "description",target = "description")
     })
-    PersonWebServiceEntity PersonWebServiceDtoToPersonWebServiceEntity(PersonWebServiceDto personWebServiceDto, @Context CycleAvoidingMappingContext context);
+    PersonApiEntity PersonWebServiceDtoToPersonWebServiceEntity(PersonApiDto personApiDto, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
-    PersonWebServiceDto PersonWebServiceEntityToPersonWebServiceDto (PersonWebServiceEntity personWebServiceEntity, @Context CycleAvoidingMappingContext context);
+    PersonApiDto PersonWebServiceEntityToPersonWebServiceDto (PersonApiEntity personApiEntity, @Context CycleAvoidingMappingContext context);
 }

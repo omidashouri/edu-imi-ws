@@ -570,7 +570,7 @@ public class UserController {
 
     private List<PersonEntity> newPersonsNotInPersonWebService(){
     /*    List<PersonEntity> persons;
-        List<PersonWebServiceEntity> personWebServices;
+        List<PersonApiEntity> personWebServices;
         List<PersonEntity> newPersons = new ArrayList<>();
 
         personWebServices = personWebServiceService.findAllPersonWebServiceIdProjection();
@@ -587,7 +587,7 @@ public class UserController {
                 .filter(
                         personWebServices
                                 .stream()
-                                .map(PersonWebServiceEntity::getPersonId)
+                                .map(PersonApiEntity::getPersonId)
                                 .collect(Collectors.toSet())
                 ::contains);
 
@@ -598,7 +598,7 @@ public class UserController {
                 .removeAll(
                         personWebServices
                                 .stream()
-                                .map(PersonWebServiceEntity::getPersonId)
+                                .map(PersonApiEntity::getPersonId)
                                 .collect(Collectors.toSet()));
 
         persons.size();
@@ -647,7 +647,7 @@ public class UserController {
 
         List<UserContactResponse> userContactResponses;
 
-        List<PersonWebServiceEntity> users =
+        List<PersonApiEntity> users =
                 personWebServiceService
                         .findAllListByPageAndSize(pageValue, limitValue);
 

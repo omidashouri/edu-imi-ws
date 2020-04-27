@@ -31,7 +31,7 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     Long selectLastSequenceNumber();
 
     @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
-    PersonEntity findByPersonWebServiceEntity_PersonPublicId(String personPublicId);
+    PersonEntity findByPersonApiEntity_PersonPublicId(String personPublicId);
 
     Page<PersonEntity> findAll(Pageable pageable);
 

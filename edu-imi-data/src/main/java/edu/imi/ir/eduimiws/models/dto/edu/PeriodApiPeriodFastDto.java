@@ -4,25 +4,18 @@ import lombok.*;
 
 import java.io.Serializable;
 
-
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PeriodWebServiceDto implements Serializable {
+public class PeriodApiPeriodFastDto implements Serializable {
 
-    private static final long serialVersionUID = -3440156297947149924L;
+    private static final long serialVersionUID = 5815734885605837343L;
 
-    private Long Id;
-
-    private Long PeriodId;
-
-    private PeriodDto periodDto;
+    private PeriodFastDto periodFastDto;
 
     private String periodPublicId;
-
-    private String periodEditDate;
 
     private String description;
 

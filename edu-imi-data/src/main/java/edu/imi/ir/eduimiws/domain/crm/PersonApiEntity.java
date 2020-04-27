@@ -45,7 +45,7 @@ import javax.persistence.*;
   )
 )
 @NamedNativeQueries({
-  @NamedNativeQuery(name = "PersonWebServiceEntity.findAllPersonWebServiceIdProjection",
+  @NamedNativeQuery(name = "PersonApiEntity.findAllPersonWebServiceIdProjection",
           query = " select pws.ID as idR, pws.CONTACT_ID as personIdR, pws.CONTACT_ID as contactIdR " +
                   " from CRM.TBL_PERSON_WEB_SERVICE pws ",
           resultSetMapping = "personWebServiceIdProjection"
@@ -60,7 +60,7 @@ import javax.persistence.*;
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_PERSON_WEB_SERVICE_ID",allocationSize = 1)
 @Table(schema = "CRM",name = "TBL_PERSON_WEB_SERVICE")
-public class PersonWebServiceEntity extends BaseEntity {
+public class PersonApiEntity extends BaseEntity {
 
 
   @EqualsAndHashCode.Exclude
