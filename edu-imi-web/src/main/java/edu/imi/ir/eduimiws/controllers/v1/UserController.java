@@ -514,7 +514,7 @@ public class UserController {
 
 
         if(duplicatePersons.size()>0){
-//            return this.nationalCodeRedundant();
+            return this.nationalCodeRedundant();
         }
 
         UserFastDto userFastDto = userRegisterUserFastDtoMapper

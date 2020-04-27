@@ -13,94 +13,58 @@ import org.springframework.hateoas.RepresentationModel;
 @AllArgsConstructor
 public class UserContactResponse extends RepresentationModel<UserContactResponse> {
 
-    @Schema(
-            description = "contact public ID"
-    )
+    @Schema(title = "contact public ID",maxLength = 36)
     private String contactPublicId;
 
-    @Schema(
-            description = "user first name"
-    )
+    @Schema(title = "User First Name",maxLength = 500)
     private String firstName;
 
-    @Schema(
-            description = "user last name"
-    )
+    @Schema(title = "User Last Name",maxLength = 100)
     private String lastName;
 
-    @Schema(
-            description = "user mobile number"
-    )
+    @Schema(title = "user mobile number",maxLength = 50)
     private String mobilePhone;
 
-    @Schema(
-            description = "user email address"
-    )
+    @Schema(title = "User Email Address",maxLength = 100)
     private String email;
 
-    @Schema(
-            description = "user gender"
-    )
+    @Schema(title= "User Gender",maxLength = 3)
     private String gender;
 
-    @Schema(
-            description = "user birth date"
-    )
+    @Schema(title = "User Birth Date",maxLength = 20)
     private String birthdate;
 
-    @Schema(
-            description = "user birth city name"
-    )
+    @Schema(title = "User Birth City Name",maxLength = 100)
     private String fromCity;
 
-    @Schema(
-            description = "user identification number"
-    )
+    @Schema(title= "User Identification Number",maxLength = 100)
     private String certificateNo;
 
-    @Schema(
-            description = "user national code"
-    )
+    @Schema(title= "User National Code",maxLength = 20)
     private String nationCode;
 
-    @Schema(
-            description = "user father name"
-    )
+    @Schema(title= "User Father Name",maxLength = 100)
     private String fatherName;
 
-    @Schema(
-            description = "description field"
-    )
+    @Schema(title= "Description Field",maxLength = 4000)
     private String description;
 
-    @Schema(
-            description = "user address"
-    )
+    @Schema(title= "User Address",maxLength = 500)
     private String address;
 
-    @Schema(
-            description = "user latin first name"
-    )
+    @Schema(title = "User Latin First Name",maxLength = 50)
     private String lfirstName;
 
-    @Schema(
-            description = "user latin last name"
-    )
+    @Schema(title = "User Latin Last Name",maxLength = 50)
     private String llastName;
 
-    @Schema(
-            description = "user postal code"
-    )
+    @Schema(title = "User Postal Code",maxLength = 20)
     private String postalCode;
 
-    @Schema(
-            description = "user latin father name"
-    )
+    @Schema(title= "User Latin Father Name",maxLength = 50)
     private String lfatherName;
 
-    @Schema(
-            description = "user latin birth city name"
-    )
+    @Schema(title= "User Latin Birth City Name",maxLength = 100)
     private String lfromCity;
 
 }
