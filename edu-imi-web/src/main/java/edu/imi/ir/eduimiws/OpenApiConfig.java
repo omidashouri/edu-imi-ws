@@ -91,4 +91,13 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi studentApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Students")
+                .pathsToMatch("/v1/students/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 }

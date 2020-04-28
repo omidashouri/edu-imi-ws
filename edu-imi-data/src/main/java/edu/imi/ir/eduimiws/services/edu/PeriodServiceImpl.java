@@ -26,7 +26,7 @@ public class PeriodServiceImpl implements PeriodService {
     private final PeriodOnlyMapper periodOnlyMapper;
 
     @Override
-    public Long PeriodCount() {
+    public Long periodCount() {
         return periodRepository.count();
     }
 

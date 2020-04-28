@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PeriodService {
 
-    Long PeriodCount();
+    Long periodCount();
 
     PeriodEntity selectLastRecord();
 

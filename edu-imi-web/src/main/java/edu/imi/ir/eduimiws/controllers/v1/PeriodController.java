@@ -1,13 +1,10 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
-import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssembler;
-import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssemblerOld;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
@@ -16,8 +13,6 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
 import edu.imi.ir.eduimiws.services.UserService;
-import edu.imi.ir.eduimiws.services.crm.PersonService;
-import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
 import edu.imi.ir.eduimiws.services.edu.PeriodWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,16 +56,10 @@ import java.util.stream.StreamSupport;
 public class PeriodController {
 
     private final PeriodService periodService;
-    private final PersonService personService;
     private final UserService userService;
-    private final PersonWebServiceService personWebServiceService;
     private final PeriodWebServiceService periodWebServiceService;
-    private final PeriodResponseAssemblerOld periodResponseAssemblerOld;
     private final PeriodResponseAssembler periodResponseAssembler;
-    private final UserResponseAssembler userResponseAssembler;
-    private final PagedResourcesAssembler<PeriodEntity> periodPagedResourcesAssemblerOld;
     private final PagedResourcesAssembler<PeriodFastDto> periodPagedResourcesAssembler;
-    private final UserFastDtoMapper userFastDtoMapper;
     private final PeriodFastDtoMapper periodFastDtoMapper;
 
     @Operation(
@@ -413,7 +402,7 @@ public class PeriodController {
         Long newPeriodCount;
 
         periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
-        periodCount = periodService.PeriodCount();
+        periodCount = periodService.periodCount();
 
         if (periodCount == null || periodCount == 0) {
             this.conflictPeriodCount();

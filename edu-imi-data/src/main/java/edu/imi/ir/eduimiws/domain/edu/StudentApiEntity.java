@@ -23,6 +23,14 @@ public class StudentApiEntity extends BaseEntity {
     @JoinColumn(name="STUDENT_ID")
     private StudentEntity student;
 
+    @Column(name = "Student_ID", insertable = false, updatable = false)
+    private Long studentId;
+
+    @Transient
+    public Long getStudentId() {
+        return studentId;
+    }
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,6 +51,9 @@ public class StudentApiEntity extends BaseEntity {
 
     @Column(name="STUDENT_DELETE_STATUS",precision = 1,scale = 0)
     private Long studentDeleteStatus;
+
+    @Column(name="STUDENT_EDIT_DATE",length = 10)
+    private String studentEditDate;
 
     @Column(name="DELETE_DATE_TS")
     private java.sql.Timestamp deleteDateTs;

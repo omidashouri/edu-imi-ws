@@ -2,10 +2,30 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import lombok.*;
 
 import javax.persistence.*;
+
+
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "StudentEntity.findStudentSubGraphUserApiService",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "person",subgraph = "person-subGraph"),
+                        @NamedAttributeNode("studentApi")
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "person-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "personApiEntity")
+                                },
+                                type = PersonApiEntity.class)
+                }
+        )
+})
+
 
 @Getter
 @Setter
@@ -63,4 +83,8 @@ public class StudentEntity extends BaseEntity {
     @Column(name="DESCRIPTION",length = 150)
     private String description;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private StudentApiEntity studentApi;
 }
