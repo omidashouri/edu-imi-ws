@@ -242,7 +242,8 @@ public class StudentController {
         Long newStudentCount;
 
         studentApiCount = studentApiService.studentApiCount();
-        studentCount = studentService.studentCount();
+        Long studentSequenceNumber = studentService.selectStudentLastSequenceNumber();
+        studentCount = studentService.countStudentByIdLessThanEqual(studentSequenceNumber);
 
         if (studentCount == null || studentCount == 0) {
             this.conflictStudentCount();
@@ -321,11 +322,13 @@ public class StudentController {
 
         studentApiCount = studentApiService.studentApiCount();
 
-     /*   if (0 != studentApiCount) {
+        if (0 != studentApiCount) {
+            Long studentSequenceNumber = studentService.selectStudentLastSequenceNumber();
             studentApiLastRecord = studentApiService.selectLastRecord();
-            studentLastRecord = studentService.selectLastRecord();
+            studentLastRecord = studentService.findFirstByIdLessThanOrderByIdDesc(studentSequenceNumber);
             if (studentLastRecord.getId() > studentApiLastRecord.getStudentId()) {
-                newStudents = studentService.findAllStudentOnlyByIdGreaterThan(studentApiLastRecord.getStudentId());
+//                newStudents = studentService.findAllStudentOnlyByIdBetween(studentApiLastRecord.getStudentId(),studentLastRecord.getId());
+                newStudents = studentService.findAllStudentOnlyByIdBetween(621525l,680759l);
             } else {
                 returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
                 returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
@@ -333,7 +336,7 @@ public class StudentController {
                 return ResponseEntity.ok(returnValue);
             }
         } else {
-            newStudents = studentService.findAllStudentOnly();
+            newStudents = studentService.selectAllStudentOnly();
         }
 
         newStudentApi = studentApiService.generateStudentApiPublicId(newStudents);
@@ -341,8 +344,7 @@ public class StudentController {
         returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
         returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
         returnValue.setDescription(newStudentApi.size() + " New Public Id Generated");
-        return ResponseEntity.ok(returnValue);*/
-     return null;
+        return ResponseEntity.ok(returnValue);
     }
 
     private ResponseEntity<?> conflictStudentCount() {

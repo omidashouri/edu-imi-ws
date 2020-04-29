@@ -1,10 +1,12 @@
 package edu.imi.ir.eduimiws.services.edu;
 
 
-
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
 import edu.imi.ir.eduimiws.repositories.edu.StudentApiRepository;
+import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import edu.imi.ir.eduimiws.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,6 +24,7 @@ import java.util.List;
 public class StudentApiServiceImpl implements StudentApiService{
 
     private final StudentApiRepository studentApiRepository;
+    private final PersonWebServiceService personApiService;
     private final Utils utils;
 
     @Override
@@ -45,13 +46,16 @@ public class StudentApiServiceImpl implements StudentApiService{
             newStudentApi.setStudent(s);
             newStudentApi.setStudentId(s.getId());
             newStudentApi.setStudentPublicId(this.generateStudentApiPublicId());
-            if (null != s.getPerson()) {
-                if(null!=s.getPerson().getPersonApiEntity()) {
+            if (null != s.getPersonId()) {
+                PersonEntity person = new PersonEntity();
+                person.setId(s.getPersonId());
+                newStudentApi.setPerson(person);
+/*                if(s.getPerson()!=null && null!=s.getPerson().getPersonApiEntity()) {
                     if(null!=s.getPerson().getPersonApiEntity().getPersonPublicId()){
                         newStudentApi
                                 .setPersonPublicId(s.getPerson().getPersonApiEntity().getPersonPublicId());
                     }
-                }
+                }*/
             }
             if(null != s.getDeleteStatus()){
                 newStudentApi.setStudentDeleteStatus(s.getDeleteStatus());
@@ -68,7 +72,29 @@ public class StudentApiServiceImpl implements StudentApiService{
 
         newStudentApiEntities.sort(Comparator.comparing(StudentApiEntity::getStudentId));
 
-        studentApiRepository.saveAll(newStudentApiEntities);
+        List<Long> personIds = new ArrayList<>();
+//        personIds =
+                newStudentApiEntities
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(e->e.getPerson()!=null)
+                .map(StudentApiEntity::getPerson)
+                .map(PersonEntity::getId)
+                        .forEachOrdered(personIds::add);
+//                .collect(Collectors.toCollection(personIds::new));
+
+        List<PersonApiEntity> personApis = personApiService.
+                findAllByPersonIdIn(personIds);
+
+//omiddo: check if it had public id insert it into StudentApiEntity
+
+
+        List<StudentApiEntity> limitedStudentApiEntities = new ArrayList<>();
+
+        limitedStudentApiEntities = newStudentApiEntities.stream().limit(10).collect(Collectors.toList());
+
+        studentApiRepository.saveAll(limitedStudentApiEntities);
+//        studentApiRepository.saveAll(newStudentApiEntities);
 
         return newStudentApiEntities;
     }

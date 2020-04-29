@@ -32,4 +32,6 @@ public interface PersonWebServiceService  {
     PersonApiEntity selectLastRecord();
 
     List<PersonApiEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons);
+
+    List<PersonApiEntity> findAllByPersonIdIn(List<Long> personIds);
 }

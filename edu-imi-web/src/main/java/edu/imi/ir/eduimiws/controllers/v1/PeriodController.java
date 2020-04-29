@@ -392,7 +392,7 @@ public class PeriodController {
                     )
             }
     )
-    @GetMapping(path = "/count-new-periods",
+    @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getNewPeriodCount() {
 
@@ -467,7 +467,7 @@ public class PeriodController {
                     )
             }
     )
-    @PostMapping(path = "/generate-public-id",
+    @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createPeriodWebServicePublicId() {
 

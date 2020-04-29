@@ -29,4 +29,6 @@ public interface PersonWebServiceRepository extends CrudRepository<PersonApiEnti
     List<PersonWebServiceIdProjection> findAllPersonWebServiceIdProjection();
 
     PersonApiEntity findFirstByOrderByIdDesc();
+
+    List<PersonApiEntity> findAllByPersonIdIn(List<Long> personIds);
 }

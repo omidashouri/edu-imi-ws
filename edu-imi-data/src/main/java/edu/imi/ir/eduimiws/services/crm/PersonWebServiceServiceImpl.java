@@ -185,6 +185,13 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
         return savedPersonWebServices;
     }
 
+    @Override
+    public List<PersonApiEntity> findAllByPersonIdIn(List<Long> personIds) {
+        List<PersonApiEntity> personApis = personWebServiceRepository
+                .findAllByPersonIdIn(personIds);
+        return personApis;
+    }
+
     private String generateUniquePersonWebServicePublicId() {
         return utils.generateUniquePublicId();
     }

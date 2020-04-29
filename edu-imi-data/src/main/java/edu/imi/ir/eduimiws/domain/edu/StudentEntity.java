@@ -4,6 +4,7 @@ package edu.imi.ir.eduimiws.domain.edu;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.models.projections.edu.StudentOnly;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,34 @@ import javax.persistence.*;
         )
 })
 
+@SqlResultSetMapping(
+        name = "StudentOnly",
+        classes = {
+                @ConstructorResult(
+                        targetClass = StudentOnly.class,
+                        columns = {
+                                @ColumnResult(name = "idR", type = Long.class),
+                                @ColumnResult(name = "personIdR", type = Long.class),
+                                @ColumnResult(name = "deleteStatusR", type = Long.class),
+                                @ColumnResult(name = "activityStatusR", type = Long.class),
+                                @ColumnResult(name = "studentEditDateR", type = String.class)
+                        }
+                )
+        }
+)
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "StudentEntity.selectAllStudentOnly",
+                query = " select ID as idR, PERSON_ID as personIdR, DELETE_STATUS as deleteStatusR, ACTIVITY_STATUS as activityStatusR, " +
+                        " EDIT_DATE as studentEditDateR  from EDU.TBL_STUDENT ",
+                resultSetMapping = "StudentOnly"),
+        @NamedNativeQuery(name = "StudentEntity.selectAllStudentOnlyByIdBetween",
+                query = " select ID as idR, PERSON_ID as personIdR, DELETE_STATUS as deleteStatusR, ACTIVITY_STATUS as activityStatusR, " +
+                        " EDIT_DATE as studentEditDateR  from EDU.TBL_STUDENT where ID between :beginStudentId and :endStudentId ",
+                resultSetMapping = "StudentOnly"),
+        @NamedNativeQuery(name = "StudentEntity.selectCurrentSequenceNumber",
+                query = " select EDU.SEQ_STUDENT.nextval from dual "
+        )
+})
 
 @Getter
 @Setter
@@ -43,6 +72,14 @@ public class StudentEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PERSON_ID")
     private PersonEntity person;
+
+    @Column(name = "PERSON_ID", insertable = false, updatable = false)
+    private Long personId;
+
+    @Transient
+    public Long getPersonId() {
+        return personId;
+    }
 
     @Column(name="FIRST_NAME",length = 100)
     private String firstName;

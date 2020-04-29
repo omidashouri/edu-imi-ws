@@ -67,7 +67,7 @@ import javax.persistence.*;
             resultSetMapping = "personUserProjection"
     ),
     @NamedNativeQuery(name = "PersonEntity.selectCurrentSequenceNumber",
-            query = " select SEQ_PERSON_ID.nextval from dual "
+            query = " select CRM.SEQ_PERSON_ID.nextval from dual "
     )
 
 })
