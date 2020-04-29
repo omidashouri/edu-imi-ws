@@ -15,13 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class StudentApiServiceImpl implements StudentApiService{
+public class StudentApiServiceImpl implements StudentApiService {
 
     private final StudentApiRepository studentApiRepository;
     private final PersonWebServiceService personApiService;
@@ -50,14 +51,8 @@ public class StudentApiServiceImpl implements StudentApiService{
                 PersonEntity person = new PersonEntity();
                 person.setId(s.getPersonId());
                 newStudentApi.setPerson(person);
-/*                if(s.getPerson()!=null && null!=s.getPerson().getPersonApiEntity()) {
-                    if(null!=s.getPerson().getPersonApiEntity().getPersonPublicId()){
-                        newStudentApi
-                                .setPersonPublicId(s.getPerson().getPersonApiEntity().getPersonPublicId());
-                    }
-                }*/
             }
-            if(null != s.getDeleteStatus()){
+            if (null != s.getDeleteStatus()) {
                 newStudentApi.setStudentDeleteStatus(s.getDeleteStatus());
                 if (s.getDeleteStatus().equals(1L)) {
                     newStudentApi.setDeleteDateTs(new Timestamp(new Date().getTime()));
@@ -72,19 +67,44 @@ public class StudentApiServiceImpl implements StudentApiService{
 
         newStudentApiEntities.sort(Comparator.comparing(StudentApiEntity::getStudentId));
 
-        List<Long> personIds = new ArrayList<>();
-//        personIds =
-                newStudentApiEntities
+        List<Long> personIds = newStudentApiEntities
                 .stream()
                 .filter(Objects::nonNull)
-                .filter(e->e.getPerson()!=null)
+                .filter(e -> e.getPerson() != null)
                 .map(StudentApiEntity::getPerson)
                 .map(PersonEntity::getId)
-                        .forEachOrdered(personIds::add);
-//                .collect(Collectors.toCollection(personIds::new));
+                .collect(Collectors.toList());
 
-        List<PersonApiEntity> personApis = personApiService.
-                findAllByPersonIdIn(personIds);
+//      do it to solve oracle IN limitation for 1000 record
+        final int chunkSize = 900;
+        final AtomicInteger counter = new AtomicInteger();
+        Collection<List<Long>> hundredPersonIds = personIds
+                .stream()
+                .collect(Collectors.groupingBy(pi -> counter.getAndIncrement() / chunkSize))
+                .values();
+
+        List<PersonApiEntity> fullPersonApis = new ArrayList<>();
+        hundredPersonIds.stream().forEach(lp->{
+             personApiService
+                    .findAllByPersonIdIn(lp)
+                    .stream()
+                    .forEachOrdered(fullPersonApis::add);
+        });
+
+        Map<Long, String> personIdPersonPublicIdMap = fullPersonApis
+                .stream()
+                .filter(pa -> pa.getPersonPublicId() != null)
+                .distinct()
+                .collect(Collectors.toMap(PersonApiEntity::getPersonId, PersonApiEntity::getPersonPublicId));
+
+        newStudentApiEntities
+                .stream()
+                .filter(s->s.getPerson()!=null)
+                .filter(s->Objects.nonNull(personIdPersonPublicIdMap.get(s.getPerson().getId())))
+                .forEach(s -> {
+                    s.setPersonPublicId(personIdPersonPublicIdMap.get(s.getPerson().getId()));
+                });
+
 
 //omiddo: check if it had public id insert it into StudentApiEntity
 
