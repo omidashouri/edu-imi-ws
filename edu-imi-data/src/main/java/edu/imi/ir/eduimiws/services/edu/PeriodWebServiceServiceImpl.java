@@ -3,7 +3,7 @@ package edu.imi.ir.eduimiws.services.edu;
 import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodWebServiceRepository;
-import edu.imi.ir.eduimiws.utilities.Utils;
+import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.util.List;
 public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
 
     private final PeriodWebServiceRepository periodWebServiceRepository;
-    private final Utils utils;
+    private final PublicIdUtil publicIdUtil;
 
     @Override
     public Long periodWebServiceCount() {
@@ -66,7 +66,7 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
     }
 
     private String generatePeriodWebServicePublicId() {
-        return utils.generateUniquePublicId();
+        return publicIdUtil.generateUniquePublicId();
     }
 
 }

@@ -10,7 +10,7 @@ import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.services.crm.ContactWebServiceService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
-import edu.imi.ir.eduimiws.utilities.Utils;
+import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     private final PersonWebServiceService personWebServiceService;
     private final ContactWebServiceService contactWebServiceService;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
-    private final Utils utils;
+    private final PublicIdUtil publicIdUtil;
 
 //    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3NzA0ODg3fQ.kIylwAPr1wk-eynP-wRdFgWefQKDSqEW0hmb1Q7LkKmheU1IYyFpYENeQtq_uGgYdu81uu-2GIsM9fdWcKu0YA
 
@@ -319,7 +319,7 @@ public class UserServiceImpl implements UserService {
 
 
     private String generatePublicId() {
-        return utils.generateUniquePublicId();
+        return publicIdUtil.generateUniquePublicId();
     }
 
     private List<PersonEntity> distinctSortPersonsById(List<PersonEntity> persons) {

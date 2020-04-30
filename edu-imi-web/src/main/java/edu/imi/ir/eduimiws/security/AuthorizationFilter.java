@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.security;
 
+import edu.imi.ir.eduimiws.utilities.AppProperties;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,14 +22,17 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
         super(authenticationManager);
     }
 
+    @Autowired
+    private AppProperties appProperties;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
 
-        String header = request.getHeader(SecurityConstants.HEADER_STRING);
+        String header = request.getHeader(appProperties.getHeaderString());
 
-        if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+        if (header == null || !header.startsWith(appProperties.getTokenPrefix())) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -39,13 +44,13 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
 
-        String token = request.getHeader(SecurityConstants.HEADER_STRING);
+        String token = request.getHeader(appProperties.getHeaderString());
 
         if (token != null) {
-            token = token.replace(SecurityConstants.TOKEN_PREFIX,"");
+            token = token.replace(appProperties.getTokenPrefix(),"");
 
             String user = Jwts.parser()
-                    .setSigningKey(SecurityConstants.getTokenSecret())
+                    .setSigningKey(appProperties.getTokenSecret())
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();

@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.security;
 
 import edu.imi.ir.eduimiws.services.UserService;
+import edu.imi.ir.eduimiws.utilities.AppProperties;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final ErpPasswordEncoder bCryptPasswordEncoder;
+    private AppProperties appProperties;
 
 
     @Override
@@ -38,19 +40,19 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
                 .csrf().disable().authorizeRequests()
 
-                .antMatchers(HttpMethod.POST,SecurityConstants.SIGN_UP_URL)
+                .antMatchers(HttpMethod.POST,appProperties.getSignUpUrl())
                 .permitAll()
 
-                .antMatchers(HttpMethod.GET,SecurityConstants.VERIFICATION_EMAIL_URL)
+                .antMatchers(HttpMethod.GET,appProperties.getVerificationEmailUrl())
                 .permitAll()
 
-                .antMatchers(HttpMethod.POST,SecurityConstants.PASSWORD_RESET_REQUEST_URL)
+                .antMatchers(HttpMethod.POST,appProperties.getPasswordResetRequestUrl())
                 .permitAll()
 
-                .antMatchers(HttpMethod.POST,SecurityConstants.PASSWORD_RESET_URL)
+                .antMatchers(HttpMethod.POST,appProperties.getPasswordResetUrl())
                 .permitAll()
 
-                .antMatchers(SecurityConstants.H2_CONSOLE)
+                .antMatchers(appProperties.getH2Console())
                 .permitAll()
 
                 .antMatchers("**/swagger-ui/**","/swagger-ui/**","/v3/api-docs/**","/v3/api-docs","/v2/api-docs/**","/configuration/**","/swagger*/**","/webjars/**")

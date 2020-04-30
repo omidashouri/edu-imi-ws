@@ -5,8 +5,11 @@ import edu.imi.ir.eduimiws.configurations.SpringApplicationContext;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonApiFastDto;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
 import edu.imi.ir.eduimiws.services.UserService;
+import edu.imi.ir.eduimiws.utilities.AppProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,14 +34,21 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 //    this class is import with extending  UsernamePasswordAuthenticationFilter
     private final AuthenticationManager authenticationManager;
-//omiddo:    remove later myUserDetailsService
-    MyUserDetailsService myUserDetailsService = new MyUserDetailsService();//RM
-
-    private String contentType;
 
     public AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
+
+    @Autowired
+    private AppProperties appProperties;
+//omiddo:    remove later myUserDetailsService
+    MyUserDetailsService myUserDetailsService = new MyUserDetailsService();//RM
+
+
+    private String contentType;
+
+    @Value("${expiration.time}")
+    private String aaa;
 
 //    this method is used for authenticating user when request come to server
     @Override
@@ -89,8 +99,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = Jwts.builder()
                 .setSubject(userName)
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret() )
+                .setExpiration(new Date(System.currentTimeMillis() + Long.valueOf(appProperties.getExpirationTime()).intValue()))
+                .signWith(SignatureAlgorithm.HS512, appProperties.getTokenSecret() )
                 .compact();
 
 //    get bean from context, bean name is name of class start with lowercase
@@ -100,7 +110,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         PersonApiFastDto userWSFastDto = userService.getUserFastDto(userName);
 
 //    add token to response header
-        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        res.addHeader(appProperties.getHeaderString(), appProperties.getTokenPrefix() + token);
 
 //    add public user id to response header
         res.addHeader("userPublicId", userWSFastDto.getPersonPublicId());

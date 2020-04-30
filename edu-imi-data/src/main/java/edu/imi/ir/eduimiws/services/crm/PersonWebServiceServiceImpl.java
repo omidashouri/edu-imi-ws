@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceIdProjectionMapper;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonWebServiceIdProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
-import edu.imi.ir.eduimiws.utilities.Utils;
+import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -31,7 +31,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
     private final PersonWebServiceRepository personWebServiceRepository;
     private final PersonWebServiceIdProjectionMapper personWebServiceIdProjectionMapper;
 //    private final ContactWebServiceService contactWebServiceService;
-    private final Utils utils;
+    private final PublicIdUtil publicIdUtil;
 
 
     @Override
@@ -193,6 +193,6 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
     }
 
     private String generateUniquePersonWebServicePublicId() {
-        return utils.generateUniquePublicId();
+        return publicIdUtil.generateUniquePublicId();
     }
 }

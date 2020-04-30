@@ -7,7 +7,7 @@ import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
-import edu.imi.ir.eduimiws.utilities.Utils;
+import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class PersonServiceImpl implements PersonService {
     private final PersonUserProjectionMapper personUserProjectionMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
-    private final Utils utils;
+    private final PublicIdUtil publicIdUtil;
 //NU
 /*    @Override
     public PersonEntity findById(Long id) {
@@ -130,7 +130,7 @@ public class PersonServiceImpl implements PersonService {
     }*/
 
     private String generatePublicId() {
-        return utils.generateUniquePublicId();
+        return publicIdUtil.generateUniquePublicId();
     }
 
 }

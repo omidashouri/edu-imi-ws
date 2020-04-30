@@ -1,12 +1,6 @@
 package edu.imi.ir.eduimiws.utilities;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
-
+/*
 @Component
 @AllArgsConstructor
 public final class Partition<T> extends AbstractList<List<T>> {
@@ -35,3 +29,4 @@ public final class Partition<T> extends AbstractList<List<T>> {
         return (int) Math.ceil((double) list.size() / (double) chunkSize);
     }
 }
+*/

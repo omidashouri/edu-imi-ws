@@ -5,7 +5,7 @@ import edu.imi.ir.eduimiws.domain.crm.ContactApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.repositories.crm.ContactWebServiceRepository;
-import edu.imi.ir.eduimiws.utilities.Utils;
+import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
 
 
     private final ContactWebServiceRepository contactWebServiceRepository;
-    private final Utils utils;
+    private final PublicIdUtil publicIdUtil;
 //NU
 /*    @Override
     public ContactApiEntity saveContactWebServiceEntity(ContactApiEntity contactWebServiceEntity) {
@@ -94,7 +94,7 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
     }
 
     private String generateUniqueContactWebServicePublicId() {
-        return utils.generateUniquePublicId();
+        return publicIdUtil.generateUniquePublicId();
     }
 
 }

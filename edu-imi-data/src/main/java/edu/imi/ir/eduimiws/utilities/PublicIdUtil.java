@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.utilities;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 
-@Service
-public class Utils {
+@Component
+public class PublicIdUtil {
 
     private final Random RANDOM = new SecureRandom();
     private final String ALPHABET = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

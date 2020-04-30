@@ -7,7 +7,7 @@ import edu.imi.ir.eduimiws.domain.edu.StudentApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
 import edu.imi.ir.eduimiws.repositories.edu.StudentApiRepository;
 import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
-import edu.imi.ir.eduimiws.utilities.Utils;
+import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class StudentApiServiceImpl implements StudentApiService {
 
     private final StudentApiRepository studentApiRepository;
     private final PersonWebServiceService personApiService;
-    private final Utils utils;
+    private final PublicIdUtil publicIdUtil;
 
     @Override
     public StudentApiEntity selectLastRecord() {
@@ -120,6 +120,6 @@ public class StudentApiServiceImpl implements StudentApiService {
     }
 
     private String generateStudentApiPublicId() {
-        return utils.generateUniquePublicId();
+        return publicIdUtil.generateUniquePublicId();
     }
 }
