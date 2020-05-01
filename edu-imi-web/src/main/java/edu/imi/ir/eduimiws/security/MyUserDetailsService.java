@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.security;
 
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.models.user.MyCurrentUser;
 import edu.imi.ir.eduimiws.services.crm.PersonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

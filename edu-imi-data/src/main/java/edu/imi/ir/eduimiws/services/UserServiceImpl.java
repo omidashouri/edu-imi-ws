@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonApiFastDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
+import edu.imi.ir.eduimiws.models.user.MyCurrentUser;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.services.crm.ContactWebServiceService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
@@ -13,15 +14,15 @@ import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final ContactWebServiceService contactWebServiceService;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
     private final PublicIdUtil publicIdUtil;
+    private final MyCurrentUser myCurrentUser;
 
 //    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3NzA0ODg3fQ.kIylwAPr1wk-eynP-wRdFgWefQKDSqEW0hmb1Q7LkKmheU1IYyFpYENeQtq_uGgYdu81uu-2GIsM9fdWcKu0YA
 
@@ -59,13 +61,13 @@ public class UserServiceImpl implements UserService {
         PersonEntity newPerson = userFastDtoSaveMapper
                 .toPersonForSaveFromUserRegister(userFastDto);
 
-        if(newPerson.getSelectedLanguage()==null){
+        if (newPerson.getSelectedLanguage() == null) {
             LanguageEntity language = new LanguageEntity();
             language.setId(1l);
             newPerson.setSelectedLanguage(language);
         }
 
-        if(newPerson.getCompany() == null){
+        if (newPerson.getCompany() == null) {
             CompanyEntity company = new CompanyEntity();
             company.setId(4l);
             newPerson.setCompany(company);
@@ -75,13 +77,13 @@ public class UserServiceImpl implements UserService {
         newContact = userFastDtoSaveMapper
                 .toContactForSaveFromUserRegister(userFastDto);
 
-        if(newContact.getAccount()==null){
+        if (newContact.getAccount() == null) {
             AccountEntity account = new AccountEntity();
             account.setId(1l);
             newContact.setAccount(account);
         }
 
-        if(newContact.getCompany()==null){
+        if (newContact.getCompany() == null) {
             CompanyEntity company = new CompanyEntity();
             company.setId(4l);
             newContact.setCompany(company);
@@ -90,7 +92,7 @@ public class UserServiceImpl implements UserService {
         ContactEntity savedContact = contactService.saveContact(newContact);
 
         newPerson.setContact(savedContact);
-        PersonEntity savedPerson =  personService.savePerson(newPerson);
+        PersonEntity savedPerson = personService.savePerson(newPerson);
 
         return savedPerson;
     }
@@ -278,6 +280,7 @@ public class UserServiceImpl implements UserService {
                             user);
         }
 
+//        return this.buildUserForAuthentication(user);
 
 //        let user login if user email is verified
         return new org.springframework.security.core.userdetails.User(userWebServiceEntity.getUserName(),
@@ -287,6 +290,31 @@ public class UserServiceImpl implements UserService {
                 true,
                 true,
                 new ArrayList<>());
+    }
+
+    private User buildUserForAuthentication(PersonEntity user) {
+
+        MyCurrentUser currentUser = new MyCurrentUser(user);
+
+        if (currentUser.getUserPublicId() == null) {
+//            generate userPublicId
+        }
+
+/*        if(currentUser.getRoles!=null){
+//            return roles
+        } else {*/
+        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+//    }
+
+        currentUser.setFirstName(user.getFirstName());
+        currentUser.setLastName(user.getLastName());
+        currentUser.setPassword(user.getPassword());
+        currentUser.setEnabled(user.getActivityStatus().equalsIgnoreCase("1") ? true : false);
+        currentUser.setAccountNonExpired(true);
+        currentUser.setCredentialsNonExpired(true);
+        currentUser.setAccountNonLocked(true);
+
+        return currentUser;
     }
 
 /*    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
