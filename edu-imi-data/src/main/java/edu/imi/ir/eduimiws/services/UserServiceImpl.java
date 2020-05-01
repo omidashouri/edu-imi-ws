@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
     private final ContactWebServiceService contactWebServiceService;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
     private final PublicIdUtil publicIdUtil;
-    private final MyCurrentUser myCurrentUser;
 
 //    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3NzA0ODg3fQ.kIylwAPr1wk-eynP-wRdFgWefQKDSqEW0hmb1Q7LkKmheU1IYyFpYENeQtq_uGgYdu81uu-2GIsM9fdWcKu0YA
 

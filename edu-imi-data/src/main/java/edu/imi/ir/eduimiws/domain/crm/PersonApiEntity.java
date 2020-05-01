@@ -4,11 +4,14 @@ package edu.imi.ir.eduimiws.domain.crm;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonWebServiceIdProjection;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 
 // add role_ID column
@@ -151,13 +154,32 @@ public class PersonApiEntity extends BaseEntity {
   @Column(name="DESCRIPTION",length = 500)
   private String description;
 
-  @Column(name = "AUTHORITY_ID")
-  private Long authorityId;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinTable(schema = "CRM",
+          name = "TBL_PERSON_ROLE_API",
+  joinColumns=
+      @JoinColumn(name = "PERSON_API_ID",referencedColumnName = "ID"),
+  inverseJoinColumns =
+      @JoinColumn(name = "ROLE_API_ID",referencedColumnName = "ID"))
+  private Collection<RoleApiEntity> roles;
 
   @Column(name = "PERSON_EDIT_DATE",length = 10)
   private String personEditDate;
 
   @Column(name = "CONTACT_EDIT_DATE",length = 10)
   private String contactEditDate;
+
+  @Column(name = "ACCOUNT_ENABLED")
+  private Long accountEnabled;
+
+  @Column(name = "ACCOUNT_NON_EXPIRED")
+  private Long accountNonExpired;
+
+  @Column(name = "CREDENTIALS_NON_EXPIRED")
+  private Long CredentialsNonExpired;
+
+  @Column(name = "ACCOUNT_NON_LOCKED")
+  private Long AccountNonLocked;
 
 }
