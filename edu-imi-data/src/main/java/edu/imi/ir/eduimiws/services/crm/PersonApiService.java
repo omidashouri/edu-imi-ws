@@ -5,7 +5,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 
 import java.util.List;
 
-public interface PersonWebServiceService  {
+public interface PersonApiService {
 //NU
 //    PersonApiEntity findByPersonEntity(PersonEntity personEntity);
 //NU

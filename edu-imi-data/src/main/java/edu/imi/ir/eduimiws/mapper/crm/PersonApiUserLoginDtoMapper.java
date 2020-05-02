@@ -8,9 +8,9 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface PersonWebServiceUserLoginDtoMapper {
+public interface PersonApiUserLoginDtoMapper {
 
-    PersonWebServiceUserLoginDtoMapper INSTANCE = Mappers.getMapper(PersonWebServiceUserLoginDtoMapper.class);
+    PersonApiUserLoginDtoMapper INSTANCE = Mappers.getMapper(PersonApiUserLoginDtoMapper.class);
 
     @Mappings({
             @Mapping(source = "personPublicId",target = "personPublicId"),

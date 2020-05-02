@@ -5,7 +5,7 @@ import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 
 import java.util.List;
 
-public interface PeriodWebServiceService {
+public interface PeriodApiService {
 
     PeriodApiEntity selectLastRecord();
 

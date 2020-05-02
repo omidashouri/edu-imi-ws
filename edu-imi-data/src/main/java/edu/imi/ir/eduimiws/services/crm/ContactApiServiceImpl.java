@@ -4,7 +4,7 @@ package edu.imi.ir.eduimiws.services.crm;
 import edu.imi.ir.eduimiws.domain.crm.ContactApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.repositories.crm.ContactWebServiceRepository;
+import edu.imi.ir.eduimiws.repositories.crm.ContactApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +20,10 @@ import java.util.stream.StreamSupport;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class ContactWebServiceServiceImpl implements ContactWebServiceService {
+public class ContactApiServiceImpl implements ContactApiService {
 
 
-    private final ContactWebServiceRepository contactWebServiceRepository;
+    private final ContactApiRepository contactApiRepository;
     private final PublicIdUtil publicIdUtil;
 //NU
 /*    @Override
@@ -38,20 +38,20 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
         newContactWebService.setContact(person.getContact());
         newContactWebService.setCreator(person);
 //        newContactWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
-        return contactWebServiceRepository.save(newContactWebService);
+        return contactApiRepository.save(newContactWebService);
     }
 
     @Override
     public ContactApiEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact) {
 //        omiddo:add NamedEntityGraph later for contact
-        return contactWebServiceRepository.findByContact(contact);
+        return contactApiRepository.findByContact(contact);
     }
 
     @Override
     public List<ContactApiEntity> saveAllContactWebServices(List<ContactApiEntity> contactWebServices) {
         Iterable<ContactApiEntity> iterableContactWebServices = new ArrayList<>();
         contactWebServices.sort(Comparator.comparing(ContactApiEntity::getContactId));
-        iterableContactWebServices = contactWebServiceRepository
+        iterableContactWebServices = contactApiRepository
                 .saveAll(contactWebServices);
         List<ContactApiEntity> newContactWebServices = StreamSupport
                 .stream(iterableContactWebServices.spliterator(), false)
@@ -84,7 +84,7 @@ public class ContactWebServiceServiceImpl implements ContactWebServiceService {
                 .sort(Comparator.comparing(ContactApiEntity::getContactId));
 
         Iterable<ContactApiEntity> savedIterableContactWebService =
-                contactWebServiceRepository.saveAll(newContactWebServices);
+                contactApiRepository.saveAll(newContactWebServices);
 
         List<ContactApiEntity> savedContactWebServices = StreamSupport
                 .stream(savedIterableContactWebService.spliterator(), false)

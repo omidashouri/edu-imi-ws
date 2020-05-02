@@ -2,15 +2,15 @@ package edu.imi.ir.eduimiws.services;
 
 import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.PersonApiFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonApiFastDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.models.user.MyCurrentUser;
+import edu.imi.ir.eduimiws.services.crm.ContactApiService;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
-import edu.imi.ir.eduimiws.services.crm.ContactWebServiceService;
+import edu.imi.ir.eduimiws.services.crm.PersonApiService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
-import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,11 +32,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final PersonWebServiceFastDtoMapper personWebServiceFastMapper;
+    private final PersonApiFastDtoMapper personWebServiceFastMapper;
     private final PersonService personService;
     private final ContactService contactService;
-    private final PersonWebServiceService personWebServiceService;
-    private final ContactWebServiceService contactWebServiceService;
+    private final PersonApiService personApiService;
+    private final ContactApiService contactApiService;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
     private final PublicIdUtil publicIdUtil;
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PersonApiFastDto getUserFastDto(String userName) {
 
-        PersonApiEntity user = personWebServiceService.findByUserNameFast(userName);
+        PersonApiEntity user = personApiService.findByUserNameFast(userName);
 
         if (null == user) {
             throw new UsernameNotFoundException("user name not found for " + userName);
@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
         List<PersonEntity> persons = personService
                 .findAllPersonEntitiesByIdIn(personIds);
 
-        List<PersonApiEntity> savedPersonWebServices = personWebServiceService
+        List<PersonApiEntity> savedPersonWebServices = personApiService
                 .generatePersonWebServicePublicId(persons);
 
         List<PersonEntity> savedPersons = savedPersonWebServices
@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService {
         List<ContactEntity> newContacts = contactService
                 .findCotactsByIds(contactIds);
 
-        List<ContactApiEntity> savedContactWebServices = contactWebServiceService
+        List<ContactApiEntity> savedContactWebServices = contactApiService
                 .generateContactWebServicePublicId(newContacts);
 
         List<PersonEntity> savedPersons =
@@ -241,7 +241,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("user name not found for " + username);
         }
 
-        PersonApiEntity userWebServiceEntity = personWebServiceService.findByUserNameFast(username);
+        PersonApiEntity userWebServiceEntity = personApiService.findByUserNameFast(username);
 
         if (null == userWebServiceEntity) {
 
@@ -250,14 +250,14 @@ public class UserServiceImpl implements UserService {
             if (!existContactPublicIdInContactWebServiceEntity(user.getContact())) {
                 publicContactId = generatePublicId();
                 contactApiEntity =
-                        contactWebServiceService
+                        contactApiService
                                 .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
             } else {
-                contactApiEntity = contactWebServiceService.findContactWebServiceEntityByContactEntityFast(user.getContact());
+                contactApiEntity = contactApiService.findContactWebServiceEntityByContactEntityFast(user.getContact());
             }
 
 
-            userWebServiceEntity = personWebServiceService
+            userWebServiceEntity = personApiService
                     .savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(publicPersonId,
                             contactApiEntity.getContactPublicId(),
                             user);
@@ -267,13 +267,13 @@ public class UserServiceImpl implements UserService {
 
             publicContactId = generatePublicId();
             contactApiEntity =
-                    contactWebServiceService
+                    contactApiService
                             .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
         }
 
         if (null == userWebServiceEntity.getPersonPublicId()) {
             publicPersonId = generatePublicId();
-            userWebServiceEntity = personWebServiceService
+            userWebServiceEntity = personApiService
                     .savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(publicPersonId,
                             contactApiEntity.getContactPublicId(),
                             user);
@@ -329,13 +329,13 @@ public class UserServiceImpl implements UserService {
         newPersonWebService.setUserName(user.getUsername());
         newPersonWebService.setPerson(user);
         newPersonWebService.setEncryptedPassword(user.getPassword());
-        return personWebServiceService.savePersonWebServiceEntity(newPersonWebService);
+        return personApiService.savePersonWebServiceEntity(newPersonWebService);
     }
 
     private boolean existContactPublicIdInContactWebServiceEntity(ContactEntity contactEntity) {
         boolean exist = true;
 
-        ContactApiEntity contactApiEntity = contactWebServiceService.findContactWebServiceEntityByContactEntityFast(contactEntity);
+        ContactApiEntity contactApiEntity = contactApiService.findContactWebServiceEntityByContactEntityFast(contactEntity);
 
         if (null == contactApiEntity) {
             exist = false;

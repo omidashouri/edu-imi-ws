@@ -11,9 +11,9 @@ import java.util.List;
 
 //NU
 @Mapper
-public interface PersonWebServiceContactFastDtoMapper {
+public interface PersonApiContactFastDtoMapper {
 
-    PersonWebServiceContactFastDtoMapper INSTANCE = Mappers.getMapper(PersonWebServiceContactFastDtoMapper.class);
+    PersonApiContactFastDtoMapper INSTANCE = Mappers.getMapper(PersonApiContactFastDtoMapper.class);
 
 
     @Mappings({
@@ -42,6 +42,6 @@ public interface PersonWebServiceContactFastDtoMapper {
     PersonApiEntity ContactFastDtoToPersonWebServiceEntity(UserContactResponseDto userContactDto, @Context CycleAvoidingMappingContext context);
 
 
-    public abstract List<PersonWebServiceContactFastDtoMapper> toTransactionDTO(
-            Collection<PersonWebServiceContactFastDtoMapper> transactions);
+    public abstract List<PersonApiContactFastDtoMapper> toTransactionDTO(
+            Collection<PersonApiContactFastDtoMapper> transactions);
 }

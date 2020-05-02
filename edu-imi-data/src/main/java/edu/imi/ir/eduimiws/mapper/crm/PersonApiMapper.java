@@ -7,9 +7,9 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface PersonWebServiceMapper {
+public interface PersonApiMapper {
 
-    PersonWebServiceMapper INSTANCE = Mappers.getMapper(PersonWebServiceMapper.class);
+    PersonApiMapper INSTANCE = Mappers.getMapper(PersonApiMapper.class);
 
 //    omiddo:correct ignore by removing extra joins
     @Mappings({

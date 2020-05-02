@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.domain.crm;
 
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
-import edu.imi.ir.eduimiws.models.projections.crm.PersonWebServiceIdProjection;
+import edu.imi.ir.eduimiws.models.projections.crm.PersonApiIdProjection;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -37,7 +37,7 @@ import java.util.Collection;
     name = "personWebServiceIdProjection",
     classes = {
       @ConstructorResult(
-        targetClass = PersonWebServiceIdProjection.class,
+        targetClass = PersonApiIdProjection.class,
         columns = {
           @ColumnResult(name = "idR", type = Long.class),
           @ColumnResult(name = "personIdR", type = Long.class),

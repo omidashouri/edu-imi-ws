@@ -7,9 +7,9 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface PersonWebServiceFastDtoMapper {
+public interface PersonApiFastDtoMapper {
 
-    PersonWebServiceFastDtoMapper INSTANCE = Mappers.getMapper(PersonWebServiceFastDtoMapper.class);
+    PersonApiFastDtoMapper INSTANCE = Mappers.getMapper(PersonApiFastDtoMapper.class);
 
     @Mappings({
             @Mapping(source = "personPublicId",target = "personPublicId"),

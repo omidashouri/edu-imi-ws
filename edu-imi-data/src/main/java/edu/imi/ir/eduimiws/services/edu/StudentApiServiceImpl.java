@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
 import edu.imi.ir.eduimiws.repositories.edu.StudentApiRepository;
-import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
+import edu.imi.ir.eduimiws.services.crm.PersonApiService;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class StudentApiServiceImpl implements StudentApiService {
 
     private final StudentApiRepository studentApiRepository;
-    private final PersonWebServiceService personApiService;
+    private final PersonApiService personApiService;
     private final PublicIdUtil publicIdUtil;
 
     @Override

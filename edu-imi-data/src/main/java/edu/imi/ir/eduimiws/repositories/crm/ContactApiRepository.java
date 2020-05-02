@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface ContactWebServiceRepository extends CrudRepository<ContactApiEntity,Long> {
+public interface ContactApiRepository extends CrudRepository<ContactApiEntity,Long> {
 
 
     @EntityGraph("contactWebServiceUserGraph")

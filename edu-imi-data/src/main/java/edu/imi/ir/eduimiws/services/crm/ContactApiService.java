@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 
 import java.util.List;
 
-public interface ContactWebServiceService {
+public interface ContactApiService {
 //NU
 //    ContactApiEntity saveContactWebServiceEntity(ContactApiEntity contactWebServiceEntity);
 

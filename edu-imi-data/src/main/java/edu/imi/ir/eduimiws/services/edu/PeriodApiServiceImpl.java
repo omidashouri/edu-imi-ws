@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
-import edu.imi.ir.eduimiws.repositories.edu.PeriodWebServiceRepository;
+import edu.imi.ir.eduimiws.repositories.edu.PeriodApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +20,14 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
+public class PeriodApiServiceImpl implements PeriodApiService {
 
-    private final PeriodWebServiceRepository periodWebServiceRepository;
+    private final PeriodApiRepository periodApiRepository;
     private final PublicIdUtil publicIdUtil;
 
     @Override
     public Long periodWebServiceCount() {
-        return periodWebServiceRepository.count();
+        return periodApiRepository.count();
     }
 
     @Override
@@ -55,14 +55,14 @@ public class PeriodWebServiceServiceImpl implements PeriodWebServiceService {
 
         newPeriodWebServiceEntities.sort(Comparator.comparing(PeriodApiEntity::getPeriodId));
 
-        periodWebServiceRepository.saveAll(newPeriodWebServiceEntities);
+        periodApiRepository.saveAll(newPeriodWebServiceEntities);
 
         return newPeriodWebServiceEntities;
     }
 
     @Override
     public PeriodApiEntity selectLastRecord() {
-        return periodWebServiceRepository.findFirstByOrderByIdDesc();
+        return periodApiRepository.findFirstByOrderByIdDesc();
     }
 
     private String generatePeriodWebServicePublicId() {

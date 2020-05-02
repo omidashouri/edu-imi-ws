@@ -13,8 +13,8 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
 import edu.imi.ir.eduimiws.services.UserService;
+import edu.imi.ir.eduimiws.services.edu.PeriodApiService;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
-import edu.imi.ir.eduimiws.services.edu.PeriodWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -57,7 +57,7 @@ public class PeriodController {
 
     private final PeriodService periodService;
     private final UserService userService;
-    private final PeriodWebServiceService periodWebServiceService;
+    private final PeriodApiService periodApiService;
     private final PeriodResponseAssembler periodResponseAssembler;
     private final PagedResourcesAssembler<PeriodFastDto> periodPagedResourcesAssembler;
     private final PeriodFastDtoMapper periodFastDtoMapper;
@@ -401,7 +401,7 @@ public class PeriodController {
         Long periodCount;
         Long newPeriodCount;
 
-        periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
+        periodWebserviceCount = periodApiService.periodWebServiceCount();
         periodCount = periodService.periodCount();
 
         if (periodCount == null || periodCount == 0) {
@@ -478,10 +478,10 @@ public class PeriodController {
         List<PeriodEntity> newPeriods = new ArrayList<>();
         List<PeriodApiEntity> newPeriodWebService = new ArrayList<>();
 
-        periodWebserviceCount = periodWebServiceService.periodWebServiceCount();
+        periodWebserviceCount = periodApiService.periodWebServiceCount();
 
         if (0 != periodWebserviceCount) {
-            periodWebServiceLastRecord = periodWebServiceService.selectLastRecord();
+            periodWebServiceLastRecord = periodApiService.selectLastRecord();
             periodLastRecord = periodService.selectLastRecord();
             if (periodLastRecord.getId() > periodWebServiceLastRecord.getPeriodId()) {
                 newPeriods = periodService.findAllPeriodOnlyByIdGreaterThan(periodWebServiceLastRecord.getPeriodId());
@@ -495,7 +495,7 @@ public class PeriodController {
             newPeriods = periodService.findAllPeriodOnly();
         }
 
-        newPeriodWebService = periodWebServiceService.generatePeriodWebServicePublicId(newPeriods);
+        newPeriodWebService = periodApiService.generatePeriodWebServicePublicId(newPeriods);
 
         returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
         returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());

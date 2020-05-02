@@ -3,7 +3,7 @@ package edu.imi.ir.eduimiws.controllers.v1;
 import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceUserContactFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.PersonApiUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserRegisterUserFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
@@ -15,8 +15,8 @@ import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
 import edu.imi.ir.eduimiws.security.ActiveUserService2;
 import edu.imi.ir.eduimiws.services.UserService;
+import edu.imi.ir.eduimiws.services.crm.PersonApiService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
-import edu.imi.ir.eduimiws.services.crm.PersonWebServiceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -58,9 +58,9 @@ import java.util.stream.StreamSupport;
 public class UserController {
 
     private final PersonService personService;
-    private final PersonWebServiceService personWebServiceService;
+    private final PersonApiService personApiService;
     private final UserService userService;
-    private final PersonWebServiceUserContactFastDtoMapper personWebServiceUserContactFastDtoMapper;
+    private final PersonApiUserContactFastDtoMapper personApiUserContactFastDtoMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserResponseAssembler userResponseAssembler;
     private final PagedResourcesAssembler<UserFastDto> userPagedResourcesAssembler;
@@ -369,7 +369,7 @@ public class UserController {
         Long userCount;
         Long newUserCount;
 
-        userWebserviceCount = personWebServiceService.personWebServiceCount();
+        userWebserviceCount = personApiService.personWebServiceCount();
         userCount = personService.selectPersonLastSequenceNumber();
 
         if (userCount == null || userCount == 0) {
@@ -573,7 +573,7 @@ public class UserController {
         List<PersonApiEntity> personWebServices;
         List<PersonEntity> newPersons = new ArrayList<>();
 
-        personWebServices = personWebServiceService.findAllPersonWebServiceIdProjection();
+        personWebServices = personApiService.findAllPersonWebServiceIdProjection();
         persons = personService.findAllPersonIdProjection();
 
 
@@ -648,11 +648,11 @@ public class UserController {
         List<UserContactResponse> userContactResponses;
 
         List<PersonApiEntity> users =
-                personWebServiceService
+                personApiService
                         .findAllListByPageAndSize(pageValue, limitValue);
 
         List<UserContactFastDto> userContactFastDtos =
-                personWebServiceUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users, new CycleAvoidingMappingContext());
+                personApiUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users, new CycleAvoidingMappingContext());
 
 
         userContactResponses =

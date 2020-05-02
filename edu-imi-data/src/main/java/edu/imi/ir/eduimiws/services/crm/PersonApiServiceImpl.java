@@ -3,9 +3,9 @@ package edu.imi.ir.eduimiws.services.crm;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.crm.PersonWebServiceIdProjectionMapper;
-import edu.imi.ir.eduimiws.models.projections.crm.PersonWebServiceIdProjection;
-import edu.imi.ir.eduimiws.repositories.crm.PersonWebServiceRepository;
+import edu.imi.ir.eduimiws.mapper.crm.PersonApiIdProjectionMapper;
+import edu.imi.ir.eduimiws.models.projections.crm.PersonApiIdProjection;
+import edu.imi.ir.eduimiws.repositories.crm.PersonApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +26,11 @@ import java.util.stream.StreamSupport;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class PersonWebServiceServiceImpl implements PersonWebServiceService {
+public class PersonApiServiceImpl implements PersonApiService {
 
-    private final PersonWebServiceRepository personWebServiceRepository;
-    private final PersonWebServiceIdProjectionMapper personWebServiceIdProjectionMapper;
-//    private final ContactWebServiceService contactWebServiceService;
+    private final PersonApiRepository personApiRepository;
+    private final PersonApiIdProjectionMapper personApiIdProjectionMapper;
+//    private final ContactApiService contactWebServiceService;
     private final PublicIdUtil publicIdUtil;
 
 
@@ -42,7 +42,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
         }
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<PersonApiEntity> pagedResult = personWebServiceRepository.findAll(pageable);
+        Page<PersonApiEntity> pagedResult = personApiRepository.findAll(pageable);
 
         if (pagedResult.hasContent()) {
             return pagedResult.getContent();
@@ -67,7 +67,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
     @Override
     public PersonApiEntity findByPersonId(Long personId) {
 
-        PersonApiEntity personApiEntity = personWebServiceRepository.findByPersonId(personId);
+        PersonApiEntity personApiEntity = personApiRepository.findByPersonId(personId);
         return personApiEntity;
     }
 //NU
@@ -78,13 +78,13 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
 
     @Override
     public PersonApiEntity findByUserNameFast(String userName) {
-        PersonApiEntity personApiEntity = personWebServiceRepository.findByUserName(userName);
+        PersonApiEntity personApiEntity = personApiRepository.findByUserName(userName);
         return personApiEntity;
     }
 
     @Override
     public PersonApiEntity findPersonWebServiceEntityByUserPublicId(String userPublicId) {
-        PersonApiEntity userWS = personWebServiceRepository.findByPersonPublicId(userPublicId);
+        PersonApiEntity userWS = personApiRepository.findByPersonPublicId(userPublicId);
         if (null == userWS) {
             throw new UsernameNotFoundException("user can not found for " + userPublicId);
         }
@@ -94,7 +94,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
 
     @Override
     public PersonApiEntity savePersonWebServiceEntity(PersonApiEntity personApiEntity) {
-        return personWebServiceRepository.save(personApiEntity);
+        return personApiRepository.save(personApiEntity);
     }
 
     @Override
@@ -109,30 +109,30 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
         newPersonWebService.setEncryptedPassword(personEntity.getPassword());
         newPersonWebService.setCreator(personEntity);
 //        newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
-        return personWebServiceRepository.save(newPersonWebService);
+        return personApiRepository.save(newPersonWebService);
     }
 
     @Override
     public List<PersonApiEntity> findAllPersonWebServiceIdProjection() {
 
-        List<PersonWebServiceIdProjection> personWebServiceIdProjections =
-                personWebServiceRepository.findAllPersonWebServiceIdProjection();
+        List<PersonApiIdProjection> personApiIdProjections =
+                personApiRepository.findAllPersonWebServiceIdProjection();
 
         List<PersonApiEntity> personWebServiceEntities =
-                personWebServiceIdProjectionMapper
-                        .toPersonWebServiceEntitys(personWebServiceIdProjections,
+                personApiIdProjectionMapper
+                        .toPersonWebServiceEntitys(personApiIdProjections,
                                 new CycleAvoidingMappingContext());
         return personWebServiceEntities;
     }
 
     @Override
     public Long personWebServiceCount() {
-        return personWebServiceRepository.count();
+        return personApiRepository.count();
     }
 
     @Override
     public PersonApiEntity selectLastRecord() {
-        return personWebServiceRepository.findFirstByOrderByIdDesc();
+        return personApiRepository.findFirstByOrderByIdDesc();
     }
 
     @Override
@@ -176,7 +176,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
                 .sort(Comparator.comparing(PersonApiEntity::getPersonId));
 
         Iterable<PersonApiEntity> savedIterablePersonWebService =
-                    personWebServiceRepository.saveAll(newPersonWebServices);
+                    personApiRepository.saveAll(newPersonWebServices);
 
         List<PersonApiEntity> savedPersonWebServices = StreamSupport
                                     .stream(savedIterablePersonWebService.spliterator(),false)
@@ -187,7 +187,7 @@ public class PersonWebServiceServiceImpl implements PersonWebServiceService {
 
     @Override
     public List<PersonApiEntity> findAllByPersonIdIn(List<Long> personIds) {
-        List<PersonApiEntity> personApis = personWebServiceRepository
+        List<PersonApiEntity> personApis = personApiRepository
                 .findAllByPersonIdIn(personIds);
         return personApis;
     }
