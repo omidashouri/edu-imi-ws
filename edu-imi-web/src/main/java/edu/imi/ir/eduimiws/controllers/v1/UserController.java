@@ -139,7 +139,7 @@ public class UserController {
     public ResponseEntity<?> getUserByUserPublicId(@PathVariable String userPublicId) {
 
         try {
-            PersonEntity person = personService.findPersonEntityByPersonWebServicePublicId(userPublicId);
+            PersonEntity person = personService.findPersonEntityByPersonApiPublicId(userPublicId);
             if (person == null) {
                 return this.userNotFound();
             }

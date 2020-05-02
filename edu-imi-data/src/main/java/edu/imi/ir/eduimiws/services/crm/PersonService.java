@@ -27,7 +27,7 @@ public interface PersonService {
 
     Long selectPersonLastSequenceNumber();
 
-    PersonEntity findPersonEntityByPersonWebServicePublicId(String personPublicId);
+    PersonEntity findPersonEntityByPersonApiPublicId(String personPublicId);
 
     Page<PersonEntity> findAllPersonEntityPages(Pageable pageable);
 

@@ -10,11 +10,11 @@ public interface ContactApiService {
 //NU
 //    ContactApiEntity saveContactWebServiceEntity(ContactApiEntity contactWebServiceEntity);
 
-    ContactApiEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person);
+    ContactApiEntity saveContactApiByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person);
 
-    ContactApiEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact);
+    ContactApiEntity findContactApiEntityByContactEntityFast(ContactEntity contact);
 
-    List<ContactApiEntity> saveAllContactWebServices(List<ContactApiEntity> contactWebServices);
+    List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactWebServices);
 
-    List<ContactApiEntity> generateContactWebServicePublicId(List<ContactEntity> newContacts);
+    List<ContactApiEntity> generateContactApiPublicId(List<ContactEntity> newContacts);
 }

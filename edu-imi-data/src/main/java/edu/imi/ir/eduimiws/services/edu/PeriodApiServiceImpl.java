@@ -26,12 +26,12 @@ public class PeriodApiServiceImpl implements PeriodApiService {
     private final PublicIdUtil publicIdUtil;
 
     @Override
-    public Long periodWebServiceCount() {
+    public Long periodApiCount() {
         return periodApiRepository.count();
     }
 
     @Override
-    public List<PeriodApiEntity> generatePeriodWebServicePublicId(List<PeriodEntity> newPeriodEntities) {
+    public List<PeriodApiEntity> generatePeriodApiPublicId(List<PeriodEntity> newPeriodEntities) {
 
         List<PeriodApiEntity> newPeriodWebServiceEntities = new ArrayList<>();
 

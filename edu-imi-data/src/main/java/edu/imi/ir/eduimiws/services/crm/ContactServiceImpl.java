@@ -50,7 +50,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public ContactEntity findContactEntityByContactWebServicePublicId(String contactPublicId) {
+    public ContactEntity findContactEntityByContactApiPublicId(String contactPublicId) {
         ContactEntity contact = contactRepository
                 .findByContactWebService_ContactPublicId(contactPublicId);
         return contact;

@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
                 .findAllPersonEntitiesByIdIn(personIds);
 
         List<PersonApiEntity> savedPersonWebServices = personApiService
-                .generatePersonWebServicePublicId(persons);
+                .generatePersonApiPublicId(persons);
 
         List<PersonEntity> savedPersons = savedPersonWebServices
                 .stream()
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
                 .findCotactsByIds(contactIds);
 
         List<ContactApiEntity> savedContactWebServices = contactApiService
-                .generateContactWebServicePublicId(newContacts);
+                .generateContactApiPublicId(newContacts);
 
         List<PersonEntity> savedPersons =
                 savedContactWebServices
@@ -251,9 +251,9 @@ public class UserServiceImpl implements UserService {
                 publicContactId = generatePublicId();
                 contactApiEntity =
                         contactApiService
-                                .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
+                                .saveContactApiByPublicContactIdAndPersonEntity(publicContactId, user);
             } else {
-                contactApiEntity = contactApiService.findContactWebServiceEntityByContactEntityFast(user.getContact());
+                contactApiEntity = contactApiService.findContactApiEntityByContactEntityFast(user.getContact());
             }
 
 
@@ -268,7 +268,7 @@ public class UserServiceImpl implements UserService {
             publicContactId = generatePublicId();
             contactApiEntity =
                     contactApiService
-                            .saveContactWebServiceByPublicContactIdAndPersonEntity(publicContactId, user);
+                            .saveContactApiByPublicContactIdAndPersonEntity(publicContactId, user);
         }
 
         if (null == userWebServiceEntity.getPersonPublicId()) {
@@ -280,6 +280,8 @@ public class UserServiceImpl implements UserService {
         }
 
 //        return this.buildUserForAuthentication(user);
+//        OR
+//        return new MyCurrentUser(user);
 
 //        let user login if user email is verified
         return new org.springframework.security.core.userdetails.User(userWebServiceEntity.getUserName(),
@@ -293,10 +295,12 @@ public class UserServiceImpl implements UserService {
 
     private User buildUserForAuthentication(PersonEntity user) {
 
-        MyCurrentUser currentUser = new MyCurrentUser(user);
+        if(user.getPersonApiEntity()==null){
+//            generate contactPublicId
+        }
 
-        if (currentUser.getUserPublicId() == null) {
-//            generate userPublicId
+        if (user.getContact().getContactWebService() == null) {
+//            generate contactPublicId
         }
 
 /*        if(currentUser.getRoles!=null){
@@ -304,7 +308,7 @@ public class UserServiceImpl implements UserService {
         } else {*/
         List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
 //    }
-
+        MyCurrentUser currentUser = new MyCurrentUser(user);
         currentUser.setFirstName(user.getFirstName());
         currentUser.setLastName(user.getLastName());
         currentUser.setPassword(user.getPassword());
@@ -316,10 +320,13 @@ public class UserServiceImpl implements UserService {
         return currentUser;
     }
 
-/*    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
-        role = "ROLE_ADMIN";
-        return Arrays.asList(new SimpleGrantedAuthority(role));
-    }*/
+    public final Collection<? extends GrantedAuthority> getAuthorities(final Collection<RoleApiEntity> roles) {
+        return roles
+                .stream()
+                .flatMap(role -> role.getPrivileges().stream())
+                .map(p -> new SimpleGrantedAuthority(p.getName()))
+                .collect(Collectors.toList());
+    }
 
     private PersonApiEntity savePersonWebService(String publicPersonId, String publicContactId, PersonEntity user) {
         PersonApiEntity newPersonWebService = new PersonApiEntity();
@@ -335,7 +342,7 @@ public class UserServiceImpl implements UserService {
     private boolean existContactPublicIdInContactWebServiceEntity(ContactEntity contactEntity) {
         boolean exist = true;
 
-        ContactApiEntity contactApiEntity = contactApiService.findContactWebServiceEntityByContactEntityFast(contactEntity);
+        ContactApiEntity contactApiEntity = contactApiService.findContactApiEntityByContactEntityFast(contactEntity);
 
         if (null == contactApiEntity) {
             exist = false;
@@ -350,10 +357,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<PersonEntity> distinctSortPersonsById(List<PersonEntity> persons) {
-        return  persons.stream()
+        return persons.stream()
                 .distinct()
                 .sorted(Comparator.comparing(PersonEntity::getId))
-        .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
 

@@ -6,9 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class MyCurrentUser extends User {
@@ -21,7 +23,7 @@ public class MyCurrentUser extends User {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
     }
 
-//    do it later, handle building MyCurrentUser with person constructor
+    //    do it later, handle building MyCurrentUser with person constructor
     public MyCurrentUser(PersonEntity person) {
 /*        this(person.getUsername(), person.getPassword(), person.getPersonApiEntity() != null ?
                 Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")) :
@@ -32,11 +34,40 @@ public class MyCurrentUser extends User {
                 true,
                 true,
                 true,
-                person.getPersonApiEntity() != null ?
-                Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")) :
-                Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+                (person.getPersonApiEntity() == null) ?
+                        new ArrayList<>() :
+                        (person.getPersonApiEntity().getRoles() == null) ?
+                                (Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))) :
+                                (person.getPersonApiEntity().getRoles().stream().findFirst().get().getPrivileges() == null) ?
+                                        (person
+                                                .getPersonApiEntity()
+                                                .getRoles()
+                                                .stream()
+                                                .map(p -> new SimpleGrantedAuthority(p.getName()))
+                                                .collect(Collectors.toList())) :
+                                        (person
+                                                .getPersonApiEntity()
+                                                .getRoles()
+                                                .stream()
+                                                .flatMap(role -> role.getPrivileges().stream())
+                                                .map(p -> new SimpleGrantedAuthority(p.getName()))
+                                                .collect(Collectors.toList()))
+        );
 
-        if(person.getPersonApiEntity()!=null){
+        if (person.getPersonApiEntity() != null) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+            if (person.getPersonApiEntity().getRoles() != null) {
+                this.authorities = person
+                        .getPersonApiEntity()
+                        .getRoles()
+                        .stream()
+                        .flatMap(role -> role.getPrivileges().stream())
+                        .map(p -> new SimpleGrantedAuthority(p.getName()))
+                        .collect(Collectors.toList());
+            }
+        }
+
+        if (person.getPersonApiEntity() != null) {
             this.userPublicId = person.getPersonApiEntity().getPersonPublicId();
             this.contactPublicId = person.getPersonApiEntity().getContactPublicId();
         }

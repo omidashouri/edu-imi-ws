@@ -179,7 +179,7 @@ public class PeriodController {
     public ResponseEntity<?> getPeriodByPeriodPublicId(@PathVariable String periodPublicId) {
 
         try {
-            PeriodEntity period = periodService.findPeriodEntityByPeriodWebServicePublicId(periodPublicId);
+            PeriodEntity period = periodService.findPeriodEntityByPeriodApiPublicId(periodPublicId);
             if (period == null) {
                 return this.periodNotFound();
             }
@@ -401,7 +401,7 @@ public class PeriodController {
         Long periodCount;
         Long newPeriodCount;
 
-        periodWebserviceCount = periodApiService.periodWebServiceCount();
+        periodWebserviceCount = periodApiService.periodApiCount();
         periodCount = periodService.periodCount();
 
         if (periodCount == null || periodCount == 0) {
@@ -478,7 +478,7 @@ public class PeriodController {
         List<PeriodEntity> newPeriods = new ArrayList<>();
         List<PeriodApiEntity> newPeriodWebService = new ArrayList<>();
 
-        periodWebserviceCount = periodApiService.periodWebServiceCount();
+        periodWebserviceCount = periodApiService.periodApiCount();
 
         if (0 != periodWebserviceCount) {
             periodWebServiceLastRecord = periodApiService.selectLastRecord();
@@ -495,7 +495,7 @@ public class PeriodController {
             newPeriods = periodService.findAllPeriodOnly();
         }
 
-        newPeriodWebService = periodApiService.generatePeriodWebServicePublicId(newPeriods);
+        newPeriodWebService = periodApiService.generatePeriodApiPublicId(newPeriods);
 
         returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
         returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());

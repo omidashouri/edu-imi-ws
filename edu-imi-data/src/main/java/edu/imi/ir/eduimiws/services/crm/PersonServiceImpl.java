@@ -78,7 +78,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonEntity findPersonEntityByPersonWebServicePublicId(String personPublicId) {
+    public PersonEntity findPersonEntityByPersonApiPublicId(String personPublicId) {
         PersonEntity person = personRepository
                 .findByPersonApiEntity_PersonPublicId(personPublicId);
         return person;

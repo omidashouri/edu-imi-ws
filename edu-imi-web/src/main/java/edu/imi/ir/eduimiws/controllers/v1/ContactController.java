@@ -183,7 +183,7 @@ public class ContactController {
     public ResponseEntity<?> getContactByContactPublicId(@PathVariable String contactPublicId) {
 
         try {
-            ContactEntity contact = contactService.findContactEntityByContactWebServicePublicId(contactPublicId);
+            ContactEntity contact = contactService.findContactEntityByContactApiPublicId(contactPublicId);
             if (contact == null) {
                 return this.contactNotFound();
             }

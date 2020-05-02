@@ -32,7 +32,7 @@ public class ContactApiServiceImpl implements ContactApiService {
     }*/
 
     @Override
-    public ContactApiEntity saveContactWebServiceByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {
+    public ContactApiEntity saveContactApiByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {
         ContactApiEntity newContactWebService = new ContactApiEntity();
         newContactWebService.setContactPublicId(publicContactId);
         newContactWebService.setContact(person.getContact());
@@ -42,13 +42,13 @@ public class ContactApiServiceImpl implements ContactApiService {
     }
 
     @Override
-    public ContactApiEntity findContactWebServiceEntityByContactEntityFast(ContactEntity contact) {
+    public ContactApiEntity findContactApiEntityByContactEntityFast(ContactEntity contact) {
 //        omiddo:add NamedEntityGraph later for contact
         return contactApiRepository.findByContact(contact);
     }
 
     @Override
-    public List<ContactApiEntity> saveAllContactWebServices(List<ContactApiEntity> contactWebServices) {
+    public List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactWebServices) {
         Iterable<ContactApiEntity> iterableContactWebServices = new ArrayList<>();
         contactWebServices.sort(Comparator.comparing(ContactApiEntity::getContactId));
         iterableContactWebServices = contactApiRepository
@@ -60,7 +60,7 @@ public class ContactApiServiceImpl implements ContactApiService {
     }
 
     @Override
-    public List<ContactApiEntity> generateContactWebServicePublicId(List<ContactEntity> newContacts) {
+    public List<ContactApiEntity> generateContactApiPublicId(List<ContactEntity> newContacts) {
         List<ContactApiEntity> newContactWebServices = new ArrayList<>();
 
         newContacts

@@ -136,7 +136,7 @@ public class PersonApiServiceImpl implements PersonApiService {
     }
 
     @Override
-    public List<PersonApiEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons) {
+    public List<PersonApiEntity> generatePersonApiPublicId(List<PersonEntity> newPersons) {
         List<PersonApiEntity> newPersonWebServices = new ArrayList<>();
 
         newPersons

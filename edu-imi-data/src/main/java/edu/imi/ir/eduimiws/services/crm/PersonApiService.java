@@ -31,7 +31,7 @@ public interface PersonApiService {
 
     PersonApiEntity selectLastRecord();
 
-    List<PersonApiEntity> generatePersonWebServicePublicId(List<PersonEntity> newPersons);
+    List<PersonApiEntity> generatePersonApiPublicId(List<PersonEntity> newPersons);
 
     List<PersonApiEntity> findAllByPersonIdIn(List<Long> personIds);
 }

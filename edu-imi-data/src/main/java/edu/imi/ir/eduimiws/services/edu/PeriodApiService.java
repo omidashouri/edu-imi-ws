@@ -9,7 +9,7 @@ public interface PeriodApiService {
 
     PeriodApiEntity selectLastRecord();
 
-    Long periodWebServiceCount();
+    Long periodApiCount();
 
-    List<PeriodApiEntity> generatePeriodWebServicePublicId(List<PeriodEntity> newPeriodEntities);
+    List<PeriodApiEntity> generatePeriodApiPublicId(List<PeriodEntity> newPeriodEntities);
 }

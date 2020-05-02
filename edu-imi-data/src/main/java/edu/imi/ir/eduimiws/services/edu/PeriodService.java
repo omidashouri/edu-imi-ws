@@ -14,7 +14,7 @@ public interface PeriodService {
 
     Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
-    PeriodEntity findPeriodEntityByPeriodWebServicePublicId(String periodPublicId);
+    PeriodEntity findPeriodEntityByPeriodApiPublicId(String periodPublicId);
 
     List<PeriodEntity> findAllPeriodOnly();
 

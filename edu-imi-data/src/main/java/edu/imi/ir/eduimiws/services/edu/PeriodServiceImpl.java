@@ -43,7 +43,7 @@ public class PeriodServiceImpl implements PeriodService {
     }
 
     @Override
-    public PeriodEntity findPeriodEntityByPeriodWebServicePublicId(String periodPublicId) {
+    public PeriodEntity findPeriodEntityByPeriodApiPublicId(String periodPublicId) {
 
         PeriodEntity period = periodRepository.findByPeriodApi_PeriodPublicId(periodPublicId);
         return period;
