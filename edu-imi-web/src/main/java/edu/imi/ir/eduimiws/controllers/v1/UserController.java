@@ -74,7 +74,7 @@ public class UserController {
 
 
 
-    @GetMapping(path = "/activeUsers",
+    @GetMapping(path = "/active",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<UserResponse>> getAllActive(){
 
@@ -360,7 +360,7 @@ public class UserController {
                     )
             }
     )
-    @GetMapping(path = "/count-new-users",
+    @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getNewUserCount() {
 
