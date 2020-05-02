@@ -327,8 +327,7 @@ public class StudentController {
             studentApiLastRecord = studentApiService.selectLastRecord();
             studentLastRecord = studentService.findFirstByIdLessThanOrderByIdDesc(studentSequenceNumber);
             if (studentLastRecord.getId() > studentApiLastRecord.getStudentId()) {
-//                newStudents = studentService.findAllStudentOnlyByIdBetween(studentApiLastRecord.getStudentId(),studentLastRecord.getId());
-                newStudents = studentService.findAllStudentOnlyByIdBetween(621525l,680759l);
+                newStudents = studentService.findAllStudentOnlyByIdBetween(studentApiLastRecord.getStudentId(),studentLastRecord.getId());
             } else {
                 returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
                 returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());

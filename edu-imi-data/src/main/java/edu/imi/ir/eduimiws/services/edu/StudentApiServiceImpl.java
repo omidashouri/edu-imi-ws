@@ -75,7 +75,6 @@ public class StudentApiServiceImpl implements StudentApiService {
                 .map(PersonEntity::getId)
                 .collect(Collectors.toList());
 
-//      do it to solve oracle IN limitation for 1000 record
         final int chunkSize = 900;
         final AtomicInteger counter = new AtomicInteger();
         Collection<List<Long>> hundredPersonIds = personIds
@@ -105,16 +104,7 @@ public class StudentApiServiceImpl implements StudentApiService {
                     s.setPersonPublicId(personIdPersonPublicIdMap.get(s.getPerson().getId()));
                 });
 
-
-//omiddo: check if it had public id insert it into StudentApiEntity
-
-
-        List<StudentApiEntity> limitedStudentApiEntities = new ArrayList<>();
-
-        limitedStudentApiEntities = newStudentApiEntities.stream().limit(10).collect(Collectors.toList());
-
-        studentApiRepository.saveAll(limitedStudentApiEntities);
-//        studentApiRepository.saveAll(newStudentApiEntities);
+        studentApiRepository.saveAll(newStudentApiEntities);
 
         return newStudentApiEntities;
     }
