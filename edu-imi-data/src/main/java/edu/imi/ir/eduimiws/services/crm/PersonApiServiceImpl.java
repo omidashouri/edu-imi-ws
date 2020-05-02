@@ -137,52 +137,52 @@ public class PersonApiServiceImpl implements PersonApiService {
 
     @Override
     public List<PersonApiEntity> generatePersonApiPublicId(List<PersonEntity> newPersons) {
-        List<PersonApiEntity> newPersonWebServices = new ArrayList<>();
+        List<PersonApiEntity> newPersonApies = new ArrayList<>();
 
         newPersons
                 .stream()
                 .filter(Objects::nonNull)
-                .forEach(p->{
-                    PersonApiEntity newPersonWebService = new PersonApiEntity();
-                    newPersonWebService.setPerson(p);
-                    newPersonWebService.setPersonId(p.getId());
-                    if(p.getUsername() != null){
-                        newPersonWebService.setUserName(p.getUsername());
+                .forEach(p -> {
+                    PersonApiEntity newPersonApi = new PersonApiEntity();
+                    newPersonApi.setPerson(p);
+                    newPersonApi.setPersonId(p.getId());
+                    if (p.getUsername() != null) {
+                        newPersonApi.setUserName(p.getUsername());
                     }
-                    if(p.getPassword() != null){
-                        newPersonWebService.setEncryptedPassword(p.getPassword());
+                    if (p.getPassword() != null) {
+                        newPersonApi.setEncryptedPassword(p.getPassword());
                     }
-                    newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
-                    newPersonWebService.setPersonPublicId(this.generateUniquePersonWebServicePublicId());
-                    if(!Hibernate.isInitialized(p.getContact())) {
+                    newPersonApi.setCreateDateTs(new Timestamp(new Date().getTime()));
+                    newPersonApi.setPersonPublicId(this.generateUniquePersonWebServicePublicId());
+                    if (!Hibernate.isInitialized(p.getContact())) {
                         p.setContact(null);
                     }
-                    if(p.getContact()!=null){
-                        newPersonWebService.setContact(p.getContact());
-                        newPersonWebService.setContactId(p.getContactId());
-                        if(p.getContact().getContactWebService()!=null){
-                            newPersonWebService.setContactPublicId(p.getContact().getContactWebService().getContactPublicId());
+                    if (p.getContact() != null) {
+                        newPersonApi.setContact(p.getContact());
+                        newPersonApi.setContactId(p.getContactId());
+                        if (p.getContact().getContactWebService() != null) {
+                            newPersonApi.setContactPublicId(p.getContact().getContactWebService().getContactPublicId());
                         }
                     }
-                    p.setPersonApiEntity(newPersonWebService);
+                    p.setPersonApiEntity(newPersonApi);
         });
 
-        newPersonWebServices = newPersons
+        newPersonApies = newPersons
                 .stream()
                 .map(PersonEntity::getPersonApiEntity)
                 .collect(Collectors.toList());
 
-        newPersonWebServices
+        newPersonApies
                 .sort(Comparator.comparing(PersonApiEntity::getPersonId));
 
         Iterable<PersonApiEntity> savedIterablePersonWebService =
-                    personApiRepository.saveAll(newPersonWebServices);
+                personApiRepository.saveAll(newPersonApies);
 
-        List<PersonApiEntity> savedPersonWebServices = StreamSupport
-                                    .stream(savedIterablePersonWebService.spliterator(),false)
-                                    .collect(Collectors.toCollection(ArrayList::new));
+        List<PersonApiEntity> savedPersonApies = StreamSupport
+                .stream(savedIterablePersonWebService.spliterator(), false)
+                .collect(Collectors.toCollection(ArrayList::new));
 
-        return savedPersonWebServices;
+        return savedPersonApies;
     }
 
     @Override

@@ -319,7 +319,7 @@ public class PeriodController {
                     )
             }
     )
-    @PostMapping(path = "/executors",
+    @PostMapping(path = "/new/executors",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> generateExecutorPublicId() {
 
