@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -42,4 +43,10 @@ public class PrivilegeApiEntity extends BaseEntity {
 
     @ManyToMany(mappedBy = "privileges")
     private Collection<RoleApiEntity> roles;
+
+    public PrivilegeApiEntity(String privilegeName){
+        this.setName(privilegeName);
+        this.setCreateDateTs(new Timestamp(new Date().getTime()));
+    }
+
 }

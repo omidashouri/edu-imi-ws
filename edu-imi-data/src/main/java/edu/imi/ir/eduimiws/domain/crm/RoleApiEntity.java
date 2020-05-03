@@ -42,7 +42,7 @@ public class RoleApiEntity extends BaseEntity {
     @Column(name = "editor_id")
     private Long editorId;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(schema = "CRM",
             name = "TBL_ROLE_PRIVILEGE_API",
@@ -51,4 +51,8 @@ public class RoleApiEntity extends BaseEntity {
     inverseJoinColumns =
         @JoinColumn(name = "PRIVILEGE_API_ID",referencedColumnName = "ID"))
     private Collection<PrivilegeApiEntity> privileges;
+
+    public RoleApiEntity(String roleName){
+        this.setName(roleName);
+    }
 }

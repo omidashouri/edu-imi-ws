@@ -7,4 +7,6 @@ import java.util.Collection;
 public interface RoleApiService {
 
     Collection<RoleApiEntity> getDefaultUserRole();
+
+    RoleApiEntity createRoleByRoleName(String roleName);
 }

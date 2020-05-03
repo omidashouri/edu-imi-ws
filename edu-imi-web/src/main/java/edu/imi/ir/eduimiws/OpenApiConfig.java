@@ -100,4 +100,13 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi roleApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Roles")
+                .pathsToMatch("/v1/roles/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 }

@@ -10,4 +10,5 @@ public interface PrivilegeApiService {
 
     List<PrivilegeApiEntity> getReadPrivilegesForRoles(Collection<RoleApiEntity> roles);
     List<PrivilegeApiEntity> getReadWriteUpdateDeletePatchPrivilegesForRoles(List<RoleApiEntity> roles);
+    Collection<PrivilegeApiEntity> createFullPrivilege();
 }
