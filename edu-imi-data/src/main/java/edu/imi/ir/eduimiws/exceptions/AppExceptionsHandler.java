@@ -48,4 +48,13 @@ public class AppExceptionsHandler {
         return new ResponseEntity<>(handleOtherExceptionMessage, new HttpHeaders(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(value = {RoleServiceException.class})
+    public ResponseEntity<Object> handleRoleServiceException(RoleServiceException exception,
+                                                             WebRequest request) {
+        ErrorMessage handleRoleServiceExceptionMessage = new ErrorMessage(new Date(), HttpStatus.CONFLICT.toString(),
+                exception.getMessage());
+        return new ResponseEntity<>(handleRoleServiceExceptionMessage, new HttpHeaders(),
+                HttpStatus.CONFLICT);
+    }
 }

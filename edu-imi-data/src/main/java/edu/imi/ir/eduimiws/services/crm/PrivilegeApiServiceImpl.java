@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -28,7 +29,7 @@ public class PrivilegeApiServiceImpl implements PrivilegeApiService {
         PrivilegeApiEntity readPrivilege = new PrivilegeApiEntity();
         readPrivilege.setName("READ");
         readPrivilege.setCreateDateTs(new Timestamp(new Date().getTime()));
-        readPrivilege.setRoles(roles);
+//        readPrivilege.setRoles(roles);
         return Arrays.asList(readPrivilege);
 
     }
@@ -53,10 +54,23 @@ public class PrivilegeApiServiceImpl implements PrivilegeApiService {
 
         returnPrivileges = Stream.of(readPrivilege, writePrivilege, deletePrivilege, updatePrivilege, patchPrivilege)
                 .peek(p -> p.setCreateDateTs(new Timestamp(new Date().getTime())))
-                .peek(p -> p.setRoles(roles))
+//                .peek(p -> p.setRoles(roles))
                 .collect(Collectors.toList());
 
         return returnPrivileges;
+    }
+
+    @Override
+    public Collection<PrivilegeApiEntity> getFullPrivilege() {
+        List<PrivilegeApiEntity> privileges = new ArrayList<>();
+
+        Stream.of("READ","WRITE","DELETE","UPDATE","PATCH")
+                .map(p->(new StringBuilder()).append(p).append("_PRIVILEGE").toString())
+                .map(String::trim)
+                .map(PrivilegeApiEntity::new)
+                .forEachOrdered(privileges::add);
+
+        return privileges;
     }
 
     @Override
@@ -69,34 +83,28 @@ public class PrivilegeApiServiceImpl implements PrivilegeApiService {
                 .map(PrivilegeApiEntity::new)
                 .forEachOrdered(privileges::add);
 
-
-        PrivilegeApiEntity pp = new PrivilegeApiEntity();
-        RoleApiEntity rr = new RoleApiEntity();
-        List<RoleApiEntity> roles = new ArrayList<>();
-        rr.setName("ADMIN");
-        roles.add(rr);
-//        pp.setRoles(roles);
-        pp.setName("test");
-        privilegeApiRepository.save(pp);
-
-        List<PrivilegeApiEntity> lpp = new ArrayList<>();
-        lpp.add(pp);
-//        rr.setPrivileges(lpp);
-//        roleApiRepository.save(rr);
-
-
 //        privileges.stream().forEach(p->p.setRoles(new ArrayList<>()));
-
-        privileges.forEach(p->{
-            privilegeApiRepository.save(p);
-        });
 
         privilegeApiRepository.saveAll(privileges);
 
-        Collection<PrivilegeApiEntity> savedPrivileges = null;
-                privilegeApiRepository.saveAll(privileges)
-                        .forEach(savedPrivileges::add);
+        Iterable<PrivilegeApiEntity> savedIterablePersonWebService =
+                privilegeApiRepository.saveAll(privileges);
 
+        Collection<PrivilegeApiEntity> savedPrivileges = StreamSupport
+                .stream(savedIterablePersonWebService.spliterator(), false)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return savedPrivileges;
+    }
+
+    @Override
+    public Collection<PrivilegeApiEntity> saveAllPrivilegeApis(Collection<PrivilegeApiEntity> privilegeApis) {
+        Iterable<PrivilegeApiEntity> savedIterablePersonWebService =
+                privilegeApiRepository.saveAll(privilegeApis);
+
+        Collection<PrivilegeApiEntity> savedPrivileges = StreamSupport
+                .stream(savedIterablePersonWebService.spliterator(), false)
+                .collect(Collectors.toCollection(ArrayList::new));
         return savedPrivileges;
     }
 }

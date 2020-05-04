@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiIdProjectionMapper;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonApiIdProjection;
@@ -30,6 +31,7 @@ public class PersonApiServiceImpl implements PersonApiService {
 
     private final PersonApiRepository personApiRepository;
     private final PersonApiIdProjectionMapper personApiIdProjectionMapper;
+    private final RoleApiService roleApiService;
 //    private final ContactApiService contactWebServiceService;
     private final PublicIdUtil publicIdUtil;
 
@@ -190,6 +192,27 @@ public class PersonApiServiceImpl implements PersonApiService {
         List<PersonApiEntity> personApis = personApiRepository
                 .findAllByPersonIdIn(personIds);
         return personApis;
+    }
+
+    @Override
+    public PersonApiEntity updateByPersonApiAndRoleName(PersonApiEntity personApi, String roleName) {
+        String roleNameCorrected = new StringBuilder()
+                .append("ROLE_")
+                .append(roleName.toUpperCase()).toString();
+        Collection<RoleApiEntity> roles = roleApiService.findAllByRoleName(roleNameCorrected);
+
+        Collection<RoleApiEntity> correctedRoles = roles.stream()
+                .filter(r->r.getPrivileges().containsAll(Arrays.asList("READ_PRIVILEGE","PATCH_PRIVILEGE")))
+                .collect(Collectors.toList());
+        List<RoleApiEntity> newRoles = personApi.getRoles().stream().collect(Collectors.toList());
+        roles.forEach(r->{
+            newRoles.add(r);
+        });
+
+        personApi.setRoles(newRoles);
+        PersonApiEntity savedPersonApi =  personApiRepository.save(personApi);
+
+        return savedPersonApi;
     }
 
     private String generateUniquePersonWebServicePublicId() {

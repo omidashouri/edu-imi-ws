@@ -1,6 +1,5 @@
 package edu.imi.ir.eduimiws.models.request;
 
-
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -9,18 +8,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.server.core.Relation;
 
-@Schema(name = "role user",description = "create role in application")
-@JsonRootName(value = "role")
-@Relation(collectionRelation = "roles")
+@Schema(name = "users",description = "User Role in application")
+@JsonRootName(value = "user")
+@Relation(collectionRelation = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleForm {
+public class UserRolePrivilege {
 
-    @Schema(title = "Role Name", maxLength = 20)
+    @Schema(title = "User Role Name")
     private String roleName;
 
-    @Schema(title = "Privilege Name", maxLength = 20)
+    @Schema(title = "User Privilege Name")
     private String privilegeName;
+
 }

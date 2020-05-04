@@ -78,15 +78,19 @@ public class RoleController {
         RoleResponse returnValue = new RoleResponse();
         RoleApiEntity savedRole = new RoleApiEntity();
 
-        String roleName = roleForm.getName();
-
-        privilegeApiService.createFullPrivilege();
+        String roleName = roleForm.getRoleName();
 
         savedRole = roleApiService.createRoleByRoleName(roleName);
 
         returnValue.setName(savedRole.getName());
-//        returnValue.setPrivilegeApies(savedRole.getPrivileges().stream().collect(Collectors.toList()));
 
         return ResponseEntity.ok(returnValue);
     }
+
+
+
+
+
+
+
 }

@@ -34,4 +34,6 @@ public interface PersonApiService {
     List<PersonApiEntity> generatePersonApiPublicId(List<PersonEntity> newPersons);
 
     List<PersonApiEntity> findAllByPersonIdIn(List<Long> personIds);
+
+    PersonApiEntity updateByPersonApiAndRoleName(PersonApiEntity personApi,String roleName);
 }

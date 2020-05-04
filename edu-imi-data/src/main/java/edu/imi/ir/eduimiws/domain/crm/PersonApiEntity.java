@@ -154,7 +154,7 @@ public class PersonApiEntity extends BaseEntity {
   @Column(name="DESCRIPTION",length = 500)
   private String description;
 
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinTable(schema = "CRM",
           name = "TBL_PERSON_ROLE_API",

@@ -10,6 +10,7 @@ import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.request.UserRegister;
+import edu.imi.ir.eduimiws.models.request.UserRolePrivilege;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
@@ -533,6 +534,71 @@ public class UserController {
                 userResponseAssembler.toCollectionModel(savedUserFastDto);
 
         return ResponseEntity.ok(userResponseCollectionModel);
+    }
+
+    @Operation(
+            summary = "Role User",
+            description = "role User",
+            tags = "users",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = UserRolePrivilege.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "406",
+                            description = "Not Acceptable",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PostMapping(path = "/{userPublicId}/role",
+            consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> createUserRole(@PathVariable String userPublicId,
+                                            @RequestBody UserRolePrivilege userRolePrivilege) {
+
+        UserRolePrivilege returnValue = new UserRolePrivilege();
+        List<PersonEntity> savedPersons = new ArrayList<>();
+        String userRoleName= null;
+        Long userCount;
+
+        if(userRolePrivilege.getRoleName().isEmpty()){
+            return this.nationalCodeIsEmpty();
+        }else{
+            userRoleName = userRolePrivilege.getRoleName();
+        }
+
+        PersonEntity person = personService.findPersonEntityByPersonApiPublicId(userPublicId);
+
+        personApiService.updateByPersonApiAndRoleName(person.getPersonApiEntity(),userRoleName);
+
+
+        return ResponseEntity.ok(null);
     }
 
 

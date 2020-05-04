@@ -52,6 +52,9 @@ public class RoleApiEntity extends BaseEntity {
         @JoinColumn(name = "PRIVILEGE_API_ID",referencedColumnName = "ID"))
     private Collection<PrivilegeApiEntity> privileges;
 
+    @ManyToMany(mappedBy = "roles",cascade = CascadeType.MERGE)
+    private Collection<PersonApiEntity> personApis;
+
     public RoleApiEntity(String roleName){
         this.setName(roleName);
     }

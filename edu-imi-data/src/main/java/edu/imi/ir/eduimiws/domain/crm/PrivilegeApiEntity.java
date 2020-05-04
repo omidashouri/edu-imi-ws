@@ -41,7 +41,7 @@ public class PrivilegeApiEntity extends BaseEntity {
     @Column(name = "editor_id")
     private Long editorId;
 
-    @ManyToMany(mappedBy = "privileges")
+    @ManyToMany(mappedBy = "privileges",cascade = CascadeType.MERGE)
     private Collection<RoleApiEntity> roles;
 
     public PrivilegeApiEntity(String privilegeName){
