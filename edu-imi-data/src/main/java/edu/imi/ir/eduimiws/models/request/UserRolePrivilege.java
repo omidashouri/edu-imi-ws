@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.server.core.Relation;
 
-@Schema(name = "users",description = "User Role in application")
-@JsonRootName(value = "user")
-@Relation(collectionRelation = "users")
+@Schema(name = "Role User",description = "User Role in application")
+@JsonRootName(value = "role")
+@Relation(collectionRelation = "roles")
 @Getter
 @Setter
 @NoArgsConstructor
