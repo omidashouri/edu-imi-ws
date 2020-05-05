@@ -97,11 +97,18 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         String userName = ((User) auth.getPrincipal()).getUsername();
 
-        String token = Jwts.builder()
+/*        String token = Jwts.builder()
                 .setSubject(userName)
                 .setExpiration(new Date(System.currentTimeMillis() + Long.valueOf(appProperties.getExpirationTime()).intValue()))
                 .signWith(SignatureAlgorithm.HS512, appProperties.getTokenSecret() )
-                .compact();
+                .compact();*/
+
+//omiddo: set role here
+        String token = Jwts.builder().setSubject(((User) auth.getPrincipal()).getUsername())
+                .claim("role", "user")
+                .setExpiration(new Date(System.currentTimeMillis() + 360000000))
+                .signWith(SignatureAlgorithm.HS512, appProperties.getTokenSecret()).compact();
+
 
 //    get bean from context, bean name is name of class start with lowercase
         UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
