@@ -36,6 +36,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -233,6 +234,7 @@ public class ContactController {
                     )
             }
     )
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(path = "/{nationalCode}/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getContactCountByNationalCode(@PathVariable String nationalCode) {

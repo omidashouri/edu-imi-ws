@@ -290,7 +290,7 @@ public class UserServiceImpl implements UserService {
                 true,
                 true,
                 true,
-                new ArrayList<>());
+                this.getAuthorities(userWebServiceEntity.getRoles()));
     }
 
     private User buildUserForAuthentication(PersonEntity user) {

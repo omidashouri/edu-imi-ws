@@ -8,9 +8,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
+import org.springframework.security.access.method.MapBasedMethodSecurityMetadataSource;
+import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,6 +28,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -150,6 +159,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl() ;
+    }
+
+    @EnableGlobalMethodSecurity(prePostEnabled = true)
+    public static class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
+
+        public MethodSecurityMetadataSource customMethodSecurityMetadataSource() {
+            Map<String, List<ConfigAttribute>> methodMap = new HashMap<>();
+            methodMap.put("edu.imi.ir.eduimiws.controllers.v1.ContactController.getContactCountByNationalCode*", SecurityConfig.createList("ROLE_ADMIN"));
+            return new MapBasedMethodSecurityMetadataSource(methodMap);
+        }
+
     }
 
 }
