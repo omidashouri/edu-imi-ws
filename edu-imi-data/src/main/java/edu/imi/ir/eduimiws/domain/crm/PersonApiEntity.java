@@ -16,21 +16,37 @@ import java.util.Collection;
 
 // add role_ID column
 
-@NamedEntityGraph(name = "personWebServiceFastGraph", attributeNodes = {
-  @NamedAttributeNode("personId"),
-  @NamedAttributeNode("personPublicId"),
-  @NamedAttributeNode("contactId"),
-  @NamedAttributeNode("contactPublicId"),
-  @NamedAttributeNode("userName"),
-  @NamedAttributeNode("encryptedPassword"),
-  @NamedAttributeNode("emailVerificationToken"),
-  @NamedAttributeNode("emailVerificationStatus"),
-  @NamedAttributeNode("mobileVerificationStatus"),
-  @NamedAttributeNode("creatorId"),
-  @NamedAttributeNode("createDateTs"),
-  @NamedAttributeNode("editorId"),
-  @NamedAttributeNode("editDateTs"),
-  @NamedAttributeNode("description")
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "PersonApiEntity.personWebServiceFastGraph", attributeNodes = {
+                @NamedAttributeNode("personId"),
+                @NamedAttributeNode("personPublicId"),
+                @NamedAttributeNode("contactId"),
+                @NamedAttributeNode("contactPublicId"),
+                @NamedAttributeNode("userName"),
+                @NamedAttributeNode("encryptedPassword"),
+                @NamedAttributeNode("emailVerificationToken"),
+                @NamedAttributeNode("emailVerificationStatus"),
+                @NamedAttributeNode("mobileVerificationStatus"),
+                @NamedAttributeNode("creatorId"),
+                @NamedAttributeNode("createDateTs"),
+                @NamedAttributeNode("editorId"),
+                @NamedAttributeNode("editDateTs"),
+                @NamedAttributeNode("description")
+        }),
+        @NamedEntityGraph(name = "PersonApiEntity.findPersonApiWithPersonRolePrivilegeSubGraph",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "person"),
+                        @NamedAttributeNode(value = "roles",subgraph = "role-subGraph")
+                },
+                subgraphs = {
+                        @NamedSubgraph(name = "role-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "privileges")
+                                }
+                        )
+                }
+        )
+
 })
 @SqlResultSetMappings(
   @SqlResultSetMapping(

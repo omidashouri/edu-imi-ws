@@ -24,6 +24,8 @@ public interface PersonApiService {
 
     PersonApiEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity);
 
+    PersonApiEntity findByPersonPublicIdWithPersonAndRole(String userPublicId);
+
 //    NU
     List<PersonApiEntity> findAllPersonWebServiceIdProjection();
 

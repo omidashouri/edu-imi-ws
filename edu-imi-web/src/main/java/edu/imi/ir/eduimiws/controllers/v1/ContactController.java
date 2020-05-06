@@ -225,6 +225,13 @@ public class ContactController {
                             )
                     ),
                     @ApiResponse(
+                            responseCode = "403",
+                            description = "Do not have Permission",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
                             responseCode = "400",
                             description = "Bad Request",
                             content = @Content(

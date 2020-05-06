@@ -51,7 +51,7 @@ public class RoleApiServiceImpl implements RoleApiService {
         Collection<PrivilegeApiEntity> newPrivileges = privilegeApiService.getFullPrivilege();
 
         newPrivileges.stream().forEachOrdered(np -> np.setRoles(Arrays.asList(newRole)));
-        newRole.setPrivileges(newPrivileges);
+        newRole.setPrivileges(newPrivileges.stream().collect(Collectors.toSet()));
 
 //        privilegeApiRepository.saveAll(newPrivileges);
         privilegeApiService.saveAllPrivilegeApis(newPrivileges);

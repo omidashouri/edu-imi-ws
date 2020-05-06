@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.mapper.crm.PersonApiFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonApiFastDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
-import edu.imi.ir.eduimiws.models.user.MyCurrentUser;
+import edu.imi.ir.eduimiws.models.user.MyErpUser;
 import edu.imi.ir.eduimiws.services.crm.ContactApiService;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.services.crm.PersonApiService;
@@ -281,16 +281,17 @@ public class UserServiceImpl implements UserService {
 
 //        return this.buildUserForAuthentication(user);
 //        OR
-//        return new MyCurrentUser(user);
+//        return new MyErpUser(user);
 
-//        let user login if user email is verified
-        return new org.springframework.security.core.userdetails.User(userWebServiceEntity.getUserName(),
+/*        return new org.springframework.security.core.userdetails.User(userWebServiceEntity.getUserName(),
                 userWebServiceEntity.getEncryptedPassword(),
                 true,
                 true,
                 true,
                 true,
-                this.getAuthorities(userWebServiceEntity.getRoles()));
+                this.getAuthorities(userWebServiceEntity.getRoles()));*/
+
+        return new MyErpUser(user);
     }
 
     private User buildUserForAuthentication(PersonEntity user) {
@@ -308,7 +309,7 @@ public class UserServiceImpl implements UserService {
         } else {*/
         List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
 //    }
-        MyCurrentUser currentUser = new MyCurrentUser(user);
+        MyErpUser currentUser = new MyErpUser(user);
         currentUser.setFirstName(user.getFirstName());
         currentUser.setLastName(user.getLastName());
         currentUser.setPassword(user.getPassword());

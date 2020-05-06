@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.security;
 
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.models.user.MyCurrentUser;
+import edu.imi.ir.eduimiws.models.user.MyErpUser;
 import edu.imi.ir.eduimiws.services.crm.PersonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -55,7 +55,7 @@ public class MyUserDetailsService implements UserDetailsService {
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
 
-        return new MyCurrentUser(username, password, enabled, accountNonExpired, credentialsNonExpired,
+        return new MyErpUser(username, password, enabled, accountNonExpired, credentialsNonExpired,
                 accountNonLocked, authorities);
         //If your database has more information of user for example firstname,... You can fill it here
         //CurrentUser currentUser = new CurrentUser(....)

@@ -115,6 +115,12 @@ public class PersonApiServiceImpl implements PersonApiService {
     }
 
     @Override
+    public PersonApiEntity findByPersonPublicIdWithPersonAndRole(String userPublicId) {
+        PersonApiEntity personApi = personApiRepository.readByPersonPublicId(userPublicId);
+        return personApi;
+    }
+
+    @Override
     public List<PersonApiEntity> findAllPersonWebServiceIdProjection() {
 
         List<PersonApiIdProjection> personApiIdProjections =

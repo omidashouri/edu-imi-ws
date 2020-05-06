@@ -166,7 +166,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         public MethodSecurityMetadataSource customMethodSecurityMetadataSource() {
             Map<String, List<ConfigAttribute>> methodMap = new HashMap<>();
-            methodMap.put("edu.imi.ir.eduimiws.controllers.v1.ContactController.getContactCountByNationalCode*", SecurityConfig.createList("ROLE_ADMIN"));
+            methodMap.put("edu.imi.ir.eduimiws.controllers.v1.ContactController.getContactCountByNationalCode*",
+                    SecurityConfig.createList("ROLE_ADMIN"));
             return new MapBasedMethodSecurityMetadataSource(methodMap);
         }
 

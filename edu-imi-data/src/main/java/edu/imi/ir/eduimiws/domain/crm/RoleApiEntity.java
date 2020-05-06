@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -42,7 +43,7 @@ public class RoleApiEntity extends BaseEntity {
     @Column(name = "editor_id")
     private Long editorId;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(schema = "CRM",
             name = "TBL_ROLE_PRIVILEGE_API",
@@ -50,7 +51,7 @@ public class RoleApiEntity extends BaseEntity {
         @JoinColumn(name = "ROLE_API_ID",referencedColumnName = "ID"),
     inverseJoinColumns =
         @JoinColumn(name = "PRIVILEGE_API_ID",referencedColumnName = "ID"))
-    private Collection<PrivilegeApiEntity> privileges;
+    private Set<PrivilegeApiEntity> privileges;
 
     @ManyToMany(mappedBy = "roles",cascade = CascadeType.MERGE)
     private Collection<PersonApiEntity> personApis;

@@ -16,10 +16,13 @@ public interface PersonApiRepository extends CrudRepository<PersonApiEntity,Long
 
     PersonApiEntity findByPersonId(Long personId);
 
-    @EntityGraph("personWebServiceFastGraph")
+    @EntityGraph("PersonApiEntity.personWebServiceFastGraph")
     PersonApiEntity findByUserName(String userName);
 
     PersonApiEntity findByPersonPublicId(String personPublicId);
+
+    @EntityGraph(value = "PersonApiEntity.findPersonApiWithPersonRolePrivilegeSubGraph",type = EntityGraph.EntityGraphType.FETCH)
+    PersonApiEntity readByPersonPublicId(String personPublicId);
 
     Page<PersonApiEntity> findAll(Pageable pageable);
 
