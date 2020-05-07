@@ -22,8 +22,11 @@ import java.util.Set;
 @Table(schema = "CRM",name = "TBL_ROLE_API")
 public class RoleApiEntity extends BaseEntity {
 
-    @Column(name = "NAME")
+    @Column(name = "NAME",length = 100)
     private String name;
+
+    @Column(name = "ROLE_PUBLIC_ID",length = 500)
+    private String rolePublicId;
 
     @Column(name = "CREATE_DATE_TS")
     private Timestamp createDateTs;
@@ -34,7 +37,7 @@ public class RoleApiEntity extends BaseEntity {
     @Column(name = "DELETE_DATE_TS")
     private Timestamp deleteDateTs;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION",length = 500)
     private String description;
 
     @Column(name = "creator_id")

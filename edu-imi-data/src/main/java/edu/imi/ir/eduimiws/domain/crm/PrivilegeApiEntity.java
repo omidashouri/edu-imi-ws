@@ -20,8 +20,11 @@ import java.util.Date;
 @Table(schema = "CRM",name = "TBL_PRIVILEGE_API")
 public class PrivilegeApiEntity extends BaseEntity {
 
-    @Column(name = "NAME")
+    @Column(name = "NAME",length = 100)
     private String name;
+
+    @Column(name = "PRIVILEGE_PUBLIC_ID",length = 500)
+    private String privilegePublicId;
 
     @Column(name = "CREATE_DATE_TS")
     private Timestamp createDateTs;
@@ -32,7 +35,7 @@ public class PrivilegeApiEntity extends BaseEntity {
     @Column(name = "DELETE_DATE_TS")
     private Timestamp deleteDateTs;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION",length = 500)
     private String description;
 
     @Column(name = "creator_id")
