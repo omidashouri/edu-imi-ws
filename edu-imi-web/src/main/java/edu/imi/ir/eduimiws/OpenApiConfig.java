@@ -109,4 +109,13 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi mailApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Mails")
+                .pathsToMatch("/v1/mails/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 }
