@@ -2,6 +2,8 @@ package edu.imi.ir.eduimiws.repositories.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -16,7 +18,12 @@ public interface RoleApiRepository extends CrudRepository<RoleApiEntity, Long> {
 
     Collection<RoleApiEntity> findAllByNameAndPrivilegesIn(String roleName, List<PrivilegeApiEntity> privilegeApis);
 
-    @Query(" from RoleApiEntity  r left join r.privileges p where r.id=8L and p.id=85L")
+    @Query(" from RoleApiEntity r left join r.privileges p where r.id=8L and p.id=85L")
     List<RoleApiEntity> findByp();
 
+/*    @Query(value = "from RoleApiEntity r join fetch r.privileges p order by r.createDateTimeStamp DESC ",
+    countQuery = "select count(r.id) from RoleApiEntity r join  r.privileges p order by r.createDateTimeStamp DESC")*/
+    Page<RoleApiEntity> findAllByOrderByCreateDateTsDesc(Pageable pageable);
+
+    RoleApiEntity findByRolePublicId(String rolePublicId);
 }

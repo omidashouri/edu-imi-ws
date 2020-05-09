@@ -8,27 +8,21 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.util.Set;
-
-@Schema(name = "roles", description = "Class representing a role in the application.")
+@Schema(name = "roles", description = "Class representing a privileges in the application.")
 @EqualsAndHashCode(callSuper = false)
-@JsonRootName(value = "role")
-@Relation(collectionRelation = "roles")
+@JsonRootName(value = "privilege")
+@Relation(collectionRelation = "privileges")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleResponse extends RepresentationModel<RoleResponse> {
+public class PrivilegeResponse extends RepresentationModel<RoleResponse> {
 
     @Schema(title = "Person Public ID",maxLength = 36)
-    private String rolePublicId;
+    private String privilegePublicId;
 
-    @Schema(title = "Role Name",maxLength = 100)
+    @Schema(title = "Privilege Name",maxLength = 100)
     private String name;
-
-    @Schema(title = "Privileges")
-    private Set<PrivilegeResponse> privilegeResponses;
-
 }

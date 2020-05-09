@@ -7,6 +7,8 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
+import java.util.List;
+
 @Schema(name = "users", description = "Class representing a user in the application.")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "user")
@@ -129,7 +131,7 @@ public class UserResponse extends RepresentationModel<UserResponse> {
     @Schema(title = "User Description", maxLength = 500)
     private String description;
 
-    @Schema(title = "User Authority (ROLE) Public ID", maxLength = 36 )
-    private String authorityPublicId;
+    @Schema(title = "User ROLES" )
+    private List<RoleResponse> roleResponses;
 }
 

@@ -7,6 +7,8 @@ import edu.imi.ir.eduimiws.repositories.crm.PrivilegeApiRepository;
 import edu.imi.ir.eduimiws.repositories.crm.RoleApiRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,4 +75,20 @@ public class RoleApiServiceImpl implements RoleApiService {
                 .findAllByNameAndPrivilegesIn(roleName, pa);
         return returnedRoles;
     }
+
+    @Override
+    public Page<RoleApiEntity> findAllRoleEntityPagesOrderByCreateDateDesc(Pageable pageable) {
+        Page<RoleApiEntity> roleApiPages = roleApiRepository
+                .findAllByOrderByCreateDateTsDesc(pageable);
+        return roleApiPages;
+    }
+
+    @Override
+    public RoleApiEntity findByRolePublicId(String rolePublicId) {
+        RoleApiEntity roleApi  = roleApiRepository
+                .findByRolePublicId(rolePublicId);
+        return roleApi;
+    }
+
+
 }
