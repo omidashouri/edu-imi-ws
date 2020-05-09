@@ -2,6 +2,8 @@ package edu.imi.ir.eduimiws.models.dto.crm;
 
 import lombok.*;
 
+import java.util.Collection;
+
 //User is PersonEntity plus PersonApiEntity
 @Data
 @Getter
@@ -79,5 +81,7 @@ public class UserFastDto {
     private String description;
 
     private String authorityPublicId;
+
+    private Collection<RoleFastDto> roleFastDtos;
 
 }

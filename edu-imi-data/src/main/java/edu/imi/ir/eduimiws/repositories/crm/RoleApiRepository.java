@@ -21,8 +21,6 @@ public interface RoleApiRepository extends CrudRepository<RoleApiEntity, Long> {
     @Query(" from RoleApiEntity r left join r.privileges p where r.id=8L and p.id=85L")
     List<RoleApiEntity> findByp();
 
-/*    @Query(value = "from RoleApiEntity r join fetch r.privileges p order by r.createDateTimeStamp DESC ",
-    countQuery = "select count(r.id) from RoleApiEntity r join  r.privileges p order by r.createDateTimeStamp DESC")*/
     Page<RoleApiEntity> findAllByOrderByCreateDateTsDesc(Pageable pageable);
 
     RoleApiEntity findByRolePublicId(String rolePublicId);

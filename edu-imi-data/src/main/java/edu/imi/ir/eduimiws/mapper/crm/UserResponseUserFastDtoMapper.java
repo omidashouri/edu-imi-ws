@@ -41,11 +41,12 @@ public interface UserResponseUserFastDtoMapper {
             @Mapping(source = "activityStatus",target = "activityStatus"),
             @Mapping(source = "address",target = "address")
     })
+    @BeanMapping(ignoreByDefault = true)
     UserResponse toUserResponse(UserFastDto userFastDto, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
+    @BeanMapping(ignoreByDefault = true)
     UserFastDto toUserFastDto(UserResponse userResponse, @Context CycleAvoidingMappingContext context);
-
 
     List<UserResponse> toUserResponses(List<UserFastDto> userFastDtos, @Context CycleAvoidingMappingContext context);
 

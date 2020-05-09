@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.mapper.crm;
 
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import org.hibernate.Hibernate;
@@ -9,6 +10,7 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 //User is PersonEntity plus PersonApiEntity
 @Mapper
@@ -16,11 +18,11 @@ public interface UserFastDtoMapper {
 
     UserFastDtoMapper INSTANCE = Mappers.getMapper(UserFastDtoMapper.class);
 
-/*
-*organizationClassPublicId, organizationPositionPublicId, ownerPublicId,
-* authorityPublicId, commerceAdditionalInfoPublicId, companyPublicId,
-* selectedLanguagePublicId,
-* */
+    /*
+     *organizationClassPublicId, organizationPositionPublicId, ownerPublicId,
+     * authorityPublicId, commerceAdditionalInfoPublicId, companyPublicId,
+     * selectedLanguagePublicId,
+     * */
 
 
     @Mappings({
@@ -64,18 +66,37 @@ public interface UserFastDtoMapper {
 
     @AfterMapping
     default void handleContactPublicIds(PersonEntity personEntity, @MappingTarget UserFastDto userFastDto) {
-        if(!Hibernate.isInitialized(personEntity.getContact())) {
+        if (!Hibernate.isInitialized(personEntity.getContact())) {
             personEntity.setContact(null);
         }
-        if(personEntity.getContact()!=null) {
+        if (personEntity.getContact() != null) {
             if (personEntity.getContact().getContactWebService() != null) {
-                userFastDto.setContactPublicId(personEntity.getContact().getContactWebService().getContactPublicId());
+                userFastDto.
+                        setContactPublicId(personEntity.getContact().getContactWebService().getContactPublicId());
             }
             if (personEntity.getContact().getNationCode() != null) {
                 userFastDto.setNationCode(personEntity.getContact().getNationCode());
             }
         }
+        if (!Hibernate.isInitialized(personEntity.getPersonApiEntity())) {
+            personEntity.setPersonApiEntity(null);
+        }
+        if (personEntity.getPersonApiEntity() != null) {
+            if (!Hibernate.isInitialized(personEntity.getPersonApiEntity().getRoles())) {
+                personEntity.getPersonApiEntity().setRoles(null);
+            }
+            if (personEntity.getPersonApiEntity().getRoles() != null &&
+                    personEntity.getPersonApiEntity().getRoles().size() > 0) {
+                List<RoleApiEntity> roleApies = personEntity
+                        .getPersonApiEntity()
+                        .getRoles()
+                        .stream()
+                        .distinct()
+                        .collect(Collectors.toList());
+                userFastDto.setRoleFastDtos(
+                        new RoleFastDtoMapperImpl()
+                                .toRoleFastDtos(roleApies, new CycleAvoidingMappingContext()));
+            }
+        }
     }
-
-
 }

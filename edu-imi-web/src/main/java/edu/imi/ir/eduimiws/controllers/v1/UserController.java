@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
+import edu.imi.ir.eduimiws.assemblers.crm.UserRolePrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiUserContactFastDtoMapper;
@@ -14,6 +15,7 @@ import edu.imi.ir.eduimiws.models.request.UserRolePrivilege;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
+import edu.imi.ir.eduimiws.models.response.crm.UserRolePrivilegeResponse;
 import edu.imi.ir.eduimiws.security.ActiveUserService2;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.crm.PersonApiService;
@@ -64,6 +66,7 @@ public class UserController {
     private final PersonApiUserContactFastDtoMapper personApiUserContactFastDtoMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserResponseAssembler userResponseAssembler;
+    private final UserRolePrivilegeResponseAssembler userRolePrivilegeResponseAssembler;
     private final PagedResourcesAssembler<UserFastDto> userPagedResourcesAssembler;
     private final ActiveUserService2 activeUserService;
     private final UserRegisterUserFastDtoMapper userRegisterUserFastDtoMapper;
@@ -102,6 +105,63 @@ public class UserController {
                 userResponseAssembler.toCollectionModel(userFastDtos);
 
         return ResponseEntity.ok(userResponseCollectionModel);*/
+    }
+
+
+    @Operation(
+            summary = "Find user role by public ID",
+            description = "search user role by the public id"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = UserResponse.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "User not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/{userPublicId}/role",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getUserRoleByUserPublicId(@PathVariable String userPublicId) {
+
+        try {
+            PersonEntity person = personApiService
+                    .findByPersonPublicIdWithPersonAndRole(userPublicId)
+                    .getPerson();
+            if (person == null) {
+                return this.userNotFound();
+            }
+
+            UserFastDto userFastDto =
+                    userFastDtoMapper.toUserFastDto(person,new CycleAvoidingMappingContext());
+
+            UserRolePrivilegeResponse userRolePrivilegeResponse =
+                    userRolePrivilegeResponseAssembler.toModel(userFastDto);
+
+            return ResponseEntity.ok(userRolePrivilegeResponse);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
     }
 
     @Operation(
