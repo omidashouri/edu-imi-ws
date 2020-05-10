@@ -2,7 +2,9 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
+import edu.imi.ir.eduimiws.exceptions.RoleServiceException;
 import edu.imi.ir.eduimiws.repositories.crm.PrivilegeApiRepository;
+import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.stream.StreamSupport;
 public class PrivilegeApiServiceImpl implements PrivilegeApiService {
 
     private final PrivilegeApiRepository privilegeApiRepository;
+    private final PublicIdUtil publicIdUtil;
 //    private final RoleApiRepository roleApiRepository;
 //    private final PersonApiRepository personApiRepository;
 
@@ -106,5 +109,44 @@ public class PrivilegeApiServiceImpl implements PrivilegeApiService {
                 .stream(savedIterablePersonWebService.spliterator(), false)
                 .collect(Collectors.toCollection(ArrayList::new));
         return savedPrivileges;
+    }
+
+    @Override
+    public PrivilegeApiEntity createPrivilegeByName(String privilegeName) {
+
+        String correctedPrivilegeName = (new StringBuilder())
+                .append(privilegeName.trim().toUpperCase())
+                .append("_PRIVILEGE").toString();
+
+        Collection<PrivilegeApiEntity> findPrivileges = this
+                .findAllByPrivilegeName(correctedPrivilegeName);
+        if (!findPrivileges.isEmpty() || findPrivileges.size() > 0) {
+            throw new RoleServiceException("Duplicate Privilege Found For " + privilegeName);
+        }
+
+        PrivilegeApiEntity newPrivilege = new PrivilegeApiEntity();
+        newPrivilege.setName(correctedPrivilegeName);
+        newPrivilege.setPrivilegePublicId(generatePrivilegePublicId());
+        newPrivilege.setCreateDateTs(new Timestamp(new Date().getTime()));
+
+        PrivilegeApiEntity savedPrivilege = privilegeApiRepository.save(newPrivilege);
+        return savedPrivilege;
+    }
+
+    @Override
+    public Collection<PrivilegeApiEntity> findAllByPrivilegeName(String privilegeName) {
+        Collection<PrivilegeApiEntity> findPrivileges = privilegeApiRepository
+                .findAllByName(privilegeName);
+        return findPrivileges;
+    }
+
+    @Override
+    public Collection<PrivilegeApiEntity> findAllByPrivilegePublicIds(List<String> privilegePublicIds) {
+        Collection<PrivilegeApiEntity> privilegeApis = privilegeApiRepository.findAllByPrivilegePublicIdIn(privilegePublicIds);
+        return privilegeApis;
+    }
+
+    private String generatePrivilegePublicId() {
+        return publicIdUtil.generateUniquePublicId();
     }
 }

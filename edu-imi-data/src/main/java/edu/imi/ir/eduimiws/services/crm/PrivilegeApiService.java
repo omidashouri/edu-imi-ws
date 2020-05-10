@@ -13,4 +13,7 @@ public interface PrivilegeApiService {
     Collection<PrivilegeApiEntity> getFullPrivilege();
     Collection<PrivilegeApiEntity> createFullPrivilege();
     Collection<PrivilegeApiEntity> saveAllPrivilegeApis(Collection<PrivilegeApiEntity> privilegeApis);
+    PrivilegeApiEntity createPrivilegeByName(String roleName);
+    Collection<PrivilegeApiEntity> findAllByPrivilegeName(String privilegeName);
+    Collection<PrivilegeApiEntity> findAllByPrivilegePublicIds(List<String> privilegePublicIds);
 }

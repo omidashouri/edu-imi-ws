@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.mapper.crm.RoleFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.RoleFastDto;
 import edu.imi.ir.eduimiws.models.request.RoleForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.models.response.crm.PrivilegeResponse;
 import edu.imi.ir.eduimiws.models.response.crm.RoleResponse;
 import edu.imi.ir.eduimiws.services.crm.RoleApiService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +36,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -226,7 +229,7 @@ public class RoleController {
                     )
             }
     )
-    @PostMapping(path = "/new/privi",
+    @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createRole(@RequestBody RoleForm roleForm) {
@@ -234,12 +237,26 @@ public class RoleController {
         RoleResponse returnValue = new RoleResponse();
         RoleApiEntity savedRole = new RoleApiEntity();
 
+//        omiddo: check if roleName is null return exception
+
         String roleName = roleForm.getRoleName();
 
-        savedRole = roleApiService.createRoleByRoleName(roleName);
+        savedRole = roleApiService.createRoleByRoleForm(roleForm);
 
+        returnValue.setRolePublicId(savedRole.getRolePublicId());
         returnValue.setName(savedRole.getName());
 
+//        omiddo: handle it with mapper
+        if(savedRole.getPrivileges()!=null && savedRole.getPrivileges().size()>0){
+            Set<PrivilegeResponse> privilegeResponses = new HashSet<>();
+            savedRole.getPrivileges().forEach(privilege->{
+                PrivilegeResponse privilegeResponse = new PrivilegeResponse();
+                privilegeResponse.setName(privilege.getName());
+                privilegeResponse.setPrivilegePublicId(privilege.getPrivilegePublicId());
+                privilegeResponses.add(privilegeResponse);
+            });
+            returnValue.setPrivilegeResponses(privilegeResponses);
+        }
         return ResponseEntity.ok(returnValue);
     }
 

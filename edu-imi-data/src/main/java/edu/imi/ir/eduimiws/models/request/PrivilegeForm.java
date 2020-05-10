@@ -11,18 +11,18 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.util.List;
 
-@Schema(name = "role user",description = "create role in application")
-@JsonRootName(value = "role")
-@Relation(collectionRelation = "roles")
+@Schema(name = "privilege user",description = "create privilege in application")
+@JsonRootName(value = "privilege")
+@Relation(collectionRelation = "privileges")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleForm {
+public class PrivilegeForm {
 
-    @Schema(title = "Role Name", maxLength = 20)
-    private String roleName;
+    @Schema(title = "Privilege Name", maxLength = 20)
+    private String privilegeName;
 
-    @Schema(title = "Privilege Public Name", maxLength = 36)
-    private List<String> privilegePublicId;
+    @Schema(title = "Role Public Name", maxLength = 36)
+    private List<String> rolePublicId;
 }

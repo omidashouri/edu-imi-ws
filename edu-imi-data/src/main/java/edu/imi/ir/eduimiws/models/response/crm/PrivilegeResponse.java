@@ -8,7 +8,7 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-@Schema(name = "roles", description = "Class representing a privileges in the application.")
+@Schema(name = "privileges", description = "Class representing a privileges in the application.")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "privilege")
 @Relation(collectionRelation = "privileges")

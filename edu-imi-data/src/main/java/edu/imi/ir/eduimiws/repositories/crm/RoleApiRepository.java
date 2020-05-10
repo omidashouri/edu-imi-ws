@@ -24,4 +24,6 @@ public interface RoleApiRepository extends CrudRepository<RoleApiEntity, Long> {
     Page<RoleApiEntity> findAllByOrderByCreateDateTsDesc(Pageable pageable);
 
     RoleApiEntity findByRolePublicId(String rolePublicId);
+
+//    Collection<RoleApiEntity> findAllByPrivilegesIn(List<PrivilegeApiEntity> privilegeApis);
 }

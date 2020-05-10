@@ -10,4 +10,5 @@ import java.util.Collection;
 public interface PrivilegeApiRepository extends CrudRepository<PrivilegeApiEntity, Long> {
 
     Collection<PrivilegeApiEntity> findAllByName(String privilegeName);
+    Collection<PrivilegeApiEntity> findAllByPrivilegePublicIdIn(Collection<String> privilegePublicIds);
 }
