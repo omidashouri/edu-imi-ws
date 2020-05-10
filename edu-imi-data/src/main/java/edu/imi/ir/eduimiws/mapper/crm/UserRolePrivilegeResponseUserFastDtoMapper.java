@@ -3,11 +3,13 @@ package edu.imi.ir.eduimiws.mapper.crm;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.crm.RoleFastDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
+import edu.imi.ir.eduimiws.models.response.crm.RoleResponse;
 import edu.imi.ir.eduimiws.models.response.crm.UserRolePrivilegeResponse;
 import org.hibernate.Hibernate;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,34 +51,48 @@ public interface UserRolePrivilegeResponseUserFastDtoMapper {
             userFastDto.setRoleFastDtos(null);
         }
         if (userFastDto.getRoleFastDtos() != null &&
-                userFastDto.getRoleFastDtos().size()>0 ) {
-            List<UserFastDto> noNullRolePrivilegeUserFastDtos = Stream.of(userFastDto)
-                    .filter(r1->r1
-                            .getRoleFastDtos()
-                            .iterator()
-                            .next()
-                            .getPrivilegeFastDtos() !=null)
-                    .filter(r2->r2
-                            .getRoleFastDtos()
-                            .iterator()
-                            .next()
-                            .getPrivilegeFastDtos().size()>0)
-                    .distinct()
-                    .collect(Collectors.toList());
+                userFastDto.getRoleFastDtos().size() > 0) {
 
-            List<RoleFastDto> roleFastDtos = noNullRolePrivilegeUserFastDtos
-                    .stream()
-                    .map(UserFastDto::getRoleFastDtos)
-                    .flatMap(Collection::stream)
+            List<UserFastDto> noNullRolePrivilegeUserFastDtos = Stream.of(userFastDto)
+                    .filter(r1 -> r1
+                            .getRoleFastDtos()
+                            .iterator()
+                            .next()
+                            .getPrivilegeFastDtos() != null)
+                    .filter(r2 -> r2
+                            .getRoleFastDtos()
+                            .iterator()
+                            .next()
+                            .getPrivilegeFastDtos().size() > 0)
                     .distinct()
                     .collect(Collectors.toList());
-            userRolePrivilegeResponse.setRoleResponses(
-                    new RoleResponseRoleFastDtoMapperImpl()
-                    .toRoleResponses(roleFastDtos,new CycleAvoidingMappingContext()));
+            if (noNullRolePrivilegeUserFastDtos != null && noNullRolePrivilegeUserFastDtos.size() > 0) {
+
+                List<RoleFastDto> roleFastDtos = noNullRolePrivilegeUserFastDtos
+                        .stream()
+                        .map(UserFastDto::getRoleFastDtos)
+                        .flatMap(Collection::stream)
+                        .filter(r -> r.getPrivilegeFastDtos().size() > 0)
+                        .distinct()
+                        .collect(Collectors.toList());
+
+                List<RoleResponse> roleWithPrivilegesResponses = new ArrayList<>();
+                roleWithPrivilegesResponses = new RoleResponseRoleFastDtoMapperImpl()
+                        .toRoleResponses(roleFastDtos, new CycleAvoidingMappingContext());
+
+                if (roleWithPrivilegesResponses != null && roleWithPrivilegesResponses.size() > 0) {
+                    roleWithPrivilegesResponses.forEach(rw -> {
+                        userRolePrivilegeResponse
+                                .getRoleResponses()
+                                .removeIf(e -> e.getRolePublicId().equalsIgnoreCase(rw.getRolePublicId()));
+                    });
+
+                    userRolePrivilegeResponse
+                            .getRoleResponses()
+                            .addAll(roleWithPrivilegesResponses);
+                }
+            }
         }
 
     }
-
-
-
 }

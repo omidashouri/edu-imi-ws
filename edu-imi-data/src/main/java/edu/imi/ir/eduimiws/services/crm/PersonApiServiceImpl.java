@@ -208,7 +208,6 @@ public class PersonApiServiceImpl implements PersonApiService {
 
         personApi.setRoles(newRoles);
         PersonApiEntity savedPersonApi =  personApiRepository.save(personApi);
-
         return savedPersonApi;
     }
 

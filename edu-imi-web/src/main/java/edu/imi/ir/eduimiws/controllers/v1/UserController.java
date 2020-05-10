@@ -108,61 +108,6 @@ public class UserController {
     }
 
 
-    @Operation(
-            summary = "Find user role by public ID",
-            description = "search user role by the public id"
-    )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "successful operation",
-                            content = @Content(
-                                    schema = @Schema(
-                                            implementation = UserResponse.class
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "User not found",
-                            content = @Content(
-                                    schema = @Schema(implementation = ErrorMessage.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Bad Request",
-                            content = @Content(
-                                    schema = @Schema(implementation = ErrorMessage.class)
-                            )
-                    )
-            }
-    )
-    @GetMapping(path = "/{userPublicId}/role",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getUserRoleByUserPublicId(@PathVariable String userPublicId) {
-
-        try {
-            PersonEntity person = personApiService
-                    .findByPersonPublicIdWithPersonAndRole(userPublicId)
-                    .getPerson();
-            if (person == null) {
-                return this.userNotFound();
-            }
-
-            UserFastDto userFastDto =
-                    userFastDtoMapper.toUserFastDto(person, new CycleAvoidingMappingContext());
-
-            UserRolePrivilegeResponse userRolePrivilegeResponse =
-                    userRolePrivilegeResponseAssembler.toModel(userFastDto);
-
-            return ResponseEntity.ok(userRolePrivilegeResponse);
-
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
 
     @Operation(
             summary = "Find user by public ID",
@@ -596,6 +541,64 @@ public class UserController {
         return ResponseEntity.ok(userResponseCollectionModel);
     }
 
+
+    @Operation(
+            summary = "Find user role by public ID",
+            description = "search user role by the public id"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = UserResponse.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "User not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/{userPublicId}/role",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getUserRoleByUserPublicId(@PathVariable String userPublicId) {
+
+        try {
+            PersonEntity person = personApiService
+                    .findByPersonPublicIdWithPersonAndRole(userPublicId)
+                    .getPerson();
+            if (person == null) {
+                return this.userNotFound();
+            }
+
+            UserFastDto userFastDto =
+                    userFastDtoMapper.toUserFastDto(person, new CycleAvoidingMappingContext());
+
+            UserRolePrivilegeResponse userRolePrivilegeResponse =
+                    userRolePrivilegeResponseAssembler.toModel(userFastDto);
+
+            return ResponseEntity.ok(userRolePrivilegeResponse);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+    }
+
+
     @Operation(
             summary = "Role User",
             description = "role User",
@@ -642,14 +645,11 @@ public class UserController {
     public ResponseEntity<?> createUserRole(@PathVariable String userPublicId,
                                             @RequestBody UserRolePrivilege userRolePrivilege) {
 
-        UserRolePrivilege returnValue = new UserRolePrivilege();
-        List<PersonEntity> savedPersons = new ArrayList<>();
         List<String> rolePublicIds = null;
-        Long userCount;
 
         if (userRolePrivilege.getRolePublicId().isEmpty() || userRolePrivilege.getRolePublicId().size() == 0) {
-//            omiddo: correct to say role public id is null
-            return this.nationalCodeIsEmpty();
+
+            return this.rolePublicIsEmpty();
         } else {
             rolePublicIds = userRolePrivilege.getRolePublicId();
         }
@@ -665,10 +665,10 @@ public class UserController {
         UserFastDto userFastDto = userFastDtoMapper
                 .toUserFastDto(savedPerson, new CycleAvoidingMappingContext());
 
-        UserResponse userResponse =
-                userResponseAssembler.toModel(userFastDto);
+        UserRolePrivilegeResponse userRolePrivilegeResponse =
+                userRolePrivilegeResponseAssembler.toModel(userFastDto);
 
-        return ResponseEntity.ok(userResponse);
+        return ResponseEntity.ok(userRolePrivilegeResponse);
     }
 
 
@@ -700,6 +700,14 @@ public class UserController {
         return new ResponseEntity<>(
                 new ErrorMessage(new Date(), HttpStatus.NOT_ACCEPTABLE.toString()
                         , "national code is redundant")
+                , HttpStatus.BAD_REQUEST
+        );
+    }
+
+    private ResponseEntity<?> rolePublicIsEmpty() {
+        return new ResponseEntity<>(
+                new ErrorMessage(new Date(), HttpStatus.BAD_REQUEST.toString()
+                        , "Role Public Id is Empty")
                 , HttpStatus.BAD_REQUEST
         );
     }
