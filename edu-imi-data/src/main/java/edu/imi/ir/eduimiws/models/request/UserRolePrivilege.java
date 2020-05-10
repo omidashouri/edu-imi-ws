@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.server.core.Relation;
 
+import java.util.List;
+
 @Schema(name = "Role User",description = "User Role in application")
 @JsonRootName(value = "role")
 @Relation(collectionRelation = "roles")
@@ -17,10 +19,10 @@ import org.springframework.hateoas.server.core.Relation;
 @AllArgsConstructor
 public class UserRolePrivilege {
 
-    @Schema(title = "User Role Name")
-    private String roleName;
+    @Schema(title = "User Role public Ids")
+    private List<String> rolePublicId;
 
-    @Schema(title = "User Privilege Name")
-    private String privilegeName;
+/*    @Schema(title = "User Privilege Name")
+    private String privilegeName;*/
 
 }

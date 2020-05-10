@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.services.crm;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface PersonApiService {
@@ -37,5 +38,5 @@ public interface PersonApiService {
 
     List<PersonApiEntity> findAllByPersonIdIn(List<Long> personIds);
 
-    PersonApiEntity updateByPersonApiAndRoleName(PersonApiEntity personApi,String roleName);
+    PersonApiEntity updateByPersonApiAndRoleName(PersonApiEntity personApi, Collection<String> rolePublicIds);
 }

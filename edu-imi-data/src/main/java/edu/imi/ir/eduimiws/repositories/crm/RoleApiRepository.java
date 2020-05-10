@@ -25,5 +25,7 @@ public interface RoleApiRepository extends CrudRepository<RoleApiEntity, Long> {
 
     RoleApiEntity findByRolePublicId(String rolePublicId);
 
+    Collection<RoleApiEntity> findAllByRolePublicIdIn(List<String> rolePublicIds);
+
 //    Collection<RoleApiEntity> findAllByPrivilegesIn(List<PrivilegeApiEntity> privilegeApis);
 }

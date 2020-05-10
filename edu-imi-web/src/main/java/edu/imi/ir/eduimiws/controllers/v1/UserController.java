@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.UserRolePrivilegeResponseAssembler;
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiUserContactFastDtoMapper;
@@ -77,18 +78,17 @@ public class UserController {
 //    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3ODMyMDEyfQ.ZmfASy43T2adVKzTahZksyQ548LdeUoSfD2edKKBKbtMx8nYnhi7IxYlrh8m7vkdlB_0rafcBBZL2GieQaZqlQ
 
 
-
     @GetMapping(path = "/active",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<UserResponse>> getAllActive(){
+    public ResponseEntity<List<UserResponse>> getAllActive() {
 
         List<String> activeUserNames = activeUserService.getAllActiveUserNames();
 
         List<UserResponse> userResponses =
-        activeUserNames
-                .stream()
-                .map(u->new UserResponse(u))
-                .collect(Collectors.toList());
+                activeUserNames
+                        .stream()
+                        .map(u -> new UserResponse(u))
+                        .collect(Collectors.toList());
 
         return ResponseEntity.ok(userResponses);
        /* Page<PersonEntity> personPages =
@@ -152,7 +152,7 @@ public class UserController {
             }
 
             UserFastDto userFastDto =
-                    userFastDtoMapper.toUserFastDto(person,new CycleAvoidingMappingContext());
+                    userFastDtoMapper.toUserFastDto(person, new CycleAvoidingMappingContext());
 
             UserRolePrivilegeResponse userRolePrivilegeResponse =
                     userRolePrivilegeResponseAssembler.toModel(userFastDto);
@@ -206,7 +206,7 @@ public class UserController {
             }
 
             UserFastDto userFastDto =
-                    userFastDtoMapper.toUserFastDto(person,new CycleAvoidingMappingContext());
+                    userFastDtoMapper.toUserFastDto(person, new CycleAvoidingMappingContext());
 
             UserResponse userResponse =
                     userResponseAssembler.toModel(userFastDto);
@@ -256,20 +256,20 @@ public class UserController {
     @PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<UserResponse>> getUsers(@Parameter(hidden = true)
-                                                                   @SortDefault(sort = "personalCode",
-                                                                           direction = Sort.Direction.DESC)
-                                                                   @PageableDefault(page = 0, size= 10,value = 10)
-                                                                           Pageable pageable ){
+                                                             @SortDefault(sort = "personalCode",
+                                                                     direction = Sort.Direction.DESC)
+                                                             @PageableDefault(page = 0, size = 10, value = 10)
+                                                                     Pageable pageable) {
 
         Page<PersonEntity> personPages =
-                personService.findAllPersonEntityPages (pageable);
+                personService.findAllPersonEntityPages(pageable);
 
         Page<UserFastDto> userFastDtoPage = personPages
-                .map(pp->userFastDtoMapper
-                        .toUserFastDto(pp,new CycleAvoidingMappingContext()));
+                .map(pp -> userFastDtoMapper
+                        .toUserFastDto(pp, new CycleAvoidingMappingContext()));
 
         PagedModel<UserResponse> userResponsePagedModel = userPagedResourcesAssembler
-                .toModel(userFastDtoPage,userResponseAssembler);
+                .toModel(userFastDtoPage, userResponseAssembler);
 
         return ResponseEntity.ok(userResponsePagedModel);
     }
@@ -281,19 +281,19 @@ public class UserController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<UserResponse>> getAllUsers(
             @Parameter(hidden = true)
-            @SortDefault(sort = "personalCode",direction = Sort.Direction.DESC)
-            @PageableDefault(page = 0, size= 10)
-                    Pageable pageable){
+            @SortDefault(sort = "personalCode", direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size = 10)
+                    Pageable pageable) {
 
         Page<PersonEntity> personPages =
                 personService.findAllPersonEntityPages(pageable);
 
         List<PersonEntity> personEntities = StreamSupport
-                .stream(personPages.spliterator(),false)
+                .stream(personPages.spliterator(), false)
                 .collect(Collectors.toList());
 
         List<UserFastDto> userFastDtos = userFastDtoMapper
-                .toUserFastDtos(personEntities,new CycleAvoidingMappingContext());
+                .toUserFastDtos(personEntities, new CycleAvoidingMappingContext());
 
         CollectionModel<UserResponse> userResponseCollectionModel =
                 userResponseAssembler.toCollectionModel(userFastDtos);
@@ -337,23 +337,23 @@ public class UserController {
                     )
             })
     @PageableAsQueryParam
-    @GetMapping(path = "/username/{username}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(path = "/username/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<UserResponse>> getUsersByUserName(@PathVariable String username,
-                                                                @Parameter(hidden = true)
-                                                             @SortDefault(sort = "personalCode",
-                                                                     direction = Sort.Direction.DESC)
-                                                             @PageableDefault(page = 0, size= 10,value = 10)
-                                                                     Pageable pageable ){
+                                                                       @Parameter(hidden = true)
+                                                                       @SortDefault(sort = "personalCode",
+                                                                               direction = Sort.Direction.DESC)
+                                                                       @PageableDefault(page = 0, size = 10, value = 10)
+                                                                               Pageable pageable) {
 
         Page<PersonEntity> personPages =
-                personService.findAllPersonEntityPagesByUserName (pageable,username);
+                personService.findAllPersonEntityPagesByUserName(pageable, username);
 
         Page<UserFastDto> userFastDtoPage = personPages
-                .map(pp->userFastDtoMapper
-                        .toUserFastDto(pp,new CycleAvoidingMappingContext()));
+                .map(pp -> userFastDtoMapper
+                        .toUserFastDto(pp, new CycleAvoidingMappingContext()));
 
         PagedModel<UserResponse> userResponsePagedModel = userPagedResourcesAssembler
-                .toModel(userFastDtoPage,userResponseAssembler);
+                .toModel(userFastDtoPage, userResponseAssembler);
 
         return ResponseEntity.ok(userResponsePagedModel);
     }
@@ -363,20 +363,20 @@ public class UserController {
     @GetMapping(path = "/username/{username}/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<UserResponse>> getAllUsersByUserName(@PathVariable String username,
-            @Parameter(hidden = true)
-            @SortDefault(sort = "personalCode",direction = Sort.Direction.DESC)
-            @PageableDefault(page = 0, size= 10)
-                    Pageable pageable){
+                                                                               @Parameter(hidden = true)
+                                                                               @SortDefault(sort = "personalCode", direction = Sort.Direction.DESC)
+                                                                               @PageableDefault(page = 0, size = 10)
+                                                                                       Pageable pageable) {
 
         Page<PersonEntity> personPages =
-                personService.findAllPersonEntityPagesByUserName(pageable,username);
+                personService.findAllPersonEntityPagesByUserName(pageable, username);
 
         List<PersonEntity> personEntities = StreamSupport
-                .stream(personPages.spliterator(),false)
+                .stream(personPages.spliterator(), false)
                 .collect(Collectors.toList());
 
         List<UserFastDto> userFastDtos = userFastDtoMapper
-                .toUserFastDtos(personEntities,new CycleAvoidingMappingContext());
+                .toUserFastDtos(personEntities, new CycleAvoidingMappingContext());
 
         CollectionModel<UserResponse> userResponseCollectionModel =
                 userResponseAssembler.toCollectionModel(userFastDtos);
@@ -501,9 +501,9 @@ public class UserController {
         List<PersonEntity> persons = personService.findPersonsByNationalCode(nationalCode);
 
         List<UserFastDto> userFastDtos = userFastDtoMapper
-                .toUserFastDtos(persons,new CycleAvoidingMappingContext());
+                .toUserFastDtos(persons, new CycleAvoidingMappingContext());
 
-        if(userFastDtos==null || userFastDtos.size() == 0){
+        if (userFastDtos == null || userFastDtos.size() == 0) {
             return this.userNotFound();
         }
 
@@ -555,7 +555,7 @@ public class UserController {
             }
     )
     @PostMapping(path = "/register",
-            consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createUser(@RequestBody UserRegister userRegister) {
 
@@ -564,9 +564,9 @@ public class UserController {
         String nationalCode = null;
         Long userCount;
 
-        if(userRegister.getNationCode().isEmpty()){
+        if (userRegister.getNationCode().isEmpty()) {
             return this.nationalCodeIsEmpty();
-        }else{
+        } else {
             nationalCode = userRegister.getNationCode();
         }
 
@@ -574,12 +574,12 @@ public class UserController {
                 .findPersonsByNationalCode(nationalCode);
 
 
-        if(duplicatePersons.size()>0){
+        if (duplicatePersons.size() > 0) {
             return this.nationalCodeRedundant();
         }
 
         UserFastDto userFastDto = userRegisterUserFastDtoMapper
-                .toUserFastDto(userRegister,new CycleAvoidingMappingContext());
+                .toUserFastDto(userRegister, new CycleAvoidingMappingContext());
 
         PersonEntity newPerson = userService
                 .saveUserByUserFastDto(userFastDto);
@@ -588,7 +588,7 @@ public class UserController {
                 .generateContactPersonPublicIdByPersons(Arrays.asList(newPerson));
 
         List<UserFastDto> savedUserFastDto = userFastDtoMapper
-                .toUserFastDtos(savedPersons,new CycleAvoidingMappingContext());
+                .toUserFastDtos(savedPersons, new CycleAvoidingMappingContext());
 
         CollectionModel<UserResponse> userResponseCollectionModel =
                 userResponseAssembler.toCollectionModel(savedUserFastDto);
@@ -637,28 +637,38 @@ public class UserController {
             }
     )
     @PostMapping(path = "/{userPublicId}/role",
-            consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createUserRole(@PathVariable String userPublicId,
                                             @RequestBody UserRolePrivilege userRolePrivilege) {
 
         UserRolePrivilege returnValue = new UserRolePrivilege();
         List<PersonEntity> savedPersons = new ArrayList<>();
-        String userRoleName= null;
+        List<String> rolePublicIds = null;
         Long userCount;
 
-        if(userRolePrivilege.getRoleName().isEmpty()){
+        if (userRolePrivilege.getRolePublicId().isEmpty() || userRolePrivilege.getRolePublicId().size() == 0) {
+//            omiddo: correct to say role public id is null
             return this.nationalCodeIsEmpty();
-        }else{
-            userRoleName = userRolePrivilege.getRoleName();
+        } else {
+            rolePublicIds = userRolePrivilege.getRolePublicId();
         }
 
         PersonEntity person = personService.findPersonEntityByPersonApiPublicId(userPublicId);
 
-        personApiService.updateByPersonApiAndRoleName(person.getPersonApiEntity(),userRoleName);
+        PersonApiEntity savedPersonApi = personApiService
+                .updateByPersonApiAndRoleName(person.getPersonApiEntity(), rolePublicIds);
 
+        PersonEntity savedPerson = personService
+                .findPersonEntityByPersonApiPublicId(savedPersonApi.getPersonPublicId());
 
-        return ResponseEntity.ok(null);
+        UserFastDto userFastDto = userFastDtoMapper
+                .toUserFastDto(savedPerson, new CycleAvoidingMappingContext());
+
+        UserResponse userResponse =
+                userResponseAssembler.toModel(userFastDto);
+
+        return ResponseEntity.ok(userResponse);
     }
 
 
@@ -694,7 +704,7 @@ public class UserController {
         );
     }
 
-    private List<PersonEntity> newPersonsNotInPersonWebService(){
+    private List<PersonEntity> newPersonsNotInPersonWebService() {
     /*    List<PersonEntity> persons;
         List<PersonApiEntity> personWebServices;
         List<PersonEntity> newPersons = new ArrayList<>();
@@ -730,7 +740,7 @@ public class UserController {
         persons.size();
         newPersons.size();
         return persons;*/
-    return null;
+        return null;
     }
 
 

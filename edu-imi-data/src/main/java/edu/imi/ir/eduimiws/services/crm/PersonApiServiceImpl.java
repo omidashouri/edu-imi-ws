@@ -201,19 +201,10 @@ public class PersonApiServiceImpl implements PersonApiService {
     }
 
     @Override
-    public PersonApiEntity updateByPersonApiAndRoleName(PersonApiEntity personApi, String roleName) {
-        String roleNameCorrected = new StringBuilder()
-                .append("ROLE_")
-                .append(roleName.toUpperCase()).toString();
-        Collection<RoleApiEntity> roles = roleApiService.findAllByRoleName(roleNameCorrected);
+    public PersonApiEntity updateByPersonApiAndRoleName(PersonApiEntity personApi, Collection<String> rolePublicIds) {
 
-        Collection<RoleApiEntity> correctedRoles = roles.stream()
-                .filter(r->r.getPrivileges().containsAll(Arrays.asList("READ_PRIVILEGE","PATCH_PRIVILEGE")))
-                .collect(Collectors.toList());
-        List<RoleApiEntity> newRoles = personApi.getRoles().stream().collect(Collectors.toList());
-        roles.forEach(r->{
-            newRoles.add(r);
-        });
+        Collection<RoleApiEntity> newRoles = roleApiService
+                .findAllByRolePublicIdsIn(rolePublicIds.stream().collect(Collectors.toList()));
 
         personApi.setRoles(newRoles);
         PersonApiEntity savedPersonApi =  personApiRepository.save(personApi);

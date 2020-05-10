@@ -153,6 +153,13 @@ public class RoleApiServiceImpl implements RoleApiService {
         return roleApi;
     }
 
+    @Override
+    public Collection<RoleApiEntity> findAllByRolePublicIdsIn(List<String> rolePublicIds) {
+        Collection<RoleApiEntity> returnRoles = roleApiRepository
+                .findAllByRolePublicIdIn(rolePublicIds);
+        return returnRoles;
+    }
+
     private String generateRolePublicId() {
         return publicIdUtil.generateUniquePublicId();
     }
