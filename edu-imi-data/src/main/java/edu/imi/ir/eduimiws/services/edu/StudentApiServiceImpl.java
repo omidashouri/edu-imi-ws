@@ -109,6 +109,13 @@ public class StudentApiServiceImpl implements StudentApiService {
         return newStudentApiEntities;
     }
 
+    @Override
+    public List<StudentApiEntity> findAllByStudentIdIn(List<Long> studentIds) {
+        List<StudentApiEntity> studentApis = studentApiRepository
+                .findAllByStudentIdIn(studentIds);
+        return studentApis;
+    }
+
     private String generateStudentApiPublicId() {
         return publicIdUtil.generateUniquePublicId();
     }

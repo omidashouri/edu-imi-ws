@@ -4,9 +4,70 @@ package edu.imi.ir.eduimiws.domain.edu;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.models.projections.edu.StudentOnly;
 import lombok.*;
 
 import javax.persistence.*;
+
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "student",subgraph = "student-subGraph"),
+                        @NamedAttributeNode(value = "period",subgraph = "period-subGraph"),
+                        @NamedAttributeNode("registerApi")
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "student-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "studentApi")
+                                },
+                                type = StudentApiEntity.class),
+                        @NamedSubgraph(
+                                name = "period-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "periodApi")
+                                },
+                                type = PeriodApiEntity.class)
+                }
+        )
+})
+
+
+@SqlResultSetMapping(
+        name = "RegisterOnly",
+        classes = {
+                @ConstructorResult(
+                        targetClass = StudentOnly.class,
+                        columns = {
+                                @ColumnResult(name = "idR", type = Long.class),
+                                @ColumnResult(name = "periodIdR", type = Long.class),
+                                @ColumnResult(name = "studentIdR", type = Long.class),
+                                @ColumnResult(name = "deleteStatusR", type = Long.class),
+                                @ColumnResult(name = "activityStatusR", type = Long.class),
+                                @ColumnResult(name = "registerEditDateR", type = String.class)
+                        }
+                )
+        }
+)
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "RegisterEntity.selectAllRegisterOnly",
+                query = " select ID as idR, PERIOD_ID as periodIdR, STUDENT_ID as studentIdR, " +
+                        " DELETE_STATUS as deleteStatusR, ACTIVITY_STATUS as activityStatusR, " +
+                        " EDIT_DATE as registerEditDateR  from EDU.TBL_REGISTER ",
+                resultSetMapping = "RegisterOnly"),
+        @NamedNativeQuery(name = "RegisterEntity.selectAllRegisterOnlyByIdBetween",
+                query = " select ID as idR, PERIOD_ID as periodIdR, STUDENT_ID as studentIdR, " +
+                        " DELETE_STATUS as deleteStatusR, ACTIVITY_STATUS as activityStatusR, " +
+                        " EDIT_DATE as registerEditDateR  from EDU.TBL_REGISTER " +
+                        " where ID between :beginRegisterId and :endRegisterId ",
+                resultSetMapping = "RegisterOnly"),
+        @NamedNativeQuery(name = "RegisterEntity.selectCurrentSequenceNumber",
+                query = " select EDU.SEQ_EDU_REGISTER.nextval from dual "
+        )
+})
+
+
 
 @Getter
 @Setter
@@ -24,11 +85,27 @@ public class RegisterEntity extends BaseEntity {
     @JoinColumn(name="PERIOD_ID")
     private PeriodEntity period;
 
+    @Column(name = "PERIOD_ID", insertable = false, updatable = false)
+    private Long periodId;
+
+    @Transient
+    public Long getPeriodId() {
+        return periodId;
+    }
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="STUDENT_ID")
     private StudentEntity student;
+
+    @Column(name = "STUDENT_ID", insertable = false, updatable = false)
+    private Long studentId;
+
+    @Transient
+    public Long getStudentId() {
+        return studentId;
+    }
 
     @Column(name="ACTIVITY_STATUS",precision = 2,scale = 0)
     private Long activityStatus;
@@ -146,5 +223,10 @@ public class RegisterEntity extends BaseEntity {
     @OneToOne(optional = true)
     @JoinColumn(name="FROM_REGISTER_ID")
     private RegisterEntity fromRegister;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "register", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private RegisterApiEntity registerApi;
 
 }

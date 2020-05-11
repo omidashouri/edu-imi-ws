@@ -15,4 +15,5 @@ public interface PeriodApiRepository extends CrudRepository<PeriodApiEntity,Long
 
     PeriodApiEntity findFirstByOrderByIdDesc();
 
+    List<PeriodApiEntity> findAllByPeriodIdIn(List<Long> periodIds);
 }

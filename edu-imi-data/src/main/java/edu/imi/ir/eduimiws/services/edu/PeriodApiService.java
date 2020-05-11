@@ -12,4 +12,6 @@ public interface PeriodApiService {
     Long periodApiCount();
 
     List<PeriodApiEntity> generatePeriodApiPublicId(List<PeriodEntity> newPeriodEntities);
+
+    List<PeriodApiEntity> findAllByPeriodIdIn(List<Long> periodIds);
 }

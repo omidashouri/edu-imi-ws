@@ -61,6 +61,13 @@ public class PeriodApiServiceImpl implements PeriodApiService {
     }
 
     @Override
+    public List<PeriodApiEntity> findAllByPeriodIdIn(List<Long> periodIds) {
+        List<PeriodApiEntity> periodApis = periodApiRepository
+                .findAllByPeriodIdIn(periodIds);
+        return periodApis;
+    }
+
+    @Override
     public PeriodApiEntity selectLastRecord() {
         return periodApiRepository.findFirstByOrderByIdDesc();
     }

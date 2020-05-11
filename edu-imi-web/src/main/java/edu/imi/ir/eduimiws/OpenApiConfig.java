@@ -119,6 +119,15 @@ public class OpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi registerApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Registers")
+                .pathsToMatch("/v1/registers/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi mailApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Mails")

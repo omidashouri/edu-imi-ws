@@ -22,17 +22,41 @@ public class RegisterApiEntity extends BaseEntity {
     @JoinColumn(name="REGISTER_ID")
     private RegisterEntity register;
 
+    @Column(name = "REGISTER_ID", insertable = false, updatable = false)
+    private Long registerId;
+
+    @Transient
+    public Long getRegisterId() {
+        return registerId;
+    }
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PERIOD_ID")
     private PeriodEntity period;
 
+    @Column(name = "PERIOD_ID", insertable = false, updatable = false)
+    private Long periodId;
+
+    @Transient
+    public Long getPeriodId() {
+        return periodId;
+    }
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="STUDENT_ID")
     private StudentEntity student;
+
+    @Column(name = "STUDENT_ID", insertable = false, updatable = false)
+    private Long studentId;
+
+    @Transient
+    public Long getStudentId() {
+        return studentId;
+    }
 
     @Column(name="REGISTER_PUBLIC_ID",length = 500)
     private String registerPublicId;

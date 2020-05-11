@@ -13,4 +13,6 @@ public interface StudentApiRepository extends CrudRepository<StudentApiEntity,Lo
 
     StudentApiEntity findFirstByOrderByIdDesc();
 
+    List<StudentApiEntity> findAllByStudentIdIn(List<Long> studentIds);
+
 }

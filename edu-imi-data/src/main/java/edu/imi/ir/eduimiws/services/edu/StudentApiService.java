@@ -1,4 +1,5 @@
 package edu.imi.ir.eduimiws.services.edu;
+
 import edu.imi.ir.eduimiws.domain.edu.StudentApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
 
@@ -11,4 +12,6 @@ public interface StudentApiService {
     Long studentApiCount();
 
     List<StudentApiEntity> generateStudentApiPublicId(List<StudentEntity> newStudentEntities);
+
+    List<StudentApiEntity> findAllByStudentIdIn(List<Long> studentIds);
 }
