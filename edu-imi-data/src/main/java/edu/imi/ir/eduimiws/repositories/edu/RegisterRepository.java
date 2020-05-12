@@ -4,7 +4,6 @@ import edu.imi.ir.eduimiws.domain.edu.RegisterEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.RegisterOnly;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
@@ -17,10 +16,10 @@ import java.util.List;
 @Repository
 public interface RegisterRepository extends CrudRepository<RegisterEntity, Long> {
 
-    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService", type = EntityGraph.EntityGraphType.LOAD)
+//    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService", type = EntityGraph.EntityGraphType.LOAD)
     Page<RegisterEntity> findAllByDeleteStatusIsNotNullOrderByCreateDateDesc(Pageable pageable);
 
-    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService", type = EntityGraph.EntityGraphType.LOAD)
+//    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService", type = EntityGraph.EntityGraphType.LOAD)
     RegisterEntity findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNullOrderByCreateDateDesc(String studentPublicId);
 
     RegisterEntity findFirstByOrderByIdDesc();
