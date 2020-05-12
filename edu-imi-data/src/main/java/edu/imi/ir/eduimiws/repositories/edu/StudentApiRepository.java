@@ -15,4 +15,6 @@ public interface StudentApiRepository extends CrudRepository<StudentApiEntity,Lo
 
     List<StudentApiEntity> findAllByStudentIdIn(List<Long> studentIds);
 
+    List<StudentApiEntity> findAllByStudentIdInAndStudentPublicIdIsNotNull(List<Long> studentIds);
+
 }

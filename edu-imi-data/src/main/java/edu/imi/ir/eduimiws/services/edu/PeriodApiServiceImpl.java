@@ -68,6 +68,13 @@ public class PeriodApiServiceImpl implements PeriodApiService {
     }
 
     @Override
+    public List<PeriodApiEntity> findAllByPeriodIdInAndPeriodPublicIdIsNotNull(List<Long> periodIds) {
+        List<PeriodApiEntity> periodApis = periodApiRepository
+                .findAllByPeriodIdInAndPeriodPublicIdIsNotNull(periodIds);
+        return periodApis;
+    }
+
+    @Override
     public PeriodApiEntity selectLastRecord() {
         return periodApiRepository.findFirstByOrderByIdDesc();
     }

@@ -4,7 +4,7 @@ package edu.imi.ir.eduimiws.domain.edu;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.models.projections.edu.StudentOnly;
+import edu.imi.ir.eduimiws.models.projections.edu.RegisterOnly;
 import lombok.*;
 
 import javax.persistence.*;
@@ -38,7 +38,7 @@ import javax.persistence.*;
         name = "RegisterOnly",
         classes = {
                 @ConstructorResult(
-                        targetClass = StudentOnly.class,
+                        targetClass = RegisterOnly.class,
                         columns = {
                                 @ColumnResult(name = "idR", type = Long.class),
                                 @ColumnResult(name = "periodIdR", type = Long.class),

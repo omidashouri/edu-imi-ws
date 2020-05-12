@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
+import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
 import edu.imi.ir.eduimiws.controllers.v1.RegisterController;
+import edu.imi.ir.eduimiws.controllers.v1.StudentController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterResponseRegisterFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.RegisterFastDto;
@@ -9,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class RegisterResponseAssembler extends RepresentationModelAssemblerSupport<RegisterFastDto, RegisterResponse> {
@@ -26,7 +31,7 @@ public class RegisterResponseAssembler extends RepresentationModelAssemblerSuppo
         RegisterResponse registerResponse = registerResponseRegisterFastDtoMapper
                 .toRegisterResponse(registerFastDto, new CycleAvoidingMappingContext());
 
-/*        if (registerFastDto.getRegisterPublicId() != null) {
+        if (registerFastDto.getRegisterPublicId() != null) {
             registerResponse
                     .add(linkTo(
                             methodOn(
@@ -35,14 +40,32 @@ public class RegisterResponseAssembler extends RepresentationModelAssemblerSuppo
                             .withSelfRel());
         }
 
-        if (registerFastDto.getPersonPublicId() != null) {
+        if (registerFastDto.getRegisterPublicId() != null) {
             registerResponse.
                     add(linkTo(
                             methodOn(
-                                    UserController.class)
-                                    .getUserByUserPublicId(registerFastDto.getPersonPublicId()))
-                            .withRel("users"));
-        }*/
+                                    RegisterController.class)
+                                    .getRegisterByRegisterPublicId(registerFastDto.getRegisterPublicId()))
+                            .withRel("registers"));
+        }
+
+        if (registerFastDto.getStudentPublicId() != null) {
+            registerResponse.
+                    add(linkTo(
+                            methodOn(
+                                    StudentController.class)
+                                    .getStudentByStudentPublicId(registerFastDto.getStudentPublicId()))
+                            .withRel("students"));
+        }
+
+        if (registerFastDto.getPeriodPublicId() != null) {
+            registerResponse.
+                    add(linkTo(
+                            methodOn(
+                                    PeriodController.class)
+                                    .getPeriodByPeriodPublicId(registerFastDto.getPeriodPublicId()))
+                            .withRel("periods"));
+        }
 
         return registerResponse;
     }
@@ -55,8 +78,9 @@ public class RegisterResponseAssembler extends RepresentationModelAssemblerSuppo
 
         Pageable pageable = Pageable.unpaged();
 
-/*        registerResponseCollectionModel
-                .add(linkTo(methodOn(RegisterController.class).getRegisters(pageable)).withRel("registers"));*/
+        registerResponseCollectionModel
+                .add(linkTo(methodOn(RegisterController.class)
+                        .getRegisters(pageable)).withRel("registers"));
 
         return registerResponseCollectionModel;
     }

@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.*;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.edu.RegisterEntityRegisterApiFromProjectionMapper;
 import edu.imi.ir.eduimiws.repositories.edu.RegisterApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -17,11 +18,12 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class RegisterApiServiceImpl implements RegisterApiService{
+public class RegisterApiServiceImpl implements RegisterApiService {
 
     private final RegisterApiRepository registerApiRepository;
     private final PeriodApiService periodApiService;
     private final StudentApiService studentApiService;
+    private final RegisterEntityRegisterApiFromProjectionMapper registerEntityRegisterApiFromProjectionMapper;
     private final PublicIdUtil publicIdUtil;
 
     @Override
@@ -41,20 +43,20 @@ public class RegisterApiServiceImpl implements RegisterApiService{
         final AtomicInteger counterPeriod = new AtomicInteger();
         final AtomicInteger counterStudent = new AtomicInteger();
 
-        newRegisters.forEach(register -> {
+ /*       newRegisters.forEach(register -> {
             RegisterApiEntity newRegisterApi = new RegisterApiEntity();
             newRegisterApi.setRegister(register);
             newRegisterApi.setRegisterId(register.getId());
             newRegisterApi.setRegisterPublicId(this.generateRegisterApiPublicId());
+            if(register.getPeriodId()!=null){
+                newRegisterApi.setPeriodId(register.getPeriodId());
+            }
+
             if (null != register.getPeriod()) {
-                PeriodEntity period = new PeriodEntity();
-                period.setId(register.getPeriodId());
-                newRegisterApi.setPeriod(period);
+                newRegisterApi.setPeriod(register.getPeriod());
             }
             if (null != register.getStudent()) {
-                StudentEntity student = new StudentEntity();
-                student.setId(register.getStudentId());
-                newRegisterApi.setStudent(student);
+                newRegisterApi.setStudent(register.getStudent());
             }
             if (null != register.getDeleteStatus()) {
                 newRegisterApi.setRegisterDeleteStatus(register.getDeleteStatus());
@@ -70,7 +72,10 @@ public class RegisterApiServiceImpl implements RegisterApiService{
             }
             newRegisterApi.setCreateDateTs(new Timestamp(new Date().getTime()));
             newRegisterApis.add(newRegisterApi);
-        });
+        });*/
+
+        newRegisterApis = registerEntityRegisterApiFromProjectionMapper
+                .toRegisterApis(newRegisters, new CycleAvoidingMappingContext());
 
         newRegisterApis.sort(Comparator.comparing(RegisterApiEntity::getRegisterId));
 
@@ -90,7 +95,7 @@ public class RegisterApiServiceImpl implements RegisterApiService{
                 .values();
 
         List<PeriodApiEntity> fullPeriodApis = new ArrayList<>();
-        hundredPeriodIds.stream().forEach(lp->{
+        hundredPeriodIds.stream().forEach(lp -> {
             periodApiService
                     .findAllByPeriodIdIn(lp)
                     .stream()
@@ -106,8 +111,8 @@ public class RegisterApiServiceImpl implements RegisterApiService{
 
         newRegisterApis
                 .stream()
-                .filter(registerApi->registerApi.getPeriod()!=null)
-                .filter(registerApi->Objects.nonNull(periodIdPeriodPublicIdMap.get(registerApi.getPeriod().getId())))
+                .filter(registerApi -> registerApi.getPeriod() != null)
+                .filter(registerApi -> Objects.nonNull(periodIdPeriodPublicIdMap.get(registerApi.getPeriod().getId())))
                 .forEach(registerApi -> {
                     registerApi.setPeriodPublicId(periodIdPeriodPublicIdMap.get(registerApi.getPeriod().getId()));
                 });
@@ -129,7 +134,7 @@ public class RegisterApiServiceImpl implements RegisterApiService{
                 .values();
 
         List<StudentApiEntity> fullStudentApis = new ArrayList<>();
-        hundredStudentIds.stream().forEach(ls->{
+        hundredStudentIds.stream().forEach(ls -> {
             studentApiService
                     .findAllByStudentIdIn(ls)
                     .stream()
@@ -145,8 +150,8 @@ public class RegisterApiServiceImpl implements RegisterApiService{
 
         newRegisterApis
                 .stream()
-                .filter(registerApi->registerApi.getStudent()!=null)
-                .filter(registerApi->Objects.nonNull(studentIdStudentPublicIdMap.get(registerApi.getStudent().getId())))
+                .filter(registerApi -> registerApi.getStudent() != null)
+                .filter(registerApi -> Objects.nonNull(studentIdStudentPublicIdMap.get(registerApi.getStudent().getId())))
                 .forEach(registerApi -> {
                     registerApi.setStudentPublicId(studentIdStudentPublicIdMap.get(registerApi.getStudent().getId()));
                 });
@@ -155,7 +160,6 @@ public class RegisterApiServiceImpl implements RegisterApiService{
 
         return newRegisterApis;
     }
-
 
 
     private String generateRegisterApiPublicId() {

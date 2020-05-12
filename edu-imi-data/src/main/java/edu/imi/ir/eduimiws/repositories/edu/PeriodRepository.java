@@ -49,4 +49,14 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntity_PersonPublicId
             (Pageable pageable, String executorPublicId);
 
+    @Query(name = "PeriodEntity.selectAllPeriodOnlyByIdBetween", nativeQuery = true)
+    List<PeriodOnly> findAllPeriodOnlyByIdBetween(@Param("beginPeriodId") Long beginPeriodId,
+                                                  @Param("endPeriodId") Long endPeriodId);
+
+    @Query(name = "PeriodEntity.selectCurrentSequenceNumber",nativeQuery = true)
+    Long selectLastSequenceNumber();
+
+    Long countByIdLessThanEqual(Long periodId);
+
+    PeriodEntity findFirstByIdLessThanEqualOrderByIdDesc(Long id);
 }

@@ -472,19 +472,21 @@ public class PeriodController {
     public ResponseEntity<?> createPeriodWebServicePublicId() {
 
         OperationStatus returnValue = new OperationStatus();
-        Long periodWebserviceCount;
-        PeriodApiEntity periodWebServiceLastRecord;
+        Long periodApiCount;
+        PeriodApiEntity periodApiLastRecord;
         PeriodEntity periodLastRecord;
         List<PeriodEntity> newPeriods = new ArrayList<>();
-        List<PeriodApiEntity> newPeriodWebService = new ArrayList<>();
+        List<PeriodApiEntity> newPeriodApi = new ArrayList<>();
 
-        periodWebserviceCount = periodApiService.periodApiCount();
+        periodApiCount = periodApiService.periodApiCount();
 
-        if (0 != periodWebserviceCount) {
-            periodWebServiceLastRecord = periodApiService.selectLastRecord();
-            periodLastRecord = periodService.selectLastRecord();
-            if (periodLastRecord.getId() > periodWebServiceLastRecord.getPeriodId()) {
-                newPeriods = periodService.findAllPeriodOnlyByIdGreaterThan(periodWebServiceLastRecord.getPeriodId());
+        if (0 != periodApiCount) {
+            Long periodSequenceNumber = periodService.selectPeriodLastSequenceNumber();
+            periodApiLastRecord = periodApiService.selectLastRecord();
+            periodLastRecord = periodService.findFirstByIdLessThanOrderByIdDesc(periodSequenceNumber);
+            if (periodLastRecord.getId() > periodApiLastRecord.getPeriodId()) {
+                Long periodApiPeriodIdPlusOne = periodApiLastRecord.getPeriodId() + 1;
+                newPeriods = periodService.findAllPeriodOnlyByIdBetween(periodApiPeriodIdPlusOne,periodLastRecord.getId());
             } else {
                 returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
                 returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
@@ -495,11 +497,11 @@ public class PeriodController {
             newPeriods = periodService.findAllPeriodOnly();
         }
 
-        newPeriodWebService = periodApiService.generatePeriodApiPublicId(newPeriods);
+        newPeriodApi = periodApiService.generatePeriodApiPublicId(newPeriods);
 
         returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
         returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
-        returnValue.setDescription(newPeriodWebService.size() + " New Public Id Generated");
+        returnValue.setDescription(newPeriodApi.size() + " New Public Id Generated");
         return ResponseEntity.ok(returnValue);
     }
 

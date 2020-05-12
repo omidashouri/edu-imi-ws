@@ -38,7 +38,8 @@ public class PeriodServiceImpl implements PeriodService {
     @Override
     public Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable) {
         Page<PeriodEntity> periodPages = periodRepository
-                .findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);;
+                .findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
+        ;
         return periodPages;
     }
 
@@ -71,12 +72,33 @@ public class PeriodServiceImpl implements PeriodService {
     }
 
     @Override
-    public Page<PeriodEntity> findAllPageableByExecutorPublicId(Pageable pageable,String executorPublicId) {
+    public Page<PeriodEntity> findAllPageableByExecutorPublicId(Pageable pageable, String executorPublicId) {
         Page<PeriodEntity> pageablePeriods =
                 periodRepository
                         .findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntity_PersonPublicId
-                                (pageable,executorPublicId);
+                                (pageable, executorPublicId);
         return pageablePeriods;
+    }
+
+    @Override
+    public List<PeriodEntity> findAllPeriodOnlyByIdBetween(Long startId, Long endId) {
+        List<PeriodOnly> allPeriodOnlys = periodRepository
+                .findAllPeriodOnlyByIdBetween(startId, endId);
+        List<PeriodEntity> allPeriods = periodOnlyMapper
+                .PeriodOnliesToPeriodEntities(allPeriodOnlys, new CycleAvoidingMappingContext());
+        return allPeriods;
+    }
+
+    @Override
+    public PeriodEntity findFirstByIdLessThanOrderByIdDesc(Long periodId) {
+        PeriodEntity period = periodRepository
+                .findFirstByIdLessThanEqualOrderByIdDesc(periodId);
+        return period;
+    }
+
+    @Override
+    public Long selectPeriodLastSequenceNumber() {
+        return periodRepository.selectLastSequenceNumber();
     }
 
 

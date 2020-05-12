@@ -28,7 +28,8 @@ public interface StudentRepository extends CrudRepository<StudentEntity, Long> {
     StudentEntity findFirstByIdLessThanEqualOrderByIdDesc(Long id);
 
     @Query(name = "StudentEntity.selectAllStudentOnlyByIdBetween", nativeQuery = true)
-    List<StudentOnly> findAllStudentOnlyByIdBetween(@Param("beginStudentId") Long beginStudentId,@Param("endStudentId") Long endStudentId);
+    List<StudentOnly> findAllStudentOnlyByIdBetween(@Param("beginStudentId") Long beginStudentId,
+                                                    @Param("endStudentId") Long endStudentId);
 
     @Query(name = "StudentEntity.selectAllStudentOnly", nativeQuery = true)
     @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
@@ -38,5 +39,5 @@ public interface StudentRepository extends CrudRepository<StudentEntity, Long> {
     @Query(name = "StudentEntity.selectCurrentSequenceNumber",nativeQuery = true)
     Long selectLastSequenceNumber();
 
-    Long countByIdLessThanEqual(Long StudentId);
+    Long countByIdLessThanEqual(Long studentId);
 }

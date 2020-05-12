@@ -14,4 +14,6 @@ public interface StudentApiService {
     List<StudentApiEntity> generateStudentApiPublicId(List<StudentEntity> newStudentEntities);
 
     List<StudentApiEntity> findAllByStudentIdIn(List<Long> studentIds);
+
+    List<StudentApiEntity> findAllByStudentIdInAndStudentPublicIdIsNotNull(List<Long> studentIds);
 }

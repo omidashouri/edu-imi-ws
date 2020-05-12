@@ -24,4 +24,10 @@ public interface PeriodService {
 
     Page<PeriodEntity> findAllPageableByExecutorPublicId(Pageable pageable, String executorPublicId);
 
+    List<PeriodEntity> findAllPeriodOnlyByIdBetween(Long startId, Long endId);
+
+    PeriodEntity findFirstByIdLessThanOrderByIdDesc(Long studentId);
+
+    Long selectPeriodLastSequenceNumber();
+
 }
