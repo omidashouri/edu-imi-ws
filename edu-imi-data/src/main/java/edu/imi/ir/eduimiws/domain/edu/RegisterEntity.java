@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.RegisterOnly;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -68,7 +69,8 @@ import javax.persistence.*;
 })
 
 
-
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Getter
 @Setter
 @NoArgsConstructor
