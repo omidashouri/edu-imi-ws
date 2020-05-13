@@ -7,6 +7,8 @@
     <springProfile name="default">
         <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
+        <logger name="org.hibernate.cache" level="info" additivity="true"/>
+        <logger name="org.ehcache" level="info" additivity="true"/>
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>

@@ -1,36 +1,55 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true" monitoring="autodetect" dynamicConfig="true">
+    <!-- Persistent cache directory -->
+    <persistence directory="/run/media/o.ashouri/Archive/0_0/cache" />
 
-    <!-- By default, Ehcache stored the cached files in temp folder. -->
-    <!-- <diskStore path="java.io.tmpdir" /> -->
+    <!-- Default cache template -->
+    <cache-template name="default">
+        <expiry>
+            <ttl unit="seconds">30</ttl>
+        </expiry>
+        <listeners>
+            <listener>
+                <class>edu.imi.ir.eduimiws.servces.CacheEventLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+                <events-to-fire-on>EVICTED</events-to-fire-on>
+            </listener>
+        </listeners>
+        <resources>
+            <heap>100</heap>
+            <offheap unit="MB">10</offheap>
+            <disk persistent="true" unit="MB">20</disk>
+        </resources>
+    </cache-template>
 
-    <!-- Ask Ehcache to store cache in this path -->
-    <diskStore path="c:\\cache" />
-    <defaultCache
-            maxElementsInMemory="100"
-            eternal="false"
-            timeToIdleSeconds="30"
-            timeToLiveSeconds="50"
-            overflowToDisk="true"
-            diskPersistent="false"
-            memoryStoreEvictionPolicy="LRU"
-    />
+    <cache alias="edu.imi.ir.eduimiws.domain.edu.RegisterEntity" uses-template="default"/>
+    <cache alias="edu.imi.ir.eduimiws.domain.edu.RegisterApiEntity" uses-template="default"/>
 
-    <!-- Sample cache named cache1
-    This cache contains a maximum in memory of 10000 elements, and will expire
-    an element if it is idle for more than 5 minutes and lives for more than
-    10 minutes.
+<!--    <cache alias="squareCache">
+        <key-type>java.lang.Long</key-type>
+        <value-type>java.math.BigDecimal</value-type>
+        <expiry>
+            <ttl unit="seconds">30</ttl>
+        </expiry>
 
-    If there are more than 10000 elements it will overflow to the
-    disk cache -->
-    <cache name="cache1"
-           maxEntriesLocalHeap="10000"
-           maxEntriesLocalDisk="1000"
-           eternal="false"
-           diskSpoolBufferSizeMB="20"
-           timeToIdleSeconds="300" timeToLiveSeconds="600"
-           memoryStoreEvictionPolicy="LFU"
-           transactionalMode="off">
-        <persistence strategy="localTempSwap" />
-    </cache>
-</ehcache>
+        <listeners>
+            <listener>
+                <class>edu.imi.ir.eduimiws.servces.CacheEventLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+            </listener>
+        </listeners>
+
+        <resources>
+            <heap unit="entries">2</heap>
+            <offheap unit="MB">10</offheap>
+        </resources>
+    </cache>-->
+</config>

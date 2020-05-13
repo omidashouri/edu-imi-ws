@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.configurations;
 
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Configuration
+@EnableCaching
 public class AppConfig {
 
     @Bean
