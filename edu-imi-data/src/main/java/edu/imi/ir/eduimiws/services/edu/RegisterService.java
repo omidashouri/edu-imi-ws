@@ -12,9 +12,9 @@ public interface RegisterService {
 
     RegisterEntity selectLastRecord();
 
-    Page<RegisterEntity> findAllByOrderByCreateDateDesc (Pageable pageable);
+    Page<RegisterEntity> findAllByOrderPageable(Pageable pageable);
 
-    RegisterEntity findByRegisterPublicIdOrderByCreateDateDesc(String registerPublicId);
+    RegisterEntity findByRegisterPublicId(String registerPublicId);
 
     List<RegisterEntity> findAllRegisterOnlyByIdBetween(Long startId, Long endId);
 

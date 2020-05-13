@@ -18,11 +18,11 @@ public interface RegisterRepository extends CrudRepository<RegisterEntity, Long>
 
 //    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService", type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
-    Page<RegisterEntity> findAllByDeleteStatusIsNotNullOrderByCreateDateDesc(Pageable pageable);
+    Page<RegisterEntity> findAllByDeleteStatusIsNotNull(Pageable pageable);
 
 //    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService", type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
-    RegisterEntity findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNullOrderByCreateDateDesc(String studentPublicId);
+    RegisterEntity findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(String studentPublicId);
 
     RegisterEntity findFirstByOrderByIdDesc();
 

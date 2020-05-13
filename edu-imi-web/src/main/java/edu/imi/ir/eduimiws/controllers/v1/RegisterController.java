@@ -103,7 +103,7 @@ public class RegisterController {
                                                                              Pageable pageable) {
 
         Page<RegisterEntity> registerPages =
-                registerService.findAllByOrderByCreateDateDesc(pageable);
+                registerService.findAllByOrderPageable(pageable);
 
         Page<RegisterFastDto> registerFastDtoPage = registerPages
                 .map(p -> registerFastDtoMapper
@@ -121,12 +121,12 @@ public class RegisterController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<RegisterResponse>> getAllRegisters(
             @Parameter(hidden = true)
-            @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+            @SortDefault(sort = "id", direction = Sort.Direction.DESC)
             @PageableDefault(page = 0, size = 10)
                     Pageable pageable) {
 
         Page<RegisterEntity> registerPages =
-                registerService.findAllByOrderByCreateDateDesc(pageable);
+                registerService.findAllByOrderPageable(pageable);
 
         List<RegisterEntity> registerEntities = StreamSupport
                 .stream(registerPages.spliterator(), false)
@@ -177,7 +177,7 @@ public class RegisterController {
     public ResponseEntity<?> getRegisterByRegisterPublicId(@PathVariable String registerPublicId) {
 
         try {
-            RegisterEntity register = registerService.findByRegisterPublicIdOrderByCreateDateDesc(registerPublicId);
+            RegisterEntity register = registerService.findByRegisterPublicId(registerPublicId);
             if (register == null) {
                 return this.registerNotFound();
             }

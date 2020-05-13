@@ -36,16 +36,16 @@ public class RegisterServiceImpl implements RegisterService{
     }
 
     @Override
-    public Page<RegisterEntity> findAllByOrderByCreateDateDesc(Pageable pageable) {
+    public Page<RegisterEntity> findAllByOrderPageable(Pageable pageable) {
         Page<RegisterEntity> registerPages = registerRepository
-                .findAllByDeleteStatusIsNotNullOrderByCreateDateDesc(pageable);
+                .findAllByDeleteStatusIsNotNull(pageable);
         return registerPages;
     }
 
     @Override
-    public RegisterEntity findByRegisterPublicIdOrderByCreateDateDesc(String registerPublicId) {
+    public RegisterEntity findByRegisterPublicId(String registerPublicId) {
         RegisterEntity register = registerRepository
-                .findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNullOrderByCreateDateDesc(registerPublicId);
+                .findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(registerPublicId);
         return register;
     }
 
