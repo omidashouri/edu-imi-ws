@@ -7,6 +7,8 @@ import edu.imi.ir.eduimiws.repositories.crm.PrivilegeApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,6 +146,20 @@ public class PrivilegeApiServiceImpl implements PrivilegeApiService {
     public Collection<PrivilegeApiEntity> findAllByPrivilegePublicIds(List<String> privilegePublicIds) {
         Collection<PrivilegeApiEntity> privilegeApis = privilegeApiRepository.findAllByPrivilegePublicIdIn(privilegePublicIds);
         return privilegeApis;
+    }
+
+    @Override
+    public Page<PrivilegeApiEntity> findAllPrivilegeEntityPagesOrderByCreateDateDesc(Pageable pageable) {
+        Page<PrivilegeApiEntity> privilegeApiPages = privilegeApiRepository
+                .findAllByOrderByCreateDateTsDesc(pageable);
+        return privilegeApiPages;
+    }
+
+    @Override
+    public PrivilegeApiEntity findByPrivilegePublicId(String privilegePublicId) {
+        PrivilegeApiEntity privilegeApi = privilegeApiRepository
+                .findByPrivilegePublicId(privilegePublicId);
+        return privilegeApi;
     }
 
     private String generatePrivilegePublicId() {

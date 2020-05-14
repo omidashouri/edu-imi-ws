@@ -53,17 +53,10 @@ import java.util.stream.StreamSupport;
 public class ContactController {
 
     private final ContactService contactService;
-
     private final ContactResponseContactFastDtoMapper contactResponseContactFastDtoMapper;
-
     private final ContactFastDtoMapper contactFastDtoMapper;
-
     private final ContactResponseAssembler contactResponseAssembler;
-
     private final PagedResourcesAssembler<ContactFastDto> contactPagedResourcesAssembler;
-
-//    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3Nzg4Njk2fQ.gt3VEOf2NKU6njEwr-J8SHZnL0NdPTkYsCTWcv-tf7Hs_Q_LYD7RzDNd_leFS-Zi3wi0lgx_wlE44VV7DL4S5Q
-//0453506690
 
     @Operation(
             summary = "find All contacts",
@@ -305,15 +298,11 @@ public class ContactController {
             return this.contactNotFound();
         }
 
-/*        List<ContactResponse> contactResponses = contactResponseContactFastDtoMapper
-                .toContactResponses(contactFastDtos, new CycleAvoidingMappingContext());*/
-
         CollectionModel<ContactResponse> contactResponseCollectionModel =
                 contactResponseAssembler.toCollectionModel(contactFastDtos);
 
         return ResponseEntity.ok(contactResponseCollectionModel);
     }
-
 
     private ResponseEntity<?> contactNotFound() {
         return new ResponseEntity<>(
