@@ -75,9 +75,6 @@ public class UserController {
     // http://localhost:8080/edu-imi-ws/v1/users/aLIRVt88hdQ858q5AMURm1QI6DC3Je
     // in header add Accept : application/xml or application/json
 
-//    IMI eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5MDU3IiwiZXhwIjoxNTg3ODMyMDEyfQ.ZmfASy43T2adVKzTahZksyQ548LdeUoSfD2edKKBKbtMx8nYnhi7IxYlrh8m7vkdlB_0rafcBBZL2GieQaZqlQ
-
-
     @GetMapping(path = "/active",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<UserResponse>> getAllActive() {
@@ -106,7 +103,6 @@ public class UserController {
 
         return ResponseEntity.ok(userResponseCollectionModel);*/
     }
-
 
 
     @Operation(
@@ -711,98 +707,4 @@ public class UserController {
                 , HttpStatus.BAD_REQUEST
         );
     }
-
-    private List<PersonEntity> newPersonsNotInPersonWebService() {
-    /*    List<PersonEntity> persons;
-        List<PersonApiEntity> personWebServices;
-        List<PersonEntity> newPersons = new ArrayList<>();
-
-        personWebServices = personApiService.findAllPersonWebServiceIdProjection();
-        persons = personService.findAllPersonIdProjection();
-
-
-        persons.stream().map(newPersons::add);
-
-        persons.size();
-
-         persons
-                .stream()
-                .map(PersonEntity::getId)
-                .filter(
-                        personWebServices
-                                .stream()
-                                .map(PersonApiEntity::getPersonId)
-                                .collect(Collectors.toSet())
-                ::contains);
-
-        newPersons
-                .stream()
-                .map(PersonEntity::getId)
-                .collect(Collectors.toList())
-                .removeAll(
-                        personWebServices
-                                .stream()
-                                .map(PersonApiEntity::getPersonId)
-                                .collect(Collectors.toSet()));
-
-        persons.size();
-        newPersons.size();
-        return persons;*/
-        return null;
-    }
-
-
-     /* @Operation(
-            summary = "find All users",
-            description = "Search user detail",
-            tags = "users",
-            security = @SecurityRequirement(name = "imi-security-key")
-    )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            headers = {@Header(name = "authorization", description = "authorization description"), @Header(name = "userPublicId")},
-                            responseCode = "200",
-                            description = "successful operation",
-                            content = @Content(
-                                    array = @ArraySchema(
-                                            schema = @Schema(implementation = UserContactResponse.class)
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Bad Request",
-                            content = @Content(
-                                    schema = @Schema(implementation = ErrorMessage.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal Server Error",
-                            content = @Content(
-                                    schema = @Schema(implementation = ErrorMessage.class)
-                            )
-                    )
-            })
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getUsers(@RequestParam(value = "page", defaultValue = "1") int pageValue
-            , @RequestParam(value = "limit", defaultValue = "25") int limitValue) {
-
-        List<UserContactResponse> userContactResponses;
-
-        List<PersonApiEntity> users =
-                personApiService
-                        .findAllListByPageAndSize(pageValue, limitValue);
-
-        List<UserContactFastDto> userContactFastDtos =
-                personApiUserContactFastDtoMapper.PersonWebServiceEntityToUserContactFastDtoes(users, new CycleAvoidingMappingContext());
-
-
-        userContactResponses =
-                userContactResponseUserContactFastDtoMapper
-                        .UserContactFastDtoToUserContactResponses(userContactFastDtos, new CycleAvoidingMappingContext());
-
-        return ResponseEntity.ok(userContactResponses);
-    }*/
 }

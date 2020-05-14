@@ -39,6 +39,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final ErpPasswordEncoder bCryptPasswordEncoder;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private AppProperties appProperties;
 
 
@@ -83,6 +85,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .maximumSessions(1).sessionRegistry(sessionRegistry())
                 .and().sessionFixation().none()*/
 
+                .and()
+
+                .exceptionHandling()
+                    .authenticationEntryPoint(customAuthenticationEntryPoint)// handles bad credentials
+                    .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
 
                 .addFilter(getAuthenticationFilter())

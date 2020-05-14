@@ -1,10 +1,13 @@
 package edu.imi.ir.eduimiws.configurations;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -35,6 +38,13 @@ public class AppConfig {
     @Bean
     public SimpleMailMessage simpleMailMessage(){
         return new SimpleMailMessage();
+    }
+
+    @Bean
+    public Jackson2JsonObjectMapper jackson2JsonObjectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+        return new Jackson2JsonObjectMapper(mapper);
     }
 
     @Bean
