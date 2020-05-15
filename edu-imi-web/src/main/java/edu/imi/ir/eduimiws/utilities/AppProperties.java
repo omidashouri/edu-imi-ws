@@ -39,7 +39,7 @@ public class AppProperties {
 
     private static String passwordResetExpirationTime;
 
-    private static String h2Console;
+//    private static String h2Console;
 
     @Value("${token.secret}")
     public void setTokenSecret(String tokenSecret) {
@@ -122,14 +122,14 @@ public class AppProperties {
         return passwordResetExpirationTime;
     }
 
-    public static String getH2Console() {
+/*    public static String getH2Console() {
         return h2Console;
-    }
+    }*/
 
-    @Value("${h2.console}")
+/*    @Value("${h2.console}")
     public void setH2Console(String h2Console) {
         AppProperties.h2Console = h2Console;
-    }
+    }*/
 
     /*    @Bean
     public static PropertySourcesPlaceholderConfigurer properties(){

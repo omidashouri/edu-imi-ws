@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -31,7 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Order(1)
 @EnableWebSecurity
 @RequiredArgsConstructor
 @ComponentScans({@ComponentScan("edu.imi.ir.eduimiws.*")})
@@ -47,6 +48,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .antMatcher("/api/**")
                 .cors().and()
 
                 .csrf().disable().authorizeRequests()
@@ -63,8 +65,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,appProperties.getPasswordResetUrl())
                 .permitAll()
 
+/*
                 .antMatchers(appProperties.getH2Console())
                 .permitAll()
+*/
 
                 .antMatchers("**/swagger-ui/**","/swagger-ui/**","/v3/api-docs/**","/v3/api-docs","/v2/api-docs/**","/configuration/**","/swagger*/**","/webjars/**")
                 .permitAll()
@@ -124,7 +128,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
 /*        filter.setAllowSessionCreation(true);
         filter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy());*/
-        filter.setFilterProcessesUrl("/users/login");
+        filter.setFilterProcessesUrl("/api/users/login");
         return filter;
     }
 

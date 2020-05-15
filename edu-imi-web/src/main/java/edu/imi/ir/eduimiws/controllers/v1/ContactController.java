@@ -47,9 +47,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
-@RequestMapping("/v1/contacts")
+@RequestMapping("/api/v1/contacts")
 @RequiredArgsConstructor
 @Tag(name = "contacts", description = "The contact API")
 public class ContactController {

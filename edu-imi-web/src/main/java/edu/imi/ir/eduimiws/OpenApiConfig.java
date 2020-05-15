@@ -59,7 +59,7 @@ public class OpenApiConfig {
     public GroupedOpenApi loginApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Authentication-login")
-                .pathsToMatch("/users/login")
+                .pathsToMatch("/api/users/login")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -68,7 +68,7 @@ public class OpenApiConfig {
     public GroupedOpenApi userApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Users")
-                .pathsToMatch("/v1/users/**")
+                .pathsToMatch("/api/v1/users/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -77,7 +77,7 @@ public class OpenApiConfig {
     public GroupedOpenApi contactApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Contacts")
-                .pathsToMatch("/v1/contacts/**")
+                .pathsToMatch("/api/v1/contacts/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -86,7 +86,7 @@ public class OpenApiConfig {
     public GroupedOpenApi periodApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Periods")
-                .pathsToMatch("/v1/periods/**")
+                .pathsToMatch("/api/v1/periods/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -95,7 +95,7 @@ public class OpenApiConfig {
     public GroupedOpenApi studentApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Students")
-                .pathsToMatch("/v1/students/**")
+                .pathsToMatch("/api/v1/students/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -104,7 +104,7 @@ public class OpenApiConfig {
     public GroupedOpenApi roleApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Roles")
-                .pathsToMatch("/v1/roles/**")
+                .pathsToMatch("/api/v1/roles/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -113,7 +113,7 @@ public class OpenApiConfig {
     public GroupedOpenApi privilegeApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Privileges")
-                .pathsToMatch("/v1/privileges/**")
+                .pathsToMatch("/api/v1/privileges/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -122,7 +122,7 @@ public class OpenApiConfig {
     public GroupedOpenApi registerApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Registers")
-                .pathsToMatch("/v1/registers/**")
+                .pathsToMatch("/api/v1/registers/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -131,7 +131,7 @@ public class OpenApiConfig {
     public GroupedOpenApi mailApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Mails")
-                .pathsToMatch("/v1/mails/**")
+                .pathsToMatch("/api/v1/mails/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
