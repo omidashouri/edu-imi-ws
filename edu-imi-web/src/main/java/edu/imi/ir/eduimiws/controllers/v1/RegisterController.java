@@ -1,10 +1,13 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
-import edu.imi.ir.eduimiws.assemblers.edu.RegisterResponseAssembler;
+import edu.imi.ir.eduimiws.assemblers.edu.RegisterResponseRegisterDtoAssembler;
+import edu.imi.ir.eduimiws.assemblers.edu.RegisterResponseRegisterFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.RegisterApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.RegisterEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.edu.RegisterDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterFastDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.edu.RegisterDto;
 import edu.imi.ir.eduimiws.models.dto.edu.RegisterFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
@@ -58,8 +61,11 @@ public class RegisterController {
 
     private final RegisterService registerService;
     private final RegisterApiService registerApiService;
+    private final RegisterDtoMapper registerDtoMapper;
     private final RegisterFastDtoMapper registerFastDtoMapper;
-    private final RegisterResponseAssembler registerResponseAssembler;
+    private final RegisterResponseRegisterDtoAssembler registerResponseRegisterDtoAssembler;
+    private final RegisterResponseRegisterFastDtoAssembler registerResponseRegisterFastDtoAssembler;
+    private final PagedResourcesAssembler<RegisterDto> registerDtoPagedResourcesAssembler;
     private final PagedResourcesAssembler<RegisterFastDto> registerFastDtoPagedResourcesAssembler;
 
 
@@ -112,7 +118,7 @@ public class RegisterController {
                         .toRegisterFastDto(p, new CycleAvoidingMappingContext()));
 
         PagedModel<RegisterResponse> registerResponsePagedModel = registerFastDtoPagedResourcesAssembler
-                .toModel(registerFastDtoPage, registerResponseAssembler);
+                .toModel(registerFastDtoPage, registerResponseRegisterFastDtoAssembler);
 
         return ResponseEntity.ok(registerResponsePagedModel);
     }
@@ -138,7 +144,7 @@ public class RegisterController {
                 .toRegisterFastDtos(registerEntities, new CycleAvoidingMappingContext());
 
         CollectionModel<RegisterResponse> registerResponseCollectionModel =
-                registerResponseAssembler.toCollectionModel(registerFastDtos);
+                registerResponseRegisterFastDtoAssembler.toCollectionModel(registerFastDtos);
 
         return ResponseEntity.ok(registerResponseCollectionModel);
     }
@@ -188,7 +194,142 @@ public class RegisterController {
                     .toRegisterFastDto(register, new CycleAvoidingMappingContext());
 
             RegisterResponse registerResponse =
-                    registerResponseAssembler.toModel(registerFastDto);
+                    registerResponseRegisterFastDtoAssembler.toModel(registerFastDto);
+
+            return ResponseEntity.ok(registerResponse);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+    }
+
+    @Operation(
+            summary = "find All registers with student and period name",
+            description = "Search register detail pageable with student and period name",
+            tags = "registers",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = RegisterResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(path = "/descriptive",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<RegisterResponse>> getRegistersWithStudentPeriodName(@Parameter(hidden = true)
+                                                                     @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                     @PageableDefault(page = 0, size = 10, value = 10)
+                                                                             Pageable pageable) {
+
+        Page<RegisterEntity> registerPages =
+                registerService.findAllWithStudentPeriodNameByOrderPageable(pageable);
+
+        Page<RegisterDto> registerDtoPage = registerPages
+                .map(p -> registerDtoMapper
+                        .toRegisterDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<RegisterResponse> registerResponsePagedModel = registerDtoPagedResourcesAssembler
+                .toModel(registerDtoPage, registerResponseRegisterDtoAssembler);
+
+        return ResponseEntity.ok(registerResponsePagedModel);
+    }
+
+    @Operation(hidden = true)
+    @PageableAsQueryParam
+    @GetMapping(path = "/collectionModel/descriptive",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CollectionModel<RegisterResponse>> getAllRegistersWithStudentPeriodName(
+            @Parameter(hidden = true)
+            @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size = 10)
+                    Pageable pageable) {
+
+        Page<RegisterEntity> registerPages =
+                registerService.findAllWithStudentPeriodNameByOrderPageable(pageable);
+
+        List<RegisterEntity> registerEntities = StreamSupport
+                .stream(registerPages.spliterator(), false)
+                .collect(Collectors.toList());
+
+        List<RegisterDto> registerDtos = registerDtoMapper
+                .toRegisterDtos(registerEntities, new CycleAvoidingMappingContext());
+
+        CollectionModel<RegisterResponse> registerResponseCollectionModel =
+                registerResponseRegisterDtoAssembler.toCollectionModel(registerDtos);
+
+        return ResponseEntity.ok(registerResponseCollectionModel);
+    }
+
+    @Operation(
+            summary = "Find Register by public ID with student and period name",
+            description = "Search register by the public id with student and period name",
+            tags = "registers",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = RegisterResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "register not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/descriptive/{registerPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getRegisterWithStudentPeriodNameByRegisterPublicId(@PathVariable String registerPublicId) {
+
+        try {
+            RegisterEntity register = registerService
+                    .findWithStudentPeriodNameByRegisterPublicId(registerPublicId);
+            if (register == null) {
+                return this.registerNotFound();
+            }
+
+            RegisterDto registerDto = registerDtoMapper
+                    .toRegisterDto(register, new CycleAvoidingMappingContext());
+
+            RegisterResponse registerResponse =
+                    registerResponseRegisterDtoAssembler.toModel(registerDto);
 
             return ResponseEntity.ok(registerResponse);
 

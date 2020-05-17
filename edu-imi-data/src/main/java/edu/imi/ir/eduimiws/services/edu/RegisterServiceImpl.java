@@ -43,9 +43,23 @@ public class RegisterServiceImpl implements RegisterService{
     }
 
     @Override
+    public Page<RegisterEntity> findAllWithStudentPeriodNameByOrderPageable(Pageable pageable) {
+        Page<RegisterEntity> registerPages = registerRepository
+                .readAllByDeleteStatusIsNotNull(pageable);
+        return registerPages;
+    }
+
+    @Override
     public RegisterEntity findByRegisterPublicId(String registerPublicId) {
         RegisterEntity register = registerRepository
                 .findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(registerPublicId);
+        return register;
+    }
+
+    @Override
+    public RegisterEntity findWithStudentPeriodNameByRegisterPublicId(String registerPublicId) {
+        RegisterEntity register = registerRepository
+                .readByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(registerPublicId);
         return register;
     }
 

@@ -28,8 +28,20 @@ public class RegisterResponse extends RepresentationModel<RegisterResponse> {
     @Schema(title = "Period Public ID",maxLength = 36)
     private String periodPublicId;
 
+    @Schema(title = "Period Name",maxLength = 500)
+    private String periodName;
+
     @Schema(title = "Student Public ID",maxLength = 36)
     private String studentPublicId;
+
+    @Schema(name="Student First Name",maxLength = 100)
+    private String studentFirstName;
+
+    @Schema(name="Student Last Name",maxLength = 100)
+    private String studentLastName;
+
+    @Schema(name="Student Full Name",maxLength = 200)
+    private String studentFullName;
 
     @Schema(title = "Student Public ID",maxLength = 2)
     private Long activityStatus;

@@ -4,8 +4,8 @@ import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
 import edu.imi.ir.eduimiws.controllers.v1.RegisterController;
 import edu.imi.ir.eduimiws.controllers.v1.StudentController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.edu.RegisterResponseRegisterFastDtoMapper;
-import edu.imi.ir.eduimiws.models.dto.edu.RegisterFastDto;
+import edu.imi.ir.eduimiws.mapper.edu.RegisterResponseRegisterDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.edu.RegisterDto;
 import edu.imi.ir.eduimiws.models.response.edu.RegisterResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -16,54 +16,54 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class RegisterResponseAssembler extends RepresentationModelAssemblerSupport<RegisterFastDto, RegisterResponse> {
-    private final RegisterResponseRegisterFastDtoMapper registerResponseRegisterFastDtoMapper;
+public class RegisterResponseRegisterDtoAssembler extends RepresentationModelAssemblerSupport<RegisterDto, RegisterResponse> {
+    private final RegisterResponseRegisterDtoMapper registerResponseRegisterDtoMapper;
 
 
-    public RegisterResponseAssembler(RegisterResponseRegisterFastDtoMapper registerResponseRegisterFastDtoMapper) {
+    public RegisterResponseRegisterDtoAssembler(RegisterResponseRegisterDtoMapper registerResponseRegisterDtoMapper) {
         super(RegisterController.class, RegisterResponse.class);
-        this.registerResponseRegisterFastDtoMapper = registerResponseRegisterFastDtoMapper;
+        this.registerResponseRegisterDtoMapper = registerResponseRegisterDtoMapper;
     }
 
     @Override
-    public RegisterResponse toModel(RegisterFastDto registerFastDto) {
+    public RegisterResponse toModel(RegisterDto registerDto) {
 
-        RegisterResponse registerResponse = registerResponseRegisterFastDtoMapper
-                .toRegisterResponse(registerFastDto, new CycleAvoidingMappingContext());
+        RegisterResponse registerResponse = registerResponseRegisterDtoMapper
+                .toRegisterResponse(registerDto, new CycleAvoidingMappingContext());
 
-        if (registerFastDto.getRegisterPublicId() != null) {
+        if (registerDto.getRegisterPublicId() != null) {
             registerResponse
                     .add(linkTo(
                             methodOn(
                                     RegisterController.class)
-                                    .getRegisterByRegisterPublicId(registerFastDto.getRegisterPublicId()))
+                                    .getRegisterByRegisterPublicId(registerDto.getRegisterPublicId()))
                             .withSelfRel());
         }
 
-        if (registerFastDto.getRegisterPublicId() != null) {
+        if (registerDto.getRegisterPublicId() != null) {
             registerResponse.
                     add(linkTo(
                             methodOn(
                                     RegisterController.class)
-                                    .getRegisterByRegisterPublicId(registerFastDto.getRegisterPublicId()))
+                                    .getRegisterByRegisterPublicId(registerDto.getRegisterPublicId()))
                             .withRel("registers"));
         }
 
-        if (registerFastDto.getStudentPublicId() != null) {
+        if (registerDto.getStudentPublicId() != null) {
             registerResponse.
                     add(linkTo(
                             methodOn(
                                     StudentController.class)
-                                    .getStudentByStudentPublicId(registerFastDto.getStudentPublicId()))
+                                    .getStudentByStudentPublicId(registerDto.getStudentPublicId()))
                             .withRel("students"));
         }
 
-        if (registerFastDto.getPeriodPublicId() != null) {
+        if (registerDto.getPeriodPublicId() != null) {
             registerResponse.
                     add(linkTo(
                             methodOn(
                                     PeriodController.class)
-                                    .getPeriodByPeriodPublicId(registerFastDto.getPeriodPublicId()))
+                                    .getPeriodByPeriodPublicId(registerDto.getPeriodPublicId()))
                             .withRel("periods"));
         }
 
@@ -72,9 +72,9 @@ public class RegisterResponseAssembler extends RepresentationModelAssemblerSuppo
 
 
     @Override
-    public CollectionModel<RegisterResponse> toCollectionModel(Iterable<? extends RegisterFastDto> registerFastDtos) {
+    public CollectionModel<RegisterResponse> toCollectionModel(Iterable<? extends RegisterDto> registerDtos) {
 
-        CollectionModel<RegisterResponse> registerResponseCollectionModel = super.toCollectionModel(registerFastDtos);
+        CollectionModel<RegisterResponse> registerResponseCollectionModel = super.toCollectionModel(registerDtos);
 
         Pageable pageable = Pageable.unpaged();
 

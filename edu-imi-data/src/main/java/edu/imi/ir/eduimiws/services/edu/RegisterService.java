@@ -14,7 +14,11 @@ public interface RegisterService {
 
     Page<RegisterEntity> findAllByOrderPageable(Pageable pageable);
 
+    Page<RegisterEntity> findAllWithStudentPeriodNameByOrderPageable(Pageable pageable);
+
     RegisterEntity findByRegisterPublicId(String registerPublicId);
+
+    RegisterEntity findWithStudentPeriodNameByRegisterPublicId(String registerPublicId);
 
     List<RegisterEntity> findAllRegisterOnlyByIdBetween(Long startId, Long endId);
 
