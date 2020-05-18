@@ -7,9 +7,9 @@
 
     <!-- Default cache template -->
     <cache-template name="default">
-        <expiry>
-            <ttl unit="seconds">30</ttl>
-        </expiry>
+<!--        <expiry>
+            <ttl unit="seconds">0</ttl>
+        </expiry>-->
         <listeners>
             <listener>
                 <class>edu.imi.ir.eduimiws.servces.CacheEventLogger</class>
@@ -23,7 +23,7 @@
         <resources>
             <heap>100</heap>
             <offheap unit="MB">10</offheap>
-            <disk persistent="true" unit="MB">20</disk>
+            <disk persistent="true" unit="MB">200</disk>
         </resources>
     </cache-template>
 
