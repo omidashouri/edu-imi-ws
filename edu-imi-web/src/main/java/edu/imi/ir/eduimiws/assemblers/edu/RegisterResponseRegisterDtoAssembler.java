@@ -36,17 +36,8 @@ public class RegisterResponseRegisterDtoAssembler extends RepresentationModelAss
                     .add(linkTo(
                             methodOn(
                                     RegisterController.class)
-                                    .getRegisterByRegisterPublicId(registerDto.getRegisterPublicId()))
+                                    .getRegisterWithStudentPeriodNameByRegisterPublicId(registerDto.getRegisterPublicId()))
                             .withSelfRel());
-        }
-
-        if (registerDto.getRegisterPublicId() != null) {
-            registerResponse.
-                    add(linkTo(
-                            methodOn(
-                                    RegisterController.class)
-                                    .getRegisterByRegisterPublicId(registerDto.getRegisterPublicId()))
-                            .withRel("registers"));
         }
 
         if (registerDto.getStudentPublicId() != null) {

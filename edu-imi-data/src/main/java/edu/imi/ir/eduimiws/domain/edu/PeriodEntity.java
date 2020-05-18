@@ -4,6 +4,7 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -59,6 +60,8 @@ import javax.persistence.*;
                 query = " select EDU.SEQ_EDU_PERIOD.nextval from dual "
         )
 })
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE,region = "period")
 @Getter
 @Setter
 @NoArgsConstructor

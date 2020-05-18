@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.StudentOnly;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "StudentEntity.findStudentSubGraphUserApiService",
                 attributeNodes = {
-                        @NamedAttributeNode(value = "person",subgraph = "person-subGraph"),
+                        @NamedAttributeNode(value = "person", subgraph = "person-subGraph"),
                         @NamedAttributeNode("studentApi")
                 },
                 subgraphs = {
@@ -56,6 +57,8 @@ import javax.persistence.*;
         )
 })
 
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "student")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -70,7 +73,7 @@ public class StudentEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="PERSON_ID")
+    @JoinColumn(name = "PERSON_ID")
     private PersonEntity person;
 
     @Column(name = "PERSON_ID", insertable = false, updatable = false)
@@ -81,43 +84,43 @@ public class StudentEntity extends BaseEntity {
         return personId;
     }
 
-    @Column(name="FIRST_NAME",length = 100)
+    @Column(name = "FIRST_NAME", length = 100)
     private String firstName;
 
-    @Column(name="LAST_NAME",length = 100)
+    @Column(name = "LAST_NAME", length = 100)
     private String lastName;
 
-    @Column(name="NATION_CODE",length = 15)
+    @Column(name = "NATION_CODE", length = 15)
     private String nationCode;
 
-    @Column(name="CODE",length = 20)
+    @Column(name = "CODE", length = 20)
     private String code;
 
-    @Column(name="ACTIVITY_STATUS")
+    @Column(name = "ACTIVITY_STATUS")
     private Long activityStatus;
 
-    @Column(name="DELETE_STATUS")
+    @Column(name = "DELETE_STATUS")
     private Long deleteStatus;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="CREATOR_ID")
+    @JoinColumn(name = "CREATOR_ID")
     private PersonEntity creator;
 
-    @Column(name="CREATE_DATE",length = 10)
+    @Column(name = "CREATE_DATE", length = 10)
     private String createDate;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="EDITOR_ID")
+    @JoinColumn(name = "EDITOR_ID")
     private PersonEntity editor;
 
-    @Column(name="EDIT_DATE",length = 10)
+    @Column(name = "EDIT_DATE", length = 10)
     private String editDate;
 
-    @Column(name="DESCRIPTION",length = 150)
+    @Column(name = "DESCRIPTION", length = 150)
     private String description;
 
     @EqualsAndHashCode.Exclude

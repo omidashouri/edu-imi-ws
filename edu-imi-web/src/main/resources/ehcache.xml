@@ -29,6 +29,10 @@
 
     <cache alias="edu.imi.ir.eduimiws.domain.edu.RegisterEntity" uses-template="default"/>
     <cache alias="edu.imi.ir.eduimiws.domain.edu.RegisterApiEntity" uses-template="default"/>
+    <cache alias="register" uses-template="default"/>
+    <cache alias="registerApi" uses-template="default"/>
+    <cache alias="student" uses-template="default"/>
+    <cache alias="period" uses-template="default"/>
 
 <!--    <cache alias="squareCache">
         <key-type>java.lang.Long</key-type>
