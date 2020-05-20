@@ -136,4 +136,13 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi rqresApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Reqres")
+                .pathsToMatch("/api/v1/reqres/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 }
