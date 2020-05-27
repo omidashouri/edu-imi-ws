@@ -38,6 +38,10 @@
             <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-support</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
@@ -120,6 +124,56 @@
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
             <version>1.2.33</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-security</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+<!--        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${javax-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>${jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${jaxb.version}</version>
+        </dependency>-->
+<!--        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-ri</artifactId>
+            <version>2.3.2</version>
+            <type>pom</type>
+        </dependency>-->
+        <!-- JAXB for Java 11 -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+        <!-- JAXWS for Java 11 -->
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>2.3.3</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>rt</artifactId>
+            <version>2.3.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -136,6 +190,40 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>wsimport-from-jdk</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- using wsdl from an url -->
+                    <wsdlUrls>
+                        <wsdlUrl>
+                            https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl
+                        </wsdlUrl>
+                    </wsdlUrls>
+                    <!-- or using wsdls file directory -->
+                    <!-- <wsdlDirectory>src/wsdl</wsdlDirectory> -->
+                    <!-- which wsdl file -->
+                    <!-- <wsdlFiles> -->
+                    <!-- <wsdlFile>myWSDL.wsdl</wsdlFile> -->
+                    <!--</wsdlFiles> -->
+                    <!-- Keep generated files -->
+                    <keep>true</keep>
+                    <!-- Package name -->
+                    <packageName>edu.imi.ir.eduimiws.models.wsdl</packageName>
+                    <!-- generated source files destination-->
+                    <sourceDestDir>target/generatedclasses</sourceDestDir>
+                </configuration>
+            </plugin>
+
+<!--            <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <version>0.14.0</version>
@@ -148,14 +236,77 @@
                 </executions>
                 <configuration>
                     <schemaLanguage>WSDL</schemaLanguage>
+&lt;!&ndash;                     Package to store the generated file &ndash;&gt;
+                    <generatePackage>a.wsdl</generatePackage>
+                    <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+&lt;!&ndash;                   The location of the WSDL file &ndash;&gt;
+&lt;!&ndash;                    <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
+                    <schemaIncludes>
+                        <include>*.xml</include>
+                    </schemaIncludes>&ndash;&gt;
+                    <forceRegenerate>true</forceRegenerate>
+                    <schemas>
+                        <schema>
+                            <url>‫‪https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl‬‬</url>
+                        </schema>
+                    </schemas>
+                </configuration>
+            </plugin>-->
+<!--            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>wsimport-from-jdk</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    &lt;!&ndash; using wsdls file directory &ndash;&gt;
+                    <wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>
+                    &lt;!&ndash; which wsdl file &ndash;&gt;
+                     <wsdlFiles>
+                        <wsdlFile>SabteAhvalPS.xml</wsdlFile>
+                    </wsdlFiles>
+                    &lt;!&ndash; Package name &ndash;&gt;
+                    <packageName>edu.imi.ir.eduimiws.models.wsdl</packageName>
+                    &lt;!&ndash; Keep generated files &ndash;&gt;
+                    <keep>true</keep>
+                    &lt;!&ndash; generated source files destination&ndash;&gt;
+                    <sourceDestDir>${project.basedir}/target/generated/src/main/java</sourceDestDir>
+                    <xdebug>true</xdebug>
+                    <verbose>true</verbose>
+                    <extension>true</extension>
+                    <xadditionalHeaders>true</xadditionalHeaders>
+                    <xauthFile>${basedir}/src/main/resources/wsdl/auth.txt</xauthFile>
+                </configuration>
+            </plugin>-->
+<!--            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.14.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaLanguage>WSDL</schemaLanguage>
+                    &lt;!&ndash; Package to store the generated file &ndash;&gt;
                     <generatePackage>edu.imi.ir.eduimiws.models.wsdl</generatePackage>
                     <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+                    &lt;!&ndash; The location of the WSDL file &ndash;&gt;
                     <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
                     <schemaIncludes>
                         <include>*.xml</include>
                     </schemaIncludes>
                 </configuration>
-            </plugin>
+            </plugin>-->
 <!--            <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>

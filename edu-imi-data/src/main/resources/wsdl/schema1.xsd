@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified"
+           targetNamespace="http://schemas.xmlsoap.org/wsdl/">
+    <xsd:import schemaLocation="schema1.xsd" namespace="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <xsd:element name="definitions">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="import">
+                    <xsd:complexType>
+                        <xsd:attribute name="location" type="xsd:string" use="required" />
+                        <xsd:attribute name="namespace" type="xsd:string" use="required" />
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="binding">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="soap:binding" />
+                            <xsd:element maxOccurs="unbounded" name="operation">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element ref="soap:operation" />
+                                        <xsd:element name="input">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element ref="soap:body" />
+                                                </xsd:sequence>
+                                                <xsd:attribute name="name" type="xsd:string" use="required" />
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="output">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element ref="soap:body" />
+                                                </xsd:sequence>
+                                                <xsd:attribute name="name" type="xsd:string" use="required" />
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                    <xsd:attribute name="name" type="xsd:string" use="required" />
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:attribute name="name" type="xsd:string" use="required" />
+                        <xsd:attribute name="type" type="xsd:string" use="required" />
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="service">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="port">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element ref="soap:address" />
+                                    </xsd:sequence>
+                                    <xsd:attribute name="binding" type="xsd:string" use="required" />
+                                    <xsd:attribute name="name" type="xsd:string" use="required" />
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:attribute name="name" type="xsd:string" use="required" />
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+            <xsd:attribute name="targetNamespace" type="xsd:string" use="required" />
+        </xsd:complexType>
+    </xsd:element>
+</xs:schema>
