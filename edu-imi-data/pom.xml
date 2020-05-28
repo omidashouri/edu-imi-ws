@@ -174,6 +174,21 @@
             <artifactId>rt</artifactId>
             <version>2.3.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>3.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf.xjc-utils</groupId>
+            <artifactId>cxf-xjc-runtime</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -189,69 +204,69 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxws-maven-plugin</artifactId>
-                <version>2.6</version>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <version>3.3.6</version>
                 <executions>
                     <execution>
-                        <id>wsimport-from-jdk</id>
+                        <id>process-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+<!--                            <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>-->
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/bankMellat.xml</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>edu.imi.ir.eduimiws.models.wsdl</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
                         <goals>
-                            <goal>wsimport</goal>
+                            <goal>wsdl2java</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <!-- using wsdl from an url -->
-                    <wsdlUrls>
-                        <wsdlUrl>
-                            https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl
-                        </wsdlUrl>
-                    </wsdlUrls>
-                    <!-- or using wsdls file directory -->
-                    <!-- <wsdlDirectory>src/wsdl</wsdlDirectory> -->
-                    <!-- which wsdl file -->
-                    <!-- <wsdlFiles> -->
-                    <!-- <wsdlFile>myWSDL.wsdl</wsdlFile> -->
-                    <!--</wsdlFiles> -->
-                    <!-- Keep generated files -->
-                    <keep>true</keep>
-                    <!-- Package name -->
-                    <packageName>edu.imi.ir.eduimiws.models.wsdl</packageName>
-                    <!-- generated source files destination-->
-                    <sourceDestDir>target/generatedclasses</sourceDestDir>
-                </configuration>
             </plugin>
 
-<!--            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.14.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <schemaLanguage>WSDL</schemaLanguage>
-&lt;!&ndash;                     Package to store the generated file &ndash;&gt;
-                    <generatePackage>a.wsdl</generatePackage>
-                    <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
-&lt;!&ndash;                   The location of the WSDL file &ndash;&gt;
-&lt;!&ndash;                    <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
-                    <schemaIncludes>
-                        <include>*.xml</include>
-                    </schemaIncludes>&ndash;&gt;
-                    <forceRegenerate>true</forceRegenerate>
-                    <schemas>
-                        <schema>
-                            <url>‫‪https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl‬‬</url>
-                        </schema>
-                    </schemas>
-                </configuration>
-            </plugin>-->
+            <!--           <plugin>
+                           <groupId>org.codehaus.mojo</groupId>
+                           <artifactId>jaxws-maven-plugin</artifactId>
+                           <version>2.6</version>
+                           <executions>
+                               <execution>
+                                   <id>wsimport-from-jdk</id>
+                                   <goals>
+                                       <goal>wsimport</goal>
+                                   </goals>
+                               </execution>
+                           </executions>
+                           <configuration>
+                               &lt;!&ndash; using wsdl from an url &ndash;&gt;
+                               <wsdlUrls>
+                                   <wsdlUrl>
+                                       https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl
+                                   </wsdlUrl>
+                               </wsdlUrls>
+                               &lt;!&ndash; or using wsdls file directory &ndash;&gt;
+                               &lt;!&ndash; <wsdlDirectory>src/wsdl</wsdlDirectory> &ndash;&gt;
+                               &lt;!&ndash; which wsdl file &ndash;&gt;
+                               &lt;!&ndash; <wsdlFiles> &ndash;&gt;
+                               &lt;!&ndash; <wsdlFile>myWSDL.wsdl</wsdlFile> &ndash;&gt;
+                               &lt;!&ndash;</wsdlFiles> &ndash;&gt;
+                               &lt;!&ndash; Keep generated files &ndash;&gt;
+                               <keep>true</keep>
+                               &lt;!&ndash; Package name &ndash;&gt;
+                               <packageName>edu.imi.ir.eduimiws.models.wsdl</packageName>
+                               &lt;!&ndash; generated source files destination&ndash;&gt;
+                               <sourceDestDir>target/generatedclasses</sourceDestDir>
+                           </configuration>
+                       </plugin>-->
+
+
 <!--            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
@@ -282,29 +297,6 @@
                     <extension>true</extension>
                     <xadditionalHeaders>true</xadditionalHeaders>
                     <xauthFile>${basedir}/src/main/resources/wsdl/auth.txt</xauthFile>
-                </configuration>
-            </plugin>-->
-<!--            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.14.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <schemaLanguage>WSDL</schemaLanguage>
-                    &lt;!&ndash; Package to store the generated file &ndash;&gt;
-                    <generatePackage>edu.imi.ir.eduimiws.models.wsdl</generatePackage>
-                    <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
-                    &lt;!&ndash; The location of the WSDL file &ndash;&gt;
-                    <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
-                    <schemaIncludes>
-                        <include>*.xml</include>
-                    </schemaIncludes>
                 </configuration>
             </plugin>-->
 <!--            <plugin>
