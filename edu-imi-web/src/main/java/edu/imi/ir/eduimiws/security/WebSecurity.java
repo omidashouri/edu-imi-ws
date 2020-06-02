@@ -65,6 +65,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,appProperties.getPasswordResetUrl())
                 .permitAll()
 
+                .antMatchers(HttpMethod.POST,appProperties.getBehpardakhtAfterPaymentResponseUrl())
+                .permitAll()
 /*
                 .antMatchers(appProperties.getH2Console())
                 .permitAll()

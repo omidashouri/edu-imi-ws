@@ -145,4 +145,13 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi mellatsApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Behpardakhts")
+                .pathsToMatch("/api/v1/behpardakhts/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 }

@@ -39,6 +39,8 @@ public class AppProperties {
 
     private static String passwordResetExpirationTime;
 
+    private static String behpardakhtAfterPaymentResponseUrl;
+
 //    private static String h2Console;
 
     @Value("${token.secret}")
@@ -86,6 +88,11 @@ public class AppProperties {
         this.passwordResetExpirationTime = passwordResetExpirationTime;
     }
 
+    @Value("behpardakht.after.payment.response.url")
+    public void setBehpardakhtAfterPaymentResponseUrl(String behpardakhtAfterPaymentResponseUrl) {
+        this.behpardakhtAfterPaymentResponseUrl = behpardakhtAfterPaymentResponseUrl;
+    }
+
     public static String getTokenSecret() {
         return tokenSecret;
     }
@@ -120,6 +127,10 @@ public class AppProperties {
 
     public static String getPasswordResetExpirationTime() {
         return passwordResetExpirationTime;
+    }
+
+    public static String getBehpardakhtAfterPaymentResponseUrl() {
+        return behpardakhtAfterPaymentResponseUrl;
     }
 
 /*    public static String getH2Console() {
