@@ -36,7 +36,7 @@ import java.util.Map;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @ComponentScans({@ComponentScan("edu.imi.ir.eduimiws.*")})
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final ErpPasswordEncoder bCryptPasswordEncoder;
