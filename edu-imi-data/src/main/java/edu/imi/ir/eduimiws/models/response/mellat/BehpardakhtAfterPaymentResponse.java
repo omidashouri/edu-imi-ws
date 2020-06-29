@@ -8,8 +8,8 @@ import org.springframework.hateoas.server.core.Relation;
 
 @Schema(name = "behpardakhts",description = "Class representing a behpardakht after payment response in the application.")
 @EqualsAndHashCode(callSuper = false)
-@JsonRootName(value = "BehpardakhtAfterPaymentResponse")
-@Relation(collectionRelation = "BehpardakhtAfterPaymentResponses")
+@JsonRootName(value = "behpardakht")
+@Relation(collectionRelation = "behpardakhts")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter

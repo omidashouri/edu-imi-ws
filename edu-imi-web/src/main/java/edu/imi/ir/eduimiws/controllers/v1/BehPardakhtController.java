@@ -7,29 +7,27 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-//@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
+
 @RestController
 @RequestMapping("/api/v1/behpardakhts")
 @RequiredArgsConstructor
-@Tag(name = "BehPardakhts", description = "The behpardakht API")
+@Tag(name = "behPardakhts", description = "The behpardakht API")
 public class BehPardakhtController {
 
 
     @Operation(
             summary = "Behpardakht Response",
             description = "Behpardakht Response after Payment",
-            tags = "behpardakhts",
-            security = @SecurityRequirement(name = "imi-security-key")
+            tags = "behpardakhts"
     )
     @ApiResponses(
             value = {
@@ -66,44 +64,44 @@ public class BehPardakhtController {
             }
     )
     @PostMapping(path = "/afterPaymentResponse",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> afterPaymentResponse(@RequestParam(name = "RefId") String RefId,
-                                            @RequestParam(name = "ResCode") String ResCode,
-                                            @RequestParam(name = "SaleOrderId") Long SaleOrderId,
-                                            @RequestParam(name = "SaleReferenceId") Long SaleReferenceId,
-                                            @RequestParam(name = "CardHolderPAN") String CardHolderPAN,
-                                            @RequestParam(name = "CreditCardSaleResponseDetail")
-                                                    String CreditCardSaleResponseDetail,
-                                            @RequestParam(name = "FinalAmount") Long FinalAmount) {
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> afterPaymentResponse(@ModelAttribute String refId,
+                                                  @ModelAttribute String resCode,
+                                                  @ModelAttribute String saleOrderId,
+                                                  @ModelAttribute String saleReferenceId,
+                                                  @ModelAttribute String cardHolderPAN,
+                                                  @ModelAttribute
+                                                    String creditCardSaleResponseDetail,
+                                                  @ModelAttribute String finalAmount) {
 
         BehpardakhtAfterPaymentResponse behpardakhtAfterPaymentResponse = new BehpardakhtAfterPaymentResponse();
 
-        if (RefId != null) {
-            behpardakhtAfterPaymentResponse.setRefId(RefId);
+        if (refId != null && refId!="") {
+            behpardakhtAfterPaymentResponse.setRefId(refId);
         }
-        if (ResCode != null) {
-            behpardakhtAfterPaymentResponse.setResCode(ResCode);
+        if (resCode != null && resCode!="") {
+            behpardakhtAfterPaymentResponse.setResCode(resCode);
         }
-        if (SaleOrderId != null) {
-            behpardakhtAfterPaymentResponse.setSaleOrderId(SaleOrderId);
+        if (saleOrderId != null && saleOrderId!="") {
+            behpardakhtAfterPaymentResponse.setSaleOrderId(Long.valueOf(saleOrderId));
         }
-        if (SaleReferenceId != null) {
-            behpardakhtAfterPaymentResponse.setSaleReferenceId(SaleReferenceId);
+        if (saleReferenceId != null&& saleReferenceId!="") {
+            behpardakhtAfterPaymentResponse.setSaleReferenceId(Long.valueOf(saleReferenceId));
         }
-        if (CardHolderPAN != null) {
-            behpardakhtAfterPaymentResponse.setCardHolderPAN(CardHolderPAN);
+/*        if (cardHolderPAN != null) {
+            behpardakhtAfterPaymentResponse.setCardHolderPAN(cardHolderPAN);
         }
-        if (CreditCardSaleResponseDetail != null) {
-            behpardakhtAfterPaymentResponse.setCreditCardSaleResponseDetail(CreditCardSaleResponseDetail);
+        if (creditCardSaleResponseDetail != null) {
+            behpardakhtAfterPaymentResponse.setCreditCardSaleResponseDetail(creditCardSaleResponseDetail);
 
         }
-        if (FinalAmount != null) {
-            behpardakhtAfterPaymentResponse.setFinalAmount(FinalAmount);
-        }
+        if (finalAmount != null) {
+            behpardakhtAfterPaymentResponse.setFinalAmount(Long.valueOf(finalAmount));
+        }*/
 
 
-        return ResponseEntity.ok(behpardakhtAfterPaymentResponse);
+        return ResponseEntity.ok(null);
     }
 
 }

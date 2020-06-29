@@ -189,6 +189,11 @@
             <groupId>wsdl4j</groupId>
             <artifactId>wsdl4j</artifactId>
         </dependency>
+<!--        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-annotate</artifactId>
+            <version>1.1.0</version>
+        </dependency>-->
     </dependencies>
 
     <build>
@@ -214,13 +219,20 @@
                         <id>process-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
+                            <additionalJvmArgs>
+                                -Djavax.xml.accessExternalDTD=all
+                                -Djavax.xml.accessExternalSchema=all
+                            </additionalJvmArgs>
 <!--                            <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>-->
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/wsdl/bankMellat.xml</wsdl>
                                     <extraargs>
+                                        <extraarg>-verbose</extraarg>
                                         <extraarg>-p</extraarg>
                                         <extraarg>edu.imi.ir.eduimiws.models.wsdl</extraarg>
+                                        <extraarg>-exsh</extraarg>
+                                        <extraarg>true</extraarg>
                                     </extraargs>
                                 </wsdlOption>
                             </wsdlOptions>
@@ -232,7 +244,7 @@
                 </executions>
             </plugin>
 
-            <!--           <plugin>
+<!--                       <plugin>
                            <groupId>org.codehaus.mojo</groupId>
                            <artifactId>jaxws-maven-plugin</artifactId>
                            <version>2.6</version>

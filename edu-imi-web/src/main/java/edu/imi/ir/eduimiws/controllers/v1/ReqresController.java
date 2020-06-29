@@ -41,7 +41,7 @@ public class ReqresController {
               String aa =   soapClientImpl2.bpPayRequest(1L,null,null,
                         1L,1L,null,
                         null,null, null,
-                1L);
+                String.valueOf(1L));
 
               String bb = aa;
             }
