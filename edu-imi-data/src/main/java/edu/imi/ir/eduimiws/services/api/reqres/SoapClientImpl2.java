@@ -49,11 +49,11 @@ public class SoapClientImpl2 extends WebServiceGatewaySupport implements IPaymen
 //        MAINPARTS.SEQ_RESERVATION_NUMBER
         bpPayRequest.setOrderId(1234567890l);
         bpPayRequest.setLocalDate("20200601");
-        bpPayRequest.setLocalTime("114110");
+        bpPayRequest.setLocalTime("000");
         bpPayRequest.setAdditionalData("for test 2");
-        bpPayRequest.setTerminalId(818149l);
-        bpPayRequest.setUserName("erpimi");
-        bpPayRequest.setUserPassword("58975627");
+        bpPayRequest.setTerminalId(000);
+        bpPayRequest.setUserName("ttt");
+        bpPayRequest.setUserPassword("00000");
         Object oo = getWebServiceTemplate().marshalSendAndReceive(new ObjectFactory().createBpPayRequest(bpPayRequest));
         return String.valueOf(oo);
 //        return null;
