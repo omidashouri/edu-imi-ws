@@ -56,6 +56,12 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,appProperties.getSignUpUrl())
                 .permitAll()
 
+                .antMatchers(HttpMethod.POST,"/api/v1/reqres/**")
+                .permitAll()
+
+                .antMatchers("/api/v1/reqres/**")
+                .permitAll()
+
                 .antMatchers(HttpMethod.GET,appProperties.getVerificationEmailUrl())
                 .permitAll()
 

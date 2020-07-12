@@ -21,6 +21,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*");
     }
 
+
+
 /*    @Bean
     public SpringResourceTemplateResolver templateResolver(){
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();

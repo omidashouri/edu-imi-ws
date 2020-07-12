@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Hidden Bank Response Redirect</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+    <h1>Hidden Bank Response Redirect</h1>
+    <form id="myRedirectForm" name="myRedirectForm" action="#"
+          th:action="@{http://ashouri-pc.imi.ir:8080/edu-imi-ws/api/v1/reqres/bankResponse}"
+          method="post">
+        <p>RefId: <input type="hidden" id="RefId" name="RefId" th:value="${nam}" /></p>
+        <p>RefId: <input type="hidden" id="ResCode" name="ResCode" th:value="50" /></p>
+        <noscript>
+            <p><input type="submit" value="Submit" /></p>
+        </noscript>
+    </form>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            document.getElementById("myRedirectForm").submit();
+        })
+    </script>
+</body>
+</html>

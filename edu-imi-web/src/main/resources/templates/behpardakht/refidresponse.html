@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Shaparak RefId Response</h1>
+<form action="#" th:action="@{http://localhost:8080/edu-imi-ws/api/v1/reqres/ali}" method="post">
+    <p>RefId: <input type="text" id="reqresId" name="reqresId" th:value="5" /></p>
+    <p>MobileNo: <input type="text" id="mobileNo" name="mobileNo" th:value="989126607350" /></p>
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>
