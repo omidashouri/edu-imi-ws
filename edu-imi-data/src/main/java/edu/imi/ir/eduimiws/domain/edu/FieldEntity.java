@@ -247,4 +247,9 @@ public class FieldEntity extends BaseEntity {
 
     @Column(name="IS_INTERNATIONAL")
     private Long isInternational;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "field", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private FieldApiEntity fieldApi;
 }

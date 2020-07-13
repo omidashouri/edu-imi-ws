@@ -53,4 +53,9 @@ public class EduCategoryEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR")
     private PersonEntity creator;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "eduCategory", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private EduCategoryApiEntity eduCategoryApi;
 }

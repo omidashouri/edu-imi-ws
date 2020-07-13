@@ -59,4 +59,9 @@ public class LevelEntity extends BaseEntity {
 
     @Column(name="CERT_TITLE",length = 50)
     private String certTitle;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "level", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private LevelApiEntity levelApi;
 }
