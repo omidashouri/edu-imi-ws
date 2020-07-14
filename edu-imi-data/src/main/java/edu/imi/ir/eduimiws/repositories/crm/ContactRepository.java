@@ -17,15 +17,15 @@ public interface ContactRepository extends CrudRepository<ContactEntity,Long> {
 
       Long countByNationCode(String nationCode);
 
-      @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonWebService",type = EntityGraph.EntityGraphType.LOAD)
+      @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonApi",type = EntityGraph.EntityGraphType.LOAD)
       List<ContactEntity> findContactEntitiesByNationCode(@Param("nationCode") String nationalCode);
 
       Page<ContactEntity> findAll(Pageable pageable);
 
 
-      @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonWebService",type = EntityGraph.EntityGraphType.LOAD)
+      @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonApi",type = EntityGraph.EntityGraphType.LOAD)
       ContactEntity findByContactWebService_ContactPublicId(String contactPublicId);
 
-      @EntityGraph(value ="ContactEntity.findContactSubGraphPersonsPersonWebServiceAndContactWebService",type = EntityGraph.EntityGraphType.LOAD)
+      @EntityGraph(value ="ContactEntity.findContactSubGraphPersonsPersonApiAndContactWebService",type = EntityGraph.EntityGraphType.LOAD)
       List<ContactEntity> findByIdIn(List<Long> contactIds);
 }

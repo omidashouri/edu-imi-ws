@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @NamedEntityGraphs({
-      @NamedEntityGraph(name = "ContactEntity.findContactSubGraphPersonsPersonWebServiceAndContactWebService",
+      @NamedEntityGraph(name = "ContactEntity.findContactSubGraphPersonsPersonApiAndContactWebService",
               attributeNodes = {
                       @NamedAttributeNode(value = "persons",subgraph = "persons-subGraph"),
                       @NamedAttributeNode(value = "contactWebService")
@@ -24,7 +24,7 @@ import java.util.List;
                       )
               }
       ),
-    @NamedEntityGraph(name = "ContactEntity.findContactSubGraphPersonsPersonWebService",
+    @NamedEntityGraph(name = "ContactEntity.findContactSubGraphPersonsPersonApi",
         attributeNodes = {
               @NamedAttributeNode(value = "persons",subgraph = "persons-subGraph")
         },

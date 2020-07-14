@@ -373,7 +373,7 @@ public class UserController {
         Long userCount;
         Long newUserCount;
 
-        userWebserviceCount = personApiService.personWebServiceCount();
+        userWebserviceCount = personApiService.personApiCount();
         userCount = personService.selectPersonLastSequenceNumber();
 
         if (userCount == null || userCount == 0) {

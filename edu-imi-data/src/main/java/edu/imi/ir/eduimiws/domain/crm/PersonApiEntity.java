@@ -17,7 +17,7 @@ import java.util.Collection;
 // add role_ID column
 
 @NamedEntityGraphs({
-        @NamedEntityGraph(name = "PersonApiEntity.personWebServiceFastGraph", attributeNodes = {
+        @NamedEntityGraph(name = "PersonApiEntity.personApiFastGraph", attributeNodes = {
                 @NamedAttributeNode("personId"),
                 @NamedAttributeNode("personPublicId"),
                 @NamedAttributeNode("contactId"),
@@ -50,7 +50,7 @@ import java.util.Collection;
 })
 @SqlResultSetMappings(
   @SqlResultSetMapping(
-    name = "personWebServiceIdProjection",
+    name = "personApiIdProjection",
     classes = {
       @ConstructorResult(
         targetClass = PersonApiIdProjection.class,
@@ -64,10 +64,10 @@ import java.util.Collection;
   )
 )
 @NamedNativeQueries({
-  @NamedNativeQuery(name = "PersonApiEntity.findAllPersonWebServiceIdProjection",
+  @NamedNativeQuery(name = "PersonApiEntity.findAllPersonApiIdProjection",
           query = " select pws.ID as idR, pws.CONTACT_ID as personIdR, pws.CONTACT_ID as contactIdR " +
-                  " from CRM.TBL_PERSON_WEB_SERVICE pws ",
-          resultSetMapping = "personWebServiceIdProjection"
+                  " from CRM.TBL_PERSON_API pws ",
+          resultSetMapping = "personApiIdProjection"
   )
 })
 @Getter
@@ -77,8 +77,8 @@ import java.util.Collection;
 @EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_PERSON_WEB_SERVICE_ID",allocationSize = 1)
-@Table(schema = "CRM",name = "TBL_PERSON_WEB_SERVICE")
+@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_PERSON_API_ID",allocationSize = 1)
+@Table(schema = "CRM",name = "TBL_PERSON_API")
 public class PersonApiEntity extends BaseEntity {
 
 

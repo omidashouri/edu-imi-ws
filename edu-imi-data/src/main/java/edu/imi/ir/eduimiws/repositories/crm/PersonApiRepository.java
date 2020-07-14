@@ -16,7 +16,7 @@ public interface PersonApiRepository extends CrudRepository<PersonApiEntity,Long
 
     PersonApiEntity findByPersonId(Long personId);
 
-    @EntityGraph("PersonApiEntity.personWebServiceFastGraph")
+    @EntityGraph("PersonApiEntity.personApiFastGraph")
     PersonApiEntity findByUserName(String userName);
 
     PersonApiEntity findByPersonPublicId(String personPublicId);
@@ -28,8 +28,8 @@ public interface PersonApiRepository extends CrudRepository<PersonApiEntity,Long
 
 /*    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
             forCounting = true)*/
-    @Query(name = "PersonApiEntity.findAllPersonWebServiceIdProjection", nativeQuery = true)
-    List<PersonApiIdProjection> findAllPersonWebServiceIdProjection();
+    @Query(name = "PersonApiEntity.findAllPersonApiIdProjection", nativeQuery = true)
+    List<PersonApiIdProjection> findAllPersonApiIdProjection();
 
     PersonApiEntity findFirstByOrderByIdDesc();
 

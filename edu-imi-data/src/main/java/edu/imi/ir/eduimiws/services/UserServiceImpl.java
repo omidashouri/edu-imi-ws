@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final PersonApiFastDtoMapper personWebServiceFastMapper;
+    private final PersonApiFastDtoMapper personApiFastMapper;
     private final PersonService personService;
     private final ContactService contactService;
     private final PersonApiService personApiService;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("user name not found for " + userName);
         }
 
-        PersonApiFastDto userFastDto = personWebServiceFastMapper.PersonWebServiceEntityToPersonWebServiceFastDto(user, new CycleAvoidingMappingContext());
+        PersonApiFastDto userFastDto = personApiFastMapper.PersonWebServiceEntityToPersonWebServiceFastDto(user, new CycleAvoidingMappingContext());
         return userFastDto;
     }
 
@@ -176,10 +176,10 @@ public class UserServiceImpl implements UserService {
         List<PersonEntity> persons = personService
                 .findAllPersonEntitiesByIdIn(personIds);
 
-        List<PersonApiEntity> savedPersonWebServices = personApiService
+        List<PersonApiEntity> savedPersonApis = personApiService
                 .generatePersonApiPublicId(persons);
 
-        List<PersonEntity> savedPersons = savedPersonWebServices
+        List<PersonEntity> savedPersons = savedPersonApis
                 .stream()
                 .map(PersonApiEntity::getPerson)
                 .collect(Collectors.toList());
@@ -258,7 +258,7 @@ public class UserServiceImpl implements UserService {
 
 
             userWebServiceEntity = personApiService
-                    .savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(publicPersonId,
+                    .savePersonApiByPublicPersonIdAndPublicContactIdAndPersonEntity(publicPersonId,
                             contactApiEntity.getContactPublicId(),
                             user);
         }
@@ -274,7 +274,7 @@ public class UserServiceImpl implements UserService {
         if (null == userWebServiceEntity.getPersonPublicId()) {
             publicPersonId = generatePublicId();
             userWebServiceEntity = personApiService
-                    .savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(publicPersonId,
+                    .savePersonApiByPublicPersonIdAndPublicContactIdAndPersonEntity(publicPersonId,
                             contactApiEntity.getContactPublicId(),
                             user);
         }
@@ -329,15 +329,15 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    private PersonApiEntity savePersonWebService(String publicPersonId, String publicContactId, PersonEntity user) {
-        PersonApiEntity newPersonWebService = new PersonApiEntity();
-//        newPersonWebService.setContactId(user.getContactId());
-        newPersonWebService.setContactPublicId(publicContactId);
-        newPersonWebService.setPersonPublicId(publicPersonId);
-        newPersonWebService.setUserName(user.getUsername());
-        newPersonWebService.setPerson(user);
-        newPersonWebService.setEncryptedPassword(user.getPassword());
-        return personApiService.savePersonWebServiceEntity(newPersonWebService);
+    private PersonApiEntity savePersonApi(String publicPersonId, String publicContactId, PersonEntity user) {
+        PersonApiEntity newPersonApi = new PersonApiEntity();
+//        newPersonApi.setContactId(user.getContactId());
+        newPersonApi.setContactPublicId(publicContactId);
+        newPersonApi.setPersonPublicId(publicPersonId);
+        newPersonApi.setUserName(user.getUsername());
+        newPersonApi.setPerson(user);
+        newPersonApi.setEncryptedPassword(user.getPassword());
+        return personApiService.savePersonApiEntity(newPersonApi);
     }
 
     private boolean existContactPublicIdInContactWebServiceEntity(ContactEntity contactEntity) {

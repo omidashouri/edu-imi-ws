@@ -85,7 +85,7 @@ public class PersonApiServiceImpl implements PersonApiService {
     }
 
     @Override
-    public PersonApiEntity findPersonWebServiceEntityByUserPublicId(String userPublicId) {
+    public PersonApiEntity findPersonApiEntityByUserPublicId(String userPublicId) {
         PersonApiEntity userWS = personApiRepository.findByPersonPublicId(userPublicId);
         if (null == userWS) {
             throw new UsernameNotFoundException("user can not found for " + userPublicId);
@@ -95,12 +95,12 @@ public class PersonApiServiceImpl implements PersonApiService {
     }
 
     @Override
-    public PersonApiEntity savePersonWebServiceEntity(PersonApiEntity personApiEntity) {
+    public PersonApiEntity savePersonApiEntity(PersonApiEntity personApiEntity) {
         return personApiRepository.save(personApiEntity);
     }
 
     @Override
-    public PersonApiEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity) {
+    public PersonApiEntity savePersonApiByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity) {
         PersonApiEntity newPersonWebService = new PersonApiEntity();
         newPersonWebService.setContactId(personEntity.getContactId());
         newPersonWebService.setContact(personEntity.getContact());
@@ -121,10 +121,10 @@ public class PersonApiServiceImpl implements PersonApiService {
     }
 
     @Override
-    public List<PersonApiEntity> findAllPersonWebServiceIdProjection() {
+    public List<PersonApiEntity> findAllPersonApiIdProjection() {
 
         List<PersonApiIdProjection> personApiIdProjections =
-                personApiRepository.findAllPersonWebServiceIdProjection();
+                personApiRepository.findAllPersonApiIdProjection();
 
         List<PersonApiEntity> personWebServiceEntities =
                 personApiIdProjectionMapper
@@ -134,7 +134,7 @@ public class PersonApiServiceImpl implements PersonApiService {
     }
 
     @Override
-    public Long personWebServiceCount() {
+    public Long personApiCount() {
         return personApiRepository.count();
     }
 

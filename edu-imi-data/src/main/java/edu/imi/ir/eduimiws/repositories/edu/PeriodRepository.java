@@ -28,7 +28,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     )
     Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
-    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonApi", type = EntityGraph.EntityGraphType.LOAD)
     PeriodEntity findByPeriodApi_PeriodPublicId(String periodPublicId);
 
     @Query(name = "PeriodEntity.selectAllPeriodOnly", nativeQuery = true)
@@ -41,10 +41,10 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
     PeriodEntity findFirstByOrderByIdDesc();
 
-    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonApi", type = EntityGraph.EntityGraphType.LOAD)
     Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntityIsNull();
 
-    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonApi", type = EntityGraph.EntityGraphType.LOAD)
     Page<PeriodEntity>
     findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntity_PersonPublicId
             (Pageable pageable, String executorPublicId);

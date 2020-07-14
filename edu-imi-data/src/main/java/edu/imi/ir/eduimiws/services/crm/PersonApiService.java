@@ -19,18 +19,18 @@ public interface PersonApiService {
 
     PersonApiEntity findByUserNameFast(String userName);
 
-    PersonApiEntity findPersonWebServiceEntityByUserPublicId(String userPublicId);
+    PersonApiEntity findPersonApiEntityByUserPublicId(String userPublicId);
 
-    PersonApiEntity savePersonWebServiceEntity(PersonApiEntity personApiEntity);
+    PersonApiEntity savePersonApiEntity(PersonApiEntity personApiEntity);
 
-    PersonApiEntity savePersonWebServiceByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity);
+    PersonApiEntity savePersonApiByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity);
 
     PersonApiEntity findByPersonPublicIdWithPersonAndRole(String userPublicId);
 
 //    NU
-    List<PersonApiEntity> findAllPersonWebServiceIdProjection();
+    List<PersonApiEntity> findAllPersonApiIdProjection();
 
-    Long personWebServiceCount();
+    Long personApiCount();
 
     PersonApiEntity selectLastRecord();
 

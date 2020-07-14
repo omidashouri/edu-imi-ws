@@ -12,7 +12,7 @@ import javax.persistence.*;
 
 
 @NamedEntityGraphs({
-        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphExecutorPersonWebService",
+        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphExecutorPersonApi",
                 attributeNodes = {
                 @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
                 @NamedAttributeNode("periodApi")
