@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 
-@NamedEntityGraph(name = "contactWebServiceUserGraph", attributeNodes = {
+@NamedEntityGraph(name = "contactApiUserGraph", attributeNodes = {
         @NamedAttributeNode("contactPublicId"),
         @NamedAttributeNode("contactId"),
         @NamedAttributeNode("createDateTs"),
@@ -22,8 +22,8 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_CONTACT_WEB_SERVICE_ID",allocationSize = 1)
-@Table(schema = "CRM",name = "TBL_CONTACT_WEB_SERVICE")
+@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_CONTACT_API_ID",allocationSize = 1)
+@Table(schema = "CRM",name = "TBL_CONTACT_API")
 public class ContactApiEntity extends BaseEntity {
 
   @Column(name="CONTACT_PUBLIC_ID")

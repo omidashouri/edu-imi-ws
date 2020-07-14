@@ -14,7 +14,7 @@ public interface ContactApiService {
 
     ContactApiEntity findContactApiEntityByContactEntityFast(ContactEntity contact);
 
-    List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactWebServices);
+    List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactApis);
 
     List<ContactApiEntity> generateContactApiPublicId(List<ContactEntity> newContacts);
 }

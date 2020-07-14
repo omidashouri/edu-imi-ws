@@ -21,7 +21,7 @@ import javax.persistence.*;
         @NamedEntityGraph(name = "PersonEntity.personIdProjectionGraph", attributeNodes = {
                 @NamedAttributeNode("id")
         }),
-        @NamedEntityGraph(name = "PersonEntity.findPersonSubGraphContactContactWebService",
+        @NamedEntityGraph(name = "PersonEntity.findPersonSubGraphContactContactApi",
                 attributeNodes = {
                         @NamedAttributeNode(value = "contact",subgraph = "contact-subGraph"),
                         @NamedAttributeNode(value = "personApiEntity")

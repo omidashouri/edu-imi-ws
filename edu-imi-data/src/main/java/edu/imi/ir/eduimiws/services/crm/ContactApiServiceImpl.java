@@ -33,12 +33,12 @@ public class ContactApiServiceImpl implements ContactApiService {
 
     @Override
     public ContactApiEntity saveContactApiByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {
-        ContactApiEntity newContactWebService = new ContactApiEntity();
-        newContactWebService.setContactPublicId(publicContactId);
-        newContactWebService.setContact(person.getContact());
-        newContactWebService.setCreator(person);
-//        newContactWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
-        return contactApiRepository.save(newContactWebService);
+        ContactApiEntity newContactApi = new ContactApiEntity();
+        newContactApi.setContactPublicId(publicContactId);
+        newContactApi.setContact(person.getContact());
+        newContactApi.setCreator(person);
+//        newContactApi.setCreateDateTs(new Timestamp(new Date().getTime()));
+        return contactApiRepository.save(newContactApi);
     }
 
     @Override
@@ -48,52 +48,52 @@ public class ContactApiServiceImpl implements ContactApiService {
     }
 
     @Override
-    public List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactWebServices) {
-        Iterable<ContactApiEntity> iterableContactWebServices = new ArrayList<>();
-        contactWebServices.sort(Comparator.comparing(ContactApiEntity::getContactId));
-        iterableContactWebServices = contactApiRepository
-                .saveAll(contactWebServices);
-        List<ContactApiEntity> newContactWebServices = StreamSupport
-                .stream(iterableContactWebServices.spliterator(), false)
+    public List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactApis) {
+        Iterable<ContactApiEntity> iterableContactApis = new ArrayList<>();
+        contactApis.sort(Comparator.comparing(ContactApiEntity::getContactId));
+        iterableContactApis = contactApiRepository
+                .saveAll(contactApis);
+        List<ContactApiEntity> newContactApis = StreamSupport
+                .stream(iterableContactApis.spliterator(), false)
                 .collect(Collectors.toList());
-        return newContactWebServices;
+        return newContactApis;
     }
 
     @Override
     public List<ContactApiEntity> generateContactApiPublicId(List<ContactEntity> newContacts) {
-        List<ContactApiEntity> newContactWebServices = new ArrayList<>();
+        List<ContactApiEntity> newContactApis = new ArrayList<>();
 
         newContacts
                 .stream()
                 .filter(Objects::nonNull)
                 .forEach(c -> {
-                            ContactApiEntity newContactWebService = new ContactApiEntity();
-                            newContactWebService.setContact(c);
-                            newContactWebService.setContactId(c.getId());
-                            newContactWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
-                            newContactWebService.setContactPublicId(this.generateUniqueContactWebServicePublicId());
-                            c.setContactWebService(newContactWebService);
+                            ContactApiEntity newContactApi = new ContactApiEntity();
+                            newContactApi.setContact(c);
+                            newContactApi.setContactId(c.getId());
+                            newContactApi.setCreateDateTs(new Timestamp(new Date().getTime()));
+                            newContactApi.setContactPublicId(this.generateUniqueContactApiPublicId());
+                            c.setContactWebService(newContactApi);
                         });
 
-        newContactWebServices = newContacts
+        newContactApis = newContacts
                                 .stream()
                                 .map(ContactEntity::getContactWebService)
                                 .collect(Collectors.toList());
 
-        newContactWebServices
+        newContactApis
                 .sort(Comparator.comparing(ContactApiEntity::getContactId));
 
-        Iterable<ContactApiEntity> savedIterableContactWebService =
-                contactApiRepository.saveAll(newContactWebServices);
+        Iterable<ContactApiEntity> savedIterableContactApi =
+                contactApiRepository.saveAll(newContactApis);
 
-        List<ContactApiEntity> savedContactWebServices = StreamSupport
-                .stream(savedIterableContactWebService.spliterator(), false)
+        List<ContactApiEntity> savedContactApis = StreamSupport
+                .stream(savedIterableContactApi.spliterator(), false)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        return savedContactWebServices;
+        return savedContactApis;
     }
 
-    private String generateUniqueContactWebServicePublicId() {
+    private String generateUniqueContactApiPublicId() {
         return publicIdUtil.generateUniquePublicId();
     }
 

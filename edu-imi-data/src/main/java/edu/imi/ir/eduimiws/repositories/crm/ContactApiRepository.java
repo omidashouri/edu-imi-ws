@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ContactApiRepository extends CrudRepository<ContactApiEntity,Long> {
 
 
-    @EntityGraph("contactWebServiceUserGraph")
+    @EntityGraph("contactApiUserGraph")
     ContactApiEntity findByContact(ContactEntity contact);
 //    ContactApiEntity saveContactWebServiceByPublicContactIdAndPersonEntity
 

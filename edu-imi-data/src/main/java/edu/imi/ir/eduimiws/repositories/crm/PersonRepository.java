@@ -30,17 +30,17 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     @Query(name = "PersonEntity.selectCurrentSequenceNumber",nativeQuery = true)
     Long selectLastSequenceNumber();
 
-    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactApi",type = EntityGraph.EntityGraphType.LOAD)
     PersonEntity findByPersonApiEntity_PersonPublicId(String personPublicId);
 
     Page<PersonEntity> findAll(Pageable pageable);
 
     Page<PersonEntity> findAllByUsername(Pageable pageable,String userName);
 
-    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactApi",type = EntityGraph.EntityGraphType.LOAD)
     List<PersonEntity> findPersonEntitiesByContact_NationCode(@Param("nationCode") String nationalCode);
 
-    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactWebService",type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactApi",type = EntityGraph.EntityGraphType.LOAD)
     List<PersonEntity> findAllPersonEntitiesByIdIn(List<Long> Ids);
 
 

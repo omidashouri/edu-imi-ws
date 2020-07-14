@@ -26,6 +26,6 @@ public interface ContactRepository extends CrudRepository<ContactEntity,Long> {
       @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonApi",type = EntityGraph.EntityGraphType.LOAD)
       ContactEntity findByContactWebService_ContactPublicId(String contactPublicId);
 
-      @EntityGraph(value ="ContactEntity.findContactSubGraphPersonsPersonApiAndContactWebService",type = EntityGraph.EntityGraphType.LOAD)
+      @EntityGraph(value ="ContactEntity.findContactSubGraphPersonsPersonApiAndContactApi",type = EntityGraph.EntityGraphType.LOAD)
       List<ContactEntity> findByIdIn(List<Long> contactIds);
 }
