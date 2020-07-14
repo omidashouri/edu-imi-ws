@@ -55,6 +55,20 @@ public class PeriodApiEntity extends BaseEntity {
         return periodId;
     }
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FIELD_ID")
+    private FieldEntity field;
+
+    @Column(name = "FIELD_ID",insertable = false, updatable = false)
+    private Long fieldId;
+
+    @Transient
+    public Long getFieldId() {
+        return fieldId;
+    }
+
     @Column(name = "PERIOD_EDIT_DATE", length = 10)
     private String periodEditDate;
 
