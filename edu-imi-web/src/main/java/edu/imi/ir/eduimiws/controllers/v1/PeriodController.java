@@ -399,19 +399,19 @@ public class PeriodController {
     public ResponseEntity<?> getNewPeriodCount() {
 
         OperationStatus returnValue = new OperationStatus();
-        Long periodWebserviceCount;
+        Long periodApiCount;
         Long periodCount;
         Long newPeriodCount;
 
-        periodWebserviceCount = periodApiService.periodApiCount();
+        periodApiCount = periodApiService.periodApiCount();
         periodCount = periodService.periodCount();
 
         if (periodCount == null || periodCount == 0) {
             this.conflictPeriodCount();
         }
 
-        if (periodWebserviceCount != null) {
-            newPeriodCount = periodCount - periodWebserviceCount;
+        if (periodApiCount != null) {
+            newPeriodCount = periodCount - periodApiCount;
         } else {
             newPeriodCount = periodCount;
         }
@@ -471,7 +471,7 @@ public class PeriodController {
     )
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> createPeriodWebServicePublicId() {
+    public ResponseEntity<?> createPeriodApiPublicId() {
 
         OperationStatus returnValue = new OperationStatus();
         Long periodApiCount;

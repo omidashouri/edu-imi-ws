@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface PeriodApiRepository extends CrudRepository<PeriodApiEntity,Long> {
 
-    @EntityGraph("PeriodApiEntity.periodWebServiceFastGraph")
+    @EntityGraph("PeriodApiEntity.periodApiFastGraph")
     List<PeriodApiEntity> findAll();
 
     PeriodApiEntity findFirstByOrderByIdDesc();

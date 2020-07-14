@@ -67,7 +67,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@NamedEntityGraph(name = "PeriodEntity.periodWebServiceEntity", attributeNodes = @NamedAttributeNode("periodApi"))
+@NamedEntityGraph(name = "PeriodEntity.periodApiEntity", attributeNodes = @NamedAttributeNode("periodApi"))
 //@NamedEntityGraph(name = "PeriodEntity.creator", attributeNodes = @NamedAttributeNode("creator"))
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "EDU", sequenceName = "SEQ_EDU_PERIOD", allocationSize = 1)

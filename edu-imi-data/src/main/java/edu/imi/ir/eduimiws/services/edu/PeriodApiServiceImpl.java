@@ -33,31 +33,31 @@ public class PeriodApiServiceImpl implements PeriodApiService {
     @Override
     public List<PeriodApiEntity> generatePeriodApiPublicId(List<PeriodEntity> newPeriodEntities) {
 
-        List<PeriodApiEntity> newPeriodWebServiceEntities = new ArrayList<>();
+        List<PeriodApiEntity> newPeriodApiEntities = new ArrayList<>();
 
         newPeriodEntities.forEach(p -> {
-            PeriodApiEntity newPeriodWebService = new PeriodApiEntity();
-            newPeriodWebService.setPeriod(p);
-            newPeriodWebService.setPeriodId(p.getId());
-            newPeriodWebService.setPeriodPublicId(this.generatePeriodWebServicePublicId());
+            PeriodApiEntity newPeriodApi = new PeriodApiEntity();
+            newPeriodApi.setPeriod(p);
+            newPeriodApi.setPeriodId(p.getId());
+            newPeriodApi.setPeriodPublicId(this.generatePeriodApiPublicId());
             if (null != p.getCanRegisterOnline()) {
-                newPeriodWebService.setCanRegisterOnline(p.getCanRegisterOnline().trim());
+                newPeriodApi.setCanRegisterOnline(p.getCanRegisterOnline().trim());
             }
             if (null != p.getDeleteStatus() && p.getDeleteStatus().equals(1L)) {
-                newPeriodWebService.setDeleteTs(new Timestamp(new Date().getTime()));
+                newPeriodApi.setDeleteTs(new Timestamp(new Date().getTime()));
             }
             if (null != p.getEditDate()) {
-                newPeriodWebService.setPeriodEditDate(p.getEditDate());
+                newPeriodApi.setPeriodEditDate(p.getEditDate());
             }
-            newPeriodWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
-            newPeriodWebServiceEntities.add(newPeriodWebService);
+            newPeriodApi.setCreateDateTs(new Timestamp(new Date().getTime()));
+            newPeriodApiEntities.add(newPeriodApi);
         });
 
-        newPeriodWebServiceEntities.sort(Comparator.comparing(PeriodApiEntity::getPeriodId));
+        newPeriodApiEntities.sort(Comparator.comparing(PeriodApiEntity::getPeriodId));
 
-        periodApiRepository.saveAll(newPeriodWebServiceEntities);
+        periodApiRepository.saveAll(newPeriodApiEntities);
 
-        return newPeriodWebServiceEntities;
+        return newPeriodApiEntities;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class PeriodApiServiceImpl implements PeriodApiService {
         return periodApiRepository.findFirstByOrderByIdDesc();
     }
 
-    private String generatePeriodWebServicePublicId() {
+    private String generatePeriodApiPublicId() {
         return publicIdUtil.generateUniquePublicId();
     }
 
