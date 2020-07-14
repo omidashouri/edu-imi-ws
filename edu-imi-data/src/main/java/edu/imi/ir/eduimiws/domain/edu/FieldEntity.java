@@ -3,10 +3,10 @@ package edu.imi.ir.eduimiws.domain.edu;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
 import lombok.*;
-import oracle.sql.CLOB;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.sql.Clob;
 
 @Getter
 @Setter
@@ -114,8 +114,9 @@ public class FieldEntity extends BaseEntity {
     @JoinColumn(name = "SUPERVISOR_ID")
     private PersonEntity supervisor;
 
+    @Lob
     @Column(name="TABLEAU")
-    private CLOB tableau;
+    private Clob tableau;
 
     @Column(name="LAST_PERIOD_NUMBER")
     private Long lastPeriodNumber;
@@ -203,26 +204,33 @@ public class FieldEntity extends BaseEntity {
     @Column(name="CERT_DESC",length = 1)
     private String certDesc;
 
+    @Lob
     @Column(name="SITE_INTRODUCTION")
-    private CLOB siteIntroduction;
+    private Clob siteIntroduction;
 
+    @Lob
     @Column(name="SITE_CONTACTS")
-    private CLOB siteContacts;
+    private Clob siteContacts;
 
+    @Lob
     @Column(name="SITE_AIM")
-    private CLOB siteAim;
+    private Clob siteAim;
 
+    @Lob
     @Column(name="SITE_CONTENTS")
-    private CLOB siteContents;
+    private Clob siteContents;
 
+    @Lob
     @Column(name="SITE_CONDITIONS")
-    private CLOB siteConditions;
+    private Clob siteConditions;
 
+    @Lob
     @Column(name="SITE_TMETHODS")
-    private CLOB siteTmethods;
+    private Clob siteTmethods;
 
+    @Lob
     @Column(name="SITE_REGISTER_R")
-    private CLOB siteRegisterR;
+    private Clob siteRegisterR;
 
     @Column(name="CERT_GOAL",length = 1)
     private String certGoal;

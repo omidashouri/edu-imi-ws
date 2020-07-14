@@ -3,19 +3,19 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.domain.edu.EduCategoryEntity;
 import edu.imi.ir.eduimiws.domain.edu.LevelEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import oracle.sql.CLOB;
+import lombok.*;
 
 import java.io.Serializable;
+import java.sql.Clob;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class FieldDto implements Serializable {
 
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 839540328420122716L;
 
     private String code;
 
@@ -61,7 +61,7 @@ public class FieldDto implements Serializable {
 
     private PersonEntity supervisor;
 
-    private CLOB tableau;
+    private Clob tableau;
 
     private Long lastPeriodNumber;
 
@@ -117,19 +117,19 @@ public class FieldDto implements Serializable {
 
     private String certDesc;
 
-    private CLOB siteIntroduction;
+    private Clob siteIntroduction;
 
-    private CLOB siteContacts;
+    private Clob siteContacts;
 
-    private CLOB siteAim;
+    private Clob siteAim;
 
-    private CLOB siteContents;
+    private Clob siteContents;
 
-    private CLOB siteConditions;
+    private Clob siteConditions;
 
-    private CLOB siteTmethods;
+    private Clob siteTmethods;
 
-    private CLOB siteRegisterR;
+    private Clob siteRegisterR;
 
     private String certGoal;
 

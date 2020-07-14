@@ -24,6 +24,9 @@ public class PeriodResponse extends RepresentationModel<PeriodResponse> {
     @Schema(title = "Period Public ID",maxLength = 36)
     private String periodPublicId;
 
+    @Schema(title = "Field Public ID",maxLength = 36)
+    private String FiledPublicId;
+
     @Schema(title = "Period name", maxLength = 500)
     private String name;
 
