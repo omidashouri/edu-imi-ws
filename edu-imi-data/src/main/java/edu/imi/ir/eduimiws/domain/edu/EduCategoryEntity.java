@@ -8,6 +8,13 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
+
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "EduCategoryEntity.selectCurrentSequenceNumber",
+                query = " select  EDU.SEQ_EDU_CATEGORY.nextval from dual "
+        )
+})
+
 @Getter
 @Setter
 @NoArgsConstructor
