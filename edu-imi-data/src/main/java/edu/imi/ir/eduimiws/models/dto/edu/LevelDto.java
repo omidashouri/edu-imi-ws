@@ -15,17 +15,31 @@ public class LevelDto implements Serializable {
 
     private String levelPublicId;
 
+    private Long id;
+
     private String description;
 
     private String code;
 
     private CompanyEntity company;
 
+    private Long companyId;
+
+    private String companyPublicId;
+
     private String termicStatus;
 
     private PersonEntity creator;
 
+    private Long creatorId;
+
+    private String creatorPublicID;
+
     private PersonEntity editor;
+
+    private Long editorId;
+
+    private String editorPublicID;
 
     private String createDate;
 

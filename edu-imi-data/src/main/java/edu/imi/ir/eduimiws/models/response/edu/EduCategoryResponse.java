@@ -27,8 +27,9 @@ public class EduCategoryResponse extends RepresentationModel<EduCategoryResponse
     @Schema(title = "Education Category Parent Public Id",maxLength =  36)
     private String parentPublicId;
 
-    @Schema(title = "Company Public ID",maxLength = 36)
-    private String companyPublicId;
+//      companyApi not built
+/*    @Schema(title = "Company Public ID",maxLength = 36)
+    private String companyPublicId;*/
 
     @Schema(title = "Editor Public ID",maxLength = 36)
     private String editorPublicId;

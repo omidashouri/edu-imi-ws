@@ -71,8 +71,9 @@ public class FieldResponse extends RepresentationModel<FieldResponse> {
     @Schema(title = "Note",maxLength =  500)
     private String note;
 
-    @Schema(title = "Diploma Type Public Id",maxLength =36)
-    private String diplomaTypePublicId;
+//    parameterApi not Built
+/*    @Schema(title = "Diploma Type Public Id",maxLength =36)
+    private String diplomaTypePublicId;*/
 
     @Schema(title = "Exame Type",maxLength =  10)
     private String examType;
@@ -80,8 +81,9 @@ public class FieldResponse extends RepresentationModel<FieldResponse> {
     @Schema(title = "Description",maxLength =36)
     private String contactPublicId;
 
-    @Schema(title = "Description",maxLength = 36)
-    private String organizationPublicId;
+//    organizationApi not Built
+/*    @Schema(title = "Description",maxLength = 36)
+    private String organizationPublicId;*/
 
     @Schema(title = "Termic Status",maxLength =  10)
     private String termicStatus;
@@ -95,24 +97,27 @@ public class FieldResponse extends RepresentationModel<FieldResponse> {
     @Schema(title = "Description", type="number")
     private Long lastPeriodNumber;
 
-    @Schema(title = "Plan Public Id",maxLength = 36)
-    private String planPublicId;
+//    PlanApi not Built
+/*    @Schema(title = "Plan Public Id",maxLength = 36)
+    private String planPublicId;*/
 
-    @Schema(title = "Executor Public Id",maxLength = 36)
-    private String executerPublicId;
+//    not joint to tbl_person in database
+/*    @Schema(title = "Executor Public Id",maxLength = 36)
+    private String executerPublicId;*/
 
     @Schema(title = "Capacity",type="number")
     private Long capacity;
 
-    @Schema(title = "Pre Certificate",maxLength = 36)
-    private String preCertificatePublicId;
+//    parameterApi not Built
+/*    @Schema(title = "Pre Certificate",maxLength = 36)
+    private String preCertificatePublicId;*/
 
     @Schema(title = "Foreign Fee",maxLength = 1)
     private String foriegnFee;
 
-    //    TBL_COEFFICIENT
-    @Schema(title = "Pre Coefficient Public Id",maxLength =36)
-    private String preCoefficientPublicId;
+//    TBL_COEFFICIENT not Built
+/*    @Schema(title = "Pre Coefficient Public Id",maxLength =36)
+    private String preCoefficientPublicId;*/
 
     @Schema(title = "Score Low Bound",type="number")
     private Long scoreLowBound;

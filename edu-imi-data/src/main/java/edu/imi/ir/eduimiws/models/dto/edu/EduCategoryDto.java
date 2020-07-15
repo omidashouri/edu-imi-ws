@@ -17,13 +17,23 @@ public class EduCategoryDto implements Serializable {
 
     private static final long serialVersionUID = -6961823590476763575L;
 
+    private String eduCategoryPublicId;
+
+    private Long id;
+
     private String title;
 
     private EduCategoryEntity parent;
 
+    private Long eduCategoryParentId;
+
+    private String eduCategoryParentPublicId;
+
     private CompanyEntity company;
 
     private Long companyId;
+
+    private String companyPublicId;
 
     private PersonEntity editor;
 

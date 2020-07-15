@@ -17,6 +17,10 @@ public class FieldDto implements Serializable {
 
     private static final long serialVersionUID = 839540328420122716L;
 
+    private String fieldPublicId;
+
+    private Long id;
+
     private String code;
 
     private String fname;
@@ -25,7 +29,15 @@ public class FieldDto implements Serializable {
 
     private LevelEntity level;
 
+    private Long levelId;
+
+    private String levelPublicId;
+
     private EduCategoryEntity eduCategory;
+
+    private Long eduCategoryId;
+
+    private String eduCategoryPublicId;
 
     private Long tunit;
 
@@ -37,13 +49,25 @@ public class FieldDto implements Serializable {
 
     private PersonEntity creator;
 
+    private Long creatorId;
+
+    private String creatorPublicID;
+
     private String createDate;
 
     private PersonEntity editor;
 
+    private Long editorId;
+
+    private String editorPublicID;
+
     private String editDate;
 
     private CompanyEntity company;
+
+    private Long companyId;
+
+    private String companyPublicId;
 
     private String description;
 
@@ -55,11 +79,23 @@ public class FieldDto implements Serializable {
 
     private ContactEntity contact;
 
+    private Long contactId;
+
+    private Long contactPublicId;
+
     private OrganizationEntity organization;
+
+    private Long organizationId;
+
+    private String organizationPublicId;
 
     private String termicStatus;
 
     private PersonEntity supervisor;
+
+    private Long supervisorId;
+
+    private String supervisorPublicId;
 
     private Clob tableau;
 
@@ -69,9 +105,16 @@ public class FieldDto implements Serializable {
 
     private Long executerId;
 
+//    not joined in database to tbl_person
+//    private Long executerPublicId;
+
     private Long capacity;
 
     private ParameterEntity preCertificate;
+
+    private Long preCertificateId;
+
+    private String preCertificatePublicId;
 
     private String foriegnFee;
 
