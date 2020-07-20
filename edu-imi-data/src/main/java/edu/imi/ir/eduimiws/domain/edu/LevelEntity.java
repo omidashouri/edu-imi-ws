@@ -7,6 +7,11 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "LevelEntity.selectCurrentSequenceNumber",
+                query = " select  EDU.SEQ_EDU_LEVEL.nextval from dual "
+        )
+})
 
 @Getter
 @Setter

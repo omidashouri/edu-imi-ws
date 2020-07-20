@@ -35,6 +35,9 @@ public class FieldApiEntity extends BaseEntity {
     @Column(name="FIELD_DELETE_STATUS", precision = 1,scale = 0)
     private Long fieldDeleteStatus;
 
+    @Column(name="FIELD_ACTIVITY_STATUS", precision = 1,scale = 0)
+    private Long fieldActivityStatus;
+
     @Column(name="FIELD_EDIT_DATE",length = 10)
     private String fieldEditDate;
 

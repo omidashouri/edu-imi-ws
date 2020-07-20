@@ -6,15 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface EduCategoryRepository extends CrudRepository<EduCategoryEntity, Long> {
 
     Page<EduCategoryEntity> findAll(Pageable pageable);
 
 //    we can remove it
-    Page<EduCategoryEntity> readAll(Pageable pageable);
+//    Page<EduCategoryEntity> readAll(Pageable pageable);
 
     EduCategoryEntity findByEduCategoryApi_EduCategoryPublicId(String eduCategoryPublicId);
 

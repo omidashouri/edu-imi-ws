@@ -1,11 +1,7 @@
 package edu.imi.ir.eduimiws.models.dto.edu;
 
-import edu.imi.ir.eduimiws.domain.crm.*;
-import edu.imi.ir.eduimiws.domain.edu.EduCategoryEntity;
-import edu.imi.ir.eduimiws.domain.edu.LevelEntity;
 import lombok.*;
 
-import java.io.Serializable;
 import java.sql.Clob;
 
 @Data
@@ -13,31 +9,19 @@ import java.sql.Clob;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FieldDto implements Serializable {
-
-    private static final long serialVersionUID = 839540328420122716L;
+public class FieldFastDto {
 
     private String fieldPublicId;
 
-    private Long id;
+    private String levelPublicId;
+
+    private String eduCategoryPublicId;
 
     private String code;
 
     private String fname;
 
     private String lname;
-
-    private LevelEntity level;
-
-    private Long levelId;
-
-    private String levelPublicId;
-
-    private EduCategoryEntity eduCategory;
-
-    private Long eduCategoryId;
-
-    private String eduCategoryPublicId;
 
     private Long tunit;
 
@@ -47,15 +31,9 @@ public class FieldDto implements Serializable {
 
     private Long activityStatus;
 
-    private PersonEntity creator;
-
-    private Long creatorId;
-
     private String creatorPublicID;
 
     private String createDate;
-
-    private PersonEntity editor;
 
     private Long editorId;
 
@@ -63,37 +41,21 @@ public class FieldDto implements Serializable {
 
     private String editDate;
 
-    private CompanyEntity company;
-
-    private Long companyId;
-
     private String companyPublicId;
 
     private String description;
 
     private String note;
 
-    private ParameterEntity diplomaType;
+    private String diplomaTypePublicId;
 
     private String examType;
 
-    private ContactEntity contact;
-
-    private Long contactId;
-
     private String contactPublicId;
-
-    private OrganizationEntity organization;
-
-    private Long organizationId;
 
     private String organizationPublicId;
 
     private String termicStatus;
-
-    private PersonEntity supervisor;
-
-    private Long supervisorId;
 
     private String supervisorPublicId;
 
@@ -109,10 +71,6 @@ public class FieldDto implements Serializable {
 //    private Long executerPublicId;
 
     private Long capacity;
-
-    private ParameterEntity preCertificate;
-
-    private Long preCertificateId;
 
     private String preCertificatePublicId;
 
@@ -189,5 +147,4 @@ public class FieldDto implements Serializable {
     private Long certDescriptFontSize;
 
     private Long isInternational;
-
 }

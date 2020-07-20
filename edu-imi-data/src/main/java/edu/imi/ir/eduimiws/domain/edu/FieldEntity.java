@@ -2,11 +2,78 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
+import edu.imi.ir.eduimiws.models.projections.edu.FieldOnly;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.sql.Clob;
+
+
+
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "level", subgraph = "level-subGraph"),
+                        @NamedAttributeNode(value = "eduCategory", subgraph = "eduCategory-subGraph"),
+                        @NamedAttributeNode("fieldApi")
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "level-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "levelApi")
+                                },
+                                type = LevelApiEntity.class),
+                        @NamedSubgraph(
+                                name = "eduCategory-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "eduCategoryApi")
+                                },
+                                type = EduCategoryApiEntity.class)
+                }
+        )
+})
+
+
+@SqlResultSetMapping(
+        name = "FieldOnly",
+        classes = {
+                @ConstructorResult(
+                        targetClass = FieldOnly.class,
+                        columns = {
+                                @ColumnResult(name = "idR", type = Long.class),
+                                @ColumnResult(name = "eduCategoryIdR", type = Long.class),
+                                @ColumnResult(name = "levelIdR", type = Long.class),
+                                @ColumnResult(name = "activityStatusR", type = Long.class),
+                                @ColumnResult(name = "fieldEditDateR", type = String.class)
+                        }
+                )
+        }
+)
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "FieldEntity.selectAllFieldOnly",
+                query = " select ID as idR, CATEGORY_ID as eduCategoryIdR, LEVEL_ID as levelIdR, " +
+                        " ACTIVITY_STATUS as activityStatusR, " +
+                        " EDIT_DATE as fieldEditDateR  from EDU.TBL_REGISTER ",
+                resultSetMapping = "FieldOnly"),
+        @NamedNativeQuery(name = "FieldEntity.selectAllFieldOnlyByIdBetween",
+                query = " select ID as idR, CATEGORY_ID as eduCategoryIdR, LEVEL_ID as levelIdR, " +
+                        " ACTIVITY_STATUS as activityStatusR, " +
+                        " EDIT_DATE as fieldEditDateR  from EDU.TBL_REGISTER " +
+                        " where ID between :beginFieldId and :endFieldId ",
+                resultSetMapping = "FieldOnly"),
+        @NamedNativeQuery(name = "FieldEntity.selectCurrentSequenceNumber",
+                query = " select EDU.SEQ_FIELD.nextval from dual "
+        )
+})
+
+
+
+
+
+
+
 
 @Getter
 @Setter
@@ -33,11 +100,27 @@ public class FieldEntity extends BaseEntity {
     @JoinColumn(name = "LEVEL_ID")
     private LevelEntity level;
 
+    @Column(name = "LEVEL_ID", insertable = false, updatable = false)
+    private Long levelId;
+
+    @Transient
+    public Long getLevelId() {
+        return levelId;
+    }
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
     private EduCategoryEntity eduCategory;
+
+    @Column(name = "CATEGORY_ID", insertable = false, updatable = false)
+    private Long eduCategoryId;
+
+    @Transient
+    public Long getEduCategoryId() {
+        return eduCategoryId;
+    }
 
     @Column(name="TUNIT")
     private Long tunit;
