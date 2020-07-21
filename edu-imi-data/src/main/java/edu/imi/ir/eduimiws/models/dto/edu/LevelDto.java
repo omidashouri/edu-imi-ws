@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 
 import edu.imi.ir.eduimiws.domain.crm.CompanyEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.domain.edu.LevelApiEntity;
 import lombok.*;
 
 import java.io.Serializable;
@@ -50,5 +51,7 @@ public class LevelDto implements Serializable {
     private String title;
 
     private String certTitle;
+
+    private LevelApiEntity levelApi;
 
 }
