@@ -11,6 +11,6 @@ public interface EduCategoryProjection {
     @Value("#{target.id}")
     Long getId();
 
-    @Value("#{target.eduCategoryApi.eduCategoryPublicId}")
+    @Value("#{target.eduCategoryApi?.eduCategoryPublicId}")
     String getEduCategoryPublicId();
 }

@@ -64,9 +64,9 @@ public class EduCategoryController {
 
 
     @Operation(
-            summary = "find All eduCategorys",
+            summary = "find All eduCategories",
             description = "Search eduCategory detail pageable",
-            tags = "eduCategorys",
+            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -100,7 +100,7 @@ public class EduCategoryController {
     @PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<EduCategoryResponse>> getEduCategorys(@Parameter(hidden = true)
-                                                               @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                               @SortDefault(sort = "id", direction = Sort.Direction.DESC)
                                                                @PageableDefault(page = 0, size = 10, value = 10)
                                                                        Pageable pageable) {
 
@@ -146,7 +146,7 @@ public class EduCategoryController {
     @Operation(
             summary = "Find EduCategory by public ID",
             description = "Search eduCategory by the public id",
-            tags = "eduCategorys",
+            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -200,9 +200,9 @@ public class EduCategoryController {
 
     @Operation(
             summary = "Find new eduCategory numbers",
-            description = "search for new eduCategorys that do not have eduCategory public id " +
+            description = "search for new eduCategories that do not have eduCategory public id " +
                     "by comparing max id eduCategory and eduCategory web service entity. ",
-            tags = "eduCategorys",
+            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -277,8 +277,8 @@ public class EduCategoryController {
 
     @Operation(
             summary = "Generate EduCategory Public Id",
-            description = "generate public id for new eduCategorys",
-            tags = "eduCategorys",
+            description = "generate public id for new eduCategories",
+            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

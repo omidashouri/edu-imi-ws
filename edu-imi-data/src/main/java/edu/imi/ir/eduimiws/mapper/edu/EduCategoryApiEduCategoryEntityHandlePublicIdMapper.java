@@ -33,9 +33,7 @@ public interface EduCategoryApiEduCategoryEntityHandlePublicIdMapper {
     default void handlePublicIds(EduCategoryEntity eduCategory, @MappingTarget EduCategoryApiEntity eduCategoryApi) {
 
         eduCategoryApi.setEduCategory(eduCategory);
-
         eduCategoryApi.setCreateDateTs(new Timestamp(new Date().getTime()));
-
         eduCategoryApi.setEduCategoryPublicId(new PublicIdUtil().generateUniquePublicId());
     }
 }

@@ -137,6 +137,24 @@ public class OpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi levelApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Levels")
+                .pathsToMatch("/api/v1/levels/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi educationCategoryApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("eduCategories")
+                .pathsToMatch("/api/v1/eduCategories/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi rqresApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Reqres")

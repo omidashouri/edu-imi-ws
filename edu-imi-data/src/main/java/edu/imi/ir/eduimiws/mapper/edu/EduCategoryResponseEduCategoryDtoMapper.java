@@ -15,9 +15,8 @@ public interface EduCategoryResponseEduCategoryDtoMapper {
             .getMapper(EduCategoryResponseEduCategoryDtoMapper.class);
 
     @Mappings({
-            @Mapping(source = "eduCategoryApi.eduCategoryPublicId", target = "eduCategoryPublicId"),
-            @Mapping(source = "title", target = "title"),
-            @Mapping(source = "parent.eduCategoryApi.eduCategoryPublicId", target = "parentPublicId")
+            @Mapping(source = "eduCategoryPublicId", target = "eduCategoryPublicId"),
+            @Mapping(source = "title", target = "title")
     })
     @BeanMapping(ignoreByDefault = true)
     EduCategoryResponse toEduCategoryResponse(EduCategoryDto eduCategoryDto

@@ -2,17 +2,18 @@ package edu.imi.ir.eduimiws.mapper.edu;
 import edu.imi.ir.eduimiws.domain.edu.LevelEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.edu.LevelDto;
+import org.hibernate.Hibernate;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface LevelDtoMapper {
     LevelDtoMapper INSTANCE = Mappers.getMapper(LevelDtoMapper.class);
 
     @Mappings({
-            @Mapping(source = "levelApi.levelPublicId", target = "levelPublicId"),
+//            @Mapping(source = "levelApi.levelPublicId", target = "levelPublicId"),
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "certTitle", target = "certTitle"),
@@ -38,35 +39,33 @@ public interface LevelDtoMapper {
     List<LevelDto> toLevelDtos(List<LevelEntity> levelEntities,
                                            @Context CycleAvoidingMappingContext context);
 
-/*    @AfterMapping
-    default void handlePeriodNameStudentFullName(RegisterEntity registerEntity,
-                                                 @MappingTarget RegisterDto registerDto) {
+    @AfterMapping
+    default void handleEntityLevelPublicId(LevelDto levelDto,
+                                                 @MappingTarget LevelEntity levelEntity) {
 
-
-        if (!Hibernate.isInitialized(registerEntity.getRegisterApi().getStudent())) {
-            registerEntity.setStudent(null);
-            registerEntity.getRegisterApi().setStudent(null);
+        if (!Hibernate.isInitialized(levelEntity.getLevelApi())) {
+            levelEntity.setLevelApi(null);
         }
 
-        if (!Hibernate.isInitialized(registerEntity.getRegisterApi().getPeriod())) {
-            registerEntity.setPeriod(null);
-            registerEntity.getRegisterApi().setPeriod(null);
+        if(levelDto.getLevelPublicId()!=null){
+            if (levelEntity.getLevelApi()!=null) {
+                levelEntity.getLevelApi().setLevelPublicId(levelDto.getLevelPublicId());
+            }
+        }
+    }
+
+    @AfterMapping
+    default void handleDtoLevelPublicId(LevelEntity levelEntity,
+                                     @MappingTarget LevelDto levelDto) {
+
+        if (!Hibernate.isInitialized(levelEntity.getLevelApi())) {
+            levelEntity.setLevelApi(null);
         }
 
-
-        if (registerEntity.getRegisterApi().getStudent() != null) {
-            registerDto.setStudentFirstName(registerEntity.getRegisterApi().getStudent().getFirstName());
-            registerDto.setStudentLastName(registerEntity.getRegisterApi().getStudent().getLastName());
-            registerDto
-                    .setStudentFullName(
-                            registerEntity.getRegisterApi().getStudent().getFirstName()
-                                    + ' ' +
-                                    registerEntity.getRegisterApi().getStudent().getLastName());
+        if(levelEntity.getLevelApi()!=null){
+            if(levelEntity.getLevelApi().getLevelPublicId()!=null){
+                levelDto.setLevelPublicId(levelEntity.getLevelApi().getLevelPublicId());
+            }
         }
-
-
-        if (registerEntity.getRegisterApi().getPeriod() != null) {
-            registerDto.setPeriodName(registerEntity.getRegisterApi().getPeriod().getName());
-        }
-    }*/
+    }
 }

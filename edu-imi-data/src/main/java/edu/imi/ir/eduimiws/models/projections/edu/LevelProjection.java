@@ -11,7 +11,7 @@ public interface LevelProjection {
     @Value("#{target.id}")
     Long getId();
 
-    @Value("#{target.levelApi.levelPublicId}")
+    @Value("#{target.levelApi?.levelPublicId}")
     String getLevelPublicId();
 
 }

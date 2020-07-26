@@ -29,7 +29,7 @@ public interface LevelApiLevelEntityHandlePublicIdMapper {
     @BeanMapping(ignoreByDefault = true)
     LevelApiEntity toLevelApi(LevelEntity level, @Context CycleAvoidingMappingContext context);
 
-    List<LevelApiEntity> toLevelApis(List<LevelEntity> eduCategories, @Context CycleAvoidingMappingContext context);
+    List<LevelApiEntity> toLevelApis(List<LevelEntity> levelEntities, @Context CycleAvoidingMappingContext context);
 
     @AfterMapping
     default void handlePublicIds(LevelEntity level, @MappingTarget LevelApiEntity levelApi) {

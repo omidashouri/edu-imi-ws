@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.mapper.edu;
 import edu.imi.ir.eduimiws.domain.edu.EduCategoryEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.edu.EduCategoryDto;
+import org.hibernate.Hibernate;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -13,10 +14,10 @@ public interface EduCategoryDtoMapper {
     EduCategoryDtoMapper INSTANCE = Mappers.getMapper(EduCategoryDtoMapper.class);
 
     @Mappings({
+//          @Mapping(source = "eduCategoryApi.eduCategoryPublicId", target = "eduCategoryPublicId"),
+            @Mapping(source = "id", target = "id"),
             @Mapping(source = "companyId", target = "companyId"),
-            @Mapping(source = "eduCategoryApi.eduCategoryPublicId", target = "eduCategoryPublicId"),
-            @Mapping(source = "title", target = "title"),
-            @Mapping(source = "parent.eduCategoryApi.eduCategoryPublicId", target = "eduCategoryParentPublicId")
+            @Mapping(source = "title", target = "title")
     })
     @BeanMapping(ignoreByDefault = true)
     EduCategoryDto toEduCategoryDto(EduCategoryEntity eduCategoryEntity
@@ -33,35 +34,33 @@ public interface EduCategoryDtoMapper {
     List<EduCategoryDto> toEduCategoryDtos(List<EduCategoryEntity> eduCategoryEntities,
                                      @Context CycleAvoidingMappingContext context);
 
-/*    @AfterMapping
-    default void handlePeriodNameStudentFullName(RegisterEntity registerEntity,
-                                                 @MappingTarget RegisterDto registerDto) {
+    @AfterMapping
+    default void handleEntityEduCategoryPublicId(EduCategoryDto eduCategoryDto,
+                                           @MappingTarget EduCategoryEntity eduCategoryEntity) {
 
-
-        if (!Hibernate.isInitialized(registerEntity.getRegisterApi().getStudent())) {
-            registerEntity.setStudent(null);
-            registerEntity.getRegisterApi().setStudent(null);
+        if (!Hibernate.isInitialized(eduCategoryEntity.getEduCategoryApi())) {
+            eduCategoryEntity.setEduCategoryApi(null);
         }
 
-        if (!Hibernate.isInitialized(registerEntity.getRegisterApi().getPeriod())) {
-            registerEntity.setPeriod(null);
-            registerEntity.getRegisterApi().setPeriod(null);
+        if(eduCategoryDto.getEduCategoryPublicId()!=null){
+            if (eduCategoryEntity.getEduCategoryApi()!=null) {
+                eduCategoryEntity.getEduCategoryApi().setEduCategoryPublicId(eduCategoryDto.getEduCategoryPublicId());
+            }
+        }
+    }
+
+    @AfterMapping
+    default void handleDtoEduCategoryPublicId(EduCategoryEntity eduCategoryEntity,
+                                        @MappingTarget EduCategoryDto eduCategoryDto) {
+
+        if (!Hibernate.isInitialized(eduCategoryEntity.getEduCategoryApi())) {
+            eduCategoryEntity.setEduCategoryApi(null);
         }
 
-
-        if (registerEntity.getRegisterApi().getStudent() != null) {
-            registerDto.setStudentFirstName(registerEntity.getRegisterApi().getStudent().getFirstName());
-            registerDto.setStudentLastName(registerEntity.getRegisterApi().getStudent().getLastName());
-            registerDto
-                    .setStudentFullName(
-                            registerEntity.getRegisterApi().getStudent().getFirstName()
-                                    + ' ' +
-                                    registerEntity.getRegisterApi().getStudent().getLastName());
+        if(eduCategoryEntity.getEduCategoryApi()!=null){
+            if(eduCategoryEntity.getEduCategoryApi().getEduCategoryPublicId()!=null){
+                eduCategoryDto.setEduCategoryPublicId(eduCategoryEntity.getEduCategoryApi().getEduCategoryPublicId());
+            }
         }
-
-
-        if (registerEntity.getRegisterApi().getPeriod() != null) {
-            registerDto.setPeriodName(registerEntity.getRegisterApi().getPeriod().getName());
-        }
-    }*/
+    }
 }
