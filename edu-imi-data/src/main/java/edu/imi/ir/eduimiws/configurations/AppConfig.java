@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.configurations;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -71,6 +72,11 @@ public class AppConfig {
         JavaMailSenderImpl javaMailSenderImpl = new JavaMailSenderImpl();
         applyProperties(properties, javaMailSenderImpl);
         return javaMailSenderImpl;
+    }
+
+    @Bean
+    public ClobHelper clobHelper(){
+        return new ClobHelper();
     }
 
     private void applyProperties(MailProperties properties, JavaMailSenderImpl sender) {

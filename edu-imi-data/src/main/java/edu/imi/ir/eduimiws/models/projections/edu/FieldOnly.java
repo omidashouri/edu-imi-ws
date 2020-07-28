@@ -6,8 +6,8 @@ import lombok.Value;
 public class FieldOnly {
 
     Long id;
-    Long levelId;
     Long eduCategoryId;
+    Long levelId;
     Long activityStatus;
     String editDate;
 }

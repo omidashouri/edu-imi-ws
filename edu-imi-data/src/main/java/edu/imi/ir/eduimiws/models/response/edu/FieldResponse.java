@@ -7,8 +7,6 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.sql.Clob;
-
 @Schema(name = "levels",description = "Class representing a level in the application.")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "level")
@@ -32,11 +30,17 @@ public class FieldResponse extends RepresentationModel<FieldResponse> {
     @Schema(title = "Code",maxLength = 20)
     private String code;
 
-    @Schema(title = "Persian Name",maxLength = 500)
+    @Schema(title = "Persian Field Name",maxLength = 500)
     private String fname;
 
-    @Schema(title = "Latin Name",maxLength = 20)
+    @Schema(title = "Latin Field Name",maxLength = 20)
     private String lname;
+
+    @Schema(title = "Level Description",maxLength = 50)
+    private String levelDescription;
+
+    @Schema(title = "Education Category Title",maxLength = 100)
+    private String eduCategoryTitle;
 
     @Schema(title = "TUnit",type = "number")
     private Long tunit;
@@ -91,8 +95,9 @@ public class FieldResponse extends RepresentationModel<FieldResponse> {
     @Schema(title = "Description",maxLength = 36)
     private String supervisorPublicId;
 
-    @Schema(title = "Description",type = "Clob")
-    private Clob tableau;
+    //    Clob
+    @Schema(title = "Description",maxLength = 255)
+    private String tableau;
 
     @Schema(title = "Description", type="number")
     private Long lastPeriodNumber;
@@ -179,26 +184,33 @@ public class FieldResponse extends RepresentationModel<FieldResponse> {
     @Schema(title = "Certificate Description",maxLength =  1)
     private String certDesc;
 
-    @Schema(title = "Site Introduction",type = "Clob")
-    private Clob siteIntroduction;
+    //    Clob
+    @Schema(title = "Site Introduction",maxLength = 255)
+    private String siteIntroduction;
 
-    @Schema(title = "Site Contacts",type="Clob" )
-    private Clob siteContacts;
+    //    Clob
+    @Schema(title = "Site Contacts",maxLength = 255)
+    private String siteContacts;
 
-    @Schema(title = "Site Aim",type = "Clob")
-    private Clob siteAim;
+    //    Clob
+    @Schema(title = "Site Aim",maxLength = 255)
+    private String siteAim;
 
-    @Schema(title = "Site Content",type = "Clob")
-    private Clob siteContents;
+    //    Clob
+    @Schema(title = "Site Content",maxLength = 255)
+    private String siteContents;
 
-    @Schema(title = "Site Condition",type="Cob")
-    private Clob siteConditions;
+    //    Clob
+    @Schema(title = "Site Condition",maxLength = 255)
+    private String siteConditions;
 
-    @Schema(title = "Site T Methods",type="Clob")
-    private Clob siteTmethods;
+    //    Clob
+    @Schema(title = "Site T Methods",maxLength = 255)
+    private String siteTmethods;
 
-    @Schema(title = "Site Register",type="Clob")
-    private Clob siteRegisterR;
+    //    Clob
+    @Schema(title = "Site Register",maxLength = 255)
+    private String siteRegisterR;
 
     @Schema(title = "Certificate Goal",maxLength =  1)
     private String certGoal;

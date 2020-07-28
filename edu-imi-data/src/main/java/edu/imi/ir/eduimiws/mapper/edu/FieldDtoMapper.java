@@ -7,7 +7,7 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
 public interface FieldDtoMapper {
 
     FieldDtoMapper INSTANCE = Mappers.getMapper(FieldDtoMapper.class);
@@ -18,7 +18,8 @@ public interface FieldDtoMapper {
             @Mapping(source = "isInternational", target = "isInternational"),
             @Mapping(source = "lastPeriodNumber", target = "lastPeriodNumber"),
             @Mapping(source = "level.id", target = "levelId"),
-            @Mapping(source = "level.levelApi.id", target = "levelPublicId"),
+            @Mapping(source = "fieldApi.levelPublicId", target = "levelPublicId"),
+            @Mapping(source = "level", target = "level"),
             @Mapping(source = "lname", target = "lname"),
             @Mapping(source = "needPermitionForAgancy", target = "needPermitionForAgancy"),
             @Mapping(source = "note", target = "note"),
@@ -77,13 +78,15 @@ public interface FieldDtoMapper {
             @Mapping(source = "editDate", target = "editDate"),
             @Mapping(source = "editor.id", target = "editorId"),
             @Mapping(source = "eduCategory.id", target = "eduCategoryId"),
+            @Mapping(source = "fieldApi.eduCategoryPublicId", target = "eduCategoryPublicId"),
+            @Mapping(source = "eduCategory", target = "eduCategory"),
             @Mapping(source = "examType", target = "examType"),
             @Mapping(source = "executerId", target = "executerId"),
             @Mapping(source = "fname", target = "fname"),
             @Mapping(source = "foriegnFee", target = "foriegnFee")
     })
     @BeanMapping(ignoreByDefault = true)
-    FieldDto toFiledDto(FieldEntity fieldEntity
+    FieldDto toFieldDto(FieldEntity fieldEntity
             , @Context CycleAvoidingMappingContext context);
 
     @BeanMapping(ignoreByDefault = true)

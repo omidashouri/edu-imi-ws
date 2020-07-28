@@ -16,6 +16,7 @@ import java.util.List;
 @Repository
 public interface FieldRepository extends CrudRepository<FieldEntity, Long> {
 
+    @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     Page<FieldEntity> findAll(Pageable pageable);
 
@@ -24,6 +25,7 @@ public interface FieldRepository extends CrudRepository<FieldEntity, Long> {
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     Page<FieldEntity> readAll(Pageable pageable);*/
 
+    @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     FieldEntity findByFieldApi_FieldPublicId(String fieldPublicId);
 
@@ -39,8 +41,8 @@ public interface FieldRepository extends CrudRepository<FieldEntity, Long> {
                                                 @Param("endFieldId") Long endFieldId);
 
     @Query(name = "FieldEntity.selectAllFieldOnly", nativeQuery = true)
-    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
-            forCounting = true)
+/*    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
+            forCounting = true)*/
     List<FieldOnly> findAllFieldOnly();
 
     @Query(name = "FieldEntity.selectCurrentSequenceNumber",nativeQuery = true)

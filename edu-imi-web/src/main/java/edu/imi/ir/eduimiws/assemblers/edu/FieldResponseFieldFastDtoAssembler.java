@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
+import edu.imi.ir.eduimiws.controllers.v1.EduCategoryController;
 import edu.imi.ir.eduimiws.controllers.v1.FieldController;
+import edu.imi.ir.eduimiws.controllers.v1.LevelController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.FieldResponseFieldFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.FieldFastDto;
@@ -9,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @Component
@@ -28,7 +33,7 @@ public class FieldResponseFieldFastDtoAssembler extends RepresentationModelAssem
         FieldResponse fieldResponse = fieldResponseFieldFastDtoMapper
                 .toFieldResponse(fieldFastDto, new CycleAvoidingMappingContext());
 
-/*        if (fieldFastDto.getFieldPublicId() != null) {
+        if (fieldFastDto.getFieldPublicId() != null) {
             fieldResponse
                     .add(linkTo(
                             methodOn(
@@ -37,14 +42,14 @@ public class FieldResponseFieldFastDtoAssembler extends RepresentationModelAssem
                             .withSelfRel());
         }
 
-        if (fieldFastDto.getFieldPublicId() != null) {
+/*        if (fieldFastDto.getFieldPublicId() != null) {
             fieldResponse.
                     add(linkTo(
                             methodOn(
                                     FieldController.class)
                                     .getFieldByFieldPublicId(fieldFastDto.getFieldPublicId()))
                             .withRel("fields"));
-        }
+        }*/
 
         if (fieldFastDto.getLevelPublicId() != null) {
             fieldResponse.
@@ -62,8 +67,7 @@ public class FieldResponseFieldFastDtoAssembler extends RepresentationModelAssem
                                     EduCategoryController.class)
                                     .getEduCategoryByEduCategoryPublicId(fieldFastDto.getEduCategoryPublicId()))
                             .withRel("eduCategorys"));
-        }*/
-
+        }
         return fieldResponse;
     }
 
@@ -75,9 +79,9 @@ public class FieldResponseFieldFastDtoAssembler extends RepresentationModelAssem
 
         Pageable pageable = Pageable.unpaged();
 
-/*        fieldResponseCollectionModel
+        fieldResponseCollectionModel
                 .add(linkTo(methodOn(FieldController.class)
-                        .getFields(pageable)).withRel("fields"));*/
+                        .getFields(pageable)).withRel("fields"));
 
         return fieldResponseCollectionModel;
     }

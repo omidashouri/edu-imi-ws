@@ -55,12 +55,12 @@ import java.sql.Clob;
         @NamedNativeQuery(name = "FieldEntity.selectAllFieldOnly",
                 query = " select ID as idR, CATEGORY_ID as eduCategoryIdR, LEVEL_ID as levelIdR, " +
                         " ACTIVITY_STATUS as activityStatusR, " +
-                        " EDIT_DATE as fieldEditDateR  from EDU.TBL_REGISTER ",
+                        " EDIT_DATE as fieldEditDateR  from EDU.TBL_FIELD ",
                 resultSetMapping = "FieldOnly"),
         @NamedNativeQuery(name = "FieldEntity.selectAllFieldOnlyByIdBetween",
                 query = " select ID as idR, CATEGORY_ID as eduCategoryIdR, LEVEL_ID as levelIdR, " +
                         " ACTIVITY_STATUS as activityStatusR, " +
-                        " EDIT_DATE as fieldEditDateR  from EDU.TBL_REGISTER " +
+                        " EDIT_DATE as fieldEditDateR  from EDU.TBL_FIELD " +
                         " where ID between :beginFieldId and :endFieldId ",
                 resultSetMapping = "FieldOnly"),
         @NamedNativeQuery(name = "FieldEntity.selectCurrentSequenceNumber",

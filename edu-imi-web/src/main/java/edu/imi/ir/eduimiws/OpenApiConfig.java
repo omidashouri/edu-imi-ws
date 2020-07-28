@@ -148,8 +148,17 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi educationCategoryApi(){
         return GroupedOpenApi.builder()
-                .setGroup("eduCategories")
+                .setGroup("Education Categories")
                 .pathsToMatch("/api/v1/eduCategories/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi fieldApi(){
+        return GroupedOpenApi.builder()
+                .setGroup("Fields")
+                .pathsToMatch("/api/v1/fields/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }

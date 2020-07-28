@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.mapper.edu;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.edu.FieldFastDto;
 import edu.imi.ir.eduimiws.models.response.edu.FieldResponse;
+import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -30,14 +31,6 @@ public interface FieldResponseFieldFastDtoMapper {
             @Mapping(source = "scoreLowBound", target = "scoreLowBound"),
             @Mapping(source = "scoreQualityValues", target = "scoreQualityValues"),
             @Mapping(source = "scoringWay", target = "scoringWay"),
-            @Mapping(source = "siteAim", target = "siteAim"),
-            @Mapping(source = "siteConditions", target = "siteConditions"),
-            @Mapping(source = "siteContacts", target = "siteContacts"),
-            @Mapping(source = "siteContents", target = "siteContents"),
-            @Mapping(source = "siteIntroduction", target = "siteIntroduction"),
-            @Mapping(source = "siteRegisterR", target = "siteRegisterR"),
-            @Mapping(source = "siteTmethods", target = "siteTmethods"),
-            @Mapping(source = "tableau", target = "tableau"),
             @Mapping(source = "termicStatus", target = "termicStatus"),
             @Mapping(source = "totalUnit", target = "totalUnit"),
             @Mapping(source = "tunit", target = "tunit"),
@@ -82,4 +75,34 @@ public interface FieldResponseFieldFastDtoMapper {
 
     List<FieldFastDto> toFieldFastDtos(List<FieldResponse> registerResponses, @Context CycleAvoidingMappingContext context);
 
+    @AfterMapping
+    default void handleClobFields(FieldFastDto fieldFastDto, @MappingTarget FieldResponse fieldResponse) {
+
+        if (fieldFastDto.getTableau() != null) {
+            fieldResponse.setTableau(ClobHelper.clobToString(fieldFastDto.getTableau()));
+        }
+        if (fieldFastDto.getSiteAim() != null) {
+            fieldResponse.setSiteAim(ClobHelper.clobToString(fieldFastDto.getSiteAim()));
+        }
+        if (fieldFastDto.getSiteConditions() != null) {
+            fieldResponse.setSiteConditions(ClobHelper.clobToString(fieldFastDto.getSiteConditions()));
+        }
+        if (fieldFastDto.getSiteContacts() != null) {
+            fieldResponse.setSiteContacts(ClobHelper.clobToString(fieldFastDto.getSiteContacts()));
+        }
+        if (fieldFastDto.getSiteContents() != null) {
+            fieldResponse.setSiteContents(ClobHelper.clobToString(fieldFastDto.getSiteContents()));
+        }
+        if (fieldFastDto.getSiteIntroduction() != null) {
+            fieldResponse.setSiteIntroduction(ClobHelper.clobToString(fieldFastDto.getSiteIntroduction()));
+        }
+        if (fieldFastDto.getSiteRegisterR() != null) {
+            fieldResponse.setSiteRegisterR(ClobHelper.clobToString(fieldFastDto.getSiteRegisterR()));
+        }
+        if (fieldFastDto.getSiteTmethods()!= null) {
+            fieldResponse.setSiteTmethods(ClobHelper.clobToString(fieldFastDto.getSiteTmethods()));
+        }
+    }
+
+    //    Handle Update FastDto from Response for later use
 }

@@ -65,6 +65,8 @@ public class FieldFastDto {
 
     private Long planId;
 
+//    planPublicId not available
+
     private Long executerId;
 
 //    not joined in database to tbl_person
