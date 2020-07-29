@@ -8,6 +8,12 @@ import java.util.List;
 
 public interface PeriodService {
 
+    Page<PeriodEntity> findAllByDeleteStatusEqualsOneAndOrderPageable(Pageable pageable);
+
+    Page<PeriodEntity> findAllByPeriodApi_FieldPublicIdPageable(String fieldPublicId,Pageable pageable);
+
+    Long countPeriodByIdLessThanEqual(Long periodId);
+
     Long periodCount();
 
     PeriodEntity selectLastRecord();

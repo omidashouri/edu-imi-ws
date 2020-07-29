@@ -131,4 +131,11 @@ public class FieldApiServiceImpl implements FieldApiService{
         fieldApiRepository.saveAll(newFieldApis);
         return newFieldApis;
     }
+
+    @Override
+    public List<FieldApiEntity> findAllByFieldIdIn(List<Long> fieldIds) {
+        List<FieldApiEntity> fieldApis = fieldApiRepository
+                .findAllByFieldIdIn(fieldIds);
+        return fieldApis;
+    }
 }

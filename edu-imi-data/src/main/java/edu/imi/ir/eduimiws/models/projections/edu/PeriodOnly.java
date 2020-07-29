@@ -8,6 +8,7 @@ public class PeriodOnly {
 // use when selecting directly from database
 
      Long id;
+     Long fieldId;
      Long deleteStatus;
      String canRegisterOnline;
      String editDate;

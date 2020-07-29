@@ -17,7 +17,14 @@ import java.util.List;
 @Repository
 public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
-    List<PeriodOnly> findBy();
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
+            type = EntityGraph.EntityGraphType.LOAD)
+    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    Page<PeriodEntity> findAllByDeleteStatusIsNotNullAndDeleteStatusEquals(Long deleteStatus,Pageable pageable);
+
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApi", type = EntityGraph.EntityGraphType.LOAD)
+    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    Page<PeriodEntity> findAllByPeriodApi_FieldPublicId(String fieldPublicId,Pageable pageable);
 
     @Query(value = "select p from PeriodEntity p " +
             " left join fetch p.executer ex left join fetch ex.personApiEntity pw " +
@@ -28,7 +35,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     )
     Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
-    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonApi", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor", type = EntityGraph.EntityGraphType.LOAD)
     PeriodEntity findByPeriodApi_PeriodPublicId(String periodPublicId);
 
     @Query(name = "PeriodEntity.selectAllPeriodOnly", nativeQuery = true)
@@ -44,7 +51,8 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonApi", type = EntityGraph.EntityGraphType.LOAD)
     Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntityIsNull();
 
-    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonApi", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
+            type = EntityGraph.EntityGraphType.LOAD)
     Page<PeriodEntity>
     findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntity_PersonPublicId
             (Pageable pageable, String executorPublicId);

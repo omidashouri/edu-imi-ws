@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
+import edu.imi.ir.eduimiws.models.projections.edu.FieldWithFieldApiLevelEduCategoryProjection;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -12,6 +13,79 @@ import javax.persistence.*;
 
 
 @NamedEntityGraphs({
+        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "field",subgraph = "field-subGraph"),
+                        @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
+                        @NamedAttributeNode("periodApi")
+                },subgraphs = {
+                @NamedSubgraph(
+                        name = "field-subGraph",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "fieldApi"),
+                                @NamedAttributeNode(value = "level"),
+                                @NamedAttributeNode(value = "eduCategory")
+                        },type = FieldWithFieldApiLevelEduCategoryProjection.class
+                ),
+                @NamedSubgraph(
+                        name = "executer-subGraph",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "personApiEntity")
+                        },
+                        type = PersonApiEntity.class)
+        }
+        ),
+        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategory",
+            attributeNodes = {
+                    @NamedAttributeNode(value = "field",subgraph = "field-subGraph"),
+                    @NamedAttributeNode("periodApi")
+            },subgraphs = {
+                @NamedSubgraph(
+                    name = "field-subGraph",
+                    attributeNodes = {
+                        @NamedAttributeNode(value = "fieldApi"),
+                        @NamedAttributeNode(value = "level"),
+                        @NamedAttributeNode(value = "eduCategory")
+                    },type = FieldWithFieldApiLevelEduCategoryProjection.class
+                )
+            }
+        ),
+        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApi",
+            attributeNodes = {
+                @NamedAttributeNode(value = "field",subgraph = "field-subGraph"),
+                @NamedAttributeNode("periodApi")
+            },subgraphs = {
+                @NamedSubgraph(
+                        name = "field-subGraph",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "fieldApi")
+                        },
+                        type = FieldApiEntity.class
+                )
+            }
+        ),
+        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApiAndExecutor",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "field",subgraph = "field-subGraph"),
+                        @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
+                        @NamedAttributeNode("periodApi")
+                },subgraphs = {
+                @NamedSubgraph(
+                        name = "field-subGraph",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "fieldApi")
+                        },
+                        type = FieldApiEntity.class
+                ),
+                @NamedSubgraph(
+                        name = "executer-subGraph",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "personApiEntity")
+                        },
+                        type = PersonApiEntity.class)
+
+        }
+        ),
         @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphExecutorPersonApi",
                 attributeNodes = {
                 @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
@@ -36,6 +110,7 @@ import javax.persistence.*;
             targetClass = PeriodOnly.class,
             columns = {
                     @ColumnResult(name = "idR", type = Long.class),
+                    @ColumnResult(name = "fieldIdR", type = Long.class),
                     @ColumnResult(name = "deleteStatusR", type = Long.class),
                     @ColumnResult(name = "canRegisterOnlineR", type = String.class),
                     @ColumnResult(name = "periodEditDateR", type = String.class)
@@ -49,11 +124,11 @@ import javax.persistence.*;
                 " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD ",
         resultSetMapping = "periodOnly"),
     @NamedNativeQuery(name = "PeriodEntity.selectPeriodOnlyByIdGreaterThan",
-        query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
+        query = " select ID as idR, FIELD_ID as fieldIdR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
                 " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID > :periodId ",
         resultSetMapping = "periodOnly"),
     @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnlyByIdBetween",
-        query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
+        query = " select ID as idR, FIELD_ID as fieldIdR,DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
                 " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID between :beginPeriodId and :endPeriodId ",
         resultSetMapping = "periodOnly"),
     @NamedNativeQuery(name = "PeriodEntity.selectCurrentSequenceNumber",
@@ -88,6 +163,14 @@ public class PeriodEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FIELD_ID")
     private FieldEntity field;
+
+    @Column(name = "FIELD_ID", insertable = false, updatable = false)
+    private Long fieldId;
+
+    @Transient
+    public Long getFieldId() {
+        return fieldId;
+    }
 
     @Column(name = "TYPE", length = 10)
     private String type;

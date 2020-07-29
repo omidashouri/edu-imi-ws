@@ -26,6 +26,26 @@ public class PeriodServiceImpl implements PeriodService {
     private final PeriodOnlyMapper periodOnlyMapper;
 
     @Override
+    public Page<PeriodEntity> findAllByDeleteStatusEqualsOneAndOrderPageable(Pageable pageable) {
+        Page<PeriodEntity> periodPages = periodRepository
+                .findAllByDeleteStatusIsNotNullAndDeleteStatusEquals(1L, pageable);
+        return periodPages;
+    }
+
+    @Override
+    public Page<PeriodEntity> findAllByPeriodApi_FieldPublicIdPageable(String fieldPublicId, Pageable pageable) {
+        Page<PeriodEntity> periodPages = periodRepository
+                .findAllByPeriodApi_FieldPublicId(fieldPublicId, pageable);
+        return periodPages;
+    }
+
+    @Override
+    public Long countPeriodByIdLessThanEqual(Long periodId) {
+        Long periodCount = periodRepository.countByIdLessThanEqual(periodId);
+        return periodCount;
+    }
+
+    @Override
     public Long periodCount() {
         return periodRepository.count();
     }
@@ -53,7 +73,8 @@ public class PeriodServiceImpl implements PeriodService {
     public List<PeriodEntity> findAllPeriodOnly() {
         List<PeriodOnly> allPeriodOnlys = periodRepository.findAllPeriodOnly();
         allPeriodOnlys.sort(Comparator.comparing(PeriodOnly::getId));
-        List<PeriodEntity> allPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(allPeriodOnlys, new CycleAvoidingMappingContext());
+        List<PeriodEntity> allPeriods = periodOnlyMapper
+                .PeriodOnliesToPeriodEntities(allPeriodOnlys, new CycleAvoidingMappingContext());
         return allPeriods;
     }
 

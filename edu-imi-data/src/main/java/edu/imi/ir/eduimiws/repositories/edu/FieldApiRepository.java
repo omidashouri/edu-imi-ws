@@ -11,4 +11,6 @@ public interface FieldApiRepository extends CrudRepository<FieldApiEntity, Long>
     List<FieldApiEntity> findAll();
 
     FieldApiEntity findFirstByOrderByIdDesc();
+
+    List<FieldApiEntity> findAllByFieldIdIn(List<Long> fieldIds);
 }

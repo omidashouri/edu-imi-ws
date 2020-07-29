@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
+import edu.imi.ir.eduimiws.controllers.v1.FieldController;
 import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
 import edu.imi.ir.eduimiws.controllers.v1.UserController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
@@ -15,12 +16,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport<PeriodFastDto, PeriodResponse> {
+public class PeriodResponsePeriodFastDtoAssembler extends RepresentationModelAssemblerSupport<PeriodFastDto, PeriodResponse> {
 
     private final PeriodResponsePeriodFastDtoMapper periodResponsePeriodFastDtoMapper;
 
 
-    public PeriodResponseAssembler(PeriodResponsePeriodFastDtoMapper periodResponsePeriodFastDtoMapper) {
+    public PeriodResponsePeriodFastDtoAssembler(PeriodResponsePeriodFastDtoMapper periodResponsePeriodFastDtoMapper) {
         super(PeriodController.class, PeriodResponse.class);
         this.periodResponsePeriodFastDtoMapper = periodResponsePeriodFastDtoMapper;
     }
@@ -30,6 +31,7 @@ public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport
 
         PeriodResponse periodResponse = periodResponsePeriodFastDtoMapper
                 .toPeriodResponse(periodFastDto, new CycleAvoidingMappingContext());
+
         periodResponse
                 .add(linkTo(
                         methodOn(
@@ -37,14 +39,24 @@ public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport
                                 .getPeriodByPeriodPublicId(periodFastDto.getPeriodPublicId()))
                         .withSelfRel());
 
-        if (periodFastDto.getExecutorPublicId() != null) {
-                periodResponse.
-                        add(linkTo(
-                                methodOn(
-                                        UserController.class)
-                                        .getUserByUserPublicId(periodFastDto.getExecutorPublicId()))
-                                .withRel("executors"));
+        if (periodFastDto.getFieldPublicId() != null) {
+            periodResponse.
+                    add(linkTo(
+                            methodOn(
+                                    FieldController.class)
+                                    .getFieldByFieldPublicId(periodFastDto.getFieldPublicId()))
+                            .withRel("fields"));
         }
+
+        if (periodFastDto.getExecutorPublicId() != null) {
+            periodResponse.
+                    add(linkTo(
+                            methodOn(
+                                    UserController.class)
+                                    .getUserByUserPublicId(periodFastDto.getExecutorPublicId()))
+                            .withRel("executors"));
+        }
+
 
         return periodResponse;
     }
@@ -58,7 +70,9 @@ public class PeriodResponseAssembler extends RepresentationModelAssemblerSupport
         Pageable pageable = Pageable.unpaged();
 
         periodResponseCollectionModel
-                .add(linkTo(methodOn(PeriodController.class).getPeriods(pageable)).withRel("periods"));
+                .add(linkTo(
+                        methodOn(PeriodController.class).getPeriods(pageable))
+                        .withRel("periods"));
 
         return periodResponseCollectionModel;
     }

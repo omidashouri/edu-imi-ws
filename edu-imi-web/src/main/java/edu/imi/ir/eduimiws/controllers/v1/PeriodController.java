@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
-import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseAssembler;
+import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponsePeriodFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
@@ -50,6 +50,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/periods")
@@ -60,8 +62,8 @@ public class PeriodController {
     private final PeriodService periodService;
     private final UserService userService;
     private final PeriodApiService periodApiService;
-    private final PeriodResponseAssembler periodResponseAssembler;
-    private final PagedResourcesAssembler<PeriodFastDto> periodPagedResourcesAssembler;
+    private final PeriodResponsePeriodFastDtoAssembler periodResponsePeriodFastDtoAssembler;
+    private final PagedResourcesAssembler<PeriodFastDto> periodFastDtoPagedResourcesAssembler;
     private final PeriodFastDtoMapper periodFastDtoMapper;
 
     @Operation(
@@ -105,15 +107,20 @@ public class PeriodController {
                                                                  @PageableDefault(page = 0, size = 10, value = 10)
                                                                          Pageable pageable) {
 
+//        List<PeriodWithPeriodApiFieldLevelEduCategoryProjection> periodEntities = periodService.testReadAll();
+
+/*        Page<PeriodEntity> periodPages =
+                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);*/
+
         Page<PeriodEntity> periodPages =
-                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
+                periodService.findAllByDeleteStatusEqualsOneAndOrderPageable(pageable);
 
         Page<PeriodFastDto> periodFastDtoPage = periodPages
                 .map(p -> periodFastDtoMapper
                         .toPeriodFastDto(p, new CycleAvoidingMappingContext()));
 
-        PagedModel<PeriodResponse> periodResponsePagedModel = periodPagedResourcesAssembler
-                .toModel(periodFastDtoPage, periodResponseAssembler);
+        PagedModel<PeriodResponse> periodResponsePagedModel = periodFastDtoPagedResourcesAssembler
+                .toModel(periodFastDtoPage, periodResponsePeriodFastDtoAssembler);
 
         return ResponseEntity.ok(periodResponsePagedModel);
     }
@@ -128,18 +135,108 @@ public class PeriodController {
             @PageableDefault(page = 0, size = 10)
                     Pageable pageable) {
 
+/*        Page<PeriodEntity> periodPages =
+                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);*/
+
         Page<PeriodEntity> periodPages =
-                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
+                periodService.findAllByDeleteStatusEqualsOneAndOrderPageable(pageable);
 
         List<PeriodEntity> periodEntities = StreamSupport
                 .stream(periodPages.spliterator(), false)
                 .collect(Collectors.toList());
 
         List<PeriodFastDto> periodFastDtos = periodFastDtoMapper
-                .toPeriodFastDtos(periodEntities,new CycleAvoidingMappingContext());
+                .toPeriodFastDtos(periodEntities, new CycleAvoidingMappingContext());
 
         CollectionModel<PeriodResponse> periodResponseCollectionModel =
-                periodResponseAssembler.toCollectionModel(periodFastDtos);
+                periodResponsePeriodFastDtoAssembler.toCollectionModel(periodFastDtos);
+
+        return ResponseEntity.ok(periodResponseCollectionModel);
+    }
+
+    @Operation(
+            summary = "find All periods by field public Id",
+            description = "Search period detail pageable by field public Id",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PeriodResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(path = "/fields/{fieldPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<PeriodResponse>> getPeriodsFields(@PathVariable String fieldPublicId,
+                                                                       @Parameter(hidden = true)
+                                                                                @SortDefault(sort = "createDate",
+                                                                                        direction = Sort.Direction.DESC)
+                                                                                @PageableDefault(page = 0,
+                                                                                        size = 10,
+                                                                                        value = 10)
+                                                                                        Pageable pageable) {
+
+        Page<PeriodEntity> periodPages =
+                periodService.findAllByPeriodApi_FieldPublicIdPageable(fieldPublicId, pageable);
+
+        Page<PeriodFastDto> periodFastDtoPage = periodPages
+                .map(p -> periodFastDtoMapper
+                        .toPeriodFastDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<PeriodResponse> periodResponsePagedModel = periodFastDtoPagedResourcesAssembler
+                .toModel(periodFastDtoPage, periodResponsePeriodFastDtoAssembler);
+
+        return ResponseEntity.ok(periodResponsePagedModel);
+    }
+
+    @Operation(hidden = true)
+    @PageableAsQueryParam
+    @GetMapping(path = "/fields/{fieldPublicId}/collectionModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriodsFields(
+                                                                @PathVariable String fieldPublicId,
+                                                                @Parameter(hidden = true)
+                                                                @SortDefault(sort = "createDate",
+                                                                             direction = Sort.Direction.DESC)
+                                                                @PageableDefault(page = 0, size = 10)
+                                                                        Pageable pageable) {
+
+        Page<PeriodEntity> periodPages =
+                periodService.findAllByPeriodApi_FieldPublicIdPageable(fieldPublicId, pageable);
+
+        List<PeriodEntity> periodEntities = StreamSupport
+                .stream(periodPages.spliterator(), false)
+                .collect(Collectors.toList());
+
+        List<PeriodFastDto> periodFastDtos = periodFastDtoMapper
+                .toPeriodFastDtos(periodEntities, new CycleAvoidingMappingContext());
+
+        CollectionModel<PeriodResponse> periodResponseCollectionModel =
+                periodResponsePeriodFastDtoAssembler.toCollectionModel(periodFastDtos);
 
         return ResponseEntity.ok(periodResponseCollectionModel);
     }
@@ -187,10 +284,10 @@ public class PeriodController {
             }
 
             PeriodFastDto periodFastDto = periodFastDtoMapper
-                    .toPeriodFastDto(period,new CycleAvoidingMappingContext());
+                    .toPeriodFastDto(period, new CycleAvoidingMappingContext());
 
             PeriodResponse periodResponse =
-                    periodResponseAssembler.toModel(periodFastDto);
+                    periodResponsePeriodFastDtoAssembler.toModel(periodFastDto);
 
             return ResponseEntity.ok(periodResponse);
 
@@ -254,8 +351,8 @@ public class PeriodController {
                 .map(p -> periodFastDtoMapper
                         .toPeriodFastDto(p, new CycleAvoidingMappingContext()));
 
-        PagedModel<PeriodResponse> periodResponsePagedModel = periodPagedResourcesAssembler
-                .toModel(periodFastDtoPage, periodResponseAssembler);
+        PagedModel<PeriodResponse> periodResponsePagedModel = periodFastDtoPagedResourcesAssembler
+                .toModel(periodFastDtoPage, periodResponsePeriodFastDtoAssembler);
 
         return ResponseEntity.ok(periodResponsePagedModel);
     }
@@ -279,10 +376,10 @@ public class PeriodController {
                 .collect(Collectors.toList());
 
         List<PeriodFastDto> periodFastDtos = periodFastDtoMapper
-                .toPeriodFastDtos(periods,new CycleAvoidingMappingContext());
+                .toPeriodFastDtos(periods, new CycleAvoidingMappingContext());
 
         CollectionModel<PeriodResponse> periodResponseCollectionModel =
-                periodResponseAssembler.toCollectionModel(periodFastDtos);
+                periodResponsePeriodFastDtoAssembler.toCollectionModel(periodFastDtos);
 
         return ResponseEntity.ok(periodResponseCollectionModel);
     }
@@ -404,7 +501,8 @@ public class PeriodController {
         Long newPeriodCount;
 
         periodApiCount = periodApiService.periodApiCount();
-        periodCount = periodService.periodCount();
+        Long periodSequenceNumber = periodService.selectPeriodLastSequenceNumber();
+        periodCount = periodService.countPeriodByIdLessThanEqual(periodSequenceNumber);
 
         if (periodCount == null || periodCount == 0) {
             this.conflictPeriodCount();
@@ -422,9 +520,10 @@ public class PeriodController {
         if (newPeriodCount > 0) {
             returnValue.setDescription(newPeriodCount + " New Record Found. use 'generate-public-id' link");
 
-            Link link = WebMvcLinkBuilder.linkTo(PeriodController.class)
-                    .slash("generate-public-id")
-                    .withRel("generate-public-id");
+            Link link = WebMvcLinkBuilder
+                    .linkTo(methodOn(PeriodController.class)
+                            .createPeriodApiPublicId())
+                    .withRel("new public id");
 
             returnValue.add(link);
         } else {
@@ -488,7 +587,7 @@ public class PeriodController {
             periodLastRecord = periodService.findFirstByIdLessThanOrderByIdDesc(periodSequenceNumber);
             if (periodLastRecord.getId() > periodApiLastRecord.getPeriodId()) {
                 Long periodApiPeriodIdPlusOne = periodApiLastRecord.getPeriodId() + 1;
-                newPeriods = periodService.findAllPeriodOnlyByIdBetween(periodApiPeriodIdPlusOne,periodLastRecord.getId());
+                newPeriods = periodService.findAllPeriodOnlyByIdBetween(periodApiPeriodIdPlusOne, periodLastRecord.getId());
             } else {
                 returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
                 returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());

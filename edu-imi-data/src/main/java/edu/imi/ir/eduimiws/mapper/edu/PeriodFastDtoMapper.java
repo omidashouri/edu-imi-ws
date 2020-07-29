@@ -9,13 +9,14 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
 public interface PeriodFastDtoMapper {
 
     PeriodFastDtoMapper INSTANCE = Mappers.getMapper(PeriodFastDtoMapper.class);
 
     @Mappings({
             @Mapping(source = "periodApi.periodPublicId", target = "periodPublicId"),
+            @Mapping(source = "periodApi.fieldPublicId", target = "fieldPublicId"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "canRegisterOnline", target = "canRegisterOnline"),
             @Mapping(source = "editDate", target = "editDate"),
@@ -23,7 +24,7 @@ public interface PeriodFastDtoMapper {
             @Mapping(source = "createDate", target = "createDate"),
             @Mapping(source = "deleteStatus", target = "deleteStatus"),
             @Mapping(source = "endDate", target = "endDate"),
-            @Mapping(source = "executer.personApiEntity.personPublicId", target = "executorPublicId"),
+//            @Mapping(source = "executer.personApiEntity.personPublicId", target = "executorPublicId"),
             @Mapping(source = "fee", target = "fee"),
             @Mapping(source = "holdingLanguage", target = "holdingLanguage"),
             @Mapping(source = "maxCapacity", target = "maxCapacity"),
@@ -52,16 +53,26 @@ public interface PeriodFastDtoMapper {
     @AfterMapping
     default void handlePeriodResponseExecutorFullName(PeriodEntity periodEntity, @MappingTarget PeriodFastDto periodFastDto) {
 
-        if(!Hibernate.isInitialized(periodEntity.getExecuter())) {
+        if (!Hibernate.isInitialized(periodEntity.getExecuter())) {
             periodEntity.setExecuter(null);
         }
 
-        if(periodEntity.getExecuter()!=null) {
+        if (periodEntity.getExecuter() != null) {
+
             periodFastDto
                     .setExecutorFullName(
                             periodEntity.getExecuter().getFirstName()
                                     + ' ' +
                                     periodEntity.getExecuter().getLastName());
+
+            if (!Hibernate.isInitialized(periodEntity.getExecuter().getPersonApiEntity())) {
+                periodEntity.getExecuter().setPersonApiEntity(null);
+            }
+            if (periodEntity.getExecuter().getPersonApiEntity() != null) {
+                    periodFastDto.setExecutorPublicId(
+                            periodEntity.getExecuter().getPersonApiEntity().getPersonPublicId()
+                    );
+            }
         }
     }
 

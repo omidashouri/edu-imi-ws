@@ -69,16 +69,19 @@ public class PeriodApiEntity extends BaseEntity {
         return fieldId;
     }
 
+    @Column(name="FIELD_PUBLIC_ID")
+    private String fieldPublicId;
+
     @Column(name = "PERIOD_EDIT_DATE", length = 10)
     private String periodEditDate;
 
-    @Column(name="PERIOD_PUBLIC_ID")
+    @Column(name="PERIOD_PUBLIC_ID",length = 500)
     private String periodPublicId;
 
-    @Column(name="DESCRIPTION")
+    @Column(name="DESCRIPTION",length = 500)
     private String description;
 
-    @Column(name="CAN_REGISTER_ONLINE")
+    @Column(name="CAN_REGISTER_ONLINE",length = 15)
     private String canRegisterOnline;
 
     @Column(name="CREATE_DATE_TS")

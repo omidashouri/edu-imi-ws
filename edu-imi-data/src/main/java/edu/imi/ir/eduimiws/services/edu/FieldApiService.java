@@ -12,4 +12,6 @@ public interface FieldApiService {
     Long fieldApiCount();
 
     List<FieldApiEntity> generateFieldApiPublicId(List<FieldEntity> newFieldEntities);
+
+    List<FieldApiEntity> findAllByFieldIdIn(List<Long> fieldIds);
 }
