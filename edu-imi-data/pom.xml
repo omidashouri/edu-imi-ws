@@ -18,6 +18,12 @@
     <properties>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
         <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
+        <org.modelmapper.varsion>2.3.8</org.modelmapper.varsion>
+        <io.jsonwebtoken.version>0.9.1</io.jsonwebtoken.version>
+        <org.springdoc.version>1.4.3</org.springdoc.version>
+        <com.sun.xml.ws.version>2.3.3</com.sun.xml.ws.version>
+        <org.apache.cxf.version>3.3.7</org.apache.cxf.version>
+        <org.apache.cxf.xjc-utils.version>3.3.1</org.apache.cxf.xjc-utils.version>
     </properties>
 
     <dependencies>
@@ -28,6 +34,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -112,12 +122,14 @@
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>2.3.5</version>
+            <version>${org.modelmapper.varsion}</version>
+            <!--            <version>2.3.5</version>-->
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <version>${io.jsonwebtoken.version}</version>
+            <!--            <version>0.9.1</version>-->
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -126,7 +138,8 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
-            <version>1.2.33</version>
+            <version>${org.springdoc.version}</version>
+            <!--            <version>1.2.33</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.ws</groupId>
@@ -170,24 +183,28 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
-            <version>2.3.3</version>
+            <version>${com.sun.xml.ws.version}</version>
+            <!--            <version>2.3.3</version>-->
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>rt</artifactId>
-            <version>2.3.3</version>
+            <version>${com.sun.xml.ws.version}</version>
+            <!--            <version>2.3.3</version>-->
         </dependency>
 
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>3.3.6</version>
+            <version>${org.apache.cxf.version}</version>
+            <!--            <version>3.3.6</version>-->
         </dependency>
         <dependency>
             <groupId>org.apache.cxf.xjc-utils</groupId>
             <artifactId>cxf-xjc-runtime</artifactId>
-            <version>3.3.1</version>
+            <version>${org.apache.cxf.xjc-utils.version}</version>
+            <!--            <version>3.3.1</version>-->
         </dependency>
         <dependency>
             <groupId>wsdl4j</groupId>
