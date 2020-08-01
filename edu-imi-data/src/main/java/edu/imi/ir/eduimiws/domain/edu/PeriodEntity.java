@@ -119,19 +119,23 @@ import javax.persistence.*;
     }
 )
 @NamedNativeQueries({
-    @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnly",
-        query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
-                " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD ",
-        resultSetMapping = "periodOnly"),
-    @NamedNativeQuery(name = "PeriodEntity.selectPeriodOnlyByIdGreaterThan",
-        query = " select ID as idR, FIELD_ID as fieldIdR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
-                " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID > :periodId ",
-        resultSetMapping = "periodOnly"),
-    @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnlyByIdBetween",
-        query = " select ID as idR, FIELD_ID as fieldIdR,DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
-                " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID between :beginPeriodId and :endPeriodId ",
-        resultSetMapping = "periodOnly"),
-    @NamedNativeQuery(name = "PeriodEntity.selectCurrentSequenceNumber",
+        @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnly",
+                query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
+                        " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD ",
+                resultSetMapping = "periodOnly"),
+        @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnlyById",
+                query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
+                        " EDIT_DATE as periodEditDateR from EDU.TBL_PERIOD where ID in (:periodIds) ",
+                resultSetMapping = "periodOnly"),
+        @NamedNativeQuery(name = "PeriodEntity.selectPeriodOnlyByIdGreaterThan",
+                query = " select ID as idR, FIELD_ID as fieldIdR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
+                        " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID > :periodId ",
+                resultSetMapping = "periodOnly"),
+        @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnlyByIdBetween",
+                query = " select ID as idR, FIELD_ID as fieldIdR,DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
+                        " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD where ID between :beginPeriodId and :endPeriodId ",
+                resultSetMapping = "periodOnly"),
+        @NamedNativeQuery(name = "PeriodEntity.selectCurrentSequenceNumber",
                 query = " select EDU.SEQ_EDU_PERIOD.nextval from dual "
         )
 })

@@ -122,5 +122,11 @@ public class PeriodServiceImpl implements PeriodService {
         return periodRepository.selectLastSequenceNumber();
     }
 
+    @Override
+    public List<PeriodEntity> findAllById(List<Long> periodIds) {
+        List<PeriodEntity> periods = periodRepository
+                .findAllByIdIn(periodIds);
+        return periods;
+    }
 
 }

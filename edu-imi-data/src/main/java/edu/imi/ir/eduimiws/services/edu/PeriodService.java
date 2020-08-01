@@ -36,4 +36,6 @@ public interface PeriodService {
 
     Long selectPeriodLastSequenceNumber();
 
+    List<PeriodEntity> findAllById(List<Long> periodIds);
+
 }

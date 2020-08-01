@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PeriodApiRepository extends CrudRepository<PeriodApiEntity,Long> {
+public interface PeriodApiRepository extends CrudRepository<PeriodApiEntity, Long> {
 
     @EntityGraph("PeriodApiEntity.periodApiFastGraph")
     List<PeriodApiEntity> findAll();
@@ -18,4 +18,6 @@ public interface PeriodApiRepository extends CrudRepository<PeriodApiEntity,Long
     List<PeriodApiEntity> findAllByPeriodIdIn(List<Long> periodIds);
 
     List<PeriodApiEntity> findAllByPeriodIdInAndPeriodPublicIdIsNotNull(List<Long> periodIds);
+
+    List<PeriodApiEntity> findAllByFieldPublicIdIsNull();
 }

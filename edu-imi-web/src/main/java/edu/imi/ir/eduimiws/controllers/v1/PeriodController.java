@@ -107,11 +107,6 @@ public class PeriodController {
                                                                  @PageableDefault(page = 0, size = 10, value = 10)
                                                                          Pageable pageable) {
 
-//        List<PeriodWithPeriodApiFieldLevelEduCategoryProjection> periodEntities = periodService.testReadAll();
-
-/*        Page<PeriodEntity> periodPages =
-                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);*/
-
         Page<PeriodEntity> periodPages =
                 periodService.findAllByDeleteStatusEqualsOneAndOrderPageable(pageable);
 
@@ -134,9 +129,6 @@ public class PeriodController {
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
             @PageableDefault(page = 0, size = 10)
                     Pageable pageable) {
-
-/*        Page<PeriodEntity> periodPages =
-                periodService.findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);*/
 
         Page<PeriodEntity> periodPages =
                 periodService.findAllByDeleteStatusEqualsOneAndOrderPageable(pageable);
@@ -193,12 +185,12 @@ public class PeriodController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriodsFields(@PathVariable String fieldPublicId,
                                                                        @Parameter(hidden = true)
-                                                                                @SortDefault(sort = "createDate",
-                                                                                        direction = Sort.Direction.DESC)
-                                                                                @PageableDefault(page = 0,
-                                                                                        size = 10,
-                                                                                        value = 10)
-                                                                                        Pageable pageable) {
+                                                                       @SortDefault(sort = "createDate",
+                                                                               direction = Sort.Direction.DESC)
+                                                                       @PageableDefault(page = 0,
+                                                                               size = 10,
+                                                                               value = 10)
+                                                                               Pageable pageable) {
 
         Page<PeriodEntity> periodPages =
                 periodService.findAllByPeriodApi_FieldPublicIdPageable(fieldPublicId, pageable);
@@ -218,12 +210,12 @@ public class PeriodController {
     @GetMapping(path = "/fields/{fieldPublicId}/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriodsFields(
-                                                                @PathVariable String fieldPublicId,
-                                                                @Parameter(hidden = true)
-                                                                @SortDefault(sort = "createDate",
-                                                                             direction = Sort.Direction.DESC)
-                                                                @PageableDefault(page = 0, size = 10)
-                                                                        Pageable pageable) {
+            @PathVariable String fieldPublicId,
+            @Parameter(hidden = true)
+            @SortDefault(sort = "createDate",
+                    direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size = 10)
+                    Pageable pageable) {
 
         Page<PeriodEntity> periodPages =
                 periodService.findAllByPeriodApi_FieldPublicIdPageable(fieldPublicId, pageable);
@@ -604,6 +596,72 @@ public class PeriodController {
         returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
         returnValue.setDescription(newPeriodApi.size() + " New Public Id Generated");
         return ResponseEntity.ok(returnValue);
+    }
+
+    @Operation(
+            summary = "Update Field Public Id",
+            description = "update public id for new fields",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = OperationStatus.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+                    ,
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PutMapping(path = "/fields/update/publicId",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> updatePeriodApiFieldPublicId() {
+
+        OperationStatus returnValue = new OperationStatus();
+        Long periodApiCount;
+        List<PeriodApiEntity> newPeriodApis = new ArrayList<>();
+        List<PeriodApiEntity> updatedPeriodApi = new ArrayList<>();
+
+        periodApiCount = periodApiService.periodApiCount();
+
+        if (0 != periodApiCount) {
+            newPeriodApis = periodApiService.findAllPeriodApisByFieldPublicIdIsNull();
+            if (newPeriodApis != null) {
+                updatedPeriodApi = periodApiService.updatePeriodApiByFieldPublicId(newPeriodApis);
+            }
+        }
+
+        if (updatedPeriodApi == null) {
+            returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
+            returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
+            returnValue.setDescription("New Record Not Found.");
+            return ResponseEntity.ok(returnValue);
+        }
+
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
+        returnValue.setOperationName(RequestOperationName.UPDATE_ENTITIES.name());
+        returnValue.setDescription(updatedPeriodApi.size() + " record updated ");
+        return ResponseEntity.ok(returnValue);
+
     }
 
     private ResponseEntity<?> conflictPeriodCount() {

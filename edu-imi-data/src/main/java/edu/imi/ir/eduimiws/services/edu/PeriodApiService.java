@@ -16,4 +16,8 @@ public interface PeriodApiService {
     List<PeriodApiEntity> findAllByPeriodIdIn(List<Long> periodIds);
 
     List<PeriodApiEntity> findAllByPeriodIdInAndPeriodPublicIdIsNotNull(List<Long> periodIds);
+
+    List<PeriodApiEntity> findAllPeriodApisByFieldPublicIdIsNull();
+
+    List<PeriodApiEntity> updatePeriodApiByFieldPublicId(List<PeriodApiEntity> periodApisWithNullFieldPublicIds);
 }

@@ -26,6 +26,7 @@ public class PeriodApiServiceImpl implements PeriodApiService {
 
     private final PeriodApiRepository periodApiRepository;
     private final FieldApiService fieldApiService;
+    private final PeriodService periodService;
     private final PeriodEntityPeriodApiFromProjectionMapper periodEntityPeriodApiFromProjectionMapper;
     private final PublicIdUtil publicIdUtil;
 
@@ -37,38 +38,12 @@ public class PeriodApiServiceImpl implements PeriodApiService {
     @Override
     public List<PeriodApiEntity> generatePeriodApiPublicId(List<PeriodEntity> newPeriods) {
 
-/*        List<PeriodApiEntity> newPeriodApiEntities = new ArrayList<>();
-
-        newPeriods.forEach(p -> {
-            PeriodApiEntity newPeriodApi = new PeriodApiEntity();
-            newPeriodApi.setPeriod(p);
-            newPeriodApi.setPeriodId(p.getId());
-            newPeriodApi.setPeriodPublicId(this.generatePeriodApiPublicId());
-            if (null != p.getCanRegisterOnline()) {
-                newPeriodApi.setCanRegisterOnline(p.getCanRegisterOnline().trim());
-            }
-            if (null != p.getDeleteStatus() && p.getDeleteStatus().equals(1L)) {
-                newPeriodApi.setDeleteTs(new Timestamp(new Date().getTime()));
-            }
-            if (null != p.getEditDate()) {
-                newPeriodApi.setPeriodEditDate(p.getEditDate());
-            }
-            newPeriodApi.setCreateDateTs(new Timestamp(new Date().getTime()));
-            newPeriodApiEntities.add(newPeriodApi);
-        });
-
-        newPeriodApiEntities.sort(Comparator.comparing(PeriodApiEntity::getPeriodId));
-
-        periodApiRepository.saveAll(newPeriodApiEntities);
-
-        return newPeriodApiEntities;*/
-
         List<PeriodApiEntity> newPeriodApis = new ArrayList<>();
         final int chunkSize = 900;
         final AtomicInteger atomicField = new AtomicInteger();
 
         newPeriodApis = periodEntityPeriodApiFromProjectionMapper
-                .toPeriodApis(newPeriods,new CycleAvoidingMappingContext());
+                .toPeriodApis(newPeriods, new CycleAvoidingMappingContext());
 
         newPeriodApis.sort(Comparator.comparing(PeriodApiEntity::getFieldId));
 
@@ -130,6 +105,109 @@ public class PeriodApiServiceImpl implements PeriodApiService {
         List<PeriodApiEntity> periodApis = periodApiRepository
                 .findAllByPeriodIdInAndPeriodPublicIdIsNotNull(periodIds);
         return periodApis;
+    }
+
+    @Override
+    public List<PeriodApiEntity> findAllPeriodApisByFieldPublicIdIsNull() {
+        List<PeriodApiEntity> periodApis = periodApiRepository
+                .findAllByFieldPublicIdIsNull();
+        return periodApis;
+    }
+
+    @Override
+    public List<PeriodApiEntity> updatePeriodApiByFieldPublicId(List<PeriodApiEntity> newPeriodApis) {
+
+        final int chunkSize = 900;
+        final AtomicInteger atomicPeriod = new AtomicInteger();
+
+
+        newPeriodApis.sort(Comparator.comparing(PeriodApiEntity::getPeriodId));
+
+        List<Long> periodIds = newPeriodApis
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(periodApi -> periodApi.getPeriodId() != null)
+                .map(PeriodApiEntity::getPeriodId)
+                .collect(Collectors.toList());
+
+        Collection<List<Long>> hundredPeriodIds = periodIds
+                .stream()
+                .collect(Collectors
+                        .groupingBy(pi ->
+                                atomicPeriod.getAndIncrement() / chunkSize))
+                .values();
+
+        List<PeriodEntity> periods = new ArrayList<>();
+        hundredPeriodIds.forEach(lp -> {
+            periodService
+                    .findAllById(lp)
+                    .stream()
+                    .forEachOrdered(periods::add);
+        });
+
+        Map<Long, Long> periodIdFieldIdMap = periods
+                .stream()
+                .filter(period -> period.getDeleteStatus() != null)
+                .filter(period -> period.getFieldId() != null)
+                .filter(period -> period.getField() != null)
+                .filter(period -> period.getField().getFieldApi() != null)
+                .filter(period -> period.getField().getFieldApi().getFieldPublicId() != null)
+                .distinct()
+                .collect(Collectors.toMap(PeriodEntity::getId,
+                        PeriodEntity::getFieldId));
+
+        newPeriodApis
+                .stream()
+                .filter(periodApi -> periodApi.getField() == null)
+                .filter(periodApi -> periodApi.getFieldId() == null)
+                .filter(periodApi -> Objects.nonNull(
+                        periodIdFieldIdMap.get(
+                                periodApi.getPeriodId())))
+                .forEach(periodApi -> {
+                    periodApi.setFieldId(
+                            periodIdFieldIdMap.get(
+                                    periodApi.getPeriodId()));
+                    FieldEntity field = new FieldEntity();
+                    field.setId(periodApi.getFieldId());
+                    periodApi.setField(field);
+                });
+
+/*        newPeriodApis
+                .stream()
+                .filter(periodApi->periodApi.getFieldId()!=null)
+                .forEach(periodApi -> {
+                    FieldEntity field = new FieldEntity();
+                    field.setId(periodApi.getFieldId());
+                    periodApi.setField(field);
+                });*/
+
+        Map<Long, String> periodIdFieldPublicIdMap = periods
+                .stream()
+                .filter(period -> period.getDeleteStatus() != null)
+                .filter(period -> period.getFieldId() != null)
+                .filter(period -> period.getField() != null)
+                .filter(period -> period.getField().getFieldApi() != null)
+                .filter(period -> period.getField().getFieldApi().getFieldPublicId() != null)
+                .distinct()
+                .collect(Collectors.toMap(PeriodEntity::getId,
+                        period -> period.getField().getFieldApi().getFieldPublicId()));
+
+        newPeriodApis
+                .stream()
+                .filter(periodApi -> periodApi.getField() != null)
+                .filter(periodApi -> periodApi.getFieldId() != null)
+                .filter(periodApi -> periodApi.getFieldPublicId() == null)
+                .filter(periodApi -> Objects.nonNull(
+                        periodIdFieldPublicIdMap.get(
+                                periodApi.getPeriodId())))
+                .forEach(periodApi -> {
+                    periodApi.setFieldPublicId(
+                            periodIdFieldPublicIdMap.get(
+                                    periodApi.getPeriodId()));
+                });
+
+        periodApiRepository.saveAll(newPeriodApis);
+        return newPeriodApis;
     }
 
     @Override

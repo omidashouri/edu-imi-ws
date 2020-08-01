@@ -9,5 +9,6 @@ public enum RequestOperationName {
     COUNT_ENTITY,
     COUNT_NEW_ENTITIES,
     CREATE_NEW_ENTITIES,
+    UPDATE_ENTITIES,
     FIND_BY_PUBLIC_ID
 }

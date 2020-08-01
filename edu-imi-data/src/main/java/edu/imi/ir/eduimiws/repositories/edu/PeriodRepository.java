@@ -35,13 +35,22 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     )
     Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
-    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
+            type = EntityGraph.EntityGraphType.LOAD)
     PeriodEntity findByPeriodApi_PeriodPublicId(String periodPublicId);
+
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApi",
+            type = EntityGraph.EntityGraphType.LOAD)
+    List<PeriodEntity> findAllByIdIn(List<Long> periodIds);
 
     @Query(name = "PeriodEntity.selectAllPeriodOnly", nativeQuery = true)
     @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
             forCounting = true)
     List<PeriodOnly> findAllPeriodOnly();
+
+/*    @Query(name = "PeriodEntity.selectAllPeriodOnlyById", nativeQuery = true)
+    @QueryHints(forCounting = true)
+    List<PeriodOnly> findAllPeriodOnlyById(@Param("periodIds") List<Long> periodIds);*/
 
     @Query(name = "PeriodEntity.selectPeriodOnlyByIdGreaterThan", nativeQuery = true)
     List<PeriodOnly> findPeriodOnlyByIdGreaterThan(@Param("periodId") Long id);
