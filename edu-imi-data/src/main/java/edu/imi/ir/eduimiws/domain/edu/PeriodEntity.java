@@ -2,7 +2,6 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
-import edu.imi.ir.eduimiws.models.projections.edu.FieldWithFieldApiLevelEduCategoryProjection;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -25,7 +24,7 @@ import javax.persistence.*;
                                 @NamedAttributeNode(value = "fieldApi"),
                                 @NamedAttributeNode(value = "level"),
                                 @NamedAttributeNode(value = "eduCategory")
-                        },type = FieldWithFieldApiLevelEduCategoryProjection.class
+                        }, type = FieldEntity.class
                 ),
                 @NamedSubgraph(
                         name = "executer-subGraph",
@@ -34,21 +33,6 @@ import javax.persistence.*;
                         },
                         type = PersonApiEntity.class)
         }
-        ),
-        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategory",
-            attributeNodes = {
-                    @NamedAttributeNode(value = "field",subgraph = "field-subGraph"),
-                    @NamedAttributeNode("periodApi")
-            },subgraphs = {
-                @NamedSubgraph(
-                    name = "field-subGraph",
-                    attributeNodes = {
-                        @NamedAttributeNode(value = "fieldApi"),
-                        @NamedAttributeNode(value = "level"),
-                        @NamedAttributeNode(value = "eduCategory")
-                    },type = FieldWithFieldApiLevelEduCategoryProjection.class
-                )
-            }
         ),
         @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApi",
             attributeNodes = {
@@ -63,28 +47,6 @@ import javax.persistence.*;
                         type = FieldApiEntity.class
                 )
             }
-        ),
-        @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApiAndExecutor",
-                attributeNodes = {
-                        @NamedAttributeNode(value = "field",subgraph = "field-subGraph"),
-                        @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
-                        @NamedAttributeNode("periodApi")
-                },subgraphs = {
-                @NamedSubgraph(
-                        name = "field-subGraph",
-                        attributeNodes = {
-                                @NamedAttributeNode(value = "fieldApi")
-                        },
-                        type = FieldApiEntity.class
-                ),
-                @NamedSubgraph(
-                        name = "executer-subGraph",
-                        attributeNodes = {
-                                @NamedAttributeNode(value = "personApiEntity")
-                        },
-                        type = PersonApiEntity.class)
-
-        }
         ),
         @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphExecutorPersonApi",
                 attributeNodes = {

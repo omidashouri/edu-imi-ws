@@ -21,23 +21,50 @@ import org.springframework.hateoas.server.core.Relation;
 @AllArgsConstructor
 public class PeriodResponse extends RepresentationModel<PeriodResponse> {
 
-    @Schema(title = "Period Public ID",maxLength = 36)
+    @Schema(title = "Period Public ID", maxLength = 36)
     private String periodPublicId;
 
-    @Schema(title = "Field Public ID",maxLength = 36)
-    private String FiledPublicId;
-
-    @Schema(title = "Period name", maxLength = 500)
+    @Schema(title = "Period Name", maxLength = 500)
     private String name;
 
-    @Schema(title = "Period start date",maxLength = 10)
+    //   for Descriptive (begin) :
+    @Schema(title = "Education Category ID", type = "number")
+    private Long eduCategoryId;
+
+    @Schema(title = "Education Category Public ID", maxLength = 36)
+    private String eduCategoryPublicId;
+
+    @Schema(title = "Education Category Title", maxLength = 100)
+    private String eduCategoryTitle;
+
+    @Schema(title = "Level ID", type = "number")
+    private Long levelId;
+
+    @Schema(title = "Level Public ID", maxLength = 36)
+    private String levelPublicId;
+
+    @Schema(title = "Level Description", maxLength = 150)
+    private String levelDescription;
+
+    //    fieldPublicId is not Descriptive
+    @Schema(title = "Field Public ID", maxLength = 36)
+    private String fieldPublicId;
+
+    @Schema(title = "Field Persian Name", maxLength = 500)
+    private String fieldFName;
+
+    @Schema(title = "Field Latin Name", maxLength = 500)
+    private String fieldLName;
+//   for Descriptive (end) :
+
+    @Schema(title = "Period start date", maxLength = 10)
     private String startDate;
 
-    @Schema(title = "Period End Date",maxLength = 10)
+    @Schema(title = "Period End Date", maxLength = 10)
     private String endDate;
 
     @Schema(title = "Period Type", maxLength = 10,
-    allowableValues = {"NonTermic", "Termic"})
+            allowableValues = {"NonTermic", "Termic"})
     private String type;
 
     @Schema(title = "Period Fee", type = "number")
@@ -97,6 +124,4 @@ public class PeriodResponse extends RepresentationModel<PeriodResponse> {
     description = "F:Persian & E:English",
     allowableValues = {"F","E"})
     private String holdingLanguage;
-
-
 }

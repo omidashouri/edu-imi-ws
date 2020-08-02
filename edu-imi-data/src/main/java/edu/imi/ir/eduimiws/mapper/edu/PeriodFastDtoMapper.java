@@ -17,6 +17,7 @@ public interface PeriodFastDtoMapper {
     @Mappings({
             @Mapping(source = "periodApi.periodPublicId", target = "periodPublicId"),
             @Mapping(source = "periodApi.fieldPublicId", target = "fieldPublicId"),
+            @Mapping(source = "fieldId", target = "fieldId"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "canRegisterOnline", target = "canRegisterOnline"),
             @Mapping(source = "editDate", target = "editDate"),
@@ -24,7 +25,6 @@ public interface PeriodFastDtoMapper {
             @Mapping(source = "createDate", target = "createDate"),
             @Mapping(source = "deleteStatus", target = "deleteStatus"),
             @Mapping(source = "endDate", target = "endDate"),
-//            @Mapping(source = "executer.personApiEntity.personPublicId", target = "executorPublicId"),
             @Mapping(source = "fee", target = "fee"),
             @Mapping(source = "holdingLanguage", target = "holdingLanguage"),
             @Mapping(source = "maxCapacity", target = "maxCapacity"),
@@ -56,7 +56,6 @@ public interface PeriodFastDtoMapper {
         if (!Hibernate.isInitialized(periodEntity.getExecuter())) {
             periodEntity.setExecuter(null);
         }
-
         if (periodEntity.getExecuter() != null) {
 
             periodFastDto
@@ -69,12 +68,53 @@ public interface PeriodFastDtoMapper {
                 periodEntity.getExecuter().setPersonApiEntity(null);
             }
             if (periodEntity.getExecuter().getPersonApiEntity() != null) {
-                    periodFastDto.setExecutorPublicId(
-                            periodEntity.getExecuter().getPersonApiEntity().getPersonPublicId()
-                    );
+                periodFastDto.setExecutorPublicId(
+                        periodEntity.getExecuter().getPersonApiEntity().getPersonPublicId()
+                );
             }
         }
+
+//  for Descriptive (begin) :
+        if (!Hibernate.isInitialized(periodEntity.getField())) {
+            periodEntity.setField(null);
+        }
+        if (periodEntity.getField() != null) {
+
+            periodFastDto.setFieldFName(periodEntity.getField().getFname());
+            periodFastDto.setFieldLName(periodEntity.getField().getLname());
+
+            if (!Hibernate.isInitialized(periodEntity.getField().getEduCategory())) {
+                periodEntity.getField().setEduCategory(null);
+            }
+            if (periodEntity.getField().getEduCategory() != null) {
+                periodFastDto.setEduCategoryId(periodEntity.getField().getEduCategory().getId());
+                periodFastDto.setEduCategoryTitle(periodEntity.getField().getEduCategory().getTitle());
+
+                if (!Hibernate.isInitialized(periodEntity.getField().getEduCategory().getEduCategoryApi())) {
+                    periodEntity.getField().getEduCategory().setEduCategoryApi(null);
+                }
+                if (periodEntity.getField().getEduCategory().getEduCategoryApi() != null) {
+                    periodFastDto.setEduCategoryPublicId(
+                            periodEntity.getField().getEduCategory().getEduCategoryApi().getEduCategoryPublicId());
+                }
+            }
+
+            if (!Hibernate.isInitialized(periodEntity.getField().getLevel())) {
+                periodEntity.getField().setLevel(null);
+            }
+            if (periodEntity.getField().getLevel() != null) {
+                periodFastDto.setLevelId(periodEntity.getField().getLevel().getId());
+                periodFastDto.setLevelDescription(periodEntity.getField().getLevel().getDescription());
+
+                if (!Hibernate.isInitialized(periodEntity.getField().getLevel().getLevelApi())) {
+                    periodEntity.getField().getLevel().setLevelApi(null);
+                }
+                if (periodEntity.getField().getLevel().getLevelApi() != null) {
+                    periodFastDto.setLevelPublicId(
+                            periodEntity.getField().getLevel().getLevelApi().getLevelPublicId());
+                }
+            }
+        }
+//  for Descriptive (end) :
     }
-
-
 }

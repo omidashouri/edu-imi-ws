@@ -9,6 +9,17 @@ import lombok.*;
 @AllArgsConstructor
 public class PeriodFastDto {
 
+    //   for Descriptive (begin) :
+    private Long eduCategoryId;
+    private String eduCategoryPublicId;
+    private String eduCategoryTitle;
+    private Long levelId;
+    private String levelPublicId;
+    private String levelDescription;
+    private String fieldFName;
+    private String fieldLName;
+//   for Descriptive (end) :
+
     private Long id;
 
     private String periodPublicId;

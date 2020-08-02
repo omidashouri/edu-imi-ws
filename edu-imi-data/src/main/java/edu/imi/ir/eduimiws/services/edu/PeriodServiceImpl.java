@@ -129,4 +129,14 @@ public class PeriodServiceImpl implements PeriodService {
         return periods;
     }
 
+    @Override
+    public Page<PeriodEntity>
+    findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable(String periodName, Pageable pageable) {
+        Page<PeriodEntity> periodPages = periodRepository
+                .readAllByDeleteStatusIsNotNullAndDeleteStatusEqualsAndNameContains(1L,
+                        periodName,
+                        pageable);
+        return periodPages;
+    }
+
 }

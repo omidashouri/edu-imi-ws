@@ -38,4 +38,5 @@ public interface PeriodService {
 
     List<PeriodEntity> findAllById(List<Long> periodIds);
 
+    Page<PeriodEntity> findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable(String periodName, Pageable pageable);
 }

@@ -1,8 +1,6 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
-import edu.imi.ir.eduimiws.controllers.v1.FieldController;
-import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
-import edu.imi.ir.eduimiws.controllers.v1.UserController;
+import edu.imi.ir.eduimiws.controllers.v1.*;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodResponsePeriodFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
@@ -55,6 +53,22 @@ public class PeriodResponsePeriodFastDtoAssembler extends RepresentationModelAss
                                     UserController.class)
                                     .getUserByUserPublicId(periodFastDto.getExecutorPublicId()))
                             .withRel("executors"));
+        }
+
+        if (periodFastDto.getEduCategoryPublicId() != null) {
+            periodResponse.
+                    add(linkTo(methodOn(
+                            EduCategoryController.class)
+                            .getEduCategoryByEduCategoryPublicId(periodFastDto.getEduCategoryPublicId()))
+                            .withRel("eduCategories"));
+        }
+
+        if (periodFastDto.getLevelPublicId() != null) {
+            periodResponse.
+                    add(linkTo(methodOn(
+                            LevelController.class)
+                            .getLevelByLevelPublicId(periodFastDto.getLevelPublicId()))
+                            .withRel("levels"));
         }
 
 

@@ -43,10 +43,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -144,6 +141,71 @@ public class PeriodController {
                 periodResponsePeriodFastDtoAssembler.toCollectionModel(periodFastDtos);
 
         return ResponseEntity.ok(periodResponseCollectionModel);
+    }
+
+    @Operation(
+            summary = "find All periods Descriptive by Period Name",
+            description = "Search period descriptive detail pageable by Period Name." +
+                    "('periodName' is optional, use single space to fetch all records)",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PeriodResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(path = "/{periodName}/descriptive",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<PeriodResponse>>
+    getPeriodsDescriptiveByPeriodName(@PathVariable(name = "periodName", required = false)
+                                              Optional<String> periodName,
+                                      @Parameter(hidden = true)
+                                      @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                      @PageableDefault(page = 0, size = 10, value = 10)
+                                              Pageable pageable) {
+
+        String inputPeriodName = null;
+        if (periodName.isPresent()) {
+            inputPeriodName = periodName.get();
+        }
+
+        Page<PeriodEntity> periodPages =
+                periodService
+                        .findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable(inputPeriodName, pageable);
+
+        Page<PeriodFastDto> periodFastDtoPage = periodPages
+                .map(p -> periodFastDtoMapper
+                        .toPeriodFastDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<PeriodResponse> periodResponsePagedModel = periodFastDtoPagedResourcesAssembler
+                .toModel(periodFastDtoPage, periodResponsePeriodFastDtoAssembler);
+
+        return ResponseEntity.ok(periodResponsePagedModel);
     }
 
     @Operation(

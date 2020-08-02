@@ -8,13 +8,23 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
 public interface PeriodResponsePeriodFastDtoMapper {
 
     PeriodResponsePeriodFastDtoMapper INSTANCE = Mappers.getMapper(PeriodResponsePeriodFastDtoMapper.class);
 
     @Mappings({
             @Mapping(source = "periodPublicId", target = "periodPublicId"),
+            @Mapping(source = "fieldPublicId", target = "fieldPublicId"),
+            @Mapping(source = "executorPublicId", target = "executorPublicId"),
+//            for Descriptive (begin):
+            @Mapping(source = "fieldFName", target = "fieldFName"),
+            @Mapping(source = "fieldLName", target = "fieldLName"),
+            @Mapping(source = "eduCategoryPublicId", target = "eduCategoryPublicId"),
+            @Mapping(source = "eduCategoryTitle", target = "eduCategoryTitle"),
+            @Mapping(source = "levelPublicId", target = "levelPublicId"),
+            @Mapping(source = "levelDescription", target = "levelDescription"),
+//            for Descriptive (end):
             @Mapping(source = "regEndDate", target = "regEndDate"),
             @Mapping(source = "regStartDate", target = "regStartDate"),
             @Mapping(source = "startDate", target = "startDate"),
@@ -27,7 +37,6 @@ public interface PeriodResponsePeriodFastDtoMapper {
             @Mapping(source = "editDate", target = "editDate"),
             @Mapping(source = "endDate", target = "endDate"),
             @Mapping(source = "executorFullName", target = "executorFullName"),
-            @Mapping(source = "executorPublicId", target = "executorPublicId"),
             @Mapping(source = "fee", target = "fee"),
             @Mapping(source = "holdingLanguage", target = "holdingLanguage"),
             @Mapping(source = "holdingType", target = "holdingType"),

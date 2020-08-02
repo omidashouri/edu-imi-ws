@@ -17,14 +17,22 @@ import java.util.List;
 @Repository
 public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
+
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
             type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
-    Page<PeriodEntity> findAllByDeleteStatusIsNotNullAndDeleteStatusEquals(Long deleteStatus,Pageable pageable);
+//    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    Page<PeriodEntity>
+    readAllByDeleteStatusIsNotNullAndDeleteStatusEqualsAndNameContains(Long deleteStatus,
+                                                                       String periodName,
+                                                                       Pageable pageable);
+
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonApi",
+            type = EntityGraph.EntityGraphType.LOAD)
+    Page<PeriodEntity> findAllByDeleteStatusIsNotNullAndDeleteStatusEquals(Long deleteStatus, Pageable pageable);
 
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApi", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
-    Page<PeriodEntity> findAllByPeriodApi_FieldPublicId(String fieldPublicId,Pageable pageable);
+//    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    Page<PeriodEntity> findAllByPeriodApi_FieldPublicId(String fieldPublicId, Pageable pageable);
 
     @Query(value = "select p from PeriodEntity p " +
             " left join fetch p.executer ex left join fetch ex.personApiEntity pw " +
@@ -35,7 +43,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     )
     Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable);
 
-    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
+    @EntityGraph(value = "PeriodEntity.findPeriodSubGraphExecutorPersonApi",
             type = EntityGraph.EntityGraphType.LOAD)
     PeriodEntity findByPeriodApi_PeriodPublicId(String periodPublicId);
 
