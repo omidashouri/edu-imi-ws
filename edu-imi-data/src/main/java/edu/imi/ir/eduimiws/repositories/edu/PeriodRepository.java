@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -18,9 +19,10 @@ import java.util.List;
 public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
 
+    @Cacheable("period")
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
             type = EntityGraph.EntityGraphType.LOAD)
-//    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     Page<PeriodEntity>
     readAllByDeleteStatusIsNotNullAndDeleteStatusEqualsAndNameContains(Long deleteStatus,
                                                                        String periodName,

@@ -3,7 +3,6 @@ package edu.imi.ir.eduimiws.mapper.edu;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.edu.FieldDto;
 import edu.imi.ir.eduimiws.models.response.edu.FieldResponse;
-import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import org.hibernate.Hibernate;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -99,7 +98,7 @@ public interface FieldResponseFieldDtoMapper {
             fieldResponse.setEduCategoryTitle(fieldDto.getEduCategory().getTitle());
         }
 
-        if (fieldDto.getTableau() != null) {
+        /*if (fieldDto.getTableau() != null) {
             fieldResponse.setTableau(ClobHelper.clobToString(fieldDto.getTableau()));
         }
         if (fieldDto.getSiteAim() != null) {
@@ -122,7 +121,32 @@ public interface FieldResponseFieldDtoMapper {
         }
         if (fieldDto.getSiteTmethods()!= null) {
             fieldResponse.setSiteTmethods(ClobHelper.clobToString(fieldDto.getSiteTmethods()));
+        }*/
+
+/*        if (fieldDto.getTableau() != null) {
+            fieldResponse.setTableau(Arrays.toString(fieldDto.getTableau()));
         }
+        if (fieldDto.getSiteAim() != null) {
+            fieldResponse.setSiteAim(Arrays.toString(fieldDto.getSiteAim()));
+        }
+        if (fieldDto.getSiteConditions() != null) {
+            fieldResponse.setSiteConditions(Arrays.toString(fieldDto.getSiteConditions()));
+        }
+        if (fieldDto.getSiteContacts() != null) {
+            fieldResponse.setSiteContacts(Arrays.toString(fieldDto.getSiteContacts()));
+        }
+        if (fieldDto.getSiteContents() != null) {
+            fieldResponse.setSiteContents(Arrays.toString(fieldDto.getSiteContents()));
+        }
+        if (fieldDto.getSiteIntroduction() != null) {
+            fieldResponse.setSiteIntroduction(Arrays.toString(fieldDto.getSiteIntroduction()));
+        }
+        if (fieldDto.getSiteRegisterR() != null) {
+            fieldResponse.setSiteRegisterR(Arrays.toString(fieldDto.getSiteRegisterR()));
+        }
+        if (fieldDto.getSiteTmethods()!= null) {
+            fieldResponse.setSiteTmethods(Arrays.toString(fieldDto.getSiteTmethods()));
+        }*/
     }
 
 //    Handle Update Dto from Response for later use

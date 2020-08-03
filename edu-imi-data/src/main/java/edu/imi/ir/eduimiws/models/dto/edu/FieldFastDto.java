@@ -2,7 +2,6 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 
 import lombok.*;
 
-import java.sql.Clob;
 
 @Data
 @Getter
@@ -59,7 +58,7 @@ public class FieldFastDto {
 
     private String supervisorPublicId;
 
-    private Clob tableau;
+    private String tableau;
 
     private Long lastPeriodNumber;
 
@@ -120,19 +119,19 @@ public class FieldFastDto {
 
     private String certDesc;
 
-    private Clob siteIntroduction;
+    private String siteIntroduction;
 
-    private Clob siteContacts;
+    private String siteContacts;
 
-    private Clob siteAim;
+    private String siteAim;
 
-    private Clob siteContents;
+    private String siteContents;
 
-    private Clob siteConditions;
+    private String siteConditions;
 
-    private Clob siteTmethods;
+    private String siteTmethods;
 
-    private Clob siteRegisterR;
+    private String siteRegisterR;
 
     private String certGoal;
 

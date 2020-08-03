@@ -4,6 +4,7 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.CompanyEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -13,6 +14,8 @@ import javax.persistence.*;
         )
 })
 
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "level")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +23,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "EDU", sequenceName = "SEQ_EDU_LEVEL", allocationSize = 1)
-@Table(schema = "EDU",name="TBL_LEVEL")
+@Table(schema = "EDU", name = "TBL_LEVEL")
 public class LevelEntity extends BaseEntity {
 
     @Column(name="DESCRIPTION",length = 150)

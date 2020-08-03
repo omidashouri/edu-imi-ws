@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -38,5 +39,6 @@ public interface PeriodService {
 
     List<PeriodEntity> findAllById(List<Long> periodIds);
 
+    @Cacheable(value = "period", cacheManager = "cacheManager")
     Page<PeriodEntity> findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable(String periodName, Pageable pageable);
 }

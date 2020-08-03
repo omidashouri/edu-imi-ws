@@ -4,10 +4,11 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.models.projections.edu.FieldOnly;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.sql.Clob;
+
 
 
 
@@ -69,12 +70,8 @@ import java.sql.Clob;
 })
 
 
-
-
-
-
-
-
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "field")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -82,7 +79,7 @@ import java.sql.Clob;
 @EqualsAndHashCode
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "EDU", sequenceName = "SEQ_FIELD", allocationSize = 1)
-@Table(schema = "EDU", name="TBL_FIELD")
+@Table(schema = "EDU", name = "TBL_FIELD")
 public class FieldEntity extends BaseEntity {
 
     @Column(name="CODE",length = 20)
@@ -198,8 +195,8 @@ public class FieldEntity extends BaseEntity {
     private PersonEntity supervisor;
 
     @Lob
-    @Column(name="TABLEAU")
-    private Clob tableau;
+    @Column(name = "TABLEAU")
+    private String tableau;
 
     @Column(name="LAST_PERIOD_NUMBER")
     private Long lastPeriodNumber;
@@ -288,32 +285,32 @@ public class FieldEntity extends BaseEntity {
     private String certDesc;
 
     @Lob
-    @Column(name="SITE_INTRODUCTION")
-    private Clob siteIntroduction;
+    @Column(name = "SITE_INTRODUCTION")
+    private String siteIntroduction;
 
     @Lob
-    @Column(name="SITE_CONTACTS")
-    private Clob siteContacts;
+    @Column(name = "SITE_CONTACTS")
+    private String siteContacts;
 
     @Lob
-    @Column(name="SITE_AIM")
-    private Clob siteAim;
+    @Column(name = "SITE_AIM")
+    private String siteAim;
 
     @Lob
-    @Column(name="SITE_CONTENTS")
-    private Clob siteContents;
+    @Column(name = "SITE_CONTENTS")
+    private String siteContents;
 
     @Lob
-    @Column(name="SITE_CONDITIONS")
-    private Clob siteConditions;
+    @Column(name = "SITE_CONDITIONS")
+    private String siteConditions;
 
     @Lob
-    @Column(name="SITE_TMETHODS")
-    private Clob siteTmethods;
+    @Column(name = "SITE_TMETHODS")
+    private String siteTmethods;
 
     @Lob
-    @Column(name="SITE_REGISTER_R")
-    private Clob siteRegisterR;
+    @Column(name = "SITE_REGISTER_R")
+    private String siteRegisterR;
 
     @Column(name="CERT_GOAL",length = 1)
     private String certGoal;

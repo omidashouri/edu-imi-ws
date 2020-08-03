@@ -33,6 +33,11 @@
     <cache alias="registerApi" uses-template="default"/>
     <cache alias="student" uses-template="default"/>
     <cache alias="period" uses-template="default"/>
+    <cache alias="periodApi" uses-template="default"/>
+    <cache alias="field" uses-template="default"/>
+    <cache alias="fieldApi" uses-template="default"/>
+    <cache alias="level" uses-template="default"/>
+    <cache alias="eduCategory" uses-template="default"/>
 
 <!--    <cache alias="squareCache">
         <key-type>java.lang.Long</key-type>

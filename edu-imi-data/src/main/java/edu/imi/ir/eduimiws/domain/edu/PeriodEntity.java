@@ -9,8 +9,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 
-
-
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
                 attributeNodes = {
@@ -101,6 +99,7 @@ import javax.persistence.*;
                 query = " select EDU.SEQ_EDU_PERIOD.nextval from dual "
         )
 })
+
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE,region = "period")
 @Getter

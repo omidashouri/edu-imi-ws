@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.domain.edu.LevelEntity;
 import lombok.*;
 
 import java.io.Serializable;
-import java.sql.Clob;
+
 
 @Data
 @Getter
@@ -97,7 +97,7 @@ public class FieldDto implements Serializable {
 
     private String supervisorPublicId;
 
-    private Clob tableau;
+    private String tableau;
 
     private Long lastPeriodNumber;
 
@@ -160,19 +160,19 @@ public class FieldDto implements Serializable {
 
     private String certDesc;
 
-    private Clob siteIntroduction;
+    private String siteIntroduction;
 
-    private Clob siteContacts;
+    private String siteContacts;
 
-    private Clob siteAim;
+    private String siteAim;
 
-    private Clob siteContents;
+    private String siteContents;
 
-    private Clob siteConditions;
+    private String siteConditions;
 
-    private Clob siteTmethods;
+    private String siteTmethods;
 
-    private Clob siteRegisterR;
+    private String siteRegisterR;
 
     private String certGoal;
 

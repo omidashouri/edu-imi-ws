@@ -3,7 +3,6 @@ package edu.imi.ir.eduimiws.mapper.edu;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.edu.FieldFastDto;
 import edu.imi.ir.eduimiws.models.response.edu.FieldResponse;
-import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -78,7 +77,7 @@ public interface FieldResponseFieldFastDtoMapper {
     @AfterMapping
     default void handleClobFields(FieldFastDto fieldFastDto, @MappingTarget FieldResponse fieldResponse) {
 
-        if (fieldFastDto.getTableau() != null) {
+/*        if (fieldFastDto.getTableau() != null) {
             fieldResponse.setTableau(ClobHelper.clobToString(fieldFastDto.getTableau()));
         }
         if (fieldFastDto.getSiteAim() != null) {
@@ -101,7 +100,32 @@ public interface FieldResponseFieldFastDtoMapper {
         }
         if (fieldFastDto.getSiteTmethods()!= null) {
             fieldResponse.setSiteTmethods(ClobHelper.clobToString(fieldFastDto.getSiteTmethods()));
+        }*/
+
+/*        if (fieldFastDto.getTableau() != null) {
+            fieldResponse.setTableau(Arrays.toString(fieldFastDto.getTableau()));
         }
+        if (fieldFastDto.getSiteAim() != null) {
+            fieldResponse.setSiteAim(Arrays.toString(fieldFastDto.getSiteAim()));
+        }
+        if (fieldFastDto.getSiteConditions() != null) {
+            fieldResponse.setSiteConditions(Arrays.toString(fieldFastDto.getSiteConditions()));
+        }
+        if (fieldFastDto.getSiteContacts() != null) {
+            fieldResponse.setSiteContacts(Arrays.toString(fieldFastDto.getSiteContacts()));
+        }
+        if (fieldFastDto.getSiteContents() != null) {
+            fieldResponse.setSiteContents(Arrays.toString(fieldFastDto.getSiteContents()));
+        }
+        if (fieldFastDto.getSiteIntroduction() != null) {
+            fieldResponse.setSiteIntroduction(Arrays.toString(fieldFastDto.getSiteIntroduction()));
+        }
+        if (fieldFastDto.getSiteRegisterR() != null) {
+            fieldResponse.setSiteRegisterR(Arrays.toString(fieldFastDto.getSiteRegisterR()));
+        }
+        if (fieldFastDto.getSiteTmethods()!= null) {
+            fieldResponse.setSiteTmethods(Arrays.toString(fieldFastDto.getSiteTmethods()));
+        }*/
     }
 
     //    Handle Update FastDto from Response for later use

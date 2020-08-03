@@ -2,9 +2,12 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "fieldApi")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,7 +15,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "EDU", sequenceName = "SEQ_FIELD_API", allocationSize = 1)
-@Table(schema = "EDU",name="TBL_FIELD_API")
+@Table(schema = "EDU", name = "TBL_FIELD_API")
 public class FieldApiEntity extends BaseEntity {
 
     @EqualsAndHashCode.Exclude
