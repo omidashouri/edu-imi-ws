@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<ehcache:config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:ehcache='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd">
+
+    <ehcache:persistence directory="/run/media/o.ashouri/Archive/0_0/cache"/>
+
+    <ehcache:cache alias="basicCache">
+        <ehcache:key-type>java.lang.Object</ehcache:key-type>
+        <ehcache:value-type>org.springframework.data.domain.PageImpl</ehcache:value-type>
+        <ehcache:expiry>
+            <ehcache:ttl unit="seconds">3</ehcache:ttl>
+        </ehcache:expiry>
+<!--        <ehcache:listeners>
+            <ehcache:listener>
+                <ehcache:class>edu.imi.ir.eduimiws.config.CacheEventLogger</ehcache:class>
+                <ehcache:event-firing-mode>ASYNCHRONOUS</ehcache:event-firing-mode>
+                <ehcache:event-ordering-mode>UNORDERED</ehcache:event-ordering-mode>
+                <ehcache:events-to-fire-on>CREATED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>EXPIRED</ehcache:events-to-fire-on>
+            </ehcache:listener>
+        </ehcache:listeners>-->
+        <ehcache:resources>
+            <ehcache:heap unit="B">5</ehcache:heap>
+            <ehcache:offheap unit="MB">1</ehcache:offheap>
+        </ehcache:resources>
+    </ehcache:cache>
+</ehcache:config>
