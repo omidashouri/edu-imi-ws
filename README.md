@@ -526,3 +526,144 @@ ALTER TRIGGER "EDU"."TBL_REGISTER_API_TRG" ENABLE;
 
 
 ------------------------------
+
+//    (for study)  create ehcache-jsr107  to use in @Cacheable as cacheManager=
+    @Bean
+    public javax.cache.CacheManager jaxCacheManager(){
+        return new EhcacheCachingProvider().getCacheManager();
+    }
+    @Bean
+    public org.springframework.cache.CacheManager cacheManager(javax.cache.CacheManager jaxCacheManager) {
+        return new JCacheCacheManager(jaxCacheManager);
+    }
+    
+---
+//    (working)  create ehcache-jsr107 and read ehcache.xml to use in @Cacheable as cacheManager=
+    @Bean
+    public JCacheCacheManager jCacheCacheManager() throws IOException, URISyntaxException {
+        CachingProvider provider = Caching.getCachingProvider();
+        CacheManager cacheManager = provider.getCacheManager(getClass().getResource("/ehcache.xml").toURI(), getClass().getClassLoader());
+        cacheManager.createCache("jcacheKeyValueCopier", cacheConfiguration());
+        return new JCacheCacheManager(cacheManager);
+    }
+        private javax.cache.configuration.Configuration<Object, Object> cacheConfiguration() {
+            return new MutableConfiguration<>()
+                    .setExpiryPolicyFactory(TouchedExpiryPolicy
+                            .factoryOf(new Duration(TimeUnit.SECONDS, 10)))
+                    .setStoreByValue(false)
+                    .setStatisticsEnabled(true);
+        }
+
+
+---    
+    
+//    (not working)  create ehcache-jsr107 read ehcache.xml to use in @Cacheable as cacheManager=
+    @Bean
+    public JCacheCacheManager jCacheCacheManager() throws IOException {
+        return new JCacheCacheManager(cacheManager());
+    }
+
+    @Bean
+    public javax.cache.CacheManager cacheManager() throws IOException {
+        XmlConfiguration xmlConfig = new XmlConfiguration(new ClassPathResource("ehcache.xml").getURL());
+        EhcacheCachingProvider provider = (EhcacheCachingProvider) Caching.getCachingProvider();
+        return provider.getCacheManager(provider.getDefaultURI(), xmlConfig);
+
+    }
+
+---
+
+//      create ehcache-jsr107 without ehcache.xml to use in @Cacheable as cacheManager=
+    @Bean
+    public JCacheManagerCustomizer jCacheConfigurationCustomizer() {
+        return cacheManager -> {
+            cacheManager.createCache("vets", cacheConfiguration());
+        };
+    }
+    private javax.cache.configuration.Configuration<Object, Object> cacheConfiguration() {
+//        return new MutableConfiguration<>().setStatisticsEnabled(true);
+        return new MutableConfiguration<>()
+                .setExpiryPolicyFactory(TouchedExpiryPolicy
+                        .factoryOf(new Duration(TimeUnit.SECONDS, 10)))
+                .setStoreByValue(false)
+                .setStatisticsEnabled(true);
+    }
+    
+    
+---
+
+ehcache.xml:
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<ehcache:config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
+        xmlns:ehcache='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd">
+
+    <ehcache:service>
+        <jsr107:defaults>
+            <jsr107:cache name="people" template="default"/>
+        </jsr107:defaults>
+    </ehcache:service>
+
+<!-- Persistent cache directory -->
+<!--    <persistence directory="/run/media/o.ashouri/Archive/0_0/cache" />-->
+    <ehcache:persistence directory="D:\Office\cache" />
+
+    <!-- Default cache template -->
+    <ehcache:cache-template name="default">
+<!--        <expiry>
+            <ttl unit="seconds">0</ttl>
+        </expiry>-->
+        <ehcache:listeners>
+            <ehcache:listener>
+                <ehcache:class>edu.imi.ir.eduimiws.servces.CacheEventLogger</ehcache:class>
+                <ehcache:event-firing-mode>ASYNCHRONOUS</ehcache:event-firing-mode>
+                <ehcache:event-ordering-mode>UNORDERED</ehcache:event-ordering-mode>
+                <ehcache:events-to-fire-on>CREATED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>EXPIRED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>EVICTED</ehcache:events-to-fire-on>
+            </ehcache:listener>
+        </ehcache:listeners>
+        <ehcache:resources>
+            <ehcache:heap>100</ehcache:heap>
+            <ehcache:offheap unit="MB">10</ehcache:offheap>
+            <ehcache:disk persistent="true" unit="MB">200</ehcache:disk>
+        </ehcache:resources>
+    </ehcache:cache-template>
+
+    <ehcache:cache alias="edu.imi.ir.eduimiws.domain.edu.RegisterEntity" uses-template="default"/>
+    <ehcache:cache alias="edu.imi.ir.eduimiws.domain.edu.RegisterApiEntity" uses-template="default"/>
+    <ehcache:cache alias="register" uses-template="default"/>
+    <ehcache:cache alias="registerApi" uses-template="default"/>
+    <ehcache:cache alias="student" uses-template="default"/>
+    <ehcache:cache alias="period" uses-template="default"/>
+    <ehcache:cache alias="periodApi" uses-template="default"/>
+    <ehcache:cache alias="field" uses-template="default"/>
+    <ehcache:cache alias="fieldApi" uses-template="default"/>
+    <ehcache:cache alias="level" uses-template="default"/>
+    <ehcache:cache alias="eduCategory" uses-template="default"/>
+
+    <ehcache:cache alias="myperiod" >
+        <ehcache:key-type>java.lang.Object</ehcache:key-type>
+        <ehcache:value-type>org.springframework.data.domain.PageImpl</ehcache:value-type>
+        <ehcache:expiry>
+            <ehcache:ttl unit="seconds">5</ehcache:ttl>
+        </ehcache:expiry>
+                <ehcache:listeners>
+                    <ehcache:listener>
+                        <ehcache:class>edu.imi.ir.eduimiws.servces.CacheEventLogger</ehcache:class>
+                        <ehcache:event-firing-mode>ASYNCHRONOUS</ehcache:event-firing-mode>
+                        <ehcache:event-ordering-mode>UNORDERED</ehcache:event-ordering-mode>
+                        <ehcache:events-to-fire-on>CREATED</ehcache:events-to-fire-on>
+                        <ehcache:events-to-fire-on>EXPIRED</ehcache:events-to-fire-on>
+                    </ehcache:listener>
+                </ehcache:listeners>
+        <ehcache:resources>
+            <ehcache:heap unit="B">5</ehcache:heap>
+            <ehcache:offheap unit="MB">1</ehcache:offheap>
+        </ehcache:resources>
+    </ehcache:cache>
+</ehcache:config>
