@@ -667,3 +667,15 @@ ehcache.xml:
         </ehcache:resources>
     </ehcache:cache>
 </ehcache:config>
+
+
+---
+
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
