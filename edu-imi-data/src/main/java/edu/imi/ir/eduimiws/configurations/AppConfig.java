@@ -7,13 +7,9 @@ import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
 import org.springframework.mail.SimpleMailMessage;
@@ -39,18 +35,30 @@ public class AppConfig {
         return new ErpPasswordEncoder();
     }
 
-    @Bean
+//    EhCacheCacheManager caching type:
+/*    @Bean
     public CacheManager cacheManager() {
-        return new EhCacheCacheManager(ehCacheCacheManager().getObject());
+        EhCacheCacheManager cacheManager = new EhCacheCacheManager();
+        cacheManager.setCacheManager(ehCacheCacheManagerFactory().getObject());
+        cacheManager.setTransactionAware(true);
+        return cacheManager;
     }
 
     @Bean
-    public EhCacheManagerFactoryBean ehCacheCacheManager() {
-        EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
-        cmfb.setConfigLocation(new ClassPathResource("ehcache.xml"));
-        cmfb.setShared(true);
-        return cmfb;
-    }
+    public EhCacheManagerFactoryBean ehCacheCacheManagerFactory() {
+        EhCacheManagerFactoryBean cacheManagerFactoryBean = new EhCacheManagerFactoryBean();
+        cacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.txt"));
+        cacheManagerFactoryBean.setShared(true);
+        return cacheManagerFactoryBean;
+    }*/
+
+//  ConcurrentMapCacheManager caching type:
+/*    @Bean
+    public CacheManager cacheManager() {
+        ConcurrentMapCacheManager concurrentMapCacheManager = new ConcurrentMapCacheManager();
+        concurrentMapCacheManager.setCacheNames(Arrays.asList("periodDescriptive"));
+        return concurrentMapCacheManager;
+    }*/
 
     @Bean
     public SpringApplicationContext springApplicationContext() {
