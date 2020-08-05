@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
+import org.ehcache.jsr107.EhcacheCachingProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -18,6 +20,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+import javax.cache.Caching;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -60,6 +64,47 @@ public class AppConfig {
         return concurrentMapCacheManager;
     }*/
 
+/*    @Bean
+    public KeyGenerator multiplyKeyGenerator() {
+        return (Object target, Method method, Object... params) ->
+                method.getName() + "_" + Arrays.toString(params);
+    }*/
+
+//  org.ehcache.CacheManager(V3) caching type:
+/*    @Bean
+    public CacheManager ehCacheV3Manager() {
+        CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
+                .with(CacheManagerBuilder
+                        .persistence("/run/media/o.ashouri/Archive/0_0/cacheV3" *//*+ File.separator + "ss"*//*))
+                .withCache("myEhv3Cache", CacheConfigurationBuilder
+                        .newCacheConfigurationBuilder(Long.class, String.class,
+                                ResourcePoolsBuilder
+                                        .newResourcePoolsBuilder()
+                                        .heap(2000, EntryUnit.ENTRIES)
+                                        .disk(50, MemoryUnit.MB, true)
+                                        .offheap(10, MemoryUnit.MB))
+                        .withExpiry(ExpiryPolicyBuilder.
+                                timeToLiveExpiration(Duration.ofSeconds(5)))
+                        .withExpiry(ExpiryPolicyBuilder
+                                .timeToIdleExpiration(Duration.ofMinutes(20))))
+                .build(true);
+        return cacheManager;
+    }*/
+
+    @Bean
+    public JCacheCacheManager jCacheCacheManager() throws URISyntaxException {
+        JCacheCacheManager jCacheManager = new JCacheCacheManager(javaxCacheManager());
+        return jCacheManager;
+    }
+
+    @Bean(destroyMethod = "close")
+    public javax.cache.CacheManager javaxCacheManager() throws URISyntaxException {
+        EhcacheCachingProvider provider = (EhcacheCachingProvider) Caching
+                .getCachingProvider("org.ehcache.jsr107.EhcacheCachingProvider");
+        javax.cache.CacheManager cacheManager = provider.getCacheManager(getClass().getResource("/ehcache.xml").toURI(), getClass().getClassLoader());
+        return cacheManager;
+    }
+
     @Bean
     public SpringApplicationContext springApplicationContext() {
         return new SpringApplicationContext();
@@ -71,7 +116,7 @@ public class AppConfig {
     }
 
     @Bean
-    public SimpleMailMessage simpleMailMessage(){
+    public SimpleMailMessage simpleMailMessage() {
         return new SimpleMailMessage();
     }
 
@@ -100,7 +145,7 @@ public class AppConfig {
     }
 
     @Bean
-    public ClobHelper clobHelper(){
+    public ClobHelper clobHelper() {
         return new ClobHelper();
     }
 

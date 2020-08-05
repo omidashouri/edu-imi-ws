@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ehcache:config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
+        xmlns:ehcache='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd">
+
+    <ehcache:service>
+        <jsr107:defaults>
+            <jsr107:cache name="people" template="default"/>
+        </jsr107:defaults>
+    </ehcache:service>
+
+    <!-- Persistent cache directory -->
+    <ehcache:persistence directory="/run/media/o.ashouri/Archive/0_0/cache"/>
+
+    <!-- Default cache template -->
+    <ehcache:cache-template name="default">
+        <!--        <expiry>
+                    <ttl unit="seconds">0</ttl>
+                </expiry>-->
+        <ehcache:listeners>
+            <ehcache:listener>
+                <ehcache:class>edu.imi.ir.eduimiws.servces.CacheEventLogger</ehcache:class>
+                <ehcache:event-firing-mode>ASYNCHRONOUS</ehcache:event-firing-mode>
+                <ehcache:event-ordering-mode>UNORDERED</ehcache:event-ordering-mode>
+                <ehcache:events-to-fire-on>CREATED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>EXPIRED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>EVICTED</ehcache:events-to-fire-on>
+            </ehcache:listener>
+        </ehcache:listeners>
+        <ehcache:resources>
+            <ehcache:heap>100</ehcache:heap>
+            <ehcache:offheap unit="MB">10</ehcache:offheap>
+            <ehcache:disk persistent="true" unit="MB">200</ehcache:disk>
+        </ehcache:resources>
+    </ehcache:cache-template>
+
+    <ehcache:cache alias="register" uses-template="default"/>
+    <ehcache:cache alias="registerApi" uses-template="default"/>
+    <ehcache:cache alias="student" uses-template="default"/>
+    <ehcache:cache alias="period" uses-template="default"/>
+    <ehcache:cache alias="periodApi" uses-template="default"/>
+    <ehcache:cache alias="field" uses-template="default"/>
+    <ehcache:cache alias="fieldApi" uses-template="default"/>
+    <ehcache:cache alias="level" uses-template="default"/>
+    <ehcache:cache alias="eduCategory" uses-template="default"/>
+
+    <ehcache:cache alias="myperiod">
+        <ehcache:key-type>java.lang.Object</ehcache:key-type>
+        <ehcache:value-type>org.springframework.data.domain.PageImpl</ehcache:value-type>
+        <ehcache:expiry>
+            <ehcache:ttl unit="seconds">5</ehcache:ttl>
+        </ehcache:expiry>
+        <ehcache:listeners>
+            <ehcache:listener>
+                <ehcache:class>edu.imi.ir.eduimiws.servces.CacheEventLogger</ehcache:class>
+                <ehcache:event-firing-mode>ASYNCHRONOUS</ehcache:event-firing-mode>
+                <ehcache:event-ordering-mode>UNORDERED</ehcache:event-ordering-mode>
+                <ehcache:events-to-fire-on>CREATED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>EXPIRED</ehcache:events-to-fire-on>
+            </ehcache:listener>
+        </ehcache:listeners>
+        <ehcache:resources>
+            <ehcache:heap unit="B">5</ehcache:heap>
+            <ehcache:offheap unit="MB">1</ehcache:offheap>
+        </ehcache:resources>
+    </ehcache:cache>
+
+    <!--    <cache alias="squareCache">
+            <key-type>java.lang.Long</key-type>
+            <value-type>java.math.BigDecimal</value-type>
+            <expiry>
+                <ttl unit="seconds">30</ttl>
+            </expiry>
+
+            <listeners>
+                <listener>
+                    <class>edu.imi.ir.eduimiws.servces.CacheEventLogger</class>
+                    <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                    <event-ordering-mode>UNORDERED</event-ordering-mode>
+                    <events-to-fire-on>CREATED</events-to-fire-on>
+                    <events-to-fire-on>EXPIRED</events-to-fire-on>
+                </listener>
+            </listeners>
+
+            <resources>
+                <heap unit="entries">2</heap>
+                <offheap unit="MB">10</offheap>
+            </resources>
+        </cache>-->
+</ehcache:config>

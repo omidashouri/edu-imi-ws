@@ -607,7 +607,24 @@ NotGood //      .using(new DefaultPersistenceConfiguration(new File("d:/cache"))
         return provider.getCacheManager(provider.getDefaultURI(), xmlConfig);
 
     }
-
+    
+    //OR
+    @Bean
+    public javax.cache.CacheManager cacheManager() throws IOException {
+    ResourcePools resourcePools = ResourcePoolsBuilder.newResourcePoolsBuilder()
+                    .heap(2000, EntryUnit.ENTRIES)
+                    .offheap(100, MemoryUnit.MB)
+                    .build();
+            CacheConfiguration<Object,Object> cacheConfiguration = CacheConfigurationBuilder.newCacheConfigurationBuilder(
+                    Object.class,
+                    Object.class,
+                    resourcePools).
+                    build();
+            Map<String, CacheConfiguration<?, ?>> caches = new HashMap<>();
+            caches.put("myCache", cacheConfiguration);
+            org.ehcache.config.Configuration configuration = new DefaultConfiguration(caches, provider.getDefaultClassLoader());
+            return  provider.getCacheManager(provider.getDefaultURI(), (org.ehcache.config.Configuration) configuration);
+    }
 ---
 
 //      create ehcache-jsr107 without ehcache.xml to use in @Cacheable as cacheManager=
