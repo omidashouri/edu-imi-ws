@@ -537,6 +537,43 @@ ALTER TRIGGER "EDU"."TBL_REGISTER_API_TRG" ENABLE;
         return new JCacheCacheManager(jaxCacheManager);
     }
     
+    --- (org.ehcache)
+     @Bean
+        public CacheManager ehCacheManager() {
+//        java solution:
+/*        CacheManager cacheManager = newCacheManagerBuilder()
+                .withCache("basicCache",
+                        newCacheConfigurationBuilder(Long.class, String.class, heap(100).offheap(1, MB)))
+                .build(true);
+        return cacheManager;*/
+
+//        xml solution: 
+/*        Configuration xmlConfig = new XmlConfiguration(AppConfig.class.getResource("ehcache.xml"));
+        CacheManager cacheManager = newCacheManager(xmlConfig);*/
+        
+        CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
+       // .with(new CacheManagerPersistenceConfiguration(new File("d:/cache"))) 
+    OR // .with(CacheManagerBuilder.persistence("d:/cache/" + File.separator + "ss")) 
+                .withCache("sessionCache",
+                        CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, String.class,
+                            ResourcePoolsBuilder.newResourcePoolsBuilder()
+                                .heap(2000, EntryUnit.ENTRIES)
+                                .disk(10, MemoryUnit.MB, true)
+                                .offheap(10, MemoryUnit.MB))
+                            .withExpiry(Expirations.timeToLiveExpiration(Duration.of(5, TimeUnit.SECONDS))))
+                            .withExpiry(Expirations.timeToIdleExpiration(Duration.of(5, TimeUnit.MINUTES))))
+NotGood //      .using(new DefaultPersistenceConfiguration(new File("d:/cache")))
+                .build(true);
+                
+        PersistentCacheManager persistentCacheManager = 
+          CacheManagerBuilder.newCacheManagerBuilder()
+            .with(CacheManagerBuilder.persistence(getStoragePath()
+              + File.separator 
+              + "squaredValue")) 
+            .withCache("persistent-cache", 
+                
+        return cacheManager;
+    
 ---
 //    (working)  create ehcache-jsr107 and read ehcache.xml to use in @Cacheable as cacheManager=
     @Bean
@@ -590,6 +627,11 @@ ALTER TRIGGER "EDU"."TBL_REGISTER_API_TRG" ENABLE;
     }
     
     
+---
+
+
+
+
 ---
 
 ehcache.xml:
@@ -666,6 +708,18 @@ ehcache.xml:
             <ehcache:offheap unit="MB">1</ehcache:offheap>
         </ehcache:resources>
     </ehcache:cache>
+    
+     <ehcache:cache alias="basicCache">
+            <ehcache:key-type>java.lang.Object</ehcache:key-type>
+            <ehcache:value-type>org.springframework.data.domain.PageImpl</ehcache:value-type>
+            <ehcache:expiry>
+                <ehcache:ttl unit="seconds">3</ehcache:ttl>
+            </ehcache:expiry>
+            <ehcache:resources>
+                <ehcache:heap unit="B">5</ehcache:heap>
+                <ehcache:offheap unit="MB">1</ehcache:offheap>
+            </ehcache:resources>
+        </ehcache:cache>
 </ehcache:config>
 
 
