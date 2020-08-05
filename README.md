@@ -733,3 +733,11 @@ ehcache.xml:
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
         </dependency>
+      <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
