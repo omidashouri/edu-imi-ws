@@ -758,3 +758,71 @@ ehcache.xml:
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>
+        
+        
+---
+
+//  8.5.1. JDK ConcurrentMap-based Cache
+    @Bean
+    public SimpleCacheManager myCacheManager(ConcurrentMapCacheFactoryBean concurrentMapCacheFactoryBean){
+        SimpleCacheManager simpleCacheManager = new SimpleCacheManager();
+        List<Cache> caches = new ArrayList<>();
+        caches.add(concurrentMapCacheFactoryBean.getObject());
+        simpleCacheManager.setCaches(caches);
+        return simpleCacheManager;
+    }
+
+    @Bean
+    public ConcurrentMapCacheFactoryBean concurrentMapCacheFactoryBean(){
+        ConcurrentMapCacheFactoryBean concurrentMapCacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        concurrentMapCacheFactoryBean.setName("ali");
+        return concurrentMapCacheFactoryBean;
+    }
+    
+    //OR
+    @Bean
+    public CacheManager cacheManager() {
+        ConcurrentMapCacheManager concurrentMapCacheManager = new ConcurrentMapCacheManager();
+        concurrentMapCacheManager.setCacheNames(Arrays.asList("periodDescriptive"));
+        return concurrentMapCacheManager;
+    }
+    
+---
+
+//  8.5.2. Ehcache-based Cache (Ehcache 2)
+    @Bean
+    public EhCacheCacheManager myEhCacheCacheManager(EhCacheManagerFactoryBean ehCacheManagerFactoryBean){
+        EhCacheCacheManager ehCacheCacheManager = new EhCacheCacheManager();
+        ehCacheCacheManager.setCacheManager(ehCacheManagerFactoryBean.getObject());
+        return ehCacheCacheManager;
+    }
+
+    @Bean
+    public EhCacheManagerFactoryBean ehCacheManagerFactoryBean(){
+        EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
+        Resource resource = new ClassPathXmlApplicationContext().getResource("ehcache.xml");
+        ehCacheManagerFactoryBean.setConfigLocation(resource);
+        ehCacheManagerFactoryBean.setShared(true);
+        return ehCacheManagerFactoryBean;
+    }
+    
+---
+
+//  8.5.5. JSR-107 Cache
+    @Bean
+    public JCacheCacheManager jCacheCacheManager(JCacheManagerFactoryBean jCacheManagerFactoryBean){
+        JCacheCacheManager jCacheCacheManager = new JCacheCacheManager();
+        jCacheCacheManager.setCacheManager(jCacheManagerFactoryBean.getObject());
+        return jCacheCacheManager;
+    }
+
+    @Bean
+    public JCacheManagerFactoryBean jCacheManagerFactoryBean() throws URISyntaxException {
+        JCacheManagerFactoryBean jCacheManagerFactoryBean = new JCacheManagerFactoryBean();
+        jCacheManagerFactoryBean.setCacheManagerUri(getClass().getResource("/ehcache.xml").toURI());
+        return jCacheManagerFactoryBean;
+    }
+    
+---
+
+    
