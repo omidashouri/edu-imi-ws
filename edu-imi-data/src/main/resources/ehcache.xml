@@ -3,10 +3,10 @@
         xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
         xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
         xmlns:ehcache='http://www.ehcache.org/v3'
-        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd">
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
 
     <ehcache:service>
-        <jsr107:defaults>
+        <jsr107:defaults  enable-management="true" enable-statistics="true">
             <jsr107:cache name="people" template="default"/>
         </jsr107:defaults>
     </ehcache:service>
@@ -30,8 +30,8 @@
             </ehcache:listener>
         </ehcache:listeners>
         <ehcache:resources>
-            <ehcache:heap>100</ehcache:heap>
-            <ehcache:offheap unit="MB">10</ehcache:offheap>
+            <ehcache:heap unit="kB">1</ehcache:heap>
+            <ehcache:offheap unit="MB">1</ehcache:offheap>
             <ehcache:disk persistent="true" unit="MB">200</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache-template>
@@ -39,7 +39,9 @@
     <ehcache:cache alias="register" uses-template="default"/>
     <ehcache:cache alias="registerApi" uses-template="default"/>
     <ehcache:cache alias="student" uses-template="default"/>
-    <ehcache:cache alias="period" uses-template="default"/>
+    <ehcache:cache alias="period" uses-template="default">
+    <jsr107:mbeans enable-management="true" enable-statistics="true"/>
+    </ehcache:cache>
     <ehcache:cache alias="periodApi" uses-template="default"/>
     <ehcache:cache alias="field" uses-template="default"/>
     <ehcache:cache alias="fieldApi" uses-template="default"/>
