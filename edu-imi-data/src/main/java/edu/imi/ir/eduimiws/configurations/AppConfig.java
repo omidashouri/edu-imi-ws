@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
-import org.ehcache.jsr107.EhcacheCachingProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.jcache.JCacheCacheManager;
+import org.springframework.cache.jcache.JCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -20,7 +20,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
-import javax.cache.Caching;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Properties;
@@ -92,17 +91,17 @@ public class AppConfig {
     }*/
 
     @Bean
-    public JCacheCacheManager jCacheCacheManager() throws URISyntaxException {
-        JCacheCacheManager jCacheManager = new JCacheCacheManager(javaxCacheManager());
-        return jCacheManager;
+    public JCacheCacheManager jCacheCacheManager(JCacheManagerFactoryBean jCacheManagerFactoryBean) {
+        JCacheCacheManager jCacheCacheManager = new JCacheCacheManager();
+        jCacheCacheManager.setCacheManager(jCacheManagerFactoryBean.getObject());
+        return jCacheCacheManager;
     }
 
-    @Bean(destroyMethod = "close")
-    public javax.cache.CacheManager javaxCacheManager() throws URISyntaxException {
-        EhcacheCachingProvider provider = (EhcacheCachingProvider) Caching
-                .getCachingProvider("org.ehcache.jsr107.EhcacheCachingProvider");
-        javax.cache.CacheManager cacheManager = provider.getCacheManager(getClass().getResource("/ehcache.xml").toURI(), getClass().getClassLoader());
-        return cacheManager;
+    @Bean
+    public JCacheManagerFactoryBean jCacheManagerFactoryBean() throws URISyntaxException {
+        JCacheManagerFactoryBean jCacheManagerFactoryBean = new JCacheManagerFactoryBean();
+        jCacheManagerFactoryBean.setCacheManagerUri(getClass().getResource("/ehcache.xml").toURI());
+        return jCacheManagerFactoryBean;
     }
 
     @Bean

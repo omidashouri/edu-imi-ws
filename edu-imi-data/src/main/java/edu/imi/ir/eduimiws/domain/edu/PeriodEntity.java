@@ -49,16 +49,19 @@ import javax.persistence.*;
         @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphExecutorPersonApi",
                 attributeNodes = {
                 @NamedAttributeNode(value = "executer",subgraph = "executer-subGraph"),
-                @NamedAttributeNode("periodApi")
+                        @NamedAttributeNode("periodApi")
                 },
                 subgraphs = {
-                    @NamedSubgraph(
-                            name = "executer-subGraph",
-                            attributeNodes = {
-                                    @NamedAttributeNode(value = "personApiEntity")
-                            },
-                            type = PersonApiEntity.class)
+                        @NamedSubgraph(
+                                name = "executer-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "personApiEntity")
+                                },
+                                type = PersonApiEntity.class)
                 }
+        ),
+        @NamedEntityGraph(name = "PeriodEntity.periodApiEntity",
+                attributeNodes = @NamedAttributeNode("periodApi")
         )
 })
 
@@ -97,18 +100,41 @@ import javax.persistence.*;
                 resultSetMapping = "periodOnly"),
         @NamedNativeQuery(name = "PeriodEntity.selectCurrentSequenceNumber",
                 query = " select EDU.SEQ_EDU_PERIOD.nextval from dual "
-        )
+        )/*, delete later
+        @NamedNativeQuery(name = "PeriodEntity.findAllByPeriodApiExecutorFieldFieldApiLevelSubEduCategorySub",
+                query = " select * from EDU.TBL_Period prd " +
+                        " left JOIN EDU.tbl_period_api pa ON prd.id=pa.period_id " +
+                        " LEFT join CRM.tbl_person prs ON prd.executer_id=prs.id " +
+                        " left join EDU.TBL_Field fld ON prd.field_id=fld.id " +
+                        " left join edu.tbl_Level lvl ON fld.level_id=lvl.id " +
+                        " left join EDU.tbl_edu_category edc On fld.category_id=edc.id " +
+                        " where prd.delete_status is not null and prd.name like '%:periodName%' "
+        )*/
 })
 
+/*@NamedQueries({ //delete later
+    @NamedQuery(name = "readAllByDeleteStatusIsNotNullAndDeleteStatusEqualsAndNameContains",
+             query = " select p from PeriodEntity p left join fetch p.periodApi pa " +
+                     " left join fetch p.executer pe left join fetch p.field pf " +
+                     " left join fetch pf.fieldApi pfa left join fetch pf.level pfl left join fetch pf.eduCategory pfe " +
+                     " where p.deleteStatus = :deleteStatus and p.name like '%:periodName%' ",
+            hints =  {
+                @QueryHint( name = QueryHints.HINT_FLUSH_MODE, value = "AUTO" ),
+                @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true"),
+                @QueryHint(name = QueryHints.HINT_READONLY,value = "true"),
+                @QueryHint( name = QueryHints.HINT_COMMENT, value = "use cache for named query" ),
+            },
+            lockMode = LockModeType.READ
+    )
+})*/
+
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE,region = "period")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)//,region = "period")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@NamedEntityGraph(name = "PeriodEntity.periodApiEntity", attributeNodes = @NamedAttributeNode("periodApi"))
-//@NamedEntityGraph(name = "PeriodEntity.creator", attributeNodes = @NamedAttributeNode("creator"))
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "EDU", sequenceName = "SEQ_EDU_PERIOD", allocationSize = 1)
 @Table(schema = "EDU", name = "TBL_PERIOD")

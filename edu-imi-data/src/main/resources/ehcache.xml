@@ -16,9 +16,9 @@
 
     <!-- Default cache template -->
     <ehcache:cache-template name="default">
-        <!--        <expiry>
-                    <ttl unit="seconds">0</ttl>
-                </expiry>-->
+        <ehcache:expiry>
+            <ehcache:ttl unit="seconds">3</ehcache:ttl>
+        </ehcache:expiry>
         <ehcache:listeners>
             <ehcache:listener>
                 <ehcache:class>edu.imi.ir.eduimiws.servces.CacheEventLogger</ehcache:class>
@@ -30,7 +30,7 @@
             </ehcache:listener>
         </ehcache:listeners>
         <ehcache:resources>
-            <ehcache:heap unit="kB">1</ehcache:heap>
+            <ehcache:heap unit="entries">50</ehcache:heap>
             <ehcache:offheap unit="MB">1</ehcache:offheap>
             <ehcache:disk persistent="true" unit="MB">200</ehcache:disk>
         </ehcache:resources>

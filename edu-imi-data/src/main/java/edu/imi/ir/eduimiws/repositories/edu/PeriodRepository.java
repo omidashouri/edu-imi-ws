@@ -22,7 +22,14 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     @Cacheable("period")
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
             type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
+//            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHE_REGION,value = "period"),
+//            @QueryHint(name = org.hibernate.jpa.QueryHints.SPEC_HINT_TIMEOUT,value = "5000"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHE_MODE, value = "PUT"), //VERY IMPORTANT
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+    })
     Page<PeriodEntity>
     readAllByDeleteStatusIsNotNullAndDeleteStatusEqualsAndNameContains(Long deleteStatus,
                                                                        String periodName,

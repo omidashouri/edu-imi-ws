@@ -17,7 +17,7 @@ import javax.persistence.*;
 })
 
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "eduCategory")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)//, region = "eduCategory")
 @Getter
 @Setter
 @NoArgsConstructor

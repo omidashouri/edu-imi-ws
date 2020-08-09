@@ -71,7 +71,7 @@ import javax.persistence.*;
 
 
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "field")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)//, region = "field")
 @Getter
 @Setter
 @NoArgsConstructor
