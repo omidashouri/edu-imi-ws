@@ -204,8 +204,8 @@ public class FieldController {
     }
 
     @Operation(
-            summary = "find All fields with student and period name",
-            description = "Search field detail pageable with student and period name",
+            summary = "find All fields with level and education category information",
+            description = "Search field detail pageable with level and education category information",
             tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
@@ -284,8 +284,8 @@ public class FieldController {
     }
 
     @Operation(
-            summary = "Find Field by public ID with student and period name",
-            description = "Search field by the public id with student and period name",
+            summary = "Find Field by public ID ",
+            description = "Search field by the public id ",
             tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
@@ -336,6 +336,110 @@ public class FieldController {
         } catch (Exception ex) {
             return (ResponseEntity<?>) ResponseEntity.badRequest();
         }
+    }
+
+    @Operation(
+            summary = "Find Fields by Level Public ID ",
+            description = "Search field by Level public id ",
+            tags = "fields",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = FieldResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "field not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/descriptive/levels/{levelPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getFieldsDescriptiveByLevelPublicId(@PathVariable String levelPublicId,
+                                                                 @Parameter(hidden = true)
+                                                                 @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                 @PageableDefault(page = 0, size = 10, value = 10)
+                                                                         Pageable pageable) {
+
+        Page<FieldEntity> fieldPages =
+                fieldService.findAllByLevelPublicIdPageable(levelPublicId, pageable);
+
+        Page<FieldDto> fieldDtoPage = fieldPages
+                .map(p -> fieldDtoMapper
+                        .toFieldDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<FieldResponse> fieldResponsePagedModel = fieldDtoPagedResourcesAssembler
+                .toModel(fieldDtoPage, fieldResponseFieldDtoAssembler);
+
+        return ResponseEntity.ok(fieldResponsePagedModel);
+    }
+
+    @Operation(
+            summary = "Find Fields by Education Category Public ID ",
+            description = "Search field by Education Category public id ",
+            tags = "fields",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = FieldResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "field not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/descriptive/eduCategories/{eduCategoryPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getFieldsDescriptiveByEduCategoryPublicId(@PathVariable String eduCategoryPublicId,
+                                                                       @Parameter(hidden = true)
+                                                                       @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                       @PageableDefault(page = 0, size = 10, value = 10)
+                                                                               Pageable pageable) {
+
+        Page<FieldEntity> fieldPages =
+                fieldService.findAllByEduCategoryPublicIdPageable(eduCategoryPublicId, pageable);
+
+        Page<FieldDto> fieldDtoPage = fieldPages
+                .map(p -> fieldDtoMapper
+                        .toFieldDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<FieldResponse> fieldResponsePagedModel = fieldDtoPagedResourcesAssembler
+                .toModel(fieldDtoPage, fieldResponseFieldDtoAssembler);
+
+        return ResponseEntity.ok(fieldResponsePagedModel);
     }
 
 

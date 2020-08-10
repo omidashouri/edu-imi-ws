@@ -40,13 +40,15 @@
     <ehcache:cache alias="registerApi" uses-template="default"/>
     <ehcache:cache alias="student" uses-template="default"/>
     <ehcache:cache alias="period" uses-template="default">
-    <jsr107:mbeans enable-management="true" enable-statistics="true"/>
+        <jsr107:mbeans enable-management="true" enable-statistics="true"/>
     </ehcache:cache>
     <ehcache:cache alias="periodApi" uses-template="default"/>
     <ehcache:cache alias="field" uses-template="default"/>
     <ehcache:cache alias="fieldApi" uses-template="default"/>
     <ehcache:cache alias="level" uses-template="default"/>
     <ehcache:cache alias="eduCategory" uses-template="default"/>
+    <ehcache:cache alias="fieldDescriptiveLevel" uses-template="default"/>
+    <ehcache:cache alias="fieldDescriptiveEduCategory" uses-template="default"/>
 
     <ehcache:cache alias="myperiod">
         <ehcache:key-type>java.lang.Object</ehcache:key-type>

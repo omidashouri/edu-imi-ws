@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.FieldEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.FieldOnly;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -17,7 +18,12 @@ import java.util.List;
 public interface FieldRepository extends CrudRepository<FieldEntity, Long> {
 
     @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHE_MODE, value = "PUT"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+    })
     Page<FieldEntity> findAll(Pageable pageable);
 
 //    ERROR No property readAll found for type FieldEntity!
@@ -26,8 +32,33 @@ public interface FieldRepository extends CrudRepository<FieldEntity, Long> {
     Page<FieldEntity> readAll(Pageable pageable);*/
 
     @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHE_MODE, value = "PUT"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+    })
     FieldEntity findByFieldApi_FieldPublicId(String fieldPublicId);
+
+    @Cacheable("fieldDescriptiveLevel")
+    @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
+    @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHE_MODE, value = "PUT"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+    })
+    Page<FieldEntity> findByFieldApiIsNotNullAndFieldApi_LevelPublicId(String levelPublicId, Pageable pageable);
+
+    @Cacheable("fieldDescriptiveEduCategory")
+    @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
+    @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHE_MODE, value = "PUT"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
+            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+    })
+    Page<FieldEntity> findByFieldApiIsNotNullAndFieldApi_EduCategoryPublicId(String eduCategoryPublicId, Pageable pageable);
 
     @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
     FieldEntity readByFieldApi_FieldPublicId(String fieldPublicId);

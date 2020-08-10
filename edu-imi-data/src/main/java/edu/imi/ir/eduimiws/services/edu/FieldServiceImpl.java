@@ -50,8 +50,22 @@ public class FieldServiceImpl implements FieldService{
     }
 
     @Override
+    public Page<FieldEntity> findAllByLevelPublicIdPageable(String levelPublicId, Pageable pageable) {
+        Page<FieldEntity> fieldPages = fieldRepository
+                .findByFieldApiIsNotNullAndFieldApi_LevelPublicId(levelPublicId, pageable);
+        return fieldPages;
+    }
+
+    @Override
+    public Page<FieldEntity> findAllByEduCategoryPublicIdPageable(String eduCategoryPublicId, Pageable pageable) {
+        Page<FieldEntity> fieldPages = fieldRepository
+                .findByFieldApiIsNotNullAndFieldApi_EduCategoryPublicId(eduCategoryPublicId, pageable);
+        return fieldPages;
+    }
+
+    @Override
     public List<FieldEntity> findAllFieldOnlyByIdBetween(Long startId, Long endId) {
-        List<FieldOnly> allFieldOnlys = fieldRepository.findAllFieldOnlyByIdBetween(startId,endId);
+        List<FieldOnly> allFieldOnlys = fieldRepository.findAllFieldOnlyByIdBetween(startId, endId);
         List<FieldEntity> allFields = fieldOnlyMapper
                 .toFieldEntities(allFieldOnlys, new CycleAvoidingMappingContext());
         return allFields;

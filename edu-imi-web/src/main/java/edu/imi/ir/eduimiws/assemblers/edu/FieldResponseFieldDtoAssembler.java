@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
+import edu.imi.ir.eduimiws.controllers.v1.EduCategoryController;
 import edu.imi.ir.eduimiws.controllers.v1.FieldController;
+import edu.imi.ir.eduimiws.controllers.v1.LevelController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.FieldResponseFieldDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.FieldDto;
@@ -9,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class FieldResponseFieldDtoAssembler extends RepresentationModelAssemblerSupport<FieldDto, FieldResponse> {
@@ -26,12 +31,12 @@ public class FieldResponseFieldDtoAssembler extends RepresentationModelAssembler
         FieldResponse fieldResponse = fieldResponseFieldDtoMapper
                 .toFieldResponse(fieldDto, new CycleAvoidingMappingContext());
 
-        /*if (fieldDto.getFieldPublicId() != null) {
+        if (fieldDto.getFieldPublicId() != null) {
             fieldResponse
                     .add(linkTo(
                             methodOn(
                                     FieldController.class)
-                                    .getFieldWithLevelPeriodNameByFieldPublicId(fieldDto.getFieldPublicId()))
+                                    .getFieldByFieldPublicId(fieldDto.getFieldPublicId()))
                             .withSelfRel());
         }
 
@@ -50,8 +55,8 @@ public class FieldResponseFieldDtoAssembler extends RepresentationModelAssembler
                             methodOn(
                                     EduCategoryController.class)
                                     .getEduCategoryByEduCategoryPublicId(fieldDto.getEduCategoryPublicId()))
-                            .withRel("eduCategorys"));
-        }*/
+                            .withRel("eduCategories"));
+        }
 
         return fieldResponse;
     }
@@ -64,9 +69,9 @@ public class FieldResponseFieldDtoAssembler extends RepresentationModelAssembler
 
         Pageable pageable = Pageable.unpaged();
 
-/*        fieldResponseCollectionModel
+        fieldResponseCollectionModel
                 .add(linkTo(methodOn(FieldController.class)
-                        .getFields(pageable)).withRel("fields"));*/
+                        .getFields(pageable)).withRel("fields"));
 
         return fieldResponseCollectionModel;
     }
