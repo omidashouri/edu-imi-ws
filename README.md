@@ -824,5 +824,17 @@ ehcache.xml:
     }
     
 ---
-
-    
+//  Video
+    @Bean
+        public JCacheCacheManager jCacheCacheManager() throws URISyntaxException {
+            CachingProvider cachingProvider = Caching.getCachingProvider();
+            javax.cache.CacheManager cacheManager = cachingProvider
+                                            .getCacheManager(getClass().getResource("/ehcache.xml").toURI(),
+                                                cachingProvider.getDefaultClassLoader());
+            MutableConfiguration<Object,PageImpl> mutableConfiguration = new MutableConfiguration<Object,PageImpl>();
+            mutableConfiguration.setStoreByValue(false);
+            cacheManager.createCache("people",mutableConfiguration); //people is defined as jsr107 in ehcache.xml
+            return new JCacheCacheManager(cacheManager);
+        }
+        
+---
