@@ -59,7 +59,8 @@ public class TermPresentedGroupEntity extends BaseEntity {
     //  add later
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToOne(mappedBy = "PRESENTED_COURSE_ID", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "PRESENTED_COURSE_ID")
     private TermPresentedCourseEntity presentedCourseId;
 
     @Column(name = "CAPACITY", precision = 4, scale = 0)
@@ -104,4 +105,9 @@ public class TermPresentedGroupEntity extends BaseEntity {
     // do not have table for it
     @Column(name = "LICENSE_PROFESSOR_ID")
     private Long licenseProfessorId;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "termPresentedGroup", fetch = FetchType.LAZY)
+    private TermPresentedGroupApiEntity termPresentedGroupApi;
 }

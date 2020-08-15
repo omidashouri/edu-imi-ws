@@ -53,4 +53,9 @@ public class CourseCategoryEntity extends BaseEntity {
 
     @Column(name = "EDIT_DATE", length = 10)
     private String editDate;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "courseCategory", fetch = FetchType.LAZY)
+    private CourseCategoryApiEntity courseCategoryApi;
 }

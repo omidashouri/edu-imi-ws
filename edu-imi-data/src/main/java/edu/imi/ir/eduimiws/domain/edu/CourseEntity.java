@@ -99,4 +99,9 @@ public class CourseEntity extends BaseEntity {
     public Long getLevelId() {
         return levelId;
     }
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "course", fetch = FetchType.LAZY)
+    private CourseApiEntity courseApi;
 }

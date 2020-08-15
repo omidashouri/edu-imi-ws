@@ -87,5 +87,10 @@ public class PeriodCourseEntity extends BaseEntity {
     @Column(name = "IN_AVERAGE", length = 1)
     private String inAverage;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "periodCourse", fetch = FetchType.LAZY)
+    private PeriodCourseApiEntity periodCourseApi;
+
 
 }

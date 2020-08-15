@@ -49,7 +49,7 @@ public class ProfessorEntity extends BaseEntity {
 
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CREATOR")
+    @JoinColumn(name = "EDITOR")
     private PersonEntity editor;
 
     @Column(name = "EDIT_DATE", length = 10)
@@ -83,4 +83,9 @@ public class ProfessorEntity extends BaseEntity {
 
     @Column(name = "DUTY_HOUR_MONTH")
     private Long dutyHourMonth;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "professorId", fetch = FetchType.LAZY)
+    private ProfessorApiEntity professorApi;
 }

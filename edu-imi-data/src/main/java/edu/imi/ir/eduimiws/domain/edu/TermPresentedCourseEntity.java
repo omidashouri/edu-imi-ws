@@ -26,8 +26,11 @@ public class TermPresentedCourseEntity extends BaseEntity {
     @JoinColumn(name = "FIELD_COURSE_ID")
     private FieldCourseEntity fieldCourse;
 
-    @Column(name = "TERM_ID")
-    private Long termId;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TERM_ID")
+    private TermEntity term;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -55,4 +58,9 @@ public class TermPresentedCourseEntity extends BaseEntity {
 
     @Column(name = "TIME", precision = 4, scale = 0)
     private Long time;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "termPresentedCourse", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private TermPresentedCourseApiEntity termPresentedCourseApi;
 }

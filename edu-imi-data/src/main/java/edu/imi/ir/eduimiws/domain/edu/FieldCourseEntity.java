@@ -82,4 +82,9 @@ public class FieldCourseEntity extends BaseEntity {
 
     @Column(name = "SCORING_WAY", precision = 2, scale = 0)
     private Long scoringWay;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "fieldCourse", fetch = FetchType.LAZY)
+    private FieldCourseApiEntity fieldCourseApi;
 }

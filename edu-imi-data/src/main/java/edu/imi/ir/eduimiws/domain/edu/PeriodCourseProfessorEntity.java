@@ -56,4 +56,9 @@ public class PeriodCourseProfessorEntity extends BaseEntity {
     //    do not have table
     @Column(name = "LICENSE_PROFESSOR_ID")
     private Long licenseProfessorId;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "periodCourseProfessor", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private PeriodCourseProfessorApiEntity periodCourseProfessorApi;
 }
