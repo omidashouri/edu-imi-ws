@@ -71,8 +71,19 @@ public class CourseEntity extends BaseEntity {
     @Column(name = "CTIME", precision = 4, scale = 0)
     private Long ctime;
 
-    @Column(name = "COURSE_CATEGORY_ID")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COURSE_CATEGORY_ID")
+    private CourseCategoryEntity courseCategory;
+
+    @Column(name = "COURSE_CATEGORY_ID", insertable = false, updatable = false)
     private Long courseCategoryId;
+
+    @Transient
+    public Long getCourseCategoryId() {
+        return courseCategoryId;
+    }
 
     @Column(name = "SILABES_FILE", length = 200)
     private String silabesFile;

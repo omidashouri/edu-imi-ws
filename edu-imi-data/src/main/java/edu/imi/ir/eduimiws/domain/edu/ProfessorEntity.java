@@ -59,12 +59,12 @@ public class ProfessorEntity extends BaseEntity {
     private Long activityStatus;
 
     @Column(name = "DELETE_STATUS")
-    private long deleteStatus;
+    private Long deleteStatus;
 
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_ID")
-    private PersonEntity personId;
+    private PersonEntity person;
 
     @Column(name = "FINAL_SCORE")
     private Long finalScore;

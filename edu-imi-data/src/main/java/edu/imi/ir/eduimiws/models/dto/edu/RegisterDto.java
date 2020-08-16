@@ -2,16 +2,24 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterDto {
+public class RegisterDto implements Serializable {
+
+    private static final long serialVersionUID = 1625681621446262691L;
 
     private String registerPublicId;
 
+    private Long periodId;
+
     private String periodPublicId;
+
+    private Long studentId;
 
     private String studentPublicId;
 

@@ -61,7 +61,7 @@ public class TermPresentedGroupEntity extends BaseEntity {
     @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "PRESENTED_COURSE_ID")
-    private TermPresentedCourseEntity presentedCourseId;
+    private TermPresentedCourseEntity termPresentedCourse;
 
     @Column(name = "CAPACITY", precision = 4, scale = 0)
     private Long capacity;
@@ -70,7 +70,7 @@ public class TermPresentedGroupEntity extends BaseEntity {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSISTANT_ID")
-    private ProfessorEntity assistantId;
+    private ProfessorEntity assistant;
 
     @Column(name = "START_DATE", length = 10)
     private String startDate;

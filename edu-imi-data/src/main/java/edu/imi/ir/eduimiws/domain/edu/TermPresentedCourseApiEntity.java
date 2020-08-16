@@ -27,9 +27,11 @@ public class TermPresentedCourseApiEntity extends BaseEntity {
     @Column(name = "TRM_PRESENTED_COURSE_PUBLIC_ID", length = 500)
     private String trmPresentedCoursePublicId;
 
-    //    not developed yet
-    @Column(name = "TERM_ID")
-    private Long termId;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TERM_ID")
+    private TermEntity term;
 
     @Column(name = "TERM_PUBLIC_ID", length = 500)
     private String termPublicId;

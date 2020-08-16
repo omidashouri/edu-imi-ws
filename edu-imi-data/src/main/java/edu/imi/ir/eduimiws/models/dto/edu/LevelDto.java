@@ -14,6 +14,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class LevelDto implements Serializable {
 
+    private static final long serialVersionUID = 3711976824629270679L;
+
     private String levelPublicId;
 
     private Long id;
