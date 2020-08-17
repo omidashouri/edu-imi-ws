@@ -16,6 +16,8 @@ public class PeriodDto implements Serializable {
 
     private static final long serialVersionUID = -921331900990713569L;
 
+    private Long id;
+
     private String name;
 
     private String startDate;

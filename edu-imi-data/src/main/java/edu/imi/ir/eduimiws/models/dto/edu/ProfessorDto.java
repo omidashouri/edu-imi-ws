@@ -16,6 +16,8 @@ public class ProfessorDto implements Serializable {
 
     private Long id;
 
+    private String professorPublicId;
+
     private String firstName;
 
     private String lastName;

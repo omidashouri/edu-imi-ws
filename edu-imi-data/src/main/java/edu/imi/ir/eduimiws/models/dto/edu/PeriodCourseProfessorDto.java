@@ -19,6 +19,10 @@ public class PeriodCourseProfessorDto implements Serializable {
 
     private String periodCourseProfessorPublicId;
 
+    private String periodPublicId;
+
+    private String coursePublicId;
+
     private PeriodCourseDto periodCourseDto;
 
     private Long periodCourseId;
