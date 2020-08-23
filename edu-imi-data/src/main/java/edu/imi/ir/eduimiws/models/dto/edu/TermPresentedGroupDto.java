@@ -48,6 +48,30 @@ public class TermPresentedGroupDto implements Serializable {
 
     private TermPresentedCourseDto termPresentedCourseDto;
 
+    private Long termId;
+
+    private String termPublicId;
+
+    private TermDto termDto;
+
+    private Long periodId;
+
+    private String periodPublicId;
+
+    private PeriodDto periodDto;
+
+    private Long filedCourseId;
+
+    private String fieldCoursePublicId;
+
+    private FieldCourseDto fieldCourseDto;
+
+    private Long courseId;
+
+    private String coursePublicId;
+
+    private CourseDto courseDto;
+
     private Long capacity;
 
     private String assistantPublicId;

@@ -16,21 +16,21 @@ public class TermPresentedCourseDto implements Serializable {
 
     private Long id;
 
-    private String termPresentedCoursePublicID;
+    private String termPresentedCoursePublicId;
 
     private String coursePublicId;
 
     private Long courseId;
 
-    private String professorPublicId;
+/*    private String professorPublicId;
 
     private Long professorId;
 
     private String presentedGroupPublicId;
 
-    private Long presentedGroupId;
+    private Long presentedGroupId;*/
 
-    private String fieldCoursePublicID;
+    private String fieldCoursePublicId;
 
     private Long fieldCourseId;
 

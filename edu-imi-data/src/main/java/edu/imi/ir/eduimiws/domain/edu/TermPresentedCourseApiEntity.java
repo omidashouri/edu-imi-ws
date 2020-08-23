@@ -63,24 +63,6 @@ public class TermPresentedCourseApiEntity extends BaseEntity {
     @Column(name = "COURSE_PUBLIC_ID", length = 500)
     private String coursePublicId;
 
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROFESSOR_ID")
-    private ProfessorEntity professor;
-
-    @Column(name = "PROFESSOR_PUBLIC_ID", length = 500)
-    private String professorPublicId;
-
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TERM_PRESENTED_GROUP_ID")
-    private TermPresentedGroupEntity termPresentedGroup;
-
-    @Column(name = "TERM_PRESENTED_GROUP_PUBLIC_ID", length = 500)
-    private String termPresentedGroupPublicId;
-
     @Column(name = "TRM_PRESENTED_COURSE_EDIT_DATE", length = 10)
     private String trmPresentedCourseEditDate;
 

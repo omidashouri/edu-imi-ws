@@ -44,7 +44,44 @@ public class TermPresentedGroupApiEntity extends BaseEntity {
     private TermPresentedCourseEntity termPresentedCourse;
 
     @Column(name = "TRM_PRESENTED_COURSE_PUBLIC_ID", length = 500)
-    private String trmPresentedCoursePublicId;
+    private String termPresentedCoursePublicId;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TERM_ID")
+    private TermEntity term;
+
+    @Column(name = "TERM_PUBLIC_ID", length = 500)
+    private String termPublicId;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PERIOD_ID")
+    private PeriodEntity period;
+
+    @Column(name = "PERIOD_PUBLIC_ID", length = 500)
+    private String periodPublicId;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FIELD_COURSE_ID")
+    private FieldCourseEntity fieldCourse;
+
+    @Column(name = "FIELD_COURSE_PUBLIC_ID", length = 500)
+    private String fieldCoursePublicId;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COURSE_ID")
+    private CourseEntity course;
+
+    @Column(name = "COURSE_PUBLIC_ID", length = 500)
+    private String coursePublicId;
+
 
     @Column(name = "TERM_PRESENTED_GROUP_EDIT_DATE", length = 10)
     private String termPresentedGroupEditDate;
