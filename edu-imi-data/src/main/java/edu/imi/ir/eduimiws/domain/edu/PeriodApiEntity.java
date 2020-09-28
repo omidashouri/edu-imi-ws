@@ -92,6 +92,6 @@ public class PeriodApiEntity extends BaseEntity {
     @Column(name="EDIT_DATE_TS")
     private java.sql.Timestamp editDateTs;
 
-    @Column(name="DELETE_TS")
+    @Column(name = "DELETE_DATE_TS")
     private java.sql.Timestamp deleteTs;
 }
