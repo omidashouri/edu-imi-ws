@@ -33,16 +33,17 @@ public interface PersonMapper {
             @Mapping(source = "emailProcessType",target = "emailProcessType"),
             @Mapping(source = "personalCode",target = "personalCode"),
             @Mapping(source = "activityStatus",target = "activityStatus"),
-            @Mapping(source = "kind",target = "kind"),
-            @Mapping(source = "organizationPosition",target = "organizationPosition"),
-            @Mapping(source = "owner",target = "owner"),
-            @Mapping(source = "organizationClass",target = "organizationClass"),
-            @Mapping(source = "noeEstekhdam",target = "noeEstekhdam"),
-            @Mapping(source = "pwdp",target = "pwdp"),
-            @Mapping(source = "signatureImg",target = "signatureImg"),
-            @Mapping(source = "commerceAdditionalInfo",target = "commerceAdditionalInfo")
+            @Mapping(source = "kind", target = "kind"),
+            @Mapping(source = "organizationPosition", target = "organizationPosition"),
+            @Mapping(source = "owner", target = "owner"),
+            @Mapping(source = "organizationClass", target = "organizationClass"),
+            @Mapping(source = "noeEstekhdam", target = "noeEstekhdam"),
+            @Mapping(source = "pwdp", target = "pwdp"),
+            @Mapping(source = "signatureImg", target = "signatureImg"),
+            @Mapping(source = "commerceAdditionalInfo", target = "commerceAdditionalInfo")
 
     })
+    @BeanMapping(ignoreByDefault = true)
     PersonEntity PersonDtoToPersonEntity(PersonDto personDto, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration

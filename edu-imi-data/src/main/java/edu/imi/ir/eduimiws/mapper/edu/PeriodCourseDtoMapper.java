@@ -58,9 +58,8 @@ public interface PeriodCourseDtoMapper {
     default void handleDtoPeriodCoursePublicId(PeriodCourseEntity periodCourseEntity,
                                                @MappingTarget PeriodCourseDto periodCourseDto) {
 
-        /**
-         * @implNote PeriodCourse Public Id
-         */
+
+//      @implNote PeriodCourse Public Id
         if (!Hibernate.isInitialized(periodCourseEntity.getPeriodCourseApi())) {
             periodCourseEntity.setPeriodCourseApi(null);
         }
@@ -74,9 +73,8 @@ public interface PeriodCourseDtoMapper {
                         );
             }
         }
-/**
- * @implNote Period Public Id
- */
+
+//      @implNote Period Public Id
         if (!Hibernate.isInitialized(periodCourseEntity.getPeriod())) {
             periodCourseEntity.setPeriod(null);
         }
@@ -98,9 +96,8 @@ public interface PeriodCourseDtoMapper {
             }
         }
 
-        /**
-         * @implNote Course Public Id
-         */
+
+//       @implNote Course Public Id
         if (!Hibernate.isInitialized(periodCourseEntity.getCourse())) {
             periodCourseEntity.setCourse(null);
         }

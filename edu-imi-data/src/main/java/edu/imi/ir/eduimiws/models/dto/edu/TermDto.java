@@ -15,6 +15,8 @@ public class TermDto implements Serializable {
 
     private static final long serialVersionUID = -2450419700271620149L;
 
+    private String termPublicId;
+
     private Long id;
 
     private String termName;

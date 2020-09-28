@@ -58,9 +58,8 @@ public interface ProfessorDtoMapper {
     default void handleDtoProfessorPublicId(ProfessorEntity professorEntity,
                                             @MappingTarget ProfessorDto professorDto) {
 
-        /**
-         * @implNote Professor Public Id
-         */
+
+//      @implNote Professor Public Id
         if (!Hibernate.isInitialized(professorEntity.getProfessorApi())) {
             professorEntity.setProfessorApi(null);
         }
@@ -69,9 +68,8 @@ public interface ProfessorDtoMapper {
                 professorDto.setProfessorPublicId(professorEntity.getProfessorApi().getProfessorPublicId());
             }
         }
-/**
- * @implNote Professor Person Public Id
- */
+
+//      @implNote Professor Person Public Id
         if (!Hibernate.isInitialized(professorEntity.getPerson())) {
             professorEntity.setPerson(null);
         }

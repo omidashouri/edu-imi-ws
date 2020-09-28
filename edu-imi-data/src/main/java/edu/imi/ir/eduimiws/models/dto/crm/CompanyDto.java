@@ -11,6 +11,11 @@ public class CompanyDto {
 
     private static final long serialVersionUID = 1907555625339107890L;
 
+    //    later complete this
+    private String companyPublicId;
+
+    private Long id;
+
     private String nameLo;
 
     private String phone;

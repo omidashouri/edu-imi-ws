@@ -24,7 +24,7 @@ public class TermPresentedGroupDto implements Serializable {
 
     private ProfessorDto professorDto;
 
-    private Number groupNumber;
+    private Long groupNumber;
 
     private String creatorPublicId;
 

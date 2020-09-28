@@ -67,13 +67,16 @@ public interface PeriodMapper {
             @Mapping(source = "periodApi", target = "periodApi")
 
     })
+    @BeanMapping(ignoreByDefault = true)
     PeriodEntity PeriodDtoToPeriodEntity(PeriodDto periodDto, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
     PeriodDto PeriodEntityToPeriodDto(PeriodEntity periodEntity, @Context CycleAvoidingMappingContext context);
 
+    @SuppressWarnings("unused")
     List<PeriodDto> PeriodEntitiesToPeriodDtoes(List<PeriodEntity> periodEntities, @Context CycleAvoidingMappingContext context);
 
+    @SuppressWarnings("unused")
     List<PeriodEntity> PeriodDtoesToPeriodEntities(List<PeriodDto> periodDtos, @Context CycleAvoidingMappingContext context);
 
 

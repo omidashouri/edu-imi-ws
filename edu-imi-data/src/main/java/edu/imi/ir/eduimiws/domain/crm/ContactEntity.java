@@ -42,7 +42,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_CONTACT_ID",allocationSize = 1)
 @Table(schema = "CRM",name = "TBL_CONTACT")

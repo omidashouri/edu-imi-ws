@@ -36,7 +36,7 @@ public class TermPresentedGroupEntity extends BaseEntity {
     }
 
     @Column(name = "GROUP_NUMBER")
-    private Number groupNumber;
+    private Long groupNumber;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
