@@ -175,7 +175,9 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
        "ACCOUNT_ENABLED" NUMBER, 
        "ACCOUNT_NON_EXPIRED" NUMBER, 
        "CREDENTIALS_NON_EXPIRED" NUMBER, 
-       "ACCOUNT_NON_LOCKED" NUMBER, 
+       "ACCOUNT_NON_LOCKED" NUMBER,
+       "USERNAME" NVARCHAR2(500),
+       "MOBILE_VERIFICATION_STATUS" NUMBER, 
      	 CONSTRAINT "TBL_PERSON_API_PK" PRIMARY KEY ("ID")
        USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
        TABLESPACE "USERS"  ENABLE, 
@@ -226,26 +228,47 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
   declare
     TS_ TIMESTAMP(6);
     UUID_ nvarchar2(500 char) ;
-    CONTACTPUBLICID_ nvarchar2(500 char);
+    APIPUBLICID_ nvarchar2(500 char);
   BEGIN
       TS_ := systimestamp;
       UUID_ := CRM.my_uuid;
     if inserting then
-      SELECT ca.contact_public_id INTO CONTACTPUBLICID_
+      SELECT ca.contact_public_id INTO APIPUBLICID_
       FROM CRM.TBL_CONTACT_API CA
       WHERE ca.contact_id = :new.contact_id;
       insert into CRM.tbl_person_api
       (id, person_public_id, create_date_ts,
+      username, encrypted_password, account_enabled,
         person_id, contact_id, contact_public_id)
        values 
-        (crm.SEQ_PERSON_API_ID.nextval, UUID_, TS_, 
-        :new.id, :new.CONTACT_ID,CONTACTPUBLICID_);
+        (crm.SEQ_PERSON_API_ID.nextval, UUID_, TS_,
+        :new.username, :new.PASSWORD, TO_NUMBER(:new.activity_status),
+        :new.id, :new.CONTACT_ID, APIPUBLICID_);
     end if;
     if updating then
       update CRM.tbl_person_api
       set  
        edit_date_ts = TS_
        where person_id = :old.id;
+       --CONTACT
+           if :new.CONTACT_ID != null and :new.CONTACT_ID != :old.CONTACT_ID THEN
+               SELECT api.contact_public_id INTO APIPUBLICID_
+                FROM CRM.tbl_contact_api api
+                WHERE api.contact_id = :new.contact_id;
+               --
+               update crm.TBL_PERSON_API
+               set
+               contact_id = :new.contact_id,
+               contact_public_id = APIPUBLICID_
+               where person_id = :old.id;
+          end if;
+          --ACTIVITYSTATUS
+           if :new.ACTIVITY_STATUS != null and :new.ACTIVITY_STATUS != :old.ACTIVITY_STATUS THEN
+               update crm.TBL_PERSON_API
+               set
+               account_enabled = TO_NUMBER(:new.ACTIVITY_STATUS)
+               where person_id = :old.id;
+          end if;
       end if;
   END;
   
@@ -281,6 +304,9 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
       cursor c_t is
               SELECT
                   mt.id as PERSONID,
+                  mt.username as USERNAME,
+                  mt.password as PASSWORD,
+                  TO_NUMBER(mt.activity_status) as ACTIVITYSTATUS,
                   mt.contact_id as CONTACTID,
                   secapi.contact_public_id CONTACTPUBLICID
               FROM
@@ -299,6 +325,9 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
                   person_public_id,
                   create_date_ts,
                   person_id,
+                  username,
+                  encrypted_password,
+                  account_enabled,
                   contact_id,
                   contact_public_id
               )VALUES(
@@ -306,12 +335,19 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
                   crm.my_uuid,
                   systimestamp,
                   r_t."PERSONID",
+                  r_t."USERNAME",
+                  r_t."PASSWORD",
+                  r_t."ACTIVITYSTATUS",
                   r_t."CONTACTID",
                   r_t."CONTACTPUBLICID"
               );
        end loop;
     end;
     commit;
+  end;
+  
+  begin
+  crm.UUID_PERSON_API;
   end;
 
 ----------------- ROLE -------------
@@ -524,8 +560,8 @@ Insert into CRM.TBL_ROLE_PRIVILEGE_API (ID,ROLE_API_ID,PRIVILEGE_API_ID) values 
     :::CORRECT TRIGGER FOR ID
     
     
-    --PERSON_API_ID=4221
-Insert into CRM.TBL_PERSON_ROLE_API (ID,PERSON_API_ID,ROLE_API_ID) values (CRM.SEQ_PERSON_ROLE_API.nextval,4221,1);    
+    --PERSON_API_ID=4221 (find by my id)
+Insert into CRM.TBL_PERSON_ROLE_API (ID,PERSON_API_ID,ROLE_API_ID) values (CRM.SEQ_PERSON_ROLE_API.nextval,3847,1);    
 
 ------------------------------
 
@@ -2020,7 +2056,6 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
       
       
  ---------------- TEAM --------------
- @@@
  
     CREATE SEQUENCE  "EDU"."SEQ_PERIOD_COURSE_PROFESSO_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
  
