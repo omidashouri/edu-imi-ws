@@ -31,7 +31,8 @@ public interface RegisterEntityRegisterApiFromProjectionMapper {
             @Mapping(source = "deleteStatus", target = "registerDeleteStatus"),
             @Mapping(source = "editDate", target = "registerEditDate"),
             @Mapping(source = "id", target = "registerId"),
-            @Mapping(source = "", target = "registerPublicId"),
+//            omiddo: later correct this
+//            @Mapping(source = "", target = "registerPublicId"),
             @Mapping(source = "student", target = "student"),
             @Mapping(source = "studentId", target = "studentId")
     })

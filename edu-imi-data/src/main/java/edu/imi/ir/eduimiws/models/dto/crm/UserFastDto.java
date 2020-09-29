@@ -82,6 +82,8 @@ public class UserFastDto {
 
     private String authorityPublicId;
 
+    private String accessType;
+
     private Collection<RoleFastDto> roleFastDtos;
 
 }

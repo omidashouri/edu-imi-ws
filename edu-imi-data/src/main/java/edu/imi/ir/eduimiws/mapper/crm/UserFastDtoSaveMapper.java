@@ -3,10 +3,7 @@ package edu.imi.ir.eduimiws.mapper.crm;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -23,6 +20,7 @@ public interface UserFastDtoSaveMapper {
             @Mapping(source = "username", target = "username"),
             @Mapping(source = "address", target = "address")
     })
+    @BeanMapping(ignoreByDefault = true)
     PersonEntity toPersonForSaveFromUserRegister(UserFastDto userFastDto);
 
 
@@ -35,6 +33,7 @@ public interface UserFastDtoSaveMapper {
             @Mapping(source = "address", target = "address"),
             @Mapping(defaultValue = "public", target = "accessType"),
     })
+    @BeanMapping(ignoreByDefault = true)
     ContactEntity toContactForSaveFromUserRegister(UserFastDto userFastDto);
 
 /*    @BeanMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
