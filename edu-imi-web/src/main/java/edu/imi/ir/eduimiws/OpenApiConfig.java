@@ -155,7 +155,7 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public GroupedOpenApi fieldApi(){
+    public GroupedOpenApi fieldApi() {
         return GroupedOpenApi.builder()
                 .setGroup("Fields")
                 .pathsToMatch("/api/v1/fields/**")
@@ -164,7 +164,43 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public GroupedOpenApi rqresApi(){
+    public GroupedOpenApi courseApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("Courses")
+                .pathsToMatch("/api/v1/courses/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi periodCourseApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("PeriodCourses")
+                .pathsToMatch("/api/v1/periodCourses/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi periodCourseProfessorApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("PeriodCourseProfessors")
+                .pathsToMatch("/api/v1/periodCourseProfessors/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi professorApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("Professors")
+                .pathsToMatch("/api/v1/professors/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi rqresApi() {
         return GroupedOpenApi.builder()
                 .setGroup("Reqres")
                 .pathsToMatch("/api/v1/reqres/**")

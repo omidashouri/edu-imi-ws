@@ -16,7 +16,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PeriodCourseProfessorResponse extends RepresentationModel<PeriodCourseProfessorResponse> {
+public class PeriodCourseResponse extends RepresentationModel<PeriodCourseResponse> {
 
 
     private String periodCoursePublicId;
@@ -57,8 +57,7 @@ public class PeriodCourseProfessorResponse extends RepresentationModel<PeriodCou
 
     private String inAverage;
 
-    private String periodCourseProfessorPublicId;
+    private String periodName;
 
-    private String professorPublicId;
-
+    private String courseName;
 }
