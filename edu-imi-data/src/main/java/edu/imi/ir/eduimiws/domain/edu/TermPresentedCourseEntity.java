@@ -8,6 +8,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "TermPresentedCourseEntity.termPresentedCourseApi",
+                attributeNodes = {
+                        @NamedAttributeNode("termPresentedCourseApi")
+                }
+        )
+})
+
+
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Getter

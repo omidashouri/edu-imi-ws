@@ -200,6 +200,42 @@ public class OpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi termApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("Terms")
+                .pathsToMatch("/api/v1/terms/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi fieldCourseApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("FieldCourses")
+                .pathsToMatch("/api/v1/fieldCourses/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi termPresentedCourseApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("TermPresentedCourses")
+                .pathsToMatch("/api/v1/termPresentedCourses/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi termCourseProfessorApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("TermCourseProfessors")
+                .pathsToMatch("/api/v1/termCourseProfessors/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi rqresApi() {
         return GroupedOpenApi.builder()
                 .setGroup("Reqres")

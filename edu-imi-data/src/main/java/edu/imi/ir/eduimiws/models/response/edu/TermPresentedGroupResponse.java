@@ -4,25 +4,32 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-@Schema(name = "termCourse", description = "Term Courses specification in the application.")
+@Schema(name = "termCourseProfessor", description = "Term Courses specification in the application.")
 @EqualsAndHashCode(callSuper = false)
-@JsonRootName(value = "termCourse")
-@Relation(collectionRelation = "termCourses")
+@JsonRootName(value = "termCourseProfessor")
+@Relation(collectionRelation = "termCourseProfessors")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TermPresentedGroupResponse {
+public class TermPresentedGroupResponse extends RepresentationModel<TermPresentedGroupResponse> {
 
+
+    //   for Descriptive (begin) :
+    private String courseName;
+    private String fieldName;
+    private String termName;
+    private String periodName;
+    private String professorFullName;
+    //   for Descriptive (end) :
 
     private String termPresentedGroupPublicId;
 
     private String professorPublicId;
-
-    private String professorFullName;
 
     private Long groupNumber;
 
@@ -38,17 +45,11 @@ public class TermPresentedGroupResponse {
 
     private String termPublicId;
 
-    private String termName;
-
     private String periodPublicId;
-
-    private String periodName;
 
     private String fieldCoursePublicId;
 
     private String coursePublicId;
-
-    private String courseName;
 
     private Long capacity;
 
@@ -76,5 +77,6 @@ public class TermPresentedGroupResponse {
 
     private Long scoringWay;
 
+    private Long licenseProfessorId;
 
 }
