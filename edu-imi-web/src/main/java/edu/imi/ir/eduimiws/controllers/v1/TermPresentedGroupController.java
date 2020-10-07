@@ -56,9 +56,9 @@ public class TermPresentedGroupController {
 
 
     @Operation(
-            summary = "find All termPresentedGroups",
-            description = "Search termPresentedGroup detail pageable",
-            tags = "termPresentedGroups",
+            summary = "find All term course professors",
+            description = "Search term Course Professors detail pageable",
+            tags = "termCourseProfessorss",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -136,9 +136,9 @@ public class TermPresentedGroupController {
     }
 
     @Operation(
-            summary = "Find TermPresentedGroup by public ID",
-            description = "Search termPresentedGroup by the public id",
-            tags = "termPresentedGroups",
+            summary = "Find TermCourseProfessor by public ID",
+            description = "Search term course professors by the public id",
+            tags = "termCourseProfessors",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -166,7 +166,7 @@ public class TermPresentedGroupController {
                     )
             }
     )
-    @GetMapping(path = "/{termPresentedGroupPublicId}",
+    @GetMapping(path = "/{termCourseProfessorPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getTermPresentedGroupByTermPresentedGroupPublicId(@PathVariable String termPresentedGroupPublicId) {
 
@@ -187,6 +187,61 @@ public class TermPresentedGroupController {
         } catch (Exception ex) {
             return (ResponseEntity<?>) ResponseEntity.badRequest();
         }
+    }
+
+    // ***
+    @Operation(
+            summary = "find All term course professors with student and period name",
+            description = "Search term course professors detail pageable with student and period name",
+            tags = "termCourseProfessors",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = TermPresentedGroupResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(path = "/descriptive", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<TermPresentedGroupResponse>> getTermPresentedGroupsWithStudentPeriodName(@Parameter(hidden = true)
+                                                                                                              @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                                                              @PageableDefault(page = 0, size = 10, value = 10)
+                                                                                                                      Pageable pageable) {
+
+        Page<TermPresentedGroupEntity> termPresentedGroupPages =
+                termPresentedGroupService.selectAllWithCoursePeriodTermProfessorFieldCourseTermPresentedCourseByOrderPageable(pageable);
+
+        Page<TermPresentedGroupFastDto> termPresentedGroupFastDtoPage = termPresentedGroupPages
+                .map(p -> termPresentedGroupFastDtoMapper
+                        .toTermPresentedGroupFastDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<TermPresentedGroupResponse> termPresentedGroupResponsePagedModel = termPresentedGroupFastDtoPagedResourcesAssembler
+                .toModel(termPresentedGroupFastDtoPage, termPresentedGroupResponseTermPresentedGroupFastDtoAssembler);
+
+        return ResponseEntity.ok(termPresentedGroupResponsePagedModel);
     }
 
     private ResponseEntity<?> termPresentedGroupNotFound() {

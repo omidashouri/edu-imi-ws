@@ -7,7 +7,7 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-@Schema(name = "termCourseProfessor", description = "Term Courses specification in the application.")
+@Schema(name = "termCourseProfessor", description = "Term Course Professors specification in the application.")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "termCourseProfessor")
 @Relation(collectionRelation = "termCourseProfessors")

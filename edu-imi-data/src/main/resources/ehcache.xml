@@ -17,7 +17,7 @@
     <!-- Default cache template -->
     <ehcache:cache-template name="default">
         <ehcache:expiry>
-            <ehcache:ttl unit="seconds">3</ehcache:ttl>
+            <ehcache:ttl unit="seconds">5</ehcache:ttl>
         </ehcache:expiry>
         <ehcache:listeners>
             <ehcache:listener>
@@ -40,6 +40,9 @@
     <ehcache:cache alias="registerApi" uses-template="default"/>
     <ehcache:cache alias="student" uses-template="default"/>
     <ehcache:cache alias="period" uses-template="default">
+        <jsr107:mbeans enable-management="true" enable-statistics="true"/>
+    </ehcache:cache>
+    <ehcache:cache alias="termPresentedGroup" uses-template="default">
         <jsr107:mbeans enable-management="true" enable-statistics="true"/>
     </ehcache:cache>
     <ehcache:cache alias="periodApi" uses-template="default"/>

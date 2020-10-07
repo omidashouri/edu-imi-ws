@@ -13,8 +13,78 @@ import javax.persistence.*;
                 attributeNodes = {
                         @NamedAttributeNode("termPresentedGroupApi")
                 }
+        ),
+        @NamedEntityGraph(name = "TermPresentedGroupEntity.findAllWithTermPresentedCourseAGraphFieldCourse",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "termPresentedCourse", subgraph = "termPresentedCourse-subGraph"),
+                        @NamedAttributeNode("professor"),
+                        @NamedAttributeNode("termPresentedGroupApi")
+                }
+                ,
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "termPresentedCourse-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "fieldCourse"
+                                                , subgraph = "fieldCourse-subGraph"
+                                        ),
+                                        @NamedAttributeNode(value = "term"),
+                                        @NamedAttributeNode(value = "period")
+                                },
+                                type = TermPresentedCourseEntity.class)
+                        ,
+                        @NamedSubgraph(
+                                name = "fieldCourse-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "course")
+                                },
+                                type = FieldCourseEntity.class)
+                }
         )
 })
+
+/*@NamedQueries({
+        @NamedQuery(name = "TermPresentedGroupEntity.selectAllWithTermPresentedCourseFieldCourseCoursePeriodTermProfessor",
+                query = " SELECT tpg FROM TermPresentedGroupEntity tpg " +
+                        " LEFT JOIN Fetch tpg.termPresentedGroupApi tpga" +
+                        " INNER JOIN FETCH tpg.termPresentedCourse tpc " +
+                        " LEFT JOIN tpc.fieldCourse fc LEFT JOIN fc.course " +
+                        " LEFT JOIN tpc.period prd  LEFT JOIN tpc.term " +
+                        " LEFT JOIN tpg.professor prf " +
+                        " ORDER BY tpg.createDate DESC ",
+                hints = { @QueryHint(name = QueryHints.HINT_CACHE_MODE,value = "put"),
+                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
+                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
+                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
+                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+                }
+        )
+})*/
+
+/*@NamedNativeQueries({
+        @NamedNativeQuery(name = "TermPresentedGroupEntity.selectAllWithTermPresentedCourseFieldCourseCoursePeriodTermProfessor",
+                query = " SELECT * FROM edu.tbl_term_presented_group tpg " +
+                        " LEFT JOIN edu.tbl_term_presented_group_api   tpga ON tpg.id = tpga.term_presented_group_id " +
+                        " WHERE rownum <= 25 ",
+*//*                        " LEFT JOIN edu.tbl_term_presented_course      tpc ON tpg.presented_course_id = tpc.id " +
+                        " LEFT JOIN edu.tbl_field_course               fc ON tpc.field_course_id = fc.id " +
+                        " LEFT JOIN edu.tbl_course                     c ON fc.course_id = c.id " +
+                        " LEFT JOIN edu.tbl_period                     pr ON tpc.period_id = pr.id " +
+                        " LEFT JOIN edu.tbl_term                       trm ON tpc.term_id = trm.id ",*//*
+                hints = {@QueryHint(name = QueryHints.HINT_CACHE_MODE,value = "put"),
+                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
+                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
+                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
+                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+                }
+                ,resultClass = TermPresentedGroupEntity.class
+        ),
+        @NamedNativeQuery(name = "TermPresentedGroupEntity.countAllWithTermPresentedCourseFieldCourseCoursePeriodTermProfessor",
+                query = " SELECT count(*) FROM edu.tbl_term_presented_group tpg " +
+                        " LEFT JOIN edu.tbl_term_presented_group_api   tpga ON tpg.id = tpga.term_presented_group_id " +
+                        " WHERE rownum <= 25 "
+        )
+})*/
 
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

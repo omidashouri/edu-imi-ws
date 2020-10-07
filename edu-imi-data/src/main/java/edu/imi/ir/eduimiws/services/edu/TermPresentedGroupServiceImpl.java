@@ -30,4 +30,13 @@ public class TermPresentedGroupServiceImpl implements TermPresentedGroupService 
                 .findByTermPresentedGroupApi_TermPresentedGroupPublicId(termPresentedGroupPublicId);
         return termPresentedGroup;
     }
+
+    @Override
+    public Page<TermPresentedGroupEntity>
+    selectAllWithCoursePeriodTermProfessorFieldCourseTermPresentedCourseByOrderPageable(Pageable pageable) {
+
+        Page<TermPresentedGroupEntity> termPresentedGroupPages = termPresentedGroupRepository
+                .readAllBy(pageable);
+        return termPresentedGroupPages;
+    }
 }
