@@ -189,7 +189,7 @@ public class TermPresentedGroupController {
         }
     }
 
-    // ***
+
     @Operation(
             summary = "find All term course professors with student and period name",
             description = "Search term course professors detail pageable with student and period name",

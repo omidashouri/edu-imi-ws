@@ -12,7 +12,6 @@ public class PeriodCourseProfessorFastDto {
     //   for Descriptive (begin) :
     private String courseFName;
     private String professorName;
-    //   for Descriptive (end)
 
     private String periodCourseStartDate;
     private String periodCourseEndDate;

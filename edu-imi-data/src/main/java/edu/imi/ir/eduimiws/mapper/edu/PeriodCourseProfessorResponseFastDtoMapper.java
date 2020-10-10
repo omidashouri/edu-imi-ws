@@ -37,8 +37,13 @@ public interface PeriodCourseProfessorResponseFastDtoMapper {
             @Mapping(source = "periodCourseScoringWay", target = "scoringWay"),
             @Mapping(source = "periodCourseSessionNumber", target = "sessionNumber"),
             @Mapping(source = "periodCourseStartDate", target = "startDate"),
-            @Mapping(source = "periodCourseTime", target = "time")
-
+            @Mapping(source = "periodCourseTime", target = "time"),
+            @Mapping(source = "courseFName", target = "courseFName"),
+            @Mapping(source = "professorName", target = "professorName"),
+            @Mapping(source = "periodName", target = "periodName"),
+            @Mapping(source = "periodOfferNumber", target = "periodOfferNumber"),
+            @Mapping(source = "fieldCode", target = "fieldCode"),
+            @Mapping(source = "fieldFName", target = "fieldFName")
     })
     @BeanMapping(ignoreByDefault = true)
     PeriodCourseProfessorResponse toPeriodCourseProfessorResponse(PeriodCourseProfessorFastDto periodCourseProfessorFastDto
@@ -54,6 +59,5 @@ public interface PeriodCourseProfessorResponseFastDtoMapper {
 
     List<PeriodCourseProfessorResponse> toPeriodCourseProfessorResponses(List<PeriodCourseProfessorFastDto> periodCourseProfessorFastDtos,
                                                                          @Context CycleAvoidingMappingContext context);
-
 
 }

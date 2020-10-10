@@ -31,4 +31,11 @@ public class PeriodCourseProfessorServiceImpl implements PeriodCourseProfessorSe
         return periodCourseProfessor;
     }
 
+    @Override
+    public Page<PeriodCourseProfessorEntity> findAllByPeriodCourseProfessorFieldNamePageable(Pageable pageable) {
+        Page<PeriodCourseProfessorEntity> periodCourseProfessorPages = periodCourseProfessorRepository
+                .readAllBy(pageable);
+        return periodCourseProfessorPages;
+    }
+
 }

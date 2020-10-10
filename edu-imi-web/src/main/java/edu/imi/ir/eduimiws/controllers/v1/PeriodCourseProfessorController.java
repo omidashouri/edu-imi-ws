@@ -8,6 +8,7 @@ import edu.imi.ir.eduimiws.mapper.edu.PeriodCourseProfessorFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodCourseProfessorFastDto;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodCourseProfessorResponse;
+import edu.imi.ir.eduimiws.models.response.edu.TermPresentedGroupResponse;
 import edu.imi.ir.eduimiws.services.edu.PeriodCourseProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -193,6 +194,60 @@ public class PeriodCourseProfessorController {
         }
     }
 
+    @Operation(
+            summary = "find All period course professors with professor and course and period name",
+            description = "Search period course professors detail pageable with professor and course and period name",
+            tags = "termCourseProfessors",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = TermPresentedGroupResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(path = "/descriptive", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<PeriodCourseProfessorResponse>> getPeriodCourseProfessorsWithCourseProfessorPeriodName(@Parameter(hidden = true)
+                                                                                                                            @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                                                                            @PageableDefault(page = 0, size = 10, value = 10)
+                                                                                                                                    Pageable pageable) {
+
+        Page<PeriodCourseProfessorEntity> periodCourseProfessorPages =
+                periodCourseProfessorService.findAllByPeriodCourseProfessorFieldNamePageable(pageable);
+
+        Page<PeriodCourseProfessorFastDto> periodCourseProfessorFastDtoPage = periodCourseProfessorPages
+                .map(p -> periodCourseProfessorFastDtoMapper
+                        .toPeriodCourseProfessorFastDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<PeriodCourseProfessorResponse> periodCourseProfessorResponsePagedModel = periodCourseProfessorFastDtoPagedResourcesAssembler
+                .toModel(periodCourseProfessorFastDtoPage, periodCourseProfessorResponsePeriodCourseProfessorFastDtoAssembler);
+
+        return ResponseEntity.ok(periodCourseProfessorResponsePagedModel);
+    }
+
     private ResponseEntity<?> periodCourseProfessorNotFound() {
         return new ResponseEntity<>(
                 new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
@@ -200,5 +255,7 @@ public class PeriodCourseProfessorController {
                 , HttpStatus.NOT_FOUND
         );
     }
+
+
 
 }

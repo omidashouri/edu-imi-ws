@@ -19,6 +19,17 @@ import org.springframework.hateoas.server.core.Relation;
 public class PeriodCourseProfessorResponse extends RepresentationModel<PeriodCourseProfessorResponse> {
 
 
+    //   for Descriptive (begin) :
+    private String courseFName;
+    private String professorName;
+    private String periodName;
+    private Long periodOfferNumber;
+
+    private String fieldCode;
+    private String fieldFName;
+    //   for Descriptive (end) :
+
+
     private String periodCoursePublicId;
 
     private String periodPublicId;

@@ -7,7 +7,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
-
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "PeriodCourseProfessorEntity.periodCourseProfessorApiEntity",
                 attributeNodes = {
@@ -18,6 +17,28 @@ import javax.persistence.*;
                 attributeNodes = {
                         @NamedAttributeNode("periodCourseProfessorApi"),
                         @NamedAttributeNode("periodCourse")
+                }
+        ),
+        @NamedEntityGraph(name = "PeriodCourseProfessorEntity.periodCourseProfessorApiEntityAndPeriodCourseProfessorFieldEntity",
+                attributeNodes = {
+                        @NamedAttributeNode("periodCourseProfessorApi"),
+                        @NamedAttributeNode("professor"),
+                        @NamedAttributeNode(value = "periodCourse", subgraph = "periodCourse-subGraph")
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "periodCourse-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "course"),
+                                        @NamedAttributeNode(value = "period", subgraph = "period-subGraph")
+                                },
+                                type = PeriodCourseEntity.class),
+                        @NamedSubgraph(
+                                name = "period-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "field")
+                                },
+                                type = FieldEntity.class)
                 }
         )
 })
@@ -78,3 +99,4 @@ public class PeriodCourseProfessorEntity extends BaseEntity {
     @OneToOne(mappedBy = "periodCourseProfessor", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private PeriodCourseProfessorApiEntity periodCourseProfessorApi;
 }
+
