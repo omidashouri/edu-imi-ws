@@ -1,7 +1,7 @@
 # edu-imi-ws
 IMI Education Web Service
 
-
+:-:> CRM.my_uuid -> CRM.public_uuid 
 CRM: contact -> person -> Role -> PRIVILEGE -> ROLE_PRIVILEGE -> PERSON_ROLE  
 EDU: EDU_LEVEL -> EDU_CATEGORY -> COURSE_CATEGORY -> TEAM -> TEAM_PRESENTED_COURSE -> TEAM_PRESENTED_GROUP ->
      STUDENT   -> REGISTER     -> 
@@ -20,7 +20,8 @@ EDU: EDU_LEVEL -> EDU_CATEGORY -> COURSE_CATEGORY -> TEAM -> TEAM_PRESENTED_COUR
   	"EDIT_DATE_TS" TIMESTAMP (6), 
   	"CONTACT_ID" NUMBER, 
   	"DELETED_CONTACT_ID" NUMBER, 
-  	"CONTACT_EDIT_DATE" NVARCHAR2(10), 
+  	"CONTACT_EDIT_DATE" NVARCHAR2(10),
+  	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,  
   	 CONSTRAINT "TBL_CONTACT_API_PK" PRIMARY KEY ("ID")
     USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
     TABLESPACE "USERS"  ENABLE, 
@@ -61,7 +62,7 @@ declare
   UUID_ nvarchar2(500 char) ;
 BEGIN
     TS_ := systimestamp;
-    UUID_ := CRM.my_uuid;
+    UUID_ := CRM.public_uuid;
   if inserting then
     insert into CRM.tbl_contact_api
     (id,contact_public_id, creator_id, create_date_ts,
@@ -90,7 +91,7 @@ declare
   ID_API number;
 BEGIN
     TS_ := systimestamp;
-    UUID_ := CRM.my_uuid;
+    UUID_ := CRM.public_uuid;
   IF DELETING THEN
     SELECT CA.ID INTO ID_API
     FROM CRM.TBL_CONTACT_API CA
@@ -128,7 +129,7 @@ begin
                 contact_id
             )VALUES(
                 crm.seq_contact_api.nextval,
-                crm.my_uuid,
+                crm.public_uuid,
                 systimestamp,
                 r_t."CONTACTID"
             );
@@ -136,6 +137,10 @@ begin
   end;
   commit;
 end;
+
+  begin
+  crm.UUID_CONTACT_API;
+  end;
 
 // enable validity to user crm
 
@@ -178,6 +183,7 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
        "ACCOUNT_NON_LOCKED" NUMBER,
        "USERNAME" NVARCHAR2(500),
        "MOBILE_VERIFICATION_STATUS" NUMBER, 
+       "DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
      	 CONSTRAINT "TBL_PERSON_API_PK" PRIMARY KEY ("ID")
        USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
        TABLESPACE "USERS"  ENABLE, 
@@ -231,7 +237,7 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
     APIPUBLICID_ nvarchar2(500 char);
   BEGIN
       TS_ := systimestamp;
-      UUID_ := CRM.my_uuid;
+      UUID_ := CRM.public_uuid;
     if inserting then
       SELECT ca.contact_public_id INTO APIPUBLICID_
       FROM CRM.TBL_CONTACT_API CA
@@ -281,7 +287,7 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
     ID_API number;
   BEGIN
       TS_ := systimestamp;
-      UUID_ := CRM.my_uuid;
+      UUID_ := CRM.public_uuid;
     IF DELETING THEN
       SELECT api.ID INTO ID_API
       FROM CRM.TBL_PERSON_API api
@@ -332,7 +338,7 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
                   contact_public_id
               )VALUES(
                   crm.SEQ_PERSON_API_ID.nextval,
-                  crm.my_uuid,
+                  crm.public_uuid,
                   systimestamp,
                   r_t."PERSONID",
                   r_t."USERNAME",
@@ -400,27 +406,27 @@ CREATE SEQUENCE  "CRM"."SEQ_ROLE_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999
  Insert into CRM.TBL_ROLE_API 
  (ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID) 
  values 
- (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_ADMIN',null,systimestamp,null,null,null,null,null,null,CRM.my_uuid);
+ (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_ADMIN',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);
  
  Insert into CRM.TBL_ROLE_API 
  (ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID) 
  values 
- (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUPOWERUSER',null,systimestamp,null,null,null,null,null,null,CRM.my_uuid);
+ (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUPOWERUSER',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);
  
  Insert into CRM.TBL_ROLE_API 
  (ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID) 
  values 
- (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUCATION',null,systimestamp,null,null,null,null,null,null,CRM.my_uuid);
+ (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUCATION',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);
  
  Insert into CRM.TBL_ROLE_API 
  (ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID) 
  values 
- (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUCATION',null,systimestamp,null,null,null,null,null,null,CRM.my_uuid);
+ (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUCATION',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);
  
  Insert into CRM.TBL_ROLE_API 
  (ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID) 
  values 
- (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUCATION',null,systimestamp,null,null,null,null,null,null,CRM.my_uuid);
+ (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUCATION',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);
        
              
              
@@ -464,22 +470,22 @@ CREATE SEQUENCE  "CRM"."SEQ_ROLE_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999
       Insert into CRM.TBL_PRIVILEGE_API 
       (ID,NAME,ROLE_ID,CREATE_DATE_TS,EDIT_DATE_TS,CREATOR_ID,EDITOR_ID,DESCRIPTION,DELETE_DATE_TS,PRIVILEGE_PUBLIC_ID) 
       values 
-      (CRM.SEQ_PRIVILEGE_API_ID.nextval,'UPDATE_PRIVILEGE',null,systimestamp,null,null,null,null,null,CRM.my_uuid);
+      (CRM.SEQ_PRIVILEGE_API_ID.nextval,'UPDATE_PRIVILEGE',null,systimestamp,null,null,null,null,null,CRM.public_uuid);
       
       Insert into CRM.TBL_PRIVILEGE_API 
       (ID,NAME,ROLE_ID,CREATE_DATE_TS,EDIT_DATE_TS,CREATOR_ID,EDITOR_ID,DESCRIPTION,DELETE_DATE_TS,PRIVILEGE_PUBLIC_ID) 
       values 
-      (CRM.SEQ_PRIVILEGE_API_ID.nextval,'DELETE_PRIVILEGE',null,systimestamp,null,null,null,null,null,CRM.my_uuid);
+      (CRM.SEQ_PRIVILEGE_API_ID.nextval,'DELETE_PRIVILEGE',null,systimestamp,null,null,null,null,null,CRM.public_uuid);
       
       Insert into CRM.TBL_PRIVILEGE_API 
       (ID,NAME,ROLE_ID,CREATE_DATE_TS,EDIT_DATE_TS,CREATOR_ID,EDITOR_ID,DESCRIPTION,DELETE_DATE_TS,PRIVILEGE_PUBLIC_ID) 
       values 
-      (CRM.SEQ_PRIVILEGE_API_ID.nextval,'READ_PRIVILEGE',null,systimestamp,null,null,null,null,null,CRM.my_uuid);
+      (CRM.SEQ_PRIVILEGE_API_ID.nextval,'READ_PRIVILEGE',null,systimestamp,null,null,null,null,null,CRM.public_uuid);
       
       Insert into CRM.TBL_PRIVILEGE_API 
       (ID,NAME,ROLE_ID,CREATE_DATE_TS,EDIT_DATE_TS,CREATOR_ID,EDITOR_ID,DESCRIPTION,DELETE_DATE_TS,PRIVILEGE_PUBLIC_ID) 
       values 
-      (CRM.SEQ_PRIVILEGE_API_ID.nextval,'CREATE_PRIVILEGE',null,systimestamp,null,null,null,null,null,CRM.my_uuid);
+      (CRM.SEQ_PRIVILEGE_API_ID.nextval,'CREATE_PRIVILEGE',null,systimestamp,null,null,null,null,null,CRM.public_uuid);
 
 ---------------- ROLE_PRIVILEGE --------------
 
@@ -559,7 +565,7 @@ Insert into CRM.TBL_ROLE_PRIVILEGE_API (ID,ROLE_API_ID,PRIVILEGE_API_ID) values 
 
     :::CORRECT TRIGGER FOR ID
     
-    
+ %%IMPORTANT%%   
     --PERSON_API_ID=4221 (find by my id)
 Insert into CRM.TBL_PERSON_ROLE_API (ID,PERSON_API_ID,ROLE_API_ID) values (CRM.SEQ_PERSON_ROLE_API.nextval,3847,1);    
 
@@ -588,7 +594,7 @@ values
         "CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
         "EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
         "DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
-        "DELETE_LEVEL_ID" NUMBER,  
+        "DELETED_LEVEL_ID" NUMBER,  
          CONSTRAINT "TBL_LEVEL_API_PK" PRIMARY KEY ("ID")
       USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
       TABLESPACE "USERS"  ENABLE, 
@@ -620,7 +626,7 @@ values
           UUID_ nvarchar2(500 char) ;
         BEGIN
             TS_ := systimestamp;
-            UUID_ := CRM.my_uuid;
+            UUID_ := CRM.public_uuid;
           if inserting then
             insert into EDU.TBL_LEVEL_API
             (id, LEVEL_public_id, create_date_ts, LEVEL_id)
@@ -647,7 +653,7 @@ values
       ID_API number;
     BEGIN
         TS_ := systimestamp;
-        UUID_ := CRM.my_uuid;
+        UUID_ := CRM.public_uuid;
       IF DELETING THEN
         SELECT API.ID INTO ID_API
         FROM EDu.TBL_LEVEL_API API
@@ -685,7 +691,7 @@ values
                     level_id
                 )VALUES(
                     edu.SEQ_EDU_LEVEL_API.nextval,
-                    crm.my_uuid,
+                    crm.public_uuid,
                     systimestamp,
                     r_t."LEVELID"
                 );
@@ -694,6 +700,10 @@ values
       commit;
     end;
     
+    
+  begin
+   EDU.UUID_LEVEL_API;
+   end;   
     
 
 ------------------------------
@@ -714,7 +724,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
     	"CREATE_DATE_TS" TIMESTAMP (6), 
     	"EDIT_DATE_TS" TIMESTAMP (6), 
     	"DELETE_DATE_TS" TIMESTAMP (6), 
-    	"DELETE_EDU_CATEGORY_ID" NUMBER, 
+    	"DELETED_EDU_CATEGORY_ID" NUMBER, 
     	 CONSTRAINT "TBL_EDU_CATEGORY_API_PK" PRIMARY KEY ("ID")
       USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
       TABLESPACE "USERS"  ENABLE, 
@@ -747,7 +757,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
           UUID_ nvarchar2(500 char) ;
         BEGIN
             TS_ := systimestamp;
-            UUID_ := CRM.my_uuid;
+            UUID_ := CRM.public_uuid;
           if inserting then
             insert into EDU.TBL_EDU_CATEGORY_API
             (id, EDU_CATEGORY_public_id, create_date_ts, EDU_CATEGORY_id)
@@ -773,7 +783,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
       ID_API number;
     BEGIN
         TS_ := systimestamp;
-        UUID_ := CRM.my_uuid;
+        UUID_ := CRM.public_uuid;
       IF DELETING THEN
         SELECT API.ID INTO ID_API
         FROM EDU.TBL_EDU_CATEGORY_API API
@@ -811,7 +821,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
                         EDU_CATEGORY_id
                     )VALUES(
                         edu.SEQ_EDU_CATEGORY_API.nextval,
-                        crm.my_uuid,
+                        crm.public_uuid,
                         systimestamp,
                         r_t."EDU_CATEGORYID"
                     );
@@ -876,7 +886,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
           UUID_ nvarchar2(500 char) ;
         BEGIN
             TS_ := systimestamp;
-            UUID_ := CRM.my_uuid;
+            UUID_ := CRM.public_uuid;
           if inserting then
             insert into EDU.TBL_COURSE_CATEGORY_API
             (id, COURSE_CATEGORY_public_id, create_date_ts, COURSE_CATEGORY_id)
@@ -901,7 +911,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
                  ID_API number;
                BEGIN
                    TS_ := systimestamp;
-                   UUID_ := CRM.my_uuid;
+                   UUID_ := CRM.public_uuid;
                  IF DELETING THEN
                    SELECT API.ID INTO ID_API
                    FROM EDU.TBL_COURSE_CATEGORY_API API
@@ -938,7 +948,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
                            COURSE_CATEGORY_id
                        )VALUES(
                            edu.SEQ_COURSE_CATEGORY_API.nextval,
-                           crm.my_uuid,
+                           crm.public_uuid,
                            systimestamp,
                            r_t."COURSE_CATEGORYID"
                        );
@@ -1000,7 +1010,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
                        UUID_ nvarchar2(500 char) ;
                      BEGIN
                          TS_ := systimestamp;
-                         UUID_ := CRM.my_uuid;
+                         UUID_ := CRM.public_uuid;
                        if inserting then
                          insert into EDU.TBL_TERM_API
                          (id, TERM_public_id, create_date_ts, TERM_id)
@@ -1015,6 +1025,30 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
                           where TERM_id = :old.id;
                          end if;
                      END;
+                     
+    create or replace TRIGGER "EDU"."TBL_TERM_API_D" BEFORE DELETE ON EDU.TBL_TERM
+               REFERENCING OLD AS OLD NEW AS NEW
+               FOR EACH ROW WHEN (1=1)
+               declare
+                 TS_ TIMESTAMP(6);
+                 UUID_ nvarchar2(500 char) ;
+                 ID_API number;
+               BEGIN
+                   TS_ := systimestamp;
+                   UUID_ := CRM.public_uuid;
+                 IF DELETING THEN
+                   SELECT API.ID INTO ID_API
+                   FROM EDU.TBL_TERM_API API
+                   WHERE API.TERM_id = :old.id;
+    
+                   update EDU.tbl_TERM_api api
+                   set  
+                    api.TERM_id = null,
+                    api.delete_date_ts = TS_,
+                    api.deleted_TERM_id = :old.id
+                    where api.id = ID_API;
+                  END IF;
+               END;
            
           
      create or replace procedure   EDU.UUID_TERM_API IS
@@ -1039,7 +1073,7 @@ Insert into EDU.TBL_EDU_CATEGORY (ID,TITLE,PARENT_ID,COMPANY_ID,EDITOR,CREATOR) 
                           TERM_id
                       )VALUES(
                           edu.SEQ_TERM_API.nextval,
-                          crm.my_uuid,
+                          crm.public_uuid,
                           systimestamp,
                           r_t."TERMID"
                       );
@@ -1105,7 +1139,7 @@ create or replace TRIGGER "EDU"."TBL_PROFESSOR_API_IU" AFTER INSERT OR UPDATE ON
     APIPUBLICID_ nvarchar2(500 char);
   BEGIN
       TS_ := systimestamp;
-      UUID_ := CRM.my_uuid;
+      UUID_ := CRM.public_uuid;
     if inserting then
       SELECT api.person_public_id INTO APIPUBLICID_
       FROM CRM.TBL_PERSON_API api
@@ -1134,7 +1168,7 @@ create or replace TRIGGER "EDU"."TBL_PROFESSOR_API_IU" AFTER INSERT OR UPDATE ON
       ID_API number;
     BEGIN
         TS_ := systimestamp;
-        UUID_ := CRM.my_uuid;
+        UUID_ := CRM.public_uuid;
       IF DELETING THEN
         SELECT api.ID INTO ID_API
         FROM EDU.TBL_PROFESSOR_API api
@@ -1178,7 +1212,7 @@ create or replace procedure   EDU.UUID_PROFESSOR_API IS
                   person_public_id
               )VALUES(
                   EDU.SEQ_PROFESSOR_API.nextval,
-                  crm.my_uuid,
+                  crm.public_uuid,
                   systimestamp,
                   r_t."PROFESSORID",
                   r_t."PERSONID",
@@ -1251,7 +1285,7 @@ create or replace TRIGGER "EDU"."TBL_COURSE_API_IU" AFTER INSERT OR UPDATE ON ED
        APIIPUBLICID_ nvarchar2(500 char); --Level
      BEGIN
          TS_ := systimestamp;
-         UUID_ := CRM.my_uuid;
+         UUID_ := CRM.public_uuid;
        if inserting then
          SELECT api.course_category_public_id INTO APIPUBLICID_
          FROM EDU.tbl_course_category_api api
@@ -1285,7 +1319,7 @@ create or replace TRIGGER "EDU"."TBL_COURSE_API_IU" AFTER INSERT OR UPDATE ON ED
            ID_API number;
          BEGIN
              TS_ := systimestamp;
-             UUID_ := CRM.my_uuid;
+             UUID_ := CRM.public_uuid;
            IF DELETING THEN
              SELECT api.ID INTO ID_API
              FROM EDU.TBL_COURSE_API api
@@ -1336,7 +1370,7 @@ create or replace TRIGGER "EDU"."TBL_COURSE_API_IU" AFTER INSERT OR UPDATE ON ED
                        level_public_id
                    )VALUES(
                        EDU.SEQ_COURSE_API.nextval,
-                       crm.my_uuid,
+                       crm.public_uuid,
                        systimestamp,
                        r_t."COURSEID",
                        r_t."COURSECATEGORYID",
@@ -1412,7 +1446,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_API_IU" AFTER INSERT OR UPDATE ON EDU
        APIIPUBLICID_ nvarchar2(500 char); --Level
      BEGIN
          TS_ := systimestamp;
-         UUID_ := CRM.my_uuid;
+         UUID_ := CRM.public_uuid;
        if inserting then
          SELECT api.edu_category_public_id INTO APIPUBLICID_
          FROM EDU.tbl_edu_category_api api
@@ -1447,7 +1481,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_API_IU" AFTER INSERT OR UPDATE ON EDU
              ID_API number;
            BEGIN
                TS_ := systimestamp;
-               UUID_ := CRM.my_uuid;
+               UUID_ := CRM.public_uuid;
              IF DELETING THEN
                SELECT api.ID INTO ID_API
                FROM EDU.TBL_FIELD_API api
@@ -1500,7 +1534,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_API_IU" AFTER INSERT OR UPDATE ON EDU
                          level_public_id
                      )VALUES(
                          EDU.SEQ_FIELD_API.nextval,
-                         crm.my_uuid,
+                         crm.public_uuid,
                          systimestamp,
                          r_t."ACTIVITYSTATUS",
                          r_t."FIELDID",
@@ -1574,7 +1608,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_API_IU" AFTER INSERT OR UPDATE ON ED
        APIPUBLICID_ nvarchar2(500 char); --FIELD
      BEGIN
          TS_ := systimestamp;
-         UUID_ := CRM.my_uuid;
+         UUID_ := CRM.public_uuid;
        if inserting then
          SELECT api.field_public_id INTO APIPUBLICID_
          FROM EDU.tbl_field_api api
@@ -1606,7 +1640,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_API_D" BEFORE DELETE ON EDU.TBL_PERI
              ID_API number;
            BEGIN
                TS_ := systimestamp;
-               UUID_ := CRM.my_uuid;
+               UUID_ := CRM.public_uuid;
              IF DELETING THEN
                SELECT api.ID INTO ID_API
                FROM EDU.TBL_PERIOD_API api
@@ -1653,7 +1687,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_API_D" BEFORE DELETE ON EDU.TBL_PERI
                            field_public_id
                        )VALUES(
                            EDU.SEQ_PERIOD_API.nextval,
-                           crm.my_uuid,
+                           crm.public_uuid,
                            systimestamp,
                            r_t."CANREGISTERONLINE",
                            r_t."PERIODID",
@@ -1731,7 +1765,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_API_IU" AFTER INSERT OR UPDAT
        APIIPUBLICID_ nvarchar2(500 char); --COURSE
      BEGIN
          TS_ := systimestamp;
-         UUID_ := CRM.my_uuid;
+         UUID_ := CRM.public_uuid;
        if inserting then
          SELECT api.period_public_id INTO APIPUBLICID_
          FROM EDU.tbl_PERIOD_api api
@@ -1789,7 +1823,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_API_IU" AFTER INSERT OR UPDAT
              ID_API number;
            BEGIN
                TS_ := systimestamp;
-               UUID_ := CRM.my_uuid;
+               UUID_ := CRM.public_uuid;
              IF DELETING THEN
                SELECT api.ID INTO ID_API
                FROM EDU.TBL_PERIOD_COURSE_API api
@@ -1839,7 +1873,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_API_IU" AFTER INSERT OR UPDAT
                          course_public_id
                      )VALUES(
                          EDU.SEQ_PERIOD_COURSE_API.nextval,
-                         crm.my_uuid,
+                         crm.public_uuid,
                          systimestamp,
                          r_t."PERIODCOURSEID",
                          r_t."PERIODID",
@@ -1918,7 +1952,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
          APIIPUBLICID_ nvarchar2(500 char); --COURSE
        BEGIN
            TS_ := systimestamp;
-           UUID_ := CRM.my_uuid;
+           UUID_ := CRM.public_uuid;
          if inserting then
            SELECT api.field_public_id INTO APIPUBLICID_
            FROM EDU.tbl_field_api api
@@ -1977,7 +2011,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
           ID_API number;
         BEGIN
             TS_ := systimestamp;
-            UUID_ := CRM.my_uuid;
+            UUID_ := CRM.public_uuid;
           IF DELETING THEN
             SELECT api.ID INTO ID_API
             FROM EDU.TBL_FIELD_COURSE_API api
@@ -2034,7 +2068,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
                             course_public_id
                         )VALUES(
                             EDU.SEQ_FIELD_COURSE_API.nextval,
-                            crm.my_uuid,
+                            crm.public_uuid,
                             systimestamp,
                             r_t."FIELDCOURSEID",
                             r_t."ACTIVITYSTATUS",
@@ -2055,7 +2089,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
       end; 
       
       
- ---------------- TEAM --------------
+ ---------------- PERIOD COURSE PROFESSOR --------------
  
     CREATE SEQUENCE  "EDU"."SEQ_PERIOD_COURSE_PROFESSO_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
  
@@ -2113,7 +2147,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
             APIVPUBLICID_ nvarchar2(500 char); --PROFESSOR
           BEGIN
               TS_ := systimestamp;
-              UUID_ := CRM.my_uuid;
+              UUID_ := CRM.public_uuid;
             if inserting then
               SELECT api.period_id, api.period_public_id INTO ID_, APIPUBLICID_
               FROM EDU.tbl_period_course_api api
@@ -2193,7 +2227,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
            ID_API number;
          BEGIN
              TS_ := systimestamp;
-             UUID_ := CRM.my_uuid;
+             UUID_ := CRM.public_uuid;
            IF DELETING THEN
              SELECT api.ID INTO ID_API
              FROM EDU.TBL_PERIOD_COURSE_PROFESSO_API api
@@ -2253,7 +2287,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
                              professor_public_id
                          )VALUES(
                              EDU.SEQ_PERIOD_COURSE_PROFESSO_API.nextval,
-                             crm.my_uuid,
+                             crm.public_uuid,
                              systimestamp,
                              r_t."PERIODCOURSEPROFESSORID",
                              r_t."PERIODCOURSEID",
@@ -2403,7 +2437,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
              APIVPUBLICID_ nvarchar2(500 char); --COURSE
            BEGIN
                TS_ := systimestamp;
-               UUID_ := CRM.my_uuid;
+               UUID_ := CRM.public_uuid;
              if inserting then
                SELECT api.period_public_id INTO APIPUBLICID_
                FROM EDU.tbl_period_api api
@@ -2487,7 +2521,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
            ID_API number;
          BEGIN
              TS_ := systimestamp;
-             UUID_ := CRM.my_uuid;
+             UUID_ := CRM.public_uuid;
            IF DELETING THEN
              SELECT api.ID INTO ID_API
              FROM EDU.TBL_TERM_PRESENTED_COURSE_API api
@@ -2550,7 +2584,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
                                course_public_id
                            )VALUES(
                                EDU.SEQ_TERM_PRESENTED_COURSE_API.nextval,
-                               crm.my_uuid,
+                               crm.public_uuid,
                                systimestamp,
                                r_t."TERMPRESENTEDCOURSEID",
                                r_t."PERIODID",
@@ -2704,7 +2738,7 @@ create or replace TRIGGER "EDU"."TBL_TERM_PRESENTED_GROUP_API_IU" AFTER INSERT O
              API6PUBLICID_ nvarchar2(500 char); --PERIOD
            BEGIN
                TS_ := systimestamp;
-               UUID_ := CRM.my_uuid;
+               UUID_ := CRM.public_uuid;
              if inserting then
                --PROFESSOR
                SELECT api.professor_public_id INTO APIPUBLICID_
@@ -2797,7 +2831,7 @@ create or replace TRIGGER "EDU"."TBL_TERM_PRESENTED_GROUP_API_IU" AFTER INSERT O
              ID_API number;
            BEGIN
                TS_ := systimestamp;
-               UUID_ := CRM.my_uuid;
+               UUID_ := CRM.public_uuid;
              IF DELETING THEN
                SELECT api.ID INTO ID_API
                FROM EDU.TBL_TERM_PRESENTED_GROUP_API api
@@ -2876,7 +2910,7 @@ create or replace TRIGGER "EDU"."TBL_TERM_PRESENTED_GROUP_API_IU" AFTER INSERT O
                                course_public_id
                            )VALUES(
                                EDU.SEQ_TERM_PRESENTED_GROUP_API.nextval,
-                               crm.my_uuid,
+                               crm.public_uuid,
                                systimestamp,
                                r_t."TERMPRESENTEDGROUPID",
                                r_t."TERMPRESENTEDCOURSEID",
@@ -2951,7 +2985,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_API_IU" AFTER INSERT OR UPDATE ON E
     APIPUBLICID_ nvarchar2(500 char);
   BEGIN
       TS_ := systimestamp;
-      UUID_ := CRM.my_uuid;
+      UUID_ := CRM.public_uuid;
     if inserting then
       SELECT api.person_public_id INTO APIPUBLICID_
       FROM CRM.TBL_PERSON_API api
@@ -2992,7 +3026,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_API_IU" AFTER INSERT OR UPDATE ON E
        ID_API number;
      BEGIN
          TS_ := systimestamp;
-         UUID_ := CRM.my_uuid;
+         UUID_ := CRM.public_uuid;
        IF DELETING THEN
          SELECT api.ID INTO ID_API
          FROM EDU.TBL_STUDENT_API api
@@ -3037,7 +3071,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_API_IU" AFTER INSERT OR UPDATE ON E
                    person_public_id
                )VALUES(
                    EDU.SEQ_STUDENT_API.nextval,
-                   crm.my_uuid,
+                   crm.public_uuid,
                    systimestamp,
                    r_t."STUDENTID",
                    r_t."PERSONID",
@@ -3054,7 +3088,6 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_API_IU" AFTER INSERT OR UPDATE ON E
   
   
 ------------------------ REGISTER -------------
-
 
 CREATE SEQUENCE  "EDU"."SEQ_REGISTER_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
 
@@ -3112,7 +3145,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
        APIIPUBLICID_ nvarchar2(500 char); --STUDENT
      BEGIN
          TS_ := systimestamp;
-         UUID_ := CRM.my_uuid;
+         UUID_ := CRM.public_uuid;
        if inserting then
          SELECT api.PERIOD_public_id INTO APIPUBLICID_
          FROM EDU.tbl_PERIOD_api api
@@ -3186,7 +3219,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
            ID_API number;
          BEGIN
              TS_ := systimestamp;
-             UUID_ := CRM.my_uuid;
+             UUID_ := CRM.public_uuid;
            IF DELETING THEN
              SELECT api.ID INTO ID_API
              FROM EDU.TBL_REGISTER_API api
@@ -3244,7 +3277,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
                        register_activity_status
                    )VALUES(
                        EDU.SEQ_REGISTER_API.nextval,
-                       crm.my_uuid,
+                       crm.public_uuid,
                        systimestamp,
                        r_t."REGISTERID",
                        r_t."PERIODID",
