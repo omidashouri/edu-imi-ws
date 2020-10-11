@@ -15,6 +15,7 @@ import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.edu.PeriodApiService;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -439,6 +440,7 @@ public class PeriodController {
     }
 
     @Operation(
+            hidden = true,
             summary = "Generate Executor Public Id",
             description = "generate public id for new executors",
             tags = "periods",
@@ -472,6 +474,7 @@ public class PeriodController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new/executors",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> generateExecutorPublicId() {
@@ -589,6 +592,7 @@ public class PeriodController {
 
 
     @Operation(
+            hidden = true,
             summary = "Generate Period Public Id",
             description = "generate public id for new periods",
             tags = "periods",
@@ -622,6 +626,7 @@ public class PeriodController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createPeriodApiPublicId() {
@@ -661,6 +666,7 @@ public class PeriodController {
     }
 
     @Operation(
+            hidden = true,
             summary = "Update Field Public Id",
             description = "update public id for new fields",
             tags = "periods",
@@ -694,6 +700,7 @@ public class PeriodController {
                     )
             }
     )
+    @DisableMethod
     @PutMapping(path = "/fields/update/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> updatePeriodApiFieldPublicId() {

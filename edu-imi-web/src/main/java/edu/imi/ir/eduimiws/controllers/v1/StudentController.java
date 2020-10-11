@@ -13,6 +13,7 @@ import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.StudentResponse;
 import edu.imi.ir.eduimiws.services.edu.StudentApiService;
 import edu.imi.ir.eduimiws.services.edu.StudentService;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -278,6 +279,7 @@ public class StudentController {
 
 
     @Operation(
+            hidden = true,
             summary = "Generate Student Public Id",
             description = "generate public id for new students",
             tags = "students",
@@ -311,6 +313,7 @@ public class StudentController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createStudentApiPublicId() {

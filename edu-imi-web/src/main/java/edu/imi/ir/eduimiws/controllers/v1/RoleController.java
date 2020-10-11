@@ -10,6 +10,7 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.crm.PrivilegeResponse;
 import edu.imi.ir.eduimiws.models.response.crm.RoleResponse;
 import edu.imi.ir.eduimiws.services.crm.RoleApiService;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -192,6 +193,7 @@ public class RoleController {
     }
 
     @Operation(
+            hidden = true,
             summary = "Create Role",
             description = "Role ",
             tags = "roles",
@@ -231,8 +233,9 @@ public class RoleController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new",
-            consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createRole(@RequestBody RoleForm roleForm) {
 

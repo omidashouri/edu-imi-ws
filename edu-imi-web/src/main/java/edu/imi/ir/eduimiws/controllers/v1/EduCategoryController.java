@@ -13,6 +13,7 @@ import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.EduCategoryResponse;
 import edu.imi.ir.eduimiws.services.edu.EduCategoryApiService;
 import edu.imi.ir.eduimiws.services.edu.EduCategoryService;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -276,6 +277,7 @@ public class EduCategoryController {
     }
 
     @Operation(
+            hidden = true,
             summary = "Generate EduCategory Public Id",
             description = "generate public id for new eduCategories",
             tags = "eduCategories",
@@ -309,6 +311,7 @@ public class EduCategoryController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createEduCategoryApiPublicId() {

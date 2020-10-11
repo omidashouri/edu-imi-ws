@@ -15,6 +15,7 @@ import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.LevelResponse;
 import edu.imi.ir.eduimiws.services.edu.LevelApiService;
 import edu.imi.ir.eduimiws.services.edu.LevelService;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -278,6 +279,7 @@ public class LevelController {
     }
 
     @Operation(
+            hidden = true,
             summary = "Generate Level Public Id",
             description = "generate public id for new levels",
             tags = "levels",
@@ -311,6 +313,7 @@ public class LevelController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createLevelApiPublicId() {

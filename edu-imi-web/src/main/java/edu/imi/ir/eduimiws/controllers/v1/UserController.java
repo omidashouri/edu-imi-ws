@@ -21,6 +21,7 @@ import edu.imi.ir.eduimiws.security.ActiveUserService2;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.crm.PersonApiService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -458,6 +459,7 @@ public class UserController {
 
 
     @Operation(
+            hidden = true,
             summary = "Register User",
             description = "register User",
             tags = "users",
@@ -497,6 +499,7 @@ public class UserController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/register",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -598,6 +601,7 @@ public class UserController {
 
 
     @Operation(
+            hidden = true,
             summary = "Role User",
             description = "role User",
             tags = "users",
@@ -637,6 +641,7 @@ public class UserController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/{userPublicId}/role",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

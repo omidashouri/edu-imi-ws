@@ -9,6 +9,7 @@ import edu.imi.ir.eduimiws.models.request.PrivilegeForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.crm.PrivilegeResponse;
 import edu.imi.ir.eduimiws.services.crm.PrivilegeApiService;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -187,6 +188,7 @@ public class PrivilegeController {
     }
 
     @Operation(
+            hidden = true,
             summary = "Create Privilege",
             description = "Privilege ",
             tags = "privileges",
@@ -226,8 +228,9 @@ public class PrivilegeController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new",
-            consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createPrivilege(@RequestBody PrivilegeForm privilegeForm) {
 
