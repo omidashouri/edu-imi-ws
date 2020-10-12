@@ -58,35 +58,36 @@ public class ReqresController {
         }
     }
 
-    @PostMapping(path = "/{reqresId}",
-            consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getRefIdResponse(@RequestParam(name = "reqresId") String reqresId) {
+//    #1
+@PostMapping(path = "/{reqresId}",
+        consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+public ResponseEntity<?> getRefIdResponse(@RequestParam(name = "reqresId") String reqresId) {
 
-        try {
+    try {
 
-            if (reqresId.equalsIgnoreCase("1")) {
+        if (reqresId.equalsIgnoreCase("1")) {
 //                soapClient.callMellat();
 
-                String aa = soapClientImpl2.bpPayRequest(1L, null, null,
-                        1L, 1L, null,
-                        null, null, null,
-                        String.valueOf(1L));
+            String aa = soapClientImpl2.bpPayRequest(1L, null, null,
+                    1L, 1L, null,
+                    null, null, null,
+                    String.valueOf(1L));
 
-                String bb = aa;
-            }
-
-            UserReqres userReqres = reqresApi.getSingleUser(Long.valueOf(reqresId));
-
-
-            return ResponseEntity.ok(userReqres);
-
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
+            String bb = aa;
         }
-    }
 
-//    bank callbackURL
+        UserReqres userReqres = reqresApi.getSingleUser(Long.valueOf(reqresId));
+
+
+        return ResponseEntity.ok(userReqres);
+
+    } catch (Exception ex) {
+        return (ResponseEntity<?>) ResponseEntity.badRequest();
+    }
+}
+
+    //    #2 bank callbackURL
 //    http://ashouri-pc.imi.ir:8080/edu-imi-ws/api/v1/reqres/bankResponse
     @PostMapping(path = "/bankResponse",
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
