@@ -17,9 +17,9 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_ROLE_PRIVILEGE_API",allocationSize = 1)
-@Table(schema = "CRM",name = "TBL_ROLE_PRIVILEGE_API")
-public class RolePrivilegeApi extends BaseEntity {
+@SequenceGenerator(name = "entity_sequence", schema = "CRM", sequenceName = "SEQ_ROLE_PRIVILEGE_API", allocationSize = 1)
+@Table(schema = "CRM", name = "TBL_ROLE_PRIVILEGE_API")
+public class RolePrivilegeApiEntity extends BaseEntity {
 
     @Column(name = "ROLE_API_ID")
     private Long roleApiId;

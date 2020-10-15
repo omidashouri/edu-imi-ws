@@ -3297,18 +3297,2587 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
     edu.UUID_REGISTER_API;
     end;
 
+### @@@
+------------------------------
+
+
+CREATE SEQUENCE  "CRM"."SEQ_PARAMETER_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+    CREATE TABLE "CRM"."TBL_PARAMETER_API" 
+     (	"ID" NUMBER NOT NULL ENABLE, 
+  	"PARAMETER_ID" NUMBER, 
+  	"PARAMETER_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+  	"DELETED_PARAMETER_ID" NUMBER, 
+  	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+  	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+  	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+  	 CONSTRAINT "TBL_PARAMETER_API_PK" PRIMARY KEY ("ID")
+    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+    TABLESPACE "USERS"  ENABLE, 
+  	 CONSTRAINT "TBL_PARAMETER_API_FK1" FOREIGN KEY ("PARAMETER_ID")
+  	  REFERENCES "CRM"."TBL_PARAMETER" ("ID") ENABLE
+     )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+   NOCOMPRESS LOGGING
+    TABLESPACE "USERS" ;
+  
+    CREATE OR REPLACE EDITIONABLE TRIGGER "CRM"."TBL_PARAMETER_API_TRG" 
+  BEFORE INSERT ON CRM.TBL_PARAMETER_API 
+  FOR EACH ROW 
+  BEGIN
+    <<COLUMN_SEQUENCES>>
+    BEGIN
+      IF INSERTING AND :NEW.ID IS NULL THEN
+        SELECT SEQ_PARAMETER_API_ID.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+      END IF;
+    END COLUMN_SEQUENCES;
+  END;
+  /
+  ALTER TRIGGER "CRM"."TBL_PARAMETER_API_TRG" ENABLE;
+  
+create or replace TRIGGER "CRM"."TBL_PARAMETER_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_PARAMETER
+             REFERENCING OLD AS OLD NEW AS NEW
+             FOR EACH ROW WHEN (1=1)
+             declare
+               TS_ TIMESTAMP(6);
+               UUID_ nvarchar2(500 char) ;
+             BEGIN
+                 TS_ := systimestamp;
+                 UUID_ := CRM.public_uuid;
+               if inserting then
+                 insert into CRM.TBL_PARAMETER_API
+                 (id, PARAMETER_public_id, create_date_ts, PARAMETER_id)
+                  values 
+                   (CRM.SEQ_PARAMETER_API_ID.nextval, UUID_, TS_, :new.id);
+               end if;
+               if updating then
+                 update CRM.TBL_PARAMETER_API
+                 set  
+                  edit_date_ts = TS_
+                  where PARAMETER_id = :old.id;
+                 end if;
+             END;   
+             
+ 
+create or replace TRIGGER "CRM"."TBL_PARAMETER_API_D" BEFORE DELETE ON CRM.TBL_PARAMETER
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         ID_API number;
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         IF DELETING THEN
+           SELECT API.ID INTO ID_API
+           FROM CRM.TBL_PARAMETER_API API
+           WHERE API.PARAMETER_id = :old.id;
+           
+           update CRM.tbl_PARAMETER_api api
+           set  
+            api.PARAMETER_id = null,
+            api.delete_date_ts = TS_,
+            api.deleted_PARAMETER_id = :old.id
+            where api.id = ID_API;
+          END IF;
+       END; 
+          
+create or replace procedure   CRM.UUID_PARAMETER_API IS
+           begin
+             declare
+               cursor c_t is
+                       SELECT
+                           mt.id as PARAMETERID
+                       FROM
+                           CRM.tbl_PARAMETER mt
+                           LEFT JOIN CRM.tbl_PARAMETER_api api ON mt.id = api.PARAMETER_id
+                       WHERE
+                           api.PARAMETER_id IS NULL
+                       ORDER BY
+                           PARAMETERID ASC;
+             begin
+               for r_t in c_t loop
+                       INSERT INTO CRM.tbl_PARAMETER_api(
+                           id,
+                           PARAMETER_public_id,
+                           create_date_ts,
+                           PARAMETER_id
+                       )VALUES(
+                           CRM.SEQ_PARAMETER_API_ID.nextval,
+                           crm.public_uuid,
+                           systimestamp,
+                           r_t."PARAMETERID"
+                       );
+                end loop;
+             end;
+             commit;
+           end; 
+       
+       
+begin
+CRM.UUID_PARAMETER_API;
+end;
+
+------------------------------
+
+CREATE SEQUENCE  "CRM"."SEQ_COMPANY_ID_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "CRM"."TBL_COMPANY_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"COMPANY_ID" NUMBER, 
+	"COMPANY_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"DELETED_COMPANY_ID" NUMBER, 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_COMPANY_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_COMPANY_API_FK1" FOREIGN KEY ("COMPANY_ID")
+	  REFERENCES "CRM"."TBL_COMPANY" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+  
+   create or replace TRIGGER "CRM"."TBL_COMPANY_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_COMPANY
+             REFERENCING OLD AS OLD NEW AS NEW
+             FOR EACH ROW WHEN (1=1)
+             declare
+               TS_ TIMESTAMP(6);
+               UUID_ nvarchar2(500 char) ;
+             BEGIN
+                 TS_ := systimestamp;
+                 UUID_ := CRM.public_uuid;
+               if inserting then
+                 insert into CRM.TBL_COMPANY_API
+                 (id, COMPANY_public_id, create_date_ts, COMPANY_id)
+                  values 
+                   (CRM.SEQ_COMPANY_ID_API.nextval, UUID_, TS_, :new.id);
+               end if;
+               if updating then
+                 update CRM.TBL_COMPANY_API
+                 set  
+                  edit_date_ts = TS_
+                  where COMPANY_id = :old.id;
+                 end if;
+             END;
+             
+ 
+ create or replace TRIGGER "CRM"."TBL_COMPANY_API_D" BEFORE DELETE ON CRM.TBL_COMPANY
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         ID_API number;
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         IF DELETING THEN
+           SELECT API.ID INTO ID_API
+           FROM CRM.TBL_COMPANY_API API
+           WHERE API.COMPANY_id = :old.id;
+           
+           update CRM.tbl_COMPANY_api api
+           set  
+            api.COMPANY_id = null,
+            api.delete_date_ts = TS_,
+            api.deleted_COMPANY_id = :old.id
+            where api.id = ID_API;
+          END IF;
+       END;
+          
+ create or replace procedure   CRM.UUID_COMPANY_API IS
+           begin
+             declare
+               cursor c_t is
+                       SELECT
+                           mt.id as COMPANYID
+                       FROM
+                           CRM.tbl_COMPANY mt
+                           LEFT JOIN CRM.tbl_COMPANY_api api ON mt.id = api.COMPANY_id
+                       WHERE
+                           api.COMPANY_id IS NULL
+                       ORDER BY
+                           COMPANYID ASC;
+             begin
+               for r_t in c_t loop
+                       INSERT INTO CRM.tbl_COMPANY_api(
+                           id,
+                           COMPANY_public_id,
+                           create_date_ts,
+                           COMPANY_id
+                       )VALUES(
+                           CRM.SEQ_COMPANY_ID_API.nextval,
+                           crm.public_uuid,
+                           systimestamp,
+                           r_t."COMPANYID"
+                       );
+                end loop;
+             end;
+             commit;
+           end;
+       
+       
+begin
+CRM.UUID_COMPANY_API;
+end;
+
+
+
+------------------------------
+
+CREATE SEQUENCE  "CRM"."SEQ_ACCOUNT_ID_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+
+create or replace TRIGGER "CRM"."TBL_ACCOUNT_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_ACCOUNT
+  REFERENCING OLD AS OLD NEW AS NEW
+  FOR EACH ROW WHEN (1=1)
+  declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    APIPUBLICID_ nvarchar2(500 char);
+  BEGIN
+      TS_ := systimestamp;
+      UUID_ := CRM.public_uuid;
+    if inserting then
+      SELECT api.COMPANY_public_id INTO APIPUBLICID_
+      FROM CRM.TBL_COMPANY_API api
+      WHERE api.COMPANY_id = :new.COMPANY_id;
+      insert into CRM.tbl_ACCOUNT_api
+      (id, ACCOUNT_public_id, create_date_ts,
+        ACCOUNT_id, COMPANY_id, COMPANY_public_id)
+       values 
+        (CRM.SEQ_ACCOUNT_ID_API.nextval, UUID_, TS_, 
+        :new.id, :new.COMPANY_ID, APIPUBLICID_);
+    end if;
+    if updating then
+      update CRM.tbl_ACCOUNT_api
+      set  
+       edit_date_ts = TS_
+       where ACCOUNT_id = :old.id;
+      end if;
+  -- COMPANY
+        if :new.COMPANY_ID != null and :new.COMPANY_ID != :old.COMPANY_ID THEN
+             SELECT api.COMPANY_public_id INTO APIPUBLICID_
+             FROM CRM.tbl_COMPANY_api api
+             WHERE api.COMPANY_id = :new.COMPANY_id;
+             --
+             update CRM.tbl_ACCOUNT_api
+             set
+             COMPANY_id = :new.COMPANY_id,
+             COMPANY_public_id = APIPUBLICID_
+             where ACCOUNT_id = :old.id;
+        end if;
+  END;
+
+  
+ create or replace TRIGGER "CRM"."TBL_ACCOUNT_API_D" BEFORE DELETE ON CRM.TBL_ACCOUNT
+    REFERENCING OLD AS OLD NEW AS NEW
+    FOR EACH ROW WHEN (1=1)
+    declare
+      TS_ TIMESTAMP(6);
+      UUID_ nvarchar2(500 char) ;
+      ID_API number;
+    BEGIN
+        TS_ := systimestamp;
+        UUID_ := CRM.public_uuid;
+      IF DELETING THEN
+        SELECT api.ID INTO ID_API
+        FROM CRM.TBL_ACCOUNT_API api
+        WHERE api.ACCOUNT_id = :old.id;
+        update CRM.tbl_ACCOUNT_api api
+        set  
+         api.ACCOUNT_id = null,
+         api.delete_date_ts = TS_,
+         api.deleted_ACCOUNT_id = :old.id,
+         api.company_id = null
+         where api.id = ID_API;
+       END IF;
+    END;  
+  
+  
+create or replace procedure   CRM.UUID_ACCOUNT_API IS
+  begin
+    declare
+      cursor c_t is
+              SELECT
+                  mt.id as ACCOUNTID,
+                  mt.company_id as COMPANYID,
+                  secapi.company_public_id COMPANYPUBLICID
+              FROM
+                  CRM.tbl_ACCOUNT mt
+                  LEFT JOIN CRM.tbl_ACCOUNT_api api ON mt.id = api.ACCOUNT_id
+                  LEFT JOIN CRM.tbl_company sect ON mt.company_id = sect.id
+                  LEFT JOIN CRM.tbl_company_api secapi ON sect.id = secapi.company_id
+              WHERE
+                  api.ACCOUNT_id IS NULL
+              ORDER BY
+                  ACCOUNTID ASC;
+    begin
+      for r_t in c_t loop
+              INSERT INTO CRM.tbl_ACCOUNT_api(
+                  id,
+                  ACCOUNT_public_id,
+                  create_date_ts,
+                  ACCOUNT_id,
+                  company_id,
+                  company_public_id
+              )VALUES(
+                  CRM.SEQ_ACCOUNT_ID_API.nextval,
+                  crm.public_uuid,
+                  systimestamp,
+                  r_t."ACCOUNTID",
+                  r_t."COMPANYID",
+                  r_t."COMPANYPUBLICID"
+              );
+       end loop;
+    end;
+    commit;
+  end;
+  
+ begin
+ CRM.UUID_ACCOUNT_API;
+ end;
+
+
+
+------------------------------
+
+   CREATE SEQUENCE  "CRM"."SEQ_EVENT_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+   CREATE TABLE "CRM"."TBL_EVENT_API" 
+       (	"ID" NUMBER NOT NULL ENABLE, 
+        "EVENT_ID" NUMBER, 
+        "EVENT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+        "CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+        "DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+        "DELETED_EVENT_ID" NUMBER, 
+        "EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+         CONSTRAINT "TABLE_EVENT_PK" PRIMARY KEY ("ID")
+      USING INDEX (CREATE UNIQUE INDEX "CRM"."TABLE1_PK1" ON "CRM"."TBL_EVENT_API" ("ID") 
+      PCTFREE 10 INITRANS 2 MAXTRANS 255 
+      TABLESPACE "USERS" )  ENABLE, 
+         CONSTRAINT "TABLE_EVENT_API_FK1" FOREIGN KEY ("EVENT_ID")
+          REFERENCES "CRM"."TBL_EVENT" ("ID") ENABLE
+       )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+      PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+     NOCOMPRESS LOGGING
+      TABLESPACE "USERS" ;
+    
+      CREATE OR REPLACE EDITIONABLE TRIGGER "CRM"."TBL_EVENT_API_TRG" 
+    BEFORE INSERT ON CRM.SEQ_EVENT_API_ID 
+    FOR EACH ROW 
+    BEGIN
+      <<COLUMN_SEQUENCES>>
+      BEGIN
+         IF INSERTING AND :NEW.ID IS NULL THEN
+          SELECT SEQ_EVENT_RAISE_API_ID.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+        END IF;
+      END COLUMN_SEQUENCES;
+    END;
+    /
+    ALTER TRIGGER "CRM"."TBL_EVENT_API_TRG" ENABLE;
+   
+    
+   
+    create or replace TRIGGER "CRM"."TBL_EVENT_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_EVENT
+           REFERENCING OLD AS OLD NEW AS NEW
+           FOR EACH ROW WHEN (1=1)
+           declare
+             TS_ TIMESTAMP(6);
+             UUID_ nvarchar2(500 char) ;
+           BEGIN
+               TS_ := systimestamp;
+               UUID_ := CRM.public_uuid;
+             if inserting then
+               insert into CRM.TBL_EVENT_API
+               (id, EVENT_public_id, create_date_ts, EVENT_id)
+                values 
+                 (CRM.SEQ_EVENT_API_ID.nextval, UUID_, TS_, :new.id);
+             end if;
+             if updating then
+               update CRM.TBL_EVENT_API
+               set  
+                edit_date_ts = TS_
+                where EVENT_id = :old.id;
+               end if;
+           END;
+           commit;
+       
+      
+       create or replace TRIGGER "CRM"."TBL_EVENT_API_D" BEFORE DELETE ON CRM.TBL_EVENT
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         ID_API number;
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         IF DELETING THEN
+           SELECT API.ID INTO ID_API
+           FROM CRM.TBL_EVENT_API API
+           WHERE API.EVENT_id = :old.id;
+           
+           update CRM.tbl_EVENT_api api
+           set  
+            api.EVENT_id = null,
+            api.delete_date_ts = TS_,
+            api.deleted_EVENT_id = :old.id
+            where api.id = ID_API;
+          END IF;
+       END;
+       
+       
+       create or replace procedure   CRM.UUID_EVENT_API IS
+           begin
+             declare
+               cursor c_t is
+                       SELECT
+                           mt.id as EVENTID
+                       FROM
+                           CRM.tbl_EVENT mt
+                           LEFT JOIN CRM.tbl_EVENT_api api ON mt.id = api.EVENT_id
+                       WHERE
+                           api.EVENT_id IS NULL
+                       ORDER BY
+                           EVENTID ASC;
+             begin
+               for r_t in c_t loop
+                       INSERT INTO CRM.tbl_EVENT_api(
+                           id,
+                           EVENT_public_id,
+                           create_date_ts,
+                           EVENT_id
+                       )VALUES(
+                           CRM.SEQ_EVENT_API_ID.nextval,
+                           crm.public_uuid,
+                           systimestamp,
+                           r_t."EVENTID"
+                       );
+                end loop;
+             end;
+             commit;
+           end;
+       
+    ** insert id 233 into crm.tbl_event
+    
+           begin
+           CRM.UUID_EVENT_API;
+           end;
+
+
+------------------------------
+
+
+CREATE SEQUENCE  "CRM"."SEQ_EVENT_RAISE_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "CRM"."TBL_EVENT_RAISE_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"EVENT_RAISE_ID" NUMBER, 
+	"EVENT_RAISE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"DELETED_EVENT_RAISE_ID" NUMBER, 
+	"EVENT_ID" NUMBER, 
+	"EVENT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_EVENT_RAISE_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_EVENT_RAISE_API_FK1" FOREIGN KEY ("EVENT_RAISE_ID")
+	  REFERENCES "CRM"."TBL_EVENT_RAISE" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_EVENT_RAISE_API_FK2" FOREIGN KEY ("EVENT_ID")
+	  REFERENCES "CRM"."TBL_EVENT" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "CRM"."TBL_EVENT_RAISE_API_TRG" 
+BEFORE INSERT ON CRM.TBL_EVENT_RAISE_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_EVENT_RAISE_API_ID.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "CRM"."TBL_EVENT_RAISE_API_TRG" ENABLE;
+
+
+create or replace TRIGGER "CRM"."TBL_EVENT_RAISE_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_EVENT_RAISE
+  REFERENCING OLD AS OLD NEW AS NEW
+  FOR EACH ROW WHEN (1=1)
+  declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    APIPUBLICID_ nvarchar2(500 char);
+  BEGIN
+      TS_ := systimestamp;
+      UUID_ := CRM.public_uuid;
+    if inserting then
+      SELECT api.EVENT_public_id INTO APIPUBLICID_
+      FROM CRM.TBL_EVENT_API api
+      WHERE api.EVENT_id = :new.EVENT_id;
+      insert into CRM.tbl_EVENT_RAISE_api
+      (id, EVENT_RAISE_public_id, create_date_ts,
+        EVENT_RAISE_id, EVENT_id, EVENT_public_id)
+       values 
+        (CRM.SEQ_EVENT_RAISE_API_ID.nextval, UUID_, TS_, 
+        :new.id, :new.EVENT_ID, APIPUBLICID_);
+    end if;
+    if updating then
+      update CRM.tbl_EVENT_RAISE_api
+      set  
+       edit_date_ts = TS_
+       where EVENT_RAISE_id = :old.id;
+      end if;
+  -- EVENT
+        if :new.EVENT_ID != null and :new.EVENT_ID != :old.EVENT_ID THEN
+             SELECT api.EVENT_public_id INTO APIPUBLICID_
+             FROM CRM.tbl_EVENT_api api
+             WHERE api.EVENT_id = :new.EVENT_id;
+             --
+             update CRM.tbl_EVENT_RAISE_api
+             set
+             EVENT_id = :new.EVENT_id,
+             EVENT_public_id = APIPUBLICID_
+             where EVENT_RAISE_id = :old.id;
+        end if;
+  END;
+
+  
+ create or replace TRIGGER "CRM"."TBL_EVENT_RAISE_API_D" BEFORE DELETE ON CRM.TBL_EVENT_RAISE
+     REFERENCING OLD AS OLD NEW AS NEW
+     FOR EACH ROW WHEN (1=1)
+     declare
+       TS_ TIMESTAMP(6);
+       UUID_ nvarchar2(500 char) ;
+       ID_API number;
+     BEGIN
+         TS_ := systimestamp;
+         UUID_ := CRM.public_uuid;
+       IF DELETING THEN
+         SELECT api.ID INTO ID_API
+         FROM CRM.TBL_EVENT_RAISE_API api
+         WHERE api.EVENT_RAISE_id = :old.id;
+         update CRM.tbl_EVENT_RAISE_api api
+         set  
+          api.EVENT_RAISE_id = null,
+          api.delete_date_ts = TS_,
+          api.deleted_EVENT_RAISE_id = :old.id,
+          api.EVENT_id = null
+          where api.id = ID_API;
+        END IF;
+     END;  
+  
+create or replace procedure   CRM.UUID_EVENT_RAISE_API IS
+  begin
+    declare
+      cursor c_t is
+              SELECT
+                  mt.id as EVENT_RAISEID,
+                  mt.EVENT_id as EVENTID,
+                  secapi.EVENT_public_id EVENTPUBLICID
+              FROM
+                  CRM.tbl_EVENT_RAISE mt
+                  LEFT JOIN CRM.tbl_EVENT_RAISE_api api ON mt.id = api.EVENT_RAISE_id
+                  LEFT JOIN CRM.tbl_EVENT sect ON mt.EVENT_id = sect.id
+                  LEFT JOIN CRM.tbl_EVENT_api secapi ON sect.id = secapi.EVENT_id
+              WHERE
+                  api.EVENT_RAISE_id IS NULL
+              ORDER BY
+                  EVENT_RAISEID ASC;
+    begin
+      for r_t in c_t loop
+              INSERT INTO CRM.tbl_EVENT_RAISE_api(
+                  id,
+                  EVENT_RAISE_public_id,
+                  create_date_ts,
+                  EVENT_RAISE_id,
+                  EVENT_id,
+                  EVENT_public_id
+              )VALUES(
+                  CRM.SEQ_EVENT_RAISE_API_ID.nextval,
+                  crm.public_uuid,
+                  systimestamp,
+                  r_t."EVENT_RAISEID",
+                  r_t."EVENTID",
+                  r_t."EVENTPUBLICID"
+              );
+       end loop;
+    end;
+    commit;
+  end;
+  
+    
+ begin
+ CRM.UUID_EVENT_RAISE_API;
+ end;
+
+
+------------------------------
+
+CREATE SEQUENCE  "EDU"."SEQ_COST_TYPE_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "EDU"."TBL_COST_TYPE_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"COST_TYPE_ID" NUMBER, 
+	"COST_TYPE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"DELETED_COST_TYPE_ID" NUMBER, 
+	"COMPANY_ID" NUMBER, 
+	"COMPANY_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_COST_TYPE_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_COST_TYPE_API_FK1" FOREIGN KEY ("COST_TYPE_ID")
+	  REFERENCES "EDU"."TBL_COST_TYPE" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_COST_TYPE_API_FK2" FOREIGN KEY ("COMPANY_ID")
+	  REFERENCES "CRM"."TBL_COMPANY" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_COST_TYPE_API_TRG" 
+BEFORE INSERT ON EDU.TBL_COST_TYPE_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_COST_TYPE_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_COST_TYPE_API_TRG" ENABLE;
+
+
+ 
+create or replace TRIGGER "EDU"."TBL_COST_TYPE_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_COST_TYPE
+  REFERENCING OLD AS OLD NEW AS NEW
+  FOR EACH ROW WHEN (1=1)
+  declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    APIPUBLICID_ nvarchar2(500 char);
+  BEGIN
+      TS_ := systimestamp;
+      UUID_ := CRM.public_uuid;
+    if inserting then
+      SELECT api.COMPANY_public_id INTO APIPUBLICID_
+      FROM CRM.TBL_COMPANY_API api
+      WHERE api.COMPANY_id = :new.COMPANY_id;
+      insert into EDU.tbl_COST_TYPE_api
+      (id, COST_TYPE_public_id, create_date_ts,
+        COST_TYPE_id, COMPANY_id, COMPANY_public_id)
+       values 
+        (EDU.SEQ_COST_TYPE_API.nextval, UUID_, TS_, 
+        :new.id, :new.COMPANY_ID, APIPUBLICID_);
+    end if;
+    if updating then
+      update EDU.tbl_COST_TYPE_api
+      set  
+       edit_date_ts = TS_
+       where COST_TYPE_id = :old.id;
+      end if;
+  -- COMPANY
+        if :new.COMPANY_ID != null and :new.COMPANY_ID != :old.COMPANY_ID THEN
+             SELECT api.COMPANY_public_id INTO APIPUBLICID_
+             FROM CRM.tbl_COMPANY_api api
+             WHERE api.COMPANY_id = :new.COMPANY_id;
+             --
+             update EDU.tbl_COST_TYPE_api
+             set
+             COMPANY_id = :new.COMPANY_id,
+             COMPANY_public_id = APIPUBLICID_
+             where COST_TYPE_id = :old.id;
+        end if;
+  END;
+
+  create or replace TRIGGER "EDU"."TBL_COST_TYPE_API_D" BEFORE DELETE ON EDU.TBL_COST_TYPE
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         ID_API number;
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         IF DELETING THEN
+           SELECT api.ID INTO ID_API
+           FROM EDU.TBL_COST_TYPE_API api
+           WHERE api.COST_TYPE_id = :old.id;
+           update EDU.tbl_COST_TYPE_api api
+           set  
+            api.COST_TYPE_id = null,
+            api.delete_date_ts = TS_,
+            api.deleted_COST_TYPE_id = :old.id,
+            api.COMPANY_id = null
+            where api.id = ID_API;
+          END IF;
+       END;
+       
+
+create or replace procedure   EDU.UUID_COST_TYPE_API IS
+  begin
+    declare
+      cursor c_t is
+              SELECT
+                  mt.id as COST_TYPEID,
+                  mt.COMPANY_id as COMPANYID,
+                  secapi.COMPANY_public_id COMPANYPUBLICID
+              FROM
+                  EDU.tbl_COST_TYPE mt
+                  LEFT JOIN EDU.tbl_COST_TYPE_api api ON mt.id = api.COST_TYPE_id
+                  LEFT JOIN CRM.tbl_COMPANY sect ON mt.COMPANY_id = sect.id
+                  LEFT JOIN CRM.tbl_COMPANY_api secapi ON sect.id = secapi.COMPANY_id
+              WHERE
+                  api.COST_TYPE_id IS NULL
+              ORDER BY
+                  COST_TYPEID ASC;
+    begin
+      for r_t in c_t loop
+              INSERT INTO EDU.tbl_COST_TYPE_api(
+                  id,
+                  COST_TYPE_public_id,
+                  create_date_ts,
+                  COST_TYPE_id,
+                  COMPANY_id,
+                  COMPANY_public_id
+              )VALUES(
+                  EDU.SEQ_COST_TYPE_API.nextval,
+                  crm.public_uuid,
+                  systimestamp,
+                  r_t."COST_TYPEID",
+                  r_t."COMPANYID",
+                  r_t."COMPANYPUBLICID"
+              );
+       end loop;
+    end;
+    commit;
+  end;       
+       
+       
+         
+begin
+EDU.UUID_COST_TYPE_API;
+end;
+           
+           
+------------------------------
+**in CONTRACT_EDU_API > PARAMETER_ID  is equivalent to TBL_CONTRACT_EDU > CONTRACT_TYPE_ID
+
+CREATE SEQUENCE  "EDU"."SEQ_EDU_CONTRACT_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "EDU"."TBL_CONTRACT_EDU_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"CONTRACT_EDU_ID" NUMBER, 
+	"DELETED_CONTRACT_EDU_ID" NUMBER, 
+	"CONTRACT_EDU_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CONTRACT_TYPE_ID" NUMBER, 
+	"CONTRACT_TYPE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_CONTRACT_EDU_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_CONTRACT_EDU_API_FK1" FOREIGN KEY ("CONTRACT_EDU_ID")
+	  REFERENCES "EDU"."TBL_CONTRACT_EDU" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_CONTRACT_EDU_API_FK2" FOREIGN KEY ("CONTRACT_TYPE_ID")
+	  REFERENCES "CRM"."TBL_PARAMETER" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_CONTRACT_EDU_API_TRG" 
+BEFORE INSERT ON EDU.TBL_CONTRACT_EDU_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_EDU_CONTRACT_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_CONTRACT_EDU_API_TRG" ENABLE;
+
+
+create or replace TRIGGER "EDU"."TBL_CONTRACT_EDU_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_CONTRACT_EDU
+  REFERENCING OLD AS OLD NEW AS NEW
+  FOR EACH ROW WHEN (1=1)
+  declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    APIPUBLICID_ nvarchar2(500 char);
+  BEGIN
+      TS_ := systimestamp;
+      UUID_ := CRM.public_uuid;
+    if inserting then
+      SELECT api.PARAMETER_public_id INTO APIPUBLICID_
+      FROM CRM.TBL_PARAMETER_API api
+      WHERE api.PARAMETER_id = :new.CONTRACT_TYPE_id;
+      insert into EDU.tbl_CONTRACT_EDU_api
+      (id, CONTRACT_EDU_public_id, create_date_ts,
+        CONTRACT_EDU_id, PARAMETER_id, PARAMETER_public_id)
+       values 
+        (EDU.SEQ_EDU_CONTRACT_API.nextval, UUID_, TS_, 
+        :new.id, :new.CONTRACT_TYPE_ID, APIPUBLICID_);
+    end if;
+    if updating then
+      update EDU.tbl_CONTRACT_EDU_api
+      set  
+       edit_date_ts = TS_
+       where CONTRACT_EDU_id = :old.id;
+      end if;
+  -- PARAMETER
+        if :new.CONTRACT_TYPE_ID != null and :new.CONTRACT_TYPE_ID != :old.CONTRACT_TYPE_ID THEN
+             SELECT api.PARAMETER_public_id INTO APIPUBLICID_
+             FROM CRM.tbl_PARAMETER_api api
+             WHERE api.PARAMETER_id = :new.CONTRACT_TYPE_id;
+             --
+             update EDU.tbl_CONTRACT_EDU_api
+             set
+             PARAMETER_id = :new.CONTRACT_TYPE_id,
+             PARAMETER_public_id = APIPUBLICID_
+             where CONTRACT_EDU_id = :old.id;
+        end if;
+  END;
+
+create or replace TRIGGER "EDU"."TBL_CONTRACT_EDU_API_D" BEFORE DELETE ON EDU.TBL_CONTRACT_EDU
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         ID_API number;
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         IF DELETING THEN
+           SELECT api.ID INTO ID_API
+           FROM EDU.TBL_CONTRACT_EDU_API api
+           WHERE api.CONTRACT_EDU_id = :old.id;
+           update EDU.tbl_CONTRACT_EDU_api api
+           set  
+            api.CONTRACT_EDU_id = null,
+            api.delete_date_ts = TS_,
+            api.deleted_CONTRACT_EDU_id = :old.id,
+            api.PARAMETER_id = null
+            where api.id = ID_API;
+          END IF;
+       END;  
+       
+
+create or replace procedure   EDU.UUID_CONTRACT_EDU_API IS
+  begin
+    declare
+      cursor c_t is
+              SELECT
+                  mt.id as CONTRACT_EDUID,
+                  mt.contract_type_id as PARAMETERID,
+                  secapi.PARAMETER_public_id PARAMETERPUBLICID
+              FROM
+                  EDU.tbl_CONTRACT_EDU mt
+                  LEFT JOIN EDU.tbl_CONTRACT_EDU_api api ON mt.id = api.CONTRACT_EDU_id
+                  LEFT JOIN CRM.tbl_PARAMETER sect ON mt.contract_type_id = sect.id
+                  LEFT JOIN CRM.tbl_PARAMETER_api secapi ON sect.id = secapi.PARAMETER_id
+              WHERE
+                  api.CONTRACT_EDU_id IS NULL
+              ORDER BY
+                  CONTRACT_EDUID ASC;
+    begin
+      for r_t in c_t loop
+              INSERT INTO EDU.tbl_CONTRACT_EDU_api(
+                  id,
+                  CONTRACT_EDU_public_id,
+                  create_date_ts,
+                  CONTRACT_EDU_id,
+                  PARAMETER_id,
+                  PARAMETER_public_id
+              )VALUES(
+                  EDU.SEQ_EDU_CONTRACT_API.nextval,
+                  crm.public_uuid,
+                  systimestamp,
+                  r_t."CONTRACT_EDUID",
+                  r_t."PARAMETERID",
+                  r_t."PARAMETERPUBLICID"
+              );
+       end loop;
+    end;
+    commit;
+  end; 
+       
+       
+         
+begin
+EDU.UUID_CONTRACT_EDU_API;
+end;
+
+
+
+------------------------------
+
+CREATE SEQUENCE  "EDU"."SEQ_PERIOD_CONTRACT_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "EDU"."TBL_PERIOD_CONTRACT_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"PERIOD_CONTRACT_ID" NUMBER, 
+	"DELETED_PERIOD_CONTRACT_ID" NUMBER, 
+	"PERIOD_CONTRACT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PERIOD_ID" NUMBER, 
+	"PERIOD_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_PERIOD_CONTRACT_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_PERIOD_CONTRACT_API_FK1" FOREIGN KEY ("PERIOD_ID")
+	  REFERENCES "EDU"."TBL_PERIOD" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_PERIOD_CONTRACT_API_FK2" FOREIGN KEY ("PERIOD_CONTRACT_ID")
+	  REFERENCES "EDU"."TBL_PERIOD_CONTRACT" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_PERIOD_CONTRACT_API_TRG" 
+BEFORE INSERT ON EDU.TBL_PERIOD_CONTRACT_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_PERIOD_CONTRACT_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_PERIOD_CONTRACT_API_TRG" ENABLE;
+
+
+
+create or replace TRIGGER "EDU"."TBL_PERIOD_CONTRACT_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_PERIOD_CONTRACT
+  REFERENCING OLD AS OLD NEW AS NEW
+  FOR EACH ROW WHEN (1=1)
+  declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    APIPUBLICID_ nvarchar2(500 char);
+  BEGIN
+      TS_ := systimestamp;
+      UUID_ := CRM.public_uuid;
+    if inserting then
+      SELECT api.PERIOD_public_id INTO APIPUBLICID_
+      FROM EDU.TBL_PERIOD_API api
+      WHERE api.PERIOD_id = :new.PERIOD_id;
+      insert into EDU.tbl_PERIOD_CONTRACT_api
+      (id, PERIOD_CONTRACT_public_id, create_date_ts,
+        PERIOD_CONTRACT_id, PERIOD_id, PERIOD_public_id)
+       values 
+        (EDU.SEQ_PERIOD_CONTRACT_API.nextval, UUID_, TS_, 
+        :new.id, :new.PERIOD_ID, APIPUBLICID_);
+    end if;
+    if updating then
+      update EDU.tbl_PERIOD_CONTRACT_api
+      set  
+       edit_date_ts = TS_
+       where PERIOD_CONTRACT_id = :old.id;
+      end if;
+  -- PERIOD
+        if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+             SELECT api.PERIOD_public_id INTO APIPUBLICID_
+             FROM EDU.tbl_PERIOD_api api
+             WHERE api.PERIOD_id = :new.PERIOD_id;
+             --
+             update EDU.tbl_PERIOD_CONTRACT_api
+             set
+             PERIOD_id = :new.PERIOD_id,
+             PERIOD_public_id = APIPUBLICID_
+             where PERIOD_CONTRACT_id = :old.id;
+        end if;
+  END;
+
+ create or replace TRIGGER "EDU"."TBL_PERIOD_CONTRACT_API_D" BEFORE DELETE ON EDU.TBL_PERIOD_CONTRACT
+        REFERENCING OLD AS OLD NEW AS NEW
+        FOR EACH ROW WHEN (1=1)
+        declare
+          TS_ TIMESTAMP(6);
+          UUID_ nvarchar2(500 char) ;
+          ID_API number;
+        BEGIN
+            TS_ := systimestamp;
+            UUID_ := CRM.public_uuid;
+          IF DELETING THEN
+            SELECT api.ID INTO ID_API
+            FROM EDU.TBL_PERIOD_CONTRACT_API api
+            WHERE api.PERIOD_CONTRACT_id = :old.id;
+            update EDU.tbl_PERIOD_CONTRACT_api api
+            set  
+             api.PERIOD_CONTRACT_id = null,
+             api.delete_date_ts = TS_,
+             api.deleted_PERIOD_CONTRACT_id = :old.id,
+             api.PERIOD_id = null
+             where api.id = ID_API;
+           END IF;
+        END; 
+       
+
+ create or replace procedure   EDU.UUID_PERIOD_CONTRACT_API IS
+   begin
+     declare
+       cursor c_t is
+               SELECT
+                   mt.id as PERIOD_CONTRACTID,
+                   mt.PERIOD_id as PERIODID,
+                   secapi.PERIOD_public_id PERIODPUBLICID
+               FROM
+                   EDU.tbl_PERIOD_CONTRACT mt
+                   LEFT JOIN EDU.tbl_PERIOD_CONTRACT_api api ON mt.id = api.PERIOD_CONTRACT_id
+                   LEFT JOIN EDU.tbl_PERIOD sect ON mt.PERIOD_id = sect.id
+                   LEFT JOIN EDU.tbl_PERIOD_api secapi ON sect.id = secapi.PERIOD_id
+               WHERE
+                   api.PERIOD_CONTRACT_id IS NULL
+               ORDER BY
+                   PERIOD_CONTRACTID ASC;
+     begin
+       for r_t in c_t loop
+               INSERT INTO EDU.tbl_PERIOD_CONTRACT_api(
+                   id,
+                   PERIOD_CONTRACT_public_id,
+                   create_date_ts,
+                   PERIOD_CONTRACT_id,
+                   PERIOD_id,
+                   PERIOD_public_id
+               )VALUES(
+                   EDU.SEQ_PERIOD_CONTRACT_API.nextval,
+                   crm.public_uuid,
+                   systimestamp,
+                   r_t."PERIOD_CONTRACTID",
+                   r_t."PERIODID",
+                   r_t."PERIODPUBLICID"
+               );
+        end loop;
+     end;
+     commit;
+   end;      
+       
+       
+         
+begin
+EDU.UUID_PERIOD_CONTRACT_API;
+end;
+
+
+
+------------------------------
+
+CREATE SEQUENCE  "EDU"."SEQ_PERIOD_PAYMENT_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "EDU"."TBL_PERIOD_PAYMENT_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"PERIOD_PAYMENT_ID" NUMBER, 
+	"DELETED_PERIOD_PAYMENT_ID" NUMBER, 
+	"PERIOD_PAYMENT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PERIOD_ID" NUMBER, 
+	"PERIOD_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_PERIOD_PAYMENT_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_PERIOD_PAYMENT_API_FK1" FOREIGN KEY ("PERIOD_PAYMENT_ID")
+	  REFERENCES "EDU"."TBL_PERIOD_PAYMENT" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_PERIOD_PAYMENT_API_FK2" FOREIGN KEY ("PERIOD_ID")
+	  REFERENCES "EDU"."TBL_PERIOD" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_PERIOD_PAYMENT_API_TRG" 
+BEFORE INSERT ON EDU.TBL_PERIOD_PAYMENT_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_PERIOD_PAYMENT_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_PERIOD_PAYMENT_API_TRG" ENABLE;
+
+
+create or replace TRIGGER "EDU"."TBL_PERIOD_PAYMENT_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_PERIOD_PAYMENT
+  REFERENCING OLD AS OLD NEW AS NEW
+  FOR EACH ROW WHEN (1=1)
+  declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    APIPUBLICID_ nvarchar2(500 char);
+  BEGIN
+      TS_ := systimestamp;
+      UUID_ := CRM.public_uuid;
+    if inserting then
+      SELECT api.PERIOD_public_id INTO APIPUBLICID_
+      FROM EDU.TBL_PERIOD_API api
+      WHERE api.PERIOD_id = :new.PERIOD_id;
+      insert into EDU.tbl_PERIOD_PAYMENT_api
+      (id, PERIOD_PAYMENT_public_id, create_date_ts,
+        PERIOD_PAYMENT_id, PERIOD_id, PERIOD_public_id)
+       values 
+        (EDU.SEQ_PERIOD_PAYMENT_API.nextval, UUID_, TS_, 
+        :new.id, :new.PERIOD_ID, APIPUBLICID_);
+    end if;
+    if updating then
+      update EDU.tbl_PERIOD_PAYMENT_api
+      set  
+       edit_date_ts = TS_
+       where PERIOD_PAYMENT_id = :old.id;
+      end if;
+  -- PERIOD
+        if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+             SELECT api.PERIOD_public_id INTO APIPUBLICID_
+             FROM EDU.tbl_PERIOD_api api
+             WHERE api.PERIOD_id = :new.PERIOD_id;
+             --
+             update EDU.tbl_PERIOD_PAYMENT_api
+             set
+             PERIOD_id = :new.PERIOD_id,
+             PERIOD_public_id = APIPUBLICID_
+             where PERIOD_PAYMENT_id = :old.id;
+        end if;
+  END;
+
+ create or replace TRIGGER "EDU"."TBL_PERIOD_PAYMENT_API_D" BEFORE DELETE ON EDU.TBL_PERIOD_PAYMENT
+        REFERENCING OLD AS OLD NEW AS NEW
+        FOR EACH ROW WHEN (1=1)
+        declare
+          TS_ TIMESTAMP(6);
+          UUID_ nvarchar2(500 char) ;
+          ID_API number;
+        BEGIN
+            TS_ := systimestamp;
+            UUID_ := CRM.public_uuid;
+          IF DELETING THEN
+            SELECT api.ID INTO ID_API
+            FROM EDU.TBL_PERIOD_PAYMENT_API api
+            WHERE api.PERIOD_PAYMENT_id = :old.id;
+            update EDU.tbl_PERIOD_PAYMENT_api api
+            set  
+             api.PERIOD_PAYMENT_id = null,
+             api.delete_date_ts = TS_,
+             api.deleted_PERIOD_PAYMENT_id = :old.id,
+             api.PERIOD_id = null
+             where api.id = ID_API;
+           END IF;
+        END; 
+       
+
+ create or replace procedure   EDU.UUID_PERIOD_PAYMENT_API IS
+   begin
+     declare
+       cursor c_t is
+               SELECT
+                   mt.id as PERIOD_PAYMENTID,
+                   mt.PERIOD_id as PERIODID,
+                   secapi.PERIOD_public_id PERIODPUBLICID
+               FROM
+                   EDU.tbl_PERIOD_PAYMENT mt
+                   LEFT JOIN EDU.tbl_PERIOD_PAYMENT_api api ON mt.id = api.PERIOD_PAYMENT_id
+                   LEFT JOIN EDU.tbl_PERIOD sect ON mt.PERIOD_id = sect.id
+                   LEFT JOIN EDU.tbl_PERIOD_api secapi ON sect.id = secapi.PERIOD_id
+               WHERE
+                   api.PERIOD_PAYMENT_id IS NULL
+               ORDER BY
+                   PERIOD_PAYMENTID ASC;
+     begin
+       for r_t in c_t loop
+               INSERT INTO EDU.tbl_PERIOD_PAYMENT_api(
+                   id,
+                   PERIOD_PAYMENT_public_id,
+                   create_date_ts,
+                   PERIOD_PAYMENT_id,
+                   PERIOD_id,
+                   PERIOD_public_id
+               )VALUES(
+                   EDU.SEQ_PERIOD_PAYMENT_API.nextval,
+                   crm.public_uuid,
+                   systimestamp,
+                   r_t."PERIOD_PAYMENTID",
+                   r_t."PERIODID",
+                   r_t."PERIODPUBLICID"
+               );
+        end loop;
+     end;
+     commit;
+   end;      
+       
+       
+         
+begin
+EDU.UUID_PERIOD_PAYMENT_API;
+end;
+
+
+
+
+------------------------------
+
+CREATE SEQUENCE  "EDU"."SEQ_TERM_PERIOD_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "EDU"."TBL_TERM_PERIOD_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"TERM_PERIOD_ID" NUMBER, 
+	"TERM_PERIOD_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"DELETED_TERM_PERIOD_ID" NUMBER, 
+	"TERM_ID" NUMBER, 
+	"TERM_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PERIOD_ID" NUMBER, 
+	"PERIOD_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_TERM_PERIOD_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_TERM_PERIOD_API_FK1" FOREIGN KEY ("TERM_PERIOD_ID")
+	  REFERENCES "EDU"."TBL_TERM_PERIOD" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_TERM_PERIOD_API_FK2" FOREIGN KEY ("TERM_ID")
+	  REFERENCES "EDU"."TBL_TERM" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_TERM_PERIOD_API_FK3" FOREIGN KEY ("PERIOD_ID")
+	  REFERENCES "EDU"."TBL_PERIOD" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_TERM_PERIOD_API_TRG" 
+BEFORE INSERT ON EDU.TBL_TERM_PERIOD_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_TERM_PERIOD_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_TERM_PERIOD_API_TRG" ENABLE;
+
+
+
+create or replace TRIGGER "EDU"."TBL_TERM_PERIOD_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_TERM_PERIOD
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         APIPUBLICID_ nvarchar2(500 char); --TERM
+         APIIPUBLICID_ nvarchar2(500 char); --PERIOD
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         if inserting then
+           SELECT api.TERM_public_id INTO APIPUBLICID_
+           FROM EDU.tbl_TERM_api api
+           WHERE api.TERM_id = :new.TERM_id;
+           --
+           SELECT api.PERIOD_public_id INTO APIIPUBLICID_
+           FROM EDU.tbl_PERIOD_api api
+           WHERE api.PERIOD_id = :new.PERIOD_id;
+           insert into EDU.tbl_TERM_PERIOD_api
+           (id, TERM_PERIOD_public_id, create_date_ts,
+             TERM_PERIOD_id, TERM_id, TERM_public_id, PERIOD_id, PERIOD_public_id)
+            values 
+             (EDU.SEQ_TERM_PERIOD_API.nextval, UUID_, TS_,
+             :new.id, :new.TERM_ID, APIPUBLICID_, :new.PERIOD_ID, APIIPUBLICID_);
+         end if;
+         if updating then
+           update EDU.tbl_TERM_PERIOD_api
+           set  
+            edit_date_ts = TS_
+            where TERM_PERIOD_id = :old.id;
+                --TERM
+                if :new.TERM_ID != null and :new.TERM_ID != :old.TERM_ID THEN
+                    SELECT api.TERM_public_id INTO APIPUBLICID_
+                     FROM EDU.tbl_TERM_api api
+                     WHERE api.TERM_id = :new.TERM_id;
+                    --
+                    update EDU.tbl_TERM_PERIOD_api
+                    set
+                    TERM_id = :new.TERM_id,
+                    TERM_public_id = APIPUBLICID_
+                    where TERM_PERIOD_id = :old.id;
+               end if;
+               --PERIOD
+                if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+                    SELECT api.PERIOD_public_id INTO APIIPUBLICID_
+                     FROM EDU.tbl_PERIOD_api api
+                     WHERE api.PERIOD_id = :new.PERIOD_id;
+                    --
+                    update EDU.tbl_TERM_PERIOD_api
+                    set
+                    PERIOD_id = :new.PERIOD_id,
+                    PERIOD_public_id = APIIPUBLICID_
+                    where TERM_PERIOD_id = :old.id;
+               end if;
+           end if;
+       END;
+       
+ 
+create or replace TRIGGER "EDU"."TBL_TERM_PERIOD_API_D" BEFORE DELETE ON EDU.TBL_TERM_PERIOD
+        REFERENCING OLD AS OLD NEW AS NEW
+        FOR EACH ROW WHEN (1=1)
+        declare
+          TS_ TIMESTAMP(6);
+          UUID_ nvarchar2(500 char) ;
+          ID_API number;
+        BEGIN
+            TS_ := systimestamp;
+            UUID_ := CRM.public_uuid;
+          IF DELETING THEN
+            SELECT api.ID INTO ID_API
+            FROM EDU.TBL_TERM_PERIOD_API api
+            WHERE api.TERM_PERIOD_id = :old.id;
+            update EDU.tbl_TERM_PERIOD_api api
+            set  
+             api.TERM_PERIOD_id = null,
+             api.delete_date_ts = TS_,
+             api.deleted_TERM_PERIOD_id = :old.id,
+             api.TERM_id = null,
+             api.PERIOD_id = null
+             where api.id = ID_API;
+           END IF;
+        END;       
+   
+       
+create or replace procedure EDU.UUID_TERM_PERIOD_API IS
+            begin
+              declare
+                cursor c_t is
+                        SELECT
+                            mt.id as TERMPERIODID,
+                            mt.TERM_id as TERMID,
+                            secapi.TERM_public_id TERMPUBLICID,
+                            mt.PERIOD_id as PERIODID,
+                            trdapi.PERIOD_public_id PERIODPUBLICID
+                        FROM
+                            EDU.tbl_TERM_PERIOD mt
+                            LEFT JOIN EDU.tbl_TERM_PERIOD_api api ON mt.id = api.TERM_PERIOD_id
+                            LEFT JOIN EDU.tbl_TERM sect ON mt.TERM_id = sect.id
+                            LEFT JOIN EDU.tbl_TERM_api secapi ON sect.id = secapi.TERM_id
+                            LEFT JOIN EDU.tbl_PERIOD trdt ON mt.PERIOD_id = trdt.id
+                            LEFT JOIN EDU.tbl_PERIOD_api trdapi ON trdt.id = trdapi.PERIOD_id
+                        WHERE
+                            api.TERM_PERIOD_id IS NULL
+                        ORDER BY
+                            TERMPERIODID ASC;
+              begin
+                for r_t in c_t loop
+                        INSERT INTO EDU.tbl_TERM_PERIOD_api(
+                            id,
+                            TERM_PERIOD_public_id,
+                            create_date_ts,
+                            TERM_PERIOD_id,
+                            TERM_id,
+                            TERM_public_id,
+                            PERIOD_id,
+                            PERIOD_public_id
+                        )VALUES(
+                            EDU.SEQ_TERM_PERIOD_API.nextval,
+                            crm.public_uuid,
+                            systimestamp,
+                            r_t."TERMPERIODID",
+                            r_t."TERMID",
+                            r_t."TERMPUBLICID",
+                            r_t."PERIODID",
+                            r_t."PERIODPUBLICID"
+                        );
+                 end loop;
+              end;
+              commit;
+            end;      
+    
+     
+      begin
+      edu.UUID_TERM_PERIOD_API;
+      end; 
+
+
+
+
+
+
+------------------------------
+
+
+CREATE SEQUENCE  "EDU"."SEQ_REGISTER_COST_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "EDU"."TBL_REGISTER_COST_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"REGISTER_COST_ID" NUMBER, 
+	"DELETED_REGISTER_COST_ID" NUMBER, 
+	"REGISTER_COST_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"REGISTER_ID" NUMBER, 
+	"REGISTER_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PERIOD_TERM_ID" NUMBER, 
+	"PERIOD_TERM_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_REGISTER_COST_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_REGISTER_COST_API_FK1" FOREIGN KEY ("REGISTER_ID")
+	  REFERENCES "EDU"."TBL_REGISTER" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_REGISTER_COST_API_FK2" FOREIGN KEY ("PERIOD_TERM_ID")
+	  REFERENCES "EDU"."TBL_TERM_PERIOD" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_REGISTER_COST_API_TRG" 
+BEFORE INSERT ON EDU.TBL_REGISTER_COST_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_REGISTER_COST_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_REGISTER_COST_API_TRG" ENABLE;
+
+
+create or replace TRIGGER "EDU"."TBL_REGISTER_COST_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_REGISTER_COST
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         APIPUBLICID_ nvarchar2(500 char); --PERIOD_TERM
+         APIIPUBLICID_ nvarchar2(500 char); --REGISTER
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         if inserting then
+           SELECT api.TERM_PERIOD_public_id INTO APIPUBLICID_
+           FROM EDU.tbl_TERM_PERIOD_api api
+           WHERE api.TERM_PERIOD_id = :new.PERIOD_TERM_id;
+           --
+           SELECT api.REGISTER_public_id INTO APIIPUBLICID_
+           FROM EDU.tbl_REGISTER_api api
+           WHERE api.REGISTER_id = :new.REGISTER_id;
+           insert into EDU.tbl_REGISTER_COST_api
+           (id, REGISTER_COST_public_id, create_date_ts,
+             REGISTER_COST_id, PERIOD_TERM_id, PERIOD_TERM_public_id, REGISTER_id, REGISTER_public_id)
+            values 
+             (EDU.SEQ_REGISTER_COST_API.nextval, UUID_, TS_,
+             :new.id, :new.PERIOD_TERM_ID, APIPUBLICID_, :new.REGISTER_ID, APIIPUBLICID_);
+         end if;
+         if updating then
+           update EDU.tbl_REGISTER_COST_api
+           set  
+            edit_date_ts = TS_
+            where REGISTER_COST_id = :old.id;
+                --PERIOD_TERM
+                if :new.PERIOD_TERM_ID != null and :new.PERIOD_TERM_ID != :old.PERIOD_TERM_ID THEN
+                    SELECT api.TERM_PERIOD_public_id INTO APIPUBLICID_
+                     FROM EDU.tbl_TERM_PERIOD_api api
+                     WHERE api.TERM_PERIOD_id = :new.PERIOD_TERM_id;
+                    --
+                    update EDU.tbl_REGISTER_COST_api
+                    set
+                    PERIOD_TERM_id = :new.PERIOD_TERM_id,
+                    PERIOD_TERM_public_id = APIPUBLICID_
+                    where REGISTER_COST_id = :old.id;
+               end if;
+               --REGISTER
+                if :new.REGISTER_ID != null and :new.REGISTER_ID != :old.REGISTER_ID THEN
+                    SELECT api.REGISTER_public_id INTO APIIPUBLICID_
+                     FROM EDU.tbl_REGISTER_api api
+                     WHERE api.REGISTER_id = :new.REGISTER_id;
+                    --
+                    update EDU.tbl_REGISTER_COST_api
+                    set
+                    REGISTER_id = :new.REGISTER_id,
+                    REGISTER_public_id = APIIPUBLICID_
+                    where REGISTER_COST_id = :old.id;
+               end if;
+           end if;
+       END;
+
+
+       
+ 
+create or replace TRIGGER "EDU"."TBL_REGISTER_COST_API_D" BEFORE DELETE ON EDU.TBL_REGISTER_COST
+        REFERENCING OLD AS OLD NEW AS NEW
+        FOR EACH ROW WHEN (1=1)
+        declare
+          TS_ TIMESTAMP(6);
+          UUID_ nvarchar2(500 char) ;
+          ID_API number;
+        BEGIN
+            TS_ := systimestamp;
+            UUID_ := CRM.public_uuid;
+          IF DELETING THEN
+            SELECT api.ID INTO ID_API
+            FROM EDU.TBL_REGISTER_COST_API api
+            WHERE api.REGISTER_COST_id = :old.id;
+            update EDU.tbl_REGISTER_COST_api api
+            set  
+             api.REGISTER_COST_id = null,
+             api.delete_date_ts = TS_,
+             api.deleted_REGISTER_COST_id = :old.id,
+             api.PERIOD_TERM_id = null,
+             api.REGISTER_id = null
+             where api.id = ID_API;
+           END IF;
+        END;
+       
+   
+ create or replace procedure EDU.UUID_REGISTER_COST_API IS
+             begin
+               declare
+                 cursor c_t is
+                         SELECT
+                             mt.id as REGISTER_COSTID,
+                             mt.PERIOD_TERM_id as PERIOD_TERMID,
+                             secapi.TERM_PERIOD_public_id PERIOD_TERMPUBLICID,
+                             mt.REGISTER_id as REGISTERID,
+                             trdapi.REGISTER_public_id REGISTERPUBLICID
+                         FROM
+                             EDU.tbl_REGISTER_COST mt
+                             LEFT JOIN EDU.tbl_REGISTER_COST_api api ON mt.id = api.REGISTER_COST_id
+                             LEFT JOIN EDU.tbl_TERM_PERIOD sect ON mt.PERIOD_TERM_id = sect.id
+                             LEFT JOIN EDU.tbl_TERM_PERIOD_api secapi ON sect.id = secapi.TERM_PERIOD_id
+                             LEFT JOIN EDU.tbl_REGISTER trdt ON mt.REGISTER_id = trdt.id
+                             LEFT JOIN EDU.tbl_REGISTER_api trdapi ON trdt.id = trdapi.REGISTER_id
+                         WHERE
+                             api.REGISTER_COST_id IS NULL
+                         ORDER BY
+                             REGISTER_COSTID ASC;
+               begin
+                 for r_t in c_t loop
+                         INSERT INTO EDU.tbl_REGISTER_COST_api(
+                             id,
+                             REGISTER_COST_public_id,
+                             create_date_ts,
+                             REGISTER_COST_id,
+                             PERIOD_TERM_id,
+                             PERIOD_TERM_public_id,
+                             REGISTER_id,
+                             REGISTER_public_id
+                         )VALUES(
+                             EDU.SEQ_REGISTER_COST_API.nextval,
+                             crm.public_uuid,
+                             systimestamp,
+                             r_t."REGISTER_COSTID",
+                             r_t."PERIOD_TERMID",
+                             r_t."PERIOD_TERMPUBLICID",
+                             r_t."REGISTERID",
+                             r_t."REGISTERPUBLICID"
+                         );
+                  end loop;
+               end;
+               commit;
+             end;        
+    
+    
+     
+      begin
+      edu.UUID_REGISTER_COST_API;
+      end;
+
+
+
+------------------------------
+
+
+
+CREATE SEQUENCE  "MAINPARTS"."SEQ_REFUND_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "MAINPARTS"."TBL_REFUND_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"REFUND_ID" NUMBER, 
+	"REFUND_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETED_REFUND_ID" NUMBER, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_REFUND_PUBLIC_ID_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_REFUND_API_FK1" FOREIGN KEY ("REFUND_ID")
+	  REFERENCES "MAINPARTS"."TBL_REFUND" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "MAINPARTS"."TBL_REFUND_API_TRG" 
+BEFORE INSERT ON MAINPARTS.TBL_REFUND_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_REFUND_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "MAINPARTS"."TBL_REFUND_API_TRG" ENABLE;
+  
+create or replace TRIGGER "MAINPARTS"."TBL_REFUND_API_IU" AFTER INSERT OR UPDATE ON MAINPARTS.TBL_REFUND
+             REFERENCING OLD AS OLD NEW AS NEW
+             FOR EACH ROW WHEN (1=1)
+             declare
+               TS_ TIMESTAMP(6);
+               UUID_ nvarchar2(500 char) ;
+             BEGIN
+                 TS_ := systimestamp;
+                 UUID_ := CRM.public_uuid;
+               if inserting then
+                 insert into MAINPARTS.TBL_REFUND_API
+                 (id, REFUND_public_id, create_date_ts, REFUND_id)
+                  values 
+                   (MAINPARTS.SEQ_REFUND_API.nextval, UUID_, TS_, :new.id);
+               end if;
+               if updating then
+                 update MAINPARTS.TBL_REFUND_API
+                 set  
+                  edit_date_ts = TS_
+                  where REFUND_id = :old.id;
+                 end if;
+             END;   
+             
+ 
+create or replace TRIGGER "MAINPARTS"."TBL_REFUND_API_D" BEFORE DELETE ON MAINPARTS.TBL_REFUND
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         ID_API number;
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         IF DELETING THEN
+           SELECT API.ID INTO ID_API
+           FROM MAINPARTS.TBL_REFUND_API API
+           WHERE API.REFUND_id = :old.id;
+           
+           update MAINPARTS.tbl_REFUND_api api
+           set  
+            api.REFUND_id = null,
+            api.delete_date_ts = TS_,
+            api.deleted_REFUND_id = :old.id
+            where api.id = ID_API;
+          END IF;
+       END; 
+          
+create or replace procedure   MAINPARTS.UUID_REFUND_API IS
+           begin
+             declare
+               cursor c_t is
+                       SELECT
+                           mt.id as REFUNDID
+                       FROM
+                           MAINPARTS.tbl_REFUND mt
+                           LEFT JOIN MAINPARTS.tbl_REFUND_api api ON mt.id = api.REFUND_id
+                       WHERE
+                           api.REFUND_id IS NULL
+                       ORDER BY
+                           REFUNDID ASC;
+             begin
+               for r_t in c_t loop
+                       INSERT INTO MAINPARTS.tbl_REFUND_api(
+                           id,
+                           REFUND_public_id,
+                           create_date_ts,
+                           REFUND_id
+                       )VALUES(
+                           MAINPARTS.SEQ_REFUND_API.nextval,
+                           crm.public_uuid,
+                           systimestamp,
+                           r_t."REFUNDID"
+                       );
+                end loop;
+             end;
+             commit;
+           end;
+       
+       
+begin
+MAINPARTS.UUID_REFUND_API;
+end;
+
+
+
+------------------------------
+
+
+CREATE SEQUENCE  "EDU"."SEQ_REGISTER_REFUND_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "EDU"."TBL_REGISTER_REFUND_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"REGISTER_REFUND_ID" NUMBER, 
+	"REGISTER_REFUND_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"DELETED_REGISTER_REFUND_ID" NUMBER, 
+	"REGISTER_ID" NUMBER, 
+	"REGISTER_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"REFUND_ID" NUMBER, 
+	"REFUND_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_REGISTER_REFUND_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_REGISTER_REFUND_API_FK1" FOREIGN KEY ("REGISTER_ID")
+	  REFERENCES "EDU"."TBL_REGISTER" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_REGISTER_REFUND_API_FK2" FOREIGN KEY ("REFUND_ID")
+	  REFERENCES "MAINPARTS"."TBL_REFUND" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_REGISTER_REFUND_API_TRG" 
+BEFORE INSERT ON EDU.TBL_REGISTER_REFUND_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_REGISTER_REFUND_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_REGISTER_REFUND_API_TRG" ENABLE;
+
+
+
+create or replace TRIGGER "EDU"."TBL_REGISTER_REFUND_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_REGISTER_REFUND
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         APIPUBLICID_ nvarchar2(500 char); --REFUND
+         APIIPUBLICID_ nvarchar2(500 char); --REGISTER
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         if inserting then
+           SELECT api.REFUND_public_id INTO APIPUBLICID_
+           FROM MAINPARTS.tbl_REFUND_api api
+           WHERE api.REFUND_id = :new.REFUND_id;
+           --
+           SELECT api.REGISTER_public_id INTO APIIPUBLICID_
+           FROM EDU.tbl_REGISTER_api api
+           WHERE api.REGISTER_id = :new.REGISTER_id;
+           insert into EDU.tbl_REGISTER_REFUND_api
+           (id, REGISTER_REFUND_public_id, create_date_ts,
+             REGISTER_REFUND_id, REFUND_id, REFUND_public_id, REGISTER_id, REGISTER_public_id)
+            values 
+             (EDU.SEQ_REGISTER_REFUND_API.nextval, UUID_, TS_,
+             :new.id, :new.REFUND_ID, APIPUBLICID_, :new.REGISTER_ID, APIIPUBLICID_);
+         end if;
+         if updating then
+           update EDU.tbl_REGISTER_REFUND_api
+           set  
+            edit_date_ts = TS_
+            where REGISTER_REFUND_id = :old.id;
+                --REFUND
+                if :new.REFUND_ID != null and :new.REFUND_ID != :old.REFUND_ID THEN
+                    SELECT api.REFUND_public_id INTO APIPUBLICID_
+                     FROM MAINPARTS.tbl_REFUND_api api
+                     WHERE api.REFUND_id = :new.REFUND_id;
+                    --
+                    update EDU.tbl_REGISTER_REFUND_api
+                    set
+                    REFUND_id = :new.REFUND_id,
+                    REFUND_public_id = APIPUBLICID_
+                    where REGISTER_REFUND_id = :old.id;
+               end if;
+               --REGISTER
+                if :new.REGISTER_ID != null and :new.REGISTER_ID != :old.REGISTER_ID THEN
+                    SELECT api.REGISTER_public_id INTO APIIPUBLICID_
+                     FROM EDU.tbl_REGISTER_api api
+                     WHERE api.REGISTER_id = :new.REGISTER_id;
+                    --
+                    update EDU.tbl_REGISTER_REFUND_api
+                    set
+                    REGISTER_id = :new.REGISTER_id,
+                    REGISTER_public_id = APIIPUBLICID_
+                    where REGISTER_REFUND_id = :old.id;
+               end if;
+           end if;
+       END;
+       
+ 
+create or replace TRIGGER "EDU"."TBL_REGISTER_REFUND_API_D" BEFORE DELETE ON EDU.TBL_REGISTER_REFUND
+        REFERENCING OLD AS OLD NEW AS NEW
+        FOR EACH ROW WHEN (1=1)
+        declare
+          TS_ TIMESTAMP(6);
+          UUID_ nvarchar2(500 char) ;
+          ID_API number;
+        BEGIN
+            TS_ := systimestamp;
+            UUID_ := CRM.public_uuid;
+          IF DELETING THEN
+            SELECT api.ID INTO ID_API
+            FROM EDU.TBL_REGISTER_REFUND_API api
+            WHERE api.REGISTER_REFUND_id = :old.id;
+            update EDU.tbl_REGISTER_REFUND_api api
+            set  
+             api.REGISTER_REFUND_id = null,
+             api.delete_date_ts = TS_,
+             api.deleted_REGISTER_REFUND_id = :old.id,
+             api.REFUND_id = null,
+             api.REGISTER_id = null
+             where api.id = ID_API;
+           END IF;
+        END;       
+   
+       
+create or replace procedure EDU.UUID_REGISTER_REFUND_API IS
+            begin
+              declare
+                cursor c_t is
+                        SELECT
+                            mt.id as REGISTER_REFUNDID,
+                            mt.REFUND_id as REFUNDID,
+                            secapi.REFUND_public_id REFUNDPUBLICID,
+                            mt.REGISTER_id as REGISTERID,
+                            trdapi.REGISTER_public_id REGISTERPUBLICID
+                        FROM
+                            EDU.tbl_REGISTER_REFUND mt
+                            LEFT JOIN EDU.tbl_REGISTER_REFUND_api api ON mt.id = api.REGISTER_REFUND_id
+                            LEFT JOIN MAINPARTS.tbl_REFUND sect ON mt.REFUND_id = sect.id
+                            LEFT JOIN MAINPARTS.tbl_REFUND_api secapi ON sect.id = secapi.REFUND_id
+                            LEFT JOIN EDU.tbl_REGISTER trdt ON mt.REGISTER_id = trdt.id
+                            LEFT JOIN EDU.tbl_REGISTER_api trdapi ON trdt.id = trdapi.REGISTER_id
+                        WHERE
+                            api.REGISTER_REFUND_id IS NULL
+                        ORDER BY
+                            REGISTER_REFUNDID ASC;
+              begin
+                for r_t in c_t loop
+                        INSERT INTO EDU.tbl_REGISTER_REFUND_api(
+                            id,
+                            REGISTER_REFUND_public_id,
+                            create_date_ts,
+                            REGISTER_REFUND_id,
+                            REFUND_id,
+                            REFUND_public_id,
+                            REGISTER_id,
+                            REGISTER_public_id
+                        )VALUES(
+                            EDU.SEQ_REGISTER_REFUND_API.nextval,
+                            crm.public_uuid,
+                            systimestamp,
+                            r_t."REGISTER_REFUNDID",
+                            r_t."REFUNDID",
+                            r_t."REFUNDPUBLICID",
+                            r_t."REGISTERID",
+                            r_t."REGISTERPUBLICID"
+                        );
+                 end loop;
+              end;
+              commit;
+            end;      
+    
+     
+      begin
+      edu.UUID_REGISTER_REFUND_API;
+      end; 
+
+
+
+
+
+
 ------------------------------
 
 
 
 
-------------------------------
+CREATE SEQUENCE  "EDU"."SEQ_PERIOD_CERTIFICATE_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+
+    CREATE TABLE "EDU"."TBL_PERIOD_CERTIFICATE_API" 
+     (	"ID" NUMBER NOT NULL ENABLE, 
+  	"PERIOD_CERTIFICATE_ID" NUMBER, 
+  	"PERIOD_CERTIFICATE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+  	"DELETED_PERIOD_CERTIFICATE_ID" NUMBER, 
+  	"REGISTER_ID" NUMBER, 
+  	"REGISTER_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+  	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+  	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+  	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+  	"STUDENT_ID" NUMBER, 
+  	"STUDENT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+  	"PERIOD_ID" NUMBER, 
+  	"PERIOD_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+  	 CONSTRAINT "TBL_PERIOD_CERTIFICATE_API_PK" PRIMARY KEY ("ID")
+    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+    TABLESPACE "USERS"  ENABLE, 
+  	 CONSTRAINT "TBL_PERIOD_CERTIFICATE_API_FK1" FOREIGN KEY ("PERIOD_CERTIFICATE_ID")
+  	  REFERENCES "EDU"."TBL_PERIOD_CERTIFICATE" ("ID") ENABLE, 
+  	 CONSTRAINT "TBL_PERIOD_CERTIFICATE_API_FK2" FOREIGN KEY ("REGISTER_ID")
+  	  REFERENCES "EDU"."TBL_REGISTER" ("ID") ENABLE, 
+  	 CONSTRAINT "TBL_PERIOD_CERTIFICATE_API_FK3" FOREIGN KEY ("STUDENT_ID")
+  	  REFERENCES "EDU"."TBL_STUDENT" ("ID") ENABLE, 
+  	 CONSTRAINT "TBL_PERIOD_CERTIFICATE_API_FK4" FOREIGN KEY ("PERIOD_ID")
+  	  REFERENCES "EDU"."TBL_PERIOD" ("ID") ENABLE
+     )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+   NOCOMPRESS LOGGING
+    TABLESPACE "USERS" ;
+  
+    CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_PERIOD_CERTIFICATE_API_TRG" 
+  BEFORE INSERT ON EDU.TBL_PERIOD_CERTIFICATE_API 
+  FOR EACH ROW 
+  BEGIN
+    <<COLUMN_SEQUENCES>>
+    BEGIN
+      NULL;
+    END COLUMN_SEQUENCES;
+  END;
+  /
+  ALTER TRIGGER "EDU"."TBL_PERIOD_CERTIFICATE_API_TRG" ENABLE;
+
+
+
+create or replace TRIGGER "EDU"."TBL_PERIOD_CERTIFICATE_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_PERIOD_CERTIFICATE
+           REFERENCING OLD AS OLD NEW AS NEW
+           FOR EACH ROW WHEN (1=1)
+           declare
+             TS_ TIMESTAMP(6);
+             UUID_ nvarchar2(500 char) ;
+             APIPUBLICID_ nvarchar2(500 char); --REGISTER
+             IID_ NUMBER;                       
+             APIIPUBLICID_ nvarchar2(500 char); --STUDENT
+             IIID_ NUMBER;
+             APIIIPUBLICID_ nvarchar2(500 char); --PERIOD
+           BEGIN
+               TS_ := systimestamp;
+               UUID_ := CRM.public_uuid;
+             if inserting then
+               SELECT 
+                    api.REGISTER_public_id, API.STUDENT_ID, api.STUDENT_public_id, API.PERIOD_ID, api.PERIOD_public_id  
+               INTO 
+                    APIPUBLICID_, IID_, APIIPUBLICID_, IIID_, APIIIPUBLICID_
+               FROM EDU.tbl_REGISTER_api api
+               WHERE api.REGISTER_id = :new.REGISTER_id;
+               --
+               insert into EDU.tbl_PERIOD_CERTIFICATE_api
+               (id, PERIOD_CERTIFICATE_public_id, create_date_ts,
+                 PERIOD_CERTIFICATE_id, REGISTER_id, REGISTER_public_id, STUDENT_id, STUDENT_public_id,
+                 PERIOD_id, PERIOD_public_id)
+                values 
+                 (EDU.SEQ_PERIOD_CERTIFICATE_API.nextval, UUID_, TS_,
+                 :new.id, :new.REGISTER_id, APIPUBLICID_, IID_, APIIPUBLICID_,
+                 IIID_, APIIIPUBLICID_);
+             end if;
+             if updating then
+               update EDU.tbl_PERIOD_CERTIFICATE_api
+               set  
+                edit_date_ts = TS_
+                where PERIOD_CERTIFICATE_id = :old.id;
+                 -- REGISTER, STUDENT, PERIOD
+                if :new.REGISTER_ID != null and :new.REGISTER_ID != :old.REGISTER_ID THEN
+                     SELECT api.REGISTER_public_id, 
+                        API.STUDENT_ID, API.STUDENT_PUBLIC_ID, API.PERIOD_ID, API.PERIOD_PUBLIC_ID 
+                     INTO APIPUBLICID_,
+                        IID_,  APIIPUBLICID_, IIID_, APIIIPUBLICID_
+                     FROM EDU.tbl_REGISTER_api api
+                     WHERE api.REGISTER_id = :new.REGISTER_id;
+                     --
+                     update EDU.tbl_PERIOD_CERTIFICATE_api
+                     set
+                     REGISTER_id = :new.REGISTER_id,
+                     REGISTER_public_id = APIPUBLICID_,
+                     STUDENT_ID = IID_,
+                     STUDENT_PUBLIC_ID = APIIPUBLICID_,
+                     PERIOD_ID = IIID_,
+                     PERIOD_PUBLIC_ID = APIIIPUBLICID_
+                     where PERIOD_CERTIFICATE_id = :old.id;
+                end if;
+             end if;
+           END;      
+
+        
+   create or replace TRIGGER "EDU"."TBL_PERIOD_CERTIFICATE_API_D" BEFORE DELETE ON EDU.tbl_PERIOD_CERTIFICATE
+         REFERENCING OLD AS OLD NEW AS NEW
+         FOR EACH ROW WHEN (1=1)
+         declare
+           TS_ TIMESTAMP(6);
+           UUID_ nvarchar2(500 char) ;
+           ID_API number;
+         BEGIN
+             TS_ := systimestamp;
+             UUID_ := CRM.public_uuid;
+           IF DELETING THEN
+             SELECT api.ID INTO ID_API
+             FROM EDU.TBL_PERIOD_CERTIFICATE_API api
+             WHERE api.PERIOD_CERTIFICATE_id = :old.id;
+             --
+             update EDU.TBL_PERIOD_CERTIFICATE_API api
+             set  
+              api.PERIOD_CERTIFICATE_id = null,
+              api.delete_date_ts = TS_,
+              api.deleted_period_certificate_id = :old.id,
+              api.STUDENT_id = null,
+              api.REGISTER_id = null,
+              api.PERIOD_id = null
+              where api.id = ID_API;
+            END IF;
+         END;
+            
+  create or replace procedure EDU.UUID_PERIOD_CERTIFICATE_API IS
+                 begin
+                   declare
+                     cursor c_t is
+                              SELECT
+                                 mt.id as PERIOD_CERTIFICATEID,
+                                 mt.REGISTER_id as REGISTERID,
+                                 secapi.REGISTER_public_id as REGISTERPUBLICID,
+                                 sect.STUDENT_id as STUDENTID,
+                                 secapi.STUDENT_public_id as STUDENTPUBLICID,
+                                 sect.PERIOD_id as PERIODID,
+                                 secapi.PERIOD_public_id PERIODPUBLICID
+                             FROM
+                                 EDU.tbl_PERIOD_CERTIFICATE mt
+                                 LEFT JOIN EDU.TBL_PERIOD_CERTIFICATE_API api ON mt.id = api.PERIOD_CERTIFICATE_id
+                                 LEFT JOIN EDU.tbl_REGISTER sect ON mt.REGISTER_id = sect.id
+                                 LEFT JOIN EDU.tbl_REGISTER_api secapi ON sect.id = secapi.REGISTER_id
+                             WHERE
+                                 api.PERIOD_CERTIFICATE_id IS NULL
+                             ORDER BY
+                                 PERIOD_CERTIFICATEID ASC;
+                   begin
+                     for r_t in c_t loop
+                             INSERT INTO EDU.TBL_PERIOD_CERTIFICATE_API(
+                                 id,
+                                 period_certificate_public_id,
+                                 create_date_ts,
+                                 PERIOD_CERTIFICATE_ID,
+                                 REGISTER_id,
+                                 REGISTER_public_id,
+                                 STUDENT_id,
+                                 STUDENT_public_id,
+                                 PERIOD_id,
+                                 PERIOD_public_id
+                             )VALUES(
+                                 EDU.SEQ_PERIOD_CERTIFICATE_API.nextval,
+                                 crm.public_uuid,
+                                 systimestamp,
+                                 r_t."PERIOD_CERTIFICATEID",
+                                 r_t."REGISTERID",
+                                 r_t."REGISTERPUBLICID",
+                                 r_t."STUDENTID",
+                                 r_t."STUDENTPUBLICID",
+                                 r_t."PERIODID",
+                                 r_t."PERIODPUBLICID"
+                             );
+                      end loop;
+                   end;
+                   commit;
+                 end;           
+   
+     
+      
+       begin
+       edu.UUID_PERIOD_CERTIFICATE_API;
+       end;     
 
 
 
 
 ------------------------------
 
+CREATE SEQUENCE  "EDU"."SEQ_PRE_REGISTER_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+  CREATE TABLE "EDU"."TBL_PRE_REGISTER_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"PRE_REGISTER_ID" NUMBER, 
+	"PERIOD_ID" NUMBER, 
+	"CONTACT_ID" NUMBER, 
+	"PRE_REGISTER_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PERIOD_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CONTACT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PRE_REGISTER_DELETE_STATUS" NUMBER, 
+	"PRE_REGISTER_ACTIVITY_STATUS" NUMBER, 
+	"PRE_REGISTER_EDIT_DATE" NVARCHAR2(10) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETED_PRE_REGISTER_ID" NUMBER, 
+	 CONSTRAINT "TBL_PRE_REGISTER_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_PRE_REGISTER_API_FK1" FOREIGN KEY ("PERIOD_ID")
+	  REFERENCES "EDU"."TBL_PERIOD" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_PRE_REGISTER_API_FK2" FOREIGN KEY ("PRE_REGISTER_ID")
+	  REFERENCES "EDU"."TBL_PRE_REGISTER" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_PRE_REGISTER_API_FK3" FOREIGN KEY ("CONTACT_ID")
+	  REFERENCES "CRM"."TBL_CONTACT" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_PRE_REGISTER_API_TRG" 
+BEFORE INSERT ON EDU.TBL_PRE_REGISTER_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_PRE_REGISTER_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_PRE_REGISTER_API_TRG" ENABLE;
+
+
+create or replace TRIGGER "EDU"."TBL_PRE_REGISTER_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_PRE_REGISTER
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         APIPUBLICID_ nvarchar2(500 char); --CONTACT
+         APIIPUBLICID_ nvarchar2(500 char); --PERIOD
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         if inserting then
+           SELECT api.CONTACT_public_id INTO APIPUBLICID_
+           FROM CRM.tbl_CONTACT_api api
+           WHERE api.CONTACT_id = :new.CONTACT_id;
+           --
+           SELECT api.PERIOD_public_id INTO APIIPUBLICID_
+           FROM EDU.tbl_PERIOD_api api
+           WHERE api.PERIOD_id = :new.PERIOD_id;
+           insert into EDU.tbl_PRE_REGISTER_api
+           (id, PRE_REGISTER_public_id, create_date_ts,
+             PRE_REGISTER_id, CONTACT_id, CONTACT_public_id, PERIOD_id, PERIOD_public_id)
+            values 
+             (EDU.SEQ_PRE_REGISTER_API.nextval, UUID_, TS_,
+             :new.id, :new.CONTACT_ID, APIPUBLICID_, :new.PERIOD_ID, APIIPUBLICID_);
+         end if;
+         if updating then
+           update EDU.tbl_PRE_REGISTER_api
+           set  
+            edit_date_ts = TS_
+            where PRE_REGISTER_id = :old.id;
+                --CONTACT
+                if :new.CONTACT_ID != null and :new.CONTACT_ID != :old.CONTACT_ID THEN
+                    SELECT api.CONTACT_public_id INTO APIPUBLICID_
+                     FROM CRM.tbl_CONTACT_api api
+                     WHERE api.CONTACT_id = :new.CONTACT_id;
+                    --
+                    update EDU.tbl_PRE_REGISTER_api
+                    set
+                    CONTACT_id = :new.CONTACT_id,
+                    CONTACT_public_id = APIPUBLICID_
+                    where PRE_REGISTER_id = :old.id;
+               end if;
+               --PERIOD
+                if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+                    SELECT api.PERIOD_public_id INTO APIIPUBLICID_
+                     FROM EDU.tbl_PERIOD_api api
+                     WHERE api.PERIOD_id = :new.PERIOD_id;
+                    --
+                    update EDU.tbl_PRE_REGISTER_api
+                    set
+                    PERIOD_id = :new.PERIOD_id,
+                    PERIOD_public_id = APIIPUBLICID_
+                    where PRE_REGISTER_id = :old.id;
+               end if;
+           end if;
+       END;
+       
+ 
+create or replace TRIGGER "EDU"."TBL_PRE_REGISTER_API_D" BEFORE DELETE ON EDU.TBL_PRE_REGISTER
+        REFERENCING OLD AS OLD NEW AS NEW
+        FOR EACH ROW WHEN (1=1)
+        declare
+          TS_ TIMESTAMP(6);
+          UUID_ nvarchar2(500 char) ;
+          ID_API number;
+        BEGIN
+            TS_ := systimestamp;
+            UUID_ := CRM.public_uuid;
+          IF DELETING THEN
+            SELECT api.ID INTO ID_API
+            FROM EDU.TBL_PRE_REGISTER_API api
+            WHERE api.PRE_REGISTER_id = :old.id;
+            update EDU.tbl_PRE_REGISTER_api api
+            set  
+             api.PRE_REGISTER_id = null,
+             api.delete_date_ts = TS_,
+             api.deleted_PRE_REGISTER_id = :old.id,
+             api.CONTACT_id = null,
+             api.PERIOD_id = null
+             where api.id = ID_API;
+           END IF;
+        END;       
+   
+       
+create or replace procedure EDU.UUID_PRE_REGISTER_API IS
+            begin
+              declare
+                cursor c_t is
+                        SELECT
+                            mt.id as PRE_REGISTERID,
+                            mt.CONTACT_id as CONTACTID,
+                            secapi.CONTACT_public_id CONTACTPUBLICID,
+                            mt.PERIOD_id as PERIODID,
+                            trdapi.PERIOD_public_id PERIODPUBLICID
+                        FROM
+                            EDU.tbl_PRE_REGISTER mt
+                            LEFT JOIN EDU.tbl_PRE_REGISTER_api api ON mt.id = api.PRE_REGISTER_id
+                            LEFT JOIN CRM.tbl_CONTACT sect ON mt.CONTACT_id = sect.id
+                            LEFT JOIN CRM.tbl_CONTACT_api secapi ON sect.id = secapi.CONTACT_id
+                            LEFT JOIN EDU.tbl_PERIOD trdt ON mt.PERIOD_id = trdt.id
+                            LEFT JOIN EDU.tbl_PERIOD_api trdapi ON trdt.id = trdapi.PERIOD_id
+                        WHERE
+                            api.PRE_REGISTER_id IS NULL
+                        ORDER BY
+                            PRE_REGISTERID ASC;
+              begin
+                for r_t in c_t loop
+                        INSERT INTO EDU.tbl_PRE_REGISTER_api(
+                            id,
+                            PRE_REGISTER_public_id,
+                            create_date_ts,
+                            PRE_REGISTER_id,
+                            CONTACT_id,
+                            CONTACT_public_id,
+                            PERIOD_id,
+                            PERIOD_public_id
+                        )VALUES(
+                            EDU.SEQ_PRE_REGISTER_API.nextval,
+                            crm.public_uuid,
+                            systimestamp,
+                            r_t."PRE_REGISTERID",
+                            r_t."CONTACTID",
+                            r_t."CONTACTPUBLICID",
+                            r_t."PERIODID",
+                            r_t."PERIODPUBLICID"
+                        );
+                 end loop;
+              end;
+              commit;
+            end;      
+    
+     
+      begin
+      edu.UUID_PRE_REGISTER_API;
+      end; 
+
+
+
+------------------------------
+
+
+
+CREATE SEQUENCE  "EDU"."SEQ_STUDENT_COURSE_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+ CREATE TABLE "EDU"."TBL_STUDENT_COURSE_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"STUDENT_COURSE_ID" NUMBER, 
+	"DELETED_STUDENT_COURSE_ID" NUMBER, 
+	"REGISTER_ID" NUMBER, 
+	"REGISTER_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"STUDENT_COURSE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PERIOD_COURSE_ID" NUMBER, 
+	"PERIOD_COURSE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PERIOD_ID" NUMBER, 
+	"PERIOD_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"COURSE_ID" NUMBER, 
+	"COURSE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"STUDENT_ID" NUMBER, 
+	"STUDENT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	 CONSTRAINT "TBL_STUDENT_COURSE_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_STUDENT_COURSE_API_FK1" FOREIGN KEY ("STUDENT_COURSE_ID")
+	  REFERENCES "EDU"."TBL_STUDENT_COURSE" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_STUDENT_COURSE_API_FK2" FOREIGN KEY ("REGISTER_ID")
+	  REFERENCES "EDU"."TBL_REGISTER" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_STUDENT_COURSE_API_FK3" FOREIGN KEY ("PERIOD_COURSE_ID")
+	  REFERENCES "EDU"."TBL_PERIOD_COURSE" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_STUDENT_COURSE_API_FK4" FOREIGN KEY ("PERIOD_ID")
+	  REFERENCES "EDU"."TBL_PERIOD" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_STUDENT_COURSE_API_FK5" FOREIGN KEY ("COURSE_ID")
+	  REFERENCES "EDU"."TBL_COURSE" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_STUDENT_COURSE_API_FK6" FOREIGN KEY ("STUDENT_ID")
+	  REFERENCES "EDU"."TBL_STUDENT" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EDU"."TBL_STUDENT_COURSE_API_TRG" 
+BEFORE INSERT ON EDU.TBL_STUDENT_COURSE_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_STUDENT_COURSE_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EDU"."TBL_STUDENT_COURSE_API_TRG" ENABLE;
+
+
+
+create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_STUDENT_COURSE
+           REFERENCING OLD AS OLD NEW AS NEW
+           FOR EACH ROW WHEN (1=1)
+           declare
+             TS_ TIMESTAMP(6);
+             UUID_ nvarchar2(500 char) ;
+             APIPUBLICID_ nvarchar2(500 char); --REGISTER
+             IID_ NUMBER;                       
+             APIIPUBLICID_ nvarchar2(500 char); --STUDENT
+             IIID_ NUMBER;
+             APIIIPUBLICID_ nvarchar2(500 char); --PERIOD
+             VPUBLICID_ nvarchar2(500 char); --PERIODCOURSE
+             VID_ NUMBER;
+             VIPUBLICID_ nvarchar2(500 char); --COURSE
+           BEGIN
+               TS_ := systimestamp;
+               UUID_ := CRM.public_uuid;
+             if inserting then
+               SELECT 
+                    api.REGISTER_public_id, API.STUDENT_ID, api.STUDENT_public_id, API.PERIOD_ID, api.PERIOD_public_id
+                INTO 
+                    APIPUBLICID_, IID_, APIIPUBLICID_, IIID_, APIIIPUBLICID_
+               FROM EDU.tbl_REGISTER_api api
+               WHERE api.REGISTER_id = :new.REGISTER_id;
+               --
+              SELECT 
+                    api.PERIOD_COURSE_public_id, API.COURSE_ID, API.COURSE_PUBLIC_ID 
+              INTO 
+                    VPUBLICID_, VID_, VIPUBLICID_
+              FROM EDU.tbl_PERIOD_COURSE_api api
+              WHERE api.PERIOD_COURSE_id = :new.PERIOD_COURSE_id;
+              --
+               insert into EDU.tbl_STUDENT_COURSE_api
+               (id, STUDENT_COURSE_public_id, create_date_ts,
+                 STUDENT_COURSE_id, REGISTER_id, REGISTER_public_id, STUDENT_id, STUDENT_public_id,
+                 PERIOD_id, PERIOD_public_id,
+                 PERIOD_COURSE_ID, PERIOD_COURSE_PUBLIC_ID, COURSE_ID, COURSE_PUBLIC_ID)
+                values 
+                 (EDU.SEQ_STUDENT_COURSE_API.nextval, UUID_, TS_,
+                 :new.id, :new.REGISTER_id, APIPUBLICID_, IID_, APIIPUBLICID_,
+                 IIID_, APIIIPUBLICID_,
+                 :new.period_course_id, VPUBLICID_, VID_, VIPUBLICID_);
+             end if;
+             if updating then
+               update EDU.tbl_STUDENT_COURSE_api
+               set  
+                edit_date_ts = TS_
+                where STUDENT_COURSE_id = :old.id;
+                 -- REGISTER, STUDENT, PERIOD
+                if :new.REGISTER_ID != null and :new.REGISTER_ID != :old.REGISTER_ID THEN
+                     SELECT api.REGISTER_public_id, 
+                        API.STUDENT_ID, API.STUDENT_PUBLIC_ID, API.PERIOD_ID, API.PERIOD_PUBLIC_ID 
+                     INTO APIPUBLICID_,
+                        IID_,  APIIPUBLICID_, IIID_, APIIIPUBLICID_
+                     FROM EDU.tbl_REGISTER_api api
+                     WHERE api.REGISTER_id = :new.REGISTER_id;
+                     --
+                     update EDU.tbl_STUDENT_COURSE_api
+                     set
+                     REGISTER_id = :new.REGISTER_id,
+                     REGISTER_public_id = APIPUBLICID_,
+                     STUDENT_ID = IID_,
+                     STUDENT_PUBLIC_ID = APIIPUBLICID_,
+                     PERIOD_ID = IIID_,
+                     PERIOD_PUBLIC_ID = APIIIPUBLICID_
+                     where STUDENT_COURSE_id = :old.id;
+                end if;
+                 -- PERIODCOURSE, COURSE
+                if :new.PERIOD_COURSE_ID != null and :new.PERIOD_COURSE_ID != :old.PERIOD_COURSE_ID THEN
+                     SELECT 
+                            api.PERIOD_COURSE_public_id, API.COURSE_ID, API.COURSE_PUBLIC_ID 
+                     INTO 
+                            VPUBLICID_, VID_,  VIPUBLICID_
+                     FROM EDU.tbl_PERIOD_COURSE_api api
+                     WHERE api.PERIOD_COURSE_id = :new.PERIOD_COURSE_id;
+                     --
+                     update EDU.tbl_STUDENT_COURSE_api
+                     set
+                     PERIOD_COURSE_id = :new.PERIOD_COURSE_id,
+                     PERIOD_COURSE_public_id = VPUBLICID_,
+                     COURSE_ID = VID_,
+                     COURSE_PUBLIC_ID = VIPUBLICID_
+                     where STUDENT_COURSE_id = :old.id;
+                end if;
+             end if;
+           END;        
+
+        
+   create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_D" BEFORE DELETE ON EDU.tbl_STUDENT_COURSE
+         REFERENCING OLD AS OLD NEW AS NEW
+         FOR EACH ROW WHEN (1=1)
+         declare
+           TS_ TIMESTAMP(6);
+           UUID_ nvarchar2(500 char) ;
+           ID_API number;
+         BEGIN
+             TS_ := systimestamp;
+             UUID_ := CRM.public_uuid;
+           IF DELETING THEN
+             SELECT api.ID INTO ID_API
+             FROM EDU.TBL_STUDENT_COURSE_API api
+             WHERE api.STUDENT_COURSE_id = :old.id;
+             --
+             update EDU.TBL_STUDENT_COURSE_API api
+             set  
+              api.STUDENT_COURSE_id = null,
+              api.delete_date_ts = TS_,
+              api.deleted_STUDENT_COURSE_id = :old.id,
+              api.STUDENT_id = null,
+              api.REGISTER_id = null,
+              api.PERIOD_id = null,
+              api.PERIOD_COURSE_id = null,
+              api.COURSE_id = null
+              where api.id = ID_API;
+            END IF;
+         END;
+            
+  create or replace procedure EDU.UUID_STUDENT_COURSE_API IS
+                 begin
+                   declare
+                     cursor c_t is
+                              SELECT
+                                 mt.id as STUDENT_COURSEID,
+                                 mt.REGISTER_id as REGISTERID,
+                                 secapi.REGISTER_public_id as REGISTERPUBLICID,
+                                 sect.STUDENT_id as STUDENTID,
+                                 secapi.STUDENT_public_id as STUDENTPUBLICID,
+                                 sect.PERIOD_id as PERIODID,
+                                 secapi.PERIOD_public_id PERIODPUBLICID,
+                                 mt.PERIOD_COURSE_id as PERIOD_COURSEID,
+                                 thrdapi.PERIOD_COURSE_public_id as PERIOD_COURSEPUBLICID,
+                                 thrd.COURSE_id as COURSEID,
+                                 thrdapi.COURSE_public_id as COURSEPUBLICID
+                             FROM
+                                 EDU.tbl_STUDENT_COURSE mt
+                                 LEFT JOIN EDU.TBL_STUDENT_COURSE_API api ON mt.id = api.STUDENT_COURSE_id
+                                 LEFT JOIN EDU.tbl_REGISTER sect ON mt.REGISTER_id = sect.id
+                                 LEFT JOIN EDU.tbl_REGISTER_api secapi ON sect.id = secapi.REGISTER_id
+                                 LEFT JOIN EDU.tbl_PERIOD_COURSE thrd ON mt.PERIOD_COURSE_id = thrd.id
+                                 LEFT JOIN EDU.tbl_PERIOD_COURSE_api thrdapi ON thrd.id = thrdapi.PERIOD_COURSE_id
+                             WHERE
+                                 api.STUDENT_COURSE_id IS NULL
+                             ORDER BY
+                                 STUDENT_COURSEID ASC;
+                   begin
+                     for r_t in c_t loop
+                             INSERT INTO EDU.TBL_STUDENT_COURSE_API(
+                                 id,
+                                 STUDENT_COURSE_public_id,
+                                 create_date_ts,
+                                 STUDENT_COURSE_ID,
+                                 REGISTER_id,
+                                 REGISTER_public_id,
+                                 STUDENT_id,
+                                 STUDENT_public_id,
+                                 PERIOD_id,
+                                 PERIOD_public_id,
+                                 PERIOD_COURSE_id,
+                                 PERIOD_COURSE_public_id,
+                                 COURSE_id,
+                                 COURSE_public_id                                
+                             )VALUES(
+                                 EDU.SEQ_STUDENT_COURSE_API.nextval,
+                                 crm.public_uuid,
+                                 systimestamp,
+                                 r_t."STUDENT_COURSEID",
+                                 r_t."REGISTERID",
+                                 r_t."REGISTERPUBLICID",
+                                 r_t."STUDENTID",
+                                 r_t."STUDENTPUBLICID",
+                                 r_t."PERIODID",
+                                 r_t."PERIODPUBLICID",
+                                 r_t."PERIOD_COURSEID",
+                                 r_t."PERIOD_COURSEPUBLICID",
+                                 r_t."COURSEID",
+                                 r_t."COURSEPUBLICID"
+                             );
+                      end loop;
+                   end;
+                   commit;
+                 end;           
+   
+     
+      
+       begin
+       edu.UUID_STUDENT_COURSE_API;
+       end;   
+
+
+
+
+
+
+
+------------------------------
+
+
+
+------------------------------
 
 
 
