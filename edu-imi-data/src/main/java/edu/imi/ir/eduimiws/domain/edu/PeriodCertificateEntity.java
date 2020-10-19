@@ -144,4 +144,10 @@ public class PeriodCertificateEntity extends BaseEntity {
 
     @Column(name = "ISEDITED", length = 20)
     private String isedited;
+
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "periodCertificate", fetch = FetchType.LAZY)
+    private PeriodCertificateApiEntity periodCertificateApi;
 }

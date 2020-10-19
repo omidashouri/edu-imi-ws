@@ -59,4 +59,9 @@ public class TermPeriodEntity extends BaseEntity {
 
     @Column(name = "FEE_EQUIVALENT")
     private Long feeEquivalent;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "termPeriod", fetch = FetchType.LAZY)
+    private TermPeriodApiEntity termPeriodApi;
 }

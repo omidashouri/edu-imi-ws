@@ -27,7 +27,7 @@ public class PeriodContractEntity extends BaseEntity {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTRACT_ID")
-    private ContractEduEntity contract;
+    private ContractEduEntity contractEdu;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -52,4 +52,9 @@ public class PeriodContractEntity extends BaseEntity {
 
     @Column(name = "PRICE")
     private Long price;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "periodContract", fetch = FetchType.LAZY)
+    private PeriodContractApiEntity periodContractApi;
 }

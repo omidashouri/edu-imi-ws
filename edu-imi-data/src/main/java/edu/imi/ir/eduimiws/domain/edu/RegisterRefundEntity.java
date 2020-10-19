@@ -72,4 +72,9 @@ public class RegisterRefundEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REFUND_ID")
     private RefundEntity refund;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "registerRefund", fetch = FetchType.LAZY)
+    private RegisterRefundApiEntity registerRefundApi;
 }

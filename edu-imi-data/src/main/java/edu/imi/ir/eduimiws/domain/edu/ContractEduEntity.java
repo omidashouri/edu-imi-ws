@@ -79,4 +79,9 @@ public class ContractEduEntity extends BaseEntity {
 
     @Column(name = "FILE_OLD_NAME", length = 50)
     private String fileOldName;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "contractEdu", fetch = FetchType.LAZY)
+    private ContractEduApiEntity contractEduApi;
 }

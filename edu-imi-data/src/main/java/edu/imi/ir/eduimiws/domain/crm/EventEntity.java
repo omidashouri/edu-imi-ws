@@ -3,10 +3,7 @@ package edu.imi.ir.eduimiws.domain.crm;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Getter
@@ -25,4 +22,9 @@ public class EventEntity extends BaseEntity {
     //    TBL_MENU
     @Column(name = "MENU_ID")
     private Long menuId;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "event", fetch = FetchType.LAZY)
+    private EventApiEntity eventApi;
 }

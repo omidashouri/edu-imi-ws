@@ -294,11 +294,17 @@ public class AccountEntity extends BaseEntity {
   @JoinColumn(name = "EMPLOYEE_ID")
   private ParameterEntity employee;
 
-  @Getter(AccessLevel.NONE)
-  @EqualsAndHashCode.Exclude
-  @ToString.Exclude
-  @ManyToOne
-  @JoinColumn(name = "ANNUAL_REVENUE_ID")
-  private ParameterEntity annualRevenueEntity;
+    @Getter(AccessLevel.NONE)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "ANNUAL_REVENUE_ID")
+    private ParameterEntity annualRevenueEntity;
+
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+    private AccountApiEntity accountApi;
 
 }

@@ -58,4 +58,9 @@ public class StudentCourseEntity extends BaseEntity {
 
     @Column(name = "FINAL_STATUS", length = 2)
     private String finalStatus;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "studentCourse", fetch = FetchType.LAZY)
+    private StudentCourseApiEntity studentCourseApi;
 }

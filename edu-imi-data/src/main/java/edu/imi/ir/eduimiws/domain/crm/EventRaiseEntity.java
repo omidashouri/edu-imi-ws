@@ -54,4 +54,9 @@ public class EventRaiseEntity extends BaseEntity {
 
     @Column(name = "USER_IP", length = 50)
     private String userIp;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "eventRaise", fetch = FetchType.LAZY)
+    private EventRaiseApiEntity eventRaiseApi;
 }

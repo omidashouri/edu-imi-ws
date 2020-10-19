@@ -59,4 +59,9 @@ public class CostTypeEntity extends BaseEntity {
 
     @Column(name = "CHANGEABLE", length = 1)
     private String changeable;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "costType", fetch = FetchType.LAZY)
+    private CostTypeApiEntity costTypeApi;
 }

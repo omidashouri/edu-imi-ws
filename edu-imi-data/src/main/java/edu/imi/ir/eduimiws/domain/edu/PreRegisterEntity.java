@@ -73,7 +73,7 @@ public class PreRegisterEntity extends BaseEntity {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTRACT_ID")
-    private ContractEduEntity contract;
+    private ContractEduEntity contractEdu;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -95,4 +95,9 @@ public class PreRegisterEntity extends BaseEntity {
 
     @Column(name = "DESCRPTION", length = 200)
     private String descrption;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "preRegister", fetch = FetchType.LAZY)
+    private PreRegisterApiEntity preRegisterApi;
 }

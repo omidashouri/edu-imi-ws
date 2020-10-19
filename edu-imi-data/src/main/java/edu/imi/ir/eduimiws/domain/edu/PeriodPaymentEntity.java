@@ -49,4 +49,9 @@ public class PeriodPaymentEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EDITOR")
     private PersonEntity editor;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "periodPayment", fetch = FetchType.LAZY)
+    private PeriodPaymentApiEntity periodPaymentApi;
 }

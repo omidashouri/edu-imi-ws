@@ -61,4 +61,9 @@ public class RegisterCostEntity extends BaseEntity {
 
     @Column(name = "FINAL_COST")
     private Long finalCost;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "registerCost", fetch = FetchType.LAZY)
+    private RegisterCostApiEntity registerCostApi;
 }

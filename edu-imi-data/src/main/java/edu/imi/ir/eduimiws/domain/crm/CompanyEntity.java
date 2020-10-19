@@ -102,14 +102,19 @@ public class CompanyEntity extends BaseEntity {
   private List<ContactEntity> contactEntities= new ArrayList<>();
 
   public void addContact(ContactEntity contact){
-    if(null != contact){
-      if(null == contactEntities){
-        contactEntities = new ArrayList<>();
+      if (null != contact) {
+          if (null == contactEntities) {
+              contactEntities = new ArrayList<>();
+          }
+          contact.setCompany(this);
+          contactEntities.add(contact);
       }
-      contact.setCompany(this);
-      contactEntities.add(contact);
-    }
   }
 
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "company", fetch = FetchType.LAZY)
+    private CompanyApiEntity companyApi;
 
 }

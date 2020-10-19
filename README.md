@@ -3421,7 +3421,7 @@ end;
 
 ------------------------------
 
-CREATE SEQUENCE  "CRM"."SEQ_COMPANY_ID_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+CREATE SEQUENCE  "CRM"."SEQ_COMPANY_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
 
   CREATE TABLE "CRM"."TBL_COMPANY_API" 
    (	"ID" NUMBER NOT NULL ENABLE, 
@@ -3440,6 +3440,19 @@ CREATE SEQUENCE  "CRM"."SEQ_COMPANY_ID_API"  MINVALUE 1 MAXVALUE 999999999999999
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
  NOCOMPRESS LOGGING
   TABLESPACE "USERS" ;
+  CREATE OR REPLACE EDITIONABLE TRIGGER "CRM"."TBL_COMPANY_API_TRG" 
+  BEFORE INSERT ON CRM.TBL_COMPANY_API 
+  FOR EACH ROW 
+  BEGIN
+    <<COLUMN_SEQUENCES>>
+    BEGIN
+      IF INSERTING AND :NEW.ID IS NULL THEN
+        SELECT SEQ_COMPANY_API_ID.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+      END IF;
+    END COLUMN_SEQUENCES;
+  END;
+  /
+  ALTER TRIGGER "CRM"."TBL_COMPANY_API_TRG" ENABLE;
   
    create or replace TRIGGER "CRM"."TBL_COMPANY_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_COMPANY
              REFERENCING OLD AS OLD NEW AS NEW
@@ -3454,7 +3467,7 @@ CREATE SEQUENCE  "CRM"."SEQ_COMPANY_ID_API"  MINVALUE 1 MAXVALUE 999999999999999
                  insert into CRM.TBL_COMPANY_API
                  (id, COMPANY_public_id, create_date_ts, COMPANY_id)
                   values 
-                   (CRM.SEQ_COMPANY_ID_API.nextval, UUID_, TS_, :new.id);
+                   (CRM.SEQ_COMPANY_API_ID.nextval, UUID_, TS_, :new.id);
                end if;
                if updating then
                  update CRM.TBL_COMPANY_API
@@ -3510,7 +3523,7 @@ CREATE SEQUENCE  "CRM"."SEQ_COMPANY_ID_API"  MINVALUE 1 MAXVALUE 999999999999999
                            create_date_ts,
                            COMPANY_id
                        )VALUES(
-                           CRM.SEQ_COMPANY_ID_API.nextval,
+                           CRM.SEQ_COMPANY_API_ID.nextval,
                            crm.public_uuid,
                            systimestamp,
                            r_t."COMPANYID"
@@ -3529,7 +3542,7 @@ end;
 
 ------------------------------
 
-CREATE SEQUENCE  "CRM"."SEQ_ACCOUNT_ID_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+CREATE SEQUENCE  "CRM"."SEQ_ACCOUNT_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
 
 
 create or replace TRIGGER "CRM"."TBL_ACCOUNT_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_ACCOUNT
@@ -3550,7 +3563,7 @@ create or replace TRIGGER "CRM"."TBL_ACCOUNT_API_IU" AFTER INSERT OR UPDATE ON C
       (id, ACCOUNT_public_id, create_date_ts,
         ACCOUNT_id, COMPANY_id, COMPANY_public_id)
        values 
-        (CRM.SEQ_ACCOUNT_ID_API.nextval, UUID_, TS_, 
+        (CRM.SEQ_ACCOUNT_API_ID.nextval, UUID_, TS_, 
         :new.id, :new.COMPANY_ID, APIPUBLICID_);
     end if;
     if updating then
@@ -3626,7 +3639,7 @@ create or replace procedure   CRM.UUID_ACCOUNT_API IS
                   company_id,
                   company_public_id
               )VALUES(
-                  CRM.SEQ_ACCOUNT_ID_API.nextval,
+                  CRM.SEQ_ACCOUNT_API_ID.nextval,
                   crm.public_uuid,
                   systimestamp,
                   r_t."ACCOUNTID",

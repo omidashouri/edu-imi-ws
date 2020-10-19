@@ -79,4 +79,9 @@ public class RefundEntity extends BaseEntity {
 
     @Column(name = "ACTIVITY_STATUS", length = 2)
     private String activityStatus;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "refund", fetch = FetchType.LAZY)
+    private RefundApiEntity refundApi;
 }
