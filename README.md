@@ -5890,6 +5890,250 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_IU" AFTER INSERT OR UPDA
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE SEQUENCE  "MAINPARTS"."SEQ_DIGITAL_PAYMENT_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+
+
+  CREATE TABLE "MAINPARTS"."TBL_DIGITAL_PAYMENT_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"DIGITAL_PAYMENT_ID" NUMBER, 
+	"DIGITAL_PAYMENT_PABLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"DELETED_DIGITAL_PAYMENT_ID" NUMBER, 
+	"CONTACT_ID" NUMBER, 
+	"CONTACT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"COMPANY_ID" NUMBER, 
+	"COMPANY_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PERSON_ID" NUMBER, 
+	"PERSON_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_DIGITAL_PAYMENT_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE, 
+	 CONSTRAINT "TBL_DIGITAL_PAYMENT_API_FK1" FOREIGN KEY ("COMPANY_ID")
+	  REFERENCES "CRM"."TBL_COMPANY" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_DIGITAL_PAYMENT_API_FK2" FOREIGN KEY ("CONTACT_ID")
+	  REFERENCES "CRM"."TBL_CONTACT" ("ID") ENABLE, 
+	 CONSTRAINT "TBL_DIGITAL_PAYMENT_API_FK3" FOREIGN KEY ("PERSON_ID")
+	  REFERENCES "CRM"."TBL_PERSON" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "MAINPARTS"."TBL_DIGITAL_PAYMENT_API_TRG" 
+BEFORE INSERT ON MAINPARTS.TBL_DIGITAL_PAYMENT_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_DIGITAL_PAYMENT_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "MAINPARTS"."TBL_DIGITAL_PAYMENT_API_TRG" ENABLE;
+
+ 
+
+
+create or replace TRIGGER "MAINPARTS"."TBL_DIGITAL_PAYMENT_API_IU" AFTER INSERT OR UPDATE ON MAINPARTS.TBL_DIGITAL_PAYMENT
+       REFERENCING OLD AS OLD NEW AS NEW
+       FOR EACH ROW WHEN (1=1)
+       declare
+         TS_ TIMESTAMP(6);
+         UUID_ nvarchar2(500 char) ;
+         APIPUBLICID_ nvarchar2(500 char); --CONTACT
+         APIIPUBLICID_ nvarchar2(500 char); --COMPANY
+         APIIIPUBLICID_ nvarchar2(500 char); --PERSON
+       BEGIN
+           TS_ := systimestamp;
+           UUID_ := CRM.public_uuid;
+         if inserting then
+           --CONTACT
+           SELECT api.CONTACT_public_id INTO APIPUBLICID_
+           FROM CRM.tbl_CONTACT_api api
+           WHERE api.CONTACT_id = :new.CONTACT_id;
+           --COMPANY
+           SELECT api.COMPANY_public_id INTO APIIPUBLICID_
+           FROM crm.tbl_COMPANY_api api
+           WHERE api.COMPANY_id = :new.COMPANY_id;
+           --PERSON
+           SELECT api.PERSON_public_id INTO APIIIPUBLICID_
+           FROM crm.tbl_PERSON_api api
+           WHERE api.PERSON_id = :new.PERSON_id;
+           insert into MAINPARTS.tbl_DIGITAL_PAYMENT_api
+           (id, digital_payment_pUblic_id, create_date_ts,
+             DIGITAL_PAYMENT_id, CONTACT_id, CONTACT_public_id, COMPANY_id, COMPANY_public_id,
+             PERSON_ID, PERSON_PUBLIC_ID)
+            values 
+             (MAINPARTS.SEQ_DIGITAL_PAYMENT_API.nextval, UUID_, TS_,
+             :new.id, :new.CONTACT_ID, APIPUBLICID_, :new.COMPANY_ID, APIIPUBLICID_,
+             :new.person_id ,APIIIPUBLICID_);
+         end if;
+         if updating then
+           update MAINPARTS.tbl_DIGITAL_PAYMENT_api
+           set  
+            edit_date_ts = TS_
+            where DIGITAL_PAYMENT_id = :old.id;
+                --CONTACT
+                if :new.CONTACT_ID != null and :new.CONTACT_ID != :old.CONTACT_ID THEN
+                    SELECT api.CONTACT_public_id INTO APIPUBLICID_
+                     FROM CRM.tbl_CONTACT_api api
+                     WHERE api.CONTACT_id = :new.CONTACT_id;
+                    --
+                    update MAINPARTS.tbl_DIGITAL_PAYMENT_api
+                    set
+                    CONTACT_id = :new.CONTACT_id,
+                    CONTACT_public_id = APIPUBLICID_
+                    where DIGITAL_PAYMENT_id = :old.id;
+               end if;
+               --COMPANY
+                if :new.COMPANY_ID != null and :new.COMPANY_ID != :old.COMPANY_ID THEN
+                    SELECT api.COMPANY_public_id INTO APIIPUBLICID_
+                     FROM CRM.tbl_COMPANY_api api
+                     WHERE api.COMPANY_id = :new.COMPANY_id;
+                    --
+                    update MAINPARTS.tbl_DIGITAL_PAYMENT_api
+                    set
+                    COMPANY_id = :new.COMPANY_id,
+                    COMPANY_public_id = APIIPUBLICID_
+                    where DIGITAL_PAYMENT_id = :old.id;
+               end if;
+               --PERSON
+               if :new.PERSON_ID != null and :new.PERSON_ID != :old.PERSON_ID THEN
+                   SELECT api.PERSON_public_id INTO APIIIPUBLICID_
+                    FROM CRM.tbl_PERSON_api api
+                    WHERE api.PERSON_id = :new.PERSON_id;
+                   --
+                   update MAINPARTS.tbl_DIGITAL_PAYMENT_api
+                   set
+                   PERSON_id = :new.PERSON_id,
+                   PERSON_public_id = APIIIPUBLICID_
+                   where DIGITAL_PAYMENT_id = :old.id;
+              end if;
+           end if;
+       END;
+       
+ 
+create or replace TRIGGER "MAINPARTS"."TBL_DIGITAL_PAYMENT_API_D" BEFORE DELETE ON MAINPARTS.TBL_DIGITAL_PAYMENT
+        REFERENCING OLD AS OLD NEW AS NEW
+        FOR EACH ROW WHEN (1=1)
+        declare
+          TS_ TIMESTAMP(6);
+          UUID_ nvarchar2(500 char) ;
+          ID_API number;
+        BEGIN
+            TS_ := systimestamp;
+            UUID_ := CRM.public_uuid;
+          IF DELETING THEN
+            SELECT api.ID INTO ID_API
+            FROM MAINPARTS.TBL_DIGITAL_PAYMENT_API api
+            WHERE api.DIGITAL_PAYMENT_id = :old.id;
+            update MAINPARTS.tbl_DIGITAL_PAYMENT_api api
+            set  
+             api.DIGITAL_PAYMENT_id = null,
+             api.delete_date_ts = TS_,
+             api.deleted_DIGITAL_PAYMENT_id = :old.id,
+             api.CONTACT_id = null,
+             api.COMPANY_id = null,
+             api.PERSON_id = null
+             where api.id = ID_API;
+           END IF;
+        END;       
+   
+       
+create or replace procedure MAINPARTS.UUID_DIGITAL_PAYMENT_API IS
+            begin
+              declare
+                cursor c_t is
+                        SELECT
+                            mt.id as DIGITAL_PAYMENTID,
+                            mt.CONTACT_id as CONTACTID,
+                            secapi.CONTACT_public_id CONTACTPUBLICID,
+                            mt.COMPANY_id as COMPANYID,
+                            trdapi.COMPANY_public_id COMPANYPUBLICID,
+                            mt.PERSON_id as PERSONID,
+                            forthapi.PERSON_public_id PERSONPUBLICID
+                        FROM
+                            MAINPARTS.tbl_DIGITAL_PAYMENT mt
+                            LEFT JOIN MAINPARTS.tbl_DIGITAL_PAYMENT_api api ON mt.id = api.DIGITAL_PAYMENT_id
+                            LEFT JOIN CRM.tbl_CONTACT sect ON mt.CONTACT_id = sect.id
+                            LEFT JOIN CRM.tbl_CONTACT_api secapi ON sect.id = secapi.CONTACT_id
+                            LEFT JOIN CRM.tbl_COMPANY trdt ON mt.COMPANY_id = trdt.id
+                            LEFT JOIN CRM.tbl_COMPANY_api trdapi ON trdt.id = trdapi.COMPANY_id
+                            LEFT JOIN CRM.tbl_PERSON forth ON mt.PERSON_id = forth.id
+                            LEFT JOIN CRM.tbl_PERSON_api forthapi ON forth.id = forthapi.PERSON_id
+                        WHERE
+                            api.DIGITAL_PAYMENT_id IS NULL
+                        ORDER BY
+                            DIGITAL_PAYMENTID ASC;
+              begin
+                for r_t in c_t loop
+                        INSERT INTO MAINPARTS.tbl_DIGITAL_PAYMENT_api(
+                            id,
+                            DIGITAL_PAYMENT_public_id,
+                            create_date_ts,
+                            DIGITAL_PAYMENT_id,
+                            CONTACT_id,
+                            CONTACT_public_id,
+                            COMPANY_id,
+                            COMPANY_public_id,
+                            person_id,
+                            person_public_id
+                        )VALUES(
+                            MAINPARTS.SEQ_DIGITAL_PAYMENT_API.nextval,
+                            crm.public_uuid,
+                            systimestamp,
+                            r_t."DIGITAL_PAYMENTID",
+                            r_t."CONTACTID",
+                            r_t."CONTACTPUBLICID",
+                            r_t."COMPANYID",
+                            r_t."COMPANYPUBLICID",
+                            r_t."PERSONID",
+                            r_t."PERSONPUBLICID"
+                        );
+                 end loop;
+              end;
+              commit;
+            end;      
+    
+     
+      begin
+      MAINPARTS.UUID_DIGITAL_PAYMENT_API;
+      end; 
 ------------------------------
 
 
