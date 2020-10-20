@@ -13,6 +13,8 @@ public class OrganizationDto implements Serializable {
 
     private static final long serialVersionUID = 3145481294256612990L;
 
+    private Long id;
+
     private String nameLo;
 
     private OrganizationDto parentId;

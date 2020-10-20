@@ -2,12 +2,18 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TermPresentedCourseFastDto {
+public class TermPresentedCourseFastDto implements Serializable {
+
+    private static final long serialVersionUID = -8161736928186596595L;
+
+    private Long id;
 
     //   for Descriptive (begin) :
     private String courseName;

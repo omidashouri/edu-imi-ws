@@ -2,9 +2,15 @@ package edu.imi.ir.eduimiws.models.dto.mainparts;
 
 import edu.imi.ir.eduimiws.models.dto.crm.ParameterDto;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
+import lombok.*;
 
 import java.io.Serializable;
 
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RefundDto implements Serializable {
 
     private static final long serialVersionUID = 4511300521188924457L;

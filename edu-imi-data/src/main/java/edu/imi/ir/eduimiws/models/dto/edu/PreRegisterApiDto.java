@@ -1,10 +1,16 @@
 package edu.imi.ir.eduimiws.models.dto.edu;
 
 import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
+import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PreRegisterApiDto implements Serializable {
 
     private static final long serialVersionUID = -417001585765279278L;

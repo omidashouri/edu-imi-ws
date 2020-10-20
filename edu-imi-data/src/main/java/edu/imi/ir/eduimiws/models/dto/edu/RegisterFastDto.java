@@ -2,12 +2,16 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterFastDto {
+public class RegisterFastDto implements Serializable {
+
+    private Long id;
 
     private String registerPublicId;
 

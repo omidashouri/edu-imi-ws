@@ -10,6 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 public class FieldFastDto {
 
+    private static final long serialVersionUID = 4884953995945875223L;
+
+    private Long id;
+
     private String fieldPublicId;
 
     private String levelPublicId;

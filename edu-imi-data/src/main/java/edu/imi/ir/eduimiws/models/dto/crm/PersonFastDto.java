@@ -2,12 +2,16 @@ package edu.imi.ir.eduimiws.models.dto.crm;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonFastDto {
+public class PersonFastDto implements Serializable {
+
+    private static final long serialVersionUID = 5671439479871763189L;
 
     private Long id;
 

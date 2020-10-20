@@ -12,6 +12,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class StudentFastDto implements Serializable {
 
+    private static final long serialVersionUID = 3430344176636112200L;
+
+    private Long id;
 
     private Long studentApiId;
 

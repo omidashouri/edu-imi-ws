@@ -10,7 +10,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrivilegeFastDto implements Serializable {
+
     private static final long serialVersionUID = 7920669264642005419L;
+
+    private Long id;
 
     private String privilegePublicId;
     private String name;

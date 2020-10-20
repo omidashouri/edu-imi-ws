@@ -13,6 +13,8 @@ public class UserContactResponseDto implements Serializable {
 
     private static final long serialVersionUID = 2198116635025433135L;
 
+    private Long id;
+
     private String contactPublicId;
     private String firstName;
     private String lastName;

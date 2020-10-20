@@ -14,6 +14,8 @@ public class RoleFastDto implements Serializable {
 
     private static final long serialVersionUID = -5210690329005619034L;
 
+    private Long id;
+
     private String rolePublicId;
     private String name;
     private Set<PrivilegeFastDto> privilegeFastDtos;

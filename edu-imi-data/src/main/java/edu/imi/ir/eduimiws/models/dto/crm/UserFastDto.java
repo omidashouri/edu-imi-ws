@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.models.dto.crm;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 //User is PersonEntity plus PersonApiEntity
@@ -10,7 +11,9 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserFastDto {
+public class UserFastDto implements Serializable {
+
+    private static final long serialVersionUID = -6416513587089890306L;
 
     private Long id;
 

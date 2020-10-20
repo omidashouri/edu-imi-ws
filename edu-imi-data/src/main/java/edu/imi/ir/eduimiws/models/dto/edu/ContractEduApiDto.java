@@ -1,10 +1,16 @@
 package edu.imi.ir.eduimiws.models.dto.edu;
 
 import edu.imi.ir.eduimiws.models.dto.crm.ParameterDto;
+import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContractEduApiDto implements Serializable {
 
     private static final long serialVersionUID = -5357795023570741188L;

@@ -1,9 +1,16 @@
 package edu.imi.ir.eduimiws.models.dto.edu;
 
 
+import lombok.*;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PeriodCertificateApiDto implements Serializable {
 
     private static final long serialVersionUID = -2491478410448001023L;

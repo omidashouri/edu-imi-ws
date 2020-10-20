@@ -11,6 +11,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ContactFastDto implements Serializable {
 
+    private static final long serialVersionUID = 2368115116670875150L;
+
     private Long id;
 
     private Long accountPublicId;

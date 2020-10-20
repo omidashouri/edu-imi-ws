@@ -1,10 +1,16 @@
 package edu.imi.ir.eduimiws.models.dto.edu;
 
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
+import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudentApiDto implements Serializable {
 
     private static final long serialVersionUID = 7778649847627058916L;

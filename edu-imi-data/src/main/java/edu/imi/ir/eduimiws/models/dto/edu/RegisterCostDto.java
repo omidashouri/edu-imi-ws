@@ -2,9 +2,15 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.CostTypeEntity;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
+import lombok.*;
 
 import java.io.Serializable;
 
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterCostDto implements Serializable {
 
     private static final long serialVersionUID = -4511554764002039989L;

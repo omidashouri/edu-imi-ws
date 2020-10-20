@@ -2,12 +2,16 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PeriodFastDto {
+public class PeriodFastDto implements Serializable {
+
+    private static final long serialVersionUID = 631680441610385751L;
 
     //   for Descriptive (begin) :
     private Long eduCategoryId;

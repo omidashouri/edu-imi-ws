@@ -87,4 +87,9 @@ public class DigitalPaymentEntity extends BaseEntity {
 
     @Column(name = "HAS_SANAD", length = 1)
     private String hasSanad;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToOne(mappedBy = "digitalPayment", fetch = FetchType.LAZY)
+    private DigitalPaymentApiEntity digitalPaymentApi;
 }

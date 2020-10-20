@@ -13,6 +13,8 @@ public class PersonApiDto implements Serializable {
 
     private static final long serialVersionUID = 3509814162285417174L;
 
+    private Long id;
+
     private PersonDto person;
 
     private Long personId;

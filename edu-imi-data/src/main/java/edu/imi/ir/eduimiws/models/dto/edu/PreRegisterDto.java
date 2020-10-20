@@ -3,9 +3,15 @@ package edu.imi.ir.eduimiws.models.dto.edu;
 import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
+import lombok.*;
 
 import java.io.Serializable;
 
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PreRegisterDto implements Serializable {
 
     private static final long serialVersionUID = -910510449737713265L;

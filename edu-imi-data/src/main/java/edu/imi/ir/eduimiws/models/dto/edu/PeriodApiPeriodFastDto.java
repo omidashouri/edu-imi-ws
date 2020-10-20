@@ -13,7 +13,13 @@ public class PeriodApiPeriodFastDto implements Serializable {
 
     private static final long serialVersionUID = 5815734885605837343L;
 
+    private Long id;
+
     private PeriodFastDto periodFastDto;
+
+    private PeriodDto periodDto;
+
+    private Long periodId;
 
     private String periodPublicId;
 

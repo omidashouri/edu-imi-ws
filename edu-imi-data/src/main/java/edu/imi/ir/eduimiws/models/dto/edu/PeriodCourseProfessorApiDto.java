@@ -13,6 +13,8 @@ public class PeriodCourseProfessorApiDto implements Serializable {
 
     private static final long serialVersionUID = 5296273303567771191L;
 
+    private Long id;
+
     private PeriodCourseProfessorDto periodCourseProfessorDto;
 
     private Long periodCourseProfessorId;

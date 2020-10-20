@@ -13,6 +13,8 @@ public class RegisterDto implements Serializable {
 
     private static final long serialVersionUID = 1625681621446262691L;
 
+    private Long id;
+
     private String registerPublicId;
 
     private Long periodId;

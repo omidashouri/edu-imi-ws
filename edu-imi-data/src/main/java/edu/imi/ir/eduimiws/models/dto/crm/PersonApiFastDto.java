@@ -13,6 +13,8 @@ public class PersonApiFastDto implements Serializable {
 
     private static final long serialVersionUID = 6161377157056013811L;
 
+    private Long id;
+
     private Long personId;
 
     private String personPublicId;
