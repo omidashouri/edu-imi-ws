@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.services.edu;
 
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.StudentOnlyMapper;
@@ -50,8 +51,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentEntity> findAllStudentOnlyByIdBetween(Long startId,Long endId) {
-        List<StudentOnly> allStudentOnlys = studentRepository.findAllStudentOnlyByIdBetween(startId,endId);
+    public StudentEntity findByStudentPublicId(String studentPublicId) {
+        StudentEntity student = studentRepository
+                .findByStudentApi_StudentPublicId(studentPublicId);
+        return student;
+    }
+
+    @Override
+    public List<StudentEntity> findAllStudentOnlyByIdBetween(Long startId, Long endId) {
+        List<StudentOnly> allStudentOnlys = studentRepository.findAllStudentOnlyByIdBetween(startId, endId);
         List<StudentEntity> allStudents = studentOnlyMapper
                 .toStudentEntities(allStudentOnlys, new CycleAvoidingMappingContext());
         return allStudents;
@@ -75,6 +83,16 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Long selectStudentLastSequenceNumber() {
         return studentRepository.selectLastSequenceNumber();
+    }
+
+    @Override
+    public StudentEntity saveNewStudent(StudentEntity newStudent) {
+        return studentRepository.save(newStudent);
+    }
+
+    @Override
+    public List<StudentEntity> findAllByPerson(PersonEntity person) {
+        return studentRepository.findAllByPerson(person);
     }
 
 

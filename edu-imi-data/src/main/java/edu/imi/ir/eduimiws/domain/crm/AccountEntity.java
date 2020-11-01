@@ -7,17 +7,27 @@ import lombok.*;
 import javax.persistence.*;
 
 
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "AccountEntity.findAccountContactCompany",
+                attributeNodes = {
+                        @NamedAttributeNode("company"),
+                        @NamedAttributeNode("primaryContact"),
+                        @NamedAttributeNode("accountApi")
+                }
+        )
+})
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_ACCOUNT_ID",allocationSize = 1)
-@Table(schema = "CRM",name="TBL_ACCOUNT")
+@SequenceGenerator(name = "entity_sequence", schema = "CRM", sequenceName = "SEQ_ACCOUNT_ID", allocationSize = 1)
+@Table(schema = "CRM", name = "TBL_ACCOUNT")
 public class AccountEntity extends BaseEntity {
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
@@ -30,25 +40,25 @@ public class AccountEntity extends BaseEntity {
   @JoinColumn(name = "PARENT_ACCOUNT_ID")
   private AccountEntity parentAccount;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "PRIMARY_CONTACT_ID")
   private ContactEntity primaryContact;
 
-//  TBL_CATEGORY
+  //  TBL_CATEGORY
   @Column(name="RELATION_TYPE_ID")
   private Long relationTypeId;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "LANGUAGE_ID")
   private LanguageEntity language;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
@@ -91,21 +101,21 @@ public class AccountEntity extends BaseEntity {
   @Column(name="ANNUAL_REVENUE")
   private String annualRevenue;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "COUNTRY_ID")
   private ParameterEntity country;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "STATE_ID")
   private ParameterEntity state;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
@@ -121,11 +131,11 @@ public class AccountEntity extends BaseEntity {
   @Column(name="DESCRIPTION")
   private String description;
 
-//  TBL_INDUSTRY
+  //  TBL_INDUSTRY
   @Column(name="INDUSTRY_ID")
   private Long industryId;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
@@ -150,14 +160,14 @@ public class AccountEntity extends BaseEntity {
   @Column(name="PRINT_ADDRESS_TITLE")
   private String printAddressTitle;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "REGION_ID")
   private ParameterEntity region;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
@@ -167,7 +177,7 @@ public class AccountEntity extends BaseEntity {
   @Column(name="CREATE_DATE")
   private String createDate;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
@@ -177,7 +187,7 @@ public class AccountEntity extends BaseEntity {
   @Column(name="LAST_EDIT_DATE")
   private String lastEditDate;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
@@ -208,7 +218,7 @@ public class AccountEntity extends BaseEntity {
   @Column(name="VERIFIED")
   private String verified;
 
-//  TBL_ACCOUNT_ADDITIONAL_INFO
+  //  TBL_ACCOUNT_ADDITIONAL_INFO
   @Column(name="ACCOUNT_ADDITIONAL_INFO_ID")
   private Long accountAdditionalInfo;
 
@@ -227,7 +237,7 @@ public class AccountEntity extends BaseEntity {
   @Column(name="IS_HOLDING")
   private String isHolding;
 
-//  TBL_ORGANIZATION_TYPE
+  //  TBL_ORGANIZATION_TYPE
   @Column(name="ORG_TYPE_ID")
   private Long orgTypeId;
 
@@ -252,7 +262,7 @@ public class AccountEntity extends BaseEntity {
   @Column(name="STOCK_HOLDERS")
   private String stockHolders;
 
-//  TBL_INPEA_ADDITIONAL_INFO
+  //  TBL_INPEA_ADDITIONAL_INFO
   @Column(name="INPEA_ADDITIONAL_INFO")
   private Long inpeaAdditionalInfo;
 
@@ -262,7 +272,7 @@ public class AccountEntity extends BaseEntity {
   @Column(name="IBMC_ADDITIONAL_INFO")
   private String ibmcAdditionalInfo;
 
-//  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
@@ -294,17 +304,17 @@ public class AccountEntity extends BaseEntity {
   @JoinColumn(name = "EMPLOYEE_ID")
   private ParameterEntity employee;
 
-    @Getter(AccessLevel.NONE)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "ANNUAL_REVENUE_ID")
-    private ParameterEntity annualRevenueEntity;
+  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "ANNUAL_REVENUE_ID")
+  private ParameterEntity annualRevenueEntity;
 
 
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
-    private AccountApiEntity accountApi;
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+  private AccountApiEntity accountApi;
 
 }

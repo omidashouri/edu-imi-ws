@@ -15,7 +15,7 @@ import javax.persistence.*;
         @NamedEntityGraph(name = "StudentEntity.findStudentSubGraphUserApiService",
                 attributeNodes = {
                         @NamedAttributeNode(value = "person", subgraph = "person-subGraph"),
-                        @NamedAttributeNode("studentApi")
+                        @NamedAttributeNode(value = "studentApi")
                 },
                 subgraphs = {
                         @NamedSubgraph(
@@ -24,6 +24,11 @@ import javax.persistence.*;
                                         @NamedAttributeNode(value = "personApiEntity")
                                 },
                                 type = PersonApiEntity.class)
+                }
+        ),
+        @NamedEntityGraph(name = "StudentEntity.findStudentApi",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "studentApi")
                 }
         )
 })

@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.StudentOnly;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,11 @@ public interface StudentRepository extends CrudRepository<StudentEntity, Long> {
     @EntityGraph(value = "StudentEntity.findStudentSubGraphUserApiService", type = EntityGraph.EntityGraphType.LOAD)
     StudentEntity findByStudentApi_StudentPublicIdAndDeleteStatusNotNullOrderByCreateDateDesc(String studentPublicId);
 
+    List<StudentEntity> findAllByPerson(PersonEntity person);
+
+    @EntityGraph(value = "StudentEntity.findStudentSubGraphUserApiService", type = EntityGraph.EntityGraphType.LOAD)
+    StudentEntity findByStudentApi_StudentPublicId(String studentPublicId);
+
     StudentEntity findFirstByOrderByIdDesc();
 
     StudentEntity findFirstByIdLessThanEqualOrderByIdDesc(Long id);
@@ -36,7 +42,7 @@ public interface StudentRepository extends CrudRepository<StudentEntity, Long> {
             forCounting = true)
     List<StudentOnly> findAllStudentOnly();
 
-    @Query(name = "StudentEntity.selectCurrentSequenceNumber",nativeQuery = true)
+    @Query(name = "StudentEntity.selectCurrentSequenceNumber", nativeQuery = true)
     Long selectLastSequenceNumber();
 
     Long countByIdLessThanEqual(Long studentId);

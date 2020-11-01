@@ -1,21 +1,25 @@
-package edu.imi.ir.eduimiws.controllers.v1;
+package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.RegisterResponseRegisterDtoAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.RegisterResponseRegisterFastDtoAssembler;
-import edu.imi.ir.eduimiws.domain.edu.RegisterApiEntity;
-import edu.imi.ir.eduimiws.domain.edu.RegisterEntity;
+import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.domain.edu.*;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.RegisterFormRegisterFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.RegisterDto;
 import edu.imi.ir.eduimiws.models.dto.edu.RegisterFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
+import edu.imi.ir.eduimiws.models.request.edu.v1.RegisterForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.RegisterResponse;
-import edu.imi.ir.eduimiws.services.edu.RegisterApiService;
-import edu.imi.ir.eduimiws.services.edu.RegisterService;
+import edu.imi.ir.eduimiws.services.crm.AccountService;
+import edu.imi.ir.eduimiws.services.edu.*;
+import edu.imi.ir.eduimiws.utilities.DateConvertor;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -61,9 +65,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class RegisterController {
 
     private final RegisterService registerService;
+    private final StudentService studentService;
+    private final PeriodService periodService;
+    private final AccountService accountService;
+    private final PeriodCourseService periodCourseService;
+    private final StudentCourseService studentCourseService;
+    private final DateConvertor dateConvertor;
     private final RegisterApiService registerApiService;
     private final RegisterDtoMapper registerDtoMapper;
     private final RegisterFastDtoMapper registerFastDtoMapper;
+    private final RegisterFormRegisterFastDtoMapper registerFormRegisterFastDtoMapper;
     private final RegisterResponseRegisterDtoAssembler registerResponseRegisterDtoAssembler;
     private final RegisterResponseRegisterFastDtoAssembler registerResponseRegisterFastDtoAssembler;
     private final PagedResourcesAssembler<RegisterDto> registerDtoPagedResourcesAssembler;
@@ -239,11 +250,11 @@ public class RegisterController {
                     )
             })
     @PageableAsQueryParam
-    @GetMapping(path = "/descriptive",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(path = "/descriptive", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<RegisterResponse>> getRegistersWithStudentPeriodName(@Parameter(hidden = true)
-                                                                     @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
-                                                                     @PageableDefault(page = 0, size = 10, value = 10)
-                                                                             Pageable pageable) {
+                                                                                          @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                                          @PageableDefault(page = 0, size = 10, value = 10)
+                                                                                                  Pageable pageable) {
 
         Page<RegisterEntity> registerPages =
                 registerService.findAllWithStudentPeriodNameByOrderPageable(pageable);
@@ -337,6 +348,138 @@ public class RegisterController {
         } catch (Exception ex) {
             return (ResponseEntity<?>) ResponseEntity.badRequest();
         }
+    }
+
+
+    @Operation(
+            summary = "Register Student in Period ",
+            description = "Register Student in period",
+            tags = "registers",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = OperationStatus.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "417",
+                            description = "EXPECTATION FAILED",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PostMapping(path = "/new",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> registerStudentInPeriod(@RequestBody RegisterForm registerForm) {
+
+        OperationStatus returnValue = new OperationStatus();
+        boolean personNotFound = true;
+        long lastStudentCode;
+        String periodPublicId;
+        String studentPublicId;
+        String registerPublicId = null;
+        RegisterApiEntity registerApi;
+        List<RegisterEntity> registers;
+        RegisterEntity newRegister;
+        RegisterEntity lastRegister;
+        StudentEntity student;
+        PeriodEntity period;
+        PersonEntity person;
+        AccountEntity account;
+        StudentCourseEntity studentCourse;
+        RegisterFastDto registerFastDto;
+        List<RegisterEntity> newRegisters = new ArrayList<>();
+        List<PeriodCourseEntity> periodCourses = new ArrayList<>();
+        List<StudentCourseEntity> studentCourses = new ArrayList<>();
+        List<RegisterApiEntity> newRegisterApi = new ArrayList<>();
+
+        registerFastDto = registerFormRegisterFastDtoMapper
+                .toRegisterFastDto(registerForm, new CycleAvoidingMappingContext());
+
+        if (registerFastDto.getStudentPublicId() != null && registerFastDto.getPeriodPublicId() != null) {
+            studentPublicId = registerFastDto.getStudentPublicId();
+            student = studentService.findByStudentPublicId(studentPublicId);
+
+            if (isContractRegister(registerFastDto)) {
+                account = accountService.findAccountByAccountPublicId(registerFastDto.getAccountPublicId());
+            }
+
+            if (student != null) {
+                periodPublicId = registerFastDto.getPeriodPublicId();
+                period = periodService.findPeriodEntityByPeriodApiPublicId(periodPublicId);
+                person = student.getPerson();
+                if (period != null) {
+                    newRegister = new RegisterEntity();
+                    newRegister.setActivityStatus(1L);
+                    newRegister.setDeleteStatus(1L);
+                    newRegister.setCreateDate(dateConvertor.todayDate());
+                    newRegister.setCreator(person);
+                    newRegister.setPeriod(period);
+                    newRegister.setFinancialStatus(0L);
+                    newRegister.setFee(period.getFee());
+                    newRegister.setRegisterType(registerFastDto.getRegisterType());
+
+                    RegisterEntity savedRegister = registerService.saveNewRegister(newRegister);
+                    registerPublicId = savedRegister.getRegisterApi().getRegisterPublicId();
+                    periodCourses = periodCourseService
+                            .findAllByPeriodIdAndPeriodType(period.getId(), "NonTermic");
+
+                    if (!periodCourses.isEmpty()) {
+                        studentCourse = new StudentCourseEntity();
+                        periodCourses.forEach(pc -> {
+                            studentCourse.setPeriodCourse(pc);
+                            studentCourse.setRegister(savedRegister);
+                            studentCourses.add(studentCourse);
+                        });
+                        studentCourseService.saveAllStudentCourses(studentCourses);
+                    }
+                }
+
+                personNotFound = false;
+            }
+        }
+
+        if (personNotFound) {
+            returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
+            returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
+            returnValue.setDescription("User Information for Student Not Found.");
+            return ResponseEntity.ok(returnValue);
+        }
+
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
+        returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
+        returnValue.setDescription(" New Register public Id : " + registerPublicId);
+        return ResponseEntity.ok(returnValue);
+    }
+
+    private boolean isContractRegister(RegisterFastDto registerFastDto) {
+        return registerFastDto.getAccountPublicId() != null &&
+                registerFastDto.getRegisterType() != null &&
+                registerFastDto.getRegisterType().equalsIgnoreCase("2");
     }
 
 

@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
+import edu.imi.ir.eduimiws.controllers.crm.v1.UserController;
 import edu.imi.ir.eduimiws.controllers.v1.ProfessorController;
-import edu.imi.ir.eduimiws.controllers.v1.UserController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.ProfessorResponseProfessorFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.ProfessorFastDto;

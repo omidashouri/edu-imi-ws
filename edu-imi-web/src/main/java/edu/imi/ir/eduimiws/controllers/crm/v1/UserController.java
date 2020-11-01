@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.controllers.v1;
+package edu.imi.ir.eduimiws.controllers.crm.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.UserRolePrivilegeResponseAssembler;
@@ -459,7 +459,6 @@ public class UserController {
 
 
     @Operation(
-            hidden = true,
             summary = "Register User",
             description = "register User",
             tags = "users",
@@ -499,7 +498,6 @@ public class UserController {
                     )
             }
     )
-    @DisableMethod
     @PostMapping(path = "/register",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.services.edu;
 
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +15,11 @@ public interface StudentService {
 
     StudentEntity selectLastRecord();
 
-    Page<StudentEntity> findAllByOrderByCreateDateDesc (Pageable pageable);
+    Page<StudentEntity> findAllByOrderByCreateDateDesc(Pageable pageable);
 
     StudentEntity findByStudentPublicIdOrderByCreateDateDesc(String studentPublicId);
+
+    StudentEntity findByStudentPublicId(String studentPublicId);
 
     List<StudentEntity> findAllStudentOnlyByIdBetween(Long startId, Long EndId);
 
@@ -26,6 +29,9 @@ public interface StudentService {
 
     Long selectStudentLastSequenceNumber();
 
+    StudentEntity saveNewStudent(StudentEntity newStudent);
+
+    List<StudentEntity> findAllByPerson(PersonEntity person);
 
 
 }

@@ -1,8 +1,8 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
+import edu.imi.ir.eduimiws.controllers.edu.v1.RegisterController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.StudentController;
 import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
-import edu.imi.ir.eduimiws.controllers.v1.RegisterController;
-import edu.imi.ir.eduimiws.controllers.v1.StudentController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterResponseRegisterDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.RegisterDto;

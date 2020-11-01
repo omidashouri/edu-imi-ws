@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,6 +31,13 @@ public class PeriodCourseServiceImpl implements PeriodCourseService {
         PeriodCourseEntity periodCourse = periodCourseRepository
                 .findByPeriodCourseApi_PeriodCoursePublicId(periodCoursePublicId);
         return periodCourse;
+    }
+
+    @Override
+    public List<PeriodCourseEntity> findAllByPeriodIdAndPeriodType(Long periodId, String periodType) {
+        List<PeriodCourseEntity> periodCourses = periodCourseRepository
+                .findAllByPeriod_IdAndPeriod_Type(periodId, periodType);
+        return periodCourses;
     }
 }
 

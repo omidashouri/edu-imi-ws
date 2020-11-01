@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface PeriodCourseRepository extends CrudRepository<PeriodCourseEntity, Long> {
 
     @EntityGraph(value = "PeriodCourseEntity.periodCourseApiEntity", type = EntityGraph.EntityGraphType.LOAD)
@@ -13,4 +15,6 @@ public interface PeriodCourseRepository extends CrudRepository<PeriodCourseEntit
 
     @EntityGraph(value = "PeriodCourseEntity.periodCourseApiEntity", type = EntityGraph.EntityGraphType.LOAD)
     PeriodCourseEntity findByPeriodCourseApi_PeriodCoursePublicId(String periodCoursePublicId);
+
+    List<PeriodCourseEntity> findAllByPeriod_IdAndPeriod_Type(Long periodId, String periodType);
 }

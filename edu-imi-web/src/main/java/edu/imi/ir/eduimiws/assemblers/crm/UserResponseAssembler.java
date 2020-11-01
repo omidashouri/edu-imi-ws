@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.assemblers.crm;
 
+import edu.imi.ir.eduimiws.controllers.crm.v1.UserController;
 import edu.imi.ir.eduimiws.controllers.v1.ContactController;
-import edu.imi.ir.eduimiws.controllers.v1.UserController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.UserResponseUserFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;

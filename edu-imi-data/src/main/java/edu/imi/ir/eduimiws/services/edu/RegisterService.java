@@ -13,6 +13,8 @@ public interface RegisterService {
 
     RegisterEntity selectLastRecord();
 
+    RegisterEntity saveNewRegister(RegisterEntity newRegister);
+
     Page<RegisterEntity> findAllByOrderPageable(Pageable pageable);
 
     @Cacheable(value = "register")

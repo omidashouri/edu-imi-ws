@@ -1,18 +1,24 @@
-package edu.imi.ir.eduimiws.controllers.v1;
+package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.StudentResponseAssembler;
+import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.StudentFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.StudentFormStudentFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.StudentFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
+import edu.imi.ir.eduimiws.models.request.edu.v1.StudentForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.StudentResponse;
+import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.edu.StudentApiService;
 import edu.imi.ir.eduimiws.services.edu.StudentService;
+import edu.imi.ir.eduimiws.utilities.DateConvertor;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -58,9 +64,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class StudentController {
 
 
+    private final DateConvertor dateConvertor;
     private final StudentService studentService;
+    private final PersonService personService;
     private final StudentApiService studentApiService;
     private final StudentFastDtoMapper studentFastDtoMapper;
+    private final StudentFormStudentFastDtoMapper studentFormStudentFastDtoMapper;
     private final StudentResponseAssembler studentResponseAssembler;
     private final PagedResourcesAssembler<StudentFastDto> studentFastDtoPagedResourcesAssembler;
 
@@ -333,7 +342,7 @@ public class StudentController {
             studentLastRecord = studentService.findFirstByIdLessThanOrderByIdDesc(studentSequenceNumber);
             if (studentLastRecord.getId() > studentApiLastRecord.getStudentId()) {
                 Long studentApiStudentIdPlusOne = studentApiLastRecord.getStudentId() + 1;
-                newStudents = studentService.findAllStudentOnlyByIdBetween(studentApiStudentIdPlusOne,studentLastRecord.getId());
+                newStudents = studentService.findAllStudentOnlyByIdBetween(studentApiStudentIdPlusOne, studentLastRecord.getId());
             } else {
                 returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
                 returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
@@ -352,6 +361,123 @@ public class StudentController {
         return ResponseEntity.ok(returnValue);
     }
 
+
+    @Operation(
+            summary = "Create New Student ",
+            description = "Create new students",
+            tags = "students",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = OperationStatus.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "417",
+                            description = "EXPECTATION FAILED",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PostMapping(path = "/new",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> createNewStudent(@RequestBody StudentForm studentForm) {
+
+        OperationStatus returnValue = new OperationStatus();
+        boolean personNotFound = true;
+        long lastStudentCode;
+        String studentPublicId;
+        String personPublicId;
+        StudentApiEntity studentApi;
+        List<StudentEntity> students;
+        StudentEntity newStudent;
+        StudentEntity savedStudent = null;
+        StudentEntity lastStudent;
+        PersonEntity person;
+        ContactEntity contact;
+        StudentFastDto studentFastDto;
+        List<StudentEntity> newStudents = new ArrayList<>();
+        List<StudentApiEntity> newStudentApi = new ArrayList<>();
+
+        studentFastDto = studentFormStudentFastDtoMapper
+                .toStudentFastDto(studentForm, new CycleAvoidingMappingContext());
+
+        if (studentFastDto.getPersonPublicId() != null) {
+            personPublicId = studentFastDto.getPersonPublicId();
+            person = personService.findPersonEntityByPersonApiPublicId(personPublicId);
+            if (person != null) {
+
+                students = studentService.findAllByPerson(person);
+                if (students == null) {
+                    contact = person.getContact();
+                    newStudent = new StudentEntity();
+
+                    if (contact != null) {
+                        newStudent.setNationCode(contact.getNationCode());
+                    } else {
+                        return this.studentFound();
+                    }
+
+                    Long studentSequenceNumber = studentService.selectStudentLastSequenceNumber();
+                    lastStudent = studentService.findFirstByIdLessThanOrderByIdDesc(studentSequenceNumber);
+                    lastStudentCode = Long.valueOf(lastStudent.getCode());
+                    lastStudentCode++;
+
+                    newStudent.setCode(String.valueOf(lastStudentCode));
+                    newStudent.setFirstName(person.getFirstName());
+                    newStudent.setLastName(person.getLastName());
+                    newStudent.setDeleteStatus(1L);
+                    newStudent.setActivityStatus(1L);
+                    newStudent.setCreateDate(dateConvertor.todayDate());
+                    newStudent.setPerson(person);
+                    newStudent.setCreator(person);
+
+                    savedStudent = studentService.saveNewStudent(newStudent);
+                }
+
+                personNotFound = false;
+            }
+        }
+
+        if (personNotFound) {
+            returnValue.setOperationResult(RequestOperationStatus.INFORMATIONAL.name());
+            returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
+            returnValue.setDescription("User Information for Student Not Found.");
+            return ResponseEntity.ok(returnValue);
+        }
+
+
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESSFUL.name());
+        returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
+        returnValue.setDescription(" New Student public Id : " + savedStudent.getStudentApi().getStudentPublicId());
+        return ResponseEntity.ok(returnValue);
+    }
+
+
     private ResponseEntity<?> conflictStudentCount() {
         return new ResponseEntity<>(
                 new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
@@ -366,6 +492,14 @@ public class StudentController {
                 new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
                         , "requested student not found")
                 , HttpStatus.NOT_FOUND
+        );
+    }
+
+    private ResponseEntity<?> studentFound() {
+        return new ResponseEntity<>(
+                new ErrorMessage(new Date(), HttpStatus.EXPECTATION_FAILED.toString()
+                        , "student found in database")
+                , HttpStatus.EXPECTATION_FAILED
         );
     }
 

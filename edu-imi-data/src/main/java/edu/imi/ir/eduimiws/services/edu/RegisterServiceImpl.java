@@ -36,6 +36,11 @@ public class RegisterServiceImpl implements RegisterService{
     }
 
     @Override
+    public RegisterEntity saveNewRegister(RegisterEntity newRegister) {
+        return registerRepository.save(newRegister);
+    }
+
+    @Override
     public Page<RegisterEntity> findAllByOrderPageable(Pageable pageable) {
         Page<RegisterEntity> registerPages = registerRepository
                 .findAllByDeleteStatusIsNotNull(pageable);
