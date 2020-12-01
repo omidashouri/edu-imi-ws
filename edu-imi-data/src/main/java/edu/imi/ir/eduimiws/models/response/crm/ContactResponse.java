@@ -27,7 +27,7 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String userPublicId;
 
     @Schema(title = "Account Public ID", maxLength = 36)
-    private Long accountPublicId;
+    private String accountPublicId;
 
     @Schema(title = "Salutation Public Id", maxLength = 36)
     private Long salutationPublicId;

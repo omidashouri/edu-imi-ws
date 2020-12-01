@@ -257,7 +257,7 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
        edit_date_ts = TS_
        where person_id = :old.id;
        --CONTACT
-           if :new.CONTACT_ID != null and :new.CONTACT_ID != :old.CONTACT_ID THEN
+           if :new.CONTACT_ID is not null and :new.CONTACT_ID != :old.CONTACT_ID THEN
                SELECT api.contact_public_id INTO APIPUBLICID_
                 FROM CRM.tbl_contact_api api
                 WHERE api.contact_id = :new.contact_id;
@@ -269,7 +269,7 @@ CREATE TABLE "CRM"."TBL_ROLE_API"
                where person_id = :old.id;
           end if;
           --ACTIVITYSTATUS
-           if :new.ACTIVITY_STATUS != null and :new.ACTIVITY_STATUS != :old.ACTIVITY_STATUS THEN
+           if :new.ACTIVITY_STATUS is not null and :new.ACTIVITY_STATUS != :old.ACTIVITY_STATUS THEN
                update crm.TBL_PERSON_API
                set
                account_enabled = TO_NUMBER(:new.ACTIVITY_STATUS)
@@ -1141,7 +1141,7 @@ create or replace TRIGGER "EDU"."TBL_PROFESSOR_API_IU" AFTER INSERT OR UPDATE ON
       TS_ := systimestamp;
       UUID_ := CRM.public_uuid;
     if inserting then
-       IF :NEW.person_id !=NULL THEN   
+       IF :NEW.person_id is not null THEN   
           SELECT api.person_public_id INTO APIPUBLICID_
           FROM CRM.TBL_PERSON_API api
           WHERE api.person_id = :new.person_id;
@@ -1450,13 +1450,13 @@ create or replace TRIGGER "EDU"."TBL_FIELD_API_IU" AFTER INSERT OR UPDATE ON EDU
          TS_ := systimestamp;
          UUID_ := CRM.public_uuid;
        if inserting then
-        IF :NEW.category_id !=NULL THEN
+        IF :NEW.category_id is not null THEN
              SELECT api.edu_category_public_id INTO APIPUBLICID_
              FROM EDU.tbl_edu_category_api api
              WHERE api.edu_category_id = :new.category_id;
         END IF;
              --
-        IF :NEW.level_id !=NULL THEN
+        IF :NEW.level_id is not null THEN
              SELECT api.level_public_id INTO APIIPUBLICID_
              FROM EDU.tbl_LEVEl_api api
              WHERE api.level_id = :new.level_id;
@@ -1616,7 +1616,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_API_IU" AFTER INSERT OR UPDATE ON ED
          TS_ := systimestamp;
          UUID_ := CRM.public_uuid;
        if inserting then
-        IF :NEW.field_id !=NULL THEN 
+        IF :NEW.field_id is not null THEN 
              SELECT api.field_public_id INTO APIPUBLICID_
              FROM EDU.tbl_field_api api
              WHERE api.field_id = :new.field_id;
@@ -1775,13 +1775,13 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_API_IU" AFTER INSERT OR UPDAT
          TS_ := systimestamp;
          UUID_ := CRM.public_uuid;
        if inserting then
-         IF :NEW.period_id !=NULL THEN 
+         IF :NEW.period_id is not null THEN 
              SELECT api.period_public_id INTO APIPUBLICID_
              FROM EDU.tbl_PERIOD_api api
              WHERE api.period_id = :new.period_id;
          END IF;    
              --
-         IF :NEW.course_id !=NULL THEN     
+         IF :NEW.course_id is not null THEN     
              SELECT api.course_public_id INTO APIIPUBLICID_
              FROM EDU.tbl_COURSE_api api
              WHERE api.course_id = :new.course_id;
@@ -1799,7 +1799,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_API_IU" AFTER INSERT OR UPDAT
           edit_date_ts = TS_
           where PERIOD_COURSE_id = :old.id;
           --PERIOD
-            if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+            if :new.PERIOD_ID is not null and :new.PERIOD_ID != :old.PERIOD_ID THEN
                 SELECT api.period_public_id INTO APIPUBLICID_
                  FROM EDU.tbl_PERIOD_api api
                  WHERE api.period_id = :new.period_id;
@@ -1811,7 +1811,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_API_IU" AFTER INSERT OR UPDAT
                 where PERIOD_COURSE_id = :old.id;
            end if;
            --COURSE
-            if :new.COURSE_ID != null and :new.COURSE_ID != :old.COURSE_ID THEN
+            if :new.COURSE_ID is not null and :new.COURSE_ID != :old.COURSE_ID THEN
                 SELECT api.COURSE_public_id INTO APIIPUBLICID_
                  FROM EDU.tbl_COURSE_api api
                  WHERE api.COURSE_id = :new.COURSE_id;
@@ -1966,13 +1966,13 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
            TS_ := systimestamp;
            UUID_ := CRM.public_uuid;
          if inserting then
-          IF :NEW.field_id !=NULL THEN 
+          IF :NEW.field_id is not null THEN 
                SELECT api.field_public_id INTO APIPUBLICID_
                FROM EDU.tbl_field_api api
                WHERE api.field_id = :new.field_id;
           END IF;
                --
-          IF :NEW.course_id !=NULL THEN 
+          IF :NEW.course_id is not null THEN 
                SELECT api.course_public_id INTO APIIPUBLICID_
                FROM EDU.tbl_COURSE_api api
                WHERE api.course_id = :new.course_id;
@@ -1992,7 +1992,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
             edit_date_ts = TS_
             where FIELD_COURSE_id = :old.id;
                 --FIELD
-                if :new.FIELD_ID != null and :new.FIELD_ID != :old.FIELD_ID THEN
+                if :new.FIELD_ID is not null and :new.FIELD_ID != :old.FIELD_ID THEN
                     SELECT api.FIELD_public_id INTO APIPUBLICID_
                      FROM EDU.tbl_FIELD_api api
                      WHERE api.FIELD_id = :new.FIELD_id;
@@ -2004,7 +2004,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
                     where FIELD_COURSE_id = :old.id;
                end if;
                --COURSE
-                if :new.COURSE_ID != null and :new.COURSE_ID != :old.COURSE_ID THEN
+                if :new.COURSE_ID is not null and :new.COURSE_ID != :old.COURSE_ID THEN
                     SELECT api.COURSE_public_id INTO APIIPUBLICID_
                      FROM EDU.tbl_COURSE_api api
                      WHERE api.COURSE_id = :new.COURSE_id;
@@ -2165,25 +2165,25 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
               TS_ := systimestamp;
               UUID_ := CRM.public_uuid;
             if inserting then
-                IF :NEW.period_course_id !=NULL THEN
+                IF :NEW.period_course_id is not null THEN
                   SELECT api.period_id, api.period_public_id INTO ID_, APIPUBLICID_
                   FROM EDU.tbl_period_course_api api
                   WHERE api.period_course_id = :new.period_course_id;
                 END IF; 
                   --
-                IF :NEW.period_course_id !=NULL THEN 
+                IF :NEW.period_course_id is not null THEN 
                   SELECT api.course_id, api.course_public_id INTO IID_, APIIPUBLICID_
                   FROM EDU.tbl_period_course_api api
                   WHERE api.period_course_id = :new.period_course_id;
                 END IF; 
                   --
-                IF :NEW.period_course_id !=NULL THEN 
+                IF :NEW.period_course_id is not null THEN 
                   SELECT api.period_course_public_id INTO APIIIPUBLICID_
                   FROM EDU.tbl_period_course_api api
                   WHERE api.period_course_id = :new.period_course_id;
                 END IF; 
                   --
-                IF :NEW.professor_id !=NULL THEN 
+                IF :NEW.professor_id is not null THEN 
                   SELECT api.professor_public_id INTO APIVPUBLICID_
                   FROM EDU.tbl_professor_api api
                   WHERE api.professor_id = :new.professor_id;
@@ -2204,7 +2204,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
                edit_date_ts = TS_
                where period_course_professor_id = :old.id;
                 -- PERIODCOURSE
-               if :new.period_COURSE_ID != null and :new.period_COURSE_ID != :old.period_COURSE_ID THEN
+               if :new.period_COURSE_ID is not null and :new.period_COURSE_ID != :old.period_COURSE_ID THEN
                     SELECT api.period_id, api.period_public_id INTO ID_, APIPUBLICID_
                     FROM EDU.tbl_period_course_api api
                     WHERE api.period_course_id = :new.period_course_id;
@@ -2228,7 +2228,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
                     where period_course_professor_id = :old.id;
                end if;
                -- PROFESSOR
-               if :new.professor_ID != null and :new.professor_ID != :old.professor_ID THEN
+               if :new.professor_ID is not null and :new.professor_ID != :old.professor_ID THEN
                     SELECT api.professor_public_id INTO APIVPUBLICID_
                     FROM EDU.tbl_professor_api api
                     WHERE api.professor_id = :new.professor_id;
@@ -2463,25 +2463,25 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
                TS_ := systimestamp;
                UUID_ := CRM.public_uuid;
              if inserting then
-                IF :NEW.period_id !=NULL THEN
+                IF :NEW.period_id is not null THEN
                    SELECT api.period_public_id INTO APIPUBLICID_
                    FROM EDU.tbl_period_api api
                    WHERE api.period_id = :new.period_id;
                 END IF;
                    --
-                IF :NEW.term_id !=NULL THEN
+                IF :NEW.term_id is not null THEN
                    SELECT api.term_public_id INTO APIIPUBLICID_
                    FROM EDU.tbl_term_api api
                    WHERE api.term_id = :new.term_id;
                 END IF;
                    --
-                IF :NEW.field_course_id !=NULL THEN
+                IF :NEW.field_course_id is not null THEN
                    SELECT api.field_course_public_id INTO APIIIPUBLICID_
                    FROM EDU.tbl_field_course_api api
                    WHERE api.field_course_id = :new.field_course_id;
                 END IF;
                    --
-                IF :NEW.field_course_id !=NULL THEN
+                IF :NEW.field_course_id is not null THEN
                    SELECT api.course_id, api.course_public_id INTO VD_, APIVPUBLICID_
                    FROM EDU.tbl_field_course_api api
                    WHERE api.field_course_id = :new.field_course_id;
@@ -2502,7 +2502,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
                 edit_date_ts = TS_
                 where TERM_PRESENTED_COURSE_id = :old.id;
                  -- FIELDCOURSE, COURSE
-                if :new.field_COURSE_ID != null and :new.field_COURSE_ID != :old.field_COURSE_ID THEN
+                if :new.field_COURSE_ID is not null and :new.field_COURSE_ID != :old.field_COURSE_ID THEN
                      SELECT api.field_course_public_id, api.course_id, api.course_public_id 
                              INTO APIIIPUBLICID_, VD_, APIVPUBLICID_
                      FROM EDU.tbl_field_course_api api
@@ -2517,7 +2517,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
                      where TERM_PRESENTED_COURSE_id = :old.id;
                 end if;
                 -- PERIOD
-                if :new.period_ID != null and :new.period_ID != :old.period_ID THEN
+                if :new.period_ID is not null and :new.period_ID != :old.period_ID THEN
                      SELECT api.period_public_id INTO APIPUBLICID_
                      FROM EDU.tbl_period_api api
                      WHERE api.period_id = :new.period_id;
@@ -2529,7 +2529,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_COURSE_PROFESSOR_API_IU" AFTER INSER
                      where TERM_PRESENTED_COURSE_id = :old.id;
                 end if;
                 -- TERM
-                if :new.term_ID != null and :new.term_ID != :old.term_ID THEN
+                if :new.term_ID is not null and :new.term_ID != :old.term_ID THEN
                      SELECT api.term_public_id INTO APIIPUBLICID_
                      FROM EDU.tbl_term_api api
                      WHERE api.term_id = :new.term_id;
@@ -2773,37 +2773,37 @@ create or replace TRIGGER "EDU"."TBL_TERM_PRESENTED_GROUP_API_IU" AFTER INSERT O
                UUID_ := CRM.public_uuid;
              if inserting then   
                    --PROFESSOR
-                IF :NEW.professor_id !=NULL THEN
+                IF :NEW.professor_id is not null THEN
                    SELECT api.professor_public_id INTO APIPUBLICID_
                    FROM EDU.tbl_professor_api api
                    WHERE api.professor_id = :new.professor_id;
                 END IF;
                    --TERMPRESENTEDCOURSE
-                IF :NEW.presented_course_id !=NULL THEN
+                IF :NEW.presented_course_id is not null THEN
                    SELECT api.trm_presented_course_public_id INTO APIIPUBLICID_
                    FROM EDU.tbl_term_presented_course_api api
                    WHERE api.term_presented_course_id = :new.presented_course_id;
                 END IF;
                    --FIELDCOURSE
-                IF :NEW.presented_course_id !=NULL THEN
+                IF :NEW.presented_course_id is not null THEN
                    SELECT api.field_course_id, api.field_course_public_id INTO IIID_, APIIIPUBLICID_
                    FROM EDU.tbl_term_presented_course_api api
                    WHERE api.term_presented_course_id = :new.presented_course_id;
                 END IF;
                    --COURSE
-                IF :NEW.presented_course_id !=NULL THEN
+                IF :NEW.presented_course_id is not null THEN
                    SELECT api.course_id, api.course_public_id INTO VD_, APIVPUBLICID_
                    FROM EDU.tbl_term_presented_course_api api
                    WHERE api.term_presented_course_id = :new.presented_course_id;
                 END IF;
                    --TERM
-                IF :NEW.presented_course_id !=NULL THEN
+                IF :NEW.presented_course_id is not null THEN
                    SELECT api.term_id, api.term_public_id INTO I5D_, API5PUBLICID_
                    FROM EDU.tbl_term_presented_course_api api
                    WHERE api.term_presented_course_id = :new.presented_course_id;
                 END IF;
                    --PERIOD
-                IF :NEW.presented_course_id !=NULL THEN
+                IF :NEW.presented_course_id is not null THEN
                    SELECT api.period_id, api.period_public_id INTO I6D_, API6PUBLICID_
                    FROM EDU.tbl_term_presented_course_api api
                    WHERE api.term_presented_course_id = :new.presented_course_id;
@@ -2826,7 +2826,7 @@ create or replace TRIGGER "EDU"."TBL_TERM_PRESENTED_GROUP_API_IU" AFTER INSERT O
                 edit_date_ts = TS_
                 where TERM_PRESENTED_GROUP_id = :old.id;
                 -- PROFESSOR
-                if :new.professor_ID != null and :new.professor_ID != :old.professor_ID THEN
+                if :new.professor_ID is not null and :new.professor_ID != :old.professor_ID THEN
                      SELECT api.professor_public_id INTO APIPUBLICID_
                      FROM EDU.tbl_professor_api api
                      WHERE api.professor_id = :new.professor_id;
@@ -2838,7 +2838,7 @@ create or replace TRIGGER "EDU"."TBL_TERM_PRESENTED_GROUP_API_IU" AFTER INSERT O
                      where TERM_PRESENTED_GROUP_id = :old.id;
                 end if;
                  -- TERMPRESENTEDCOURSE, FIELDCOURSE, COURSE, TERM, PERIOD
-                if :new.presented_course_ID != null and :new.presented_course_ID != :old.presented_course_ID THEN
+                if :new.presented_course_ID is not null and :new.presented_course_ID != :old.presented_course_ID THEN
                      SELECT api.trm_presented_course_public_id, 
                             api.field_course_id, api.field_course_public_id, api.course_id, api.course_public_id,
                             api.term_id, api.term_public_id, api.period_id, api.period_public_id
@@ -3031,7 +3031,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_API_IU" AFTER INSERT OR UPDATE ON E
       TS_ := systimestamp;
       UUID_ := CRM.public_uuid;
     if inserting then
-        IF :NEW.person_id !=NULL THEN
+        IF :NEW.person_id is not null THEN
           SELECT api.person_public_id INTO APIPUBLICID_
           FROM CRM.TBL_PERSON_API api
           WHERE api.person_id = :new.person_id;
@@ -3049,7 +3049,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_API_IU" AFTER INSERT OR UPDATE ON E
        edit_date_ts = TS_
        where STUDENT_id = :old.id;
         -- PERSON
-        if :new.person_ID != null and :new.person_ID != :old.person_ID THEN
+        if :new.person_ID is not null and :new.person_ID != :old.person_ID THEN
              SELECT api.person_public_id INTO APIPUBLICID_
              FROM CRM.tbl_person_api api
              WHERE api.person_id = :new.person_id;
@@ -3193,13 +3193,13 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
          TS_ := systimestamp;
          UUID_ := CRM.public_uuid;
        if inserting then
-        IF :NEW.PERIOD_id !=NULL THEN  
+        IF :NEW.PERIOD_id is not null THEN  
              SELECT api.PERIOD_public_id INTO APIPUBLICID_
              FROM EDU.tbl_PERIOD_api api
              WHERE api.PERIOD_id = :new.PERIOD_id;
         END IF;
              --
-        IF :NEW.STUDENT_id !=NULL THEN   
+        IF :NEW.STUDENT_id is not null THEN   
              SELECT api.STUDENT_public_id INTO APIIPUBLICID_
              FROM EDU.tbl_STUDENT_api api
              WHERE api.STUDENT_id = :new.STUDENT_id;
@@ -3219,7 +3219,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
           edit_date_ts = TS_
           where REGISTER_id = :old.id;
             -- PERIOD
-            if :new.period_ID != null and :new.period_ID != :old.period_ID THEN
+            if :new.period_ID is not null and :new.period_ID != :old.period_ID THEN
                  SELECT api.period_public_id INTO APIPUBLICID_
                  FROM EDU.tbl_period_api api
                  WHERE api.period_id = :new.period_id;
@@ -3231,7 +3231,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
                  where register_id = :old.id;
             end if;
             -- STUDENT
-            if :new.student_ID != null and :new.student_ID != :old.student_ID THEN
+            if :new.student_ID is not null and :new.student_ID != :old.student_ID THEN
                  SELECT api.student_public_id INTO APIIPUBLICID_
                  FROM EDU.tbl_student_api api
                  WHERE api.student_id = :new.student_id;
@@ -3243,14 +3243,14 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
                  where register_id = :old.id;
             end if;
             -- ACTIVITYSTATUS
-            if :new.activity_status != null and :new.activity_status != :old.activity_status THEN
+            if :new.activity_status is not null and :new.activity_status != :old.activity_status THEN
                  update EDU.tbl_REGISTER_api
                  set
                  register_activity_status = :new.activity_status
                  where register_id = :old.id;
             end if;
             -- DELETESTATUS
-            if :new.delete_status != null and :new.delete_status != :old.delete_status THEN
+            if :new.delete_status is not null and :new.delete_status != :old.delete_status THEN
                  update EDU.tbl_REGISTER_api
                  set
                  register_delete_status = :new.delete_status
@@ -3595,6 +3595,47 @@ end;
 CREATE SEQUENCE  "CRM"."SEQ_ACCOUNT_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
 
 
+  CREATE TABLE "CRM"."TBL_ACCOUNT_API" 
+   (	"ID" NUMBER NOT NULL ENABLE, 
+	"ACCOUNT_ID" NUMBER, 
+	"ACCOUNT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"DELETED_ACCOUNT_ID" NUMBER, 
+	"COMPANY_ID" NUMBER, 
+	"COMPANY_PUBLIC_ID" VARCHAR2(500 BYTE) COLLATE "USING_NLS_COMP", 
+	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
+	 CONSTRAINT "TBL_ACCOUNT_API_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  TABLESPACE "USERS"  ENABLE,
+	 CONSTRAINT "TBL_ACCOUNT_API_FK1" FOREIGN KEY ("ACCOUNT_ID")
+	  REFERENCES "CRM"."TBL_ACCOUNT" ("ID") ENABLE
+   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "CRM"."TBL_ACCOUNT_API_TRG" 
+BEFORE INSERT ON CRM.TBL_ACCOUNT_API 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+      SELECT SEQ_ACCOUNT_API_ID.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+    IF INSERTING AND :NEW.COMPANY_PUBLIC_ID IS NULL THEN
+      SELECT SEQ_ACCOUNT_API_ID.NEXTVAL INTO :NEW.COMPANY_PUBLIC_ID FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "CRM"."TBL_ACCOUNT_API_TRG" ENABLE;
+
+
 create or replace TRIGGER "CRM"."TBL_ACCOUNT_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_ACCOUNT
   REFERENCING OLD AS OLD NEW AS NEW
   FOR EACH ROW WHEN (1=1)
@@ -3606,7 +3647,7 @@ create or replace TRIGGER "CRM"."TBL_ACCOUNT_API_IU" AFTER INSERT OR UPDATE ON C
       TS_ := systimestamp;
       UUID_ := CRM.public_uuid;
     if inserting then
-        IF :NEW.COMPANY_id !=NULL THEN
+        IF :NEW.COMPANY_id is not null THEN
           SELECT api.COMPANY_public_id INTO APIPUBLICID_
           FROM CRM.TBL_COMPANY_API api
           WHERE api.COMPANY_id = :new.COMPANY_id;
@@ -3623,9 +3664,9 @@ create or replace TRIGGER "CRM"."TBL_ACCOUNT_API_IU" AFTER INSERT OR UPDATE ON C
       set  
        edit_date_ts = TS_
        where ACCOUNT_id = :old.id;
-      end if;
+      
   -- COMPANY
-        if :new.COMPANY_ID != null and :new.COMPANY_ID != :old.COMPANY_ID THEN
+        if :new.COMPANY_ID is not null and :new.COMPANY_ID != :old.COMPANY_ID THEN
              SELECT api.COMPANY_public_id INTO APIPUBLICID_
              FROM CRM.tbl_COMPANY_api api
              WHERE api.COMPANY_id = :new.COMPANY_id;
@@ -3636,6 +3677,7 @@ create or replace TRIGGER "CRM"."TBL_ACCOUNT_API_IU" AFTER INSERT OR UPDATE ON C
              COMPANY_public_id = APIPUBLICID_
              where ACCOUNT_id = :old.id;
         end if;
+    end if;
   END;
 
   
@@ -3731,15 +3773,15 @@ create or replace procedure   CRM.UUID_ACCOUNT_API IS
       PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
      NOCOMPRESS LOGGING
       TABLESPACE "USERS" ;
-    
+       
       CREATE OR REPLACE EDITIONABLE TRIGGER "CRM"."TBL_EVENT_API_TRG" 
-    BEFORE INSERT ON CRM.SEQ_EVENT_API_ID 
+    BEFORE INSERT ON CRM.TBL_EVENT_API 
     FOR EACH ROW 
     BEGIN
       <<COLUMN_SEQUENCES>>
       BEGIN
          IF INSERTING AND :NEW.ID IS NULL THEN
-          SELECT SEQ_EVENT_RAISE_API_ID.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+          SELECT SEQ_EVENT_API_ID.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
         END IF;
       END COLUMN_SEQUENCES;
     END;
@@ -3770,7 +3812,6 @@ create or replace procedure   CRM.UUID_ACCOUNT_API IS
                 where EVENT_id = :old.id;
                end if;
            END;
-           commit;
        
       
        create or replace TRIGGER "CRM"."TBL_EVENT_API_D" BEFORE DELETE ON CRM.TBL_EVENT
@@ -3889,7 +3930,7 @@ create or replace TRIGGER "CRM"."TBL_EVENT_RAISE_API_IU" AFTER INSERT OR UPDATE 
       TS_ := systimestamp;
       UUID_ := CRM.public_uuid;
     if inserting then
-        IF :NEW.EVENT_id !=NULL THEN
+        IF :NEW.EVENT_id is not null THEN
           SELECT api.EVENT_public_id INTO APIPUBLICID_
           FROM CRM.TBL_EVENT_API api
           WHERE api.EVENT_id = :new.EVENT_id;
@@ -3906,9 +3947,9 @@ create or replace TRIGGER "CRM"."TBL_EVENT_RAISE_API_IU" AFTER INSERT OR UPDATE 
       set  
        edit_date_ts = TS_
        where EVENT_RAISE_id = :old.id;
-      end if;
+      
   -- EVENT
-        if :new.EVENT_ID != null and :new.EVENT_ID != :old.EVENT_ID THEN
+        if :new.EVENT_ID is not null and :new.EVENT_ID != :old.EVENT_ID THEN
              SELECT api.EVENT_public_id INTO APIPUBLICID_
              FROM CRM.tbl_EVENT_api api
              WHERE api.EVENT_id = :new.EVENT_id;
@@ -3919,6 +3960,7 @@ create or replace TRIGGER "CRM"."TBL_EVENT_RAISE_API_IU" AFTER INSERT OR UPDATE 
              EVENT_public_id = APIPUBLICID_
              where EVENT_RAISE_id = :old.id;
         end if;
+    end if;
   END;
 
   
@@ -4044,7 +4086,7 @@ create or replace TRIGGER "EDU"."TBL_COST_TYPE_API_IU" AFTER INSERT OR UPDATE ON
       TS_ := systimestamp;
       UUID_ := CRM.public_uuid;
     if inserting then
-        IF :NEW.COMPANY_id !=NULL THEN
+        IF :NEW.COMPANY_id is not null THEN
           SELECT api.COMPANY_public_id INTO APIPUBLICID_
           FROM CRM.TBL_COMPANY_API api
           WHERE api.COMPANY_id = :new.COMPANY_id;
@@ -4061,9 +4103,9 @@ create or replace TRIGGER "EDU"."TBL_COST_TYPE_API_IU" AFTER INSERT OR UPDATE ON
       set  
        edit_date_ts = TS_
        where COST_TYPE_id = :old.id;
-      end if;
+      
   -- COMPANY
-        if :new.COMPANY_ID != null and :new.COMPANY_ID != :old.COMPANY_ID THEN
+        if :new.COMPANY_ID is not null and :new.COMPANY_ID != :old.COMPANY_ID THEN
              SELECT api.COMPANY_public_id INTO APIPUBLICID_
              FROM CRM.tbl_COMPANY_api api
              WHERE api.COMPANY_id = :new.COMPANY_id;
@@ -4074,6 +4116,7 @@ create or replace TRIGGER "EDU"."TBL_COST_TYPE_API_IU" AFTER INSERT OR UPDATE ON
              COMPANY_public_id = APIPUBLICID_
              where COST_TYPE_id = :old.id;
         end if;
+    end if;
   END;
 
   create or replace TRIGGER "EDU"."TBL_COST_TYPE_API_D" BEFORE DELETE ON EDU.TBL_COST_TYPE
@@ -4157,8 +4200,8 @@ CREATE SEQUENCE  "EDU"."SEQ_EDU_CONTRACT_API"  MINVALUE 1 MAXVALUE 9999999999999
 	"CONTRACT_EDU_ID" NUMBER, 
 	"DELETED_CONTRACT_EDU_ID" NUMBER, 
 	"CONTRACT_EDU_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
-	"CONTRACT_TYPE_ID" NUMBER, 
-	"CONTRACT_TYPE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"PARAMETER_ID" NUMBER, 
+	"PARAMETER_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
 	"CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
 	"EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
 	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE, 
@@ -4200,7 +4243,7 @@ create or replace TRIGGER "EDU"."TBL_CONTRACT_EDU_API_IU" AFTER INSERT OR UPDATE
       TS_ := systimestamp;
       UUID_ := CRM.public_uuid;
     if inserting then
-        IF :NEW.CONTRACT_TYPE_id !=NULL THEN
+        IF :NEW.CONTRACT_TYPE_id is not null THEN
           SELECT api.PARAMETER_public_id INTO APIPUBLICID_
           FROM CRM.TBL_PARAMETER_API api
           WHERE api.PARAMETER_id = :new.CONTRACT_TYPE_id;
@@ -4219,7 +4262,7 @@ create or replace TRIGGER "EDU"."TBL_CONTRACT_EDU_API_IU" AFTER INSERT OR UPDATE
        where CONTRACT_EDU_id = :old.id;
       end if;
   -- PARAMETER
-        if :new.CONTRACT_TYPE_ID != null and :new.CONTRACT_TYPE_ID != :old.CONTRACT_TYPE_ID THEN
+        if :new.CONTRACT_TYPE_ID is not null and :new.CONTRACT_TYPE_ID != :old.CONTRACT_TYPE_ID THEN
              SELECT api.PARAMETER_public_id INTO APIPUBLICID_
              FROM CRM.tbl_PARAMETER_api api
              WHERE api.PARAMETER_id = :new.CONTRACT_TYPE_id;
@@ -4357,7 +4400,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_CONTRACT_API_IU" AFTER INSERT OR UPD
       TS_ := systimestamp;
       UUID_ := CRM.public_uuid;
     if inserting then
-        IF :NEW.PERIOD_id !=NULL THEN
+        IF :NEW.PERIOD_id is not null THEN
           SELECT api.PERIOD_public_id INTO APIPUBLICID_
           FROM EDU.TBL_PERIOD_API api
           WHERE api.PERIOD_id = :new.PERIOD_id;
@@ -4374,9 +4417,9 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_CONTRACT_API_IU" AFTER INSERT OR UPD
       set  
        edit_date_ts = TS_
        where PERIOD_CONTRACT_id = :old.id;
-      end if;
+      
   -- PERIOD
-        if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+        if :new.PERIOD_ID is not null and :new.PERIOD_ID != :old.PERIOD_ID THEN
              SELECT api.PERIOD_public_id INTO APIPUBLICID_
              FROM EDU.tbl_PERIOD_api api
              WHERE api.PERIOD_id = :new.PERIOD_id;
@@ -4387,6 +4430,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_CONTRACT_API_IU" AFTER INSERT OR UPD
              PERIOD_public_id = APIPUBLICID_
              where PERIOD_CONTRACT_id = :old.id;
         end if;
+    end if;
   END;
 
  create or replace TRIGGER "EDU"."TBL_PERIOD_CONTRACT_API_D" BEFORE DELETE ON EDU.TBL_PERIOD_CONTRACT
@@ -4513,7 +4557,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_PAYMENT_API_IU" AFTER INSERT OR UPDA
       TS_ := systimestamp;
       UUID_ := CRM.public_uuid;
     if inserting then
-       IF :NEW.PERIOD_id !=NULL THEN 
+       IF :NEW.PERIOD_id is not null THEN 
           SELECT api.PERIOD_public_id INTO APIPUBLICID_
           FROM EDU.TBL_PERIOD_API api
           WHERE api.PERIOD_id = :new.PERIOD_id;
@@ -4530,9 +4574,9 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_PAYMENT_API_IU" AFTER INSERT OR UPDA
       set  
        edit_date_ts = TS_
        where PERIOD_PAYMENT_id = :old.id;
-      end if;
+      
   -- PERIOD
-        if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+        if :new.PERIOD_ID is not null and :new.PERIOD_ID != :old.PERIOD_ID THEN
              SELECT api.PERIOD_public_id INTO APIPUBLICID_
              FROM EDU.tbl_PERIOD_api api
              WHERE api.PERIOD_id = :new.PERIOD_id;
@@ -4543,6 +4587,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_PAYMENT_API_IU" AFTER INSERT OR UPDA
              PERIOD_public_id = APIPUBLICID_
              where PERIOD_PAYMENT_id = :old.id;
         end if;
+    end if;
   END;
 
  create or replace TRIGGER "EDU"."TBL_PERIOD_PAYMENT_API_D" BEFORE DELETE ON EDU.TBL_PERIOD_PAYMENT
@@ -4676,13 +4721,13 @@ create or replace TRIGGER "EDU"."TBL_TERM_PERIOD_API_IU" AFTER INSERT OR UPDATE 
            TS_ := systimestamp;
            UUID_ := CRM.public_uuid;
          if inserting then
-            IF :NEW.TERM_id !=NULL THEN
+            IF :NEW.TERM_id is not null THEN
                SELECT api.TERM_public_id INTO APIPUBLICID_
                FROM EDU.tbl_TERM_api api
                WHERE api.TERM_id = :new.TERM_id;
             END IF;
                --
-            IF :NEW.PERIOD_id !=NULL THEN
+            IF :NEW.PERIOD_id is not null THEN
                SELECT api.PERIOD_public_id INTO APIIPUBLICID_
                FROM EDU.tbl_PERIOD_api api
                WHERE api.PERIOD_id = :new.PERIOD_id;
@@ -4700,7 +4745,7 @@ create or replace TRIGGER "EDU"."TBL_TERM_PERIOD_API_IU" AFTER INSERT OR UPDATE 
             edit_date_ts = TS_
             where TERM_PERIOD_id = :old.id;
                 --TERM
-                if :new.TERM_ID != null and :new.TERM_ID != :old.TERM_ID THEN
+                if :new.TERM_ID is not null and :new.TERM_ID != :old.TERM_ID THEN
                     SELECT api.TERM_public_id INTO APIPUBLICID_
                      FROM EDU.tbl_TERM_api api
                      WHERE api.TERM_id = :new.TERM_id;
@@ -4712,7 +4757,7 @@ create or replace TRIGGER "EDU"."TBL_TERM_PERIOD_API_IU" AFTER INSERT OR UPDATE 
                     where TERM_PERIOD_id = :old.id;
                end if;
                --PERIOD
-                if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+                if :new.PERIOD_ID is not null and :new.PERIOD_ID != :old.PERIOD_ID THEN
                     SELECT api.PERIOD_public_id INTO APIIPUBLICID_
                      FROM EDU.tbl_PERIOD_api api
                      WHERE api.PERIOD_id = :new.PERIOD_id;
@@ -4866,13 +4911,13 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_COST_API_IU" AFTER INSERT OR UPDAT
            TS_ := systimestamp;
            UUID_ := CRM.public_uuid;
          if inserting then
-            IF :NEW.PERIOD_TERM_id !=NULL THEN
+            IF :NEW.PERIOD_TERM_id is not null THEN
                SELECT api.TERM_PERIOD_public_id INTO APIPUBLICID_
                FROM EDU.tbl_TERM_PERIOD_api api
                WHERE api.TERM_PERIOD_id = :new.PERIOD_TERM_id;
             END IF;
                --
-            IF :NEW.REGISTER_id !=NULL THEN
+            IF :NEW.REGISTER_id is not null THEN
                SELECT api.REGISTER_public_id INTO APIIPUBLICID_
                FROM EDU.tbl_REGISTER_api api
                WHERE api.REGISTER_id = :new.REGISTER_id;
@@ -4890,7 +4935,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_COST_API_IU" AFTER INSERT OR UPDAT
             edit_date_ts = TS_
             where REGISTER_COST_id = :old.id;
                 --PERIOD_TERM
-                if :new.PERIOD_TERM_ID != null and :new.PERIOD_TERM_ID != :old.PERIOD_TERM_ID THEN
+                if :new.PERIOD_TERM_ID is not null and :new.PERIOD_TERM_ID != :old.PERIOD_TERM_ID THEN
                     SELECT api.TERM_PERIOD_public_id INTO APIPUBLICID_
                      FROM EDU.tbl_TERM_PERIOD_api api
                      WHERE api.TERM_PERIOD_id = :new.PERIOD_TERM_id;
@@ -4902,7 +4947,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_COST_API_IU" AFTER INSERT OR UPDAT
                     where REGISTER_COST_id = :old.id;
                end if;
                --REGISTER
-                if :new.REGISTER_ID != null and :new.REGISTER_ID != :old.REGISTER_ID THEN
+                if :new.REGISTER_ID is not null and :new.REGISTER_ID != :old.REGISTER_ID THEN
                     SELECT api.REGISTER_public_id INTO APIIPUBLICID_
                      FROM EDU.tbl_REGISTER_api api
                      WHERE api.REGISTER_id = :new.REGISTER_id;
@@ -5181,13 +5226,13 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_REFUND_API_IU" AFTER INSERT OR UPD
            TS_ := systimestamp;
            UUID_ := CRM.public_uuid;
          if inserting then
-            IF :NEW.REFUND_id !=NULL THEN
+            IF :NEW.REFUND_id is not null THEN
                SELECT api.REFUND_public_id INTO APIPUBLICID_
                FROM MAINPARTS.tbl_REFUND_api api
                WHERE api.REFUND_id = :new.REFUND_id;
             END IF;
                --
-            IF :NEW.REGISTER_id !=NULL THEN
+            IF :NEW.REGISTER_id is not null THEN
                SELECT api.REGISTER_public_id INTO APIIPUBLICID_
                FROM EDU.tbl_REGISTER_api api
                WHERE api.REGISTER_id = :new.REGISTER_id;
@@ -5205,7 +5250,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_REFUND_API_IU" AFTER INSERT OR UPD
             edit_date_ts = TS_
             where REGISTER_REFUND_id = :old.id;
                 --REFUND
-                if :new.REFUND_ID != null and :new.REFUND_ID != :old.REFUND_ID THEN
+                if :new.REFUND_ID is not null and :new.REFUND_ID != :old.REFUND_ID THEN
                     SELECT api.REFUND_public_id INTO APIPUBLICID_
                      FROM MAINPARTS.tbl_REFUND_api api
                      WHERE api.REFUND_id = :new.REFUND_id;
@@ -5217,7 +5262,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_REFUND_API_IU" AFTER INSERT OR UPD
                     where REGISTER_REFUND_id = :old.id;
                end if;
                --REGISTER
-                if :new.REGISTER_ID != null and :new.REGISTER_ID != :old.REGISTER_ID THEN
+                if :new.REGISTER_ID is not null and :new.REGISTER_ID != :old.REGISTER_ID THEN
                     SELECT api.REGISTER_public_id INTO APIIPUBLICID_
                      FROM EDU.tbl_REGISTER_api api
                      WHERE api.REGISTER_id = :new.REGISTER_id;
@@ -5382,7 +5427,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_CERTIFICATE_API_IU" AFTER INSERT OR 
                TS_ := systimestamp;
                UUID_ := CRM.public_uuid;
              if inserting then
-                IF :NEW.REGISTER_id !=NULL THEN
+                IF :NEW.REGISTER_id is not null THEN
                    SELECT 
                         api.REGISTER_public_id, API.STUDENT_ID, api.STUDENT_public_id, API.PERIOD_ID, api.PERIOD_public_id  
                    INTO 
@@ -5406,7 +5451,7 @@ create or replace TRIGGER "EDU"."TBL_PERIOD_CERTIFICATE_API_IU" AFTER INSERT OR 
                 edit_date_ts = TS_
                 where PERIOD_CERTIFICATE_id = :old.id;
                  -- REGISTER, STUDENT, PERIOD
-                if :new.REGISTER_ID != null and :new.REGISTER_ID != :old.REGISTER_ID THEN
+                if :new.REGISTER_ID is not null and :new.REGISTER_ID != :old.REGISTER_ID THEN
                      SELECT api.REGISTER_public_id, 
                         API.STUDENT_ID, API.STUDENT_PUBLIC_ID, API.PERIOD_ID, API.PERIOD_PUBLIC_ID 
                      INTO APIPUBLICID_,
@@ -5581,13 +5626,13 @@ create or replace TRIGGER "EDU"."TBL_PRE_REGISTER_API_IU" AFTER INSERT OR UPDATE
            TS_ := systimestamp;
            UUID_ := CRM.public_uuid;
          if inserting then
-            IF :NEW.CONTACT_id !=NULL THEN
+            IF :NEW.CONTACT_id is not null THEN
                SELECT api.CONTACT_public_id INTO APIPUBLICID_
                FROM CRM.tbl_CONTACT_api api
                WHERE api.CONTACT_id = :new.CONTACT_id;
             END IF;
                --
-            IF :NEW.PERIOD_id !=NULL THEN
+            IF :NEW.PERIOD_id is not null THEN
                SELECT api.PERIOD_public_id INTO APIIPUBLICID_
                FROM EDU.tbl_PERIOD_api api
                WHERE api.PERIOD_id = :new.PERIOD_id;
@@ -5605,7 +5650,7 @@ create or replace TRIGGER "EDU"."TBL_PRE_REGISTER_API_IU" AFTER INSERT OR UPDATE
             edit_date_ts = TS_
             where PRE_REGISTER_id = :old.id;
                 --CONTACT
-                if :new.CONTACT_ID != null and :new.CONTACT_ID != :old.CONTACT_ID THEN
+                if :new.CONTACT_ID is not null and :new.CONTACT_ID != :old.CONTACT_ID THEN
                     SELECT api.CONTACT_public_id INTO APIPUBLICID_
                      FROM CRM.tbl_CONTACT_api api
                      WHERE api.CONTACT_id = :new.CONTACT_id;
@@ -5617,7 +5662,7 @@ create or replace TRIGGER "EDU"."TBL_PRE_REGISTER_API_IU" AFTER INSERT OR UPDATE
                     where PRE_REGISTER_id = :old.id;
                end if;
                --PERIOD
-                if :new.PERIOD_ID != null and :new.PERIOD_ID != :old.PERIOD_ID THEN
+                if :new.PERIOD_ID is not null and :new.PERIOD_ID != :old.PERIOD_ID THEN
                     SELECT api.PERIOD_public_id INTO APIIPUBLICID_
                      FROM EDU.tbl_PERIOD_api api
                      WHERE api.PERIOD_id = :new.PERIOD_id;
@@ -5790,7 +5835,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_IU" AFTER INSERT OR UPDA
                TS_ := systimestamp;
                UUID_ := CRM.public_uuid;
              if inserting then
-               IF :NEW.REGISTER_id !=NULL THEN 
+               IF :NEW.REGISTER_id is not null THEN 
                    SELECT 
                         api.REGISTER_public_id, API.STUDENT_ID, api.STUDENT_public_id, API.PERIOD_ID, api.PERIOD_public_id
                     INTO 
@@ -5799,7 +5844,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_IU" AFTER INSERT OR UPDA
                    WHERE api.REGISTER_id = :new.REGISTER_id;
                END IF; 
                    --
-               IF :NEW.PERIOD_COURSE_id !=NULL THEN 
+               IF :NEW.PERIOD_COURSE_id is not null THEN 
                   SELECT 
                         api.PERIOD_COURSE_public_id, API.COURSE_ID, API.COURSE_PUBLIC_ID 
                   INTO 
@@ -5825,7 +5870,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_IU" AFTER INSERT OR UPDA
                 edit_date_ts = TS_
                 where STUDENT_COURSE_id = :old.id;
                  -- REGISTER, STUDENT, PERIOD
-                if :new.REGISTER_ID != null and :new.REGISTER_ID != :old.REGISTER_ID THEN
+                if :new.REGISTER_ID is not null and :new.REGISTER_ID != :old.REGISTER_ID THEN
                      SELECT api.REGISTER_public_id, 
                         API.STUDENT_ID, API.STUDENT_PUBLIC_ID, API.PERIOD_ID, API.PERIOD_PUBLIC_ID 
                      INTO APIPUBLICID_,
@@ -5844,7 +5889,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_IU" AFTER INSERT OR UPDA
                      where STUDENT_COURSE_id = :old.id;
                 end if;
                  -- PERIODCOURSE, COURSE
-                if :new.PERIOD_COURSE_ID != null and :new.PERIOD_COURSE_ID != :old.PERIOD_COURSE_ID THEN
+                if :new.PERIOD_COURSE_ID is not null and :new.PERIOD_COURSE_ID != :old.PERIOD_COURSE_ID THEN
                      SELECT 
                             api.PERIOD_COURSE_public_id, API.COURSE_ID, API.COURSE_PUBLIC_ID 
                      INTO 
@@ -5974,44 +6019,13 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_IU" AFTER INSERT OR UPDA
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 CREATE SEQUENCE  "MAINPARTS"."SEQ_DIGITAL_PAYMENT_API"  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
 
 
   CREATE TABLE "MAINPARTS"."TBL_DIGITAL_PAYMENT_API" 
    (	"ID" NUMBER NOT NULL ENABLE, 
 	"DIGITAL_PAYMENT_ID" NUMBER, 
-	"DIGITAL_PAYMENT_PABLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
+	"DIGITAL_PAYMENT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
 	"DELETED_DIGITAL_PAYMENT_ID" NUMBER, 
 	"CONTACT_ID" NUMBER, 
 	"CONTACT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP", 
@@ -6067,19 +6081,19 @@ create or replace TRIGGER "MAINPARTS"."TBL_DIGITAL_PAYMENT_API_IU" AFTER INSERT 
            UUID_ := CRM.public_uuid;
          if inserting then
                --CONTACT
-            IF :NEW.CONTACT_id !=NULL THEN
+            IF :NEW.CONTACT_id is not null THEN
                SELECT api.CONTACT_public_id INTO APIPUBLICID_
                FROM CRM.tbl_CONTACT_api api
                WHERE api.CONTACT_id = :new.CONTACT_id;
             END IF;
                --COMPANY
-            IF :NEW.COMPANY_id !=NULL THEN
+            IF :NEW.COMPANY_id is not null THEN
                SELECT api.COMPANY_public_id INTO APIIPUBLICID_
                FROM crm.tbl_COMPANY_api api
                WHERE api.COMPANY_id = :new.COMPANY_id;
             END IF;
                --PERSON
-            IF :NEW.PERSON_id !=NULL THEN
+            IF :NEW.PERSON_id is not null THEN
                SELECT api.PERSON_public_id INTO APIIIPUBLICID_
                FROM crm.tbl_PERSON_api api
                WHERE api.PERSON_id = :new.PERSON_id;
@@ -6099,7 +6113,7 @@ create or replace TRIGGER "MAINPARTS"."TBL_DIGITAL_PAYMENT_API_IU" AFTER INSERT 
             edit_date_ts = TS_
             where DIGITAL_PAYMENT_id = :old.id;
                 --CONTACT
-                if :new.CONTACT_ID != null and :new.CONTACT_ID != :old.CONTACT_ID THEN
+                if :new.CONTACT_ID is not null and :new.CONTACT_ID != :old.CONTACT_ID THEN
                     SELECT api.CONTACT_public_id INTO APIPUBLICID_
                      FROM CRM.tbl_CONTACT_api api
                      WHERE api.CONTACT_id = :new.CONTACT_id;
@@ -6111,7 +6125,7 @@ create or replace TRIGGER "MAINPARTS"."TBL_DIGITAL_PAYMENT_API_IU" AFTER INSERT 
                     where DIGITAL_PAYMENT_id = :old.id;
                end if;
                --COMPANY
-                if :new.COMPANY_ID != null and :new.COMPANY_ID != :old.COMPANY_ID THEN
+                if :new.COMPANY_ID is not null and :new.COMPANY_ID != :old.COMPANY_ID THEN
                     SELECT api.COMPANY_public_id INTO APIIPUBLICID_
                      FROM CRM.tbl_COMPANY_api api
                      WHERE api.COMPANY_id = :new.COMPANY_id;
@@ -6123,7 +6137,7 @@ create or replace TRIGGER "MAINPARTS"."TBL_DIGITAL_PAYMENT_API_IU" AFTER INSERT 
                     where DIGITAL_PAYMENT_id = :old.id;
                end if;
                --PERSON
-               if :new.PERSON_ID != null and :new.PERSON_ID != :old.PERSON_ID THEN
+               if :new.PERSON_ID is not null and :new.PERSON_ID != :old.PERSON_ID THEN
                    SELECT api.PERSON_public_id INTO APIIIPUBLICID_
                     FROM CRM.tbl_PERSON_api api
                     WHERE api.PERSON_id = :new.PERSON_id;
@@ -6468,21 +6482,17 @@ create or replace procedure MAINPARTS.UUID_DIGITAL_PAYMENT_API IS
 
 
 ------------------------------
+Update API syntax:
 
+--ID(IN API from FATHER TABLE)
+update EDU.tbl_term_presented_group_api mtapi 
+set mtapi.professor_id = (select secapi.professor_id from EDU.tbl_term_presented_group secapi where secapi.id = mtapi.TERM_PRESENTED_GROUP_ID )
+where mtapi.professor_id is null and mtapi.TERM_PRESENTED_GROUP_ID is not null;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+--PUBLICID
+update EDU.tbl_term_presented_group_api mtapi 
+set mtapi.professor_public_id = (select secapi.professor_public_id from EDU.tbl_professor_api secapi where secapi.professor_id = mtapi.professor_id)
+where mtapi.professor_public_id is null and mtapi.professor_id is not null;
 
 ------------------------------
 

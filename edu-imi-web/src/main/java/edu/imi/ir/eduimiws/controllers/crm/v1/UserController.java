@@ -17,6 +17,7 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
 import edu.imi.ir.eduimiws.models.response.crm.UserRolePrivilegeResponse;
+import edu.imi.ir.eduimiws.proxies.crm.CrmServiceProxy;
 import edu.imi.ir.eduimiws.security.ActiveUserService2;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.crm.PersonApiService;
@@ -51,7 +52,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,6 +64,7 @@ import java.util.stream.StreamSupport;
 @Tag(name = "users", description = "The user API")
 public class UserController {
 
+    private final CrmServiceProxy crmServiceProxy;
     private final PersonService personService;
     private final PersonApiService personApiService;
     private final UserService userService;
@@ -144,7 +145,12 @@ public class UserController {
     public ResponseEntity<?> getUserByUserPublicId(@PathVariable String userPublicId) {
 
         try {
-            PersonEntity person = personService.findPersonEntityByPersonApiPublicId(userPublicId);
+//            PersonEntity person = personService.findPersonEntityByPersonApiPublicId(userPublicId);
+            PersonEntity person = crmServiceProxy.
+                    createPersonServiceProxyInstance().
+                    findPersonEntityByPersonApiPublicId(userPublicId);
+
+
             if (person == null) {
                 return this.userNotFound();
             }
@@ -528,8 +534,9 @@ public class UserController {
         PersonEntity newPerson = userService
                 .saveUserByUserFastDto(userFastDto);
 
-        savedPersons = userService
-                .generateContactPersonPublicIdByPersons(Arrays.asList(newPerson));
+//        with new trigger, no more need to this
+/*        savedPersons = userService
+                .generateContactPersonPublicIdByPersons(Arrays.asList(newPerson));*/
 
         List<UserFastDto> savedUserFastDto = userFastDtoMapper
                 .toUserFastDtos(savedPersons, new CycleAvoidingMappingContext());
