@@ -100,7 +100,7 @@ public class OpenApiConfig {
                 .build();
     }
 
-    @Bean
+/*    @Bean
     public GroupedOpenApi roleApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Roles")
@@ -116,7 +116,7 @@ public class OpenApiConfig {
                 .pathsToMatch("/api/v1/privileges/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
-    }
+    }*/
 
     @Bean
     public GroupedOpenApi registerApi(){
@@ -235,22 +235,22 @@ public class OpenApiConfig {
                 .build();
     }
 
-    @Bean
+/*    @Bean
     public GroupedOpenApi rqresApi() {
         return GroupedOpenApi.builder()
                 .setGroup("Reqres")
                 .pathsToMatch("/api/v1/reqres/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
-    }
+    }*/
 
-    @Bean
+/*    @Bean
     public GroupedOpenApi mellatsApi(){
         return GroupedOpenApi.builder()
                 .setGroup("Behpardakhts")
                 .pathsToMatch("/api/v1/behpardakhts/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
-    }
+    }*/
 
 }
