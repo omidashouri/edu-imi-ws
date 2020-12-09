@@ -20,6 +20,8 @@ public interface LevelService {
 
     List<LevelEntity> selectAllLevelProjection();
 
+    List<LevelEntity> findAllByLevelDescription(String levelDescription);
+
     LevelEntity findFirstByIdLessThanOrderByIdDesc(Long levelId);
 
     Long selectLevelLastSequenceNumber();

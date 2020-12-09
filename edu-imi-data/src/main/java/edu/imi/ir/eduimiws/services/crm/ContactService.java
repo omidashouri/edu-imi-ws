@@ -27,6 +27,8 @@ public interface ContactService {
 
     ContactEntity saveContact(ContactEntity newContact);
 
+    ContactEntity updateContact(ContactFastDto contactFastDto);
+
 }
 
 

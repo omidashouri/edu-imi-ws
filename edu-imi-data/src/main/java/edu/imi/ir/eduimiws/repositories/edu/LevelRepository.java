@@ -30,14 +30,17 @@ public interface LevelRepository extends CrudRepository<LevelEntity, Long> {
 
     //    List<RegisterOnly>
     List<LevelProjection> findAllByIdBetween(@Param("beginLevelId") Long beginLevelId,
-                                               @Param("endLevelId") Long endLevelId);
+                                             @Param("endLevelId") Long endLevelId);
+
+
+    List<LevelEntity> findAllByDescriptionContains(String levelDescription);
 
 //    List<RegisterOnly> Duplicate
 //    List<LevelEntity> findAllByLevel();
 
     List<LevelProjection> findBy();
 
-    @Query(name = "LevelEntity.selectCurrentSequenceNumber",nativeQuery = true)
+    @Query(name = "LevelEntity.selectCurrentSequenceNumber", nativeQuery = true)
     Long selectLastSequenceNumber();
 
     Long countByIdLessThanEqual(Long levelId);

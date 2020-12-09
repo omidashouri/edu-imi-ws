@@ -77,6 +77,13 @@ public class LevelServiceImpl implements LevelService {
     }
 
     @Override
+    public List<LevelEntity> findAllByLevelDescription(String levelDescription) {
+        List<LevelEntity> levels = levelRepository
+                .findAllByDescriptionContains(levelDescription);
+        return levels;
+    }
+
+    @Override
     public LevelEntity findFirstByIdLessThanOrderByIdDesc(Long levelId) {
         LevelEntity level = levelRepository
                 .findFirstByIdLessThanEqualOrderByIdDesc(levelId);

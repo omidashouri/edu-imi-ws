@@ -15,7 +15,6 @@ import java.util.Collection;
 @JsonRootName(value = "user")
 @Relation(collectionRelation = "users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor

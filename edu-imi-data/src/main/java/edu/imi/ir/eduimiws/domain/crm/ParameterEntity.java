@@ -7,14 +7,22 @@ import lombok.*;
 import javax.persistence.*;
 
 
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "ParameterEntity.findByParameterApi",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "parameterApi")
+                }
+        )
+})
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_PARAMETER_ID",allocationSize = 1)
-@Table(schema = "CRM",name="TBL_PARAMETER")
+@SequenceGenerator(name = "entity_sequence", schema = "CRM", sequenceName = "SEQ_PARAMETER_ID", allocationSize = 1)
+@Table(schema = "CRM", name = "TBL_PARAMETER")
 public class ParameterEntity extends BaseEntity {
 
     @Column(name = "PARAM_NAME")

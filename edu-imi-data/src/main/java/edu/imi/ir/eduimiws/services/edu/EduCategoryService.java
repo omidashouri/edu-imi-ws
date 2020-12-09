@@ -20,6 +20,8 @@ public interface EduCategoryService {
 
     List<EduCategoryEntity> selectAllEduCategoryProjection();
 
+    List<EduCategoryEntity> findAllByEduCategoryTitle(String title);
+
     EduCategoryEntity findFirstByIdLessThanOrderByIdDesc(Long eduCategoryId);
 
     Long selectEduCategoryLastSequenceNumber();

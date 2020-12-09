@@ -28,16 +28,18 @@ public interface EduCategoryRepository extends CrudRepository<EduCategoryEntity,
 
     EduCategoryEntity findFirstByIdLessThanEqualOrderByIdDesc(Long id);
 
-//    List<RegisterOnly>
+    //    List<RegisterOnly>
     List<EduCategoryProjection> findAllByIdBetween(@Param("beginEduCategoryId") Long beginEduCategoryId,
                                                    @Param("endEduCategoryId") Long endEduCategoryId);
+
+    List<EduCategoryEntity> findAllByTitleContains(String eduCategoryTitle);
 
 //    List<RegisterOnly> Duplicate
 //    List<EduCategoryEntity> findAllByEduCategory();
 
     List<EduCategoryProjection> findBy();
 
-    @Query(name = "EduCategoryEntity.selectCurrentSequenceNumber",nativeQuery = true)
+    @Query(name = "EduCategoryEntity.selectCurrentSequenceNumber", nativeQuery = true)
     Long selectLastSequenceNumber();
 
     Long countByIdLessThanEqual(Long eduCategoryId);

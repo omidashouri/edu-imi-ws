@@ -68,6 +68,13 @@ public class ContactServiceImpl implements ContactService {
         return contactRepository.save(newContact);
     }
 
+    @Override
+    public ContactEntity updateContact(ContactFastDto contactFastDto) {
+        ContactEntity contact;
+
+        return null;
+    }
+
 //NU
 /*    @Override
     public ContactEntity findContactEntityById(Long id) {

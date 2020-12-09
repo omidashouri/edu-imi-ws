@@ -12,7 +12,6 @@ import org.springframework.hateoas.server.core.Relation;
 @JsonRootName(value = "user")
 @Relation(collectionRelation = "users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor

@@ -77,6 +77,13 @@ public class EduCategoryServiceImpl implements EduCategoryService{
     }
 
     @Override
+    public List<EduCategoryEntity> findAllByEduCategoryTitle(String eduCategoryTitle) {
+        List<EduCategoryEntity> eduCategories = eduCategoryRepository
+                .findAllByTitleContains(eduCategoryTitle);
+        return eduCategories;
+    }
+
+    @Override
     public EduCategoryEntity findFirstByIdLessThanOrderByIdDesc(Long eduCategoryId) {
         EduCategoryEntity eduCategory = eduCategoryRepository
                 .findFirstByIdLessThanEqualOrderByIdDesc(eduCategoryId);
