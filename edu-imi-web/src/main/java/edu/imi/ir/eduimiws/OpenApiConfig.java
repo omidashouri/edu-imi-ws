@@ -100,6 +100,7 @@ public class OpenApiConfig {
                 .build();
     }
 
+//    Later correct Them
 /*    @Bean
     public GroupedOpenApi roleApi(){
         return GroupedOpenApi.builder()
@@ -235,6 +236,7 @@ public class OpenApiConfig {
                 .build();
     }
 
+//    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {
         return GroupedOpenApi.builder()
