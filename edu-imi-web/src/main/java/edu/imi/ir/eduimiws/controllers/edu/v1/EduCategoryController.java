@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.controllers.v1;
+package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.EduCategoryResponseEduCategoryDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.EduCategoryApiEntity;
@@ -175,7 +175,7 @@ public class EduCategoryController {
                     )
             }
     )
-    @GetMapping(path = "/{eduCategoryPublicId}",
+    @GetMapping(path = "/publicId/{eduCategoryPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getEduCategoryByEduCategoryPublicId(@PathVariable String eduCategoryPublicId) {
 
@@ -198,6 +198,62 @@ public class EduCategoryController {
         }
     }
 
+
+    @Operation(
+            summary = "Find EduCategory by Title",
+            description = "Search eduCategory by Title",
+            tags = "eduCategories",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = EduCategoryResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "eduCategory not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/title/{eduCategoryTitle}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getEduCategoryByEduCategoryTitle(@PathVariable String eduCategoryTitle) {
+
+        try {
+
+            List<EduCategoryEntity> eduCategories = eduCategoryService
+                    .findAllByEduCategoryTitle(eduCategoryTitle);
+            if (eduCategories == null || eduCategories.size() == 0) {
+                return this.eduCategoryNotFound();
+            }
+
+            List<EduCategoryDto> eduCategoryDtos = eduCategoryDtoMapper
+                    .toEduCategoryDtos(eduCategories, new CycleAvoidingMappingContext());
+
+            CollectionModel<EduCategoryResponse> eduCategoryResponseCollectionModel =
+                    eduCategoryResponseEduCategoryDtoAssembler.toCollectionModel(eduCategoryDtos);
+
+            return ResponseEntity.ok(eduCategoryResponseCollectionModel);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+    }
 
     @Operation(
             summary = "Find new eduCategory numbers",

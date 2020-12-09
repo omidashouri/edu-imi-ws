@@ -1,8 +1,8 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
-import edu.imi.ir.eduimiws.controllers.v1.CourseController;
-import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
-import edu.imi.ir.eduimiws.controllers.v1.PeriodCourseController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.CourseController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.PeriodController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.PeriodCourseController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodCourseResponsePeriodCourseFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodCourseFastDto;

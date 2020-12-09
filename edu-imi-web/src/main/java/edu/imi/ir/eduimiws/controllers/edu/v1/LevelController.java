@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.controllers.v1;
+package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 
 
@@ -147,6 +147,63 @@ public class LevelController {
     }
 
     @Operation(
+            summary = "Find Level by Description",
+            description = "Search Level by Description",
+            tags = "Levels",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = LevelResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Level not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/description/{LevelDescription}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getLevelByLevelTitle(@PathVariable String LevelDescription) {
+
+        try {
+
+            List<LevelEntity> Levels = levelService
+                    .findAllByLevelDescription(LevelDescription);
+            if (Levels == null || Levels.size() == 0) {
+                return this.levelNotFound();
+            }
+
+            List<LevelDto> LevelDtos = levelDtoMapper
+                    .toLevelDtos(Levels, new CycleAvoidingMappingContext());
+
+            CollectionModel<LevelResponse> LevelResponseCollectionModel =
+                    levelResponseLevelDtoAssembler.toCollectionModel(LevelDtos);
+
+            return ResponseEntity.ok(LevelResponseCollectionModel);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+    }
+
+
+    @Operation(
             summary = "Find Level by public ID",
             description = "Search level by the public id",
             tags = "levels",
@@ -177,7 +234,7 @@ public class LevelController {
                     )
             }
     )
-    @GetMapping(path = "/{levelPublicId}",
+    @GetMapping(path = "/publicId/{levelPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getLevelByLevelPublicId(@PathVariable String levelPublicId) {
 

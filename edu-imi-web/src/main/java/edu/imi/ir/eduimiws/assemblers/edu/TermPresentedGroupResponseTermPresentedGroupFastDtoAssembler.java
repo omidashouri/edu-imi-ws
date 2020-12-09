@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
-import edu.imi.ir.eduimiws.controllers.v1.*;
+import edu.imi.ir.eduimiws.controllers.edu.v1.*;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.TermPresentedGroupResponseTermPresentedGroupFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.TermPresentedGroupFastDto;

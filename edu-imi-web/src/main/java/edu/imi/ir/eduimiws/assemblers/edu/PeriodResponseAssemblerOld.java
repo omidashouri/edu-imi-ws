@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
 import edu.imi.ir.eduimiws.controllers.crm.v1.UserController;
-import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.PeriodController;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseMapper;

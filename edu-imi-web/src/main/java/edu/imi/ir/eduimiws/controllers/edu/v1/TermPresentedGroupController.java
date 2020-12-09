@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.controllers.v1;
+package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.TermPresentedGroupResponseTermPresentedGroupFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.TermPresentedGroupEntity;

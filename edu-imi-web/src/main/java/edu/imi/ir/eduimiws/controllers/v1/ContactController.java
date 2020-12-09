@@ -37,10 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -97,19 +94,19 @@ public class ContactController {
     @PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<ContactResponse>> getContacts(@Parameter(hidden = true)
-                                                                 @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
-                                                                 @PageableDefault(page = 0, size= 10,value = 10)
-                                                                         Pageable pageable ){
+                                                                   @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                   @PageableDefault(page = 0, size = 10, value = 10)
+                                                                           Pageable pageable) {
 
         Page<ContactEntity> contactPages =
-                contactService.findAllContactEntityPages (pageable);
+                contactService.findAllContactEntityPages(pageable);
 
         Page<ContactFastDto> contactFastDtoPage = contactPages
-                .map(cp->contactFastDtoMapper
-                        .toContactFastDto(cp,new CycleAvoidingMappingContext()));
+                .map(cp -> contactFastDtoMapper
+                        .toContactFastDto(cp, new CycleAvoidingMappingContext()));
 
         PagedModel<ContactResponse> contactResponsePagedModel = contactPagedResourcesAssembler
-                .toModel(contactFastDtoPage,contactResponseAssembler);
+                .toModel(contactFastDtoPage, contactResponseAssembler);
 
         return ResponseEntity.ok(contactResponsePagedModel);
     }
@@ -121,19 +118,19 @@ public class ContactController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<ContactResponse>> getAllContacts(
             @Parameter(hidden = true)
-            @SortDefault(sort = "createDate",direction = Sort.Direction.DESC)
-            @PageableDefault(page = 0, size= 10)
-                    Pageable pageable){
+            @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size = 10)
+                    Pageable pageable) {
 
         Page<ContactEntity> contactPages =
                 contactService.findAllContactEntityPages(pageable);
 
         List<ContactEntity> contactEntities = StreamSupport
-                .stream(contactPages.spliterator(),false)
+                .stream(contactPages.spliterator(), false)
                 .collect(Collectors.toList());
 
         List<ContactFastDto> contactFastDtos = contactFastDtoMapper
-                .toContactFastDtos(contactEntities,new CycleAvoidingMappingContext());
+                .toContactFastDtos(contactEntities, new CycleAvoidingMappingContext());
 
         CollectionModel<ContactResponse> contactResponseCollectionModel =
                 contactResponseAssembler.toCollectionModel(contactFastDtos);
@@ -141,6 +138,67 @@ public class ContactController {
         return ResponseEntity.ok(contactResponseCollectionModel);
     }
 
+
+    @Operation(
+            summary = "Update Contact by public ID",
+            description = "Update contact by the public id",
+            tags = "contacts",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = ContactResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "period not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> updateContactByContactPublicId(@RequestBody ContactResponse contactResponse) {
+
+        String contactPublicId = contactResponse.getContactPublicId();
+        ContactEntity contact = null;
+        ContactFastDto contactFastDto;
+        try {
+            if (contactPublicId != null) {
+                contact = contactService.findContactEntityByContactApiPublicId(contactPublicId);
+            }
+            if (contact == null) {
+                return this.contactNotFound();
+            }
+
+            contactFastDto = contactResponseContactFastDtoMapper
+                    .toContactFastDto(contactResponse, new CycleAvoidingMappingContext());
+
+//            contact = contactService.
+
+/*            contactResponse =
+                    contactResponseAssembler.toModel(contactFastDto);*/
+
+            return ResponseEntity.ok(contactResponse);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+    }
 
     @Operation(
             summary = "Find Contact by public ID",
@@ -184,7 +242,7 @@ public class ContactController {
             }
 
             ContactFastDto contactFastDto =
-                    contactFastDtoMapper.toContactFastDto(contact,new CycleAvoidingMappingContext());
+                    contactFastDtoMapper.toContactFastDto(contact, new CycleAvoidingMappingContext());
 
             ContactResponse contactResponse =
                     contactResponseAssembler.toModel(contactFastDto);
@@ -270,7 +328,7 @@ public class ContactController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                        schema = @Schema(implementation = ContactResponse.class)
+                                            schema = @Schema(implementation = ContactResponse.class)
                                     )
                             )
                     ),
@@ -296,7 +354,7 @@ public class ContactController {
 
         List<ContactFastDto> contactFastDtos = contactService.findContactByNationalCode(nationalCode);
 
-        if(contactFastDtos==null || contactFastDtos.size() == 0){
+        if (contactFastDtos == null || contactFastDtos.size() == 0) {
             return this.contactNotFound();
         }
 

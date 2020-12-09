@@ -1,13 +1,13 @@
-package edu.imi.ir.eduimiws.controllers.v1;
+package edu.imi.ir.eduimiws.controllers.edu.v1;
 
-import edu.imi.ir.eduimiws.assemblers.edu.CourseResponseCourseFastDtoAssembler;
-import edu.imi.ir.eduimiws.domain.edu.CourseEntity;
+import edu.imi.ir.eduimiws.assemblers.edu.PeriodCourseResponsePeriodCourseFastDtoAssembler;
+import edu.imi.ir.eduimiws.domain.edu.PeriodCourseEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.edu.CourseFastDtoMapper;
-import edu.imi.ir.eduimiws.models.dto.edu.CourseFastDto;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodCourseFastDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodCourseFastDto;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
-import edu.imi.ir.eduimiws.models.response.edu.CourseResponse;
-import edu.imi.ir.eduimiws.services.edu.CourseService;
+import edu.imi.ir.eduimiws.models.response.edu.PeriodCourseResponse;
+import edu.imi.ir.eduimiws.services.edu.PeriodCourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -44,20 +44,20 @@ import java.util.stream.StreamSupport;
 
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
-@RequestMapping("/api/v1/courses")
+@RequestMapping("/api/v1/periodCourses")
 @RequiredArgsConstructor
-@Tag(name = "Courses", description = "The course API")
-public class CourseController {
+@Tag(name = "PeriodCourses", description = "The period course API")
+public class PeriodCourseController {
 
-    private final CourseService courseService;
-    private final CourseResponseCourseFastDtoAssembler courseResponseCourseFastDtoAssembler;
-    private final PagedResourcesAssembler<CourseFastDto> courseFastDtoPagedResourcesAssembler;
-    private final CourseFastDtoMapper courseFastDtoMapper;
+    private final PeriodCourseService periodCourseService;
+    private final PeriodCourseResponsePeriodCourseFastDtoAssembler periodCourseResponsePeriodCourseFastDtoAssembler;
+    private final PagedResourcesAssembler<PeriodCourseFastDto> periodCourseFastDtoPagedResourcesAssembler;
+    private final PeriodCourseFastDtoMapper periodCourseFastDtoMapper;
 
     @Operation(
-            summary = "find All courses",
-            description = "Search course detail pageable",
-            tags = "courses",
+            summary = "find All periodCourses",
+            description = "Search periodCourse detail pageable",
+            tags = "periodCourses",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -69,7 +69,7 @@ public class CourseController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                            schema = @Schema(implementation = CourseResponse.class)
+                                            schema = @Schema(implementation = PeriodCourseResponse.class)
                                     )
                             )
                     ),
@@ -90,55 +90,55 @@ public class CourseController {
             })
     @PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<PagedModel<CourseResponse>> getPeriods(@Parameter(hidden = true)
-                                                                 @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
-                                                                 @PageableDefault(page = 0, size = 10, value = 10)
-                                                                         Pageable pageable) {
+    public ResponseEntity<PagedModel<PeriodCourseResponse>> getPeriods(@Parameter(hidden = true)
+                                                                       @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                       @PageableDefault(page = 0, size = 10, value = 10)
+                                                                               Pageable pageable) {
 
-        Page<CourseEntity> coursePages =
-                courseService.findAllByPageable(pageable);
+        Page<PeriodCourseEntity> periodCoursePages =
+                periodCourseService.findAllByPageable(pageable);
 
-        Page<CourseFastDto> courseFastDtoPage = coursePages
-                .map(p -> courseFastDtoMapper
-                        .toCourseFastDto(p, new CycleAvoidingMappingContext()));
+        Page<PeriodCourseFastDto> periodCourseFastDtoPage = periodCoursePages
+                .map(p -> periodCourseFastDtoMapper
+                        .toPeriodCourseFastDto(p, new CycleAvoidingMappingContext()));
 
-        PagedModel<CourseResponse> courseResponsePagedModel = courseFastDtoPagedResourcesAssembler
-                .toModel(courseFastDtoPage, courseResponseCourseFastDtoAssembler);
+        PagedModel<PeriodCourseResponse> periodCourseResponsePagedModel = periodCourseFastDtoPagedResourcesAssembler
+                .toModel(periodCourseFastDtoPage, periodCourseResponsePeriodCourseFastDtoAssembler);
 
-        return ResponseEntity.ok(courseResponsePagedModel);
+        return ResponseEntity.ok(periodCourseResponsePagedModel);
     }
 
     @Operation(hidden = true)
     @PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<CollectionModel<CourseResponse>> getAllCourses(
+    public ResponseEntity<CollectionModel<PeriodCourseResponse>> getAllPeriodCourses(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
             @PageableDefault(page = 0, size = 10)
                     Pageable pageable) {
 
-        Page<CourseEntity> coursePages =
-                courseService.findAllByPageable(pageable);
+        Page<PeriodCourseEntity> periodCoursePages =
+                periodCourseService.findAllByPageable(pageable);
 
-        List<CourseEntity> courseEntities = StreamSupport
-                .stream(coursePages.spliterator(), false)
+        List<PeriodCourseEntity> periodCourseEntities = StreamSupport
+                .stream(periodCoursePages.spliterator(), false)
                 .collect(Collectors.toList());
 
-        List<CourseFastDto> courseFastDtos = courseFastDtoMapper
-                .toCourseFastDtos(courseEntities, new CycleAvoidingMappingContext());
+        List<PeriodCourseFastDto> periodCourseFastDtos = periodCourseFastDtoMapper
+                .toPeriodCourseFastDtos(periodCourseEntities, new CycleAvoidingMappingContext());
 
-        CollectionModel<CourseResponse> courseResponseCollectionModel =
-                courseResponseCourseFastDtoAssembler.toCollectionModel(courseFastDtos);
+        CollectionModel<PeriodCourseResponse> periodCourseResponseCollectionModel =
+                periodCourseResponsePeriodCourseFastDtoAssembler.toCollectionModel(periodCourseFastDtos);
 
-        return ResponseEntity.ok(courseResponseCollectionModel);
+        return ResponseEntity.ok(periodCourseResponseCollectionModel);
     }
 
 
     @Operation(
-            summary = "Find Course by public ID",
-            description = "Search course by the public id",
-            tags = "courses",
+            summary = "Find PeriodCourse by public ID",
+            description = "Search periodCourse by the public id",
+            tags = "periodCourses",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -147,12 +147,12 @@ public class CourseController {
                             responseCode = "200",
                             description = "successful operation",
                             content = @Content(
-                                    schema = @Schema(implementation = CourseResponse.class)
+                                    schema = @Schema(implementation = PeriodCourseResponse.class)
                             )
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "course not found",
+                            description = "periodCourse not found",
                             content = @Content(
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
@@ -166,35 +166,34 @@ public class CourseController {
                     )
             }
     )
-    @GetMapping(path = "/{coursePublicId}",
+    @GetMapping(path = "/{periodCoursePublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getCourseByCoursePublicId(@PathVariable String coursePublicId) {
+    public ResponseEntity<?> getPeriodCourseByPeriodCoursePublicId(@PathVariable String periodCoursePublicId) {
 
         try {
-            CourseEntity course = courseService.findByCoursePublicId(coursePublicId);
-            if (course == null) {
-                return this.courseNotFound();
+            PeriodCourseEntity periodCourse = periodCourseService.findByPeriodCoursePublicId(periodCoursePublicId);
+            if (periodCourse == null) {
+                return this.periodCourseNotFound();
             }
 
-            CourseFastDto courseFastDto = courseFastDtoMapper
-                    .toCourseFastDto(course, new CycleAvoidingMappingContext());
+            PeriodCourseFastDto periodCourseFastDto = periodCourseFastDtoMapper
+                    .toPeriodCourseFastDto(periodCourse, new CycleAvoidingMappingContext());
 
-            CourseResponse courseResponse =
-                    courseResponseCourseFastDtoAssembler.toModel(courseFastDto);
+            PeriodCourseResponse periodCourseResponse =
+                    periodCourseResponsePeriodCourseFastDtoAssembler.toModel(periodCourseFastDto);
 
-            return ResponseEntity.ok(courseResponse);
+            return ResponseEntity.ok(periodCourseResponse);
 
         } catch (Exception ex) {
             return (ResponseEntity<?>) ResponseEntity.badRequest();
         }
     }
 
-    private ResponseEntity<?> courseNotFound() {
+    private ResponseEntity<?> periodCourseNotFound() {
         return new ResponseEntity<>(
                 new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
-                        , "requested course not found")
+                        , "requested periodCourse not found")
                 , HttpStatus.NOT_FOUND
         );
     }
-
 }

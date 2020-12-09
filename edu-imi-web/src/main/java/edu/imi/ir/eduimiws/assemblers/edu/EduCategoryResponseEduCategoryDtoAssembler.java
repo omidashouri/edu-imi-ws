@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
-import edu.imi.ir.eduimiws.controllers.v1.EduCategoryController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.EduCategoryController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.EduCategoryResponseEduCategoryDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.EduCategoryDto;

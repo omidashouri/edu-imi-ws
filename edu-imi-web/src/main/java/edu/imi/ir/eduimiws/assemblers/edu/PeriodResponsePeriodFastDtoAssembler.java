@@ -1,10 +1,10 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
 import edu.imi.ir.eduimiws.controllers.crm.v1.UserController;
-import edu.imi.ir.eduimiws.controllers.v1.EduCategoryController;
-import edu.imi.ir.eduimiws.controllers.v1.FieldController;
-import edu.imi.ir.eduimiws.controllers.v1.LevelController;
-import edu.imi.ir.eduimiws.controllers.v1.PeriodController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.EduCategoryController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.FieldController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.LevelController;
+import edu.imi.ir.eduimiws.controllers.edu.v1.PeriodController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodResponsePeriodFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
