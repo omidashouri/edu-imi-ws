@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.services.edu;
 
+import edu.imi.ir.eduimiws.aop.annotation.PerformanceLogger;
 import edu.imi.ir.eduimiws.domain.edu.EduCategoryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ public interface EduCategoryService {
 
     EduCategoryEntity selectLastRecord();
 
+    @PerformanceLogger
     Page<EduCategoryEntity> findAllByOrderPageable(Pageable pageable);
 
     EduCategoryEntity findByEduCategoryPublicId(String eduCategoryPublicId);

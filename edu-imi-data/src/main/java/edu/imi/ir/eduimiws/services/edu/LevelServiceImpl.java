@@ -92,6 +92,7 @@ public class LevelServiceImpl implements LevelService {
 
     @Override
     public Long selectLevelLastSequenceNumber() {
+        log.info("salam");
         return levelRepository.selectLastSequenceNumber();
     }
 }

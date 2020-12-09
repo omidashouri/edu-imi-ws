@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.services.edu;
 
+import edu.imi.ir.eduimiws.aop.annotation.PerformanceLogger;
 import edu.imi.ir.eduimiws.domain.edu.EduCategoryEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.EduCategoryDtoMapper;
@@ -39,6 +40,7 @@ public class EduCategoryServiceImpl implements EduCategoryService{
         return eduCategoryRepository.findFirstByOrderByIdDesc();
     }
 
+    @PerformanceLogger
     @Override
     public Page<EduCategoryEntity> findAllByOrderPageable(Pageable pageable) {
         Page<EduCategoryEntity> eduCategoryPages = eduCategoryRepository

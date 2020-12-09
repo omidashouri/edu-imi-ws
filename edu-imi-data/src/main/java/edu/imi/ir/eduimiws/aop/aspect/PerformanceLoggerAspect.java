@@ -23,8 +23,6 @@ public class PerformanceLoggerAspect {
             long finishTime = System.currentTimeMillis();
             Duration duration = Duration.ofMillis(finishTime - startTime);
             log.info(String.format("Duration of %s execution was %s", proceedingJoinPoint.getSignature(), duration));
-            log.trace(String.format("Duration of %s execution was %s", proceedingJoinPoint.getSignature(), duration));
-            System.out.println(String.format("Duration of %s execution was %s", proceedingJoinPoint.getSignature(), duration));
         }
     }
 }
