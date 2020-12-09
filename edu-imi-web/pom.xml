@@ -17,15 +17,11 @@
 
     <properties>
         <jquery-ui.version>1.12.1</jquery-ui.version>
-        <!--        <bootstrap.version>4.3.1</bootstrap.version>-->
         <bootstrap.version>4.5.3</bootstrap.version>
         <bootstrap-datepicker.version>1.9.0</bootstrap-datepicker.version>
         <org.webjars.jquery.version>3.5.1</org.webjars.jquery.version>
-        <!--        <popper.js.version>1.15.0</popper.js.version>-->
         <popper.js.version>2.5.2</popper.js.version>
-        <!--        <jackson-dataformat-xml.version>2.10.0</jackson-dataformat-xml.version>-->
         <jackson-dataformat-xml.version>2.11.3</jackson-dataformat-xml.version>
-        <!--        <org.springdoc.version>1.4.8</org.springdoc.version>-->
         <org.springdoc.version>1.3.0</org.springdoc.version>
     </properties>
 
@@ -35,12 +31,6 @@
             <groupId>education.imi.ir</groupId>
             <version>0.0.1-SNAPSHOT</version>
             <exclusions>
-                <!--                <exclusion>
-                                   <groupId>org.codehaus.woodstox</groupId>
-                                   <artifactId>woodstox-core</artifactId>
-                               </exclusion>
-
-                               -->
                 <exclusion>
                     <groupId>com.fasterxml.woodstox</groupId>
                     <artifactId>woodstox-core</artifactId>
@@ -85,7 +75,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
-<!--            <version>${jackson-dataformat-xml.version}</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -193,10 +182,6 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
             <exclusions>
-                <!--               <exclusion>
-                                   <groupId>com.sun.xml.bind</groupId>
-                                   <artifactId>jaxb-osgi</artifactId>
-                               </exclusion>-->
                 <exclusion>
                     <groupId>javax.activation</groupId>
                     <artifactId>activation</artifactId>
@@ -207,22 +192,12 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>json-path</artifactId>
             <scope>test</scope>
-            <!--            <exclusions>
-                            <exclusion>
-                                <groupId>com.sun.xml.bind</groupId>
-                                <artifactId>jaxb-osgi</artifactId>
-                            </exclusion>
-                        </exclusions>-->
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
             <scope>test</scope>
             <exclusions>
-                <!--                <exclusion>
-                                    <groupId>com.sun.xml.bind</groupId>
-                                    <artifactId>jaxb-osgi</artifactId>
-                                </exclusion>-->
                 <exclusion>
                     <groupId>com.google.code.findbugs</groupId>
                     <artifactId>jsr305</artifactId>
@@ -233,24 +208,16 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-mock-mvc</artifactId>
             <scope>test</scope>
-            <!--            <exclusions>
-                            <exclusion>
-                                <groupId>com.sun.xml.bind</groupId>
-                                <artifactId>jaxb-osgi</artifactId>
-                            </exclusion>
-                        </exclusions>-->
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>${org.springdoc.version}</version>
-            <!--            <version>1.3.0</version>-->
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
             <version>${org.springdoc.version}</version>
-            <!--            <version>1.3.0</version>-->
             <exclusions>
                 <exclusion>
                     <groupId>io.github.classgraph</groupId>
@@ -262,13 +229,11 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-data-rest</artifactId>
             <version>${org.springdoc.version}</version>
-            <!--            <version>1.3.0</version>-->
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-security</artifactId>
             <version>${org.springdoc.version}</version>
-            <!--            <version>1.3.0</version>-->
         </dependency>
 
     </dependencies>

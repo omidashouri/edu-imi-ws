@@ -29,13 +29,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
         <jaxb.version>2.3.1</jaxb.version>
-        <!--        <jaxb.version>2.3.0</jaxb.version>-->
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <!--        <org.mapstruct.version>1.4.0.Final</org.mapstruct.version>-->
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
-        <!--        <spring-boot.run.jvmArguments>-Duser.timezone=UTC</spring-boot.run.jvmArguments>-->
     </properties>
 
     <dependencies>
