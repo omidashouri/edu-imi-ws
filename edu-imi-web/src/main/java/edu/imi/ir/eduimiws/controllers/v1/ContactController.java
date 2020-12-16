@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 
+import com.google.common.base.Joiner;
 import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
@@ -13,6 +14,11 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
+import edu.imi.ir.eduimiws.specifications.SearchCriteriaOld;
+import edu.imi.ir.eduimiws.specifications.SearchOperation;
+import edu.imi.ir.eduimiws.specifications.crm.ContactPredicateBuilder;
+import edu.imi.ir.eduimiws.specifications.crm.ContactSpecification;
+import edu.imi.ir.eduimiws.specifications.crm.ContactSpecificationBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -39,8 +45,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -56,6 +65,9 @@ public class ContactController {
     private final ContactFastDtoMapper contactFastDtoMapper;
     private final ContactResponseAssembler contactResponseAssembler;
     private final PagedResourcesAssembler<ContactFastDto> contactPagedResourcesAssembler;
+    private final ContactSpecificationBuilder contactSpecificationBuilder;
+    private final ContactSpecification contactSpecification;
+    private final ContactPredicateBuilder contactPredicateBuilder;
 
     @Operation(
             summary = "find All contacts",
@@ -248,6 +260,58 @@ public class ContactController {
                     contactResponseAssembler.toModel(contactFastDto);
 
             return ResponseEntity.ok(contactResponse);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+    }
+
+
+    @GetMapping(path = "/search/{searchString}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getContactBySearch(@PathVariable String searchString) {
+
+        List<ContactEntity> contacts;
+        ContactPredicateBuilder contactPredicateBuilder2 = new ContactPredicateBuilder();
+        List<SearchCriteriaOld> searchCriteriaOlds = new ArrayList<>();
+        try {
+            if (searchString != null) {
+//                Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS);
+                String operationSetExper = Joiner.on("|").join(SearchOperation.SIMPLE_OPERATION_SET);
+                Pattern pattern = Pattern
+                        .compile("(\\p{Punct}?)(\\w+?)(" + operationSetExper + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?),", Pattern.UNICODE_CHARACTER_CLASS);
+                Matcher matcher = pattern.matcher(searchString + ",");
+/*                while (matcher.find()) {
+                    contactPredicateBuilder2
+                            .with(matcher.group(1),
+                                    matcher.group(2),
+                                    matcher.group(3),
+                                    matcher.group(5),
+                                    matcher.group(4),
+                                    matcher.group(6));
+*//*                    contactPredicateBuilder
+                            .with(matcher.group(1),
+                                    matcher.group(2),
+                                    matcher.group(3),
+                                    matcher.group(5),
+                                    matcher.group(4),
+                                    matcher.group(6));*//*
+                }*/
+                searchCriteriaOlds = contactPredicateBuilder.createListSecrchCriteria(matcher);
+            }
+
+            Long contact = contactService.countByPredicate(contactPredicateBuilder.build(searchCriteriaOlds));
+
+            contacts = contactService.findAllByPredicate(contactPredicateBuilder.build(searchCriteriaOlds));
+
+            if (contacts != null && contacts.size() > 0) {
+                List<ContactFastDto> contactFastDtos =
+                        contactFastDtoMapper.toContactFastDtos(contacts, new CycleAvoidingMappingContext());
+
+                CollectionModel<ContactResponse> contactResponseCollectionModel =
+                        contactResponseAssembler.toCollectionModel(contactFastDtos);
+                return ResponseEntity.ok(contactResponseCollectionModel);
+            } else return ResponseEntity.ok(this.contactNotFound());
 
         } catch (Exception ex) {
             return (ResponseEntity<?>) ResponseEntity.badRequest();

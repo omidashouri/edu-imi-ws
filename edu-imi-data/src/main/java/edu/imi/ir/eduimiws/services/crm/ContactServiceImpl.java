@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 
+import com.google.common.collect.Iterables;
+import com.querydsl.core.types.Predicate;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
@@ -13,7 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 @Service
@@ -30,7 +35,7 @@ public class ContactServiceImpl implements ContactService {
         List<ContactEntity> contactEntities = contactRepository
                 .findContactEntitiesByNationCode(nationalCode);
         List<ContactFastDto> contactFastDtos = contactFastDtoMapper
-                .toContactFastDtos(contactEntities,new CycleAvoidingMappingContext());
+                .toContactFastDtos(contactEntities, new CycleAvoidingMappingContext());
         return contactFastDtos;
     }
 
@@ -73,6 +78,22 @@ public class ContactServiceImpl implements ContactService {
         ContactEntity contact;
 
         return null;
+    }
+
+    @Override
+    public Long countByPredicate(Predicate predicate) {
+        Long contactCount = Long.valueOf(contactRepository.count(predicate));
+        return contactCount != null ? contactCount.longValue() : null;
+    }
+
+    @Override
+    public List<ContactEntity> findAllByPredicate(Predicate predicate) {
+        List<ContactEntity> contacts = new ArrayList<>();
+        if (Iterables.size(contactRepository.findAll(predicate)) > 0) {
+            contacts = StreamSupport.stream(contactRepository.findAll(predicate).spliterator(), false).
+                    collect(Collectors.toList());
+        }
+        return contacts;
     }
 
 //NU

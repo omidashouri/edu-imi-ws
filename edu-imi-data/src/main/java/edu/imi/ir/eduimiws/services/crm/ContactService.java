@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 
+import com.querydsl.core.types.Predicate;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,10 @@ public interface ContactService {
     ContactEntity saveContact(ContactEntity newContact);
 
     ContactEntity updateContact(ContactFastDto contactFastDto);
+
+    Long countByPredicate(Predicate predicate);
+
+    List<ContactEntity> findAllByPredicate(Predicate predicate);
 
 }
 
