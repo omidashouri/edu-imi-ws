@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 
 import com.google.common.base.Joiner;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
@@ -13,6 +14,7 @@ import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
+import edu.imi.ir.eduimiws.predicates.v2.QueryDSLPredicatesBuilderSe;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.specifications.SearchCriteriaOld;
 import edu.imi.ir.eduimiws.specifications.SearchOperation;
@@ -312,6 +314,69 @@ public class ContactController {
                         contactResponseAssembler.toCollectionModel(contactFastDtos);
                 return ResponseEntity.ok(contactResponseCollectionModel);
             } else return ResponseEntity.ok(this.contactNotFound());
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+    }
+
+
+    @GetMapping(path = "/search2/{searchString}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getContactBySearch2(@PathVariable String searchString) {
+
+        List<ContactEntity> contacts;
+        ContactPredicateBuilder contactPredicateBuilder2 = new ContactPredicateBuilder();
+        List<SearchCriteriaOld> searchCriteriaOlds = new ArrayList<>();
+        try {
+            if (searchString != null) {
+//                Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS);
+                String operationSetExper = Joiner.on("|").join(SearchOperation.SIMPLE_OPERATION_SET);
+                Pattern pattern = Pattern
+                        .compile("(\\p{Punct}?)(\\w+?)(" + operationSetExper + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?),", Pattern.UNICODE_CHARACTER_CLASS);
+                Matcher matcher = pattern.matcher(searchString + ",");
+/*                while (matcher.find()) {
+                    contactPredicateBuilder2
+                            .with(matcher.group(1),
+                                    matcher.group(2),
+                                    matcher.group(3),
+                                    matcher.group(5),
+                                    matcher.group(4),
+                                    matcher.group(6));
+*//*                    contactPredicateBuilder
+                            .with(matcher.group(1),
+                                    matcher.group(2),
+                                    matcher.group(3),
+                                    matcher.group(5),
+                                    matcher.group(4),
+                                    matcher.group(6));*//*
+                }*/
+                searchCriteriaOlds = contactPredicateBuilder.createListSecrchCriteria(matcher);
+            }
+
+
+/*            BooleanExpression expression = new QueryDSLPredicatesBuilder<>(ContactEntity.class)
+                    .withSearchString(searchString).build();
+
+            Long contact = contactService.countByPredicate(expression);*/
+
+            BooleanExpression expression = new QueryDSLPredicatesBuilderSe<>(ContactEntity.class)
+                    .with(searchString).build();
+
+            Long contact = contactService.countByPredicate(expression);
+
+/*            contacts = contactService.findAllByPredicate(contactPredicateBuilder.build(searchCriteriaOlds));
+
+            if (contacts != null && contacts.size() > 0) {
+                List<ContactFastDto> contactFastDtos =
+                        contactFastDtoMapper.toContactFastDtos(contacts, new CycleAvoidingMappingContext());
+
+                CollectionModel<ContactResponse> contactResponseCollectionModel =
+                        contactResponseAssembler.toCollectionModel(contactFastDtos);
+                return ResponseEntity.ok(contactResponseCollectionModel);
+            } else return ResponseEntity.ok(this.contactNotFound());*/
+
+            return ResponseEntity.ok(contact.toString());
 
         } catch (Exception ex) {
             return (ResponseEntity<?>) ResponseEntity.badRequest();

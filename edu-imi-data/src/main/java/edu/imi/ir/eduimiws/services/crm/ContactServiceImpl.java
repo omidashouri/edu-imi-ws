@@ -79,9 +79,11 @@ public class ContactServiceImpl implements ContactService {
 
         return null;
     }
-
+//    containsIc(ContactEntity.firstName,omid)   eqIc(contactEntity.firstName,omid)
+//true = true && eqIc(contactEntity.firstName,omid) eqIc(contactEntity.firstName,omid)
     @Override
     public Long countByPredicate(Predicate predicate) {
+        Object o = contactRepository.count(predicate);
         Long contactCount = Long.valueOf(contactRepository.count(predicate));
         return contactCount != null ? contactCount.longValue() : null;
     }
