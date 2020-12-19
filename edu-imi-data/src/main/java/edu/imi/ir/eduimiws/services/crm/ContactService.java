@@ -32,7 +32,7 @@ public interface ContactService {
 
     Long countByPredicate(Predicate predicate);
 
-    List<ContactEntity> findAllByPredicate(Predicate predicate);
+    Page<ContactEntity> findAllByPredicate(Predicate predicate, Pageable pageable);
 
 }
 

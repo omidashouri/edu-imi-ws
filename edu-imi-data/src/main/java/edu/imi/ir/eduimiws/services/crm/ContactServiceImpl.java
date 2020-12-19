@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 
-import com.google.common.collect.Iterables;
 import com.querydsl.core.types.Predicate;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
@@ -15,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 @Service
@@ -79,8 +75,7 @@ public class ContactServiceImpl implements ContactService {
 
         return null;
     }
-//    containsIc(ContactEntity.firstName,omid)   eqIc(contactEntity.firstName,omid)
-//true = true && eqIc(contactEntity.firstName,omid) eqIc(contactEntity.firstName,omid)
+
     @Override
     public Long countByPredicate(Predicate predicate) {
         Object o = contactRepository.count(predicate);
@@ -89,13 +84,13 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<ContactEntity> findAllByPredicate(Predicate predicate) {
-        List<ContactEntity> contacts = new ArrayList<>();
-        if (Iterables.size(contactRepository.findAll(predicate)) > 0) {
+    public Page<ContactEntity> findAllByPredicate(Predicate predicate, Pageable pageable) {
+        Page<ContactEntity> contactPages = contactRepository.findAll(predicate, pageable);
+/*        if (Iterables.size(contactRepository.findAll(predicate, pageable) ) > 0) {
             contacts = StreamSupport.stream(contactRepository.findAll(predicate).spliterator(), false).
                     collect(Collectors.toList());
-        }
-        return contacts;
+        }*/
+        return contactPages;
     }
 
 //NU

@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 
-import com.google.common.base.Joiner;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
@@ -16,13 +15,13 @@ import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
 import edu.imi.ir.eduimiws.predicates.v2.QueryDSLPredicatesBuilderSe;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
-import edu.imi.ir.eduimiws.specifications.SearchCriteriaOld;
-import edu.imi.ir.eduimiws.specifications.SearchOperation;
 import edu.imi.ir.eduimiws.specifications.crm.ContactPredicateBuilder;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecification;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecificationBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,11 +46,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -269,114 +265,79 @@ public class ContactController {
     }
 
 
-    @GetMapping(path = "/search/{searchString}",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getContactBySearch(@PathVariable String searchString) {
-
-        List<ContactEntity> contacts;
-        ContactPredicateBuilder contactPredicateBuilder2 = new ContactPredicateBuilder();
-        List<SearchCriteriaOld> searchCriteriaOlds = new ArrayList<>();
-        try {
-            if (searchString != null) {
-//                Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS);
-                String operationSetExper = Joiner.on("|").join(SearchOperation.SIMPLE_OPERATION_SET);
-                Pattern pattern = Pattern
-                        .compile("(\\p{Punct}?)(\\w+?)(" + operationSetExper + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?),", Pattern.UNICODE_CHARACTER_CLASS);
-                Matcher matcher = pattern.matcher(searchString + ",");
-/*                while (matcher.find()) {
-                    contactPredicateBuilder2
-                            .with(matcher.group(1),
-                                    matcher.group(2),
-                                    matcher.group(3),
-                                    matcher.group(5),
-                                    matcher.group(4),
-                                    matcher.group(6));
-*//*                    contactPredicateBuilder
-                            .with(matcher.group(1),
-                                    matcher.group(2),
-                                    matcher.group(3),
-                                    matcher.group(5),
-                                    matcher.group(4),
-                                    matcher.group(6));*//*
-                }*/
-                searchCriteriaOlds = contactPredicateBuilder.createListSecrchCriteria(matcher);
+    @Operation(
+            summary = "Find Contact by Query",
+            description = "Search contact by Query",
+            tags = "contacts",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @Parameters(value = {
+            @Parameter(
+                    in = ParameterIn.QUERY,
+                    name = "criteria",
+                    required = true,
+                    description = " criteria in the format mean array of PROPERTY:VALUE. " +
+                            "PROPERTY are entity properties. " +
+                            "use COLON (:) as separator between property and its value. " +
+                            "use COMMA (,) as AND between each criteria. " +
+                            "use QUOTATION (') as OR between each criteria. ",
+                    example = "lastName:عاشوری,'firstName:امید",
+                    content = @Content(schema = @Schema(type = "string"))
+            )
+    })
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = ContactResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "period not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
             }
-
-            Long contact = contactService.countByPredicate(contactPredicateBuilder.build(searchCriteriaOlds));
-
-            contacts = contactService.findAllByPredicate(contactPredicateBuilder.build(searchCriteriaOlds));
-
-            if (contacts != null && contacts.size() > 0) {
-                List<ContactFastDto> contactFastDtos =
-                        contactFastDtoMapper.toContactFastDtos(contacts, new CycleAvoidingMappingContext());
-
-                CollectionModel<ContactResponse> contactResponseCollectionModel =
-                        contactResponseAssembler.toCollectionModel(contactFastDtos);
-                return ResponseEntity.ok(contactResponseCollectionModel);
-            } else return ResponseEntity.ok(this.contactNotFound());
-
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
-
-
-    @GetMapping(path = "/search2/{searchString}",
+    )
+    @PageableAsQueryParam
+    @GetMapping(path = "/search/{criteria}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getContactBySearch2(@PathVariable String searchString) {
+    public ResponseEntity<?> getContactBySearch(@PathVariable String criteria,
+                                                @Parameter(hidden = true)
+                                                @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                @PageableDefault(page = 0, size = 10, value = 10)
+                                                        Pageable pageable) {
 
-        List<ContactEntity> contacts;
-        ContactPredicateBuilder contactPredicateBuilder2 = new ContactPredicateBuilder();
-        List<SearchCriteriaOld> searchCriteriaOlds = new ArrayList<>();
         try {
-            if (searchString != null) {
-//                Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS);
-                String operationSetExper = Joiner.on("|").join(SearchOperation.SIMPLE_OPERATION_SET);
-                Pattern pattern = Pattern
-                        .compile("(\\p{Punct}?)(\\w+?)(" + operationSetExper + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?),", Pattern.UNICODE_CHARACTER_CLASS);
-                Matcher matcher = pattern.matcher(searchString + ",");
-/*                while (matcher.find()) {
-                    contactPredicateBuilder2
-                            .with(matcher.group(1),
-                                    matcher.group(2),
-                                    matcher.group(3),
-                                    matcher.group(5),
-                                    matcher.group(4),
-                                    matcher.group(6));
-*//*                    contactPredicateBuilder
-                            .with(matcher.group(1),
-                                    matcher.group(2),
-                                    matcher.group(3),
-                                    matcher.group(5),
-                                    matcher.group(4),
-                                    matcher.group(6));*//*
-                }*/
-                searchCriteriaOlds = contactPredicateBuilder.createListSecrchCriteria(matcher);
+            if (criteria == null || criteria.length() == 0) {
+                return this.contactNotFound();
             }
-
-
-/*            BooleanExpression expression = new QueryDSLPredicatesBuilder<>(ContactEntity.class)
-                    .withSearchString(searchString).build();
-
-            Long contact = contactService.countByPredicate(expression);*/
 
             BooleanExpression expression = new QueryDSLPredicatesBuilderSe<>(ContactEntity.class)
-                    .with(searchString).build();
+                    .with(criteria).build();
 
-            Long contact = contactService.countByPredicate(expression);
+            Page<ContactEntity> contactPages =
+                    contactService.findAllByPredicate(expression, pageable);
 
-/*            contacts = contactService.findAllByPredicate(contactPredicateBuilder.build(searchCriteriaOlds));
+            Page<ContactFastDto> contactFastDtoPage = contactPages
+                    .map(cp -> contactFastDtoMapper
+                            .toContactFastDto(cp, new CycleAvoidingMappingContext()));
 
-            if (contacts != null && contacts.size() > 0) {
-                List<ContactFastDto> contactFastDtos =
-                        contactFastDtoMapper.toContactFastDtos(contacts, new CycleAvoidingMappingContext());
+            PagedModel<ContactResponse> contactResponsePagedModel = contactPagedResourcesAssembler
+                    .toModel(contactFastDtoPage, contactResponseAssembler);
 
-                CollectionModel<ContactResponse> contactResponseCollectionModel =
-                        contactResponseAssembler.toCollectionModel(contactFastDtos);
-                return ResponseEntity.ok(contactResponseCollectionModel);
-            } else return ResponseEntity.ok(this.contactNotFound());*/
-
-            return ResponseEntity.ok(contact.toString());
+            return ResponseEntity.ok(contactResponsePagedModel);
 
         } catch (Exception ex) {
             return (ResponseEntity<?>) ResponseEntity.badRequest();

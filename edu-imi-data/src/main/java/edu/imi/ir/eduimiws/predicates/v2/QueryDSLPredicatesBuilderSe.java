@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.predicates.v2;
 
 import com.google.common.base.Joiner;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import edu.imi.ir.eduimiws.exceptions.QueryDSLPredicateBuildException;
 import edu.imi.ir.eduimiws.specifications.SearchOperation;
 
@@ -9,13 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class QueryDSLPredicatesBuilderSe<T> {
     private final List<SearchCriteriaSe> searchCriteriaListSe;
+    private final List<SearchCriteriaSe> andCriteriaList;
+    private final List<SearchCriteriaSe> orCriteriaList;
     private final Class<T> entityClass;
 
     public QueryDSLPredicatesBuilderSe(Class<T> entityClass) {
         this.searchCriteriaListSe = new ArrayList<>();
+        this.andCriteriaList = new ArrayList<>();
+        this.orCriteriaList = new ArrayList<>();
         this.entityClass = entityClass;
     }
 
@@ -69,8 +75,11 @@ public class QueryDSLPredicatesBuilderSe<T> {
 
         final List<BooleanExpression> andPredicates = new ArrayList<>();
         QueryDSLPredicateSe<T> predicate;
-//        omiddo: in 'searchCriteriaListSe' remove those which are not null and have 1 in orPredicate before enter loop
-        for (final SearchCriteriaSe param : searchCriteriaListSe) {
+
+        andCriteriaList.addAll(searchCriteriaListSe.stream()
+                .filter(l -> l.getOrPredicate().equalsIgnoreCase("0"))
+                .collect(Collectors.toList()));
+        for (final SearchCriteriaSe param : andCriteriaList) {
             predicate = new QueryDSLPredicateSe<>(param);
             final BooleanExpression exp = predicate.getPredicate(entityClass);
             if (exp != null) {
@@ -79,7 +88,10 @@ public class QueryDSLPredicatesBuilderSe<T> {
         }
 
         final List<BooleanExpression> orPredicates = new ArrayList<>();
-        for (final SearchCriteriaSe param : searchCriteriaListSe) {
+        orCriteriaList.addAll(searchCriteriaListSe.stream()
+                .filter(l -> l.getOrPredicate().equalsIgnoreCase("1"))
+                .collect(Collectors.toList()));
+        for (final SearchCriteriaSe param : orCriteriaList) {
             if (param.getOrPredicate() != null && param.getOrPredicate().equalsIgnoreCase("1")) {
                 predicate = new QueryDSLPredicateSe<>(param);
                 final BooleanExpression exp = predicate.getPredicate(entityClass);
@@ -89,14 +101,12 @@ public class QueryDSLPredicatesBuilderSe<T> {
             }
         }
 
-        BooleanExpression result = andPredicates.get(0);
-        for (int i = 1; i < andPredicates.size(); i++) {
-            result = result.and(andPredicates.get(i));
+        BooleanExpression result = Expressions.asBoolean(true).isTrue();
+        for (BooleanExpression andPredicate : andPredicates) {
+            result = result.and(andPredicate);
         }
-        if (orPredicates.size() > 0) {
-            for (int i = 1; i < orPredicates.size(); i++) {
-                result = result.or(orPredicates.get(i));
-            }
+        for (BooleanExpression orPredicate : orPredicates) {
+            result = result.or(orPredicate);
         }
 
         return result;
