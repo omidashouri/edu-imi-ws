@@ -18,10 +18,9 @@ import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.specifications.crm.ContactPredicateBuilder;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecification;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecificationBuilder;
+import edu.imi.ir.eduimiws.utilities.QueryDslAsQueryParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -271,20 +270,6 @@ public class ContactController {
             tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
-    @Parameters(value = {
-            @Parameter(
-                    in = ParameterIn.QUERY,
-                    name = "criteria",
-                    required = true,
-                    description = " criteria in the format mean array of PROPERTY:VALUE. " +
-                            "PROPERTY are entity properties. " +
-                            "use COLON (:) as separator between property and its value. " +
-                            "use COMMA (,) as AND between each criteria. " +
-                            "use QUOTATION (') as OR between each criteria. ",
-                    example = "lastName:عاشوری,'firstName:امید",
-                    content = @Content(schema = @Schema(type = "string"))
-            )
-    })
     @ApiResponses(
             value = {
                     @ApiResponse(
@@ -310,6 +295,7 @@ public class ContactController {
                     )
             }
     )
+    @QueryDslAsQueryParam
     @PageableAsQueryParam
     @GetMapping(path = "/search/{criteria}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
