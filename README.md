@@ -6960,3 +6960,35 @@ ehcache.xml:
         }
         
 ---
+
+
+DTO:
+before Entity to Dto for joins 
+if not initialize -> set to null child
+example: AccountMapper
+handleLazyFetchExceptionEntity
+handleLazyFetchExceptionDto
+
+
+
+
+contactEntities.forEach(ce->{
+                    try {
+                        PersistenceUtils.cleanFromProxies(ce);
+                        for (PropertyDescriptor pd : Introspector.getBeanInfo(ce.getClass()).getPropertyDescriptors()) {
+                            if (!persistenceUnitUtil.isLoaded(ce, pd.getName())) {
+                                String setterName = pd.getWriteMethod().getName();
+                                Method setterMethod = ce.getClass().getDeclaredMethod(setterName,pd.getPropertyType());
+                                setterMethod.setAccessible(true);
+                                setterMethod.invoke(ce,pd.getPropertyType().getDeclaredConstructor().newInstance());
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
+List<PropertyDescriptor> propertyDescriptorsError =
+                    Arrays.stream(Introspector.getBeanInfo(contactEntity1.getClass()).getPropertyDescriptors())
+                            .filter(e -> !persistenceUnitUtil.isLoaded(contactEntity1, e.getName()))
+                            .collect(Collectors.toList());
