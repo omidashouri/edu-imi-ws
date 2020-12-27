@@ -1,12 +1,12 @@
 package edu.imi.ir.eduimiws.models.dto.crm;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrganizationClassDto implements Serializable {

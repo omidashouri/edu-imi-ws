@@ -1,18 +1,22 @@
 package edu.imi.ir.eduimiws.models.dto.crm;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
+import java.util.List;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyDto {
+public class CompanyDto implements Serializable {
 
     private static final long serialVersionUID = 1907555625339107890L;
 
-    //    later complete this
     private String companyPublicId;
+    private Long companyApiId;
+    private CompanyApiDto companyApi;
 
     private Long id;
 
@@ -36,17 +40,30 @@ public class CompanyDto {
 
     private String ownership;
 
-    private ParameterDto paremeterId;
+    private ParameterDto parameter;
+    private String parameterPublicId;
+    private Long parameterId;
 
     private String territory;
 
-    private LanguageDto languageId;
+    private LanguageDto language;
+    //    not created
+    private String languagePublicId;
+    private Long languageId;
 
     private String calenderType;
 
-    private AccountDto mainAccountId;
+    private AccountDto mainAccount;
+    private String mainAccountPublicId;
+    private Long mainAccountId;
 
     private String isMain;
 
     private String logo;
+
+
+    private List<ContactDto> contactEntities;
+
+    private List<PersonDto> personEntities;
+
 }

@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.utilities;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.cxf.common.util.CollectionUtils;
 import org.hibernate.collection.internal.PersistentSet;
 import org.hibernate.collection.spi.PersistentCollection;
@@ -17,6 +18,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Stream;
 
+
+@Slf4j
 public class PersistenceUtils {
 
     public static <T> void cleanFromProxyCollection(Collection<T> values) {
@@ -44,13 +47,13 @@ public class PersistenceUtils {
                         setterMethod.invoke(value, pde.getPropertyType().getDeclaredConstructor().newInstance());
 
                     } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
+                        log.warn(e.getMessage(), e);
                     } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                        log.warn(e.getMessage(), e);
                     } catch (InstantiationException e) {
-                        e.printStackTrace();
+                        log.warn(e.getMessage(), e);
                     } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                        log.warn(e.getMessage(), e);
                     }
 
                 });
@@ -72,7 +75,7 @@ public class PersistenceUtils {
             try {
                 beanInfo = Introspector.getBeanInfo(value.getClass());
             } catch (IntrospectionException e) {
-                // LOGGER.warn(e.getMessage(), e);
+                log.warn(e.getMessage(), e);
             }
             if (beanInfo != null) {
                 for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
@@ -86,7 +89,7 @@ public class PersistenceUtils {
                             cleanFromProxies(fieldValue, handledObjects);
                         }
                     } catch (Exception e) {
-                        // LOGGER.warn(e.getMessage(), e);
+                        log.warn(e.getMessage(), e);
                     }
                 }
             }

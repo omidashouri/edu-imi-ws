@@ -1,12 +1,12 @@
 package edu.imi.ir.eduimiws.models.dto.crm;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContactDto implements Serializable {
@@ -14,12 +14,15 @@ public class ContactDto implements Serializable {
     private static final long serialVersionUID = 7055740784295092359L;
 
     private Long id;
+    private String contactPublicId;
 
-    private AccountDto account;
-
+    private AccountDto accountDto;
     private Long accountId;
+    private String accountPublicId;
 
-    private ParameterDto salutation;
+    private ParameterDto salutationDto;
+    private Long salutationId;
+    private String salutationPublicId;
 
     private String firstName;
 
@@ -41,17 +44,23 @@ public class ContactDto implements Serializable {
 
     private String email;
 
-    private ParameterDto currency;
+    private ParameterDto currencyDto;
+    private Long currencyId;
+    private String currencyPublicId;
 
     private String department;
 
     private String role;
 
-    private ContactDto manager;
+    private ContactDto managerDto;
+    private Long managerId;
+    private String managerPublicId;
 
     private String managerPhone;
 
-    private ContactDto assistant;
+    private ContactDto assistantDto;
+    private Long assistantId;
+    private String assistantPublicId;
 
     private String assistantPhone;
 
@@ -67,21 +76,33 @@ public class ContactDto implements Serializable {
 
     private String description;
 
-    private ContactDto parent;
+    private ContactDto parentDto;
+    private Long parentId;
+    private String parentPublicId;
 
-    private ParameterDto country;
+    private ParameterDto countryDto;
+    private Long countryId;
+    private String countryPublicId;
 
-    private ParameterDto state;
+    private ParameterDto stateDto;
+    private Long stateId;
+    private String statePublicId;
 
-    private ParameterDto city;
+    private ParameterDto cityDto;
+    private Long cityId;
+    private String cityPublicId;
 
     private String addressPhone;
 
     private String address;
 
-    private CompanyDto company;
+    private CompanyDto companyDto;
+    private Long companyId;
+    private String companyPublicId;
 
-    private OrganizationDto organization;
+    private OrganizationDto organizationDto;
+    private Long organizationId;
+    private String organizationPublicId;
 
     private Long leadSourceId;
 
@@ -103,9 +124,13 @@ public class ContactDto implements Serializable {
 
     private String allowMail;
 
-    private ParameterDto addressType;
+    private ParameterDto addressTypeDto;
+    private Long addressTypeId;
+    private String addressTypePublicId;
 
-    private PersonDto userCreator;
+    private PersonDto userCreatorDto;
+    private Long userCreatorId;
+    private String userCreatorPublicId;
 
     private String fromCity;
 
@@ -115,7 +140,9 @@ public class ContactDto implements Serializable {
 
     private String fatherName;
 
-    private ParameterDto birthCity;
+    private ParameterDto birthCityDto;
+    private Long birthCityId;
+    private String birthCityPublicId;
 
     private String accessType;
 
@@ -125,11 +152,17 @@ public class ContactDto implements Serializable {
 
     private String llastName;
 
-    private ParameterDto religion;
+    private ParameterDto religionDto;
+    private Long religionId;
+    private String religionPublicId;
 
-    private ParameterDto militaryService;
+    private ParameterDto militaryServiceDto;
+    private Long militaryServiceId;
+    private String militaryServicePublicId;
 
-    private ParameterDto eduLevel;
+    private ParameterDto eduLevelDto;
+    private Long eduLevelId;
+    private String eduLevelPublicId;
 
     private String fieldName;
 
@@ -143,13 +176,19 @@ public class ContactDto implements Serializable {
 
     private String entranceDate;
 
-    private ParameterDto contractType;
+    private ParameterDto contractTypeDto;
+    private Long contractTypeId;
+    private String contractTypePublicId;
 
     private String university;
 
-    private ParameterDto insuranceKind;
+    private ParameterDto insuranceKindDto;
+    private Long insuranceKindId;
+    private String insuranceKindPublicId;
 
-    private ParameterDto insuranceBox;
+    private ParameterDto insuranceBoxDto;
+    private Long insuranceBoxId;
+    private String insuranceBoxPublicId;
 
     private String gender1;
 
@@ -169,7 +208,9 @@ public class ContactDto implements Serializable {
 
     private String createDate;
 
-    private PersonDto userEditor;
+    private PersonDto userEditorDto;
+    private Long userEditorId;
+    private String userEditorPublicId;
 
     private String convertDateWho;
 
@@ -179,6 +220,12 @@ public class ContactDto implements Serializable {
 
     private String lfromCity;
 
-    private ParameterDto lfromCityEntity;
+    private ParameterDto lfromCityEntityDto;
+    private Long lfromCityEntityId;
+    private String lfromCityEntityPublicId;
+
+    private ContactApiDto contactApiDto;
+    private Long contactApiId;
+
 
 }

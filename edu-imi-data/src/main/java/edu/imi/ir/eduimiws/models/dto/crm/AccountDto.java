@@ -1,12 +1,13 @@
 package edu.imi.ir.eduimiws.models.dto.crm;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import edu.imi.ir.eduimiws.domain.crm.AccountApiEntity;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDto implements Serializable {
@@ -14,18 +15,29 @@ public class AccountDto implements Serializable {
     private static final long serialVersionUID = -7634450278509108686L;
 
     private Long id;
+    private String accountPublicId;
 
-    private CompanyDto company;
+    private CompanyDto companyDto;
+    private Long companyId;
+    private String companyPublicId;
 
-    private AccountDto parentAccount;
+    private AccountDto parentAccountDto;
+    private Long parentAccountId;
+    private String parentAccountPublicId;
 
-    private ContactDto primaryContact;
+    private ContactDto primaryContactDto;
+    private Long primaryContactId;
+    private String primaryContactPublicId;
 
     private Long relationTypeId;
 
-    private LanguageDto language;
+    private LanguageDto languageDto;
+    private Long languageId;
+    private String languagePublicId;
 
-    private ParameterDto currency;
+    private ParameterDto currencyDto;
+    private Long currencyId;
+    private String currencyPublicId;
 
     private String accountName;
 
@@ -51,11 +63,17 @@ public class AccountDto implements Serializable {
 
     private String annualRevenue;
 
-    private ParameterDto country;
+    private ParameterDto countryDto;
+    private Long countryId;
+    private String countryPublicId;
 
-    private ParameterDto state;
+    private ParameterDto stateDto;
+    private Long stateId;
+    private String statePublicId;
 
-    private ParameterDto city;
+    private ParameterDto cityDto;
+    private Long cityId;
+    private String cityPublicId;
 
     private String addressPhone;
 
@@ -65,7 +83,9 @@ public class AccountDto implements Serializable {
 
     private Long industryId;
 
-    private ParameterDto addressType;
+    private ParameterDto addressTypeDto;
+    private Long addressTypeId;
+    private String addressTypePublicId;
 
     private String accountLogo;
 
@@ -79,17 +99,25 @@ public class AccountDto implements Serializable {
 
     private String printAddressTitle;
 
-    private ParameterDto region;
+    private ParameterDto regionDto;
+    private Long regionId;
+    private String regionPublicId;
 
-    private PersonDto userCreator;
+    private PersonDto userCreatorDto;
+    private Long userCreatorId;
+    private String userCreatorPublicId;
 
     private String createDate;
 
-    private PersonDto userLastEditor;
+    private PersonDto userLastEditorDto;
+    private Long userLastEditorId;
+    private String userLastEditorPublicId;
 
     private String lastEditDate;
 
-    private ContactDto userFollower;
+    private ContactDto userFollowerDto;
+    private Long userFollowerId;
+    private String userFollowerPublicId;
 
     private String generalCode;
 
@@ -141,7 +169,9 @@ public class AccountDto implements Serializable {
 
     private String ibmcAdditionalInfo;
 
-    private ParameterDto siteCity;
+    private ParameterDto siteCityDto;
+    private Long siteCityId;
+    private String siteCityPublicId;
 
     private String siteStateId;
 
@@ -155,7 +185,14 @@ public class AccountDto implements Serializable {
 
     private String orgNationalCode;
 
-    private ParameterDto employee;
+    private ParameterDto employeeDto;
+    private Long employeeId;
+    private String employeePublicId;
 
-    private ParameterDto annualRevenueEntity;
+    private ParameterDto annualRevenueEntityDto;
+    private Long annualRevenueEntityId;
+    private String annualRevenueEntityPublicId;
+
+    private AccountApiEntity accountApiDto;
+    private Long accountApiId;
 }
