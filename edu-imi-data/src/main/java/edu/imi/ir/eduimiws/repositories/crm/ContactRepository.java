@@ -28,7 +28,7 @@ public interface ContactRepository extends CrudRepository<ContactEntity, Long>,
               QuerydslBindings bindings, QContactEntity root) {
             bindings.bind(String.class)
                     .first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
-//            bindings.excluding(root.email);
+            bindings.excluding(root.id);
       }
 
 

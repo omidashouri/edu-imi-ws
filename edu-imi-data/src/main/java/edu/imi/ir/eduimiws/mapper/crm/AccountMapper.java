@@ -4,6 +4,7 @@ package edu.imi.ir.eduimiws.mapper.crm;
 import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
+import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.hibernate.Hibernate;
 import org.mapstruct.*;
 
@@ -17,7 +18,6 @@ public interface AccountMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "accountApi", target = "accountApiDto"),
-//            @Mapping(source = "accountApi", target = "accountPublicId", qualifiedByName = "accountPublicIdQualifier"),
             @Mapping(source = "accessType", target = "accessType"),
             @Mapping(source = "accountAdditionalInfo", target = "accountAdditionalInfoId"),
             @Mapping(source = "accountEnName", target = "accountEnName"),
@@ -106,25 +106,13 @@ public interface AccountMapper {
     default void handleLazyFetchExceptionDto(AccountDto accountDto) {
 
         if (accountDto != null) {
-            //        Account Public Id
+            //        Account Public Id\
+            PersistenceUtils.cleanFromProxyByNull(accountDto);
             if (!Hibernate.isInitialized(accountDto.getAccountApiDto())) {
                 accountDto.setAccountApiDto(null);
             }
         }
     }
-
-
-
-/*    @Named(value = "accountPublicIdQualifier")
-    default String handleAccountPubicId(AccountApiEntity accountApi,
-                                        @Context CycleAvoidingMappingContext context) {
-        if (accountApi != null) {
-            if (accountApi.getAccountPublicId() != null) {
-                return accountApi.getAccountPublicId();
-            }
-        }
-        return null;
-    }*/
 
     @AfterMapping
     default void handleDtoAccountPublicId(AccountEntity accountEntity,
