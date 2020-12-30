@@ -2,7 +2,6 @@ package edu.imi.ir.eduimiws.utilities;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.proxy.HibernateProxy;
-import org.springframework.validation.ObjectError;
 
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUtil;
@@ -19,7 +18,93 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-public class PersistenceUtils {
+public class PersistenceUtils2 {
+
+
+/*    public static <T> void cleanFromProxyByGetMethod(T value) {
+
+        try {
+
+            PersistenceUtil persistenceUnitUtil = Persistence.getPersistenceUtil();
+            List<PropertyDescriptor> propertyDescriptors =
+                    Stream
+                            .of(Introspector.getBeanInfo(value.getClass()).getPropertyDescriptors())
+                            .filter(l -> l.getPropertyType().getName().contains("imi.ir"))
+//                            .filter(pd -> !persistenceUnitUtil.isLoaded(value, pd.getName()))
+                            .collect(Collectors.toList());
+
+
+            List<String> readMethods =
+                    Stream
+                            .of(Introspector.getBeanInfo(value.getClass()).getPropertyDescriptors())
+                            .map(PropertyDescriptor::getReadMethod)
+                            .map(Method::getName)
+                            .collect(Collectors.toList());
+
+            List<String> nameMethod =
+                    Stream.of(value.getClass().getDeclaredMethods())
+                            .map(Method::getName)
+                            .collect(Collectors.toList());
+
+
+            propertyDescriptors.forEach(pd -> {
+                try {
+                    String packageName = pd.getReadMethod().getReturnType().getName();
+                    Class<?> clazz = Class.forName(packageName);
+                    Object returnObject = clazz.getConstructor().newInstance();
+
+                    if (isClassCollection(pd.getPropertyType())) {
+                        System.out.println("List");
+                    } else {
+                        String getterName = pd.getReadMethod().getName();
+                        String setterName = pd.getWriteMethod().getName();
+                        Method getterMethod = value.getClass().getDeclaredMethod(getterName);
+                        getterMethod.setAccessible(true);
+                        returnObject = getterMethod.invoke(value);
+
+                        if (returnObject instanceof HibernateProxy) {
+                            Field setterField = value.getClass().getDeclaredField(pd.getName());
+                            setterField.setAccessible(true);
+                            setterField.set(value, null);
+                        }
+                    }
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+
+    private static List<Field> getAllFieldsRecursive(List<Field> fields, Class<?> type) {
+        for (Field field : type.getDeclaredFields()) {
+            fields.add(field);
+        }
+
+        if (type.getSuperclass() != null) {
+            fields = getAllFieldsRecursive(fields, type.getSuperclass());
+        }
+
+        return fields;
+    }
+
+    //values property haye har entity hastand ke imi darand
+    //dar har bar ejra shodan property ra check mikonad va agar imi daraad vared in method mikonad
+    public static List<Object> cleanFromProxyByReadMethodRecursive(List<Object> values, Object value) {
+        //filter all values that have property of imi
+        for(Object o : values){
+            //add those value to list
+            values.add(o);
+        }
+        //if value have property that have imi
+        if(value !=null){
+            //again varede in method kon
+            values = cleanFromProxyByReadMethodRecursive(values,value);
+        }
+        return values;
+    }
 
     public static <T> void cleanFromProxyByReadMethod(T value) {
 
@@ -93,7 +178,7 @@ public class PersistenceUtils {
         return (T) returnObject;
     }
 
-    @SuppressWarnings("unchecked")
+
     private static <T, S extends Method> Object propertyReadAsObjectFromEntityAndMethod(T value, S method) {
         Object returnObject = null;
         try {
@@ -179,6 +264,42 @@ public class PersistenceUtils {
                 });
     }
 
+
+    private static List<Field> getAllFieldsByMethod(Method method) {
+        List<Field> fields = new ArrayList<Field>();
+        try {
+            String packageName = method.getReturnType().getName();
+            Class<?> clazz = Class.forName(packageName);
+            fields = Arrays.asList(clazz.getFields());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return fields;
+    }
+
+/*    private static List<Field> getAllFields(Object obj) {
+        List<Field> fields = new ArrayList<Field>();
+        getAllFieldsRecursive(fields, obj.getClass());
+        return fields;
+    }
+
+    private static List<Field> getAllFieldsRecursive(List<Field> fields, Class<?> type) {
+        for (Field field : type.getDeclaredFields()) {
+            fields.add(field);
+        }
+
+        if (type.getSuperclass() != null) {
+            fields = getAllFieldsRecursive(fields, type.getSuperclass());
+        }
+
+        return fields;
+    }*/
+
+    public static BiPredicate<Object, Method> isEntityReadPropertyDescriptorNull = (value, method) -> {
+        Object o = propertyReadAsObjectFromEntityAndMethod(value, method);
+        return (o == null);
+    };
+
     public static BiPredicate<Object, Method> isEntityReadPropertyDescriptorInstanceOfHibernateProxy = (value, method) -> {
         Object o = propertyReadAsObjectFromEntityAndMethod(value, method);
         return (o instanceof HibernateProxy);
@@ -204,4 +325,18 @@ public class PersistenceUtils {
     private static Predicate<Class> isClassCollection = (c) -> {
         return Collection.class.isAssignableFrom(c) || Map.class.isAssignableFrom(c);
     };
+
+
+
+/*    Object value2 =
+        propertyReadAsObjectFromEntityAndMethod(value,
+                    entityToPropertyDescriptors(value).collect(Collectors.toList()).get(1).getReadMethod()
+        );
+
+    isEntityReadPropertyDescriptorInstanceOfHibernateProxy.test(
+    entityToPropertyDescriptors(value2).filter(isPropertyEntity).collect(Collectors.toList()).get(0),
+        entityToPropertyDescriptors(value2).filter(isPropertyEntity).collect(Collectors.toList()).get(0).getReadMethod()
+    );*/
+
+
 }
