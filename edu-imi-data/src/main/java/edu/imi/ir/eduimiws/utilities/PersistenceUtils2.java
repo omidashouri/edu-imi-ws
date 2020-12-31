@@ -90,6 +90,9 @@ public class PersistenceUtils2 {
         return fields;
     }
 
+
+//    if entity get id is not null return true
+
     //values property haye har entity hastand ke imi darand
     //dar har bar ejra shodan property ra check mikonad va agar imi daraad vared in method mikonad
     public static List<Object> cleanFromProxyByReadMethodRecursive(List<Object> values, Object value) {

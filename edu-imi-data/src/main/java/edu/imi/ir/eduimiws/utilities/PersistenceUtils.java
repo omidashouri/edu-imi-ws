@@ -6,6 +6,7 @@ import org.springframework.validation.ObjectError;
 
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUtil;
+import java.beans.BeanDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -21,16 +22,45 @@ import java.util.stream.Stream;
 @Slf4j
 public class PersistenceUtils {
 
+    private static List<String> objectNames = new ArrayList<>();
+
     public static <T> void cleanFromProxyByReadMethod(T value) {
+
+        objectNames.add(value.getClass().getName());
 
         entityToPropertyDescriptors(value)
                 .filter(isPropertyEntity)
+                .peek(pde -> System.out.println(pde.getName()))
+                .filter(pdn -> !isEntityReadPropertyDescriptorInstanceNull.test(value, pdn.getReadMethod()))
+                .peek(pde -> System.out.println(pde.getName()))
                 .filter(pde -> isEntityReadPropertyDescriptorInstanceOfHibernateProxy.test(value, pde.getReadMethod()))
                 .forEach(pde -> nullFieldByEntityAndPropertyDescriptor(value, pde));
 
         entityToPropertyDescriptors(value)
                 .filter(isPropertyDescriptorClassCollection)
                 .forEach(cpd -> nullFieldByEntityAndPropertyDescriptor(value, cpd));
+
+
+        entityToPropertyDescriptors(value)
+                .filter(isPropertyEntity)
+                .filter(pdn -> !isEntityReadPropertyDescriptorInstanceNull.test(value, pdn.getReadMethod()))
+                .map(pd -> propertyReadAsObjectFromEntityAndMethod(value, pd.getReadMethod()))
+                .peek(pde -> System.out.println(pde.getClass()))
+                .filter(pdf->!objectNames.contains(pdf.getClass().getName()))
+                .forEach(pd->cleanFromProxyByReadMethod(pd));
+
+/*        entityToPropertyDescriptors(value)
+                .filter(isPropertyEntity)
+                .filter(pdn -> !isEntityReadPropertyDescriptorInstanceNull.test(value, pdn.getReadMethod()))
+                .map(pd -> propertyReadAsObjectFromEntityAndMethod(value, pd.getReadMethod()))
+                .peek(pde -> System.out.println(pde.getClass()))
+                .forEach(o -> {
+                    System.out.println(o.getClass());
+                    if(!objectNames.contains(o.getClass().getName())){
+                        cleanFromProxyByReadMethod(o);
+                    }
+                });*/
+        System.out.println("salam");
     }
 
 
@@ -85,6 +115,9 @@ public class PersistenceUtils {
         try {
             String packageName = method.getReturnType().getName();
             Class<?> clazz = Class.forName(packageName);
+            if (clazz == null) {
+                return null;
+            }
             returnObject = clazz.getConstructor().newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException |
                 InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -98,7 +131,9 @@ public class PersistenceUtils {
         Object returnObject = null;
         try {
             returnObject = newInstanceFromMethodReturnType(method);
-
+            if (returnObject == null) {
+                return null;
+            }
             String getterName = method.getName();
             Method getterMethod = value.getClass().getDeclaredMethod(getterName);
             getterMethod.setAccessible(true);
@@ -178,6 +213,12 @@ public class PersistenceUtils {
                     }
                 });
     }
+
+
+    public static BiPredicate<Object, Method> isEntityReadPropertyDescriptorInstanceNull = (value, method) -> {
+        Object o = propertyReadAsObjectFromEntityAndMethod(value, method);
+        return (o == null);
+    };
 
     public static BiPredicate<Object, Method> isEntityReadPropertyDescriptorInstanceOfHibernateProxy = (value, method) -> {
         Object o = propertyReadAsObjectFromEntityAndMethod(value, method);
