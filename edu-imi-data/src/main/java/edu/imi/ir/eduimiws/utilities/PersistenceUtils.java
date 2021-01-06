@@ -1,18 +1,15 @@
 package edu.imi.ir.eduimiws.utilities;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
-import org.springframework.validation.ObjectError;
 
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUtil;
-import java.beans.BeanDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -29,10 +26,26 @@ public class PersistenceUtils {
         objectNames.add(value.getClass().getName());
 
         entityToPropertyDescriptors(value)
-                .filter(isPropertyEntity)
-                .peek(pde -> System.out.println(pde.getName()))
+                .filter(isPropertyDescriptorReadMethodInstanceIMI)
                 .filter(pdn -> !isEntityReadPropertyDescriptorInstanceNull.test(value, pdn.getReadMethod()))
-                .peek(pde -> System.out.println(pde.getName()))
+                .filter(pde -> isEntityReadPropertyDescriptorInstanceOfHibernateProxy.test(value, pde.getReadMethod()))
+                .forEach(pde -> nullFieldByEntityAndPropertyDescriptor(value, pde));
+
+        entityToPropertyDescriptors(value)
+                .filter(isPropertyDescriptorReadMethodInstanceIMI)
+                .filter(isPropertyDescriptorReadMethodInterface)
+                .forEach(cpi -> setNullInstanceFieldByPropertyDescriptor(value, cpi));
+
+        entityToPropertyDescriptors(value)
+                .filter(isPropertyDescriptorReadMethodInstanceIMI)
+                .filter(pdn -> !isEntityReadPropertyDescriptorInstanceNull.test(value, pdn.getReadMethod()))
+                .map(pd -> propertyReadAsObjectFromEntityAndMethod(value, pd.getReadMethod()))
+                .filter(pdf -> !objectNames.contains(pdf.getClass().getName()))
+                .forEach(pd -> cleanFromProxyByReadMethod(pd));
+
+/*        entityToPropertyDescriptors(value)
+                .filter(isPropertyEntity)
+                .filter(pdn -> !isEntityReadPropertyDescriptorInstanceNull.test(value, pdn.getReadMethod()))
                 .filter(pde -> isEntityReadPropertyDescriptorInstanceOfHibernateProxy.test(value, pde.getReadMethod()))
                 .forEach(pde -> nullFieldByEntityAndPropertyDescriptor(value, pde));
 
@@ -40,14 +53,12 @@ public class PersistenceUtils {
                 .filter(isPropertyDescriptorClassCollection)
                 .forEach(cpd -> nullFieldByEntityAndPropertyDescriptor(value, cpd));
 
-
         entityToPropertyDescriptors(value)
                 .filter(isPropertyEntity)
                 .filter(pdn -> !isEntityReadPropertyDescriptorInstanceNull.test(value, pdn.getReadMethod()))
                 .map(pd -> propertyReadAsObjectFromEntityAndMethod(value, pd.getReadMethod()))
-                .peek(pde -> System.out.println(pde.getClass()))
                 .filter(pdf->!objectNames.contains(pdf.getClass().getName()))
-                .forEach(pd->cleanFromProxyByReadMethod(pd));
+                .forEach(pd->cleanFromProxyByReadMethod(pd));*/
 
 /*        entityToPropertyDescriptors(value)
                 .filter(isPropertyEntity)
@@ -60,7 +71,7 @@ public class PersistenceUtils {
                         cleanFromProxyByReadMethod(o);
                     }
                 });*/
-        System.out.println("salam");
+//        System.out.println("salam");
     }
 
 
@@ -110,7 +121,32 @@ public class PersistenceUtils {
         return propertyDescriptors;
     }
 
-    private static <T extends Object> T newInstanceFromMethodReturnType(Method method) {
+    private static <T extends Object> T newInstanceInterfaceFromReadMethod(Method method) {
+        Object returnObject = null;
+        try {
+            ParameterizedType parameterizedType = (ParameterizedType) method.getGenericReturnType();
+            Type[] types = parameterizedType.getActualTypeArguments();
+            if (types == null || types.length == 0) {
+                return null;
+            }
+            String packageName = types[0].getTypeName();
+            Class<?> clazz = Class.forName(packageName);
+            if (clazz == null) {
+                return null;
+            }
+            Object typeObject = clazz.getConstructor().newInstance();
+            List<Object> objects = new ArrayList<>();
+            objects.add(typeObject);
+            returnObject = objects;
+        } catch (ClassNotFoundException | NoSuchMethodException |
+                InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            log.warn(e.getMessage(), e);
+        }
+        return (T) returnObject;
+    }
+
+    //    #
+    private static <T extends Object> T newInstanceFromReadMethod(Method method) {
         Object returnObject = null;
         try {
             String packageName = method.getReturnType().getName();
@@ -126,11 +162,16 @@ public class PersistenceUtils {
         return (T) returnObject;
     }
 
+    //    #
     @SuppressWarnings("unchecked")
     private static <T, S extends Method> Object propertyReadAsObjectFromEntityAndMethod(T value, S method) {
         Object returnObject = null;
         try {
-            returnObject = newInstanceFromMethodReturnType(method);
+            if (method.getReturnType().isInterface()) {
+                return readMethodFromInstanceAndInterfaceMethod(value, method);
+            } else {
+                returnObject = newInstanceFromReadMethod(method);
+            }
             if (returnObject == null) {
                 return null;
             }
@@ -138,6 +179,27 @@ public class PersistenceUtils {
             Method getterMethod = value.getClass().getDeclaredMethod(getterName);
             getterMethod.setAccessible(true);
             returnObject = getterMethod.invoke(value);
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            log.warn(e.getMessage(), e);
+        }
+        return returnObject;
+    }
+
+    private static <T, S extends Method> Object readMethodFromInstanceAndInterfaceMethod(T value, S method) {
+        Object returnObject = null;
+        try {
+                returnObject = newInstanceInterfaceFromReadMethod(method);
+            if (returnObject == null) {
+                return HibernateProxy.class;
+            }
+            String getterName = method.getName();
+            Method getterMethod = value.getClass().getDeclaredMethod(getterName);
+            getterMethod.setAccessible(true);
+            if(Hibernate.isInitialized(getterMethod.invoke(value))){
+                returnObject = getterMethod.invoke(value);
+            }else{
+                returnObject = HibernateProxy.class;
+            }
         } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             log.warn(e.getMessage(), e);
         }
@@ -172,6 +234,17 @@ public class PersistenceUtils {
                         log.warn(e.getMessage(), e);
                     }
                 });
+    }
+
+
+    public static <T> void setNullInstanceFieldByPropertyDescriptor(T instance, PropertyDescriptor propertyDescriptor) {
+        try {
+            Field fieldInstance = instance.getClass().getDeclaredField(propertyDescriptor.getName());
+            fieldInstance.setAccessible(true);
+            fieldInstance.set(instance, null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            log.warn(e.getMessage(), e);
+        }
     }
 
     public static <T> void cleanAllFromProxyByNewInstance(Collection<T> values) {
@@ -237,6 +310,10 @@ public class PersistenceUtils {
         return pd.getPropertyType().getName().contains("imi.ir");
     };
 
+    private static Predicate<PropertyDescriptor> isPropertyDescriptorReadMethodInstanceIMI = (pd) -> {
+        return pd.getReadMethod().getGenericReturnType().getTypeName().contains("imi.ir");
+    };
+
     private static Predicate<PropertyDescriptor> isPropertyDescriptorClassCollection = (pd) -> {
         return Collection.class.isAssignableFrom(pd.getPropertyType()) ||
                 Map.class.isAssignableFrom(pd.getPropertyType());
@@ -245,4 +322,14 @@ public class PersistenceUtils {
     private static Predicate<Class> isClassCollection = (c) -> {
         return Collection.class.isAssignableFrom(c) || Map.class.isAssignableFrom(c);
     };
+
+    private static Predicate<PropertyDescriptor> isPropertyDescriptorReadMethodInterface = (c) -> {
+        return c.getReadMethod().getReturnType().isInterface();
+    };
+
+    public static BiPredicate<Field, PropertyDescriptor> isFieldNameEqualPropertyDescriptorName = (field, propertyDescriptor) -> {
+        return field.getName().equalsIgnoreCase(propertyDescriptor.getName());
+    };
+
+
 }

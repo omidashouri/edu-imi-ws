@@ -18,39 +18,40 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-public class PersistenceUtils3 {
+public class PersistenceUtils4 {
 
     private List<String> objectNames = new ArrayList<>();
+    private List<PropertyDescriptor> propertyDescriptors;
 
     public <T> void cleanFromProxyByReadMethod(T value) {
 
         objectNames.add(value.getClass().getName());
+        propertyDescriptors = new ArrayList<>();
 
-        entityToPropertyDescriptors(value)
-                .filter(Objects::nonNull)
-                .filter(pd -> !isPropertyDescriptorClassOrId.test(pd))
-                .filter(isPropertyDescriptorReadMethodInstanceIMI)
-                .filter(p -> !isPropertyDescriptorInstanceNull(value, p))
+        propertyDescriptors =
+                entityToPropertyDescriptors(value)
+                        .filter(Objects::nonNull)
+                        .filter(pd -> !isPropertyDescriptorClassOrId.test(pd))
+                        .filter(isPropertyDescriptorReadMethodInstanceIMI)
+                        .filter(p -> !isPropertyDescriptorInstanceNull(value, p))
+                        .collect(Collectors.toList());
+
+        propertyDescriptors
+                .stream()
                 .filter(pdpu -> isPropertyDescriptorInstanceOfHibernateProxy.test(value, pdpu))
-                .forEach(pdh -> setNullInstanceFieldByPropertyDescriptor(value, pdh));;
+                .forEach(pdh -> setNullInstanceFieldByPropertyDescriptor(value, pdh));
 
-        entityToPropertyDescriptors(value)
-                .filter(pd -> !isPropertyDescriptorClassOrId.test(pd))
-                .filter(isPropertyDescriptorReadMethodInstanceIMI)
-                .filter(p -> !isPropertyDescriptorInstanceNull(value, p))
+        propertyDescriptors
+                .stream()
                 .filter(pd -> !isPersistenceUnitLoaded.test(value, pd.getName()))
                 .forEach(pdi -> setNullInstanceFieldByPropertyDescriptor(value, pdi));
 
-        entityToPropertyDescriptors(value)
-                .filter(pd -> !isPropertyDescriptorClassOrId.test(pd))
-                .filter(isPropertyDescriptorReadMethodInstanceIMI)
+        propertyDescriptors
+                .stream()
                 .filter(p -> !isPropertyDescriptorInstanceNull(value, p))
                 .map(pd -> propertyReadAsObjectFromEntityAndMethod(value, pd.getReadMethod()))
                 .filter(pdf -> !objectNames.contains(pdf.getClass().getName()))
                 .forEach(pd -> cleanFromProxyByReadMethod(pd));
-
-
-
 
 
 /*        List<PropertyDescriptor> propertyDescriptors =
