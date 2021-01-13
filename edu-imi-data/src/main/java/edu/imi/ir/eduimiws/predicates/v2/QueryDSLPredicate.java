@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.predicates.v1;
+package edu.imi.ir.eduimiws.predicates.v2;
 
 import com.querydsl.core.types.dsl.*;
 import edu.imi.ir.eduimiws.exceptions.QueryDSLPredicateBuildException;
@@ -30,6 +30,12 @@ public class QueryDSLPredicate<T> {
                     }
                 case ";":
                     return path.containsIgnoreCase(criteria.getValue().toString());
+                case "**":
+                    return path.like("%" + criteria.getValue().toString() + "%");
+                case "*_":
+                    return path.like(criteria.getValue().toString() + "%");
+                case "_*":
+                    return path.like("%" + criteria.getValue().toString());
                 case "!":
                     return path.notEqualsIgnoreCase(criteria.getValue().toString());
                 default:
@@ -46,10 +52,14 @@ public class QueryDSLPredicate<T> {
                         return path.eq(value);
                     case "!":
                         return path.ne(value);
-                    case ">":
+                    case ">=":
                         return path.goe(value);
-                    case "<":
+                    case "=<":
                         return path.loe(value);
+                    case ">":
+                        return path.gt(value);
+                    case "<":
+                        return path.lt(value);
                     default:
                         throw new QueryDSLPredicateBuildException(criteria.getKey() + "'s search operator", criteria.getOperation(), "Valid Search Operator");
                 }

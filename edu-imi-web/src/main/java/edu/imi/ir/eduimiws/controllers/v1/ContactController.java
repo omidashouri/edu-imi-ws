@@ -13,7 +13,7 @@ import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
-import edu.imi.ir.eduimiws.predicates.v2.QueryDSLPredicatesBuilderSe;
+import edu.imi.ir.eduimiws.predicates.v2.QueryDSLPredicatesBuilder;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.specifications.crm.ContactPredicateBuilder;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecification;
@@ -103,7 +103,8 @@ public class ContactController {
     @PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<ContactResponse>> getContacts(@Parameter(hidden = true)
-                                                                   @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
+                                                                   @SortDefault(sort = "createDate",
+                                                                           direction = Sort.Direction.DESC)
                                                                    @PageableDefault(page = 0, size = 10, value = 10)
                                                                            Pageable pageable) {
 
@@ -310,7 +311,7 @@ public class ContactController {
                 return this.contactNotFound();
             }
 
-            BooleanExpression expression = new QueryDSLPredicatesBuilderSe<>(ContactEntity.class)
+            BooleanExpression expression = new QueryDSLPredicatesBuilder<>(ContactEntity.class)
                     .with(criteria).build();
 
             Page<ContactEntity> contactPages =

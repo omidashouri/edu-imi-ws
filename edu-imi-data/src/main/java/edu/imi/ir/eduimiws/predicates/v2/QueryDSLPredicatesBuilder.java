@@ -12,21 +12,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class QueryDSLPredicatesBuilderSe<T> {
-    private final List<SearchCriteriaSe> searchCriteriaListSe;
-    private final List<SearchCriteriaSe> andCriteriaList;
-    private final List<SearchCriteriaSe> orCriteriaList;
+public class QueryDSLPredicatesBuilder<T> {
+    private final List<SearchCriteria> searchCriteriaListSe;
+    private final List<SearchCriteria> andCriteriaList;
+    private final List<SearchCriteria> orCriteriaList;
     private final Class<T> entityClass;
 
-    public QueryDSLPredicatesBuilderSe(Class<T> entityClass) {
+    public QueryDSLPredicatesBuilder(Class<T> entityClass) {
         this.searchCriteriaListSe = new ArrayList<>();
         this.andCriteriaList = new ArrayList<>();
         this.orCriteriaList = new ArrayList<>();
         this.entityClass = entityClass;
     }
 
-    public QueryDSLPredicatesBuilderSe with(final String orPredicate, final String key, final String operation,
-                                            final Object value, final String prefix, final String suffix) {
+    public QueryDSLPredicatesBuilder with(final String orPredicate, final String key, final String operation,
+                                          final Object value, final String prefix, final String suffix) {
 
         String newOperation = null;
         String newOrPredicate;
@@ -50,12 +50,12 @@ public class QueryDSLPredicatesBuilderSe<T> {
         } else {
             newOrPredicate = "0";
         }
-        searchCriteriaListSe.add(new SearchCriteriaSe(newOrPredicate != null ? newOrPredicate : orPredicate,
+        searchCriteriaListSe.add(new SearchCriteria(newOrPredicate != null ? newOrPredicate : orPredicate,
                 key, newOperation != null ? newOperation : operation, value, prefix, suffix));
         return this;
     }
 
-    public QueryDSLPredicatesBuilderSe with(final String search) {
+    public QueryDSLPredicatesBuilder with(final String search) {
         String operationSetExper = Joiner.on("|").join(SearchOperation.SIMPLE_OPERATION_SET);
         Pattern pattern = Pattern
                 .compile("(\\p{Punct}?)(\\w+?)(" + operationSetExper + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?),",
@@ -74,13 +74,13 @@ public class QueryDSLPredicatesBuilderSe<T> {
         }
 
         final List<BooleanExpression> andPredicates = new ArrayList<>();
-        QueryDSLPredicateSe<T> predicate;
+        QueryDSLPredicate<T> predicate;
 
         andCriteriaList.addAll(searchCriteriaListSe.stream()
                 .filter(l -> l.getOrPredicate().equalsIgnoreCase("0"))
                 .collect(Collectors.toList()));
-        for (final SearchCriteriaSe param : andCriteriaList) {
-            predicate = new QueryDSLPredicateSe<>(param);
+        for (final SearchCriteria param : andCriteriaList) {
+            predicate = new QueryDSLPredicate<>(param);
             final BooleanExpression exp = predicate.getPredicate(entityClass);
             if (exp != null) {
                 andPredicates.add(exp);
@@ -91,9 +91,9 @@ public class QueryDSLPredicatesBuilderSe<T> {
         orCriteriaList.addAll(searchCriteriaListSe.stream()
                 .filter(l -> l.getOrPredicate().equalsIgnoreCase("1"))
                 .collect(Collectors.toList()));
-        for (final SearchCriteriaSe param : orCriteriaList) {
+        for (final SearchCriteria param : orCriteriaList) {
             if (param.getOrPredicate() != null && param.getOrPredicate().equalsIgnoreCase("1")) {
-                predicate = new QueryDSLPredicateSe<>(param);
+                predicate = new QueryDSLPredicate<>(param);
                 final BooleanExpression exp = predicate.getPredicate(entityClass);
                 if (exp != null) {
                     orPredicates.add(exp);
@@ -112,7 +112,7 @@ public class QueryDSLPredicatesBuilderSe<T> {
         return result;
     }
 
-    public List<SearchCriteriaSe> getSearchCriteriaListSe() {
+    public List<SearchCriteria> getSearchCriteriaListSe() {
         return searchCriteriaListSe;
     }
 }

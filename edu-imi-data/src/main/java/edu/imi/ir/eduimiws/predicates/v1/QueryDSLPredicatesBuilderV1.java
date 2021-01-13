@@ -10,21 +10,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class QueryDSLPredicatesBuilder<T> {
-    private final List<SearchCriteria> searchCriteriaList;
+public class QueryDSLPredicatesBuilderV1<T> {
+    private final List<SearchCriteriaV1> searchCriteriaV1List;
     private final Class<T> entityClass;
 
-    public QueryDSLPredicatesBuilder(Class<T> entityClass) {
-        this.searchCriteriaList = new ArrayList<>();
+    public QueryDSLPredicatesBuilderV1(Class<T> entityClass) {
+        this.searchCriteriaV1List = new ArrayList<>();
         this.entityClass = entityClass;
     }
 
-    public QueryDSLPredicatesBuilder with(final String key, final String operation, final Object value) {
-        searchCriteriaList.add(new SearchCriteria(key, operation, value));
+    public QueryDSLPredicatesBuilderV1 with(final String key, final String operation, final Object value) {
+        searchCriteriaV1List.add(new SearchCriteriaV1(key, operation, value));
         return this;
     }
 
-    public QueryDSLPredicatesBuilder with(final String search) {
+    public QueryDSLPredicatesBuilderV1 with(final String search) {
         Pattern pattern = Pattern.compile("([^,]+)([:;!<>])([^,]+)");
         Matcher matcher = pattern.matcher(search);
         while (matcher.find()) {
@@ -33,7 +33,7 @@ public class QueryDSLPredicatesBuilder<T> {
         return this;
     }
 
-    public QueryDSLPredicatesBuilder withSearchString(final String search) {
+    public QueryDSLPredicatesBuilderV1 withSearchString(final String search) {
         String operationSetExper = Joiner.on("|").join(SearchOperation.SIMPLE_OPERATION_SET);
         Pattern pattern = Pattern
                 .compile("(\\p{Punct}?)(\\w+?)(" + operationSetExper + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?),",
@@ -46,14 +46,14 @@ public class QueryDSLPredicatesBuilder<T> {
     }
 
     public BooleanExpression build() throws QueryDSLPredicateBuildException {
-        if (searchCriteriaList.size() == 0) {
+        if (searchCriteriaV1List.size() == 0) {
             return null;
         }
 
         final List<BooleanExpression> predicates = new ArrayList<>();
-        QueryDSLPredicate<T> predicate;
-        for (final SearchCriteria param : searchCriteriaList) {
-            predicate = new QueryDSLPredicate<>(param);
+        QueryDSLPredicateV1<T> predicate;
+        for (final SearchCriteriaV1 param : searchCriteriaV1List) {
+            predicate = new QueryDSLPredicateV1<>(param);
             final BooleanExpression exp = predicate.getPredicate(entityClass);
             if (exp != null) {
                 predicates.add(exp);
@@ -67,7 +67,7 @@ public class QueryDSLPredicatesBuilder<T> {
         return result;
     }
 
-    public List<SearchCriteria> getSearchCriteriaList() {
-        return searchCriteriaList;
+    public List<SearchCriteriaV1> getSearchCriteriaList() {
+        return searchCriteriaV1List;
     }
 }

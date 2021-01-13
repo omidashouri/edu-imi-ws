@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.predicates.v2;
+package edu.imi.ir.eduimiws.predicates.v1;
 
 import com.querydsl.core.types.dsl.*;
 import edu.imi.ir.eduimiws.exceptions.QueryDSLPredicateBuildException;
@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
-public class QueryDSLPredicateSe<T> {
-    private SearchCriteriaSe criteria;
+public class QueryDSLPredicateV1<T> {
+    private SearchCriteriaV1 criteria;
 
-    public QueryDSLPredicateSe(final SearchCriteriaSe criteria) {
+    public QueryDSLPredicateV1(final SearchCriteriaV1 criteria) {
         this.criteria = criteria;
     }
 
@@ -30,12 +30,6 @@ public class QueryDSLPredicateSe<T> {
                     }
                 case ";":
                     return path.containsIgnoreCase(criteria.getValue().toString());
-                case "**":
-                    return path.like("%" + criteria.getValue().toString() + "%");
-                case "*_":
-                    return path.like(criteria.getValue().toString() + "%");
-                case "_*":
-                    return path.like("%" + criteria.getValue().toString());
                 case "!":
                     return path.notEqualsIgnoreCase(criteria.getValue().toString());
                 default:
@@ -52,14 +46,10 @@ public class QueryDSLPredicateSe<T> {
                         return path.eq(value);
                     case "!":
                         return path.ne(value);
-                    case ">=":
-                        return path.goe(value);
-                    case "=<":
-                        return path.loe(value);
                     case ">":
-                        return path.gt(value);
+                        return path.goe(value);
                     case "<":
-                        return path.lt(value);
+                        return path.loe(value);
                     default:
                         throw new QueryDSLPredicateBuildException(criteria.getKey() + "'s search operator", criteria.getOperation(), "Valid Search Operator");
                 }

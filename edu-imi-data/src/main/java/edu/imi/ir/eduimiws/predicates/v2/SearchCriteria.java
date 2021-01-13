@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 
-public class SearchCriteriaSe implements Serializable {
+public class SearchCriteria implements Serializable {
 
         private static final long serialVersionUID = 6202682331223209100L;
 
@@ -15,8 +15,8 @@ public class SearchCriteriaSe implements Serializable {
         String prefix;
         String suffix;
 
-        public SearchCriteriaSe(final String orPredicate, final String key, final String operation,
-                                final Object value, final String prefix, final String suffix) {
+        public SearchCriteria(final String orPredicate, final String key, final String operation,
+                              final Object value, final String prefix, final String suffix) {
                 super();
                 this.orPredicate = orPredicate;
                 this.key = key;
@@ -56,7 +56,7 @@ public class SearchCriteriaSe implements Serializable {
                 if (this == o) return true;
                 if (o == null || getClass() != o.getClass()) return false;
 
-                SearchCriteriaSe that = (SearchCriteriaSe) o;
+                SearchCriteria that = (SearchCriteria) o;
 
                 return Objects.equals(orPredicate, that.orPredicate) &&
                         Objects.equals(key, that.key) &&
