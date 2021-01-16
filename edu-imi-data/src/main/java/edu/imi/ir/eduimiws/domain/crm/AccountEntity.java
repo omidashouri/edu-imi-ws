@@ -297,14 +297,12 @@ public class AccountEntity extends BaseEntity {
   @Column(name="ORG_NATIONAL_CODE")
   private String orgNationalCode;
 
-  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "EMPLOYEE_ID")
   private ParameterEntity employee;
 
-  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @ManyToOne
