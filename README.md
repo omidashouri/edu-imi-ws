@@ -12,17 +12,37 @@ EDU: EDU_LEVEL -> EDU_CATEGORY -> COURSE_CATEGORY -> TEAM -> TEAM_PRESENTED_COUR
 
 
   CREATE TABLE "CRM"."TBL_CONTACT_API" 
-     (	"ID" NUMBER NOT NULL ENABLE, 
-  	"CONTACT_PUBLIC_ID" NVARCHAR2(500) NOT NULL ENABLE, 
-  	"CREATOR_ID" NUMBER, 
-  	"CREATE_DATE_TS" TIMESTAMP (6), 
-  	"EDITOR_ID" NUMBER, 
-  	"EDIT_DATE_TS" TIMESTAMP (6), 
-  	"CONTACT_ID" NUMBER, 
-  	"DELETED_CONTACT_ID" NUMBER, 
-  	"CONTACT_EDIT_DATE" NVARCHAR2(10),
-  	"DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,  
-  	 CONSTRAINT "TBL_CONTACT_API_PK" PRIMARY KEY ("ID")
+     (	"ID" NUMBER NOT NULL ENABLE,
+      "CONTACT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP" NOT NULL ENABLE,
+      "CREATOR_ID" NUMBER,
+      "CREATE_DATE_TS" TIMESTAMP (6),
+      "EDITOR_ID" NUMBER,
+      "EDIT_DATE_TS" TIMESTAMP (6),
+      "CONTACT_ID" NUMBER,
+      "DELETED_CONTACT_ID" NUMBER,
+      "CONTACT_EDIT_DATE" NVARCHAR2(10) COLLATE "USING_NLS_COMP",
+      "DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+      "ACCOUNT_ID" NUMBER,
+      "ACCOUNT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "COMPANY_ID" NUMBER,
+      "COMPANY_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "ORGANIZATION_ID" NUMBER,
+      "ORGANIZATION_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "COUNTRY_ID" NUMBER,
+      "COUNTRY_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "STATE_ID" NUMBER,
+      "STATE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "CITY_ID" NUMBER,
+      "CITY_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "BIRTH_CITY_ID" NUMBER,
+      "BIRTH_CITY_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "RELIGION_ID" NUMBER,
+      "RELIGION_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "MILITARY_SERVICE_ID" NUMBER,
+      "MILITARY_SERVICE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      "EDU_LEVEL_ID" NUMBER,
+      "EDU_LEVEL_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+      CONSTRAINT "TBL_CONTACT_API_PK" PRIMARY KEY ("ID")
     USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
     TABLESPACE "USERS"  ENABLE, 
      CONSTRAINT "TBL_CONTACT_API_UK1" UNIQUE ("CONTACT_PUBLIC_ID")
@@ -53,89 +73,389 @@ EDU: EDU_LEVEL -> EDU_CATEGORY -> COURSE_CATEGORY -> TEAM -> TEAM_PRESENTED_COUR
   /
   ALTER TRIGGER "CRM"."TBL_CONTACT_API_TRG" ENABLE;
 
-
+##
 create or replace TRIGGER "CRM"."TBL_CONTACT_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_CONTACT
-REFERENCING OLD AS OLD NEW AS NEW
-FOR EACH ROW WHEN (1=1)
-declare
-  TS_ TIMESTAMP(6);
-  UUID_ nvarchar2(500 char) ;
+    REFERENCING OLD AS OLD NEW AS NEW
+    FOR EACH ROW WHEN (1=1)
+    declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    APIPUBLICID_ nvarchar2(500 char); --ACCOUNT
+    APIIPUBLICID_ nvarchar2(500 char); --COMPANY
+    APIIIPUBLICID_ nvarchar2(500 char); --ORGANIZATION
+    APIVPUBLICID_ nvarchar2(500 char); --COUNTRY
+    APVPUBLICID_ nvarchar2(500 char); --STATE
+    APVIPUBLICID_ nvarchar2(500 char); --CITY
+    APVIIPUBLICID_ nvarchar2(500 char); --BIRTH_CITY
+    APVIIIPUBLICID_ nvarchar2(500 char); --RELIGION
+    APIXPUBLICID_ nvarchar2(500 char); --MILITERY_SERVICE
+    APXPUBLICID_ nvarchar2(500 char); --EDU_LEVEL
 BEGIN
     TS_ := systimestamp;
     UUID_ := CRM.public_uuid;
-  if inserting then
+    if inserting then
+    --ACCOUNT
+    IF :NEW.ACCOUNT_ID is not null THEN  
+    SELECT api.ACCOUNT_public_id INTO APIPUBLICID_
+    FROM CRM.tbl_ACCOUNT_api api
+    WHERE api.ACCOUNT_id = :new.ACCOUNT_id;
+    END IF;
+    --COMPANY
+    IF :NEW.COMPANY_ID is not null THEN  
+    SELECT api.COMPANY_public_id INTO APIIPUBLICID_
+    FROM CRM.tbl_COMPANY_api api
+    WHERE api.COMPANY_id = :new.COMPANY_id;
+    END IF;
+    --ORGANIZATION
+    IF :NEW.ORGANIZATION_ID is not null THEN  
+    SELECT api.ORGANIZATION_public_id INTO APIIIPUBLICID_
+    FROM CRM.tbl_ORGANIZATION_api api
+    WHERE api.ORGANIZATION_id = :new.ORGANIZATION_id;
+    END IF;
+    --COUNTRY
+    IF :NEW.COUNTRY_ID is not null THEN  
+    SELECT api.PARAMETER_public_id INTO APIVPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.COUNTRY_id;
+    END IF;
+    --STATE
+    IF :NEW.STATE_ID is not null THEN  
+    SELECT api.PARAMETER_public_id INTO APVPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.STATE_id;
+    END IF;
+    --CITY
+    IF :NEW.CITY_ID is not null THEN  
+    SELECT api.PARAMETER_public_id INTO APVIPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.CITY_id;
+    END IF;
+    --BIRTH_CITY
+    IF :NEW.BIRTH_CITY_ID is not null THEN  
+    SELECT api.PARAMETER_public_id INTO APVIIPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.BIRTH_CITY_id;
+    END IF;
+    --RELIGION
+    IF :NEW.RELIGION_ID is not null THEN  
+    SELECT api.PARAMETER_public_id INTO APVIIIPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.parameter_id = :new.RELIGION_id;
+    END IF;
+    --MILITERY_SERVICE
+    IF :NEW.MILITARY_SERVICE_ID is not null THEN  
+    SELECT api.PARAMETER_public_id INTO APIXPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.MILITARY_SERVICE_id;
+    END IF;
+    --EDU_LEVEL
+    IF :NEW.EDU_LEVEL_ID is not null THEN  
+    SELECT api.PARAMETER_public_id INTO APXPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.EDU_LEVEL_id;
+    END IF;
+    --
     insert into CRM.tbl_contact_api
     (id,contact_public_id, creator_id, create_date_ts,
-     editor_id, edit_date_ts, contact_id, contact_edit_date)
-     values 
-      (crm.seq_contact_api.nextval, UUID_, :new.user_creator_id, TS_, 
-      null, null, :new.id, null);
-  end if;
-  if updating then
+    account_id, account_public_id, company_id, company_public_id,
+    organization_id, organization_public_id , country_id, country_public_id,
+    state_id, state_public_id, city_id, city_public_id,
+    birth_city_id, birth_city_public_id, religion_id, religion_public_id,
+    military_service_id, military_service_public_id, edu_level_id, edu_level_public_id,
+    editor_id, edit_date_ts, contact_id, contact_edit_date)
+    values
+    (crm.seq_contact_api.nextval, UUID_, :new.user_creator_id, TS_,
+    :new.account_id, APIPUBLICID_, :new.company_id, APIIPUBLICID_,
+    :new.organization_id, APIIIPUBLICID_, :new.country_id, APIVPUBLICID_,
+    :new.state_id, APVPUBLICID_, :new.city_id , APVIPUBLICID_,
+    :new.birth_city_id, APVIIPUBLICID_, :new.religion_id, APVIIIPUBLICID_,
+    :new.military_service_id, APIXPUBLICID_,:new.edu_level_id, APXPUBLICID_,
+    null, null, :new.id, null);
+    end if;
+    if updating then
     update CRM.tbl_contact_api
-    set 
-     editor_id = :new.user_editor_id, 
-     edit_date_ts = TS_, 
-     contact_edit_date = :new.edit_date
-     where contact_id = :old.id;
+    set
+    editor_id = :new.user_editor_id,
+    edit_date_ts = TS_,
+    contact_edit_date = :new.edit_date
+    where contact_id = :old.id;
+    -- ACCOUNT
+    if :new.ACCOUNT_ID is not null and :new.ACCOUNT_ID != nvl(:old.ACCOUNT_ID,0) THEN
+    SELECT api.ACCOUNT_public_id INTO APIPUBLICID_
+    FROM CRM.tbl_ACCOUNT_api api
+    WHERE api.ACCOUNT_id = :new.ACCOUNT_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    ACCOUNT_id = :new.ACCOUNT_id,
+    ACCOUNT_public_id = APIPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- COMPANY
+    if :new.COMPANY_ID is not null and :new.COMPANY_ID != nvl(:old.COMPANY_ID,0) THEN
+    SELECT api.COMPANY_public_id INTO APIIPUBLICID_
+    FROM CRM.tbl_COMPANY_api api
+    WHERE api.COMPANY_id = :new.COMPANY_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    COMPANY_id = :new.COMPANY_id,
+    COMPANY_public_id = APIIPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- ORGANIZATION
+    if :new.ORGANIZATION_ID is not null and :new.ORGANIZATION_ID != nvl(:old.ORGANIZATION_ID,0) THEN
+    SELECT api.ORGANIZATION_public_id INTO APIIIPUBLICID_
+    FROM CRM.tbl_ORGANIZATION_api api
+    WHERE api.ORGANIZATION_id = :new.ORGANIZATION_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    ORGANIZATION_id = :new.ORGANIZATION_id,
+    ORGANIZATION_public_id = APIIIPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- COUNTRY
+    if :new.COUNTRY_ID is not null and :new.COUNTRY_ID != nvl(:old.COUNTRY_ID,0) THEN
+    SELECT api.PARAMETER_public_id INTO APIVPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.COUNTRY_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    COUNTRY_id = :new.COUNTRY_id,
+    COUNTRY_public_id = APIVPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- STATE
+    if :new.STATE_ID is not null and :new.STATE_ID != nvl(:old.STATE_ID,0) THEN
+    SELECT api.PARAMETER_public_id INTO APVPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.STATE_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    STATE_id = :new.STATE_id,
+    STATE_public_id = APVPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- CITY
+    if :new.CITY_ID is not null and :new.CITY_ID != nvl(:old.CITY_ID,0) THEN
+    SELECT api.PARAMETER_public_id INTO APVIPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.CITY_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    CITY_id = :new.CITY_id,
+    CITY_public_id = APVIPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- BIRTH_CITY
+    if :new.BIRTH_CITY_ID is not null and :new.BIRTH_CITY_ID != nvl(:old.BIRTH_CITY_ID,0) THEN
+    SELECT api.PARAMETER_public_id INTO APVIIPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.BIRTH_CITY_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    BIRTH_CITY_id = :new.BIRTH_CITY_id,
+    BIRTH_CITY_public_id = APVIIPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- RELIGION
+    if :new.RELIGION_ID is not null and :new.RELIGION_ID != nvl(:old.RELIGION_ID,0) THEN
+    SELECT api.PARAMETER_public_id INTO APVIIIPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.RELIGION_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    RELIGION_id = :new.RELIGION_id,
+    RELIGION_public_id = APVIIIPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- MILITERY_SERVICE
+    if :new.military_service_id is not null and :new.military_service_id != nvl(:old.military_service_id,0) THEN
+    SELECT api.PARAMETER_public_id INTO APIXPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.military_service_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    military_service_id = :new.military_service_id,
+    MILITARY_SERVICE_public_id = APIXPUBLICID_
+    where contact_id = :old.id;
+    end if;
+    -- EDU_LEVEL
+    if :new.EDU_LEVEL_ID is not null and :new.EDU_LEVEL_ID != nvl(:old.EDU_LEVEL_ID,0) THEN
+    SELECT api.PARAMETER_public_id INTO APXPUBLICID_
+    FROM CRM.tbl_PARAMETER_api api
+    WHERE api.PARAMETER_id = :new.EDU_LEVEL_id;
+    --
+    update CRM.tbl_CONTACT_api
+    set
+    EDU_LEVEL_id = :new.EDU_LEVEL_id,
+    EDU_LEVEL_public_id = APXPUBLICID_
+    where contact_id = :old.id;
+    end if;
     end if;
 END;
 
 
 create or replace TRIGGER "CRM"."TBL_CONTACT_API_D" BEFORE DELETE ON CRM.TBL_CONTACT
-REFERENCING OLD AS OLD NEW AS NEW
-FOR EACH ROW WHEN (1=1)
-declare
-  TS_ TIMESTAMP(6);
-  UUID_ nvarchar2(500 char) ;
-  ID_API number;
-BEGIN
+    REFERENCING OLD AS OLD NEW AS NEW
+    FOR EACH ROW WHEN (1=1)
+    declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    ID_API number;
+    BEGIN
     TS_ := systimestamp;
     UUID_ := CRM.public_uuid;
-  IF DELETING THEN
+    IF DELETING THEN
     SELECT CA.ID INTO ID_API
     FROM CRM.TBL_CONTACT_API CA
     WHERE ca.contact_id = :old.id;
-    
-    update CRM.tbl_contact_api ca
-    set  
-     ca.contact_id = null,
-     ca.delete_date_ts = TS_,
-     ca.deleted_contact_id = :old.id
-     where ca.id = ID_API;
-   END IF;
+        update CRM.tbl_contact_api ca
+        set  
+         ca.contact_id = null,
+         ca.delete_date_ts = TS_,
+         ca.deleted_contact_id = :old.id,
+         ca.account_id = null,
+         ca.company_id= null,
+         ca.organization_id = null,
+         ca.country_id = null,
+         ca.state_id = null,
+         ca.city_id = null,
+         ca.birth_city_id = null,
+         ca.religion_id = null,
+         ca.military_service_id = null,
+         ca.edu_level_id = null
+         where ca.id = ID_API;
+    END IF;
 END;
 
 
 create or replace procedure   CRM.UUID_CONTACT_API IS
-begin
-  declare
+    begin
+    declare
     cursor c_t is
-            SELECT
-                ct.id as CONTACTID
-            FROM
-                crm.tbl_contact ct
-                LEFT JOIN crm.tbl_contact_api cta ON ct.id = cta.contact_id
-            WHERE
-                cta.contact_id IS NULL
-            ORDER BY
-                CONTACTID ASC;
-  begin
+    SELECT
+    ct.id as CONTACTID,
+    ct.account_id as ACCOUNTID,
+    secapi.account_public_id ACCOUNTPUBLICID,
+    ct.company_id as COMPANYID,
+    trdapi.company_public_id COMPANYPUBLICID,
+    ct.organization_id as ORGANIZATIONID,
+    frdapi.organization_public_id ORGANIZATIONPUBLICID,
+    ct.country_id as COUNTRYID,
+    fidapi.parameter_public_id COUNTRYPUBLICID,
+    ct.state_id as STATEID,
+    sidapi.parameter_public_id STATEPUBLICID,
+    ct.city_id as CITYID,
+    sevdapi.parameter_public_id CITYPUBLICID,
+    ct.birth_city_id as BIRTHCITYID,
+    eidapi.parameter_public_id BIRTHCITYPUBLICID,
+    ct.religion_id as RELIGIONID,
+    nidapi.parameter_public_id RELIGIONPUBLICID,
+    ct.military_service_id as MILITARYSERVICEID,
+    tndapi.parameter_public_id MILITARYSERVICEPUBLICID,
+    ct.edu_level_id as EDULEVELID,
+    eidapi.parameter_public_id EDULEVELPUBLICID
+    FROM
+    crm.tbl_contact ct
+    LEFT JOIN crm.tbl_contact_api cta ON ct.id = cta.contact_id
+    --ACCOUNT
+    LEFT JOIN crm.tbl_ACCOUNT sect ON ct.account_id = sect.id
+    LEFT JOIN crm.tbl_ACCOUNT_api secapi ON sect.id = secapi.ACCOUNT_id
+    --COMPANY
+    LEFT JOIN crm.tbl_COMPANY trdt ON ct.COMPANY_id = trdt.id
+    LEFT JOIN crm.tbl_COMPANY_api trdapi ON trdt.id = trdapi.COMPANY_id                
+    --ORGANIZATION
+    LEFT JOIN crm.tbl_ORGANIZATION frdt ON ct.ORGANIZATION_id = frdt.id
+    LEFT JOIN crm.tbl_ORGANIZATION_api frdapi ON frdt.id = frdapi.ORGANIZATION_id
+    --COUNTRY
+    LEFT JOIN crm.tbl_PARAMETER fidt ON ct.COUNTRY_id = fidt.id
+    LEFT JOIN crm.tbl_PARAMETER_api fidapi ON fidt.id = fidapi.PARAMETER_id
+    --STATE
+    LEFT JOIN crm.tbl_PARAMETER sidt ON ct.STATE_id = sidt.id
+    LEFT JOIN crm.tbl_PARAMETER_api sidapi ON sidt.id = sidapi.PARAMETER_id
+    --CITY
+    LEFT JOIN crm.tbl_PARAMETER sevdt ON ct.CITY_id = sevdt.id
+    LEFT JOIN crm.tbl_PARAMETER_api sevdapi ON sevdt.id = sevdapi.PARAMETER_id
+    --BIRTH_CITY
+    LEFT JOIN crm.tbl_PARAMETER eidt ON ct.birth_city_id = eidt.id
+    LEFT JOIN crm.tbl_PARAMETER_api eidapi ON eidt.id = eidapi.PARAMETER_id
+    --RELIGION
+    LEFT JOIN crm.tbl_PARAMETER nidt ON ct.religion_id = nidt.id
+    LEFT JOIN crm.tbl_PARAMETER_api nidapi ON nidt.id = nidapi.PARAMETER_id
+    --MILITERY_SERVICE
+    LEFT JOIN crm.tbl_PARAMETER tndt ON ct.military_service_id = tndt.id
+    LEFT JOIN crm.tbl_PARAMETER_api tndapi ON tndt.id = tndapi.PARAMETER_id
+    --EDU_LEVEL
+    LEFT JOIN crm.tbl_PARAMETER eldt ON ct.edu_level_id = eldt.id
+    LEFT JOIN crm.tbl_PARAMETER_api eldapi ON eldt.id = eldapi.PARAMETER_id
+    WHERE
+    cta.contact_id IS NULL
+    ORDER BY
+    CONTACTID ASC;
+    begin
     for r_t in c_t loop
-            INSERT INTO crm.tbl_contact_api(
-                id,
-                contact_public_id,
-                create_date_ts,
-                contact_id
-            )VALUES(
-                crm.seq_contact_api.nextval,
-                crm.public_uuid,
-                systimestamp,
-                r_t."CONTACTID"
-            );
-     end loop;
-  end;
-  commit;
+    INSERT INTO crm.tbl_contact_api(
+    id,
+    contact_public_id,
+    create_date_ts,
+    account_id,
+    account_public_id,
+    company_id,
+    company_public_id,
+    organization_id,
+    organization_public_id,
+    country_id,
+    country_public_id,
+    state_id,
+    state_public_id,
+    city_id,
+    city_public_id,
+    birth_city_id,
+    birth_city_public_id,
+    religion_id,
+    religion_public_id,
+    military_service_id,
+    military_service_public_id,
+    edu_level_id,
+    edu_level_public_id,
+    contact_id
+    )VALUES(
+    crm.seq_contact_api.nextval,
+    crm.public_uuid,
+    systimestamp,
+    r_t."ACCOUNTID",
+    r_t."ACCOUNTPUBLICID",
+    r_t."COMPANYID",
+    r_t."COMPANYPUBLICID",
+    r_t."ORGANIZATIONID",
+    r_t."ORGANIZATIONPUBLICID",
+    r_t."COUNTRYID",
+    r_t."COUNTRYPUBLICID",
+    r_t."STATEID",
+    r_t."STATEPUBLICID",
+    r_t."CITYID",
+    r_t."CITYPUBLICID",
+    r_t."BIRTHCITYID",
+    r_t."BIRTHCITYPUBLICID",
+    r_t."RELIGIONID",
+    r_t."RELIGIONPUBLICID",
+    r_t."MILITARYSERVICEID",
+    r_t."MILITARYSERVICEPUBLICID",
+    r_t."EDULEVELID",
+    r_t."EDULEVELPUBLICID",
+    r_t."CONTACTID"
+    );
+    end loop;
+    end;
+    commit;
 end;
 
   begin
@@ -1604,7 +1924,6 @@ END;
 /
 ALTER TRIGGER "EDU"."TBL_PERIOD_API_TRG" ENABLE;
 
-
 create or replace TRIGGER "EDU"."TBL_PERIOD_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_PERIOD
      REFERENCING OLD AS OLD NEW AS NEW
      FOR EACH ROW WHEN (1=1)
@@ -2108,7 +2427,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
  ---------------- PERIOD COURSE PROFESSOR --------------
  
     CREATE SEQUENCE  "EDU"."SEQ_PERIOD_COURSE_PROFESSO_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
- 
+ ###
       CREATE TABLE "EDU"."TBL_PERIOD_COURSE_PROFESSO_API" 
        (	"ID" NUMBER NOT NULL ENABLE, 
     	"PERIOD_COURSE_PROFESSOR_ID" NUMBER, 
@@ -3180,7 +3499,7 @@ END;
 /
 ALTER TRIGGER "EDU"."TBL_REGISTER_API_TRG" ENABLE;
 
-
+##
 create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON EDU.TBL_REGISTER
      REFERENCING OLD AS OLD NEW AS NEW
      FOR EACH ROW WHEN (1=1)
@@ -3347,7 +3666,7 @@ create or replace TRIGGER "EDU"."TBL_REGISTER_API_IU" AFTER INSERT OR UPDATE ON 
     edu.UUID_REGISTER_API;
     end;
 
-### @@@
+
 ------------------------------
 
 
@@ -6637,10 +6956,19 @@ create or replace procedure MAINPARTS.UUID_DIGITAL_PAYMENT_API IS
 ------------------------------
 Update API syntax: (DON'T DELETE THESE)
 
+--ID(IN API from FATHER TABLE) (SameTableValue):
+UPDATE ( SELECT mtapi.account_id as mtapi1, mt.account_id as mt1
+FROM CRM.tbl_contact_api mtapi
+INNER JOIN CRM.tbl_contact mt ON mtapi.contact_id = mt.id
+WHERE mtapi.account_id is null and mt.account_id is not null)
+SET mtapi1 = mt1
+
+
 --ID(IN API from FATHER TABLE)
 update EDU.tbl_term_presented_group_api mtapi 
 set mtapi.professor_id = (select secapi.professor_id from EDU.tbl_term_presented_group secapi where secapi.id = mtapi.TERM_PRESENTED_GROUP_ID )
 where mtapi.professor_id is null and mtapi.TERM_PRESENTED_GROUP_ID is not null;
+
 
 --PUBLICID
 update EDU.tbl_term_presented_group_api mtapi 
