@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.aop.aspect.crm;
+package edu.imi.ir.eduimiws.aop.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -6,8 +6,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
-@Component
-@Aspect
+import java.util.Arrays;
+
+//@Component
+//@Aspect
 @Slf4j
 public class ServicesAspect {
 
@@ -34,6 +36,7 @@ public class ServicesAspect {
 
     @AfterReturning(value = "serviceOrSamePackageRepository()", returning = "returnValue")
     public void afterReturning(JoinPoint joinPoint, Object returnValue) {
+        log.info("AfterReturning: " + joinPoint.getArgs() + "- Args: " + Arrays.toString(joinPoint.getArgs()));
         log.info("AfterReturning: " + joinPoint.getSignature() + "- return Value: " + returnValue);
     }
 
