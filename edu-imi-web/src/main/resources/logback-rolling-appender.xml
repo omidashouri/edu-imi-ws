@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+    <property name="LOG_PATH" value="logs" />
+    <property name="LOG_ARCHIVE" value="${LOG_PATH}/archive" />
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>[%clr(%thread){blue}] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--        <layout class="ch.qos.logback.classic.PatternLayout">-->
+        <!--            <Pattern>%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable</Pattern>-->
+        <encoder>
+            <pattern>%clr(%d{ISO8601}){blue} | %highlight(%-5level) | [%clr(%t){blue}] | %clr(%C{1.}){yellow}: %msg%n%throwable</pattern>
+            <charset>utf8</charset>
+        </encoder>
+
+        <!--        </layout>-->
+    </appender>
+
+
+    <appender name="ROLLING-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${CATALINA_LOGS}/spring_boot_logger.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+<!--            <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>-->
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOG_ARCHIVE}/spring_boot_logger_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <!--            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+            <maxFileSize>50MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 10GB, it will delete old archived file -->
+            <totalSizeCap>200MB</totalSizeCap>
+            <!-- 15 days to keep (files to keep)-->
+            <maxHistory>20</maxHistory>
+            <!--            </timeBasedFileNamingAndTriggeringPolicy>-->
+        </rollingPolicy>
+    </appender>
+
+</included>

@@ -270,7 +270,7 @@ public class AccountEntity extends BaseEntity {
   private String subSys;
 
   @Column(name="IBMC_ADDITIONAL_INFO")
-  private String ibmcAdditionalInfo;
+  private Long ibmcAdditionalInfo;
 
   //  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude

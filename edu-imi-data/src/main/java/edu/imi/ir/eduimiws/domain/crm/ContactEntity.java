@@ -35,6 +35,11 @@ import java.util.List;
                         },type = PersonApiEntity.class
                 )
         }
+    ),
+      @NamedEntityGraph(name = "ContactEntity.findContactAccount",
+              attributeNodes = {
+                      @NamedAttributeNode(value = "account")
+              }
     )
 })
 

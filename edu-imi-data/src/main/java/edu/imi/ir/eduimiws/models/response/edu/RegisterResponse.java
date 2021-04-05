@@ -7,10 +7,10 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
+import java.util.Date;
 
 
-
-@Schema(name = "registers",description = "Class representing a register in the application.")
+@Schema(name = "registers", description = "Class representing a register in the application.")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "register")
 @Relation(collectionRelation = "registers")
@@ -22,126 +22,129 @@ import org.springframework.hateoas.server.core.Relation;
 public class RegisterResponse extends RepresentationModel<RegisterResponse> {
 
 
-    @Schema(title = "register Public ID",maxLength = 36)
+    @Schema(title = "register Public ID", maxLength = 36)
     private String registerPublicId;
 
-    @Schema(title = "Period Public ID",maxLength = 36)
+    @Schema(title = "Period Public ID", maxLength = 36)
     private String periodPublicId;
 
-    @Schema(title = "Period Name",maxLength = 500)
+    @Schema(title = "Period Name", maxLength = 500)
     private String periodName;
 
-    @Schema(title = "Student Public ID",maxLength = 36)
+    @Schema(title = "Student Public ID", maxLength = 36)
     private String studentPublicId;
 
-    @Schema(name="Student First Name",maxLength = 100)
+    @Schema(name = "Student First Name", maxLength = 100)
     private String studentFirstName;
 
-    @Schema(name="Student Last Name",maxLength = 100)
+    @Schema(name = "Student Last Name", maxLength = 100)
     private String studentLastName;
 
-    @Schema(name="Student Full Name",maxLength = 200)
+    @Schema(name = "Student Full Name", maxLength = 200)
     private String studentFullName;
 
-    @Schema(title = "Student Public ID",maxLength = 2)
+    @Schema(title = "Student Public ID", maxLength = 2)
     private Long activityStatus;
 
-    @Schema(title = "Delete Status",maxLength = 2)
+    @Schema(title = "Delete Status", maxLength = 2)
     private Long deleteStatus;
 
-    @Schema(title = "Creator Public ID",maxLength = 36)
+    @Schema(title = "Creator Public ID", maxLength = 36)
     private String creatorPublicId;
 
-    @Schema(title = "Create Date",maxLength = 10)
+    @Schema(title = "Create Date", maxLength = 10)
     private String createDate;
 
-    @Schema(title = "Editor Public ID",maxLength = 36)
+    @Schema(title = "Editor Public ID", maxLength = 36)
     private String editorPublicId;
 
-    @Schema(title = "Edit Date",maxLength = 10)
+    @Schema(title = "Edit Date", maxLength = 10)
     private String editDate;
 
-    @Schema(title = "Financial Status",maxLength = 2)
+    @Schema(title = "Financial Status", maxLength = 2)
     private Long financialStatus;
 
-    @Schema(title = "Register Type",maxLength = 20)
+    @Schema(title = "Register Type", maxLength = 20)
     private String registerType;
 
-    @Schema(title = "Fee",maxLength = 2)
+    @Schema(title = "Fee", maxLength = 2)
     private Long fee;
 
-    @Schema(title = "Period Contract id",type = "number")
+    @Schema(title = "Period Contract id", type = "number")
     private Long periodContractId;
 
-    @Schema(title = "Status Date",maxLength = 10)
+    @Schema(title = "Status Date", maxLength = 10)
     private String statusDate;
 
-    @Schema(title = "Account public Id",maxLength = 36)
+    @Schema(title = "Account public Id", maxLength = 36)
     private String accountPublicId;
 
-    @Schema(title = "Contract Id",type = "number")
+    @Schema(title = "Contract Id", type = "number")
     private Long contractId;
 
-    @Schema(title = "Register Date",maxLength = 10)
+    @Schema(title = "Register Date", maxLength = 10)
     private String registerDate;
 
-    @Schema(title = "Paid Fee",type="number")
+    @Schema(title = "Register Date", description = "value is only available in response", maxLength = 10)
+    private Date registerDateGregorian;
+
+    @Schema(title = "Paid Fee", type = "number")
     private Long paidFee;
 
-    @Schema(title = "Discount",maxLength = 20)
+    @Schema(title = "Discount", maxLength = 20)
     private Long discount;
 
-    @Schema(title = "Total Paid",type = "number")
+    @Schema(title = "Total Paid", type = "number")
     private Long totalPaid;
 
-    @Schema(title = "Final Score",type = "number")
+    @Schema(title = "Final Score", type = "number")
     private Long finalScore;
 
-    @Schema(title = "Final Status",maxLength = 20)
+    @Schema(title = "Final Status", maxLength = 20)
     private String finalStatus;
 
-    @Schema(title = "Financial Description",maxLength = 1000)
+    @Schema(title = "Financial Description", maxLength = 1000)
     private String financialDesc;
 
-    @Schema(title = "Register From",maxLength = 20)
+    @Schema(title = "Register From", maxLength = 20)
     private String registerFrom;
 
-    @Schema(title = "Field New Name",maxLength = 50)
+    @Schema(title = "Field New Name", maxLength = 50)
     private String fileNewName;
 
-    @Schema(title = "File Old Name",maxLength = 50)
+    @Schema(title = "File Old Name", maxLength = 50)
     private String fileOldName;
 
-    @Schema(title = "Card Number",maxLength = 20)
+    @Schema(title = "Card Number", maxLength = 20)
     private String cardNo;
 
-    @Schema(title = "Education Type",maxLength = 10)
+    @Schema(title = "Education Type", maxLength = 10)
     private String educationType;
 
-    @Schema(title = "Attach Date",maxLength = 10)
+    @Schema(title = "Attach Date", maxLength = 10)
     private String attachDate;
 
-    @Schema(title = "Has Senad",maxLength = 1)
+    @Schema(title = "Has Senad", maxLength = 1)
     private String hasSanad;
 
-    @Schema(title = "Temporary Score",maxLength = 20)
+    @Schema(title = "Temporary Score", maxLength = 20)
     private String tempScore;
 
-    @Schema(title = "Temporary Time",maxLength = 20)
+    @Schema(title = "Temporary Time", maxLength = 20)
     private String tempTime;
 
-    @Schema(title = "Term Fee",type = "number")
+    @Schema(title = "Term Fee", type = "number")
     private Long termFee;
 
-    @Schema(title = "Temporary Date",maxLength = 10)
+    @Schema(title = "Temporary Date", maxLength = 10)
     private String tempDate;
 
-    @Schema(title = "Financial Status Date",maxLength = 10)
+    @Schema(title = "Financial Status Date", maxLength = 10)
     private String financialStatusDate;
 
-    @Schema(title = "Financial Person Public Id",maxLength = 36)
+    @Schema(title = "Financial Person Public Id", maxLength = 36)
     private String financialPersonPublicId;
 
-    @Schema(title ="From Register Public Id",maxLength = 36)
+    @Schema(title = "From Register Public Id", maxLength = 36)
     private String fromRegisterPublicId;
 }

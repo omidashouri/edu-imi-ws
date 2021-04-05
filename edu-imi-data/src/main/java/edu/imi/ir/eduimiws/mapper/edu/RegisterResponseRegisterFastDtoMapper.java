@@ -3,12 +3,18 @@ package edu.imi.ir.eduimiws.mapper.edu;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.edu.RegisterFastDto;
 import edu.imi.ir.eduimiws.models.response.edu.RegisterResponse;
+import edu.imi.ir.eduimiws.services.crm.ContactPublicIdzService;
+import edu.imi.ir.eduimiws.utilities.DateConvertor;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring",
+        imports = {DateConvertor.class},
+        unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface RegisterResponseRegisterFastDtoMapper {
 
     RegisterResponseRegisterFastDtoMapper INSTANCE = Mappers.getMapper(RegisterResponseRegisterFastDtoMapper.class);
@@ -50,7 +56,9 @@ public interface RegisterResponseRegisterFastDtoMapper {
             @Mapping(source = "tempScore", target = "tempScore"),
             @Mapping(source = "tempTime", target = "tempTime"),
             @Mapping(source = "termFee", target = "termFee"),
-            @Mapping(source = "totalPaid", target = "totalPaid")
+            @Mapping(source = "totalPaid", target = "totalPaid"),
+            @Mapping(target = "registerDateGregorian",
+                    expression = "java(new DateConvertor().convertKhToGeorgianDate(registerFastDto.getRegisterDate()))")
 
 
     })

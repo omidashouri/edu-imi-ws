@@ -1,15 +1,19 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
 
+import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
+import edu.imi.ir.eduimiws.services.crm.ContactPublicIdzService;
+import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+@Mapper(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+,imports = {ContactPublicIdzService.class})
 public interface ContactResponseContactFastDtoMapper {
 
     ContactResponseContactFastDtoMapper INSTANCE = Mappers.getMapper(ContactResponseContactFastDtoMapper.class);
@@ -18,6 +22,16 @@ public interface ContactResponseContactFastDtoMapper {
     @Mappings({
             @Mapping(source = "contactPublicId", target = "contactPublicId"),
             @Mapping(source = "personPublicId", target = "userPublicId"),
+            @Mapping(source = "companyPublicId", target = "companyPublicId"),
+            @Mapping(source = "organizationPublicId", target = "organizationPublicId"),
+            @Mapping(source = "accountPublicId", target = "accountPublicId"),
+            @Mapping(source = "countryPublicId", target = "countryPublicId"),
+            @Mapping(source = "statePublicId", target = "statePublicId"),
+            @Mapping(source = "cityPublicId", target = "cityPublicId"),
+            @Mapping(source = "birthCityPublicId", target = "birthCityPublicId"),
+            @Mapping(source = "religionPublicId", target = "religionPublicId"),
+            @Mapping(source = "militaryServicePublicId", target = "militaryServicePublicId"),
+            @Mapping(source = "eduLevelPublicId", target = "eduLevelPublicId"),
             @Mapping(source = "firstName", target = "firstName"),
             @Mapping(source = "middleName", target = "middleName"),
             @Mapping(source = "lastName", target = "lastName"),
@@ -82,10 +96,25 @@ public interface ContactResponseContactFastDtoMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT,
             ignoreByDefault = true)
+    @Mappings({
+            @Mapping(target = "id",
+            expression = "java(new ContactPublicIdzService().findContactIdByContactPublicId(" +
+                    "contactResponse.getContactPublicId()))"),
+            @Mapping(target = "account",
+            expression = "java(new ContactPublicIdzService().findAccountDtoByAccountPublicId(" +
+                    "contactResponse.getAccountPublicId()))"),
+            @Mapping(target = "company",
+                    expression = "java(new ContactPublicIdzService().findCompanyDtoByCompanyPublicId(" +
+                            "contactResponse.getCompanyPublicId()))"),
+            @Mapping(target = "organization",
+                    expression = "java(new ContactPublicIdzService().findOrganizationDtoByOrganizationPublicId(" +
+                            "contactResponse.getOrganizationPublicId()))")
+    })
     @InheritInverseConfiguration
     ContactFastDto toContactFastDto(ContactResponse contactResponse, @Context CycleAvoidingMappingContext context);
 
     List<ContactResponse> toContactResponses(List<ContactFastDto> ContactFastDtos, @Context CycleAvoidingMappingContext context);
 
     List<ContactFastDto> toContactFastDtos(List<ContactResponse> contactResponses, @Context CycleAvoidingMappingContext context);
+
 }

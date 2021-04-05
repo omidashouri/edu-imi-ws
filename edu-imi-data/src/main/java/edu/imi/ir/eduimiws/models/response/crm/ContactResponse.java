@@ -29,7 +29,7 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String accountPublicId;
 
     @Schema(title = "Salutation Public Id", maxLength = 36)
-    private Long salutationPublicId;
+    private String salutationPublicId;
 
     @Schema(title = "First Name", maxLength = 500)
     private String firstName;
@@ -62,7 +62,7 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String email;
 
     @Schema(title = "Currency Public Id", maxLength = 36)
-    private Long currencyPublicId;
+    private String currencyPublicId;
 
     @Schema(title = "Department Name", maxLength = 100)
     private String department;
@@ -71,13 +71,13 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String role;
 
     @Schema(title = "Manager Public ID", maxLength = 36)
-    private Long managerPublicId;
+    private String managerPublicId;
 
     @Schema(title = "Manager Phone", maxLength = 50)
     private String managerPhone;
 
     @Schema(title = "Assistance Public Id", maxLength = 36)
-    private Long assistantPublicId;
+    private String assistantPublicId;
 
     @Schema(title = "Assistance Phon", maxLength = 50)
     private String assistantPhone;
@@ -101,16 +101,16 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String description;
 
     @Schema(title = "Parent Public ID", maxLength = 36)
-    private Long parentPublicId;
+    private String parentPublicId;
 
     @Schema(title = "Country Public Id", maxLength = 36)
-    private Long countryPublicId;
+    private String countryPublicId;
 
     @Schema(title = "State Public Id", maxLength = 36)
-    private Long statePublicId;
+    private String statePublicId;
 
     @Schema(title = "City Public Id", maxLength = 36)
-    private Long cityPublicId;
+    private String cityPublicId;
 
     @Schema(title = "Address Phone", maxLength = 500)
     private String addressPhone;
@@ -119,19 +119,19 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String address;
 
     @Schema(title = "Company Public Id", maxLength = 36)
-    private Long companyPublicId;
+    private String companyPublicId;
 
     @Schema(title = "Organization Public Id", maxLength = 36)
-    private Long organizationPublicId;
+    private String organizationPublicId;
 
     @Schema(title = "Lead Source public Id", maxLength = 36)
-    private Long leadSourcePublicId;
+    private String leadSourcePublicId;
 
     @Schema(title = "Campaign Public ID", maxLength = 36)
-    private Long campaignPublicId;
+    private String campaignPublicId;
 
     @Schema(title = "Team Public Id", maxLength = 36)
-    private Long teamPublicId;
+    private String teamPublicId;
 
     @Schema(title = "Sync Outlook", maxLength = 1)
     private String syncOutLook;
@@ -155,10 +155,10 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String allowMail;
 
     @Schema(title = "Address Type Public Id", maxLength = 36)
-    private Long addressTypePublicId;
+    private String addressTypePublicId;
 
     @Schema(title = "User Creator Public Id", maxLength = 36)
-    private Long userCreatorPublicId;
+    private String userCreatorPublicId;
 
     @Schema(title = "From City", maxLength = 100)
     private String fromCity;
@@ -173,7 +173,7 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String fatherName;
 
     @Schema(title = "Birth City Public Id", maxLength = 36)
-    private Long birthCityPublicId;
+    private String birthCityPublicId;
 
     @Schema(title = "Access Type", maxLength = 10)
     private String accessType;
@@ -188,13 +188,13 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String llastName;
 
     @Schema(title = "Religion Public Id", maxLength = 36)
-    private Long religionPublicId;
+    private String religionPublicId;
 
     @Schema(title = "Military Service Public Id", maxLength = 36)
-    private Long militaryServicePublicId;
+    private String militaryServicePublicId;
 
     @Schema(title = "Education Level Public Id", maxLength = 36)
-    private Long eduLevelPublicId;
+    private String eduLevelPublicId;
 
     @Schema(title = "Field Name", maxLength = 200)
     private String fieldName;
@@ -215,16 +215,16 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String entranceDate;
 
     @Schema(title = "Contract Type Public Id", maxLength = 36)
-    private Long contractTypePublicId;
+    private String contractTypePublicId;
 
     @Schema(title = "University", maxLength = 300)
     private String university;
 
     @Schema(title = "Insurance Kind Public Id", maxLength = 36)
-    private Long insuranceKindPublicId;
+    private String insuranceKindPublicId;
 
     @Schema(title = "Insurance Box Public Id", maxLength = 36)
-    private Long insuranceBoxPublicId;
+    private String insuranceBoxPublicId;
 
     @Schema(title = "Latin Gender", maxLength = 10)
     private String gender1;
@@ -254,7 +254,7 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String createDate;
 
     @Schema(title = "User Editor Public Id", maxLength = 36)
-    private Long userEditorPublicId;
+    private String userEditorPublicId;
 
     @Schema(title = "Convert Date Who", maxLength = 30)
     private String convertDateWho;
@@ -269,6 +269,6 @@ public class ContactResponse extends RepresentationModel<UserContactResponse> {
     private String lfromCity;
 
     @Schema(title = "Latin From City Public ID", maxLength = 36)
-    private Long lfromCityEntityPublicId;
+    private String lfromCityEntityPublicId;
 
 }

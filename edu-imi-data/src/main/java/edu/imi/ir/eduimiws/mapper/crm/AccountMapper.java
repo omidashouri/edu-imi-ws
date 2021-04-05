@@ -7,17 +7,21 @@ import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.hibernate.Hibernate;
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring",
+        uses = {AccountApiMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface AccountMapper {
 
+    AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
+
     @Mappings({
             @Mapping(source = "id", target = "id"),
-            @Mapping(source = "accountApi", target = "accountApiDto"),
+            @Mapping(source = "accountApi.accountPublicId", target = "accountPublicId"),
             @Mapping(source = "accessType", target = "accessType"),
             @Mapping(source = "accountAdditionalInfo", target = "accountAdditionalInfoId"),
             @Mapping(source = "accountEnName", target = "accountEnName"),
@@ -82,6 +86,10 @@ public interface AccountMapper {
 
     @BeanMapping(ignoreByDefault = true)
     @InheritInverseConfiguration
+    @Mappings({
+            @Mapping(source = "id",target = "id"),
+            @Mapping(source = "accountApi",target = "accountApi")
+    })
     AccountEntity toAccountEntity(AccountDto accountDto
             , @Context CycleAvoidingMappingContext context);
 
@@ -107,9 +115,8 @@ public interface AccountMapper {
 
         if (accountDto != null) {
             //        Account Public Id\
-            PersistenceUtils.cleanFromProxyByNull(accountDto);
-            if (!Hibernate.isInitialized(accountDto.getAccountApiDto())) {
-                accountDto.setAccountApiDto(null);
+            if (!Hibernate.isInitialized(accountDto.getAccountApi())) {
+                accountDto.setAccountApi(null);
             }
         }
     }

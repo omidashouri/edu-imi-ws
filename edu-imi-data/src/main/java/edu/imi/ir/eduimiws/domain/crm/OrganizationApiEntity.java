@@ -49,5 +49,5 @@ public class OrganizationApiEntity extends BaseEntity {
     private Timestamp deletedDateTs;
 
     @Column(name = "DELETED_ORGANIZATION_ID")
-    private String deletedOrganizationId;
+    private Long deletedOrganizationId;
 }

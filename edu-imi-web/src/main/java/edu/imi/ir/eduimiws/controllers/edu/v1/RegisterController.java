@@ -9,6 +9,7 @@ import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterFormRegisterFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.RegisterResponseRegisterFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.RegisterDto;
 import edu.imi.ir.eduimiws.models.dto.edu.RegisterFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
@@ -75,11 +76,79 @@ public class RegisterController {
     private final RegisterDtoMapper registerDtoMapper;
     private final RegisterFastDtoMapper registerFastDtoMapper;
     private final RegisterFormRegisterFastDtoMapper registerFormRegisterFastDtoMapper;
+    private final RegisterResponseRegisterFastDtoMapper registerResponseRegisterFastDtoMapper;
     private final RegisterResponseRegisterDtoAssembler registerResponseRegisterDtoAssembler;
     private final RegisterResponseRegisterFastDtoAssembler registerResponseRegisterFastDtoAssembler;
     private final PagedResourcesAssembler<RegisterDto> registerDtoPagedResourcesAssembler;
     private final PagedResourcesAssembler<RegisterFastDto> registerFastDtoPagedResourcesAssembler;
 
+
+    @Operation(
+            summary = "find All registers not pageable",
+            description = "Search register details",
+            tags = "registers",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = RegisterResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @GetMapping(path = "/unpaged", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<RegisterResponse>> getRegisters() {
+
+        Pageable pageable = Pageable.unpaged();
+
+/*        Page<RegisterEntity> registerPages =
+                registerService.findAllByOrderPageable(pageable);
+
+        Page<RegisterFastDto> registerFastDtoPage = registerPages
+                .map(p -> registerFastDtoMapper
+                        .toRegisterFastDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<RegisterResponse> registerResponsePagedModel = registerFastDtoPagedResourcesAssembler
+                .toModel(registerFastDtoPage, registerResponseRegisterFastDtoAssembler);
+
+        List<RegisterResponse> registerResponses = registerResponsePagedModel
+                .getContent()
+                .stream()
+                .collect(Collectors.toList());*/
+
+//        List<RegisterEntity> registerEntities = registerService.selectAllRegisterOnly();
+
+        List<RegisterEntity> registerEntities = registerService.findAllByDeleteStatusIsNotNull();
+
+        List<RegisterFastDto> registerFastDtos = registerFastDtoMapper
+                .toRegisterFastDtos(registerEntities, new CycleAvoidingMappingContext());
+
+        List<RegisterResponse> registerResponses = registerResponseRegisterFastDtoMapper
+                .toRegisterResponses(registerFastDtos, new CycleAvoidingMappingContext());
+
+        return ResponseEntity.ok(registerResponses);
+    }
 
     @Operation(
             summary = "find All registers",

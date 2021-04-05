@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.mapper.crm;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
+import edu.imi.ir.eduimiws.services.crm.ContactApiService;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

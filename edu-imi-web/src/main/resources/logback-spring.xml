@@ -1,68 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
+<!--    if changed to defaults.xml read the location for appender from its defaults-->
     <include resource="org/springframework/boot/logging/logback/base.xml" />
-    <property name="LOG_PATH" value="logs" />
-    <property name="LOG_ARCHIVE" value="${LOG_PATH}/archive" />
+    <include resource="logback-rolling-appender.xml"/>
 
-
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <withJansi>true</withJansi>
-        <encoder>
-            <pattern>[%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
-            </Pattern>
-        </layout>
-    </appender>
-
-    <appender name="RollingFile"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${CATALINA_LOGS}/spring-boot-logger.log</file>
-        <encoder
-                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
-        </encoder>
-
-        <rollingPolicy
-                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- rollover daily and when the file reaches 10 MegaBytes -->
-            <fileNamePattern>${LOG_ARCHIVE}/spring-boot-logger-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-<!--            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
-                <maxFileSize>10MB</maxFileSize>
-                <!-- total size of all archive files, if total size > 10GB, it will delete old archived file -->
-                <totalSizeCap>10GB</totalSizeCap>
-                <!-- 60 days to keep -->
-                <maxHistory>60</maxHistory>
-<!--            </timeBasedFileNamingAndTriggeringPolicy>-->
-        </rollingPolicy>
-    </appender>
 
     <!-- LOG everything at INFO level -->
-    <root level="info">
-        <appender-ref ref="RollingFile" />
-        <appender-ref ref="Console" />
+    <root level="INFO">
+        <appender-ref ref="ROLLING-APPENDER" />
+        <appender-ref ref="CONSOLE" />
     </root>
 
     <!-- LOG "com.baeldung*" at TRACE level -->
-    <logger name="ir.imi" level="info" additivity="false">
-        <appender-ref ref="RollingFile" />
-        <appender-ref ref="Console" />
+    <logger name="ir.imi" level="error" additivity="false">
+        <appender-ref ref="ROLLING-APPENDER" />
+        <appender-ref ref="CONSOLE" />
     </logger>
 
-    <logger name="org.hibernate.cache" level="info" additivity="true">
-        <appender-ref ref="RollingFile"/>
-        <appender-ref ref="Console"/>
+    <logger name="org.hibernate.cache" level="error" additivity="true">
+        <appender-ref ref="ROLLING-APPENDER"/>
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <logger name="org.ehcache" level="info" additivity="true">
-        <appender-ref ref="RollingFile"/>
-        <appender-ref ref="Console"/>
+    <logger name="org.ehcache" level="error" additivity="true">
+        <appender-ref ref="ROLLING-APPENDER"/>
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
 </configuration>

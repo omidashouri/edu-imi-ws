@@ -20,14 +20,21 @@ public interface RegisterRepository extends CrudRepository<RegisterEntity, Long>
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     Page<RegisterEntity> findAllByDeleteStatusIsNotNull(Pageable pageable);
 
-    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"registerApi"})
+    List<RegisterEntity> findTop10ByDeleteStatusIsNotNull();
+    @EntityGraph(attributePaths = {"registerApi"})
+    List<RegisterEntity> findAllByDeleteStatusIsNotNull();
+
+    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService",
+            type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     Page<RegisterEntity> readAllByDeleteStatusIsNotNull(Pageable pageable);
 
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     RegisterEntity findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(String studentPublicId);
 
-    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService",
+            type = EntityGraph.EntityGraphType.LOAD)
     RegisterEntity readByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(String studentPublicId);
 
     RegisterEntity findFirstByOrderByIdDesc();
@@ -38,9 +45,10 @@ public interface RegisterRepository extends CrudRepository<RegisterEntity, Long>
     List<RegisterOnly> findAllRegisterOnlyByIdBetween(@Param("beginRegisterId") Long beginRegisterId,
                                                            @Param("endRegisterId") Long endRegisterId);
 
+//    first add register only object in cacheable xml file
     @Query(name = "RegisterEntity.selectAllRegisterOnly", nativeQuery = true)
-    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
-            forCounting = true)
+/*    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
+            forCounting = true)*/
     List<RegisterOnly> findAllRegisterOnly();
 
     @Query(name = "RegisterEntity.selectCurrentSequenceNumber",nativeQuery = true)

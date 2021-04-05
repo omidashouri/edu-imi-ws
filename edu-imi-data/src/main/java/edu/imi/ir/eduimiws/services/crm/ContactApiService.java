@@ -12,6 +12,10 @@ public interface ContactApiService {
 
     ContactApiEntity saveContactApiByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person);
 
+    ContactEntity findContactByContactPublicId(String contactPublicId);
+
+    Long findContactIdByContactPublicId(String contactPublicId);
+
     ContactApiEntity findContactApiEntityByContactEntityFast(ContactEntity contact);
 
     List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactApis);

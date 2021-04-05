@@ -17,6 +17,8 @@ public interface RegisterService {
 
     Page<RegisterEntity> findAllByOrderPageable(Pageable pageable);
 
+    List<RegisterEntity> findAllByDeleteStatusIsNotNull();
+
     @Cacheable(value = "register")
     Page<RegisterEntity> findAllWithStudentPeriodNameByOrderPageable(Pageable pageable);
 

@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.repositories.crm.ContactRepository;
+import edu.imi.ir.eduimiws.repositories.crm.querydsl.ContactQueryDslRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,12 +25,14 @@ import java.util.List;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
+    private final ContactQueryDslRepository contactQueryDslRepository;
     private final ContactFastDtoMapper contactFastDtoMapper;
 
     @Override
     public List<ContactFastDto> findContactByNationalCode(String nationalCode) {
         List<ContactEntity> contactEntities = contactRepository
                 .findContactEntitiesByNationCode(nationalCode);
+
         List<ContactFastDto> contactFastDtos = contactFastDtoMapper
                 .toContactFastDtos(contactEntities, new CycleAvoidingMappingContext());
         return contactFastDtos;
@@ -78,18 +81,14 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Long countByPredicate(Predicate predicate) {
-        Object o = contactRepository.count(predicate);
-        Long contactCount = Long.valueOf(contactRepository.count(predicate));
+        Object o = contactQueryDslRepository.count(predicate);
+        Long contactCount = Long.valueOf(contactQueryDslRepository.count(predicate));
         return contactCount != null ? contactCount.longValue() : null;
     }
 
     @Override
     public Page<ContactEntity> findAllByPredicate(Predicate predicate, Pageable pageable) {
-        Page<ContactEntity> contactPages = contactRepository.findAll(predicate, pageable);
-/*        if (Iterables.size(contactRepository.findAll(predicate, pageable) ) > 0) {
-            contacts = StreamSupport.stream(contactRepository.findAll(predicate).spliterator(), false).
-                    collect(Collectors.toList());
-        }*/
+        Page<ContactEntity> contactPages = contactQueryDslRepository.findAll(predicate, pageable);
         return contactPages;
     }
 

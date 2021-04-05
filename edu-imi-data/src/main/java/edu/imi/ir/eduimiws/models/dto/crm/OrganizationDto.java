@@ -17,7 +17,9 @@ public class OrganizationDto implements Serializable {
 
     private String nameLo;
 
-    private OrganizationDto parentId;
+    private OrganizationDto parent;
+    private Long parentId;
+    private String parentPublicId;
 
     private String website;
 
@@ -32,24 +34,38 @@ public class OrganizationDto implements Serializable {
     private String billAddress;
 
     private ParameterDto billCity;
+    private Long billCityId;
+    private String billCityPublicId;
 
     private ParameterDto billState;
+    private Long billStateId;
+    private String billStatePublicId;
 
     private ParameterDto billCountry;
+    private Long billCountryId;
+    private String billCountryPublicId;
 
     private String billZipcode;
 
     private String shipAddress;
 
     private ParameterDto shipCity;
+    private Long shipCityId;
+    private String shipCityPublicId;
 
     private ParameterDto shipState;
+    private Long shipStateId;
+    private String shipStatePublicId;
 
     private ParameterDto shipCountry;
+    private Long shipCountryId;
+    private String shipCountryPublicId;
 
     private String shipZipcode;
 
-    private AccountDto accountId;
+    private AccountDto account;
+    private Long accountId;
+    private String accountPublicId;
 
     private String isActive;
 

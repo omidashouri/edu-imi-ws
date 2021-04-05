@@ -42,6 +42,24 @@ public class ContactApiServiceImpl implements ContactApiService {
     }
 
     @Override
+    public ContactEntity findContactByContactPublicId(String contactPublicId) {
+        return contactApiRepository
+                .findByContactPublicId(contactPublicId)
+                .filter(Objects::nonNull)
+                .map(ContactApiEntity::getContact)
+                .orElse(new ContactEntity());
+    }
+
+    @Override
+    public Long findContactIdByContactPublicId(String contactPublicId) {
+        return Optional
+                .of(this.findContactByContactPublicId(contactPublicId))
+                .filter(Objects::nonNull)
+                .map(ContactEntity::getId)
+                .orElse(null);
+    }
+
+    @Override
     public ContactApiEntity findContactApiEntityByContactEntityFast(ContactEntity contact) {
 //        omiddo:add NamedEntityGraph later for contact
         return contactApiRepository.findByContact(contact);
@@ -67,18 +85,18 @@ public class ContactApiServiceImpl implements ContactApiService {
                 .stream()
                 .filter(Objects::nonNull)
                 .forEach(c -> {
-                            ContactApiEntity newContactApi = new ContactApiEntity();
-                            newContactApi.setContact(c);
-                            newContactApi.setContactId(c.getId());
-                            newContactApi.setCreateDateTs(new Timestamp(new Date().getTime()));
-                            newContactApi.setContactPublicId(this.generateUniqueContactApiPublicId());
-                            c.setContactWebService(newContactApi);
-                        });
+                    ContactApiEntity newContactApi = new ContactApiEntity();
+                    newContactApi.setContact(c);
+                    newContactApi.setContactId(c.getId());
+                    newContactApi.setCreateDateTs(new Timestamp(new Date().getTime()));
+                    newContactApi.setContactPublicId(this.generateUniqueContactApiPublicId());
+                    c.setContactWebService(newContactApi);
+                });
 
         newContactApis = newContacts
-                                .stream()
-                                .map(ContactEntity::getContactWebService)
-                                .collect(Collectors.toList());
+                .stream()
+                .map(ContactEntity::getContactWebService)
+                .collect(Collectors.toList());
 
         newContactApis
                 .sort(Comparator.comparing(ContactApiEntity::getContactId));

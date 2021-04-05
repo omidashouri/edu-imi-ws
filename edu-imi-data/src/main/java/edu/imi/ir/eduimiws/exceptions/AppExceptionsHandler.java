@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
@@ -47,6 +48,16 @@ public class AppExceptionsHandler {
                 exception.getMessage());
         return new ResponseEntity<>(handleOtherExceptionMessage, new HttpHeaders(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = {NullPointerException.class})
+    public ResponseEntity<Object> handleNullPointServiceException(NullPointerException exception,
+                                                                  WebRequest request) {
+        ErrorMessage handleNullPointServiceException = new ErrorMessage(new Date(),
+                HttpStatus.NOT_FOUND.toString(),
+                exception.getMessage());
+        return new ResponseEntity<>(handleNullPointServiceException, new HttpHeaders(),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {RoleServiceException.class})

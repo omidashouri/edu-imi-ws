@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 
 @Repository
 public interface ContactApiRepository extends CrudRepository<ContactApiEntity,Long> {
@@ -13,6 +15,9 @@ public interface ContactApiRepository extends CrudRepository<ContactApiEntity,Lo
 
     @EntityGraph("contactApiUserGraph")
     ContactApiEntity findByContact(ContactEntity contact);
+
+    Optional<ContactApiEntity> findByContactPublicId(String contactPublicId);
+
 //    ContactApiEntity saveContactWebServiceByPublicContactIdAndPersonEntity
 
 }

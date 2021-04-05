@@ -10,6 +10,6 @@ public class RegisterOnly {
     Long studentId;
     Long deleteStatus;
     Long activityStatus;
-    String editDate;
+    String registerDate;
 
 }

@@ -67,4 +67,93 @@ public class ContactApiEntity extends BaseEntity {
   @Column(name = "CONTACT_EDIT_DATE")
   private String contactEditDate;
 
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "COMPANY_ID")
+  private CompanyEntity company;
+
+  @Column(name="COMPANY_PUBLIC_ID")
+  private String companyPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ACCOUNT_ID")
+  private AccountEntity account;
+
+  @Column(name="ACCOUNT_PUBLIC_ID")
+  private String accountPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ORGANIZATION_ID")
+  private OrganizationEntity organization;
+
+  @Column(name="ORGANIZATION_PUBLIC_ID")
+  private String organizationPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "COUNTRY_ID")
+  private ParameterEntity country;
+
+  @Column(name="COUNTRY_PUBLIC_ID")
+  private String countryPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "STATE_ID")
+  private ParameterEntity state;
+
+  @Column(name="STATE_PUBLIC_ID")
+  private String statePublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "CITY_ID")
+  private ParameterEntity city;
+
+  @Column(name="CITY_PUBLIC_ID")
+  private String cityPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "BIRTH_CITY_ID")
+  private ParameterEntity birthCity;
+
+  @Column(name="BIRTH_CITY_PUBLIC_ID")
+  private String birthCityPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "RELIGION_ID")
+  private ParameterEntity religion;
+
+  @Column(name="RELIGION_PUBLIC_ID")
+  private String religionPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "EDU_LEVEL_ID")
+  private ParameterEntity eduLevel;
+
+  @Column(name="EDU_LEVEL_PUBLIC_ID")
+  private String eduLevelPublicId;
+
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "MILITARY_SERVICE_ID")
+  private ParameterEntity militaryService;
+
+  @Column(name="MILITARY_SERVICE_PUBLIC_ID")
+  private String militaryServicePublicId;
 }

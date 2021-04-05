@@ -3,7 +3,6 @@ package edu.imi.ir.eduimiws.mapper.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.hibernate.Hibernate;
@@ -12,13 +11,10 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",
-        uses = {AccountMapper.class},
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-public interface ContactFastDtoMapper {
+@Mapper
+public interface ContactFastDtoMapperArchive {
 
-    ContactFastDtoMapper INSTANCE = Mappers.getMapper(ContactFastDtoMapper.class);
+    ContactFastDtoMapperArchive INSTANCE = Mappers.getMapper(ContactFastDtoMapperArchive.class);
 
 /*
     accountPublicId, salutationPublicId, currencyPublicId, managerPublicId, assistantPublicId, parentPublicId
@@ -30,28 +26,7 @@ public interface ContactFastDtoMapper {
 */
 
     @Mappings({
-            @Mapping(source = "id", target = "id"),
-            @Mapping(source = "contactWebService.contactPublicId", target = "contactPublicId"),
-            @Mapping(source = "contactWebService.account.id", target = "accountId"),
-            @Mapping(source = "contactWebService.accountPublicId", target = "accountPublicId"),
-            @Mapping(source = "contactWebService.company.id", target = "companyId"),
-            @Mapping(source = "contactWebService.companyPublicId", target = "companyPublicId"),
-            @Mapping(source = "contactWebService.organization.id", target = "organizationId"),
-            @Mapping(source = "contactWebService.organizationPublicId", target = "organizationPublicId"),
-            @Mapping(source = "contactWebService.country.id", target = "countryId"),
-            @Mapping(source = "contactWebService.countryPublicId", target = "countryPublicId"),
-            @Mapping(source = "contactWebService.state.id", target = "stateId"),
-            @Mapping(source = "contactWebService.statePublicId", target = "statePublicId"),
-            @Mapping(source = "contactWebService.city.id", target = "cityId"),
-            @Mapping(source = "contactWebService.cityPublicId", target = "cityPublicId"),
-            @Mapping(source = "contactWebService.birthCity.id", target = "birthCityId"),
-            @Mapping(source = "contactWebService.birthCityPublicId", target = "birthCityPublicId"),
-            @Mapping(source = "contactWebService.religion.id", target = "religionId"),
-            @Mapping(source = "contactWebService.religionPublicId", target = "religionPublicId"),
-            @Mapping(source = "contactWebService.militaryService.id", target = "militaryServiceId"),
-            @Mapping(source = "contactWebService.militaryServicePublicId", target = "militaryServicePublicId"),
-            @Mapping(source = "contactWebService.eduLevel.id", target = "eduLevelId"),
-            @Mapping(source = "contactWebService.eduLevelPublicId", target = "eduLevelPublicId"),
+            @Mapping(source = "contactPublicId", target = "contactWebService.contactPublicId"),
             @Mapping(source = "firstName", target = "firstName"),
             @Mapping(source = "middleName", target = "middleName"),
             @Mapping(source = "lastName", target = "lastName"),
@@ -111,24 +86,26 @@ public interface ContactFastDtoMapper {
             @Mapping(source = "lfromCity", target = "lfromCity")
     })
     @BeanMapping(ignoreByDefault = true)
-    ContactFastDto toContactFastDto(ContactEntity contactEntity, @Context CycleAvoidingMappingContext context);
+    ContactEntity toContactEntity(ContactFastDto contactFastDto, @Context CycleAvoidingMappingContext context);
 
     @BeanMapping(ignoreByDefault = true)
     @InheritInverseConfiguration
-    @Mappings({
-            @Mapping(source = "id",target = "id"),
-            @Mapping(source = "account",target = "account")
-    })
-    ContactEntity toContactEntity(ContactFastDto contactFastDto, @Context CycleAvoidingMappingContext context);
+    ContactFastDto toContactFastDto(ContactEntity contactEntity, @Context CycleAvoidingMappingContext context);
 
     List<ContactEntity> toContactEntities(List<ContactFastDto> ContactFastDtos, @Context CycleAvoidingMappingContext context);
 
     List<ContactFastDto> toContactFastDtos(List<ContactEntity> contactEntities, @Context CycleAvoidingMappingContext context);
 
-    @BeforeMapping
+    @AfterMapping
     default void handlePersonPublicIds(ContactEntity contactEntity, @MappingTarget ContactFastDto contactFastDto) {
-        new PersistenceUtils().cleanFromProxyByReadMethod(contactEntity);
+        if(!Hibernate.isInitialized(contactEntity.getPersons())) {
+            contactEntity.setPersons(null);
+        }
+        if(contactEntity.getPersons()!=null) {
+            if (contactEntity.getPersons().iterator().next().getPersonApiEntity() != null) {
+                contactFastDto.setPersonPublicId(contactEntity.getPersons().iterator().next().getPersonApiEntity().getPersonPublicId());
+            }
+        }
     }
-
 
 }

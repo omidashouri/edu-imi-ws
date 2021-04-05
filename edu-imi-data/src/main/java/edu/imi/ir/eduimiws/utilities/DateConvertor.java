@@ -1,11 +1,16 @@
 package edu.imi.ir.eduimiws.utilities;
 
+import com.ghasemkiani.app.demo.PersianCalendarDemo;
+import com.ghasemkiani.app.demo.PersianGregorianDateConverter;
 import com.ghasemkiani.util.DateFields;
+import com.ghasemkiani.util.PersianCalendarUtils;
 import com.ghasemkiani.util.SimplePersianCalendar;
+import com.ghasemkiani.util.icu.PersianCalendar;
+import io.jsonwebtoken.lang.Strings;
 import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.driver.DatabaseError;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,14 +18,41 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
-import java.util.Calendar;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @Slf4j
 public class DateConvertor {
 
+    public Date convertKhToGeorgianDate(String date) {
+        Optional<String> miladiDate = null;
+        if (date == null) {
+            return null;
+        }
+        miladiDate = Optional.ofNullable(this.convertKhToMi(date));
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Optional<Date> georgianDate = null;
+        try {
+            if (miladiDate != null) {
+                georgianDate = Optional.of(dateFormat.parse(miladiDate.get()));
+            }
+        } catch (ParseException e) {
+            log.error(e.getMessage());
+        }
+        return georgianDate.orElse(null);
+    }
+
     public String convertKhToMi(String date) {
+
+        PersianCalendar persianCalendar = new PersianCalendar(1391, 8, 20);
+
+        SimplePersianCalendar simplePersianCalendar = new SimplePersianCalendar();
+        simplePersianCalendar.setDateFields(new DateFields(1399, 8, 12));
+        simplePersianCalendar.getGregorianChange();
+
         String[] s = date.split("/");
         String finalDate = "";
         try {
@@ -922,7 +954,7 @@ public class DateConvertor {
      * @author Omid Ashouri
      */
     public java.util.Date getDateTimefromLocaleDate(LocalDate localDate) {
-        return Date.valueOf(localDate);
+        return java.sql.Date.valueOf(localDate);
     }
 
     /**

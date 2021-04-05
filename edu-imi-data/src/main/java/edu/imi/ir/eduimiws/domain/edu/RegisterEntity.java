@@ -46,7 +46,7 @@ import javax.persistence.*;
                                 @ColumnResult(name = "studentIdR", type = Long.class),
                                 @ColumnResult(name = "deleteStatusR", type = Long.class),
                                 @ColumnResult(name = "activityStatusR", type = Long.class),
-                                @ColumnResult(name = "registerEditDateR", type = String.class)
+                                @ColumnResult(name = "registerDateR", type = String.class)
                         }
                 )
         }
@@ -55,12 +55,12 @@ import javax.persistence.*;
         @NamedNativeQuery(name = "RegisterEntity.selectAllRegisterOnly",
                 query = " select ID as idR, PERIOD_ID as periodIdR, STUDENT_ID as studentIdR, " +
                         " DELETE_STATUS as deleteStatusR, ACTIVITY_STATUS as activityStatusR, " +
-                        " EDIT_DATE as registerEditDateR  from EDU.TBL_REGISTER ",
+                        " REGISTER_DATE as registerDateR  from EDU.TBL_REGISTER where DELETE_STATUS=1 ",
                 resultSetMapping = "RegisterOnly"),
         @NamedNativeQuery(name = "RegisterEntity.selectAllRegisterOnlyByIdBetween",
                 query = " select ID as idR, PERIOD_ID as periodIdR, STUDENT_ID as studentIdR, " +
                         " DELETE_STATUS as deleteStatusR, ACTIVITY_STATUS as activityStatusR, " +
-                        " EDIT_DATE as registerEditDateR  from EDU.TBL_REGISTER " +
+                        " REGISTER_DATE as registerDateR  from EDU.TBL_REGISTER " +
                         " where ID between :beginRegisterId and :endRegisterId ",
                 resultSetMapping = "RegisterOnly"),
         @NamedNativeQuery(name = "RegisterEntity.selectCurrentSequenceNumber",

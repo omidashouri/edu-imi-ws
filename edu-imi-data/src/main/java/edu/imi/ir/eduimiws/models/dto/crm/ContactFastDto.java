@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.models.dto.crm;
 
+import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
+import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import lombok.*;
 
 import java.io.Serializable;
@@ -15,9 +17,12 @@ public class ContactFastDto implements Serializable {
 
     private Long id;
 
-    private Long accountPublicId;
+    private String accountPublicId;
+    private Long accountId;
+    private AccountDto account;
 
-    private Long salutationPublicId;
+    private String salutationPublicId;
+    private Long salutationId;
 
     private String firstName;
 
@@ -39,17 +44,20 @@ public class ContactFastDto implements Serializable {
 
     private String email;
 
-    private Long currencyPublicId;
+    private String currencyPublicId;
+    private Long currencyId;
 
     private String department;
 
     private String role;
 
-    private Long managerPublicId;
+    private String managerPublicId;
+    private Long managerId;
 
     private String managerPhone;
 
-    private Long assistantPublicId;
+    private String assistantPublicId;
+    private Long assistantId;
 
     private String assistantPhone;
 
@@ -65,27 +73,41 @@ public class ContactFastDto implements Serializable {
 
     private String description;
 
-    private Long parentPublicId;
+    private String parentPublicId;
+    private Long parentId;
 
-    private Long countryPublicId;
+    private String countryPublicId;
+    private Long countryId;
+    private ParameterDto country;
 
-    private Long statePublicId;
+    private String statePublicId;
+    private Long stateId;
+    private ParameterDto state;
 
-    private Long cityPublicId;
+    private String cityPublicId;
+    private Long cityId;
+    private ParameterDto city;
 
     private String addressPhone;
 
     private String address;
 
-    private Long companyPublicId;
+    private String companyPublicId;
+    private Long companyId;
+    private CompanyDto company;
 
-    private Long organizationPublicId;
+    private String organizationPublicId;
+    private Long organizationId;
+    private OrganizationDto organization;
 
-    private Long leadSourcePublicId;
+    private String leadSourcePublicId;
+    private Long leadSourceId;
 
-    private Long campaignPublicId;
+    private String campaignPublicId;
+    private Long campaignId;
 
-    private Long teamPublicId;
+    private String teamPublicId;
+    private Long teamId;
 
     private String syncOutLook;
 
@@ -101,9 +123,11 @@ public class ContactFastDto implements Serializable {
 
     private String allowMail;
 
-    private Long addressTypePublicId;
+    private String addressTypePublicId;
+    private Long addressTypeId;
 
-    private Long userCreatorPublicId;
+    private String userCreatorPublicId;
+    private Long userCreatorId;
 
     private String fromCity;
 
@@ -113,7 +137,9 @@ public class ContactFastDto implements Serializable {
 
     private String fatherName;
 
-    private Long birthCityPublicId;
+    private String birthCityPublicId;
+    private Long birthCityId;
+    private ParameterDto birthCity;
 
     private String accessType;
 
@@ -123,11 +149,17 @@ public class ContactFastDto implements Serializable {
 
     private String llastName;
 
-    private Long religionPublicId;
+    private String religionPublicId;
+    private Long religionId;
+    private ParameterDto religion;
 
-    private Long militaryServicePublicId;
+    private String militaryServicePublicId;
+    private Long militaryServiceId;
+    private ParameterDto militaryService;
 
-    private Long eduLevelPublicId;
+    private String eduLevelPublicId;
+    private Long eduLevelId;
+    private ParameterDto eduLevel;
 
     private String fieldName;
 
@@ -141,13 +173,16 @@ public class ContactFastDto implements Serializable {
 
     private String entranceDate;
 
-    private Long contractTypePublicId;
+    private String contractTypePublicId;
+    private Long contractTypeId;
 
     private String university;
 
-    private Long insuranceKindPublicId;
+    private String insuranceKindPublicId;
+    private Long insuranceKindId;
 
-    private Long insuranceBoxPublicId;
+    private String insuranceBoxPublicId;
+    private Long insuranceBoxId;
 
     private String gender1;
 
@@ -167,7 +202,8 @@ public class ContactFastDto implements Serializable {
 
     private String createDate;
 
-    private Long userEditorPublicId;
+    private String userEditorPublicId;
+    private Long userEditorId;
 
     private String convertDateWho;
 
@@ -177,10 +213,13 @@ public class ContactFastDto implements Serializable {
 
     private String lfromCity;
 
-    private Long lfromCityEntityPublicId;
+    private String lfromCityEntityPublicId;
+    private Long lfromCityEntityId;
 
     private String contactPublicId;
+    private Long contactId;
 
     private String personPublicId;
+    private Long personId;
 
 }

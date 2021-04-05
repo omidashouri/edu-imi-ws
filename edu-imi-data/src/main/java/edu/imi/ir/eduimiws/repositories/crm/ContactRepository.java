@@ -18,18 +18,19 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ContactRepository extends CrudRepository<ContactEntity, Long>,
-        QuerydslPredicateExecutor<ContactEntity>, QuerydslBinderCustomizer<QContactEntity> {
+public interface ContactRepository extends CrudRepository<ContactEntity, Long>
+//        , QuerydslPredicateExecutor<ContactEntity>, QuerydslBinderCustomizer<QContactEntity>
+{
 //NU
 //    List<ContactEntity> findAllByPersonsIn(List<PersonEntity> personEntities);
 
-      @Override
+/*      @Override
       default public void customize(
               QuerydslBindings bindings, QContactEntity root) {
             bindings.bind(String.class)
                     .first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
             bindings.excluding(root.id);
-      }
+      }*/
 
 
       Long countByNationCode(String nationCode);
@@ -37,6 +38,7 @@ public interface ContactRepository extends CrudRepository<ContactEntity, Long>,
       @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonApi", type = EntityGraph.EntityGraphType.LOAD)
       List<ContactEntity> findContactEntitiesByNationCode(@Param("nationCode") String nationalCode);
 
+      @EntityGraph(value = "ContactEntity.findContactAccount", type = EntityGraph.EntityGraphType.LOAD)
       Page<ContactEntity> findAll(Pageable pageable);
 
 

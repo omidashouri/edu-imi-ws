@@ -9,12 +9,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
 
+@Async
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -45,6 +48,11 @@ public class RegisterServiceImpl implements RegisterService{
         Page<RegisterEntity> registerPages = registerRepository
                 .findAllByDeleteStatusIsNotNull(pageable);
         return registerPages;
+    }
+
+    @Override
+    public List<RegisterEntity> findAllByDeleteStatusIsNotNull() {
+        return registerRepository.findAllByDeleteStatusIsNotNull();
     }
 
     @Override
