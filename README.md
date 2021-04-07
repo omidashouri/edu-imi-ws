@@ -2370,7 +2370,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
               declare
                 cursor c_t is
                         SELECT
-                            mt.id as FIELDCOURSEID,
+                            mt.id as PROJECTID,
                             mt.activity_status as ACTIVITYSTATUS,
                             mt.delete_status as DELETESTATUS,
                             mt.field_id as FIELDID,
@@ -2387,7 +2387,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
                         WHERE
                             api.FIELD_COURSE_id IS NULL
                         ORDER BY
-                            FIELDCOURSEID ASC;
+                            PROJECTID ASC;
               begin
                 for r_t in c_t loop
                         INSERT INTO EDU.tbl_FIELD_COURSE_api(
@@ -2405,7 +2405,7 @@ create or replace TRIGGER "EDU"."TBL_FIELD_COURSE_API_IU" AFTER INSERT OR UPDATE
                             EDU.SEQ_FIELD_COURSE_API.nextval,
                             crm.public_uuid,
                             systimestamp,
-                            r_t."FIELDCOURSEID",
+                            r_t."PROJECTID",
                             r_t."ACTIVITYSTATUS",
                             r_t."DELETESTATUS",
                             r_t."FIELDID",
@@ -6711,6 +6711,423 @@ create or replace procedure MAINPARTS.UUID_DIGITAL_PAYMENT_API IS
       MAINPARTS.UUID_DIGITAL_PAYMENT_API;
       end; 
 ------------------------------
+
+
+------------------ TBL_PROJECT_TYPE ------------
+
+
+       CREATE SEQUENCE  "PMIS"."SEQ_PROJECT_TYPE_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+
+        CREATE TABLE "PMIS"."TBL_PROJECT_TYPE_API"
+        (	"ID" NUMBER NOT NULL ENABLE,
+        "PROJECT_TYPE_ID" NUMBER,
+        "PROJECT_TYPE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+        "CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+        "EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+        "DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+        "DESCRIPTION" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+        "DELETED_PROJECT_TYPE_ID" NUMBER,
+        CONSTRAINT "TBL_PROJECT_TYPE_API_PK" PRIMARY KEY ("ID")
+        USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255
+        TABLESPACE "USERS"  ENABLE,
+        CONSTRAINT "TBL_PROJECT_TYPE_API_FK1" FOREIGN KEY ("PROJECT_TYPE_ID")
+        REFERENCES "PMIS"."TBL_PROJECT_TYPE" ("ID") ENABLE
+        )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED
+        PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255
+        NOCOMPRESS LOGGING
+        TABLESPACE "USERS" ;
+        
+        CREATE OR REPLACE EDITIONABLE TRIGGER "PMIS"."PROJECT_TYPE_API_TRG"
+        BEFORE INSERT ON PMIS.TBL_PROJECT_TYPE_API
+        FOR EACH ROW
+        BEGIN
+        <<COLUMN_SEQUENCES>>
+        BEGIN
+        IF INSERTING AND :NEW.ID IS NULL THEN
+        SELECT SEQ_PROJECT_TYPE_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+        END IF;
+        END COLUMN_SEQUENCES;
+        END;
+        /
+        ALTER TRIGGER "PMIS"."PROJECT_TYPE_API_TRG" ENABLE;
+       
+       
+       create or replace TRIGGER "PMIS"."TBL_PROJECT_TYPE_API_IU" AFTER INSERT OR UPDATE ON PMIS.TBL_PROJECT_TYPE
+                     REFERENCING OLD AS OLD NEW AS NEW
+                     FOR EACH ROW WHEN (1=1)
+                     declare
+                       TS_ TIMESTAMP(6);
+                       UUID_ nvarchar2(500 char) ;
+                     BEGIN
+                         TS_ := systimestamp;
+                         UUID_ := CRM.public_uuid;
+                       if inserting then
+                         insert into PMIS.TBL_PROJECT_TYPE_API
+                         (id, PROJECT_TYPE_public_id, create_date_ts, PROJECT_TYPE_id)
+                          values 
+                           (PMIS.SEQ_PROJECT_TYPE_API.nextval, UUID_, TS_, :new.id);
+                       end if;
+                       if updating then
+                         update PMIS.TBL_PROJECT_TYPE_API
+                         set  
+                          edit_date_ts = TS_
+                          where PROJECT_TYPE_id = :old.id;
+                         end if;
+                     END;
+                     
+    create or replace TRIGGER "PMIS"."TBL_PROJECT_TYPE_API_D" BEFORE DELETE ON PMIS.TBL_PROJECT_TYPE
+               REFERENCING OLD AS OLD NEW AS NEW
+               FOR EACH ROW WHEN (1=1)
+               declare
+                 TS_ TIMESTAMP(6);
+                 UUID_ nvarchar2(500 char) ;
+                 ID_API number;
+               BEGIN
+                   TS_ := systimestamp;
+                   UUID_ := CRM.public_uuid;
+                 IF DELETING THEN
+                   SELECT API.ID INTO ID_API
+                   FROM PMIS.TBL_PROJECT_TYPE_API API
+                   WHERE API.PROJECT_TYPE_id = :old.id;
+    
+                   update PMIS.tbl_PROJECT_TYPE_api api
+                   set  
+                    api.PROJECT_TYPE_id = null,
+                    api.delete_date_ts = TS_,
+                    api.deleted_PROJECT_TYPE_id = :old.id
+                    where api.id = ID_API;
+                  END IF;
+               END;
+           
+          
+     create or replace procedure   PMIS.UUID_PROJECT_TYPE_API IS
+          begin
+            declare
+              cursor c_t is
+                      SELECT
+                          mt.id as PROJECT_TYPEID
+                      FROM
+                          PMIS.tbl_PROJECT_TYPE mt
+                          LEFT JOIN PMIS.tbl_PROJECT_TYPE_api api ON mt.id = api.PROJECT_TYPE_id
+                      WHERE
+                          api.PROJECT_TYPE_id IS NULL
+                      ORDER BY
+                          PROJECT_TYPEID ASC;
+            begin
+              for r_t in c_t loop
+                      INSERT INTO PMIS.tbl_PROJECT_TYPE_api(
+                          id,
+                          PROJECT_TYPE_public_id,
+                          create_date_ts,
+                          PROJECT_TYPE_id
+                      )VALUES(
+                          PMIS.SEQ_PROJECT_TYPE_API.nextval,
+                          crm.public_uuid,
+                          systimestamp,
+                          r_t."PROJECT_TYPEID"
+                      );
+               end loop;
+            end;
+            commit;
+          end;  
+           
+           
+          BEGIN
+          PMIS.UUID_PROJECT_TYPE_API;
+          END;   
+
+
+------------------------------
+
+@@@--------------- TBL_PROJECT ---------------
+
+
+   CREATE SEQUENCE  "PMIS"."SEQ_PROJECT_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+    
+     CREATE TABLE "PMIS"."TBL_PROJECT_API" 
+    (	"ID" NUMBER NOT NULL ENABLE,
+    "PROJECT_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    "PROJECT_ID" NUMBER,
+    "PROJECT_TYPE_ID" NUMBER,
+    "PROJECT_TYPE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    "EXECUTOR_ID" NUMBER,
+    "EXECUTOR_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    "MANAGER_ID" NUMBER,
+    "MANAGER_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    "LAST_VERSION" NVARCHAR2(1) COLLATE "USING_NLS_COMP",
+    "PROJECT_REQUEST_ID" NUMBER,
+    "PROJECT_REQUEST_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    "CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+    "EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+    "DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+    "DELETED_PROJECT_ID" NUMBER,
+    "DESCRIPTION" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    CONSTRAINT "TBL_PROJECT_API_PK" PRIMARY KEY ("ID")
+    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255
+    TABLESPACE "USERS"  ENABLE,
+    CONSTRAINT "TBL_PROJECT_API_FK1" FOREIGN KEY ("PROJECT_ID")
+    REFERENCES "PMIS"."TBL_PROJECT" ("ID") ENABLE,
+    CONSTRAINT "TBL_PROJECT_API_FK2" FOREIGN KEY ("EXECUTOR_ID")
+    REFERENCES "CRM"."TBL_PERSON" ("ID") ENABLE,
+    CONSTRAINT "TBL_PROJECT_API_FK3" FOREIGN KEY ("MANAGER_ID")
+    REFERENCES "CRM"."TBL_PERSON" ("ID") ENABLE,
+    CONSTRAINT "TBL_PROJECT_API_FK4" FOREIGN KEY ("PROJECT_TYPE_ID")
+    REFERENCES "PMIS"."TBL_PROJECT_TYPE" ("ID") ENABLE,
+    CONSTRAINT "TBL_PROJECT_API_FK5" FOREIGN KEY ("PROJECT_REQUEST_ID")
+    REFERENCES "PMIS"."TBL_PROJECT_REQUEST" ("ID") ENABLE
+    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED
+    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255
+    NOCOMPRESS LOGGING
+    TABLESPACE "USERS" ;
+
+     COMMENT ON COLUMN "PMIS"."TBL_PROJECT_API"."PROJECT_REQUEST_PUBLIC_ID" IS 'LATER ADD  DEPENDENCIES';
+    
+    CREATE OR REPLACE EDITIONABLE TRIGGER "PMIS"."TBL_PROJECT_API_TRG"
+    BEFORE INSERT ON PMIS.TBL_PROJECT_API
+    FOR EACH ROW
+    BEGIN
+    <<COLUMN_SEQUENCES>>
+    BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+    SELECT SEQ_PROJECT_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+    END COLUMN_SEQUENCES;
+    END;
+    /
+    ALTER TRIGGER "PMIS"."TBL_PROJECT_API_TRG" ENABLE;
+
+
+    create or replace TRIGGER "PMIS"."TBL_PROJECT_API_IU" AFTER INSERT OR UPDATE ON PMIS.TBL_PROJECT
+        REFERENCING OLD AS OLD NEW AS NEW
+        FOR EACH ROW WHEN (1=1)
+        declare
+        TS_ TIMESTAMP(6);
+        UUID_ nvarchar2(500 char) ;
+        APIPUBLICID_ nvarchar2(500 char); --MANAGER
+        APIIPUBLICID_ nvarchar2(500 char); --PROJECT_TYPE
+        APIIIPUBLICID_ nvarchar2(500 char); --EXECUTOR
+        BEGIN
+        TS_ := systimestamp;
+        UUID_ := CRM.public_uuid;
+    if inserting then
+        IF :NEW.MANAGER_id is not null THEN
+            SELECT api.PERSON_public_id INTO APIPUBLICID_
+            FROM CRM.tbl_PERSON_api api
+            WHERE api.PERSON_id = :new.MANAGER_id;
+        END IF;
+        --
+        IF :NEW.PROJECT_TYPE_id is not null THEN
+            SELECT api.PROJECT_TYPE_public_id INTO APIIPUBLICID_
+            FROM PMIS.tbl_PROJECT_TYPE_api api
+            WHERE api.PROJECT_TYPE_id = :new.PROJECT_TYPE_id;
+        END IF;
+        --
+        IF :NEW.EXECUTER_id is not null THEN
+            SELECT api.PERSON_public_id INTO APIIIPUBLICID_
+            FROM CRM.tbl_PERSON_api api
+            WHERE api.PERSON_id = :new.EXECUTER_id;
+        END IF;
+        --
+        insert into PMIS.tbl_PROJECT_api
+            (id, PROJECT_public_id, create_date_ts,
+            PROJECT_id, MANAGER_id, MANAGER_public_id, PROJECT_TYPE_id, PROJECT_TYPE_public_id,
+            EXECUTOR_ID, EXECUTOR_PUBLIC_ID,
+            last_version, PROJECT_REQUEST_ID)
+        values
+            (PMIS.SEQ_PROJECT_API.nextval, UUID_, TS_,
+            :new.id, :new.MANAGER_ID, APIPUBLICID_, :new.PROJECT_TYPE_ID, APIIPUBLICID_,
+            :new.EXECUTER_ID, APIIIPUBLICID_,
+            :new.last_version, :new.REQUEST_ID);
+    end if;
+    if updating then
+        update PMIS.tbl_PROJECT_api
+        set  
+        edit_date_ts = TS_
+        where PROJECT_id = :old.id;
+            --MANAGER
+                if :new.MANAGER_ID is not null and :new.MANAGER_ID != nvl(:old.MANAGER_ID,0) THEN
+                SELECT api.PERSON_public_id INTO APIPUBLICID_
+                FROM CRM.tbl_PERSON_api api
+                WHERE api.PERSON_id = :new.MANAGER_id;
+            --
+        update PMIS.tbl_PROJECT_api
+        set
+        MANAGER_id = :new.MANAGER_id,
+        MANAGER_public_id = APIPUBLICID_
+        where PROJECT_id = :old.id;
+        end if;
+            --PROJECT_TYPE
+                if :new.PROJECT_TYPE_ID is not null and :new.PROJECT_TYPE_ID != nvl(:old.PROJECT_TYPE_ID,0) THEN
+                SELECT api.PROJECT_TYPE_public_id INTO APIIPUBLICID_
+                FROM PMIS.tbl_PROJECT_TYPE_api api
+                WHERE api.PROJECT_TYPE_id = :new.PROJECT_TYPE_id;
+            --
+                update PMIS.tbl_PROJECT_api
+                set
+                PROJECT_TYPE_id = :new.PROJECT_TYPE_id,
+                PROJECT_TYPE_public_id = APIIPUBLICID_
+                where PROJECT_id = :old.id;
+                end if;
+            --EXECUTOR
+                if :new.EXECUTER_ID is not null and :new.EXECUTER_ID != nvl(:old.EXECUTER_ID,0) THEN
+                SELECT api.PERSON_public_id INTO APIIIPUBLICID_
+                FROM CRM.tbl_PERSON_api api
+                WHERE api.PERSON_id = :new.EXECUTER_id;
+            --
+            update PMIS.tbl_PROJECT_api
+            set
+            EXECUTOR_id = :new.EXECUTER_id,
+            EXECUTOR_public_id = APIIIPUBLICID_
+            where PROJECT_id = :old.id;
+            end if;
+        end if;
+    END;
+
+
+    create or replace TRIGGER "PMIS"."TBL_PROJECT_API_D" BEFORE DELETE ON PMIS.TBL_PROJECT
+            REFERENCING OLD AS OLD NEW AS NEW
+            FOR EACH ROW WHEN (1=1)
+            declare
+            TS_ TIMESTAMP(6);
+            UUID_ nvarchar2(500 char) ;
+            ID_API number;
+            BEGIN
+            TS_ := systimestamp;
+            UUID_ := CRM.public_uuid;
+        IF DELETING THEN
+                SELECT api.ID INTO ID_API
+                FROM PMIS.TBL_PROJECT_API api
+                WHERE api.PROJECT_id = :old.id;
+                update PMIS.tbl_PROJECT_api api
+            set  
+                api.PROJECT_id = null,
+                api.delete_date_ts = TS_,
+                api.deleted_PROJECT_id = :old.id,
+                api.MANAGER_id = null,
+                api.EXECUTOR_id = null,
+                api.PROJECT_REQUEST_ID = null,
+                api.PROJECT_TYPE_id = null
+                where api.id = ID_API;
+        END IF;
+    END;
+       
+       
+ create or replace procedure PMIS.UUID_PROJECT_API IS
+            begin
+              declare
+                cursor c_t is
+                        SELECT
+                            mt.id as PROJECTID,
+                            mt.MANAGER_id as MANAGERID,
+                            secapi.PERSON_public_id as MANAGERPUBLICID,
+                            mt.PROJECT_TYPE_id as PROJECT_TYPEID,
+                            trdapi.PROJECT_TYPE_public_id as PROJECT_TYPEPUBLICID,
+                             mt.EXECUTER_id as EXECUTORID,
+                             frthapi.PERSON_public_id as EXECUTORPUBLICID,
+                            mt.request_id as REQUEST_ID,
+                            mt.last_version as LAST_VERSION
+                        FROM
+                            PMIS.tbl_PROJECT mt
+                            LEFT JOIN PMIS.tbl_PROJECT_api api ON mt.id = api.PROJECT_id
+                            LEFT JOIN CRM.tbl_PERSON sect ON mt.MANAGER_id = sect.id
+                            LEFT JOIN CRM.tbl_PERSON_api secapi ON sect.id = secapi.PERSON_id
+                            LEFT JOIN PMIS.tbl_PROJECT_TYPE trdt ON mt.PROJECT_TYPE_id = trdt.id
+                            LEFT JOIN PMIS.tbl_PROJECT_TYPE_api trdapi ON trdt.id = trdapi.PROJECT_TYPE_id
+                            LEFT JOIN CRM.tbl_PERSON frtht ON mt.EXECUTER_id = frtht.id
+                            LEFT JOIN CRM.tbl_PERSON_api frthapi ON frtht.id = frthapi.PERSON_id
+                            LEFT JOIN PMIS.tbl_PROJECT_REQUEST fiftht ON mt.request_id = fiftht.id
+                        WHERE
+                            api.PROJECT_id IS NULL
+                        ORDER BY
+                            PROJECTID ASC;
+              begin
+                for r_t in c_t loop
+                        INSERT INTO PMIS.tbl_PROJECT_api(
+                            id,
+                            PROJECT_public_id,
+                            create_date_ts,
+                            PROJECT_id,
+                            MANAGER_id,
+                            MANAGER_public_id,
+                            PROJECT_TYPE_id,
+                            PROJECT_TYPE_public_id,
+                             EXECUTOR_id,
+                             EXECUTOR_public_id,
+                            LAST_VERSION,
+                            PROJECT_REQUEST_ID
+                        )VALUES(
+                            PMIS.SEQ_PROJECT_API.nextval,
+                            crm.public_uuid,
+                            systimestamp,
+                            r_t."PROJECTID",
+                            r_t."MANAGERID",
+                            r_t."MANAGERPUBLICID",
+                            r_t."PROJECT_TYPEID",
+                            r_t."PROJECT_TYPEPUBLICID",
+                             r_t."EXECUTORID",
+                             r_t."EXECUTORPUBLICID",
+                            r_t."LAST_VERSION",
+                            r_t."REQUEST_ID"
+                        );
+                 end loop;
+              end;
+              commit;
+            end;    
+    
+     
+      begin
+      PMIS.UUID_PROJECT_API;
+      end; 
+
+
+
+
+
+
+-----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
