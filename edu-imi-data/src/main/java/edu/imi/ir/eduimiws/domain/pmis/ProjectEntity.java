@@ -98,7 +98,7 @@ public class ProjectEntity extends BaseEntity {
     @ToString.Exclude
     @OneToOne(optional = true)
     @JoinColumn(name = "MOTHER_PROJECT_ID")
-    private ProjectEntity motherProjectId;
+    private ProjectEntity motherProject;
 
     @Column(name = "SALE_PRESENT_AMOUNT")
     private Long salePresentAmount;

@@ -50,7 +50,7 @@ public class ProjectApiEntity extends BaseEntity {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MANAGER_ID")
-    private PersonEntity managerId;
+    private PersonEntity manager;
 
     @Column(name = "MANAGER_PUBLIC_ID", length = 500)
     private String managerPublicId;

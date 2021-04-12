@@ -28,7 +28,7 @@ public class ProjectTypeEntity extends BaseEntity {
     @ToString.Exclude
     @OneToOne(optional = true)
     @JoinColumn(name = "PARENT_ID")
-    private ProjectTypeEntity parentId;
+    private ProjectTypeEntity parent;
 
     @Column(name = "CREATOR_ID")
     private Long creatorId;
