@@ -21,6 +21,7 @@ public class ProjectTypeDto implements Serializable {
 
     private ProjectTypeDto parent;
     private Long parentId;
+//    not generated in ProjectTypeApi
     private String parentPublicId;
 
     private PersonDto creator;

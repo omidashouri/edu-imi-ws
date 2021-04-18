@@ -15,7 +15,7 @@ public class ProjectDto implements Serializable {
     private static final long serialVersionUID = 3633026288364266840L;
 
     private Long id;
-    private String publicId;
+    private String projectPublicId;
 
     private String lastVersion;
 
@@ -88,6 +88,7 @@ public class ProjectDto implements Serializable {
     private Long offerId;
 
     private Long requestId;
+    private String projectRequestPublicId;
 
     private Long incomeIndicator;
 

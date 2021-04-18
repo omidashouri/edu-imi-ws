@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "PMIS", sequenceName = "SEQ_EXPENSE_CODE_API", allocationSize = 1)
 @Table(schema = "PMIS", name = "TBL_EXPENSE_CODE_API")
-public class ExpenseCodeApi extends BaseEntity {
+public class ExpenseCodeApiEntity extends BaseEntity {
 
 
     @Column(name = "EXPENSE_CODE")
