@@ -1,11 +1,7 @@
 package edu.imi.ir.eduimiws.mapper.pmis;
 
-import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.crm.AccountMapper;
-import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
-import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.mapstruct.*;

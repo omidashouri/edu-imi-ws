@@ -8,6 +8,20 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
+
+
+
+
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "ProjectEntity.findProjectProjectApi",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "projectApi")
+                }
+        )
+})
+
+
+
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)//,region = "period")
 @Getter
