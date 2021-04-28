@@ -12,7 +12,7 @@
     </ehcache:service>
 
     <!-- Persistent cache directory -->
-    <ehcache:persistence directory="/run/media/o.ashouri/Archive/0_0/cache"/>
+    <ehcache:persistence directory="/run/media/omidashouri/Archive/0_0/cache"/>
 
     <!-- Default cache template -->
     <ehcache:cache-template name="default">

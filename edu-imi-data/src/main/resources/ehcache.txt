@@ -4,7 +4,7 @@
          monitoring="autodetect"
          dynamicConfig="true">
 
-    <diskStore path="/run/media/o.ashouri/Archive/0_0/cache"/>
+    <diskStore path="/run/media/omidashouri/Archive/0_0/cache"/>
 
     <cache name="eduCategory"
            maxEntriesLocalHeap="10000"

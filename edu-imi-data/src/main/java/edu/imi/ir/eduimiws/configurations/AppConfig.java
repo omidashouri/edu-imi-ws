@@ -75,7 +75,7 @@ public class AppConfig {
     public CacheManager ehCacheV3Manager() {
         CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
                 .with(CacheManagerBuilder
-                        .persistence("/run/media/o.ashouri/Archive/0_0/cacheV3" *//*+ File.separator + "ss"*//*))
+                        .persistence("/run/media/omidashouri/Archive/0_0/cacheV3" *//*+ File.separator + "ss"*//*))
                 .withCache("myEhv3Cache", CacheConfigurationBuilder
                         .newCacheConfigurationBuilder(Long.class, String.class,
                                 ResourcePoolsBuilder

@@ -5,7 +5,7 @@
         xmlns:ehcache='http://www.ehcache.org/v3'
         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd">
 
-    <ehcache:persistence directory="/run/media/o.ashouri/Archive/0_0/cache"/>
+    <ehcache:persistence directory="/run/media/omidashouri/Archive/0_0/cache"/>
 
     <ehcache:cache alias="basicCache">
         <ehcache:key-type>java.lang.Object</ehcache:key-type>

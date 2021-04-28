@@ -7609,7 +7609,7 @@ ehcache.xml:
     </ehcache:service>
 
 <!-- Persistent cache directory -->
-<!--    <persistence directory="/run/media/o.ashouri/Archive/0_0/cache" />-->
+<!--    <persistence directory="/run/media/omidashouri/Archive/0_0/cache" />-->
     <ehcache:persistence directory="D:\Office\cache" />
 
     <!-- Default cache template -->
