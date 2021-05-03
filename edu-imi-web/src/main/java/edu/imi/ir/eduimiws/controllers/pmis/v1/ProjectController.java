@@ -11,6 +11,7 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponse;
 import edu.imi.ir.eduimiws.predicates.v2.QueryDSLPredicatesBuilder;
 import edu.imi.ir.eduimiws.services.pmis.ProjectService;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.QueryDslAsQueryParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -198,6 +199,7 @@ public class ProjectController {
 
 
     @Operation(
+            hidden = true,
             summary = "Find Project by Query",
             description = "Search project by Query",
             tags = "projects",
@@ -230,6 +232,7 @@ public class ProjectController {
     )
     @QueryDslAsQueryParam
     @PageableAsQueryParam
+    @DisableMethod
     @GetMapping(path = "/search/{criteria}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getProjectBySearch(@PathVariable String criteria,

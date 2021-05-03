@@ -236,6 +236,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi projectApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("Projects")
+                .pathsToMatch("/api/v1/projects/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {

@@ -40,14 +40,23 @@ public class ProjectResponseAssembler extends RepresentationModelAssemblerSuppor
                             .withSelfRel());
         }
 
-/*        if (projectDto.getPersonPublicId() != null) {
+        if (projectDto.getExecuterPublicId() != null) {
             projectResponse
                     .add(linkTo(
                             methodOn(
                                     UserController.class)
-                                    .getUserByUserPublicId(projectDto.getPersonPublicId()))
-                            .withRel("user"));
-        }*/
+                                    .getUserByUserPublicId(projectDto.getExecuterPublicId()))
+                            .withRel("Executor"));
+        }
+
+        if (projectDto.getManagerPublicId() != null) {
+            projectResponse
+                    .add(linkTo(
+                            methodOn(
+                                    UserController.class)
+                                    .getUserByUserPublicId(projectDto.getManagerPublicId()))
+                            .withRel("Manager"));
+        }
 
 /*        if(projectDto.getNationCode() != null){
             projectResponse
