@@ -22,7 +22,7 @@
         <com.sun.xml.ws.version>2.3.3</com.sun.xml.ws.version>
         <org.apache.cxf.version>3.4.0</org.apache.cxf.version>
         <org.apache.cxf.xjc-utils.version>3.3.1</org.apache.cxf.xjc-utils.version>
-        <h2.version>1.4.200</h2.version>
+<!--        <h2.version>1.4.200</h2.version>-->
         <ir.ghasemkiani.version>2.1.7</ir.ghasemkiani.version>
         <org.apache.cxf.cxf-codegen-plugin.version>3.4.1</org.apache.cxf.cxf-codegen-plugin.version>
     </properties>
@@ -88,12 +88,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
