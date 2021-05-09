@@ -1,8 +1,12 @@
 package edu.imi.ir.eduimiws.utilities;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.actuate.info.Info;
 import org.springframework.boot.actuate.info.InfoContributor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +15,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class ActuatorInfoContributor implements InfoContributor {
+public class ActuatorInfoContributor implements InfoContributor, HealthIndicator {
 
     private final Environment environment;
 
@@ -22,11 +26,36 @@ public class ActuatorInfoContributor implements InfoContributor {
         System
                 .getProperties()
                 .forEach((k, v) -> props.put(String.valueOf(k), v));
-        props.put("info.app.name","IMI Web Service API");
-        props.put("info.app.description","This is a Restful Web Api");
-        props.put("info.app.version","1.0.0");
-        props.put("Developer Name","Omid Ashouri");
-        props.put("Developer Contact Information","+9809126607350");
+        props.put("info.app.name", "IMI Web Service API");
+        props.put("info.app.description", "This is a Restful Web Api");
+        props.put("info.app.version", "1.0.0");
+        props.put("Developer Name", "Omid Ashouri");
+        props.put("Developer Contact Information", "+9809126607350");
         builder.withDetails(props);
     }
+
+
+    @Override
+    public Health health() {
+
+        Status systemStatus = new Status("Server Status", "this status is defined by omid ashouri");
+
+        Map<String, Object> details = new HashMap<>();
+        details.put("system-ready", true);
+        details.put("can-accept-request", true);
+
+        return Health
+                .status(systemStatus).withDetails(details)
+                .build();
+    }
+
+//    an oder way to register a bean
+    @Bean
+    public HealthIndicator paymentServerStatus(){
+        return () -> Health.status("Payment Server")
+                .withDetail("system-ready",false)
+                .build();
+    }
+
+
 }
