@@ -7811,3 +7811,109 @@ List<PropertyDescriptor> propertyDescriptorsError =
                     Arrays.stream(Introspector.getBeanInfo(contactEntity1.getClass()).getPropertyDescriptors())
                             .filter(e -> !persistenceUnitUtil.isLoaded(contactEntity1, e.getName()))
                             .collect(Collectors.toList());
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+spring.profiles.active=dev
+
+
+
+spring.jpa.properties.hibernate.jdbc.batch_size = 100
+spring.jpa.properties.hibernate.jdbc.fetch_size= 400
+#spring.jpa.properties.hibernate.order_inserts=  true
+#spring.jpa.properties.hibernate.order_updates=  true
+spring.datasource.hikari.maximum-pool-size= 10
+spring.datasource.hikari.setLeakDetectionThreshold= 60000
+spring.datasource.hikari.leak-detection-threshold= 30000
+spring.datasource.hikari.driver-class-name= oracle.jdbc.OracleDriver
+
+
+
+------------------------------
+
+    //in 'WebConfig' clss, not mandatory
+
+
+    @Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
+    public DispatcherServlet dispatcherServlet()
+    {
+        return new DispatcherServlet();
+    }
+
+    @Bean
+    public ServletRegistrationBean dispatcherRegistration() {
+        ServletRegistrationBean registration = new ServletRegistrationBean(
+                dispatcherServlet(), "/");
+        registration.setAsyncSupported(true);
+        return registration;
+    }
+    
+    
+    
+    -------------------------------------------------------------
+    
+    //Remove @Async from 'RegisterServiceImpl'
+    
+    //in Service
+    CompletableFuture<List<RegisterEntity>> findAllByDeleteStatusIsNotNullThread();
+    
+    //in ServiceImpl    
+    @Async("asyncExecutor")
+        @Override
+        public CompletableFuture<List<RegisterEntity>> findAllByDeleteStatusIsNotNullThread() {
+            System.out.println("Thread Name Async:"+Thread.currentThread().getName());
+            return CompletableFuture.completedFuture(registerRepository.findAllByDeleteStatusIsNotNull());
+        }
+        
+        -------------------------------------------------------------
+        
+        
+        @Configuration
+        @EnableAsync
+        public class SpringAsyncConfig implements AsyncConfigurer {
+        
+            @Primary
+            @Bean(name = "asyncExecutor")
+            public Executor threadPoolTaskExecutor() {
+                ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+                executor.setCorePoolSize(3);
+                executor.setMaxPoolSize(10);
+                executor.setQueueCapacity(100);
+        //        executor.setThreadNamePrefix("AsynchThread-");
+                executor.initialize();
+                return executor;
+            }
+        
+            @Override
+            public Executor getAsyncExecutor() {
+                return threadPoolTaskExecutor();
+            }
+     }
+     
+     
+     -------------------------------------------------------------
+     
+     //in tomcat:
+     
+     apache-tomcat-9.0.30\conf\server.xml
+     
+         <Connector port="8080" protocol="org.apache.coyote.http11.Http11NioProtocol"
+                     minProcessors="3"
+                    maxProcessors="8"
+                    maxThreads="20"
+                    connectionTimeout="150000" 
+                    asyncTimeout="150000"
+                    redirectPort="8443" />
