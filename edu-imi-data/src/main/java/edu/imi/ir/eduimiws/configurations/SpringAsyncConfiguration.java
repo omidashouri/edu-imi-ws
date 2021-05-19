@@ -2,8 +2,12 @@ package edu.imi.ir.eduimiws.configurations;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.Connector;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.TomcatServletWebServerFactoryCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,9 +64,42 @@ public class SpringAsyncConfiguration implements AsyncConfigurer {
     }
 
 //    change AsyncRequestTimeoutException
-    @Bean
+/*    @Bean
     public TomcatConnectorCustomizer tomcatConnectorCustomizer(){
         return connector -> connector.setAsyncTimeout(180000);
+    }*/
+
+/*    @Bean
+    public TomcatServletWebServerFactoryCustomizer tomcatServletWebServerFactoryCustomizer(
+            ServerProperties serverProperties) {
+        TomcatServletWebServerFactoryCustomizer tomcatServletWebServerFactoryCustomizer =
+                new TomcatServletWebServerFactoryCustomizer(serverProperties);
+        tomcatServletWebServerFactoryCustomizer.customize(this.tomcatServletWebServerFactory());
+        return tomcatServletWebServerFactoryCustomizer;
+    }*/
+
+
+
+
+    @Bean
+    public TomcatServletWebServerFactory tomcatServletWebServerFactory() {
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+            tomcat.addAdditionalTomcatConnectors(connector());
+        return tomcat;
+    }
+
+    @Bean
+    public Connector connector(){
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setAsyncTimeout(180000);
+        connector.setPort(Integer.valueOf(8083));
+        connector.setAllowTrace(true);
+        return connector;
+    }
+
+    @Bean
+    public TomcatConnectorCustomizer tomcatConnectorCustomizer(){
+        return connector -> {this.connector();};
     }
 
 }
