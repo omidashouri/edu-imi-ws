@@ -7,20 +7,23 @@ import edu.imi.ir.eduimiws.models.projections.edu.RegisterOnly;
 import edu.imi.ir.eduimiws.repositories.edu.RegisterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-@Async
+
+
 @Service
 @Transactional
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class RegisterServiceImpl implements RegisterService{
 
@@ -53,6 +56,14 @@ public class RegisterServiceImpl implements RegisterService{
     @Override
     public List<RegisterEntity> findAllByDeleteStatusIsNotNull() {
         return registerRepository.findAllByDeleteStatusIsNotNull();
+    }
+
+    @Async("asyncExecutor")
+    @Override
+    public CompletableFuture<List<RegisterEntity>> findAllByDeleteStatusIsNotNullThread() throws ExecutionException, InterruptedException {
+        System.out.println(" >>> is currently running in " + Thread.currentThread().getName());
+//        final  List<RegisterEntity> registers = registerRepository.findAllByDeleteStatusIsNotNull();
+        return  CompletableFuture.completedFuture(registerRepository.findAllByDeleteStatusIsNotNull());
     }
 
     @Override

@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public interface RegisterService {
 
@@ -18,6 +20,8 @@ public interface RegisterService {
     Page<RegisterEntity> findAllByOrderPageable(Pageable pageable);
 
     List<RegisterEntity> findAllByDeleteStatusIsNotNull();
+
+    CompletableFuture<List<RegisterEntity>> findAllByDeleteStatusIsNotNullThread() throws ExecutionException, InterruptedException;
 
     @Cacheable(value = "register")
     Page<RegisterEntity> findAllWithStudentPeriodNameByOrderPageable(Pageable pageable);

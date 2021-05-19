@@ -22,6 +22,7 @@ public interface RegisterRepository extends CrudRepository<RegisterEntity, Long>
 
     @EntityGraph(attributePaths = {"registerApi"})
     List<RegisterEntity> findTop10ByDeleteStatusIsNotNull();
+
     @EntityGraph(attributePaths = {"registerApi"})
     List<RegisterEntity> findAllByDeleteStatusIsNotNull();
 

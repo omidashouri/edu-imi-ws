@@ -53,6 +53,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -148,6 +150,14 @@ public class RegisterController {
                 .toRegisterResponses(registerFastDtos, new CycleAvoidingMappingContext());
 
         return ResponseEntity.ok(registerResponses);
+    }
+
+    @GetMapping(path = "/unpagedAsync", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public @ResponseBody CompletableFuture<ResponseEntity<List<RegisterResponse>>> getRegisters2() throws ExecutionException, InterruptedException {
+        return registerService.findAllByDeleteStatusIsNotNullThread()
+                .thenApply(re->registerFastDtoMapper.toRegisterFastDtos(re, new CycleAvoidingMappingContext()))
+                .thenApply(rfd->registerResponseRegisterFastDtoMapper.toRegisterResponses(rfd, new CycleAvoidingMappingContext()))
+                .thenApply(result-> new ResponseEntity<>(result, HttpStatus.OK));
     }
 
     @Operation(
