@@ -7084,7 +7084,7 @@ create or replace procedure MAINPARTS.UUID_DIGITAL_PAYMENT_API IS
 
 
 
------------------------------------------------------------------------------------
+----------------------------NOT CREATED-------------------------------------------------------
 
 
 
@@ -7155,16 +7155,212 @@ create or replace TRIGGER "PMIS"."TBL_EXPENSE_CODE_API_IU" AFTER INSERT OR UPDAT
          end if;
      END;
 
-
-
-
 -----------------------------------------------------------------------------------
 
 
 
+--------------------  CenterCostCodeAPI --------------
+
+
+CREATE SEQUENCE  "PMIS"."SEQ_CENTER_COST_CODE_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+
+    CREATE TABLE PMIS.TBL_CENTER_COST_CODE_API 
+        (
+            ID NUMBER NOT NULL
+            , CENTER_COST_CODE_PUBLIC_ID NVARCHAR2(500)
+            , COST_CODE NUMBER
+            , COST_CODE_TITLE NVARCHAR2(500)
+            , CREATE_DATE_TS TIMESTAMP(6) WITH TIME ZONE
+            , EDIT_DATE_TS TIMESTAMP(6) WITH TIME ZONE
+            , DELETE_DATE_TS TIMESTAMP(6) WITH TIME ZONE
+            , LAST_VERSION NUMBER
+            , DESCRIPTION NVARCHAR2(500)
+            , CREATOR_ID NUMBER
+            , EDITOR_ID NUMBER
+        )
+        LOGGING
+        TABLESPACE USERS
+        PCTFREE 10
+        INITRANS 1
+        STORAGE
+        (
+            BUFFER_POOL DEFAULT
+        )
+        NOCOMPRESS
+        NO INMEMORY
+        NOPARALLEL;
+
+CREATE UNIQUE INDEX PMIS.TBL_CENTER_COST_CODE_API_PK ON PMIS.TBL_CENTER_COST_CODE_API (ID ASC)
+    LOGGING
+    TABLESPACE USERS
+    PCTFREE 10
+    INITRANS 2
+    STORAGE
+    (
+        BUFFER_POOL DEFAULT
+    )
+    NOPARALLEL;
+
+CREATE UNIQUE INDEX PMIS.TBL_CENTER_COST_CODE_API_PK ON PMIS.TBL_CENTER_COST_CODE_API (ID ASC)
+    LOGGING
+    TABLESPACE USERS
+    PCTFREE 10
+    INITRANS 2
+    STORAGE
+    (
+        BUFFER_POOL DEFAULT
+    )
+    NOPARALLEL;
+
+ALTER TABLE PMIS.TBL_CENTER_COST_CODE_API
+    ADD CONSTRAINT TBL_CENTER_COST_CODE_API_PK PRIMARY KEY
+    (
+        ID
+    )
+    USING INDEX PMIS.TBL_CENTER_COST_CODE_API_PK
+    ENABLE;
+
+ALTER TABLE PMIS.TBL_CENTER_COST_CODE_API
+    ADD CONSTRAINT TBL_CENTER_COST_CODE_API_FK1 FOREIGN KEY
+    (
+        CREATOR_ID
+    )
+        REFERENCES CRM.TBL_PERSON
+    (
+        ID
+    )
+    ENABLE;
+    
+    ALTER TABLE PMIS.TBL_CENTER_COST_CODE_API
+        ADD CONSTRAINT TBL_CENTER_COST_CODE_API_FK2 FOREIGN KEY
+        (
+            EDITOR_ID
+        )
+            REFERENCES CRM.TBL_PERSON
+        (
+            ID
+        )
+        ENABLE;
+
+COMMENT ON COLUMN PMIS.TBL_CENTER_COST_CODE_API.LAST_VERSION IS '0=NO,1=YES';
+
+CREATE OR REPLACE TRIGGER PMIS.TBL_CENTER_COST_CODE_API_TRG
+    BEFORE INSERT ON PMIS.TBL_CENTER_COST_CODE_API
+    FOR EACH ROW
+    BEGIN
+        <<COLUMN_SEQUENCES>>
+    BEGIN
+    NULL;
+        END COLUMN_SEQUENCES;
+    END;
+
+
+INSERT ALL
+INTO pmis.tbl_center_cost_code_api ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)
+VALUES (  crm.public_uuid, 0, 'نمایندگی ها', systimestamp, 100160, 1 )
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)  
+VALUES ( crm.public_uuid, 1, 'مشاوره', systimestamp, 100160, 1)
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)
+VALUES ( crm.public_uuid, 2, 'رتبه بندی', systimestamp,100160, 1)
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)
+VALUES ( crm.public_uuid, 3, 'تعالی سازمانی', systimestamp,100160, 1)
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)
+VALUES ( crm.public_uuid, 4, 'اداره کنفرانس ها', systimestamp,100160, 1)
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)
+VALUES ( crm.public_uuid, 5, 'مرکز همایش', systimestamp,100160, 1)
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)
+VALUES ( crm.public_uuid, 6, 'آموزش تخصصی', systimestamp,100160, 1)
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)
+VALUES ( crm.public_uuid, 7, 'آموزش عالی', systimestamp,100160, 1)
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)  
+VALUES ( crm.public_uuid, 8, 'آموزش خانه مدیران انتشارات نشریه معاونت', systimestamp,100160, 1)
+INTO "PMIS"."TBL_CENTER_COST_CODE_API" ( center_cost_code_public_id, cost_code, cost_code_title, create_date_ts, creator_id, last_version)  
+VALUES ( crm.public_uuid, 9, 'سایر', systimestamp,100160, 1)
+SELECT * FROM dual;
+
+------------------------------
+
+
+--------------------PaymentCodeAPI------------------------------
+
+CREATE SEQUENCE  "MAINPARTS"."SEQ_PAYMENT_CODE_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
 
 
 
+DROP INDEX MAINPARTS.TBL_PAYMENT_CODE_API_PK;
+
+CREATE TABLE MAINPARTS.TBL_PAYMENT_CODE_API
+(
+ID NUMBER NOT NULL
+, PAYMENT_CODE_PUBLIC_ID NVARCHAR2(500)
+, PAYMENT_CODE NVARCHAR2(34)
+, CREATE_DATE_TS TIMESTAMP(6) WITH TIME ZONE
+, EDIT_DATE_TS TIMESTAMP(6) WITH TIME ZONE
+, DELETE_DATE_TS TIMESTAMP(6) WITH TIME ZONE
+, REQUEST_ID NUMBER
+, CREATOR_ID NUMBER
+, DESCRIPTION NVARCHAR2(500)
+, REQUEST_IP NVARCHAR2(500)
+, REQUEST_DESCRIPTION NVARCHAR2(500)
+)
+LOGGING
+TABLESPACE USERS
+PCTFREE 10
+INITRANS 1
+STORAGE
+(
+BUFFER_POOL DEFAULT
+)
+NOCOMPRESS
+NO INMEMORY
+NOPARALLEL;
+
+CREATE UNIQUE INDEX MAINPARTS.TBL_PAYMENT_CODE_API_PK ON MAINPARTS.TBL_PAYMENT_CODE_API (ID ASC)
+LOGGING
+TABLESPACE USERS
+PCTFREE 10
+INITRANS 2
+STORAGE
+(
+BUFFER_POOL DEFAULT
+)
+NOPARALLEL;
+
+CREATE UNIQUE INDEX MAINPARTS.TBL_PAYMENT_CODE_API_PK ON MAINPARTS.TBL_PAYMENT_CODE_API (ID ASC)
+LOGGING
+TABLESPACE USERS
+PCTFREE 10
+INITRANS 2
+STORAGE
+(
+BUFFER_POOL DEFAULT
+)
+NOPARALLEL;
+
+ALTER TABLE MAINPARTS.TBL_PAYMENT_CODE_API
+ADD CONSTRAINT TBL_PAYMENT_CODE_API_PK PRIMARY KEY
+(
+ID
+)
+USING INDEX MAINPARTS.TBL_PAYMENT_CODE_API_PK
+ENABLE;
+
+ALTER TABLE MAINPARTS.TBL_PAYMENT_CODE_API
+ADD CONSTRAINT TBL_PAYMENT_CODE_API_FK1 FOREIGN KEY
+(
+CREATOR_ID
+)
+REFERENCES CRM.TBL_PERSON
+(
+ID
+)
+ENABLE;
+
+COMMENT ON COLUMN MAINPARTS.TBL_PAYMENT_CODE_API.PAYMENT_CODE IS 'must be 17 digit';
+
+
+
+--------------------PaymentCodeAPI------------------------------
 
 
 
