@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import lombok.*;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 @Getter
@@ -34,9 +35,9 @@ public class ExpenseCodeApiDto implements Serializable {
     private Long editorId;
     private String editorPublicId;
 
-    private java.sql.Timestamp createDateTs;
+    private Timestamp createDateTs;
 
-    private java.sql.Timestamp editDateTs;
+    private Timestamp editDateTs;
 
-    private java.sql.Timestamp deleteDateTs;
+    private Timestamp deleteDateTs;
 }
