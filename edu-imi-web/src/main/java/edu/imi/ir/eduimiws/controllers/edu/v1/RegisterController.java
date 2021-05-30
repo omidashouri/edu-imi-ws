@@ -33,8 +33,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.time.StopWatch;
 import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -50,12 +52,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -122,7 +125,7 @@ public class RegisterController {
     @GetMapping(path = "/unpaged", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<RegisterResponse>> getRegisters() {
 
-        Pageable pageable = Pageable.unpaged();
+//        Pageable pageable = Pageable.unpaged();
 
 /*        Page<RegisterEntity> registerPages =
                 registerService.findAllByOrderPageable(pageable);
@@ -141,7 +144,69 @@ public class RegisterController {
 
 //        List<RegisterEntity> registerEntities = registerService.selectAllRegisterOnly();
 
-        List<RegisterEntity> registerEntities = registerService.findAllByDeleteStatusIsNotNull();
+
+//      ------------------------------------------------------------------------------------------  CompletableFuture
+
+        Pageable pageable = PageRequest.of(0,400);
+
+        Page<RegisterEntity> registerOnePage =  registerService
+                .findAllByOrderPageable(pageable);
+
+        int totalPages =  registerService
+                .findAllByOrderPageable(pageable)
+                .getTotalPages();
+
+        totalPages = 30;
+
+        List<Integer> pagez =  IntStream.rangeClosed(0,totalPages).boxed().collect(Collectors.toList());
+
+/*        while(!registerOnePage.isLast()){
+            registerService.findAllByOrderPageable(registerOnePage.nextPageable());
+        }*/
+
+
+        StopWatch stopWatch = new StopWatch();
+        ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(10);
+
+        stopWatch.start();
+        List<CompletableFuture<Page<RegisterEntity>>>  register_cf_p =
+                pagez.stream()
+                        .map(pg-> CompletableFuture.supplyAsync(()->{
+                            System.out.println("Thread Name >> "+ Thread.currentThread().getName());
+                            return registerService.findAllByOrderPageable(PageRequest.of(pg,99));
+                        },newFixedThreadPool))
+                        .collect(Collectors.toList());
+
+        CompletableFuture<Void> cfAllOf = CompletableFuture.allOf(register_cf_p.toArray(new CompletableFuture[totalPages]));
+        stopWatch.stop();
+
+        List<RegisterEntity> registerEntities =
+                cfAllOf.thenApply(v->register_cf_p.stream()
+                                .map(CompletableFuture::join)
+                                .flatMap(Page::stream)
+                                .collect(Collectors.toList()))
+                .join();
+
+
+        System.out.println(stopWatch.getTime()+" >>>>>> "+registerEntities.size());
+
+
+
+        /*        List<RegisterResponse> responses =
+                cfAllOf.thenApply(v->register_cf_p.stream()
+                        .map(CompletableFuture::join)
+                        .flatMap(Page::stream)
+                        .map(e->registerFastDtoMapper.toRegisterFastDto(e,new CycleAvoidingMappingContext()))
+                        .map(z->registerResponseRegisterFastDtoMapper.toRegisterResponse(z,new CycleAvoidingMappingContext()))
+                        .collect(Collectors.toList()))
+                        .join();*/
+
+
+//      ------------------------------------------------------------------------------------------  CompletableFuture
+
+
+
+/*        List<RegisterEntity> registerEntities = registerService.findAllByDeleteStatusIsNotNull();*/
 
         List<RegisterFastDto> registerFastDtos = registerFastDtoMapper
                 .toRegisterFastDtos(registerEntities, new CycleAvoidingMappingContext());
