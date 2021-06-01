@@ -25,6 +25,7 @@
 <!--        <h2.version>1.4.200</h2.version>-->
         <ir.ghasemkiani.version>2.1.7</ir.ghasemkiani.version>
         <org.apache.cxf.cxf-codegen-plugin.version>3.4.1</org.apache.cxf.cxf-codegen-plugin.version>
+        <org.codehaus.mojo.jaxb2-maven-plugin.version>2.5.0</org.codehaus.mojo.jaxb2-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -314,6 +315,31 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>${org.codehaus.mojo.jaxb2-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <id>xjc-schema2</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${basedir}/src/main/resources/xsd</source>
+                            </sources>
+                            <generateDirectory>${basedir}/edu.imi.ir.eduimiws.models.sabtahval</generateDirectory>
+                            <packageName>edu.imi.ir.eduimiws.models.sabtahval</packageName>
+                            <addGeneratedAnnotation>true</addGeneratedAnnotation>
+                            <!--  Other configuration options-->
+                            <clearOutputDir>false</clearOutputDir>
+                        </configuration>
+                    </execution>
+                </executions>
+
             </plugin>
         </plugins>
     </build>
