@@ -40,11 +40,10 @@ public class ReqresController {
             if (reqresId.equalsIgnoreCase("1")) {
 //                soapClient.callMellat();
 
-                String aa = "";
-/*                String aa = soapClientImpl2.bpPayRequest(1L, null, null,
+                String aa = soapClientImpl2.bpPayRequest(1L, null, null,
                         1L, 1L, null,
                         null, null, null,
-                        String.valueOf(1L));*/
+                        String.valueOf(1L));
 
                 bb = aa;
             }
@@ -70,11 +69,10 @@ public ResponseEntity<?> getRefIdResponse(@RequestParam(name = "reqresId") Strin
         if (reqresId.equalsIgnoreCase("1")) {
 //                soapClient.callMellat();
 
-            String aa = "";
-/*            String aa = soapClientImpl2.bpPayRequest(1L, null, null,
+            String aa = soapClientImpl2.bpPayRequest(1L, null, null,
                     1L, 1L, null,
                     null, null, null,
-                    String.valueOf(1L));*/
+                    String.valueOf(1L));
 
             String bb = aa;
         }
