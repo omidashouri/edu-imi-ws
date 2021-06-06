@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings xmlns="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+               xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb
+            http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
+            http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd"
+               version="2.1">
+
+    <jaxb:bindings schemaLocation="../xsd/sabtahval.xsd" node="//xs:schema">
+        <jaxb:globalBindings>
+            <xjc:javaType name="java.time.LocalDateTime" xmlType="xs:dateTime"
+                          adapter="edu.imi.ir.eduimiws.models.sabtahval.adapter.LocalDateTimeAdapter" >
+            </xjc:javaType>
+            <xjc:javaType name="java.util.Date" xmlType="xs:date"
+                          adapter="edu.imi.ir.eduimiws.models.sabtahval.adapter.DateAdapter" >
+            </xjc:javaType>
+            <xjc:javaType name="java.util.Base64" xmlType="xs:base64Binary"
+                          adapter="edu.imi.ir.eduimiws.models.sabtahval.adapter.StringByteArrayAdapter" >
+            </xjc:javaType>
+            <xjc:serializable uid="1" />
+        </jaxb:globalBindings>
+        <jaxb:schemaBindings>
+            <package name="edu.imi.ir.eduimiws.models.sabtahval.estelam"/>
+        </jaxb:schemaBindings>
+<!--        <jaxb:bindings node="xs:complexType[@name='PersonInfo']">
+            <jaxb:class name="edu.imi.ir.eduimiws.models.dto.sabtahval.PersonInfoDto">
+            </jaxb:class>
+        </jaxb:bindings>-->
+    </jaxb:bindings>
+</jaxb:bindings>
