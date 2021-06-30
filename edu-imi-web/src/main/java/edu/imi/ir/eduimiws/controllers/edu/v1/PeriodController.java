@@ -44,6 +44,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -735,7 +736,7 @@ public class PeriodController {
 
     private ResponseEntity<?> conflictPeriodCount() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
                         , "period count is null or zero")
                 , HttpStatus.INTERNAL_SERVER_ERROR
         );
@@ -743,7 +744,7 @@ public class PeriodController {
 
     private ResponseEntity<?> periodNotFound() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
                         , "requested period not found")
                 , HttpStatus.NOT_FOUND
         );

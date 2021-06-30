@@ -48,8 +48,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -480,7 +480,7 @@ public class StudentController {
 
     private ResponseEntity<?> conflictStudentCount() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
                         , "student count is null or zero")
                 , HttpStatus.INTERNAL_SERVER_ERROR
         );
@@ -489,7 +489,7 @@ public class StudentController {
 
     private ResponseEntity<?> studentNotFound() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
                         , "requested student not found")
                 , HttpStatus.NOT_FOUND
         );
@@ -497,7 +497,7 @@ public class StudentController {
 
     private ResponseEntity<?> studentFound() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.EXPECTATION_FAILED.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.EXPECTATION_FAILED.toString()
                         , "student found in database")
                 , HttpStatus.EXPECTATION_FAILED
         );

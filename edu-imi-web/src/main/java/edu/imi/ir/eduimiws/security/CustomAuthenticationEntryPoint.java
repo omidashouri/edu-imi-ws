@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Component
 @AllArgsConstructor
@@ -34,7 +34,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint,
           This is a pojo you can create to hold the repsonse code, error, and description.
           You can create a POJO to hold whatever information you want to send back.
         */
-        ErrorMessage error = new ErrorMessage(new Date(),HttpStatus.FORBIDDEN.toString(), "You are Not Authorized");
+        ErrorMessage error = new ErrorMessage(LocalDateTime.now(),HttpStatus.FORBIDDEN.toString(), "You are Not Authorized");
 
         /*
           Here we're going to creat a json strong from the CustomError object we just created.

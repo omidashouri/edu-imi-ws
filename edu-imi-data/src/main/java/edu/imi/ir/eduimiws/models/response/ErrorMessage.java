@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class ErrorMessage {
             description = "error date",
             example = "2020-03-28T06:27:59.049Z"
     )
-    private Date errorDate;
+    private LocalDateTime errorDateTime;
 
     @Schema(
             description = "HTTP status error code",

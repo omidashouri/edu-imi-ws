@@ -44,8 +44,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -411,7 +411,7 @@ public class LevelController {
 
     private ResponseEntity<?> conflictLevelCount() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
                         , "level count is null or zero")
                 , HttpStatus.INTERNAL_SERVER_ERROR
         );
@@ -420,7 +420,7 @@ public class LevelController {
 
     private ResponseEntity<?> levelNotFound() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
                         , "requested level not found")
                 , HttpStatus.NOT_FOUND
         );

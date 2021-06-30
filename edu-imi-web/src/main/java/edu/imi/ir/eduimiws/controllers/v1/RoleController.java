@@ -37,7 +37,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -269,7 +269,7 @@ public class RoleController {
 
     private ResponseEntity<?> roleNotFound() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
                         , "requested role not found")
                 , HttpStatus.NOT_FOUND
         );

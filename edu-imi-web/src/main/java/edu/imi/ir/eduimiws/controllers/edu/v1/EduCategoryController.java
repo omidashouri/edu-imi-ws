@@ -42,8 +42,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -408,7 +408,7 @@ public class EduCategoryController {
 
     private ResponseEntity<?> conflictEduCategoryCount() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
                         , "eduCategory count is null or zero")
                 , HttpStatus.INTERNAL_SERVER_ERROR
         );
@@ -417,7 +417,7 @@ public class EduCategoryController {
 
     private ResponseEntity<?> eduCategoryNotFound() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
                         , "requested eduCategory not found")
                 , HttpStatus.NOT_FOUND
         );
