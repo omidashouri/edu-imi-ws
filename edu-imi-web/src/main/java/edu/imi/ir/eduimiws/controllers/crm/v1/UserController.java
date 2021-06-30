@@ -4,6 +4,8 @@ import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.UserRolePrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NationalCodeNullException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NationalCodeRedundantException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
@@ -51,8 +53,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -515,7 +517,7 @@ public class UserController {
         Long userCount;
 
         if (userRegister.getNationCode().isEmpty()) {
-            return this.nationalCodeIsEmpty();
+            throw new NationalCodeNullException("national code is null");
         } else {
             nationalCode = userRegister.getNationCode();
         }
@@ -525,7 +527,7 @@ public class UserController {
 
 
         if (duplicatePersons.size() > 0) {
-            return this.nationalCodeRedundant();
+            throw new NationalCodeRedundantException("national code is redundant");
         }
 
         UserFastDto userFastDto = userRegisterUserFastDtoMapper
@@ -682,7 +684,7 @@ public class UserController {
 
     private ResponseEntity<?> conflictUserCount() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
                         , "user count is null or zero")
                 , HttpStatus.INTERNAL_SERVER_ERROR
         );
@@ -690,7 +692,7 @@ public class UserController {
 
     private ResponseEntity<?> userNotFound() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
                         , "requested user not found")
                 , HttpStatus.NOT_FOUND
         );
@@ -698,7 +700,7 @@ public class UserController {
 
     private ResponseEntity<?> nationalCodeIsEmpty() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.BAD_REQUEST.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.BAD_REQUEST.toString()
                         , "national code is null")
                 , HttpStatus.BAD_REQUEST
         );
@@ -706,7 +708,7 @@ public class UserController {
 
     private ResponseEntity<?> nationalCodeRedundant() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.NOT_ACCEPTABLE.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_ACCEPTABLE.toString()
                         , "national code is redundant")
                 , HttpStatus.BAD_REQUEST
         );
@@ -714,7 +716,7 @@ public class UserController {
 
     private ResponseEntity<?> rolePublicIsEmpty() {
         return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.BAD_REQUEST.toString()
+                new ErrorMessage(LocalDateTime.now(), HttpStatus.BAD_REQUEST.toString()
                         , "Role Public Id is Empty")
                 , HttpStatus.BAD_REQUEST
         );
