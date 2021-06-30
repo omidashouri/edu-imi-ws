@@ -7132,6 +7132,57 @@ ALTER TRIGGER "PMIS"."TBL_EXPENSE_CODE_API_TRG" ENABLE;
 
 
 
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 1, 'مشاوره', CRM.public_uuid, 1,100160,systimestamp);
+
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 2, 'رتبه بندی', CRM.public_uuid, 1,100160,systimestamp);
+
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 3, 'تعالی سازمانی', CRM.public_uuid, 1,100160,systimestamp);
+
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 4, 'اداره کنفرانس ها', CRM.public_uuid, 1,100160,systimestamp);
+
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 5, 'مرکز همایش ها', CRM.public_uuid, 1,100160,systimestamp);
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 6, 'آموزش تخصصی', CRM.public_uuid, 1,100160,systimestamp);
+
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 7, 'آموزش عالی', CRM.public_uuid, 1,100160,systimestamp);
+
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 8, 'آموزش خانه مدیران انتشارات نشریه معاونت', CRM.public_uuid, 1,100160,systimestamp);
+
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 9, 'سایر موارد', CRM.public_uuid, 1,100160,systimestamp);
+
+insert into PMIS.TBL_EXPENSE_CODE_API
+(ID, expense_code, expense_title, EXPENSE_CODE_public_id, status, creator_id, create_date_ts)
+values
+(pmis.SEQ_EXPENSE_CODE_API.NEXTVAL, 0, 'نمایندگی ها', CRM.public_uuid, 1,100160,systimestamp);
+
+
+// DISABLED : NOT POSSIBLE IN SAME TABLE 
 create or replace TRIGGER "PMIS"."TBL_EXPENSE_CODE_API_IU" AFTER INSERT OR UPDATE ON PMIS.TBL_EXPENSE_CODE_API
      REFERENCING OLD AS OLD NEW AS NEW
      FOR EACH ROW WHEN (1=1)
