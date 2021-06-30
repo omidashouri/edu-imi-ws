@@ -331,8 +331,10 @@
                             <sources>
                                 <source>${basedir}/src/main/resources/xsd</source>
                             </sources>
-                            <outputDirectory>${basedir}/src/main/java/edu/imi/ir/eduimiws/models/sabtahval</outputDirectory>
-                            <packageName>estelam</packageName>
+                            <xjbSources>
+                                <xjbSource>${basedir}/src/main/resources/xjb/global.xjb</xjbSource>
+                            </xjbSources>
+                            <packageName>edu.imi.ir.eduimiws.models.sabtahval</packageName>
                             <addGeneratedAnnotation>true</addGeneratedAnnotation>
                             <!--  Other configuration options-->
                             <clearOutputDir>false</clearOutputDir>
