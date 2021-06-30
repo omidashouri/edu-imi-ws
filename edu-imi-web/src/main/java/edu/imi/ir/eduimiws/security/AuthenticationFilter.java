@@ -15,7 +15,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -44,9 +43,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private String contentType;
 
-    @Value("${expiration.time}")
-    private String aaa;
-
     //    this method is used for authenticating user when request come to server
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
@@ -59,16 +55,19 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             UserLoginRequestModel creds = new ObjectMapper()
                     .readValue(req.getInputStream(), UserLoginRequestModel.class);
 
-//omiddo:later remove this
+/*
+            //omiddo:later remove this
             if (creds.getUsername().equalsIgnoreCase("admin") && // RM
                     creds.getPassword().equalsIgnoreCase("admin")) {     // RM
                 UserDetails userDetails = myUserDetailsService.loadUserByUsername("9057"); // RM
+
                 Authentication authentication = new UsernamePasswordAuthenticationToken(    // RM
                         userDetails,                                        // RM
                         userDetails,                                        //RM
                         getAuthorities("ROLE_ADMIN"));                      // RM
                 return authentication;                                      // RM
             }                                                               // RM
+*/
 
 
 //            use the method we implement in our service to identify user
