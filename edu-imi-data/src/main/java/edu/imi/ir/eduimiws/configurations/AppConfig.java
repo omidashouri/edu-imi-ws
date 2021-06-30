@@ -4,15 +4,21 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import edu.imi.ir.eduimiws.security.ApiUrlSecurityCredential;
+import edu.imi.ir.eduimiws.security.AuthenticationCredential;
+import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
 import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.cache.jcache.JCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
 import org.springframework.mail.SimpleMailMessage;
@@ -26,6 +32,10 @@ import java.util.Map;
 import java.util.Properties;
 
 @Configuration
+@PropertySources({
+        @PropertySource("classpath:application.properties"),
+        @PropertySource("classpath:security.properties")
+})
 @EnableCaching
 public class AppConfig {
 
@@ -169,6 +179,23 @@ public class AppConfig {
         return properties;
     }
 
+    @Bean
+    @ConfigurationProperties(prefix = "authenticationcredential")
+    public AuthenticationCredential authenticationCredential() {
+        return new AuthenticationCredential();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "apiurlsecuritycredential")
+    public ApiUrlSecurityCredential apiUrlSecurityCredential() {
+        return new ApiUrlSecurityCredential();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "digitalpaymentcredential")
+    public DigitalPaymentCredential digitalPayMentCredential() {
+        return new DigitalPaymentCredential();
+    }
 
 /*    @PostConstruct
     public void init() {

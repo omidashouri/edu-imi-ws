@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws.security;
 
 import edu.imi.ir.eduimiws.services.UserService;
-import edu.imi.ir.eduimiws.utilities.AppProperties;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +31,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 @Order(1)
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -42,7 +43,8 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
     private final ErpPasswordEncoder bCryptPasswordEncoder;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-    private AppProperties appProperties;
+    private final ApiUrlSecurityCredential apiUrlSecurityCredential;
+    private final DigitalPaymentCredential digitalPayMentCredential;
 
 
     @Override
@@ -53,32 +55,37 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
 
                 .csrf().disable().authorizeRequests()
 
-                .antMatchers(HttpMethod.POST,appProperties.getSignUpUrl())
+                .antMatchers(HttpMethod.POST, apiUrlSecurityCredential.getSignUpUrl())
                 .permitAll()
 
-                .antMatchers(HttpMethod.POST,"/api/v1/reqres/**")
+                .antMatchers(HttpMethod.POST, "/api/v1/reqres/**")
+//                .antMatchers("/admin/**").access("hasRole('admin') and hasIpAddress('0:0:0:0:0:0:0:1')")
                 .permitAll()
+
+                .antMatchers("/**/sabtahval/**")
+                .access(this.createHasIpRangeExpression())
 
                 .antMatchers("/api/v1/reqres/**")
                 .permitAll()
 
-                .antMatchers(HttpMethod.GET,appProperties.getVerificationEmailUrl())
+                .antMatchers(HttpMethod.GET, apiUrlSecurityCredential.getVerificationEmailUrl())
                 .permitAll()
 
-                .antMatchers(HttpMethod.POST,appProperties.getPasswordResetRequestUrl())
+                .antMatchers(HttpMethod.POST, apiUrlSecurityCredential.getPasswordResetRequestUrl())
                 .permitAll()
 
-                .antMatchers(HttpMethod.POST,appProperties.getPasswordResetUrl())
+                .antMatchers(HttpMethod.POST, apiUrlSecurityCredential.getPasswordResetUrl())
                 .permitAll()
 
-                .antMatchers(HttpMethod.POST,appProperties.getBehpardakhtAfterPaymentResponseUrl())
+//                .antMatchers(HttpMethod.POST, securityProperties.getBehpardakhtAfterPaymentResponseUrl())
+                .antMatchers(HttpMethod.POST, digitalPayMentCredential.getBehpardakhtCredential().getAfterPaymentResponseUrl())
                 .permitAll()
 /*
                 .antMatchers(appProperties.getH2Console())
                 .permitAll()
 */
 
-                .antMatchers("**/swagger-ui/**","/swagger-ui/**","/v3/api-docs/**","/v3/api-docs","/v2/api-docs/**","/configuration/**","/swagger*/**","/webjars/**")
+                .antMatchers(apiUrlSecurityCredential.getSwaggerUiAntMatchers())
                 .permitAll()
 
 //                or .hasAuthority("ADMIN")
@@ -100,8 +107,8 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .exceptionHandling()
-                    .authenticationEntryPoint(customAuthenticationEntryPoint)// handles bad credentials
-                    .accessDeniedHandler(customAccessDeniedHandler)
+                .authenticationEntryPoint(customAuthenticationEntryPoint)// handles bad credentials
+                .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
 
                 .addFilter(getAuthenticationFilter())
@@ -118,21 +125,24 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 /*        authenticationManagerBuilder.userDetailsService(userService)
                 //omiddo: do my implementation for password encoding
                 .passwordEncoder(bCryptPasswordEncoder);*/
 
         authenticationManagerBuilder
                 .authenticationProvider(daoAuthenticationProvider())
-
-        .inMemoryAuthentication()
-                .withUser("admiin").password("{noop}admiin").roles("ADMIN")
-                .and()
-                .withUser("useer").password("{noop}useer").roles("USER");
+/*
+//              omiddo: in future develop this part
+               .inMemoryAuthentication()
+               .withUser("admiin").password("{noop}admiin").roles("ADMIN")
+               .and()
+               .withUser("useer").password("{noop}useer").roles("USER")
+*/
+        ;
     }
 
-    public AuthenticationFilter getAuthenticationFilter() throws Exception{
+    public AuthenticationFilter getAuthenticationFilter() throws Exception {
         final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
 /*        filter.setAllowSessionCreation(true);
         filter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy());*/
@@ -150,16 +160,16 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
     }*/
 
     @Bean
-    public AuthenticationProvider daoAuthenticationProvider(){
+    public AuthenticationProvider daoAuthenticationProvider() {
         final DaoAuthenticationProvider daoAuthenticationProvider =
-                                                new DaoAuthenticationProvider();
+                new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userService);
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return daoAuthenticationProvider;
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
@@ -171,13 +181,13 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
         corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
 
         final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return urlBasedCorsConfigurationSource;
-        }
+    }
 
     @Bean
     public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl() ;
+        return new SessionRegistryImpl();
     }
 
     @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -190,6 +200,16 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
             return new MapBasedMethodSecurityMetadataSource(methodMap);
         }
 
+    }
+
+    //        join your comma separated ips into an expression for the .access() method
+    private String createHasIpRangeExpression() {
+
+        String ipRanges = apiUrlSecurityCredential.getIpRanges();
+        List<String> validIps = Arrays.asList(ipRanges.split("\\s*,\\s*"));
+        String hasIpRangeAccessExpresion = validIps.stream()
+                .collect(Collectors.joining("') or hasIpAddress('", "hasIpAddress('", "')"));
+        return hasIpRangeAccessExpresion;
     }
 
 }
