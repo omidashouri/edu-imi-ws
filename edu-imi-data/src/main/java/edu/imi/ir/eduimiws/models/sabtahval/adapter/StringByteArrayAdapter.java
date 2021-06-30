@@ -1,15 +1,17 @@
 package edu.imi.ir.eduimiws.models.sabtahval.adapter;
 
+import org.springframework.stereotype.Component;
+
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 
-
+@Component
 public class StringByteArrayAdapter extends XmlAdapter<String, byte[]> {
 
     @Override
-    public byte[] unmarshal(String inputString) throws Exception {
+    public  byte[] unmarshal(String inputString) throws Exception {
         Charset charset = StandardCharsets.UTF_8;
         if(inputString==null)
             return null;

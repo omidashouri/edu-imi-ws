@@ -1,0 +1,16 @@
+package edu.imi.ir.eduimiws.models.dto.sabtahval;
+
+import lombok.*;
+
+import java.io.Serializable;
+
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class GetVersionResponseDto implements Serializable {
+
+    private String returnValue;
+
+}

@@ -245,6 +245,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi sabtAhvalApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("Sabtahval")
+                .pathsToMatch("/api/v1/sabtahval/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {

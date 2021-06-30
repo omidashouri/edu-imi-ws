@@ -17,18 +17,23 @@ public class PersonInfoDto implements Serializable {
     private int bookNo;
     private int bookRow;
     private int dateHasPostfix;
-    private Base64 family;
+    private byte[] family;
+    private String familyString;
     private int familyHasPerfix;
     private int familyHasPostfix;
-    private Base64 fatherName;
+    private byte[] fatherName;
+    private String fatherNameString;
     private int gender;
-    private Base64 name;
+    private byte[] name;
+    private String nameString;
     private int nameHasPerfix;
     private int nameHasPostfix;
     private long nin;
     private int officeCode;
-    private Base64 officeName;
+    private byte[] officeName;
+    private String officeNameString;
     private int shenasnameNo;
-    private Base64 shenasnameSeri;
+    private byte[] shenasnameSeri;
+    private String shenasnameSeriString;
     private int shenasnameSerial;
 }
