@@ -7,6 +7,8 @@ import edu.imi.ir.eduimiws.models.wsdl.ObjectFactory;
 import edu.imi.ir.eduimiws.models.wsdl.PaymentGatewayImplService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,12 @@ import javax.xml.bind.JAXBElement;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class SoapClientImpl {
 
     private final WebServiceTemplate webServiceTemplate;
-    private final Jaxb2Marshaller jaxb2Marshaller;
+    @Qualifier("jaxb2Marshaller") private final Jaxb2Marshaller jaxb2Marshaller;
 
 //    ConfRegisterConfirmStartAction
 
@@ -46,6 +48,7 @@ public class SoapClientImpl {
             WebServiceTemplate springWSTemplate = context.getBean(WebServiceTemplate.class);
         PaymentGatewayImplService paymentGatewayImplService = new PaymentGatewayImplService();
 
+//      OR 1 >>>
 
         JAXBElement<BpPayRequestResponse> jaxbResponse = (JAXBElement<BpPayRequestResponse>) webServiceTemplate
                 .marshalSendAndReceive("https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl",
@@ -62,3 +65,20 @@ public class SoapClientImpl {
         return "yes";
     }
 }
+
+
+/*  1 >>>
+
+        edu.imi.ir.eduimiws.models.wsdl.ObjectFactory objectFactory = new ObjectFactory();
+        JAXBElement<BpPayRequest> bpPayRequestJAXBElement = objectFactory
+                                                                .createBpPayRequest(bpPayRequest);
+
+        JAXBElement<BpPayRequestResponse> bpPayRequestResponseJAXBElement = objectFactory
+                                                    .createBpPayRequestResponse(new BpPayRequestResponse());
+
+        Object marshalSendAndReceive = webServiceTemplate
+                    .marshalSendAndReceive("https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl",
+                                                                                bpPayRequestJAXBElement);
+        bpPayRequestResponseJAXBElement = (JAXBElement<BpPayRequestResponse>) marshalSendAndReceive;
+
+ */

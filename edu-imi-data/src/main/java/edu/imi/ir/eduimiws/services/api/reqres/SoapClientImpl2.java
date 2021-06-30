@@ -20,9 +20,14 @@ public class SoapClientImpl2 extends WebServiceGatewaySupport implements IPaymen
     }
 
     @Override
-    public String bpDynamicPayRequest(long terminalId, String userName, String userPassword, long orderId, long amount, String localDate, String localTime, String additionalData, String callBackUrl, String payerId, long subServiceId) {
+    public String bpDynamicPayRequest(long terminalId, String userName, String userPassword, long orderId, long amount, String localDate, String localTime, String additionalData, String callBackUrl, String payerId, long subServiceId, String mobileNo, String encPan, String panHiddenMode, String cartItem, String enc) {
         return null;
     }
+
+/*    @Override
+    public String bpDynamicPayRequest(long terminalId, String userName, String userPassword, long orderId, long amount, String localDate, String localTime, String additionalData, String callBackUrl, String payerId, long subServiceId) {
+        return null;
+    }*/
 
     @Override
     public String bpInquiryRequest(long terminalId, String userName, String userPassword, long orderId, long saleOrderId, long saleReferenceId) {
@@ -40,11 +45,21 @@ public class SoapClientImpl2 extends WebServiceGatewaySupport implements IPaymen
     }
 
     @Override
-    public String bpCumulativeDynamicPayRequest(long terminalId, String userName, String userPassword, long orderId, long amount, String localDate, String localTime, String additionalData, String callBackUrl) {
+    public String bpCumulativeDynamicPayRequest(long terminalId, String userName, String userPassword, long orderId, long amount, String localDate, String localTime, String additionalData, String callBackUrl, String mobileNo, String encPan, String panHiddenMode, String cartItem, String enc) {
         return null;
     }
 
     @Override
+    public String bpPayRequest(long terminalId, String userName, String userPassword, long orderId, long amount, String localDate, String localTime, String additionalData, String callBackUrl, String payerId, String mobileNo, String encPan, String panHiddenMode, String cartItem, String enc) {
+        return null;
+    }
+
+/*    @Override
+    public String bpCumulativeDynamicPayRequest(long terminalId, String userName, String userPassword, long orderId, long amount, String localDate, String localTime, String additionalData, String callBackUrl) {
+        return null;
+    }*/
+
+//    @Override
     public String bpPayRequest(long terminalId, String userName, String userPassword, long orderId, long amount, String localDate, String localTime, String additionalData, String callBackUrl, String payerId) {
         BpPayRequest bpPayRequest = new BpPayRequest();
 //        bpPayRequest.setCallBackUrl("http://77.104.84.251:8080/edu-imi-ws/api/v1/reqres/bankResponse");
