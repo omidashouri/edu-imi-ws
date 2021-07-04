@@ -445,6 +445,7 @@ public class FieldController {
 
 
     @Operation(
+            hidden = true,
             summary = "Find new field numbers",
             description = "search for new fields that do not have field public id " +
                     "by comparing max id field and field web service entity. ",
@@ -479,6 +480,7 @@ public class FieldController {
                     )
             }
     )
+    @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getNewFieldCount() {

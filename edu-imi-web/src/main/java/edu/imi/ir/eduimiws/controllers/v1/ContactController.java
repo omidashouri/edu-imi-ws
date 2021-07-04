@@ -18,6 +18,7 @@ import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.specifications.crm.ContactPredicateBuilder;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecification;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecificationBuilder;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.QueryDslAsQueryParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -150,6 +151,7 @@ public class ContactController {
 
 
     @Operation(
+            hidden = true,
             summary = "Update Contact by public ID",
             description = "Update contact by the public id",
             tags = "contacts",
@@ -180,6 +182,7 @@ public class ContactController {
                     )
             }
     )
+    @DisableMethod
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> updateContactByContactPublicId(@RequestBody ContactResponse contactResponse) {

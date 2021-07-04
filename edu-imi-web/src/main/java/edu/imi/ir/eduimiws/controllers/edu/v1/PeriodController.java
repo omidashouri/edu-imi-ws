@@ -515,6 +515,7 @@ public class PeriodController {
 
 
     @Operation(
+            hidden = true,
             summary = "Find new period numbers",
             description = "search for new periods that do not have period public id " +
                     "by comparing max id period and period web service entity. ",
@@ -549,6 +550,7 @@ public class PeriodController {
                     )
             }
     )
+    @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getNewPeriodCount() {

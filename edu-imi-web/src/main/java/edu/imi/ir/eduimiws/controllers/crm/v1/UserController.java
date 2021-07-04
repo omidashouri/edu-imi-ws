@@ -339,6 +339,7 @@ public class UserController {
 //    ----------------------------------------------------------------------
 
     @Operation(
+            hidden = true,
             summary = "Count new user numbers",
             description = "search for new users that do not have user public id " +
                     "by comparing person id in person entity and person web service entity. ",
@@ -373,6 +374,7 @@ public class UserController {
                     )
             }
     )
+    @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getNewUserCount() {
@@ -467,6 +469,7 @@ public class UserController {
 
 
     @Operation(
+            hidden = true,
             summary = "Register User",
             description = "register User",
             tags = "users",
@@ -506,6 +509,7 @@ public class UserController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/register",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

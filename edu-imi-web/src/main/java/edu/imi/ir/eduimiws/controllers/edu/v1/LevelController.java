@@ -259,6 +259,7 @@ public class LevelController {
 
 
     @Operation(
+            hidden = true,
             summary = "Find new level numbers",
             description = "search for new levels that do not have level public id " +
                     "by comparing max id level and level web service entity. ",
@@ -293,6 +294,7 @@ public class LevelController {
                     )
             }
     )
+    @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getNewLevelCount() {

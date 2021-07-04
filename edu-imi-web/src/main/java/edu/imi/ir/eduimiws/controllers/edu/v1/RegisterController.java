@@ -89,6 +89,7 @@ public class RegisterController {
 
 
     @Operation(
+            hidden = true,
             summary = "find All registers not pageable",
             description = "Search register details",
             tags = "registers",
@@ -122,6 +123,7 @@ public class RegisterController {
                             )
                     )
             })
+    @DisableMethod
     @GetMapping(path = "/unpaged", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<RegisterResponse>> getRegisters() {
 
@@ -217,6 +219,8 @@ public class RegisterController {
         return ResponseEntity.ok(registerResponses);
     }
 
+    @Operation(hidden = true)
+    @DisableMethod
     @GetMapping(path = "/unpagedAsync", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public @ResponseBody CompletableFuture<ResponseEntity<List<RegisterResponse>>> getRegisters2() throws ExecutionException, InterruptedException {
         return registerService.findAllByDeleteStatusIsNotNullThread()
@@ -496,6 +500,7 @@ public class RegisterController {
 
 
     @Operation(
+            hidden = true,
             summary = "Register Student in Period ",
             description = "Register Student in period",
             tags = "registers",
@@ -535,6 +540,7 @@ public class RegisterController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -628,6 +634,7 @@ public class RegisterController {
 
 
     @Operation(
+            hidden = true,
             summary = "Find new register numbers",
             description = "search for new registers that do not have register public id " +
                     "by comparing max id register and register web service entity. ",
@@ -662,6 +669,7 @@ public class RegisterController {
                     )
             }
     )
+    @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getNewRegisterCount() {

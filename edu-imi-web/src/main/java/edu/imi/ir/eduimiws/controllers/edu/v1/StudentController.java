@@ -210,6 +210,7 @@ public class StudentController {
     }
 
     @Operation(
+            hidden = true,
             summary = "Find new student numbers",
             description = "search for new students that do not have student public id " +
                     "by comparing max id student and student web service entity. ",
@@ -244,6 +245,7 @@ public class StudentController {
                     )
             }
     )
+    @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getNewStudentCount() {
@@ -363,6 +365,7 @@ public class StudentController {
 
 
     @Operation(
+            hidden = true,
             summary = "Create New Student ",
             description = "Create new students",
             tags = "students",
@@ -402,6 +405,7 @@ public class StudentController {
                     )
             }
     )
+    @DisableMethod
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

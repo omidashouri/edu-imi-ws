@@ -17,6 +17,7 @@ import java.util.List;
 @Repository
 public interface RegisterRepository extends CrudRepository<RegisterEntity, Long> {
 
+//    @EntityGraph(attributePaths = {"registerApi"})
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     Page<RegisterEntity> findAllByDeleteStatusIsNotNull(Pageable pageable);
 
