@@ -254,6 +254,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi expenseCodeApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("ExpenseCodes")
+                .pathsToMatch("/api/v1/expenseCodes/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {

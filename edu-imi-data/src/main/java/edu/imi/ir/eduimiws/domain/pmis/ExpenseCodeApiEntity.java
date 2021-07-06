@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -30,7 +31,7 @@ public class ExpenseCodeApiEntity extends BaseEntity {
     private String expenseCodePublicId;
 
     @Column(name = "STATUS")
-    private Number status;
+    private Integer status;
 
     @Column(name = "DESCRIPTION", length = 500)
     private String description;
@@ -48,11 +49,11 @@ public class ExpenseCodeApiEntity extends BaseEntity {
     private PersonEntity editor;
 
     @Column(name = "CREATE_DATE_TS")
-    private java.sql.Timestamp createDateTs;
+    private Timestamp createDateTs;
 
     @Column(name = "EDIT_DATE_TS")
-    private java.sql.Timestamp editDateTs;
+    private Timestamp editDateTs;
 
     @Column(name = "DELETE_DATE_TS")
-    private java.sql.Timestamp deleteDateTs;
+    private Timestamp deleteDateTs;
 }

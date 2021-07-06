@@ -23,7 +23,7 @@ public class ExpenseCodeApiDto implements Serializable {
 
     private String expenseCodePublicId;
 
-    private Number status;
+    private Integer status;
 
     private String description;
 
