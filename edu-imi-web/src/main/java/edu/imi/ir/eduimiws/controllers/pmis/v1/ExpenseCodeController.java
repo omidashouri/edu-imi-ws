@@ -8,7 +8,7 @@ import edu.imi.ir.eduimiws.mapper.pmis.ExpenseCodeApiFastMapper;
 import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.pmis.ExpenseCodeResponse;
-import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeApiService;
+import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "expenseCodes", description = "The expense code API")
 public class ExpenseCodeController {
 
-    private final ExpenseCodeApiService expenseCodeApiService;
+    private final ExpenseCodeService expenseCodeService;
     private final ExpenseCodeApiFastMapper expenseCodeApiFastMapper;
     private final ExpenseCodeResponseAssembler expenseCodeResponseAssembler;
     private final PagedResourcesAssembler<ExpenseCodeApiDto> expenseCodeFastDtoPagedResourcesAssembler;
@@ -91,7 +91,7 @@ public class ExpenseCodeController {
                                                                            Pageable pageable) {
 
         Page<ExpenseCodeApiEntity> ExpenseCodePages =
-                expenseCodeApiService.findAll(pageable);
+                expenseCodeService.findAll(pageable);
 
         Page<ExpenseCodeApiDto> expenseCodeApiDtoPage = ExpenseCodePages
                 .map(p -> expenseCodeApiFastMapper
@@ -139,7 +139,7 @@ public class ExpenseCodeController {
     public ResponseEntity<?> getExpenseCodeByExpenseCodePublicId(@PathVariable String expenseCodePublicId) {
 
         try {
-            ExpenseCodeApiEntity expenseCode = expenseCodeApiService.findByExpenseCodePublicId(expenseCodePublicId);
+            ExpenseCodeApiEntity expenseCode = expenseCodeService.findByExpenseCodePublicId(expenseCodePublicId);
             if (expenseCode == null) {
                 throw new FiledValueNullException("Expense Code is null");
             }
@@ -193,7 +193,7 @@ public class ExpenseCodeController {
     public ResponseEntity<?> getExpenseCodeByExpenseCode(@PathVariable String expenseCode) {
 
         try {
-            ExpenseCodeApiEntity expenseCodeEntity = expenseCodeApiService.findByExpenseCode(Long.valueOf(expenseCode));
+            ExpenseCodeApiEntity expenseCodeEntity = expenseCodeService.findByExpenseCode(Long.valueOf(expenseCode));
             if (expenseCode == null) {
                 throw new FiledValueNullException("Expense Code is null");
             }
@@ -253,7 +253,7 @@ public class ExpenseCodeController {
             if (expenseTitle == null) {
                 throw new FiledValueNullException("Expense Code is null");
             }
-            Page<ExpenseCodeApiEntity> ExpenseCodePages = expenseCodeApiService
+            Page<ExpenseCodeApiEntity> ExpenseCodePages = expenseCodeService
                     .findAllByExpenseTitleContaining(expenseTitle, pageable);
 
             Page<ExpenseCodeApiDto> expenseCodeApiDtoPage = ExpenseCodePages

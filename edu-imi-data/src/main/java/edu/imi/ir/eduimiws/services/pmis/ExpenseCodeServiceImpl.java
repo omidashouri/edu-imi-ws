@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class ExpenseCodeApiServiceImpl implements ExpenseCodeApiService {
+public class ExpenseCodeServiceImpl implements ExpenseCodeService {
 
 
     private final ExpenseCodeRepository expenseCodeRepository;

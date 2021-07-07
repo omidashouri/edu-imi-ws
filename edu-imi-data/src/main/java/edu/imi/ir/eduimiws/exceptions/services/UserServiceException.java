@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.exceptions;
+package edu.imi.ir.eduimiws.exceptions.services;
 
 public class UserServiceException extends RuntimeException {
 

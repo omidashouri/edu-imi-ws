@@ -36,17 +36,21 @@ public interface ExpenseCodeApiFastMapper {
     @Named("toExpenseCodeApiEntity")
     @BeanMapping(ignoreByDefault = true)
     @InheritInverseConfiguration(name = "toExpenseCodeApiDto")
-    ExpenseCodeApiEntity toExpenseCodeApiEntity(ExpenseCodeApiDto expenseCodeApiDto, @Context CycleAvoidingMappingContext context);
+    ExpenseCodeApiEntity toExpenseCodeApiEntity(ExpenseCodeApiDto expenseCodeApiDto,
+                                                @Context CycleAvoidingMappingContext context);
 
     @IterableMapping(qualifiedByName = "toExpenseCodeApiDto")
-    List<ExpenseCodeApiDto> toExpenseCodeApiDtos(List<ExpenseCodeApiEntity> expenseCodeApiEntities, @Context CycleAvoidingMappingContext context);
+    List<ExpenseCodeApiDto> toExpenseCodeApiDtos(List<ExpenseCodeApiEntity> expenseCodeApiEntities,
+                                                 @Context CycleAvoidingMappingContext context);
 
     @IterableMapping(qualifiedByName = "toExpenseCodeApiEntity")
-    List<ExpenseCodeApiEntity> toExpenseCodeApiEntities(List<ExpenseCodeApiDto> ExpenseCodeApiDtos, @Context CycleAvoidingMappingContext context);
+    List<ExpenseCodeApiEntity> toExpenseCodeApiEntities(List<ExpenseCodeApiDto> ExpenseCodeApiDtos,
+                                                        @Context CycleAvoidingMappingContext context);
 
     @BeforeMapping
     @InheritConfiguration(name = "toExpenseCodeApiDto")
-    default void handleExpenseCodeApiPublicIds(ExpenseCodeApiEntity expenseCodeApiEntity, @MappingTarget ExpenseCodeApiDto expenseCodeApiDto) {
+    default void handleExpenseCodeApiPublicIds(ExpenseCodeApiEntity expenseCodeApiEntity,
+                                               @MappingTarget ExpenseCodeApiDto expenseCodeApiDto) {
         new PersistenceUtils().cleanFromProxyByReadMethod(expenseCodeApiEntity);
     }
 }

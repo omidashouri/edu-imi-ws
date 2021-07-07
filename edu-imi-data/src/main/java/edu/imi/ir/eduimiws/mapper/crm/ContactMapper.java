@@ -1,24 +1,28 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import edu.imi.ir.eduimiws.services.crm.ContactApiService;
+import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-//NU
+
 @Mapper(componentModel = "spring",
         uses = {AccountMapper.class},
+        imports = {PersistenceUtils.class},
         unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface ContactMapper {
 
-    ContactMapper INSTANCE = Mappers.getMapper(ContactMapper.class);
 
+    @Named("toContactEntity")
     @Mappings({
             @Mapping(source = "accountDto", target = "account"),
             @Mapping(source = "accountId", target = "account.id"),
@@ -126,10 +130,20 @@ public interface ContactMapper {
     })
     ContactEntity toContactEntity(ContactDto contactDto , @Context CycleAvoidingMappingContext context);
 
-    @InheritInverseConfiguration
+    @Named("toContactDto")
+    @InheritInverseConfiguration(name = "toContactEntity")
     ContactDto toContactDto(ContactEntity contactEntity, @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toContactEntity")
     List<ContactEntity> toContactEntities(List<ContactDto> ContactDtos, @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toContactDto")
     List<ContactDto> toContactDtos(List<ContactEntity> contactEntities, @Context CycleAvoidingMappingContext context);
+
+    @BeforeMapping
+    @InheritConfiguration(name = "toContactDto")
+    default void handleContactApiPublicIds(ContactEntity contactEntity,
+                                          @MappingTarget ContactDto contactDto) {
+        new PersistenceUtils().cleanFromProxyByReadMethod(contactEntity);
+    }
 }

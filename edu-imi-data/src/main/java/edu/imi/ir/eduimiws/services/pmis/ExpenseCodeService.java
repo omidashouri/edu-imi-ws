@@ -4,7 +4,7 @@ import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ExpenseCodeApiService {
+public interface ExpenseCodeService {
 
     Page<ExpenseCodeApiEntity> findAll(Pageable pageable);
 

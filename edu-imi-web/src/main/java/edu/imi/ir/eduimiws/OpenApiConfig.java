@@ -263,6 +263,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi paymentCodeApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("PaymentCodes")
+                .pathsToMatch("/api/v1/paymentCodes/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {

@@ -74,7 +74,7 @@ public interface TermDtoMapper {
         }
         if (termEntity.getCreator() != null) {
             PersonDto creatorDto = new PersonMapperImpl()
-                    .PersonEntityToPersonDto(termEntity.getCreator(), new CycleAvoidingMappingContext());
+                    .personEntityToPersonDto(termEntity.getCreator(), new CycleAvoidingMappingContext());
             termDto.setCreatorDto(creatorDto);
             if (!Hibernate.isInitialized(termEntity.getCreator().getPersonApiEntity())) {
                 termEntity.getCreator().setPersonApiEntity(null);
@@ -89,7 +89,7 @@ public interface TermDtoMapper {
         }
         if (termEntity.getEditor() != null) {
             PersonDto editorDto = new PersonMapperImpl()
-                    .PersonEntityToPersonDto(termEntity.getEditor(), new CycleAvoidingMappingContext());
+                    .personEntityToPersonDto(termEntity.getEditor(), new CycleAvoidingMappingContext());
             termDto.setEditorDto(editorDto);
             if (!Hibernate.isInitialized(termEntity.getEditor().getPersonApiEntity())) {
                 termEntity.getEditor().setPersonApiEntity(null);

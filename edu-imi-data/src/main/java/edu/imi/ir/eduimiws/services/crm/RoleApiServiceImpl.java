@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
-import edu.imi.ir.eduimiws.exceptions.RoleServiceException;
+import edu.imi.ir.eduimiws.exceptions.services.RoleServiceException;
 import edu.imi.ir.eduimiws.models.request.RoleForm;
 import edu.imi.ir.eduimiws.repositories.crm.PrivilegeApiRepository;
 import edu.imi.ir.eduimiws.repositories.crm.RoleApiRepository;

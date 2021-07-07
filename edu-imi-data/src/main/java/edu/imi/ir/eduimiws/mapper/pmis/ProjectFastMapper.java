@@ -10,16 +10,14 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
+        imports = {PersistenceUtils.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface ProjectFastMapper {
 
-    ProjectFastMapper INSTANCE = Mappers.getMapper(ProjectFastMapper.class);
-
-
 //    accountId, creator,  do not have join in database
 
-
+    @Named("toProjectDto")
     @Mappings({
             @Mapping(source = "accountId", target = "accountId"),
             @Mapping(source = "affectEfficiency", target = "affectEfficiency"),
@@ -80,12 +78,15 @@ public interface ProjectFastMapper {
     @BeanMapping(ignoreByDefault = true)
     ProjectDto toProjectDto(ProjectEntity projectEntity, @Context CycleAvoidingMappingContext context);
 
+    @Named("toProjectEntity")
     @BeanMapping(ignoreByDefault = true)
     @InheritInverseConfiguration
     ProjectEntity toProjectEntity(ProjectDto projectDto, @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toProjectEntity")
     List<ProjectEntity> toProjectEntities(List<ProjectDto> ProjectDtos, @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toProjectDto")
     List<ProjectDto> toProjectDtos(List<ProjectEntity> projectEntities, @Context CycleAvoidingMappingContext context);
 
     @BeforeMapping

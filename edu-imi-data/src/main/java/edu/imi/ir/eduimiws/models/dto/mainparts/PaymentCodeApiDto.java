@@ -1,8 +1,12 @@
 package edu.imi.ir.eduimiws.models.dto.mainparts;
 
+import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
+import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
+import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import lombok.*;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -39,4 +43,33 @@ public class PaymentCodeApiDto implements Serializable {
     private String requestIp;
 
     private String requestDescription;
+
+    private String nationalCode;
+
+    private ExpenseCodeApiDto expenseCodeApi;
+    private String expenseCodePublicId;
+    private Long expenseCodeId;
+
+    private Long expenseCode;
+
+    private ProjectDto project;
+    private String projectPublicId;
+    private Long projectId;
+
+    private String projectCode;
+
+    private Long bankId;
+
+    private String bankCode;
+
+    private Long requestCode;
+
+    private PersonDto person;
+    private String personPublicId;
+    private Long personId;
+
+    private ContactDto contact;
+    private String contactPublicId;
+    private Long contactId;
+
 }

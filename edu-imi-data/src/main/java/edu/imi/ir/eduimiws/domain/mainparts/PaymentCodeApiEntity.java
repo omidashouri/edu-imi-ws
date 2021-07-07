@@ -2,7 +2,11 @@ package edu.imi.ir.eduimiws.domain.mainparts;
 
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
+import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
+import edu.imi.ir.eduimiws.domain.pmis.ProjectApiEntity;
+import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -53,4 +57,46 @@ public class PaymentCodeApiEntity extends BaseEntity {
 
     @Column(name = "REQUEST_DESCRIPTION",length = 500)
     private String requestDescription;
+
+    @Column(name = "NATIONAL_CODE",length = 10)
+    private String nationalCode;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EXPENSE_CODE_ID")
+    private ExpenseCodeApiEntity expenseCodeApi;
+
+    @Column(name = "EXPENSE_CODE")
+    private Long expenseCode;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PROJECT_ID")
+    private ProjectEntity project;
+
+    @Column(name = "PROJECT_CODE", length = 30)
+    private String projectCode;
+
+    @Column(name = "BANK_ID")
+    private Long bankId;
+
+    @Column(name = "BANK_CODE", length = 10)
+    private String bankCode;
+
+    @Column(name = "REQUEST_CODE")
+    private Long requestCode;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PERSON_ID")
+    private PersonEntity person;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONTACT_ID")
+    private ContactEntity contact;
 }
