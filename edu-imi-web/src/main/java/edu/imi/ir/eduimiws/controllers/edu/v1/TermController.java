@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.TermResponseTermFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.TermEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.TermFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.TermFastDto;
@@ -170,10 +171,9 @@ public class TermController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getTermByTermPublicId(@PathVariable String termPublicId) {
 
-        try {
             TermEntity term = termService.findByTermPublicId(termPublicId);
             if (term == null) {
-                return this.termNotFound();
+                throw new NotFoundException("requested term not found");
             }
 
             TermFastDto termFastDto = termFastDtoMapper
@@ -184,17 +184,6 @@ public class TermController {
 
             return ResponseEntity.ok(termResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
-
-    private ResponseEntity<?> termNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested term not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 
 }

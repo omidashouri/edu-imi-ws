@@ -4,8 +4,7 @@ import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.UserRolePrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.exceptions.controllers.NationalCodeNullException;
-import edu.imi.ir.eduimiws.exceptions.controllers.NationalCodeRedundantException;
+import edu.imi.ir.eduimiws.exceptions.controllers.*;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
@@ -146,7 +145,6 @@ public class UserController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getUserByUserPublicId(@PathVariable String userPublicId) {
 
-        try {
 //            PersonEntity person = personService.findPersonEntityByPersonApiPublicId(userPublicId);
             PersonEntity person = crmServiceProxy.
                     createPersonServiceProxyInstance().
@@ -154,7 +152,7 @@ public class UserController {
 
 
             if (person == null) {
-                return this.userNotFound();
+                throw new NotFoundException("requested user not found");
             }
 
             UserFastDto userFastDto =
@@ -164,10 +162,6 @@ public class UserController {
                     userResponseAssembler.toModel(userFastDto);
 
             return ResponseEntity.ok(userResponse);
-
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -388,7 +382,7 @@ public class UserController {
         userCount = personService.selectPersonLastSequenceNumber();
 
         if (userCount == null || userCount == 0) {
-            this.conflictUserCount();
+            throw new InternalServerErrorException("user count is null or zero");
         }
 
         if (userWebserviceCount != null) {
@@ -458,7 +452,7 @@ public class UserController {
                 .toUserFastDtos(persons, new CycleAvoidingMappingContext());
 
         if (userFastDtos == null || userFastDtos.size() == 0) {
-            return this.userNotFound();
+            throw new NotFoundException("requested user not found");
         }
 
         CollectionModel<UserResponse> userResponseCollectionModel =
@@ -521,7 +515,7 @@ public class UserController {
         Long userCount;
 
         if (userRegister.getNationCode().isEmpty()) {
-            throw new NationalCodeNullException("national code is null");
+            throw new BadRequestException("national code is null");
         } else {
             nationalCode = userRegister.getNationCode();
         }
@@ -531,7 +525,7 @@ public class UserController {
 
 
         if (duplicatePersons.size() > 0) {
-            throw new NationalCodeRedundantException("national code is redundant");
+            throw new NotAcceptableException("national code is redundant");
         }
 
         UserFastDto userFastDto = userRegisterUserFastDtoMapper
@@ -589,12 +583,12 @@ public class UserController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getUserRoleByUserPublicId(@PathVariable String userPublicId) {
 
-        try {
+
             PersonEntity person = personApiService
                     .findByPersonPublicIdWithPersonAndRole(userPublicId)
                     .getPerson();
             if (person == null) {
-                return this.userNotFound();
+                throw new NotFoundException("requested user not found");
             }
 
             UserFastDto userFastDto =
@@ -605,9 +599,6 @@ public class UserController {
 
             return ResponseEntity.ok(userRolePrivilegeResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -663,7 +654,7 @@ public class UserController {
 
         if (userRolePrivilege.getRolePublicId().isEmpty() || userRolePrivilege.getRolePublicId().size() == 0) {
 
-            return this.rolePublicIsEmpty();
+           throw new BadRequestException("Role Public Id is Empty");
         } else {
             rolePublicIds = userRolePrivilege.getRolePublicId();
         }
@@ -683,46 +674,5 @@ public class UserController {
                 userRolePrivilegeResponseAssembler.toModel(userFastDto);
 
         return ResponseEntity.ok(userRolePrivilegeResponse);
-    }
-
-
-    private ResponseEntity<?> conflictUserCount() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        , "user count is null or zero")
-                , HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
-
-    private ResponseEntity<?> userNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested user not found")
-                , HttpStatus.NOT_FOUND
-        );
-    }
-
-    private ResponseEntity<?> nationalCodeIsEmpty() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.BAD_REQUEST.toString()
-                        , "national code is null")
-                , HttpStatus.BAD_REQUEST
-        );
-    }
-
-    private ResponseEntity<?> nationalCodeRedundant() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_ACCEPTABLE.toString()
-                        , "national code is redundant")
-                , HttpStatus.BAD_REQUEST
-        );
-    }
-
-    private ResponseEntity<?> rolePublicIsEmpty() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.BAD_REQUEST.toString()
-                        , "Role Public Id is Empty")
-                , HttpStatus.BAD_REQUEST
-        );
     }
 }

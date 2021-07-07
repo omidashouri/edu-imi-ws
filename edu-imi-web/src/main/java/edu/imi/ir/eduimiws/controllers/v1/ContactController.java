@@ -4,6 +4,7 @@ package edu.imi.ir.eduimiws.controllers.v1;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.ContactResponseContactFastDtoMapper;
@@ -190,12 +191,12 @@ public class ContactController {
         String contactPublicId = contactResponse.getContactPublicId();
         ContactEntity contact = null;
         ContactFastDto contactFastDto;
-        try {
+
             if (contactPublicId != null) {
                 contact = contactService.findContactEntityByContactApiPublicId(contactPublicId);
             }
             if (contact == null) {
-                return this.contactNotFound();
+                throw new NotFoundException("requested contact not found");
             }
 
             contactFastDto = contactResponseContactFastDtoMapper
@@ -208,9 +209,6 @@ public class ContactController {
 
             return ResponseEntity.ok(contactResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -248,10 +246,9 @@ public class ContactController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getContactByContactPublicId(@PathVariable String contactPublicId) {
 
-        try {
             ContactEntity contact = contactService.findContactEntityByContactApiPublicId(contactPublicId);
             if (contact == null) {
-                return this.contactNotFound();
+                throw new NotFoundException("requested contact not found");
             }
 
             ContactFastDto contactFastDto =
@@ -262,9 +259,6 @@ public class ContactController {
 
             return ResponseEntity.ok(contactResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -309,11 +303,11 @@ public class ContactController {
                                                 @PageableDefault(page = 0, size = 10, value = 10)
                                                         Pageable pageable) {
 
-        try {
-            if (criteria == null || criteria.length() == 0) {
-                return this.contactNotFound();
-            }
 
+            if (criteria == null || criteria.length() == 0) {
+                throw new NotFoundException("requested contact not found");
+            }
+        try {
             BooleanExpression expression = new QueryDSLPredicatesBuilder<>(ContactEntity.class)
                     .with(criteria).build();
 
@@ -435,21 +429,13 @@ public class ContactController {
         List<ContactFastDto> contactFastDtos = contactService.findContactByNationalCode(nationalCode);
 
         if (contactFastDtos == null || contactFastDtos.size() == 0) {
-            return this.contactNotFound();
+            throw new NotFoundException("requested contact not found");
         }
 
         CollectionModel<ContactResponse> contactResponseCollectionModel =
                 contactResponseAssembler.toCollectionModel(contactFastDtos);
 
         return ResponseEntity.ok(contactResponseCollectionModel);
-    }
-
-    private ResponseEntity<?> contactNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested contact not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 
 }

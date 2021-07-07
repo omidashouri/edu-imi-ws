@@ -4,6 +4,8 @@ import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponsePeriodFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
@@ -333,10 +335,9 @@ public class PeriodController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getPeriodByPeriodPublicId(@PathVariable String periodPublicId) {
 
-        try {
             PeriodEntity period = periodService.findPeriodEntityByPeriodApiPublicId(periodPublicId);
             if (period == null) {
-                return this.periodNotFound();
+                throw new NotFoundException("requested period not found");
             }
 
             PeriodFastDto periodFastDto = periodFastDtoMapper
@@ -347,9 +348,6 @@ public class PeriodController {
 
             return ResponseEntity.ok(periodResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -565,7 +563,7 @@ public class PeriodController {
         periodCount = periodService.countPeriodByIdLessThanEqual(periodSequenceNumber);
 
         if (periodCount == null || periodCount == 0) {
-            this.conflictPeriodCount();
+            throw new InternalServerErrorException("period count is null or zero");
         }
 
         if (periodApiCount != null) {
@@ -734,22 +732,6 @@ public class PeriodController {
         returnValue.setDescription(updatedPeriodApi.size() + " record updated ");
         return ResponseEntity.ok(returnValue);
 
-    }
-
-    private ResponseEntity<?> conflictPeriodCount() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        , "period count is null or zero")
-                , HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
-
-    private ResponseEntity<?> periodNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested period not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 
 }

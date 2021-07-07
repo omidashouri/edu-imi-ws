@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.CourseResponseCourseFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.CourseEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.CourseFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.CourseFastDto;
@@ -170,10 +171,9 @@ public class CourseController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getCourseByCoursePublicId(@PathVariable String coursePublicId) {
 
-        try {
             CourseEntity course = courseService.findByCoursePublicId(coursePublicId);
             if (course == null) {
-                return this.courseNotFound();
+                throw new NotFoundException("requested course not found");
             }
 
             CourseFastDto courseFastDto = courseFastDtoMapper
@@ -184,17 +184,6 @@ public class CourseController {
 
             return ResponseEntity.ok(courseResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
-
-    private ResponseEntity<?> courseNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested course not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 
 }

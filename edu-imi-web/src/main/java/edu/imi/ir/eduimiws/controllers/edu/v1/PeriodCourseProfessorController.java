@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodCourseProfessorResponsePeriodCourseProfessorFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.PeriodCourseProfessorEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodCourseProfessorFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodCourseProfessorFastDto;
@@ -173,11 +174,10 @@ public class PeriodCourseProfessorController {
     public ResponseEntity<?> getPeriodCourseProfessorByPeriodCourseProfessorPublicId(
             @PathVariable String periodCourseProfessorPublicId) {
 
-        try {
             PeriodCourseProfessorEntity periodCourseProfessor = periodCourseProfessorService
                     .findByPeriodCourseProfessorPublicId(periodCourseProfessorPublicId);
             if (periodCourseProfessor == null) {
-                return this.periodCourseProfessorNotFound();
+                throw new NotFoundException("requested periodCourseProfessor not found");
             }
 
             PeriodCourseProfessorFastDto periodCourseProfessorFastDto = periodCourseProfessorFastDtoMapper
@@ -189,9 +189,6 @@ public class PeriodCourseProfessorController {
 
             return ResponseEntity.ok(periodCourseProfessorResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -247,15 +244,5 @@ public class PeriodCourseProfessorController {
 
         return ResponseEntity.ok(periodCourseProfessorResponsePagedModel);
     }
-
-    private ResponseEntity<?> periodCourseProfessorNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested periodCourseProfessor not found")
-                , HttpStatus.NOT_FOUND
-        );
-    }
-
-
 
 }

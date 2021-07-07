@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.RoleResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.RoleFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.RoleFastDto;
@@ -173,10 +174,9 @@ public class RoleController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getRoleByRolePublicId(@PathVariable String rolePublicId) {
 
-        try {
             RoleApiEntity roleApi = roleApiService.findByRolePublicId(rolePublicId);
             if (roleApi == null) {
-                return this.roleNotFound();
+                throw new NotFoundException("requested role not found");
             }
 
             RoleFastDto roleFastDto = roleFastDtoMapper
@@ -187,9 +187,6 @@ public class RoleController {
 
             return ResponseEntity.ok(roleResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -264,17 +261,4 @@ public class RoleController {
         }
         return ResponseEntity.ok(returnValue);
     }
-
-
-
-    private ResponseEntity<?> roleNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested role not found")
-                , HttpStatus.NOT_FOUND
-        );
-    }
-
-
-
 }

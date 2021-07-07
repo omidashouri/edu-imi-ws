@@ -4,6 +4,8 @@ import edu.imi.ir.eduimiws.assemblers.edu.FieldResponseFieldDtoAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.FieldResponseFieldFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.FieldApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.FieldEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.FieldDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.FieldFastDtoMapper;
@@ -185,10 +187,9 @@ public class FieldController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getFieldByFieldPublicId(@PathVariable String fieldPublicId) {
 
-        try {
             FieldEntity field = fieldService.findByFieldPublicId(fieldPublicId);
             if (field == null) {
-                return this.fieldNotFound();
+                throw new NotFoundException("requested field not found");
             }
 
             FieldFastDto fieldFastDto = fieldFastDtoMapper
@@ -199,9 +200,6 @@ public class FieldController {
 
             return ResponseEntity.ok(fieldResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -319,11 +317,10 @@ public class FieldController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getFieldWithStudentPeriodNameByFieldPublicId(@PathVariable String fieldPublicId) {
 
-        try {
             FieldEntity field = fieldService
                     .findByFieldPublicId(fieldPublicId);
             if (field == null) {
-                return this.fieldNotFound();
+                throw new NotFoundException("requested field not found");
             }
 
             FieldDto fieldDto = fieldDtoMapper
@@ -334,9 +331,6 @@ public class FieldController {
 
             return ResponseEntity.ok(fieldResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -495,7 +489,7 @@ public class FieldController {
         fieldCount = fieldService.countFieldByIdLessThanEqual(fieldSequenceNumber);
 
         if (fieldCount == null || fieldCount == 0) {
-            this.conflictFieldCount();
+            throw new InternalServerErrorException("field count is null or zero");
         }
 
         if (fieldApiCount != null) {
@@ -596,23 +590,5 @@ public class FieldController {
         returnValue.setDescription(newFieldApi.size() + " New Public Id Generated");
         return ResponseEntity.ok(returnValue);
     }
-
-    private ResponseEntity<?> conflictFieldCount() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        , "field count is null or zero")
-                , HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
-
-
-    private ResponseEntity<?> fieldNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested field not found")
-                , HttpStatus.NOT_FOUND
-        );
-    }
-
 
 }

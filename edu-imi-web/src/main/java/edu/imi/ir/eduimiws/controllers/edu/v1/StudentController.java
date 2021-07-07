@@ -5,6 +5,9 @@ import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.StudentEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.ExpectationFailedException;
+import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.StudentFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.StudentFormStudentFastDtoMapper;
@@ -190,10 +193,9 @@ public class StudentController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getStudentByStudentPublicId(@PathVariable String studentPublicId) {
 
-        try {
             StudentEntity student = studentService.findByStudentPublicIdOrderByCreateDateDesc(studentPublicId);
             if (student == null) {
-                return this.studentNotFound();
+                throw new NotFoundException("requested student not found");
             }
 
             StudentFastDto studentFastDto = studentFastDtoMapper
@@ -204,9 +206,6 @@ public class StudentController {
 
             return ResponseEntity.ok(studentResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -260,7 +259,7 @@ public class StudentController {
         studentCount = studentService.countStudentByIdLessThanEqual(studentSequenceNumber);
 
         if (studentCount == null || studentCount == 0) {
-            this.conflictStudentCount();
+            throw new InternalServerErrorException("student count is null or zero");
         }
 
         if (studentApiCount != null) {
@@ -443,7 +442,7 @@ public class StudentController {
                     if (contact != null) {
                         newStudent.setNationCode(contact.getNationCode());
                     } else {
-                        return this.studentFound();
+                        throw new ExpectationFailedException("student found in database");
                     }
 
                     Long studentSequenceNumber = studentService.selectStudentLastSequenceNumber();
@@ -480,32 +479,5 @@ public class StudentController {
         returnValue.setDescription(" New Student public Id : " + savedStudent.getStudentApi().getStudentPublicId());
         return ResponseEntity.ok(returnValue);
     }
-
-
-    private ResponseEntity<?> conflictStudentCount() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        , "student count is null or zero")
-                , HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
-
-
-    private ResponseEntity<?> studentNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested student not found")
-                , HttpStatus.NOT_FOUND
-        );
-    }
-
-    private ResponseEntity<?> studentFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.EXPECTATION_FAILED.toString()
-                        , "student found in database")
-                , HttpStatus.EXPECTATION_FAILED
-        );
-    }
-
 
 }

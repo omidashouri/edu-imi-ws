@@ -3,6 +3,8 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 import edu.imi.ir.eduimiws.assemblers.edu.EduCategoryResponseEduCategoryDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.EduCategoryApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.EduCategoryEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.EduCategoryDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.EduCategoryDto;
@@ -179,10 +181,9 @@ public class EduCategoryController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getEduCategoryByEduCategoryPublicId(@PathVariable String eduCategoryPublicId) {
 
-        try {
             EduCategoryEntity eduCategory = eduCategoryService.findByEduCategoryPublicId(eduCategoryPublicId);
             if (eduCategory == null) {
-                return this.eduCategoryNotFound();
+                throw new NotFoundException("requested eduCategory not found");
             }
 
             EduCategoryDto eduCategoryDto = eduCategoryDtoMapper
@@ -193,9 +194,6 @@ public class EduCategoryController {
 
             return ResponseEntity.ok(eduCategoryResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -234,12 +232,11 @@ public class EduCategoryController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getEduCategoryByEduCategoryTitle(@PathVariable String eduCategoryTitle) {
 
-        try {
 
             List<EduCategoryEntity> eduCategories = eduCategoryService
                     .findAllByEduCategoryTitle(eduCategoryTitle);
             if (eduCategories == null || eduCategories.size() == 0) {
-                return this.eduCategoryNotFound();
+                throw new NotFoundException("requested eduCategory not found");
             }
 
             List<EduCategoryDto> eduCategoryDtos = eduCategoryDtoMapper
@@ -250,9 +247,6 @@ public class EduCategoryController {
 
             return ResponseEntity.ok(eduCategoryResponseCollectionModel);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -304,7 +298,7 @@ public class EduCategoryController {
         eduCategoryCount = eduCategoryService.countEduCategoryByIdLessThanEqual(eduCategorySequenceNumber);
 
         if (eduCategoryCount == null || eduCategoryCount == 0) {
-            this.conflictEduCategoryCount();
+            throw new InternalServerErrorException("eduCategory count is null or zero");
         }
 
         if (eduCategoryApiCount != null) {
@@ -404,22 +398,5 @@ public class EduCategoryController {
         returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
         returnValue.setDescription(newEduCategoryApi.size() + " New Public Id Generated");
         return ResponseEntity.ok(returnValue);
-    }
-
-    private ResponseEntity<?> conflictEduCategoryCount() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        , "eduCategory count is null or zero")
-                , HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
-
-
-    private ResponseEntity<?> eduCategoryNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested eduCategory not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 }

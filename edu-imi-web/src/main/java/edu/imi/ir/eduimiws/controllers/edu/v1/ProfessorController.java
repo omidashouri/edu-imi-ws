@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.ProfessorResponseProfessorFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.ProfessorEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.ProfessorFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.ProfessorFastDto;
@@ -170,10 +171,9 @@ public class ProfessorController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getProfessorByProfessorPublicId(@PathVariable String professorPublicId) {
 
-        try {
             ProfessorEntity professor = professorService.findByProfessorPublicId(professorPublicId);
             if (professor == null) {
-                return this.professorNotFound();
+                throw new NotFoundException("requested professor not found");
             }
 
             ProfessorFastDto professorFastDto = professorFastDtoMapper
@@ -184,16 +184,5 @@ public class ProfessorController {
 
             return ResponseEntity.ok(professorResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
-
-    private ResponseEntity<?> professorNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested professor not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 }

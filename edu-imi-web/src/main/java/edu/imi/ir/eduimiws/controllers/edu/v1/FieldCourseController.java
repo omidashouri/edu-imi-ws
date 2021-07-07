@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.FieldCourseResponseFieldCourseFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.FieldCourseEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.FieldCourseFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.FieldCourseFastDto;
@@ -170,10 +171,9 @@ public class FieldCourseController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getFieldCourseByFieldCoursePublicId(@PathVariable String fieldCoursePublicId) {
 
-        try {
             FieldCourseEntity fieldCourse = fieldCourseService.findByFieldCoursePublicId(fieldCoursePublicId);
             if (fieldCourse == null) {
-                return this.fieldCourseNotFound();
+                throw new NotFoundException("requested fieldCourse not found");
             }
 
             FieldCourseFastDto fieldCourseFastDto = fieldCourseFastDtoMapper
@@ -184,16 +184,5 @@ public class FieldCourseController {
 
             return ResponseEntity.ok(fieldCourseResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
-
-    private ResponseEntity<?> fieldCourseNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested fieldCourse not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 }

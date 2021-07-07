@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.TermPresentedCourseResponseTermPresentedCourseFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.TermPresentedCourseEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.TermPresentedCourseFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.TermPresentedCourseFastDto;
@@ -170,10 +171,9 @@ public class TermPresentedCourseController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getTermPresentedCourseByTermPresentedCoursePublicId(@PathVariable String termPresentedCoursePublicId) {
 
-        try {
             TermPresentedCourseEntity termPresentedCourse = termPresentedCourseService.findByTermPresentedCoursePublicId(termPresentedCoursePublicId);
             if (termPresentedCourse == null) {
-                return this.termPresentedCourseNotFound();
+                throw new NotFoundException("requested termPresentedCourse not found");
             }
 
             TermPresentedCourseFastDto termPresentedCourseFastDto = termPresentedCourseFastDtoMapper
@@ -184,16 +184,5 @@ public class TermPresentedCourseController {
 
             return ResponseEntity.ok(termPresentedCourseResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
-
-    private ResponseEntity<?> termPresentedCourseNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested termPresentedCourse not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 }

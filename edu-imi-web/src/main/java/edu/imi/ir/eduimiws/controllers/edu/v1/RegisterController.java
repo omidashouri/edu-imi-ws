@@ -5,6 +5,8 @@ import edu.imi.ir.eduimiws.assemblers.edu.RegisterResponseRegisterFastDtoAssembl
 import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.*;
+import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterDtoMapper;
 import edu.imi.ir.eduimiws.mapper.edu.RegisterFastDtoMapper;
@@ -344,10 +346,9 @@ public class RegisterController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getRegisterByRegisterPublicId(@PathVariable String registerPublicId) {
 
-        try {
             RegisterEntity register = registerService.findByRegisterPublicId(registerPublicId);
             if (register == null) {
-                return this.registerNotFound();
+                throw new NotFoundException("requested register not found");
             }
 
             RegisterFastDto registerFastDto = registerFastDtoMapper
@@ -358,9 +359,6 @@ public class RegisterController {
 
             return ResponseEntity.ok(registerResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -478,11 +476,10 @@ public class RegisterController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getRegisterWithStudentPeriodNameByRegisterPublicId(@PathVariable String registerPublicId) {
 
-        try {
             RegisterEntity register = registerService
                     .findWithStudentPeriodNameByRegisterPublicId(registerPublicId);
             if (register == null) {
-                return this.registerNotFound();
+                throw new NotFoundException("requested register not found");
             }
 
             RegisterDto registerDto = registerDtoMapper
@@ -493,9 +490,6 @@ public class RegisterController {
 
             return ResponseEntity.ok(registerResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -684,7 +678,7 @@ public class RegisterController {
         registerCount = registerService.countRegisterByIdLessThanEqual(registerSequenceNumber);
 
         if (registerCount == null || registerCount == 0) {
-            this.conflictRegisterCount();
+            throw new InternalServerErrorException("register count is null or zero");
         }
 
         if (registerApiCount != null) {

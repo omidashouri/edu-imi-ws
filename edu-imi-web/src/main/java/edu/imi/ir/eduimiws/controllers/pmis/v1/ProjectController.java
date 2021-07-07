@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.controllers.pmis.v1;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import edu.imi.ir.eduimiws.assemblers.pmis.ProjectResponseAssembler;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.pmis.ProjectFastMapper;
 import edu.imi.ir.eduimiws.mapper.pmis.ProjectResponseProjectDtoMapper;
@@ -178,10 +179,9 @@ public class ProjectController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getProjectByProjectPublicId(@PathVariable String projectPublicId) {
 
-        try {
             ProjectEntity project = projectService.findProjectEntityByProjectApiPublicId(projectPublicId);
             if (project == null) {
-                return this.projectNotFound();
+                throw new NotFoundException("requested project not found");
             }
 
             ProjectDto projectFastDto =
@@ -192,9 +192,6 @@ public class ProjectController {
 
             return ResponseEntity.ok(projectResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -241,9 +238,9 @@ public class ProjectController {
                                                 @PageableDefault(page = 0, size = 10, value = 10)
                                                         Pageable pageable) {
 
-/*        try {
+/*
             if (criteria == null || criteria.length() == 0) {
-                return this.projectNotFound();
+                throw new NotFoundException("requested project not found");
             }
 
             BooleanExpression expression = new QueryDSLPredicatesBuilder<>(ProjectEntity.class)
@@ -261,18 +258,8 @@ public class ProjectController {
 
             return ResponseEntity.ok(projectResponsePagedModel);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }*/
+        */
         return null;
-    }
-
-    private ResponseEntity<?> projectNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested project not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 
 }

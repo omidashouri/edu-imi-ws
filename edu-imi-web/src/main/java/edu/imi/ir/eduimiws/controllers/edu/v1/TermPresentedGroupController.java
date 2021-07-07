@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.TermPresentedGroupResponseTermPresentedGroupFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.TermPresentedGroupEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.TermPresentedGroupFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.TermPresentedGroupFastDto;
@@ -170,10 +171,10 @@ public class TermPresentedGroupController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getTermPresentedGroupByTermPresentedGroupPublicId(@PathVariable String termPresentedGroupPublicId) {
 
-        try {
+
             TermPresentedGroupEntity termPresentedGroup = termPresentedGroupService.findByTermPresentedGroupPublicId(termPresentedGroupPublicId);
             if (termPresentedGroup == null) {
-                return this.termPresentedGroupNotFound();
+                throw new NotFoundException("requested termPresentedGroup not found");
             }
 
             TermPresentedGroupFastDto termPresentedGroupFastDto = termPresentedGroupFastDtoMapper
@@ -184,9 +185,6 @@ public class TermPresentedGroupController {
 
             return ResponseEntity.ok(termPresentedGroupResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -242,14 +240,6 @@ public class TermPresentedGroupController {
                 .toModel(termPresentedGroupFastDtoPage, termPresentedGroupResponseTermPresentedGroupFastDtoAssembler);
 
         return ResponseEntity.ok(termPresentedGroupResponsePagedModel);
-    }
-
-    private ResponseEntity<?> termPresentedGroupNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested termPresentedGroup not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 
 }

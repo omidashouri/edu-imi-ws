@@ -31,7 +31,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler, Serializa
         // You can create your own repsonse here to handle method level access denied reponses..
         // Follow similar method to the bad credentials handler above.
 
-        ErrorMessage error = new ErrorMessage(LocalDateTime.now(), HttpStatus.FORBIDDEN.toString(), "You are Not Authenticated");
+        ErrorMessage error = new ErrorMessage(LocalDateTime.now().toString(), HttpStatus.FORBIDDEN.toString(), "You are Not Authenticated");
 
         /*
           Here we're going to creat a json strong from the CustomError object we just created.

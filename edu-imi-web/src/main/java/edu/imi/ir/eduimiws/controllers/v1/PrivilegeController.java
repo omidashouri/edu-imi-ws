@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.PrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PrivilegeFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PrivilegeFastDto;
@@ -168,10 +169,9 @@ public class PrivilegeController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getPrivilegeByPrivilegePublicId(@PathVariable String privilegePublicId) {
 
-        try {
             PrivilegeApiEntity privilegeApi = privilegeApiService.findByPrivilegePublicId(privilegePublicId);
             if (privilegeApi == null) {
-                return this.privilegeNotFound();
+                throw new NotFoundException("requested privilege not found");
             }
 
             PrivilegeFastDto privilegeFastDto = privilegeFastDtoMapper
@@ -182,9 +182,6 @@ public class PrivilegeController {
 
             return ResponseEntity.ok(privilegeResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
     @Operation(
@@ -245,14 +242,6 @@ public class PrivilegeController {
         returnValue.setName(savedPrivilege.getName());
 
         return ResponseEntity.ok(returnValue);
-    }
-
-    private ResponseEntity<?> privilegeNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested privilege not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 
 }

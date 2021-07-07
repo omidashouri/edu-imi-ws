@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -15,11 +16,12 @@ import java.time.LocalDateTime;
 @Setter
 public class ErrorMessage {
 
+
     @Schema(
-            description = "error date",
+            description = "error date time",
             example = "2020-03-28T06:27:59.049Z"
     )
-    private LocalDateTime errorDateTime;
+    private String errorDateTime;
 
     @Schema(
             description = "HTTP status error code",

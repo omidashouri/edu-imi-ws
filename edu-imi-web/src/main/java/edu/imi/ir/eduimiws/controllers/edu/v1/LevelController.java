@@ -5,6 +5,8 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 import edu.imi.ir.eduimiws.assemblers.edu.LevelResponseLevelDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.LevelApiEntity;
 import edu.imi.ir.eduimiws.domain.edu.LevelEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.LevelDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.LevelDto;
@@ -181,12 +183,11 @@ public class LevelController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getLevelByLevelTitle(@PathVariable String LevelDescription) {
 
-        try {
 
             List<LevelEntity> Levels = levelService
                     .findAllByLevelDescription(LevelDescription);
             if (Levels == null || Levels.size() == 0) {
-                return this.levelNotFound();
+                throw new NotFoundException("requested level not found");
             }
 
             List<LevelDto> LevelDtos = levelDtoMapper
@@ -197,9 +198,6 @@ public class LevelController {
 
             return ResponseEntity.ok(LevelResponseCollectionModel);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -238,10 +236,9 @@ public class LevelController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getLevelByLevelPublicId(@PathVariable String levelPublicId) {
 
-        try {
             LevelEntity level = levelService.findByLevelPublicId(levelPublicId);
             if (level == null) {
-                return this.levelNotFound();
+                throw new NotFoundException("requested level not found");
             }
 
             LevelDto levelDto = levelDtoMapper
@@ -252,9 +249,6 @@ public class LevelController {
 
             return ResponseEntity.ok(levelResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
     }
 
 
@@ -309,7 +303,7 @@ public class LevelController {
         levelCount = levelService.countLevelByIdLessThanEqual(levelSequenceNumber);
 
         if (levelCount == null || levelCount == 0) {
-            this.conflictLevelCount();
+            throw new InternalServerErrorException("level count is null or zero");
         }
 
         if (levelApiCount != null) {
@@ -410,23 +404,4 @@ public class LevelController {
         returnValue.setDescription(newLevelApi.size() + " New Public Id Generated");
         return ResponseEntity.ok(returnValue);
     }
-
-    private ResponseEntity<?> conflictLevelCount() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        , "level count is null or zero")
-                , HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
-
-
-    private ResponseEntity<?> levelNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested level not found")
-                , HttpStatus.NOT_FOUND
-        );
-    }
-
-
 }

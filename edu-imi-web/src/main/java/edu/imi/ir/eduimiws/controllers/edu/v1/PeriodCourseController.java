@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.edu.v1;
 
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodCourseResponsePeriodCourseFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.PeriodCourseEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodCourseFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodCourseFastDto;
@@ -170,10 +171,9 @@ public class PeriodCourseController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getPeriodCourseByPeriodCoursePublicId(@PathVariable String periodCoursePublicId) {
 
-        try {
             PeriodCourseEntity periodCourse = periodCourseService.findByPeriodCoursePublicId(periodCoursePublicId);
             if (periodCourse == null) {
-                return this.periodCourseNotFound();
+                throw new NotFoundException("requested periodCourse not found");
             }
 
             PeriodCourseFastDto periodCourseFastDto = periodCourseFastDtoMapper
@@ -184,16 +184,5 @@ public class PeriodCourseController {
 
             return ResponseEntity.ok(periodCourseResponse);
 
-        } catch (Exception ex) {
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
-
-    private ResponseEntity<?> periodCourseNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.toString()
-                        , "requested periodCourse not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 }
