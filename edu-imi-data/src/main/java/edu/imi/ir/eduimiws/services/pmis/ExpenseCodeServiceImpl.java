@@ -1,6 +1,9 @@
 package edu.imi.ir.eduimiws.services.pmis;
 
 import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.pmis.ExpenseCodeApiFastMapper;
+import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
 import edu.imi.ir.eduimiws.repositories.pmis.ExpenseCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,7 @@ public class ExpenseCodeServiceImpl implements ExpenseCodeService {
 
 
     private final ExpenseCodeRepository expenseCodeRepository;
+    private final ExpenseCodeApiFastMapper expenseCodeApiFastMapper;
 
     @Override
     public Page<ExpenseCodeApiEntity> findAll(Pageable pageable) {
@@ -36,5 +40,11 @@ public class ExpenseCodeServiceImpl implements ExpenseCodeService {
     @Override
     public ExpenseCodeApiEntity findByExpenseCode(Long expenseCode) {
         return expenseCodeRepository.findByExpenseCode(expenseCode);
+    }
+
+    @Override
+    public ExpenseCodeApiDto findExpenseCodeApiDtoByExpenseCodePublicId(String expenseCodePublicId) {
+        return expenseCodeApiFastMapper
+                .toExpenseCodeApiDto(this.findByExpenseCodePublicId(expenseCodePublicId), new CycleAvoidingMappingContext());
     }
 }

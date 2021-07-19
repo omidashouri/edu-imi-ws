@@ -2,9 +2,11 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.crm.PersonMapper;
 import edu.imi.ir.eduimiws.mapper.crm.PersonUserProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
@@ -29,6 +31,7 @@ public class PersonServiceImpl implements PersonService {
     private final PersonUserProjectionMapper personUserProjectionMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
+    private final PersonMapper personMapper;
     private final PublicIdUtil publicIdUtil;
 //NU
 /*    @Override
@@ -82,6 +85,14 @@ public class PersonServiceImpl implements PersonService {
         PersonEntity person = personRepository
                 .findByPersonApiEntity_PersonPublicId(personPublicId);
         return person;
+    }
+
+    @Override
+    public PersonDto findPersonDtoByPersonApiPublicId(String personPublicId) {
+        PersonDto newPersonDto = personMapper
+                .personEntityToPersonDto(personRepository.readByPersonApiEntity_PersonPublicId(personPublicId),
+                        new CycleAvoidingMappingContext());
+        return newPersonDto;
     }
 
     @Override

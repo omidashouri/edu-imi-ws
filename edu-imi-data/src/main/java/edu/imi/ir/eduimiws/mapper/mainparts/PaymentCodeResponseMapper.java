@@ -19,9 +19,8 @@ public interface PaymentCodeResponseMapper {
 
     @Named("paymentCodeResponseToPaymentCodeApiDto")
     @Mappings({
-            @Mapping(source = "bankCode", target = "bankCode"),
-            @Mapping(source = "bankId", target = "bankId"),
-            @Mapping(source = "contactPublicId", target = "contactPublicId"),
+            @Mapping(source = "bankApiPublicId", target = "bankApiPublicId"),
+            @Mapping(source = "payerContactPublicId", target = "payerContactPublicId"),
             @Mapping(source = "createDateTs", target = "createDateTs"),
             @Mapping(source = "creatorPublicId", target = "creatorPublicId"),
             @Mapping(source = "deleteDateTs", target = "deleteDateTs"),
@@ -32,12 +31,11 @@ public interface PaymentCodeResponseMapper {
             @Mapping(source = "nationalCode", target = "nationalCode"),
             @Mapping(source = "paymentCode", target = "paymentCode"),
             @Mapping(source = "paymentCodePublicId", target = "paymentCodePublicId"),
-            @Mapping(source = "personPublicId", target = "personPublicId"),
+            @Mapping(source = "payerUserPublicId", target = "payerUserPublicId"),
             @Mapping(source = "projectCode", target = "projectCode"),
             @Mapping(source = "projectPublicId", target = "projectPublicId"),
             @Mapping(source = "requestCode", target = "requestCode"),
             @Mapping(source = "requestDescription", target = "requestDescription"),
-            @Mapping(source = "requestId", target = "requestId"),
             @Mapping(source = "requestIp", target = "requestIp")
     })
     @BeanMapping(ignoreByDefault = true)

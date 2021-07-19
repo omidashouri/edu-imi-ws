@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,6 +30,9 @@ public interface PersonService {
     Long selectPersonLastSequenceNumber();
 
     PersonEntity findPersonEntityByPersonApiPublicId(String personPublicId);
+
+    @MappingUtil.PersonPublicIdToPersonDto
+    PersonDto findPersonDtoByPersonApiPublicId(String personPublicId);
 
     Page<PersonEntity> findAllPersonEntityPages(Pageable pageable);
 

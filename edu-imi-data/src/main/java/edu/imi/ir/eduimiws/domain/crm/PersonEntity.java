@@ -33,8 +33,13 @@ import javax.persistence.*;
                                 },type = ContactApiEntity.class
                         )
                 }
+        ),
+        @NamedEntityGraph(name = "PersonEntity.findPersonSubGraphPersonApiSelectedLanguage",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "personApiEntity"),
+                        @NamedAttributeNode(value = "selectedLanguage")
+                }
         )
-
 })
 @SqlResultSetMapping(
     name = "personUserProjection",
@@ -172,7 +177,8 @@ public class PersonEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SELECTED_LANGUAGE", nullable = false)
+    @JoinColumn(name = "SELECTED_LANGUAGE", nullable = false, columnDefinition = " Long default '1' ")
+    @ColumnDefault("1")
     private LanguageEntity selectedLanguage;
 
     @Column(name = "EMAIL_PROCESS_TYPE",length = 15)

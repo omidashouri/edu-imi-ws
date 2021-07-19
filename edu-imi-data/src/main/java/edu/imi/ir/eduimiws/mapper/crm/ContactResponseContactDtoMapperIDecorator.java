@@ -28,7 +28,7 @@ public abstract class ContactResponseContactDtoMapperIDecorator implements Conta
         ContactDto contactDto = delegate.toContactDto(contactResponse, context);
 
         AccountDto accountDto = accountService.findAccountDtoByAccountPublicId(contactResponse.getAccountPublicId());
-        contactDto.setAccountDto(accountDto);
+        contactDto.setAccount(accountDto);
         contactDto.setAccountId(accountDto.getId());
 
         return contactDto;

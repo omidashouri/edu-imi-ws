@@ -13,7 +13,8 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        uses = {ContactMapper.class, PersonMapper.class, ExpenseCodeApiFastMapper.class, ProjectFastMapper.class},
+        uses = {ContactMapper.class, PersonMapper.class, BankApiMapper.class,
+                ExpenseCodeApiFastMapper.class, ProjectFastMapper.class},
         imports = {PersistenceUtils.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
@@ -22,11 +23,9 @@ public interface PaymentCodeApiMapper {
     @Named("toPaymentCodeApiDto")
     @Mappings({
             @Mapping(source = "id", target = "id"),
-            @Mapping(source = "bankCode", target = "bankCode"),
-            @Mapping(source = "bankId", target = "bankId"),
-            @Mapping(source = "contact", target = "contact", qualifiedByName = "toContactDto"),
-            @Mapping(source = "contact.id", target = "contactId"),
-            @Mapping(source = "contact.contactWebService.contactPublicId", target = "contactPublicId"),
+            @Mapping(source = "bankApi.bankPublicId", target = "bankApiPublicId"),
+            @Mapping(source = "bankApi.id", target = "bankApiId"),
+            @Mapping(source = "bankApi", target = "bankApi",  qualifiedByName = "toBankApiDto"),
             @Mapping(source = "createDateTs", target = "createDateTs"),
             @Mapping(source = "creator", target = "creator", qualifiedByName = "personEntityToPersonDto"),
             @Mapping(source = "creator.id", target = "creatorId"),
@@ -41,16 +40,18 @@ public interface PaymentCodeApiMapper {
             @Mapping(source = "nationalCode", target = "nationalCode"),
             @Mapping(source = "paymentCode", target = "paymentCode"),
             @Mapping(source = "paymentCodePublicId", target = "paymentCodePublicId"),
-            @Mapping(source = "person", target = "person", qualifiedByName = "personEntityToPersonDto"),
-            @Mapping(source = "person.id", target = "personId"),
-            @Mapping(source = "person.personApiEntity.personPublicId", target = "personPublicId"),
+            @Mapping(source = "payerUser.personApiEntity.personPublicId", target = "payerUserPublicId"),
+            @Mapping(source = "payerUser", target = "payerUser", qualifiedByName = "personEntityToPersonDto"),
+            @Mapping(source = "payerUser.id", target = "payerUserId"),
+            @Mapping(source = "payerContact", target = "payerContact", qualifiedByName = "toContactDto"),
+            @Mapping(source = "payerContact.contactWebService.contactPublicId", target = "payerContactPublicId"),
+            @Mapping(source = "payerContact.id", target = "payerContactId"),
             @Mapping(source = "projectCode", target = "projectCode"),
             @Mapping(source = "project", target = "project", qualifiedByName = "toProjectDto"),
             @Mapping(source = "project.id", target = "projectId"),
             @Mapping(source = "project.projectApi.projectPublicId", target = "projectPublicId"),
             @Mapping(source = "requestCode", target = "requestCode"),
             @Mapping(source = "requestDescription", target = "requestDescription"),
-            @Mapping(source = "requestId", target = "requestId"),
             @Mapping(source = "requestIp", target = "requestIp")
     })
     @BeanMapping(ignoreByDefault = true)
@@ -59,7 +60,26 @@ public interface PaymentCodeApiMapper {
 
     @Named("toPaymentCodeApiEntity")
     @BeanMapping(ignoreByDefault = true)
-    @InheritInverseConfiguration(name = "toPaymentCodeApiDto")
+    @Mappings({
+            @Mapping(source = "bankApi", target = "bankApi",  qualifiedByName = "toBankApiEntity"),
+            @Mapping(source = "creator", target = "creator", qualifiedByName = "personDtoToPersonEntity"),
+            @Mapping(source = "expenseCodeApi", target = "expenseCodeApi", qualifiedByName = "toExpenseCodeApiEntity"),
+            @Mapping(source = "payerUser", target = "payerUser", qualifiedByName = "personDtoToPersonEntity"),
+            @Mapping(source = "payerContact", target = "payerContact", qualifiedByName = "toContactEntity"),
+            @Mapping(source = "project", target = "project", qualifiedByName = "toProjectEntity"),
+            @Mapping(source = "createDateTs", target = "createDateTs"),
+            @Mapping(source = "deleteDateTs", target = "deleteDateTs"),
+            @Mapping(source = "description", target = "description"),
+            @Mapping(source = "editDateTs", target = "editDateTs"),
+            @Mapping(source = "expenseCode", target = "expenseCode"),
+            @Mapping(source = "nationalCode", target = "nationalCode"),
+            @Mapping(source = "paymentCode", target = "paymentCode"),
+            @Mapping(source = "paymentCodePublicId", target = "paymentCodePublicId"),
+            @Mapping(source = "projectCode", target = "projectCode"),
+            @Mapping(source = "requestCode", target = "requestCode"),
+            @Mapping(source = "requestDescription", target = "requestDescription"),
+            @Mapping(source = "requestIp", target = "requestIp")
+    })
     PaymentCodeApiEntity toPaymentCodeApiEntity(PaymentCodeApiDto PaymentCodeApiDto,
                                                 @Context CycleAvoidingMappingContext context);
 

@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.services.pmis;
 
 import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
+import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,4 +15,7 @@ public interface ExpenseCodeService {
     ExpenseCodeApiEntity findByExpenseCodePublicId(String expenseCodePublicId);
 
     ExpenseCodeApiEntity findByExpenseCode(Long expenseCode);
+
+    @MappingUtil.ExpenseCodePublicIdToExpenseCodeApiDto
+    ExpenseCodeApiDto findExpenseCodeApiDtoByExpenseCodePublicId(String expenseCodePublicId);
 }

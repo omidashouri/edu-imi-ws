@@ -220,7 +220,7 @@ public class AccountEntity extends BaseEntity {
 
   //  TBL_ACCOUNT_ADDITIONAL_INFO
   @Column(name="ACCOUNT_ADDITIONAL_INFO_ID")
-  private Long accountAdditionalInfo;
+  private Long accountAdditionalInfoId;
 
   @Column(name="ADDRESS2")
   private String address2;

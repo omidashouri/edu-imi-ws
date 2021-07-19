@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.models.dto.mainparts;
 
+import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
+import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
@@ -32,8 +34,6 @@ public class PaymentCodeApiDto implements Serializable {
 
     private Timestamp deleteDateTs;
 
-    private Long requestId;
-
     private PersonDto creator;
     private String creatorPublicId;
     private Long creatorId;
@@ -58,18 +58,20 @@ public class PaymentCodeApiDto implements Serializable {
 
     private String projectCode;
 
-    private Long bankId;
+    private BankApiDto bankApi;
+    private String bankApiPublicId;
+    private Long bankApiId;
 
     private String bankCode;
 
     private Long requestCode;
 
-    private PersonDto person;
-    private String personPublicId;
-    private Long personId;
+    private PersonDto payerUser;
+    private String payerUserPublicId;
+    private Long payerUserId;
 
-    private ContactDto contact;
-    private String contactPublicId;
-    private Long contactId;
+    private ContactDto payerContact;
+    private String payerContactPublicId;
+    private Long payerContactId;
 
 }

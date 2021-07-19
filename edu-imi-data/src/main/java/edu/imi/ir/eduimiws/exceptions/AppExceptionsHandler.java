@@ -16,7 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.time.LocalDateTime;
 
 
-@ControllerAdvice
+//@ControllerAdvice
 public class AppExceptionsHandler {
 
     String dateTime = LocalDateTime.now().toString();

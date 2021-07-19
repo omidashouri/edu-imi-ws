@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.proxies.crm;
 
+import edu.imi.ir.eduimiws.mapper.crm.PersonMapper;
 import edu.imi.ir.eduimiws.mapper.crm.PersonUserProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
@@ -21,6 +22,7 @@ public class CrmServiceProxyImpl implements CrmServiceProxy {
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
     private final PublicIdUtil publicIdUtil;
+    private final PersonMapper personMapper;
 
     @Override
     public PersonService createPersonServiceProxyInstance() {
@@ -28,7 +30,7 @@ public class CrmServiceProxyImpl implements CrmServiceProxy {
                 PersonService.class.getClassLoader(), PersonServiceImpl.class.getInterfaces(),
                 new PersonServiceInvocationHandler(
                         new PersonServiceImpl(personRepository, personUserProjectionMapper,
-                                userFastDtoMapper, userFastDtoSaveMapper, publicIdUtil)
+                                userFastDtoMapper, userFastDtoSaveMapper, personMapper,publicIdUtil)
                 )
         );
         return personService;

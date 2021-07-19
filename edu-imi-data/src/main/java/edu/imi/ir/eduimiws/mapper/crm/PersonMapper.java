@@ -4,6 +4,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.mainparts.PaymentCodeApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.pmis.ExpenseCodeApiFastMapper;
+import edu.imi.ir.eduimiws.models.dto.crm.LanguageDto;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
@@ -14,13 +15,14 @@ import java.util.List;
 
 @Mapper(componentModel = "spring",
         uses = {ContactMapper.class, PersonMapper.class, ExpenseCodeApiFastMapper.class},
-        imports = {PersistenceUtils.class},
+        imports = {PersistenceUtils.class, LanguageDto.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PersonMapper {
 
     @Named("personDtoToPersonEntity")
     @Mappings({
+            @Mapping(source = "id",target = "id"),
             @Mapping(source = "firstName",target = "firstName"),
             @Mapping(source = "lastName",target = "lastName"),
             @Mapping(source = "tel",target = "tel"),

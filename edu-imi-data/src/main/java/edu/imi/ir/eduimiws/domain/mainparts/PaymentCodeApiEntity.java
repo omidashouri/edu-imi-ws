@@ -40,9 +40,6 @@ public class PaymentCodeApiEntity extends BaseEntity {
     @Column(name = "DELETE_DATE_TS")
     private Timestamp deleteDateTs;
 
-    @Column(name = "REQUEST_ID")
-    private Long requestId;
-
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
@@ -79,11 +76,11 @@ public class PaymentCodeApiEntity extends BaseEntity {
     @Column(name = "PROJECT_CODE", length = 30)
     private String projectCode;
 
-    @Column(name = "BANK_ID")
-    private Long bankId;
-
-    @Column(name = "BANK_CODE", length = 10)
-    private String bankCode;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BANK_API_ID")
+    private BankApiEntity bankApi;
 
     @Column(name = "REQUEST_CODE")
     private Long requestCode;
@@ -91,12 +88,13 @@ public class PaymentCodeApiEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PERSON_ID")
-    private PersonEntity person;
+    @JoinColumn(name = "PAYER_CONTACT_ID")
+    private ContactEntity payerContact;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CONTACT_ID")
-    private ContactEntity contact;
+    @JoinColumn(name = "PAYER_PERSON_ID")
+    private PersonEntity payerUser;
+
 }

@@ -12,4 +12,8 @@ public class DigitalPaymentCredential {
 
     private BehpardakhtCredential behpardakhtCredential;
 
+    private String melliTwoDigitCode;
+
+    private String melliPublicId;
+
 }

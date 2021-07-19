@@ -33,6 +33,9 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     @EntityGraph(value = "PersonEntity.findPersonSubGraphContactContactApi",type = EntityGraph.EntityGraphType.LOAD)
     PersonEntity findByPersonApiEntity_PersonPublicId(String personPublicId);
 
+    @EntityGraph(value = "PersonEntity.findPersonSubGraphPersonApiSelectedLanguage",type = EntityGraph.EntityGraphType.LOAD)
+    PersonEntity readByPersonApiEntity_PersonPublicId(String personPublicId);
+
     Page<PersonEntity> findAll(Pageable pageable);
 
     Page<PersonEntity> findAllByUsername(Pageable pageable,String userName);

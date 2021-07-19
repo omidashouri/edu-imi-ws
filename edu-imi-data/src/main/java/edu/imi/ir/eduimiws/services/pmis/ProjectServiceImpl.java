@@ -1,11 +1,10 @@
 package edu.imi.ir.eduimiws.services.pmis;
 
-import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
-import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.mapper.pmis.ProjectFastMapper;
-import edu.imi.ir.eduimiws.repositories.crm.ContactRepository;
-import edu.imi.ir.eduimiws.repositories.crm.querydsl.ContactQueryDslRepository;
+import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.repositories.pmis.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,5 +35,13 @@ public class ProjectServiceImpl implements ProjectService{
         ProjectEntity project = projectRepository
                 .findByProjectApi_ProjectPublicId(projectPublicId);
         return project;
+    }
+
+
+    @Override
+    public ProjectDto findProjectDtoByProjectApiPublicId(String projectPublicId) {
+        return  projectFastMapper
+                .toProjectDto(this.findProjectEntityByProjectApiPublicId(projectPublicId),
+                        new CycleAvoidingMappingContext());
     }
 }

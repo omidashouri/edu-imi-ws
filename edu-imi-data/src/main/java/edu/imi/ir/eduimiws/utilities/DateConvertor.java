@@ -11,13 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import oracle.jdbc.driver.DatabaseError;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -1006,5 +1004,9 @@ public class DateConvertor {
         } else {
             return "00:00";
         }
+    }
+
+    public Timestamp getCurrentTimeStampWithZoneIdTehran(){
+        return Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Tehran")));
     }
 }

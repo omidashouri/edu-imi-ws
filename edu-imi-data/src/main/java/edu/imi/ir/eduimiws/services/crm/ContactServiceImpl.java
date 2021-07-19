@@ -5,6 +5,8 @@ import com.querydsl.core.types.Predicate;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.ContactMapper;
+import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.repositories.crm.ContactRepository;
 import edu.imi.ir.eduimiws.repositories.crm.querydsl.ContactQueryDslRepository;
@@ -27,6 +29,7 @@ public class ContactServiceImpl implements ContactService {
     private final ContactRepository contactRepository;
     private final ContactQueryDslRepository contactQueryDslRepository;
     private final ContactFastDtoMapper contactFastDtoMapper;
+    private final ContactMapper contactMapper;
 
     @Override
     public List<ContactFastDto> findContactByNationalCode(String nationalCode) {
@@ -58,6 +61,13 @@ public class ContactServiceImpl implements ContactService {
         ContactEntity contact = contactRepository
                 .findByContactWebService_ContactPublicId(contactPublicId);
         return contact;
+    }
+
+    @Override
+    public ContactDto findContactDtoByContactApiPublicId(String contactPublicId) {
+        return contactMapper
+                .toContactDto(this.findContactEntityByContactApiPublicId(contactPublicId),
+                        new CycleAvoidingMappingContext());
     }
 
     @Override

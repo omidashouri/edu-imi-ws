@@ -21,8 +21,10 @@ import java.sql.Timestamp;
 public class PaymentCodeResponse extends RepresentationModel<PaymentCodeResponse> {
 
 
+    @Schema(title = "Payment Code", maxLength=17)
     private String paymentCode;
 
+    @Schema(title = "Payment Code Public ID",maxLength = 36)
     private String paymentCodePublicId;
 
     private Timestamp createDateTs;
@@ -30,8 +32,6 @@ public class PaymentCodeResponse extends RepresentationModel<PaymentCodeResponse
     private Timestamp editDateTs;
 
     private Timestamp deleteDateTs;
-
-    private Long requestId;
 
     private String creatorPublicId;
 
@@ -51,13 +51,11 @@ public class PaymentCodeResponse extends RepresentationModel<PaymentCodeResponse
 
     private String projectCode;
 
-    private Long bankId;
-
-    private String bankCode;
+    private String bankApiPublicId;
 
     private Long requestCode;
 
-    private String personPublicId;
+    private String payerUserPublicId;
 
-    private String contactPublicId;
+    private String payerContactPublicId;
 }
