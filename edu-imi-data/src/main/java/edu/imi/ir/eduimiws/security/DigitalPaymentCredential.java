@@ -16,4 +16,6 @@ public class DigitalPaymentCredential {
 
     private String melliPublicId;
 
+    private String expenseCodeDefaultPublicId;
+
 }

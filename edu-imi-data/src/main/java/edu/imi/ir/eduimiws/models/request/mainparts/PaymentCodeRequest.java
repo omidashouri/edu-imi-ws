@@ -18,13 +18,13 @@ import org.springframework.hateoas.server.core.Relation;
 public class PaymentCodeRequest {
 
 
-    @Schema(title = "national code",
-            description = "payer national code", maxLength = 10,
+    @Schema(title = "national/economic code",
+            description = "payer national code", maxLength = 11,
             type = "string", example = " ")
     private String nationalCode;
 
     @Schema(title = "Expense Code Public Id",
-            description = "expense code public Id", maxLength =36,
+            description = "expense code public Id", maxLength =36, nullable = true,
             type = "string", example = " ")
     private String expenseCodePublicId;
 

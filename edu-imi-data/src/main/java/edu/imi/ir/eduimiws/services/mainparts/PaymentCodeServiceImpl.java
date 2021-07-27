@@ -9,10 +9,12 @@ import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.models.dto.mainparts.BankApiDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
+import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
 import edu.imi.ir.eduimiws.models.user.MyPrincipleUser;
 import edu.imi.ir.eduimiws.repositories.mainparts.PaymentCodeRepository;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
+import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeService;
 import edu.imi.ir.eduimiws.utilities.DateConvertor;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
     private final PublicIdUtil publicIdUtil;
     private final DateConvertor dateConvertor;
     private final BankApiService bankApiService;
+    private final ExpenseCodeService expenseCodeService;
 
 
     @Override
@@ -109,9 +112,14 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
                                                      String projectCode,
                                                      String bankTwoDigitPaymentCode) {
 
+        String nationalEconomicCode = nationalCode;
+
+        if(checkStringByLength.test(nationalCode,10))
+            nationalEconomicCode = "0".concat(nationalEconomicCode);
+
+
         String paymentCode = new StringBuilder()
-                .append(0)
-                .append(nationalCode)
+                .append(nationalEconomicCode)
                 .append(expenseCode)
                 .append(projectCode.substring(Math.max(projectCode.length() - 3, 0)))
                 .append(bankTwoDigitPaymentCode)
@@ -141,8 +149,8 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         if (checkStringIsNull.test(bankTwoDigitPaymentCode))
             throw new NotAcceptableException("bank two digit code is null");
 
-        if (!checkStringByLength.test(nationalCode, 10))
-            throw new NotAcceptableException("national code length is not acceptable");
+        if (!checkStringByLength.test(nationalCode, 10) || !checkStringByLength.test(nationalCode, 11))
+            throw new NotAcceptableException("national/economic code length is not acceptable");
 
         if (!checkStringByLength.test(projectCode, 8))
             throw new NotAcceptableException("project code length is not acceptable");
@@ -152,18 +160,19 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
     @Override
     public void validatePaymentCodeRequestNullInputs(PaymentCodeRequest paymentCodeRequest) {
         if (isInputNullOrEqualString().test(paymentCodeRequest.getNationalCode()))
-            throw new NotAcceptableException("national code is null");
+            throw new NotAcceptableException("national/economic code is null");
         if (isInputNullOrEqualString().test(paymentCodeRequest.getExpenseCodePublicId()))
-            throw new NotAcceptableException("expense code public id is null");
+            paymentCodeRequest.setExpenseCodePublicId(digitalPaymentCredential.getExpenseCodeDefaultPublicId());
+//            throw new NotAcceptableException("expense code public id is null");
         if (isInputNullOrEqualString().test(paymentCodeRequest.getProjectPublicId()))
             throw new NotAcceptableException("project public id is null");
         if (isInputNullOrEqualString().test(paymentCodeRequest.getBankApiPublicId())) {
             paymentCodeRequest.setBankApiPublicId(digitalPaymentCredential.getMelliPublicId());
         }
-        if (isInputNullOrEqualString().test(paymentCodeRequest.getPayerContactPublicId())
+/*        if (isInputNullOrEqualString().test(paymentCodeRequest.getPayerContactPublicId())
                 && isInputNullOrEqualString().test(paymentCodeRequest.getPayerUserPublicId())) {
             throw new NotAcceptableException("both payer contact and payer user public Id are null");
-        }
+        }*/
     }
 
     @Override
@@ -173,13 +182,14 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         }
 
         if (isNull().test(paymentCodeApiDto.getExpenseCodeApi()))
-            throw new NotFoundException("Expense Code Not Found");
+            paymentCodeApiDto.setExpenseCodeApi(this.findExpenseCodeApiDtoByExpenseCodePublicId());
+//            throw new NotFoundException("Expense Code Not Found");
 
         if (isNull().test(paymentCodeApiDto.getProject()))
             throw new NotFoundException("Project Not Found");
 
-        if (isNull().test(paymentCodeApiDto.getPayerUser()) && isNull().test(paymentCodeApiDto.getPayerContact()))
-            throw new NotFoundException("Payer Not Found");
+/*        if (isNull().test(paymentCodeApiDto.getPayerUser()) && isNull().test(paymentCodeApiDto.getPayerContact()))
+            throw new NotFoundException("Payer Not Found");*/
     }
 
     protected Predicate<String> checkStringIsNull =
@@ -217,6 +227,10 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
 
     BankApiDto findBankApiDtoByBunkPublicId() {
         return bankApiService.findBankDtoByBankPublicId(digitalPaymentCredential.getMelliPublicId());
+    }
+
+    ExpenseCodeApiDto findExpenseCodeApiDtoByExpenseCodePublicId() {
+        return expenseCodeService.findExpenseCodeApiDtoByExpenseCodePublicId(digitalPaymentCredential.getExpenseCodeDefaultPublicId());
     }
 
     protected String concatenateAllEntityInputsForPaymentCode(String nationalCode, ProjectEntity project, ExpenseCodeApiEntity expenseCodeApi, String bankTwoDigitPaymentCode) {
