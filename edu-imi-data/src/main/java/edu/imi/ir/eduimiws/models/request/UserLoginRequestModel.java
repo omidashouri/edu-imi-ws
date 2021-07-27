@@ -23,6 +23,6 @@ public class UserLoginRequestModel {
     @Schema(title = "PassWord", maxLength=10, example = " ", required = true)
     private String password;
 
-    @Schema(title = "role", maxLength=10, example = " ")
+    @Schema(title = "role", maxLength=10, example = "anonymous")
     private String role;
 }

@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "PMIS", sequenceName = "SEQ_CENTER_COST_CODE_API", allocationSize = 1)
 @Table(schema = "PMIS", name = "TBL_CENTER_COST_CODE_API")
+//Attention NOT USED IN PROJECT REPLACED WITH PMIS.TBL_Expense_Code_Api_Entity
 public class CenterCostCodeApiEntity extends BaseEntity {
 
 
