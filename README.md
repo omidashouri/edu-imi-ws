@@ -7490,7 +7490,7 @@ VALUES (  crm.public_uuid, 'ملی', null, systimestamp, 100160 )
 
 
 
-
+https://stackoverflow.com/questions/38349930/spring-data-and-native-query-with-pagination
 
 
 

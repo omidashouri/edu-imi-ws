@@ -93,4 +93,9 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     Long countByIdLessThanEqual(Long periodId);
 
     PeriodEntity findFirstByIdLessThanEqualOrderByIdDesc(Long id);
+
+    @Query(name = "PeriodEntity.querySelectAllPeriodCustomQuery",
+            countQuery = "PeriodEntity.queryCountAllPeriodCustomQuery",
+            nativeQuery = true)
+    Page<PeriodEntity> queryAllPeriod(Pageable pageable);
 }

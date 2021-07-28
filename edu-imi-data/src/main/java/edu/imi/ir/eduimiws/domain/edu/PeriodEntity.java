@@ -100,16 +100,110 @@ import javax.persistence.*;
                 resultSetMapping = "periodOnly"),
         @NamedNativeQuery(name = "PeriodEntity.selectCurrentSequenceNumber",
                 query = " select EDU.SEQ_EDU_PERIOD.nextval from dual "
-        )/*, delete later
-        @NamedNativeQuery(name = "PeriodEntity.findAllByPeriodApiExecutorFieldFieldApiLevelSubEduCategorySub",
-                query = " select * from EDU.TBL_Period prd " +
-                        " left JOIN EDU.tbl_period_api pa ON prd.id=pa.period_id " +
-                        " LEFT join CRM.tbl_person prs ON prd.executer_id=prs.id " +
-                        " left join EDU.TBL_Field fld ON prd.field_id=fld.id " +
-                        " left join edu.tbl_Level lvl ON fld.level_id=lvl.id " +
-                        " left join EDU.tbl_edu_category edc On fld.category_id=edc.id " +
-                        " where prd.delete_status is not null and prd.name like '%:periodName%' "
-        )*/
+        ),
+        @NamedNativeQuery(name = "PeriodEntity.querySelectAllPeriodCustomQuery",
+                query = "SELECT " +
+                        "    flda.field_public_id, " +
+                        "    edca.edu_category_public_id, " +
+                        "    fld.code, " +
+                        "    prd.offer_number, " +
+                        "    prd.name, " +
+                        "    fld.fname, " +
+                        "    edc.title, -" +
+                        "    prd.start_date, " +
+                        "    prd.end_date, " +
+                        "    prd.reg_start_date, " +
+                        "    prd.reg_end_date, " +
+                        "    prd.max_capacity, " +
+                        "    prd.holding_type, " +
+                        "    prd.can_register_online, " +
+                        "    prd.type, " +
+                        "    prd.fee, " +
+                        "    prd.schedule, " +
+                        "    prd.activity_status, " +
+                        "    prd.delete_status, " +
+                        "    exc.first_name, " +
+                        "    exc.last_name " +
+                        "FROM " +
+                        "    edu.tbl_period prd " +
+                        "    left join crm.tbl_person exc " +
+                        "    ON prd.executer_id = exc.id " +
+                        "    left join EDU.tbl_field fld " +
+                        "    on prd.field_id = fld.id " +
+                        "    left join EDU.tbl_field_api flda " +
+                        "    on fld.id=flda.field_id " +
+                        "    left join EDU.tbl_edu_category edc " +
+                        "    ON fld.category_id = edc.id " +
+                        "    left join EDU.tbl_edu_category_api edca " +
+                        "    ON edc.id=edca.edu_category_id " +
+                        " where " +
+//                        " 1 = 1 AND " +
+                        " ( :fieldPublicId is null or flda.field_public_id = :fieldPublicId ) AND " +
+                        " ( :eduCategoryPublicId is null or   edca.edu_category_public_id = :eduCategoryPublicId ) AND " +
+                        " ( :marja is null or fld.code = :marja ) AND " +
+                        " ( :nobat is null or prd.offer_number = :nobat ) AND " +
+                        " ( :periodName is null or prd.name like '%:periodName%' ) AND " +
+                        " ( :fieldName is null or fld.fname like '%:fieldName%' ) AND " +
+                        " ( :eduCategoryName is null or edc.title = :eduCategoryName ) AND " +
+                        " ( :periodStartDate is null or prd.start_date = :periodStartDate ) AND " +
+                        " ( :periodEndDate is null or prd.end_date = :periodEndDate ) AND " +
+                        " ( :registerStartDate is null or prd.reg_start_date = :registerStartDate ) AND " +
+                        " ( :registerEndDate is null or prd.reg_end_date = :registerEndDate ) AND " +
+                        " ( :periodMaxCapacity is null or prd.max_capacity = :periodMaxCapacity ) AND " +
+                        " ( :attendanceType is null or prd.holding_type = :attendanceType ) AND " +
+                        " ( :registerOnLine is null or prd.can_register_online = :registerOnLine ) AND " +
+                        " ( :termicType is null or prd.type = :termicType ) AND " +
+                        " ( :periodFee is null or prd.fee = :periodFee ) AND " +
+                        " ( :periodSchedule is null or prd.schedule = :periodSchedule ) AND " +
+                        " ( :periodActivityStatus is null or prd.activity_status = :periodActivityStatus ) AND " +
+                        " ( :periodDeleteStatus is null or prd.delete_status = :periodDeleteStatus ) AND " +
+                        " ( :periodExecutorFirstName is null or exc.first_name like '%:periodExecutorFirstName%' ) AND " +
+                        " ( :periodExecutorLastName is null or exc.last_name like '%:periodExecutorLastName%' ) AND " +
+                        " ( :periodExecutorFullName is null or exc.first_name || ' ' || exc.last_name  like '%:periodExecutorFullName%') " +
+                        " ORDER BY /*#pageable*/  "
+//                attention in plsql i use ORDER BY '/*#pageable*/'
+        ),
+        @NamedNativeQuery(name = "PeriodEntity.queryCountAllPeriodCustomQuery",
+                query = "SELECT " +
+                        "  count(*)   " +
+                        "FROM " +
+                        "    edu.tbl_period prd " +
+                        "    left join crm.tbl_person exc " +
+                        "    ON prd.executer_id = exc.id " +
+                        "    left join EDU.tbl_field fld " +
+                        "    on prd.field_id = fld.id " +
+                        "    left join EDU.tbl_field_api flda " +
+                        "    on fld.id=flda.field_id " +
+                        "    left join EDU.tbl_edu_category edc " +
+                        "    ON fld.category_id = edc.id " +
+                        "    left join EDU.tbl_edu_category_api edca " +
+                        "    ON edc.id=edca.edu_category_id " +
+                        " where " +
+//                        " 1 = 1 AND " +
+                        " ( :fieldPublicId is null or flda.field_public_id = :fieldPublicId ) AND " +
+                        " ( :eduCategoryPublicId is null or   edca.edu_category_public_id = :eduCategoryPublicId ) AND " +
+                        " ( :marja is null or fld.code = :marja ) AND " +
+                        " ( :nobat is null or prd.offer_number = :nobat ) AND " +
+                        " ( :periodName is null or prd.name like '%:periodName%' ) AND " +
+                        " ( :fieldName is null or fld.fname like '%:fieldName%' ) AND " +
+                        " ( :eduCategoryName is null or edc.title = :eduCategoryName ) AND " +
+                        " ( :periodStartDate is null or prd.start_date = :periodStartDate ) AND " +
+                        " ( :periodEndDate is null or prd.end_date = :periodEndDate ) AND " +
+                        " ( :registerStartDate is null or prd.reg_start_date = :registerStartDate ) AND " +
+                        " ( :registerEndDate is null or prd.reg_end_date = :registerEndDate ) AND " +
+                        " ( :periodMaxCapacity is null or prd.max_capacity = :periodMaxCapacity ) AND " +
+                        " ( :attendanceType is null or prd.holding_type = :attendanceType ) AND " +
+                        " ( :registerOnLine is null or prd.can_register_online = :registerOnLine ) AND " +
+                        " ( :termicType is null or prd.type = :termicType ) AND " +
+                        " ( :periodFee is null or prd.fee = :periodFee ) AND " +
+                        " ( :periodSchedule is null or prd.schedule = :periodSchedule ) AND " +
+                        " ( :periodActivityStatus is null or prd.activity_status = :periodActivityStatus ) AND " +
+                        " ( :periodDeleteStatus is null or prd.delete_status = :periodDeleteStatus ) AND " +
+                        " ( :periodExecutorFirstName is null or exc.first_name like '%:periodExecutorFirstName%' ) AND " +
+                        " ( :periodExecutorLastName is null or exc.last_name like '%:periodExecutorLastName%' ) AND " +
+                        " ( :periodExecutorFullName is null or exc.first_name || ' ' || exc.last_name  like '%:periodExecutorFullName%') " +
+                        " ORDER BY /*#pageable*/  "
+        )
 })
 
 /*@NamedQueries({ //delete later
