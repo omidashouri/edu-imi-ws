@@ -11,9 +11,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
+
+
+    @Query("select per from PersonEntity per where per.id = :id and "
+            + "(:firstName is null or per.firstName = :firstName)")
+    List<PersonEntity> findByIdAndOptionalName(
+            @Param("id") Long id,
+            @Param("firstName") Optional<String> firstName);
 
 
     @EntityGraph("personUserGraph")

@@ -9,14 +9,18 @@ import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
+import edu.imi.ir.eduimiws.repositories.crm.specification.PersonRepositorySpecification;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -28,6 +32,7 @@ import java.util.List;
 public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
+    private final PersonRepositorySpecification personRepositorySpecification;
     private final PersonUserProjectionMapper personUserProjectionMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
@@ -126,6 +131,34 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonEntity savePerson(PersonEntity newPerson) {
         return personRepository.save(newPerson);
+    }
+
+    @Override
+    public Specification<PersonEntity> getPersonQuerySpecification(String firstName, String lastName) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+           /* predicates.add(criteriaBuilder.equal(root.get("domainId"), domainId));
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), startDate));
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), endDate));
+*/
+            if (firstName != null) {
+                predicates.add(criteriaBuilder.like(root.get("firstName"), "%" + firstName + "%"));
+            }
+
+            if (lastName != null) {
+                predicates.add(criteriaBuilder.like(root.get("lastName"), "%" + lastName + "%"));
+            }
+
+
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    @Override
+    public Page<PersonEntity> findAllPersonEntitySpecificationPages(Pageable pageable, Specification specification) {
+        return personRepositorySpecification.findAll(specification, pageable);
     }
 
 

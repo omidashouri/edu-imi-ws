@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -43,5 +44,9 @@ public interface PersonService {
     List<PersonEntity> findAllPersonEntitiesByIdIn(List<Long> personIds);
 
     PersonEntity savePerson(PersonEntity newPerson);
+
+    Specification<PersonEntity> getPersonQuerySpecification(String firstName, String lastName);
+
+    Page<PersonEntity> findAllPersonEntitySpecificationPages(Pageable pageable, Specification specification);
 
 }

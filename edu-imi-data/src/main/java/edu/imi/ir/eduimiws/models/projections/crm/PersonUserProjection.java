@@ -13,4 +13,6 @@ public class PersonUserProjection {
 /*     String personEditDate;
      String contactEditDate;*/
 
+
+
 }

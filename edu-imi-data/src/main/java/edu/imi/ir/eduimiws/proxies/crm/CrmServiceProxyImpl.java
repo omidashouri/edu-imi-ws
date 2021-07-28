@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.mapper.crm.PersonUserProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoSaveMapper;
 import edu.imi.ir.eduimiws.repositories.crm.PersonRepository;
+import edu.imi.ir.eduimiws.repositories.crm.specification.PersonRepositorySpecification;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.crm.PersonServiceImpl;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
@@ -18,6 +19,7 @@ import java.lang.reflect.Proxy;
 public class CrmServiceProxyImpl implements CrmServiceProxy {
 
     private final PersonRepository personRepository;
+    private final PersonRepositorySpecification personRepositorySpecification;
     private final PersonUserProjectionMapper personUserProjectionMapper;
     private final UserFastDtoMapper userFastDtoMapper;
     private final UserFastDtoSaveMapper userFastDtoSaveMapper;
@@ -29,8 +31,9 @@ public class CrmServiceProxyImpl implements CrmServiceProxy {
         PersonService personService = (PersonService) Proxy.newProxyInstance(
                 PersonService.class.getClassLoader(), PersonServiceImpl.class.getInterfaces(),
                 new PersonServiceInvocationHandler(
-                        new PersonServiceImpl(personRepository, personUserProjectionMapper,
-                                userFastDtoMapper, userFastDtoSaveMapper, personMapper,publicIdUtil)
+                        new PersonServiceImpl(personRepository, personRepositorySpecification,
+                                personUserProjectionMapper, userFastDtoMapper, userFastDtoSaveMapper,
+                                personMapper,publicIdUtil)
                 )
         );
         return personService;

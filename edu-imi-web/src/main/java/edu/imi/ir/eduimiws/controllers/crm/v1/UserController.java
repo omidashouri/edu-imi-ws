@@ -4,12 +4,16 @@ import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.UserRolePrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.*;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserRegisterUserFastDtoMapper;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
+import edu.imi.ir.eduimiws.models.dto.crm.PersonFastDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
+import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.request.UserRegister;
@@ -18,6 +22,7 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
 import edu.imi.ir.eduimiws.models.response.crm.UserRolePrivilegeResponse;
+import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponse;
 import edu.imi.ir.eduimiws.proxies.crm.CrmServiceProxy;
 import edu.imi.ir.eduimiws.security.ActiveUserService2;
 import edu.imi.ir.eduimiws.services.UserService;
@@ -39,6 +44,8 @@ import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
@@ -55,6 +62,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -209,6 +217,70 @@ public class UserController {
 
         Page<PersonEntity> personPages =
                 personService.findAllPersonEntityPages(pageable);
+
+        Page<UserFastDto> userFastDtoPage = personPages
+                .map(pp -> userFastDtoMapper
+                        .toUserFastDto(pp, new CycleAvoidingMappingContext()));
+
+        PagedModel<UserResponse> userResponsePagedModel = userPagedResourcesAssembler
+                .toModel(userFastDtoPage, userResponseAssembler);
+
+        return ResponseEntity.ok(userResponsePagedModel);
+    }
+
+    @Operation(
+            hidden = true,
+            summary = "find All persons",
+            description = "Search persons detail pageable",
+            tags = "projects",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PersonEntity.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @DisableMethod
+    @GetMapping(path = "/specification",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getPersonQuerySpecification(@RequestParam(value = "firstName", required = false)String  firstName,
+                                         @RequestParam Optional<String> lastName,
+                                         @Parameter(hidden = true)
+                                                                   @SortDefault(sort = "id",
+                                                                           direction = Sort.Direction.DESC)
+                                                                   @PageableDefault(page = 0, size = 10, value = 10)
+                                                                           Pageable pageable) {
+
+
+        Specification<PersonEntity> personSpecification = personService
+                .getPersonQuerySpecification(firstName, lastName.orElse(null));
+
+        Page<PersonEntity> personPages = personService
+                .findAllPersonEntitySpecificationPages(pageable, personSpecification);
 
         Page<UserFastDto> userFastDtoPage = personPages
                 .map(pp -> userFastDtoMapper
