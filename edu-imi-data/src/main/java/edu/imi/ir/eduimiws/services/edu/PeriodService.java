@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,4 +42,28 @@ public interface PeriodService {
 
     @Cacheable(value = "period", cacheManager = "jCacheCacheManager")
     Page<PeriodEntity> findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable(String periodName, Pageable pageable);
+
+    Page<PeriodProjectionCustomOne> queryAllPeriodsCustomOne(String fieldPublicId,
+                                                             String eduCategoryPublicId,
+                                                             String fieldCode,
+                                                             Long periodOfferNumber,
+                                                             String periodName,
+                                                             String fieldName,
+                                                             String eduCategoryName,
+                                                             String periodStartDate,
+                                                             String periodEndDate,
+                                                             String registerStartDate,
+                                                             String registerEndDate,
+                                                             Long periodMaxCapacity,
+                                                             String periodHoldingType,
+                                                             String periodCanRegisterOnline,
+                                                             String periodType,
+                                                             Long periodFee,
+                                                             String periodSchedule,
+                                                             Long periodActivityStatus,
+                                                             Long periodDeleteStatus,
+                                                             String periodExecutorFirstName,
+                                                             String periodExecutorLastName,
+                                                             String periodExecutorFullName,
+                                                             Pageable pageable);
 }

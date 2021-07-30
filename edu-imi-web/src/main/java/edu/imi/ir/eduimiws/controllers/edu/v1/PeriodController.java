@@ -9,6 +9,7 @@ import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
@@ -31,8 +32,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
@@ -40,13 +43,11 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -348,6 +349,102 @@ public class PeriodController {
 
             return ResponseEntity.ok(periodResponse);
 
+    }
+
+    @Operation(
+            summary = "query All periods",
+            description = "Search period detail pageable",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PeriodResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PageableAsQueryParam
+    @GetMapping(path = "/queryPeriodsCustomOne",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<PeriodResponse>> queryPeriods(
+                                                                @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
+                                                                @RequestParam("eduCategoryPublicId") Optional<String> eduCategoryPublicId,
+                                                                @RequestParam("fieldCode") Optional<String> fieldCode,
+                                                                @RequestParam("periodOfferNumber") Optional<Long> periodOfferNumber,
+                                                                @RequestParam("periodName") Optional<String> periodName,
+                                                                @RequestParam("fieldName") Optional<String> fieldName,
+                                                                @RequestParam("eduCategoryName") Optional<String> eduCategoryName,
+                                                                @RequestParam("periodStartDate") Optional<String> periodStartDate,
+                                                                @RequestParam("periodEndDate") Optional<String> periodEndDate,
+                                                                @RequestParam("registerStartDate") Optional<String> registerStartDate,
+                                                                @RequestParam("registerEndDate") Optional<String> registerEndDate,
+                                                                @RequestParam("periodMaxCapacity") Optional<Long> periodMaxCapacity,
+                                                                @RequestParam("periodHoldingType") Optional<String> periodHoldingType,
+                                                                @RequestParam("periodCanRegisterOnline") Optional<String> periodCanRegisterOnline,
+                                                                @RequestParam("periodType") Optional<String> periodType,
+                                                                @RequestParam("periodFee") Optional<Long> periodFee,
+                                                                @RequestParam("periodSchedule") Optional<String> periodSchedule,
+                                                                @RequestParam(value = "periodActivityStatus", defaultValue = "1") Optional<Long> periodActivityStatus,
+                                                                @RequestParam(value = "periodDeleteStatus", defaultValue = "1") Optional<Long> periodDeleteStatus,
+                                                                @RequestParam("periodExecutorFirstName") Optional<String> periodExecutorFirstName,
+                                                                @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
+                                                                @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
+                                                                @Parameter(hidden = true)
+/*                                                                 @SortDefault(sort = "periodRegisterStartDate",
+                                                                         direction = Sort.Direction.DESC)*/
+                                                                 @PageableDefault(page = 1, size = 50, value = 10)
+                                                                         Pageable pageable) {
+
+//        pageable = Pageable.unpaged();
+
+        Page<PeriodProjectionCustomOne> periodPages =
+                periodService.queryAllPeriodsCustomOne(fieldPublicId.orElse(null),
+                        eduCategoryPublicId.orElse(null), fieldCode.orElse(null),
+                        periodOfferNumber.orElse(null), periodName.orElse(null),
+                        fieldName.orElse(null), eduCategoryName.orElse(null),
+                        periodStartDate.orElse(null), periodEndDate.orElse(null),
+                        registerStartDate.orElse(null), registerEndDate.orElse(null),
+                        periodMaxCapacity.orElse(null), periodHoldingType.orElse(null),
+                        periodCanRegisterOnline.orElse(null), periodType.orElse(null),
+                        periodFee.orElse(null), periodSchedule.orElse(null),
+                        periodActivityStatus.orElse(null), periodDeleteStatus.orElse(null),
+                        periodExecutorFirstName.orElse(null), periodExecutorLastName.orElse(null),
+                        periodExecutorFullName.orElse(null),
+                        pageable);
+
+        System.out.println("2");
+
+/*        Page<PeriodFastDto> periodFastDtoPage = periodPages
+                .map(p -> periodFastDtoMapper
+                        .toPeriodFastDto(p, new CycleAvoidingMappingContext()));
+
+        PagedModel<PeriodResponse> periodResponsePagedModel = periodFastDtoPagedResourcesAssembler
+                .toModel(periodFastDtoPage, periodResponsePeriodFastDtoAssembler);
+
+        return ResponseEntity.ok(periodResponsePagedModel);*/
+        return null;
     }
 
 

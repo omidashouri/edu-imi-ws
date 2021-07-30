@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -94,8 +95,59 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
     PeriodEntity findFirstByIdLessThanEqualOrderByIdDesc(Long id);
 
-    @Query(name = "PeriodEntity.querySelectAllPeriodCustomQuery",
-            countQuery = "PeriodEntity.queryCountAllPeriodCustomQuery",
+    @Query(name = "PeriodEntity.querySelectAllPeriodCustomOne",
+            countName = "PeriodEntity.queryCountAllPeriodCustomOne",
             nativeQuery = true)
-    Page<PeriodEntity> queryAllPeriod(Pageable pageable);
+    Page<PeriodProjectionCustomOne> queryAllPeriodCustomOne(@Param("fieldPublicId") String fieldPublicId,
+                                                            @Param("eduCategoryPublicId") String eduCategoryPublicId,
+                                                            @Param("marja") String fieldCode,
+                                                            @Param("nobat") Long periodOfferNumber,
+                                                            @Param("periodName") String periodName,
+                                                            @Param("fieldName") String fieldName,
+                                                            @Param("eduCategoryName") String eduCategoryName,
+                                                            @Param("periodStartDate") String periodStartDate,
+                                                            @Param("periodEndDate") String periodEndDate,
+                                                            @Param("registerStartDate") String registerStartDate,
+                                                            @Param("registerEndDate") String registerEndDate,
+                                                            @Param("periodMaxCapacity") Long periodMaxCapacity,
+                                                            @Param("attendanceType") String periodHoldingType,
+                                                            @Param("registerOnLine") String periodCanRegisterOnline,
+                                                            @Param("termicType") String periodType,
+                                                            @Param("periodFee") Long periodFee,
+                                                            @Param("periodSchedule") String periodSchedule,
+                                                            @Param("periodActivityStatus") Long periodActivityStatus,
+                                                            @Param("periodDeleteStatus") Long periodDeleteStatus,
+                                                            @Param("periodExecutorFirstName") String periodExecutorFirstName,
+                                                            @Param("periodExecutorLastName") String periodExecutorLastName,
+                                                            @Param("periodExecutorFullName") String periodExecutorFullName,
+                                                            Pageable pageable);
+
+
+    @Query(name = "PeriodEntity.querySelectAllPeriodCustomOne",
+            countName = "PeriodEntity.queryCountAllPeriodCustomOne",
+            nativeQuery = true)
+    List<PeriodProjectionCustomOne> queryAllPeriodCustomOnea(@Param("fieldPublicId") String fieldPublicId,
+                                                            @Param("eduCategoryPublicId") String eduCategoryPublicId,
+                                                            @Param("marja") String fieldCode,
+                                                            @Param("nobat") Long periodOfferNumber,
+                                                            @Param("periodName") String periodName,
+                                                            @Param("fieldName") String fieldName,
+                                                            @Param("eduCategoryName") String eduCategoryName,
+                                                            @Param("periodStartDate") String periodStartDate,
+                                                            @Param("periodEndDate") String periodEndDate,
+                                                            @Param("registerStartDate") String registerStartDate,
+                                                            @Param("registerEndDate") String registerEndDate,
+                                                            @Param("periodMaxCapacity") Long periodMaxCapacity,
+                                                            @Param("attendanceType") String periodHoldingType,
+                                                            @Param("registerOnLine") String periodCanRegisterOnline,
+                                                            @Param("termicType") String periodType,
+                                                            @Param("periodFee") Long periodFee,
+                                                            @Param("periodSchedule") String periodSchedule,
+                                                            @Param("periodActivityStatus") Long periodActivityStatus,
+                                                            @Param("periodDeleteStatus") Long periodDeleteStatus,
+                                                            @Param("periodExecutorFirstName") String periodExecutorFirstName,
+                                                            @Param("periodExecutorLastName") String periodExecutorLastName,
+                                                            @Param("periodExecutorFullName") String periodExecutorFullName,
+                                                            Pageable pageable);
+
 }

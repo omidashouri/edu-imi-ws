@@ -4,6 +4,7 @@ package edu.imi.ir.eduimiws.services.edu;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodOnlyMapper;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Service
 @Transactional
@@ -139,4 +141,51 @@ public class PeriodServiceImpl implements PeriodService {
         return periodPages;
     }
 
+    @Override
+    public Page<PeriodProjectionCustomOne> queryAllPeriodsCustomOne(String fieldPublicId, String eduCategoryPublicId,
+                                                                    String fieldCode, Long periodOfferNumber,
+                                                                    String periodName, String fieldName,
+                                                                    String eduCategoryName, String periodStartDate,
+                                                                    String periodEndDate, String registerStartDate,
+                                                                    String registerEndDate, Long periodMaxCapacity,
+                                                                    String periodHoldingType, String periodCanRegisterOnline,
+                                                                    String periodType, Long periodFee, String periodSchedule,
+                                                                    Long periodActivityStatus, Long periodDeleteStatus,
+                                                                    String periodExecutorFirstName, String periodExecutorLastName,
+                                                                    String periodExecutorFullName, Pageable pageable) {
+
+
+        System.out.println("1");
+
+        List<PeriodProjectionCustomOne> periodProjectionCustomOnes = periodRepository.queryAllPeriodCustomOnea(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
+                nullDefaultValue(periodOfferNumber), periodName, fieldName, eduCategoryName, periodStartDate, periodEndDate,
+                registerStartDate, registerEndDate, periodMaxCapacity, periodHoldingType, periodCanRegisterOnline,
+                periodType, periodFee, periodSchedule, periodActivityStatus, periodDeleteStatus, periodExecutorFirstName,
+                periodExecutorLastName, periodExecutorFullName, pageable);
+
+        Page<PeriodProjectionCustomOne> periodProjectionCustomOnes1 = periodRepository.queryAllPeriodCustomOne(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
+                nullDefaultValue(periodOfferNumber), periodName, fieldName, eduCategoryName, periodStartDate, periodEndDate,
+                registerStartDate, registerEndDate, periodMaxCapacity, periodHoldingType, periodCanRegisterOnline,
+                periodType, periodFee, periodSchedule, periodActivityStatus, periodDeleteStatus, periodExecutorFirstName,
+                periodExecutorLastName, periodExecutorFullName, pageable);
+        return null;
+    }
+
+    protected Predicate<Object> isValueDefault = (input) -> {
+        if (input == null)
+            return false;
+
+        if (input != null) {
+            String str = (String) input;
+            if (str.equalsIgnoreCase(""))
+                return true;
+        }
+        return false;
+    };
+
+    protected <T> T nullDefaultValue(T input){
+        if(isValueDefault.test(input))
+            return null;
+        return input;
+    }
 }
