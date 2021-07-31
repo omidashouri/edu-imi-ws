@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodOnlyMapper;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -157,17 +158,18 @@ public class PeriodServiceImpl implements PeriodService {
 
         System.out.println("1");
 
-        List<PeriodProjectionCustomOne> periodProjectionCustomOnes = periodRepository.queryAllPeriodCustomOnea(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
+        PeriodProjectionCustomOne periodProjectionCustomOne = periodRepository.queryPeriodCustomOne(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
                 nullDefaultValue(periodOfferNumber), periodName, fieldName, eduCategoryName, periodStartDate, periodEndDate,
                 registerStartDate, registerEndDate, periodMaxCapacity, periodHoldingType, periodCanRegisterOnline,
                 periodType, periodFee, periodSchedule, periodActivityStatus, periodDeleteStatus, periodExecutorFirstName,
-                periodExecutorLastName, periodExecutorFullName, pageable);
+                periodExecutorLastName, periodExecutorFullName);
 
-        Page<PeriodProjectionCustomOne> periodProjectionCustomOnes1 = periodRepository.queryAllPeriodCustomOne(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
+        List<PeriodProjectionCustomOne> periodProjectionCustomOnes = periodRepository.queryAllPeriodCustomOne(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
                 nullDefaultValue(periodOfferNumber), periodName, fieldName, eduCategoryName, periodStartDate, periodEndDate,
                 registerStartDate, registerEndDate, periodMaxCapacity, periodHoldingType, periodCanRegisterOnline,
                 periodType, periodFee, periodSchedule, periodActivityStatus, periodDeleteStatus, periodExecutorFirstName,
-                periodExecutorLastName, periodExecutorFullName, pageable);
+                periodExecutorLastName, periodExecutorFullName);
+
         return null;
     }
 

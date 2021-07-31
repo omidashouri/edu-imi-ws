@@ -31,10 +31,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.PageableAsQueryParam;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -388,7 +385,7 @@ public class PeriodController {
     @PageableAsQueryParam
     @GetMapping(path = "/queryPeriodsCustomOne",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<PagedModel<PeriodResponse>> queryPeriods(
+    public ResponseEntity<?> queryPeriods(
                                                                 @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
                                                                 @RequestParam("eduCategoryPublicId") Optional<String> eduCategoryPublicId,
                                                                 @RequestParam("fieldCode") Optional<String> fieldCode,
@@ -418,6 +415,7 @@ public class PeriodController {
                                                                          Pageable pageable) {
 
 //        pageable = Pageable.unpaged();
+        Pageable pageable1 = PageRequest.of(1,20);
 
         Page<PeriodProjectionCustomOne> periodPages =
                 periodService.queryAllPeriodsCustomOne(fieldPublicId.orElse(null),
@@ -432,7 +430,7 @@ public class PeriodController {
                         periodActivityStatus.orElse(null), periodDeleteStatus.orElse(null),
                         periodExecutorFirstName.orElse(null), periodExecutorLastName.orElse(null),
                         periodExecutorFullName.orElse(null),
-                        pageable);
+                        pageable1);
 
         System.out.println("2");
 

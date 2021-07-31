@@ -4,6 +4,7 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -112,6 +113,40 @@ import javax.persistence.*;
                     }
                 )
             }
+        ),
+        @SqlResultSetMapping(name = "periodProjectionCustomOne.count",
+                columns = @ColumnResult(name = "cnt")
+        ),
+        @SqlResultSetMapping(
+                name = "periodProjectionCustomTwo",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = PeriodProjectionCustomTwo.class,
+                                columns = {
+                                        @ColumnResult(name = "fieldPublicId", type = String.class),
+                                        @ColumnResult(name = "eduCategoryPublicId", type = String.class),
+                                        @ColumnResult(name = "fieldCode", type = String.class),
+                                        @ColumnResult(name = "offerNumber", type = Long.class),
+                                        @ColumnResult(name = "name", type = String.class),
+                                        @ColumnResult(name = "fieldFName", type = String.class),
+                                        @ColumnResult(name = "eduCategoryTitle", type = String.class),
+                                        @ColumnResult(name = "startDate", type = String.class),
+                                        @ColumnResult(name = "endDate", type = String.class),
+                                        @ColumnResult(name = "regStartDate", type = String.class),
+                                        @ColumnResult(name = "regEndDate", type = String.class),
+                                        @ColumnResult(name = "maxCapacity", type = Long.class),
+                                        @ColumnResult(name = "holdingType", type = String.class),
+                                        @ColumnResult(name = "canRegisterOnline", type = String.class),
+                                        @ColumnResult(name = "type", type = String.class),
+                                        @ColumnResult(name = "fee", type = Long.class),
+                                        @ColumnResult(name = "schedule", type = String.class),
+                                        @ColumnResult(name = "activityStatus", type = Long.class),
+                                        @ColumnResult(name = "deleteStatus", type = Long.class),
+                                        @ColumnResult(name = "executorFirstName", type = String.class),
+                                        @ColumnResult(name = "executorLastName", type = String.class)
+                                }
+                        )
+                }
         )
     })
 @NamedNativeQueries({
@@ -191,12 +226,13 @@ import javax.persistence.*;
                         " ( :periodDeleteStatus is null or prd.delete_status =  TO_NUMBER(:periodDeleteStatus) ) AND " +
                         " ( :periodExecutorFirstName is null or exc.first_name like '%:periodExecutorFirstName%' ) AND " +
                         " ( :periodExecutorLastName is null or exc.last_name like '%:periodExecutorLastName%' ) AND " +
-                        " ( :periodExecutorFullName is null or exc.first_name || ' ' || exc.last_name  like '%:periodExecutorFullName%') " +
-                        " ORDER BY prd.reg_start_date DESC /*#{#pageable}*/ "
+                        " ( :periodExecutorFullName is null or exc.first_name || ' ' || exc.last_name  like '%:periodExecutorFullName%') "
+//                        " AND  RN between ?#{ #pageable.offset +1 } and ?#{#pageable.offset + #pageable.pageSize} "
+//                        " /*#{#pageable}*/ "
 //                        "  /*#pageable*/  "
                 ,resultSetMapping = "periodProjectionCustomOne"
         ),
-        @NamedNativeQuery(name = "PeriodEntity.queryCountAllPeriodCustomOne",
+        @NamedNativeQuery(name = "PeriodEntity.querySelectAllPeriodCustomOne.count",
                 query = "SELECT " +
                         "  count(*)  " +
                         " FROM ( " +
@@ -258,6 +294,85 @@ import javax.persistence.*;
                         " ( :periodExecutorFirstName is null or exc.first_name like '%:periodExecutorFirstName%' ) AND " +
                         " ( :periodExecutorLastName is null or exc.last_name like '%:periodExecutorLastName%' ) AND " +
                         " ( :periodExecutorFullName is null or exc.first_name || ' ' || exc.last_name  like '%:periodExecutorFullName%') "
+                ,resultSetMapping = "periodProjectionCustomOne.count"
+        ),
+        @NamedNativeQuery(name = "PeriodEntity.querySelectAllPeriodCustomTwo",
+                query = "SELECT " +
+                        "    flda.field_public_id as fieldPublicId, " +
+                        "    edca.edu_category_public_id as eduCategoryPublicId, " +
+                        "    fld.code as fieldCode, " +
+                        "    prd.offer_number as offerNumber, " +
+                        "    prd.name as name, " +
+                        "    fld.fname as fieldFName, " +
+                        "    edc.title as eduCategoryTitle, " +
+                        "    prd.start_date as startDate, " +
+                        "    prd.end_date as endDate, " +
+                        "    prd.reg_start_date as regStartDate, " +
+                        "    prd.reg_end_date as regEndDate, " +
+                        "    prd.max_capacity as maxCapacity, " +
+                        "    prd.holding_type as holdingType, " +
+                        "    prd.can_register_online as canRegisterOnline, " +
+                        "    prd.type as type, " +
+                        "    prd.fee as fee, " +
+                        "    prd.schedule as schedule, " +
+                        "    prd.activity_status as activityStatus, " +
+                        "    prd.delete_status as deleteStatus " +
+                        "    prd.delete_status as periodDeleteStatus, " +
+                        "    exc.first_name as executorFirstName, " +
+                        "    exc.last_name as executorLastName " +
+                        " FROM " +
+                        "    EDU.TBL_PERIOD prd " +
+                        "    left join crm.tbl_person exc " +
+                        "    ON prd.executer_id = exc.id " +
+                        "    left join EDU.tbl_field fld " +
+                        "    on prd.field_id = fld.id " +
+                        "    left join EDU.tbl_field_api flda " +
+                        "    on fld.id=flda.field_id " +
+                        "    left join EDU.tbl_edu_category edc " +
+                        "    ON fld.category_id = edc.id " +
+                        "    left join EDU.tbl_edu_category_api edca " +
+                        "    ON edc.id=edca.edu_category_id "
+                ,resultSetMapping = "periodProjectionCustomTwo"
+        ),
+        @NamedNativeQuery(name = "PeriodEntity.queryCountAllPeriodCustomTwo",
+                query = "SELECT " +
+                        "  count(*)  " +
+                        " FROM ( " +
+                        "SELECT " +
+                        "    flda.field_public_id as fieldPublicId, " +
+                        "    edca.edu_category_public_id as eduCategoryPublicId, " +
+                        "    fld.code as fieldCode, " +
+                        "    prd.offer_number as periodOfferNumber, " +
+                        "    prd.name as periodName, " +
+                        "    fld.fname as fieldFName, " +
+                        "    edc.title as eduCategoryTitle, " +
+                        "    prd.start_date as periodStartDate, " +
+                        "    prd.end_date as periodEndDate, " +
+                        "    prd.reg_start_date as periodRegisterStartDate, " +
+                        "    prd.reg_end_date as periodRegisterEndDate, " +
+                        "    prd.max_capacity as periodMaxCapacity, " +
+                        "    prd.holding_type as periodHoldingType, " +
+                        "    prd.can_register_online as periodCanRegisterOnline, " +
+                        "    prd.type as periodType, " +
+                        "    prd.fee as periodFee, " +
+                        "    prd.schedule as periodSchedule, " +
+                        "    prd.activity_status as periodActivityStatus, " +
+                        "    prd.delete_status as periodDeleteStatus, " +
+                        "    exc.first_name as executorFirstName, " +
+                        "    exc.last_name as executorLastName " +
+                        " FROM " +
+                        "    EDU.TBL_PERIOD prd " +
+                        "    left join crm.tbl_person exc " +
+                        "    ON prd.executer_id = exc.id " +
+                        "    left join EDU.tbl_field fld " +
+                        "    on prd.field_id = fld.id " +
+                        "    left join EDU.tbl_field_api flda " +
+                        "    on fld.id=flda.field_id " +
+                        "    left join EDU.tbl_edu_category edc " +
+                        "    ON fld.category_id = edc.id " +
+                        "    left join EDU.tbl_edu_category_api edca " +
+                        "    ON edc.id=edca.edu_category_id " +
+                        " ) "
         )
 })
 

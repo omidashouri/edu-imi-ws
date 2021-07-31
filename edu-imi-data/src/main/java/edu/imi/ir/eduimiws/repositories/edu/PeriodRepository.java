@@ -3,10 +3,12 @@ package edu.imi.ir.eduimiws.repositories.edu;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
@@ -17,7 +19,7 @@ import javax.persistence.QueryHint;
 import java.util.List;
 
 @Repository
-public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
+public interface PeriodRepository extends JpaRepository<PeriodEntity, Long> {
 
 
     @Cacheable("period")
@@ -96,9 +98,9 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     PeriodEntity findFirstByIdLessThanEqualOrderByIdDesc(Long id);
 
     @Query(name = "PeriodEntity.querySelectAllPeriodCustomOne",
-            countName = "PeriodEntity.queryCountAllPeriodCustomOne",
+            countName = "PeriodEntity.querySelectAllPeriodCustomOne.count",
             nativeQuery = true)
-    Page<PeriodProjectionCustomOne> queryAllPeriodCustomOne(@Param("fieldPublicId") String fieldPublicId,
+    List<PeriodProjectionCustomOne> queryAllPeriodCustomOne(@Param("fieldPublicId") String fieldPublicId,
                                                             @Param("eduCategoryPublicId") String eduCategoryPublicId,
                                                             @Param("marja") String fieldCode,
                                                             @Param("nobat") Long periodOfferNumber,
@@ -119,14 +121,13 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                             @Param("periodDeleteStatus") Long periodDeleteStatus,
                                                             @Param("periodExecutorFirstName") String periodExecutorFirstName,
                                                             @Param("periodExecutorLastName") String periodExecutorLastName,
-                                                            @Param("periodExecutorFullName") String periodExecutorFullName,
-                                                            Pageable pageable);
+                                                            @Param("periodExecutorFullName") String periodExecutorFullName);
 
 
     @Query(name = "PeriodEntity.querySelectAllPeriodCustomOne",
-            countName = "PeriodEntity.queryCountAllPeriodCustomOne",
+            countName = "PeriodEntity.querySelectAllPeriodCustomOne.count",
             nativeQuery = true)
-    List<PeriodProjectionCustomOne> queryAllPeriodCustomOnea(@Param("fieldPublicId") String fieldPublicId,
+    PeriodProjectionCustomOne queryPeriodCustomOne(@Param("fieldPublicId") String fieldPublicId,
                                                             @Param("eduCategoryPublicId") String eduCategoryPublicId,
                                                             @Param("marja") String fieldCode,
                                                             @Param("nobat") Long periodOfferNumber,
@@ -147,7 +148,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                             @Param("periodDeleteStatus") Long periodDeleteStatus,
                                                             @Param("periodExecutorFirstName") String periodExecutorFirstName,
                                                             @Param("periodExecutorLastName") String periodExecutorLastName,
-                                                            @Param("periodExecutorFullName") String periodExecutorFullName,
-                                                            Pageable pageable);
+                                                            @Param("periodExecutorFullName") String periodExecutorFullName);
+
 
 }
