@@ -158,6 +158,8 @@ public class PeriodServiceImpl implements PeriodService {
 
         System.out.println("1");
 
+        Page<PeriodProjectionCustomTwo> projectionCustomTwos = periodRepository.queryAll(pageable);
+
         PeriodProjectionCustomOne periodProjectionCustomOne = periodRepository.queryPeriodCustomOne(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
                 nullDefaultValue(periodOfferNumber), periodName, fieldName, eduCategoryName, periodStartDate, periodEndDate,
                 registerStartDate, registerEndDate, periodMaxCapacity, periodHoldingType, periodCanRegisterOnline,

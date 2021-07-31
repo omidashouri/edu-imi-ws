@@ -430,7 +430,7 @@ public class PeriodController {
                         periodActivityStatus.orElse(null), periodDeleteStatus.orElse(null),
                         periodExecutorFirstName.orElse(null), periodExecutorLastName.orElse(null),
                         periodExecutorFullName.orElse(null),
-                        pageable1);
+                        pageable);
 
         System.out.println("2");
 

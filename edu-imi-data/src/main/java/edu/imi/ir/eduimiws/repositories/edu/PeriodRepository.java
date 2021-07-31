@@ -151,4 +151,8 @@ public interface PeriodRepository extends JpaRepository<PeriodEntity, Long> {
                                                             @Param("periodExecutorFullName") String periodExecutorFullName);
 
 
+    @Query(name = "PeriodEntity.queryAllPeriodCustomTwo")
+    Page<PeriodProjectionCustomTwo> queryAll(Pageable pageable);
+
+
 }

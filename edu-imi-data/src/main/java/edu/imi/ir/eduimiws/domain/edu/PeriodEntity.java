@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.jpa.QueryHints;
 
 import javax.persistence.*;
 
@@ -373,6 +374,43 @@ import javax.persistence.*;
                         "    left join EDU.tbl_edu_category_api edca " +
                         "    ON edc.id=edca.edu_category_id " +
                         " ) "
+        )
+})
+@NamedQueries({ //delete later
+        @NamedQuery(name = "PeriodEntity.queryAllPeriodCustomTwo",
+                query = " select flda.fieldPublicId as fieldPublicId, " +
+                        " edca.eduCategoryPublicId as eduCategoryPublicId, " +
+                        " fld.code as fieldCode, " +
+                        " prd.offerNumber as periodOfferNumber, " +
+                        " prd.name as periodName, " +
+                        " fld.fname as fieldFName, " +
+                        " edc.title as eduCategoryTitle, " +
+                        " prd.startDate as periodStartDate, " +
+                        " prd.endDate as periodEndDate, " +
+                        " prd.regStartDate as periodRegisterStartDate, " +
+                        " prd.regEndDate as periodRegisterEndDate, " +
+                        " prd.maxCapacity as periodMaxCapacity, " +
+                        " prd.holdingType as periodHoldingType, " +
+                        " prd.canRegisterOnline as periodCanRegisterOnline, " +
+                        " prd.type as periodType, " +
+                        " prd.fee as periodFee, " +
+                        " prd.schedule as periodSchedule, " +
+                        " prd.activityStatus as periodActivityStatus, " +
+                        " prd.deleteStatus as periodDeleteStatus, " +
+                        " exc.firstName as executorFirstName, " +
+                        " exc.lastName as executorLastName " +
+                        " from PeriodEntity prd left join prd.periodApi prda " +
+                        " left join prd.executer exc left join prd.field fld " +
+                        " left join fld.fieldApi flda left join fld.eduCategory edc " +
+                        " left join edc.eduCategoryApi edca "
+//                    + " where p.deleteStatus = :deleteStatus and p.name like '%:periodName%' ",
+                /*hints =  {
+                        @QueryHint( name = QueryHints.HINT_FLUSH_MODE, value = "AUTO" ),
+                        @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true"),
+                        @QueryHint(name = QueryHints.HINT_READONLY,value = "true"),
+                        @QueryHint( name = QueryHints.HINT_COMMENT, value = "use cache for named query" ),
+                },
+                lockMode = LockModeType.READ*/
         )
 })
 
