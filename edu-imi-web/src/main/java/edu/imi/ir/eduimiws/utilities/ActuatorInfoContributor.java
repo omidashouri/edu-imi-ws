@@ -1,23 +1,14 @@
 package edu.imi.ir.eduimiws.utilities;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.Status;
-import org.springframework.boot.actuate.info.Info;
-import org.springframework.boot.actuate.info.InfoContributor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class ActuatorInfoContributor implements InfoContributor, HealthIndicator {
+public class ActuatorInfoContributor //implements InfoContributor, HealthIndicator
+{
 
-    private final Environment environment;
+/*    private final Environment environment;
 
     Map<String, Object> props = new HashMap<>();
 
@@ -47,15 +38,15 @@ public class ActuatorInfoContributor implements InfoContributor, HealthIndicator
         return Health
                 .status(systemStatus).withDetails(details)
                 .build();
-    }
+    }*/
 
 //    an oder way to register a bean
-    @Bean
+/*    @Bean
     public HealthIndicator paymentServerStatus(){
         return () -> Health.status("Payment Server")
                 .withDetail("system-ready",false)
                 .build();
-    }
+    }*/
 
 
 }

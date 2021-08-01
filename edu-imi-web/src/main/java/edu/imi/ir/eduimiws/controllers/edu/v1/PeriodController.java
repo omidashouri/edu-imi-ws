@@ -422,11 +422,10 @@ public class PeriodController {
                                                                 @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
                                                                 @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
                                                                 @Parameter(hidden = true)
-                                                                 @SortDefault(sort = "periodRegisterStartDate",
-                                                                         direction = Sort.Direction.DESC)
+                                                   /*              @SortDefault(sort = "regStartDate",
+                                                                         direction = Sort.Direction.DESC)*/
                                                                  @PageableDefault(page = 1, size = 50, value = 10)
                                                                          Pageable pageable) {
-
 
         Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages =
                 periodService.queryAllPeriodsCustomTwo(fieldPublicId.orElse(null),

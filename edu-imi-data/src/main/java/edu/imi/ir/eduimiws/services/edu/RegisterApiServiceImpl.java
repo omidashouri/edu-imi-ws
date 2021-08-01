@@ -58,9 +58,9 @@ public class RegisterApiServiceImpl implements RegisterApiService {
             if (null != register.getStudent()) {
                 newRegisterApi.setStudent(register.getStudent());
             }
-            if (null != register.getDeleteStatus()) {
-                newRegisterApi.setRegisterDeleteStatus(register.getDeleteStatus());
-                if (register.getDeleteStatus().equals(1L)) {
+            if (null != register.getPeriodDeleteStatus()) {
+                newRegisterApi.setRegisterDeleteStatus(register.getPeriodDeleteStatus());
+                if (register.getPeriodDeleteStatus().equals(1L)) {
                     newRegisterApi.setDeleteDateTs(new Timestamp(new Date().getTime()));
                 }
             }

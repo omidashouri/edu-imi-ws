@@ -143,7 +143,7 @@ import javax.persistence.*;
                                         @ColumnResult(name = "fee", type = Long.class),
                                         @ColumnResult(name = "schedule", type = String.class),
                                         @ColumnResult(name = "activityStatus", type = Long.class),
-                                        @ColumnResult(name = "deleteStatus", type = Long.class),
+                                        @ColumnResult(name = "periodDeleteStatus", type = Long.class),
                                         @ColumnResult(name = "executorFirstName", type = String.class),
                                         @ColumnResult(name = "executorLastName", type = String.class)
                                 }
@@ -379,29 +379,29 @@ import javax.persistence.*;
 })
 
 
-@NamedQueries({ //delete later
+@NamedQueries({
         @NamedQuery(name = "PeriodEntity.queryAllPeriodCustomTwo",
                 query = " select flda.fieldPublicId as fieldPublicId, " +
                         " edca.eduCategoryPublicId as eduCategoryPublicId, " +
                         " lvla.levelPublicId as levelPublicId, " +
                         " fld.code as fieldCode, " +
-                        " prd.offerNumber as periodOfferNumber, " +
-                        " prd.name as periodName, " +
+                        " prd.offerNumber as offerNumber, " +
+                        " prd.name as name, " +
                         " lvl.description as levelDescription, " +
-                        " fld.fname as fieldFName, " +
+                        " fld.fname as fieldName, " +
                         " edc.title as eduCategoryTitle, " +
-                        " prd.startDate as periodStartDate, " +
-                        " prd.endDate as periodEndDate, " +
-                        " prd.regStartDate as periodRegisterStartDate, " +
-                        " prd.regEndDate as periodRegisterEndDate, " +
-                        " prd.maxCapacity as periodMaxCapacity, " +
-                        " prd.holdingType as periodHoldingType, " +
-                        " prd.canRegisterOnline as periodCanRegisterOnline, " +
-                        " prd.type as periodType, " +
-                        " prd.fee as periodFee, " +
-                        " prd.schedule as periodSchedule, " +
-                        " prd.activityStatus as periodActivityStatus, " +
-                        " prd.deleteStatus as periodDeleteStatus, " +
+                        " prd.startDate as startDate, " +
+                        " prd.endDate as endDate, " +
+                        " prd.regStartDate as regStartDate, " +
+                        " prd.regEndDate as regEndDate, " +
+                        " prd.maxCapacity as maxCapacity, " +
+                        " prd.holdingType as holdingType, " +
+                        " prd.canRegisterOnline as canRegisterOnline, " +
+                        " prd.type as type, " +
+                        " prd.fee as fee, " +
+                        " prd.schedule as schedule, " +
+                        " prd.activityStatus as activityStatus, " +
+                        " prd.deleteStatus as deleteStatus, " +
                         " exc.firstName as executorFirstName, " +
                         " exc.lastName as executorLastName " +
                         " from " +

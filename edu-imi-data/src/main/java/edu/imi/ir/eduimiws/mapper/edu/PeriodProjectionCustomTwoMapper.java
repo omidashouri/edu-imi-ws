@@ -27,7 +27,7 @@ public interface PeriodProjectionCustomTwoMapper {
                             "source.getExecutorLastName()).toString())"),
             @Mapping(source = "fee", target = "fee"),
             @Mapping(source = "fieldCode", target = "fieldCode"),
-            @Mapping(source = "fieldFName", target = "fieldFName"),
+            @Mapping(source = "fieldName", target = "fieldFName"),
             @Mapping(source = "fieldPublicId", target = "fieldPublicId"),
             @Mapping(source = "holdingType", target = "holdingType"),
             @Mapping(source = "levelPublicId", target = "levelPublicId"),
