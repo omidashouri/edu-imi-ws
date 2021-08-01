@@ -69,7 +69,7 @@ public interface PeriodProjectionCustomTwo {
     Long getActivityStatus();
 
 //    @Value("#{target.deleteStatus}")
-    Long getDeleteStatus1();
+    Long getDeleteStatus();
 
 //    @Value("#{target.executer?.firstName}")
     String getExecutorFirstName();
