@@ -2,12 +2,11 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.jpa.QueryHints;
 
 import javax.persistence.*;
 
@@ -126,9 +125,11 @@ import javax.persistence.*;
                                 columns = {
                                         @ColumnResult(name = "fieldPublicId", type = String.class),
                                         @ColumnResult(name = "eduCategoryPublicId", type = String.class),
+                                        @ColumnResult(name = "levelPublicId", type = String.class),
                                         @ColumnResult(name = "fieldCode", type = String.class),
                                         @ColumnResult(name = "offerNumber", type = Long.class),
                                         @ColumnResult(name = "name", type = String.class),
+                                        @ColumnResult(name = "levelDescription", type = String.class),
                                         @ColumnResult(name = "fieldFName", type = String.class),
                                         @ColumnResult(name = "eduCategoryTitle", type = String.class),
                                         @ColumnResult(name = "startDate", type = String.class),
@@ -297,7 +298,7 @@ import javax.persistence.*;
                         " ( :periodExecutorFullName is null or exc.first_name || ' ' || exc.last_name  like '%:periodExecutorFullName%') "
                 ,resultSetMapping = "periodProjectionCustomOne.count"
         ),
-        @NamedNativeQuery(name = "PeriodEntity.querySelectAllPeriodCustomTwo",
+        @NamedNativeQuery(name = "PeriodEntity.querySelectAllPeriodCustomTwo", //add levelPublicId and LevelTitle
                 query = "SELECT " +
                         "    flda.field_public_id as fieldPublicId, " +
                         "    edca.edu_category_public_id as eduCategoryPublicId, " +
@@ -335,7 +336,7 @@ import javax.persistence.*;
                         "    ON edc.id=edca.edu_category_id "
                 ,resultSetMapping = "periodProjectionCustomTwo"
         ),
-        @NamedNativeQuery(name = "PeriodEntity.queryCountAllPeriodCustomTwo",
+        @NamedNativeQuery(name = "PeriodEntity.queryCountAllPeriodCustomTwo", //add levelPublicId and LevelTitle
                 query = "SELECT " +
                         "  count(*)  " +
                         " FROM ( " +
@@ -376,13 +377,17 @@ import javax.persistence.*;
                         " ) "
         )
 })
+
+
 @NamedQueries({ //delete later
         @NamedQuery(name = "PeriodEntity.queryAllPeriodCustomTwo",
                 query = " select flda.fieldPublicId as fieldPublicId, " +
                         " edca.eduCategoryPublicId as eduCategoryPublicId, " +
+                        " lvla.levelPublicId as levelPublicId, " +
                         " fld.code as fieldCode, " +
                         " prd.offerNumber as periodOfferNumber, " +
                         " prd.name as periodName, " +
+                        " lvl.description as levelDescription, " +
                         " fld.fname as fieldFName, " +
                         " edc.title as eduCategoryTitle, " +
                         " prd.startDate as periodStartDate, " +
@@ -399,11 +404,37 @@ import javax.persistence.*;
                         " prd.deleteStatus as periodDeleteStatus, " +
                         " exc.firstName as executorFirstName, " +
                         " exc.lastName as executorLastName " +
-                        " from PeriodEntity prd left join prd.periodApi prda " +
-                        " left join prd.executer exc left join prd.field fld " +
-                        " left join fld.fieldApi flda left join fld.eduCategory edc " +
-                        " left join edc.eduCategoryApi edca "
-//                    + " where p.deleteStatus = :deleteStatus and p.name like '%:periodName%' ",
+                        " from " +
+                        " PeriodEntity prd left join prd.periodApi prda " +
+                        " left join prd.executer exc " +
+                        " left join prd.field fld left join fld.fieldApi flda " +
+                        " left join fld.eduCategory edc left join edc.eduCategoryApi edca " +
+                        " left join fld.level lvl left join lvl.levelApi lvla " +
+                        " where " +
+                        " ( :fieldPublicId is null or flda.fieldPublicId = :fieldPublicId ) AND " +
+                        " ( :eduCategoryPublicId is null or edca.eduCategoryPublicId = :eduCategoryPublicId ) AND " +
+                        " ( :levelPublicId is null or lvla.levelPublicId = :levelPublicId ) AND " +
+                        " ( :fieldCode is null or fld.code = :fieldCode ) AND " +
+                        " ( :periodOfferNumber is null or prd.offerNumber =  :periodOfferNumber ) AND " +
+                        " ( :levelDescription is null or lvl.description like '%:levelDescription%' ) AND " +
+                        " ( :periodName is null or prd.name like '%:periodName%' ) AND " +
+                        " ( :fieldName is null or fld.fname like '%:fieldName%' ) AND " +
+                        " ( :eduCategoryTitle is null or edc.title like '%:eduCategoryTitle%' ) AND " +
+                        " ( :periodStartDate is null or prd.startDate = :periodStartDate ) AND " +
+                        " ( :periodEndDate is null or prd.endDate = :periodEndDate ) AND " +
+                        " ( :registerStartDate is null or prd.regStartDate = :registerStartDate ) AND " +
+                        " ( :registerEndDate is null or prd.regEndDate = :registerEndDate ) AND " +
+                        " ( :periodMaxCapacity is null or prd.maxCapacity = :periodMaxCapacity ) AND " +
+                        " ( :periodHoldingType is null or prd.holdingType = :periodHoldingType ) AND " +
+                        " ( :periodCanRegisterOnline is null or prd.canRegisterOnline = :periodCanRegisterOnline ) AND " +
+                        " ( :periodType is null or prd.type = :periodType ) AND " +
+                        " ( :periodFee is null or prd.fee = :periodFee ) AND " +
+                        " ( :periodSchedule is null or prd.schedule like '%:periodSchedule%' ) AND " +
+                        " ( :periodActivityStatus is null or prd.activityStatus = :periodActivityStatus ) AND " +
+                        " ( :periodDeleteStatus is null or prd.deleteStatus = :periodDeleteStatus ) AND " +
+                        " ( :periodExecutorFirstName is null or exc.firstName like '%:periodExecutorFirstName%' ) AND " +
+                        " ( :periodExecutorLastName is null or exc.lastName like '%:periodExecutorLastName%' ) AND " +
+                        " ( :periodExecutorFullName is null or concat(exc.firstName,' ',exc.lastName)  like '%:periodExecutorFullName%') "
                 /*hints =  {
                         @QueryHint( name = QueryHints.HINT_FLUSH_MODE, value = "AUTO" ),
                         @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true"),

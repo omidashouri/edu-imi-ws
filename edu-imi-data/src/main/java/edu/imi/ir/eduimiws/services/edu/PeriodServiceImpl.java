@@ -4,7 +4,6 @@ package edu.imi.ir.eduimiws.services.edu;
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodOnlyMapper;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodRepository;
@@ -143,9 +142,10 @@ public class PeriodServiceImpl implements PeriodService {
     }
 
     @Override
-    public Page<PeriodProjectionCustomOne> queryAllPeriodsCustomOne(String fieldPublicId, String eduCategoryPublicId,
+    public Page<PeriodProjectionCustomTwo> queryAllPeriodsCustomTwo(String fieldPublicId, String eduCategoryPublicId,
+                                                                    String levelPublicId,
                                                                     String fieldCode, Long periodOfferNumber,
-                                                                    String periodName, String fieldName,
+                                                                    String periodName, String levelDescription, String fieldName,
                                                                     String eduCategoryName, String periodStartDate,
                                                                     String periodEndDate, String registerStartDate,
                                                                     String registerEndDate, Long periodMaxCapacity,
@@ -155,24 +155,20 @@ public class PeriodServiceImpl implements PeriodService {
                                                                     String periodExecutorFirstName, String periodExecutorLastName,
                                                                     String periodExecutorFullName, Pageable pageable) {
 
+        Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages = periodRepository.queryAllPeriodCustomTwo(fieldPublicId, eduCategoryPublicId,
+                                                                                        levelPublicId,
+                                                                                        fieldCode, periodOfferNumber,
+                                                                                        periodName, levelDescription,fieldName,
+                                                                                        eduCategoryName, periodStartDate,
+                                                                                        periodEndDate, registerStartDate,
+                                                                                        registerEndDate, periodMaxCapacity,
+                                                                                        periodHoldingType, periodCanRegisterOnline,
+                                                                                        periodType, periodFee, periodSchedule,
+                                                                                        periodActivityStatus, periodDeleteStatus,
+                                                                                        periodExecutorFirstName, periodExecutorLastName,
+                                                                                        periodExecutorFullName, pageable);
 
-        System.out.println("1");
-
-        Page<PeriodProjectionCustomTwo> projectionCustomTwos = periodRepository.queryAll(pageable);
-
-        PeriodProjectionCustomOne periodProjectionCustomOne = periodRepository.queryPeriodCustomOne(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
-                nullDefaultValue(periodOfferNumber), periodName, fieldName, eduCategoryName, periodStartDate, periodEndDate,
-                registerStartDate, registerEndDate, periodMaxCapacity, periodHoldingType, periodCanRegisterOnline,
-                periodType, periodFee, periodSchedule, periodActivityStatus, periodDeleteStatus, periodExecutorFirstName,
-                periodExecutorLastName, periodExecutorFullName);
-
-        List<PeriodProjectionCustomOne> periodProjectionCustomOnes = periodRepository.queryAllPeriodCustomOne(nullDefaultValue(fieldPublicId), eduCategoryPublicId, fieldCode,
-                nullDefaultValue(periodOfferNumber), periodName, fieldName, eduCategoryName, periodStartDate, periodEndDate,
-                registerStartDate, registerEndDate, periodMaxCapacity, periodHoldingType, periodCanRegisterOnline,
-                periodType, periodFee, periodSchedule, periodActivityStatus, periodDeleteStatus, periodExecutorFirstName,
-                periodExecutorLastName, periodExecutorFullName);
-
-        return null;
+        return periodProjectionCustomTwoPages;
     }
 
     protected Predicate<Object> isValueDefault = (input) -> {

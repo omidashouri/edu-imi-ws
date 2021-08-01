@@ -1,14 +1,13 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
@@ -19,7 +18,7 @@ import javax.persistence.QueryHint;
 import java.util.List;
 
 @Repository
-public interface PeriodRepository extends JpaRepository<PeriodEntity, Long> {
+public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
 
     @Cacheable("period")
@@ -124,6 +123,7 @@ public interface PeriodRepository extends JpaRepository<PeriodEntity, Long> {
                                                             @Param("periodExecutorFullName") String periodExecutorFullName);
 
 
+//    make periodPublicId mandatory
     @Query(name = "PeriodEntity.querySelectAllPeriodCustomOne",
             countName = "PeriodEntity.querySelectAllPeriodCustomOne.count",
             nativeQuery = true)
@@ -152,7 +152,31 @@ public interface PeriodRepository extends JpaRepository<PeriodEntity, Long> {
 
 
     @Query(name = "PeriodEntity.queryAllPeriodCustomTwo")
-    Page<PeriodProjectionCustomTwo> queryAll(Pageable pageable);
+    Page<PeriodProjectionCustomTwo> queryAllPeriodCustomTwo(@Param("fieldPublicId") String fieldPublicId,
+                                                            @Param("eduCategoryPublicId") String eduCategoryPublicId,
+                                                            @Param("levelPublicId") String levelPublicId,
+                                                            @Param("fieldCode") String fieldCode, //marja
+                                                            @Param("periodOfferNumber") Long periodOfferNumber, //nobat
+                                                            @Param("periodName") String periodName,
+                                                            @Param("levelDescription") String levelDescription,
+                                                            @Param("fieldName") String fieldName,
+                                                            @Param("eduCategoryTitle") String eduCategoryTitle,
+                                                            @Param("periodStartDate") String periodStartDate,
+                                                            @Param("periodEndDate") String periodEndDate,
+                                                            @Param("registerStartDate") String registerStartDate,
+                                                            @Param("registerEndDate") String registerEndDate,
+                                                            @Param("periodMaxCapacity") Long periodMaxCapacity,
+                                                            @Param("periodHoldingType") String periodHoldingType,
+                                                            @Param("periodCanRegisterOnline") String periodCanRegisterOnline,
+                                                            @Param("periodType") String periodType, //termicType
+                                                            @Param("periodFee") Long periodFee,
+                                                            @Param("periodSchedule") String periodSchedule,
+                                                            @Param("periodActivityStatus") Long periodActivityStatus,
+                                                            @Param("periodDeleteStatus") Long periodDeleteStatus,
+                                                            @Param("periodExecutorFirstName") String periodExecutorFirstName,
+                                                            @Param("periodExecutorLastName") String periodExecutorLastName,
+                                                            @Param("periodExecutorFullName") String periodExecutorFullName,
+                                                            Pageable pageable);
 
 
 }

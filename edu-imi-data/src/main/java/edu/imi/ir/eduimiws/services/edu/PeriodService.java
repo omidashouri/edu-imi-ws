@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,11 +43,13 @@ public interface PeriodService {
     @Cacheable(value = "period", cacheManager = "jCacheCacheManager")
     Page<PeriodEntity> findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable(String periodName, Pageable pageable);
 
-    Page<PeriodProjectionCustomOne> queryAllPeriodsCustomOne(String fieldPublicId,
+    Page<PeriodProjectionCustomTwo> queryAllPeriodsCustomTwo(String fieldPublicId,
                                                              String eduCategoryPublicId,
+                                                             String levelPublicId,
                                                              String fieldCode,
                                                              Long periodOfferNumber,
                                                              String periodName,
+                                                             String levelDescription,
                                                              String fieldName,
                                                              String eduCategoryName,
                                                              String periodStartDate,

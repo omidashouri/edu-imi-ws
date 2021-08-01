@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.controllers.edu.v1;
 
+import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponsePeriodFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.edu.PeriodApiEntity;
@@ -8,13 +9,16 @@ import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodProjectionCustomTwoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodProjectionCustomTwoDto;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
+import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseCustomTwo;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.edu.PeriodApiService;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
@@ -31,8 +35,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.PageableAsQueryParam;
-import org.springframework.data.domain.*;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
@@ -45,7 +50,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -64,6 +72,9 @@ public class PeriodController {
     private final PeriodResponsePeriodFastDtoAssembler periodResponsePeriodFastDtoAssembler;
     private final PagedResourcesAssembler<PeriodFastDto> periodFastDtoPagedResourcesAssembler;
     private final PeriodFastDtoMapper periodFastDtoMapper;
+    private final PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler periodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler;
+    private final PagedResourcesAssembler<PeriodProjectionCustomTwoDto> periodProjectionCustomTwoDtoDtoPagedResourcesAssembler;
+    private final PeriodProjectionCustomTwoMapper periodProjectionCustomTwoMapper;
 
     @Operation(
             summary = "find All periods",
@@ -383,14 +394,16 @@ public class PeriodController {
                     )
             })
     @PageableAsQueryParam
-    @GetMapping(path = "/queryPeriodsCustomOne",
+    @GetMapping(path = "/periodResponseCustomTwo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> queryPeriods(
                                                                 @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
                                                                 @RequestParam("eduCategoryPublicId") Optional<String> eduCategoryPublicId,
+                                                                @RequestParam("levelPublicId") Optional<String> levelPublicId,
                                                                 @RequestParam("fieldCode") Optional<String> fieldCode,
                                                                 @RequestParam("periodOfferNumber") Optional<Long> periodOfferNumber,
                                                                 @RequestParam("periodName") Optional<String> periodName,
+                                                                @RequestParam("levelName") Optional<String> levelName,
                                                                 @RequestParam("fieldName") Optional<String> fieldName,
                                                                 @RequestParam("eduCategoryName") Optional<String> eduCategoryName,
                                                                 @RequestParam("periodStartDate") Optional<String> periodStartDate,
@@ -409,18 +422,17 @@ public class PeriodController {
                                                                 @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
                                                                 @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
                                                                 @Parameter(hidden = true)
-/*                                                                 @SortDefault(sort = "periodRegisterStartDate",
-                                                                         direction = Sort.Direction.DESC)*/
+                                                                 @SortDefault(sort = "periodRegisterStartDate",
+                                                                         direction = Sort.Direction.DESC)
                                                                  @PageableDefault(page = 1, size = 50, value = 10)
                                                                          Pageable pageable) {
 
-//        pageable = Pageable.unpaged();
-        Pageable pageable1 = PageRequest.of(1,20);
 
-        Page<PeriodProjectionCustomOne> periodPages =
-                periodService.queryAllPeriodsCustomOne(fieldPublicId.orElse(null),
-                        eduCategoryPublicId.orElse(null), fieldCode.orElse(null),
-                        periodOfferNumber.orElse(null), periodName.orElse(null),
+        Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages =
+                periodService.queryAllPeriodsCustomTwo(fieldPublicId.orElse(null),
+                        eduCategoryPublicId.orElse(null), levelPublicId.orElse(null),
+                        fieldCode.orElse(null), periodOfferNumber.orElse(null),
+                        periodName.orElse(null), levelName.orElse(null),
                         fieldName.orElse(null), eduCategoryName.orElse(null),
                         periodStartDate.orElse(null), periodEndDate.orElse(null),
                         registerStartDate.orElse(null), registerEndDate.orElse(null),
@@ -428,21 +440,17 @@ public class PeriodController {
                         periodCanRegisterOnline.orElse(null), periodType.orElse(null),
                         periodFee.orElse(null), periodSchedule.orElse(null),
                         periodActivityStatus.orElse(null), periodDeleteStatus.orElse(null),
-                        periodExecutorFirstName.orElse(null), periodExecutorLastName.orElse(null),
-                        periodExecutorFullName.orElse(null),
-                        pageable);
+                        periodExecutorFirstName.orElse(null),
+                        periodExecutorLastName.orElse(null), periodExecutorFullName.orElse(null), pageable);
 
-        System.out.println("2");
 
-/*        Page<PeriodFastDto> periodFastDtoPage = periodPages
-                .map(p -> periodFastDtoMapper
-                        .toPeriodFastDto(p, new CycleAvoidingMappingContext()));
+        Page<PeriodProjectionCustomTwoDto> periodProjectionCustomTwoDtoPages = periodProjectionCustomTwoPages
+                .map(periodProjectionCustomTwoMapper::periodProjectionCustomTwoToPeriodProjectionCustomTwoDto);
 
-        PagedModel<PeriodResponse> periodResponsePagedModel = periodFastDtoPagedResourcesAssembler
-                .toModel(periodFastDtoPage, periodResponsePeriodFastDtoAssembler);
+        PagedModel<PeriodResponseCustomTwo> periodResponseCustomTwoPagedModel = periodProjectionCustomTwoDtoDtoPagedResourcesAssembler
+                .toModel(periodProjectionCustomTwoDtoPages, periodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler);
 
-        return ResponseEntity.ok(periodResponsePagedModel);*/
-        return null;
+        return ResponseEntity.ok(periodResponseCustomTwoPagedModel);
     }
 
 
