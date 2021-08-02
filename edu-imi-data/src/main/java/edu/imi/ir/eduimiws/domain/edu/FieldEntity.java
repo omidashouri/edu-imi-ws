@@ -70,6 +70,29 @@ import javax.persistence.*;
 })
 
 
+@NamedQueries({
+        @NamedQuery(name = "FieldEntity.queryAllFieldCustomOne",
+                query = " select edca.eduCategoryPublicId as eduCategoryPublicId, " +
+                        " lvla.levelPublicId as levelPublicId, " +
+                        " edc.title as eduCategoryTitle, " +
+                        " lvl.description as levelDescription, " +
+                        " count(fld.id) as fieldCount" +
+                        " from FieldEntity fld " +
+                        " inner join EduCategoryEntity edc " +
+                        " left join EduCategoryApiEntity edca " +
+                        " inner join LevelEntity lvl " +
+                        " left join LevelApiEntity lvla " +
+                        " where " +
+                        " edc.title is not null AND " +
+                        " lvl.description <> ' ' AND " +
+                        " ( :eduCategoryPublicId is null or edca.eduCategoryPublicId = :eduCategoryPublicId ) AND " +
+                        " ( :levelPublicId is null or lvla.levelPublicId = :levelPublicId ) AND " +
+                        " ( :levelDescription is null or lvl.description like concat('%',:levelDescription,'%') ) AND " +
+                        " ( :eduCategoryTitle is null or edc.title like concat('%',:eduCategoryTitle,'%') ) " +
+                        " group by edca.eduCategoryPublicId, lvla.levelPublicId, edc.title, lvl.description "
+        )
+})
+
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)//, region = "field")
 @Getter

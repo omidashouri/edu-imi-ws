@@ -9,10 +9,10 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 
-@Schema(name = "periodCustomTwo",description = "Class representing a period in the application.")
+@Schema(name = "periodResponseCustomTwo",description = "Class representing a period in the application.")
 @EqualsAndHashCode(callSuper = false)
-@JsonRootName(value = "periodCustomTwo")
-@Relation(collectionRelation = "periodCustomTwos")
+@JsonRootName(value = "periodResponseCustomTwo")
+@Relation(collectionRelation = "periodResponseCustomTwos")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
