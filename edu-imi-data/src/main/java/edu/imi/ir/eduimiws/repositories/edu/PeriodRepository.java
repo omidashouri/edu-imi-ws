@@ -157,7 +157,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                             @Param("levelPublicId") String levelPublicId,
                                                             @Param("fieldCode") String fieldCode, //marja
                                                             @Param("periodOfferNumber") Long periodOfferNumber, //nobat
-                                                            @Param("periodName") String periodName,
+                                                            @Param("periodName") String name,
                                                             @Param("levelDescription") String levelDescription,
                                                             @Param("fieldName") String fieldName,
                                                             @Param("eduCategoryTitle") String eduCategoryTitle,

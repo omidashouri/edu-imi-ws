@@ -416,10 +416,10 @@ import javax.persistence.*;
                         " ( :levelPublicId is null or lvla.levelPublicId = :levelPublicId ) AND " +
                         " ( :fieldCode is null or fld.code = :fieldCode ) AND " +
                         " ( :periodOfferNumber is null or prd.offerNumber =  :periodOfferNumber ) AND " +
-                        " ( :levelDescription is null or lvl.description like '%:levelDescription%' ) AND " +
-                        " ( :periodName is null or prd.name like '%:periodName%' ) AND " +
-                        " ( :fieldName is null or fld.fname like '%:fieldName%' ) AND " +
-                        " ( :eduCategoryTitle is null or edc.title like '%:eduCategoryTitle%' ) AND " +
+                        " ( :levelDescription is null or lvl.description like concat('%',:levelDescription,'%') ) AND " +
+                        " ( :periodName is null or prd.name like concat('%',:periodName,'%') ) AND " +
+                        " ( :fieldName is null or fld.fname like concat('%',:fieldName,'%') ) AND " +
+                        " ( :eduCategoryTitle is null or edc.title like concat('%',:eduCategoryTitle,'%') ) AND " +
                         " ( :periodStartDate is null or prd.startDate = :periodStartDate ) AND " +
                         " ( :periodEndDate is null or prd.endDate = :periodEndDate ) AND " +
                         " ( :registerStartDate is null or prd.regStartDate = :registerStartDate ) AND " +
@@ -429,12 +429,13 @@ import javax.persistence.*;
                         " ( :periodCanRegisterOnline is null or prd.canRegisterOnline = :periodCanRegisterOnline ) AND " +
                         " ( :periodType is null or prd.type = :periodType ) AND " +
                         " ( :periodFee is null or prd.fee = :periodFee ) AND " +
-                        " ( :periodSchedule is null or prd.schedule like '%:periodSchedule%' ) AND " +
+                        " ( :periodSchedule is null or prd.schedule like concat('%',:periodSchedule,'%') ) AND " +
                         " ( :periodActivityStatus is null or prd.activityStatus = :periodActivityStatus ) AND " +
                         " ( :periodDeleteStatus is null or prd.deleteStatus = :periodDeleteStatus ) AND " +
-                        " ( :periodExecutorFirstName is null or exc.firstName like '%:periodExecutorFirstName%' ) AND " +
-                        " ( :periodExecutorLastName is null or exc.lastName like '%:periodExecutorLastName%' ) AND " +
-                        " ( :periodExecutorFullName is null or concat(exc.firstName,' ',exc.lastName)  like '%:periodExecutorFullName%') "
+                        " ( :periodExecutorFirstName is null or exc.firstName like concat('%',:periodExecutorFirstName,'%') ) AND " +
+                        " ( :periodExecutorLastName is null or exc.lastName like concat('%',:periodExecutorLastName,'%') ) AND " +
+                        " ( :periodExecutorFullName is null or concat(exc.firstName,' ',exc.lastName)  like concat('%',:periodExecutorFullName,'%') ) " +
+                        " ORDER BY regStartDate desc, name ASC NULLS LAST "
                 /*hints =  {
                         @QueryHint( name = QueryHints.HINT_FLUSH_MODE, value = "AUTO" ),
                         @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true"),

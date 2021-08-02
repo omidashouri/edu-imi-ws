@@ -362,7 +362,7 @@ public class PeriodController {
     @Operation(
             summary = "query All periods",
             description = "Search period detail pageable",
-            tags = "periods",
+            tags = "periodCustomTwo",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -374,7 +374,7 @@ public class PeriodController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                            schema = @Schema(implementation = PeriodResponse.class)
+                                            schema = @Schema(implementation = PeriodResponseCustomTwo.class)
                                     )
                             )
                     ),
@@ -396,7 +396,7 @@ public class PeriodController {
     @PageableAsQueryParam
     @GetMapping(path = "/periodResponseCustomTwo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> queryPeriods(
+    public ResponseEntity<PagedModel<PeriodResponseCustomTwo>> queryPeriods(
                                                                 @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
                                                                 @RequestParam("eduCategoryPublicId") Optional<String> eduCategoryPublicId,
                                                                 @RequestParam("levelPublicId") Optional<String> levelPublicId,
@@ -422,8 +422,8 @@ public class PeriodController {
                                                                 @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
                                                                 @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
                                                                 @Parameter(hidden = true)
-                                                   /*              @SortDefault(sort = "regStartDate",
-                                                                         direction = Sort.Direction.DESC)*/
+                                                                 @SortDefault(sort = "regStartDate",
+                                                                         direction = Sort.Direction.DESC)
                                                                  @PageableDefault(page = 1, size = 50, value = 10)
                                                                          Pageable pageable) {
 

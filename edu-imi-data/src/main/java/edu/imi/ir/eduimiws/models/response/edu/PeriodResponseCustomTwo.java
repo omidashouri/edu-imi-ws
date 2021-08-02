@@ -9,7 +9,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 
-@Schema(name = "periods",description = "Class representing a period in the application.")
+@Schema(name = "periodCustomTwo",description = "Class representing a period in the application.")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "periodCustomTwo")
 @Relation(collectionRelation = "periodCustomTwos")
@@ -29,16 +29,16 @@ public class PeriodResponseCustomTwo extends RepresentationModel<PeriodResponseC
     @Schema(title = "Level Public ID", maxLength = 36)
     private String levelPublicId;
 
-    @Schema(title = "Field Code (marja)", maxLength = 0)
+    @Schema(title = "Field Code (marja)", maxLength = 20)
     private String fieldCode;
 
     @Schema(title = "Offer Number (nobat)",type = "number")
     private Long offerNumber;
 
-    @Schema(title = "Period Name", maxLength = 0)
+    @Schema(title = "Period Name", maxLength = 500)
     private String periodName;
 
-    @Schema(title = "Level Title Name", maxLength = 0)
+    @Schema(title = "Level Title Name", maxLength = 50)
     private String levelTitle;
 
     @Schema(title = "Field Persian Name", maxLength = 500)
@@ -81,24 +81,24 @@ public class PeriodResponseCustomTwo extends RepresentationModel<PeriodResponseC
     @Schema(title = "Period Fee", type = "number")
     private Long periodFee;
 
-    @Schema(title = "Period Schedule",maxLength = 0)
+    @Schema(title = "Period Schedule",maxLength = 250)
     private String periodSchedule;
 
     @Schema(title = "Period Activity Status",
-            description = "0:inactive 1:active 2:canceled 3:stopped 4:finished 5:archived ", type = "number", maxLength = 1,
-    allowableValues = {"1", "2", "3", "4", "5"})
+            description = "0:inactive 1:active 2:canceled 3:stopped 4:finished 5:archived ",
+            type = "number", maxLength = 1, allowableValues = {"1", "2", "3", "4", "5"})
     private Long periodActivityStatus;
 
     @Schema(title = "Period Delete Status", type = "number" , maxLength = 1)
     private Long periodDeleteStatus;
 
-    @Schema(title = "Period Executor First Name")
+    @Schema(title = "Period Executor First Name" , maxLength = 100)
     private String executorFirstName;
 
-    @Schema(title = "Period Executor Last Name")
+    @Schema(title = "Period Executor Last Name", maxLength = 100)
     private String executorLastName;
 
-    @Schema(title = "Period Executor Full Name")
+    @Schema(title = "Period Executor Full Name", maxLength = 200)
     private String executorFullName;
 
 }
