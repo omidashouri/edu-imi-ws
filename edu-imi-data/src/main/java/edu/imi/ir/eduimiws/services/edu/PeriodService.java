@@ -64,6 +64,7 @@ public interface PeriodService {
                                                              String periodSchedule,
                                                              Long periodActivityStatus,
                                                              Long periodDeleteStatus,
+                                                             Long periodTotalUnit,
                                                              String periodExecutorFirstName,
                                                              String periodExecutorLastName,
                                                              String periodExecutorFullName,

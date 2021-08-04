@@ -173,6 +173,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                             @Param("periodSchedule") String periodSchedule,
                                                             @Param("periodActivityStatus") Long periodActivityStatus,
                                                             @Param("periodDeleteStatus") Long periodDeleteStatus,
+                                                            @Param("periodTotalUnit") Long periodTotalUnit,
                                                             @Param("periodExecutorFirstName") String periodExecutorFirstName,
                                                             @Param("periodExecutorLastName") String periodExecutorLastName,
                                                             @Param("periodExecutorFullName") String periodExecutorFullName,

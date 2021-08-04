@@ -418,6 +418,7 @@ public class PeriodController {
                                                                 @RequestParam("periodSchedule") Optional<String> periodSchedule,
                                                                 @RequestParam(value = "periodActivityStatus", defaultValue = "1") Optional<Long> periodActivityStatus,
                                                                 @RequestParam(value = "periodDeleteStatus", defaultValue = "1") Optional<Long> periodDeleteStatus,
+                                                                @RequestParam("periodTotalUnit") Optional<Long> periodTotalUnit,
                                                                 @RequestParam("periodExecutorFirstName") Optional<String> periodExecutorFirstName,
                                                                 @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
                                                                 @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
@@ -439,7 +440,7 @@ public class PeriodController {
                         periodCanRegisterOnline.orElse(null), periodType.orElse(null),
                         periodFee.orElse(null), periodSchedule.orElse(null),
                         periodActivityStatus.orElse(null), periodDeleteStatus.orElse(null),
-                        periodExecutorFirstName.orElse(null),
+                        periodTotalUnit.orElse(null), periodExecutorFirstName.orElse(null),
                         periodExecutorLastName.orElse(null), periodExecutorFullName.orElse(null), pageable);
 
 

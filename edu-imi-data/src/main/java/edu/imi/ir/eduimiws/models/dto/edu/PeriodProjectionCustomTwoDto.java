@@ -56,6 +56,8 @@ public class PeriodProjectionCustomTwoDto implements Serializable {
 
     private Long deleteStatus;
 
+    private Long totalUnit;
+
     private String executorFirstName;
 
     private String executorLastName;

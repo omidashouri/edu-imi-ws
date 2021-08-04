@@ -402,6 +402,7 @@ import javax.persistence.*;
                         " prd.schedule as schedule, " +
                         " prd.activityStatus as activityStatus, " +
                         " prd.deleteStatus as deleteStatus, " +
+                        " prd.totalUnit as totalUnit, " +
                         " exc.firstName as executorFirstName, " +
                         " exc.lastName as executorLastName " +
                         " from " +
@@ -432,6 +433,7 @@ import javax.persistence.*;
                         " ( :periodSchedule is null or prd.schedule like concat('%',:periodSchedule,'%') ) AND " +
                         " ( :periodActivityStatus is null or prd.activityStatus = :periodActivityStatus ) AND " +
                         " ( :periodDeleteStatus is null or prd.deleteStatus = :periodDeleteStatus ) AND " +
+                        " ( :periodTotalUnit is null or prd.totalUnit = :periodTotalUnit ) AND " +
                         " ( :periodExecutorFirstName is null or exc.firstName like concat('%',:periodExecutorFirstName,'%') ) AND " +
                         " ( :periodExecutorLastName is null or exc.lastName like concat('%',:periodExecutorLastName,'%') ) AND " +
                         " ( :periodExecutorFullName is null or concat(exc.firstName,' ',exc.lastName)  like concat('%',:periodExecutorFullName,'%') ) " +

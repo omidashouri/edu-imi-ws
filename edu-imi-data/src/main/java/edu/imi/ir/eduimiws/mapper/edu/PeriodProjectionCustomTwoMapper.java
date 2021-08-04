@@ -39,6 +39,7 @@ public interface PeriodProjectionCustomTwoMapper {
             @Mapping(source = "regStartDate", target = "regStartDate"),
             @Mapping(source = "startDate", target = "startDate"),
             @Mapping(source = "schedule", target = "schedule"),
+            @Mapping(source = "totalUnit", target = "totalUnit"),
             @Mapping(source = "type", target = "type")
 
     })

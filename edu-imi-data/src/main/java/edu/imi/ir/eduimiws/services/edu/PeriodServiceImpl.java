@@ -151,7 +151,7 @@ public class PeriodServiceImpl implements PeriodService {
                                                                     String registerEndDate, Long periodMaxCapacity,
                                                                     String periodHoldingType, String periodCanRegisterOnline,
                                                                     String periodType, Long periodFee, String periodSchedule,
-                                                                    Long periodActivityStatus, Long periodDeleteStatus,
+                                                                    Long periodActivityStatus, Long periodDeleteStatus, Long periodTotalUnit,
                                                                     String periodExecutorFirstName, String periodExecutorLastName,
                                                                     String periodExecutorFullName, Pageable pageable) {
 
@@ -164,7 +164,7 @@ public class PeriodServiceImpl implements PeriodService {
                                                                                         registerEndDate, periodMaxCapacity,
                                                                                         periodHoldingType, periodCanRegisterOnline,
                                                                                         periodType, periodFee, periodSchedule,
-                                                                                        periodActivityStatus, periodDeleteStatus,
+                                                                                        periodActivityStatus, periodDeleteStatus, periodTotalUnit,
                                                                                         periodExecutorFirstName, periodExecutorLastName,
                                                                                         periodExecutorFullName, pageable);
 
