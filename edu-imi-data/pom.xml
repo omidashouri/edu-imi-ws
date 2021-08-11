@@ -26,12 +26,18 @@
         <ir.ghasemkiani.version>2.1.7</ir.ghasemkiani.version>
         <org.apache.cxf.cxf-codegen-plugin.version>3.4.1</org.apache.cxf.cxf-codegen-plugin.version>
         <org.codehaus.mojo.jaxb2-maven-plugin.version>2.5.0</org.codehaus.mojo.jaxb2-maven-plugin.version>
+        <org.json.json>20210307</org.json.json>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${org.json.json}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -89,12 +95,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>
-<!--        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
-            <scope>runtime</scope>
-        </dependency>-->
+        <!--        <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <version>${h2.version}</version>
+                    <scope>runtime</scope>
+                </dependency>-->
         <dependency>
             <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
@@ -167,8 +173,8 @@
             </exclusions>
         </dependency>
         <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
