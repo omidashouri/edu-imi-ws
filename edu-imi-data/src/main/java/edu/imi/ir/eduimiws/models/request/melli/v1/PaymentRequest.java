@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
-import org.json.JSONObject;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
@@ -67,7 +66,7 @@ public class PaymentRequest implements Serializable {
     @Schema(title = "Multiplexing data",
             description = "Division Information")
     @JsonProperty("MultiplexingData")
-    private JSONObject multiplexingData;
+    private MultiplexingData multiplexingData;
 
     @Schema(title = "User Id",
             description = "Card Holder Mobile Number")

@@ -6,24 +6,16 @@ class MelliTripleDesTest {
 
     @Test
     void test1() throws Exception {
-/*        */
 
-        TrippleDe trippleDe = new TrippleDe();
-        System.out.println(
-        trippleDe._encrypt("salam","XZewVTUH9U+hQgMCjMu9mKmF9srWLN/y")
-        );
+        System.out.println("---------MELLI--------");
 
-        System.out.println(
-        trippleDe._decrypt("qg8eLRKKHUo=","XZewVTUH9U+hQgMCjMu9mKmF9srWLN/y")
-        );
-        System.out.println("-----------------");
+        MelliTripleDes melliTripleDes = new MelliTripleDes();
+        String encrypted = melliTripleDes.encrypt("salam");
+        System.out.println("Encypted: >> "+encrypted);
+        String decrypted = melliTripleDes.decrypt(encrypted);
+        System.out.println("Decrypted: >>"+decrypted);
 
-        TrippleDESTest trippleDESTest = new TrippleDESTest();
-        trippleDESTest.test();
-
-/*        MelliTripleDes melliTripleDes = new MelliTripleDes();
-        melliTripleDes.test();*/
-//
-//        PR+yYZk26DU=
+        System.out.println("Decrypted bank Sample: >>   "+melliTripleDes.encryptBankSample("salam","XZewVTUH9U+hQgMCjMu9mKmF9srWLN/y"));
+//        qg8eLRKKHUo=
     }
 }

@@ -1,14 +1,9 @@
 package edu.imi.ir.eduimiws.utilities;
 
-import com.ghasemkiani.app.demo.PersianCalendarDemo;
-import com.ghasemkiani.app.demo.PersianGregorianDateConverter;
 import com.ghasemkiani.util.DateFields;
-import com.ghasemkiani.util.PersianCalendarUtils;
 import com.ghasemkiani.util.SimplePersianCalendar;
 import com.ghasemkiani.util.icu.PersianCalendar;
-import io.jsonwebtoken.lang.Strings;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.driver.DatabaseError;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -16,10 +11,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @Slf4j
@@ -1008,5 +1003,16 @@ public class DateConvertor {
 
     public Timestamp getCurrentTimeStampWithZoneIdTehran(){
         return Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Tehran")));
+    }
+
+    /**
+     * author Omid Ashouri (Attention: Method is copied from Bank Melli Sample)
+     * @return
+     */
+    public String getBankMelliPaymentDate(){
+        String date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ").format(new Date());
+        String tail = date.substring(date.indexOf("+") + 1);
+        tail = tail.substring(0, 2) + ":" + tail.substring(2);
+        return date.substring(0, date.indexOf("+") + 1) + tail;
     }
 }
