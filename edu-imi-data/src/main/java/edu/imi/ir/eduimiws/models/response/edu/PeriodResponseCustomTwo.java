@@ -95,6 +95,9 @@ public class PeriodResponseCustomTwo extends RepresentationModel<PeriodResponseC
     @Schema(title = "Period Total Unit", type = "number")
     private Long periodTotalUnit;
 
+    @Schema(title = "Period Id", type = "number")
+    private Long periodId;
+
     @Schema(title = "Period Executor First Name" , maxLength = 100)
     private String executorFirstName;
 

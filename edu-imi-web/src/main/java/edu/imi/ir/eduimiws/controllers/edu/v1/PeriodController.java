@@ -422,6 +422,7 @@ public class PeriodController {
                                                                 @RequestParam("periodExecutorFirstName") Optional<String> periodExecutorFirstName,
                                                                 @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
                                                                 @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
+                                                                @RequestParam("periodId") Optional<Long> periodId,
                                                                 @Parameter(hidden = true)
                                                                  @SortDefault(sort = "regStartDate",
                                                                          direction = Sort.Direction.DESC)
@@ -440,8 +441,9 @@ public class PeriodController {
                         periodCanRegisterOnline.orElse(null), periodType.orElse(null),
                         periodFee.orElse(null), periodSchedule.orElse(null),
                         periodActivityStatus.orElse(null), periodDeleteStatus.orElse(null),
-                        periodTotalUnit.orElse(null), periodExecutorFirstName.orElse(null),
-                        periodExecutorLastName.orElse(null), periodExecutorFullName.orElse(null), pageable);
+                        periodTotalUnit.orElse(null), periodId.orElse(null),
+                        periodExecutorFirstName.orElse(null), periodExecutorLastName.orElse(null),
+                        periodExecutorFullName.orElse(null), pageable);
 
 
         Page<PeriodProjectionCustomTwoDto> periodProjectionCustomTwoDtoPages = periodProjectionCustomTwoPages

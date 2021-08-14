@@ -84,6 +84,8 @@ public interface PeriodProjectionCustomTwo {
     @Value("#{target.totalUnit}")
     Long getTotalUnit();
 
+    Long getPeriodId();
+
 //    @Value("#{target.executer?.firstName}")
     String getExecutorFirstName();
 

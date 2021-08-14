@@ -38,6 +38,7 @@ public interface PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper {
             @Mapping(source = "startDate", target = "periodStartDate"),
             @Mapping(source = "schedule", target = "periodSchedule"),
             @Mapping(source = "totalUnit", target = "periodTotalUnit"),
+            @Mapping(source = "periodId", target = "periodId"),
             @Mapping(source = "type", target = "periodType")
 
     })
