@@ -7,7 +7,7 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        imports = {StringBuilder.class},
+        imports = {String.class,Long.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper {
@@ -23,7 +23,10 @@ public interface PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper {
             @Mapping(source = "executorFirstName", target = "executorFirstName"),
             @Mapping(source = "executorLastName", target = "executorLastName"),
             @Mapping(source = "executorFullName", target = "executorFullName"),
-            @Mapping(source = "fee", target = "periodFee"),
+            @Mapping(target = "periodFee",
+                    expression = "java(" +
+                            "(source.getType()!=null && source.getType().equalsIgnoreCase(\"termic\")) ? Long.sum(" +
+                            "source.getFeeEquivalentFixed(),source.getFeeEquivalentVariable()) : source.getFee())"),
             @Mapping(source = "fieldCode", target = "fieldCode"),
             @Mapping(source = "fieldFName", target = "fieldName"),
             @Mapping(source = "fieldPublicId", target = "fieldPublicId"),

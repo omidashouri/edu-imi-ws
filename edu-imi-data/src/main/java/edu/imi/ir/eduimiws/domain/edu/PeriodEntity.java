@@ -399,6 +399,8 @@ import javax.persistence.*;
                         " prd.canRegisterOnline as canRegisterOnline, " +
                         " prd.type as type, " +
                         " prd.fee as fee, " +
+                        " coalesce(prd.feeEquivalentFixed,0) as feeEquivalentFixed, " +
+                        " coalesce(prd.feeEquivalentVariable,0) as feeEquivalentVariable, " +
                         " prd.schedule as schedule, " +
                         " prd.activityStatus as activityStatus, " +
                         " prd.deleteStatus as deleteStatus, " +

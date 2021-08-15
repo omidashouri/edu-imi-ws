@@ -50,6 +50,10 @@ public class PeriodProjectionCustomTwoDto implements Serializable {
 
     private Long fee;
 
+    private Long feeEquivalentFixed;
+
+    private Long feeEquivalentVariable;
+
     private String schedule;
 
     private Long activityStatus;

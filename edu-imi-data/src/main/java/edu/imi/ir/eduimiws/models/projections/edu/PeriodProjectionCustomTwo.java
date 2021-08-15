@@ -72,6 +72,12 @@ public interface PeriodProjectionCustomTwo {
     @Value("#{target.fee}")
     Long getFee();
 
+    @Value("#{target.feeEquivalentFixed}")
+    Long getFeeEquivalentFixed();
+
+    @Value("#{target.feeEquivalentVariable}")
+    Long getFeeEquivalentVariable();
+
     @Value("#{target.schedule}")
     String getSchedule();
 
