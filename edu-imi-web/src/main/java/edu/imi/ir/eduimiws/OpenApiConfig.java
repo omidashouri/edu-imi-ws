@@ -272,6 +272,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi melliCodeApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("mellies")
+                .pathsToMatch("/api/v1/mellies/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {

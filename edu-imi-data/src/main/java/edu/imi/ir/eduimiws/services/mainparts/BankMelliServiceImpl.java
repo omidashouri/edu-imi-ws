@@ -46,11 +46,12 @@ public class BankMelliServiceImpl implements BankMelliService{
 
     protected PaymentRequest updateCredentialAndSignedData(PaymentRequest paymentRequest){
         String orderId = String.valueOf(this.queryLastOrderId());
+        paymentRequest.setOrderId(Long.valueOf(orderId));
         paymentRequest.setTerminalId(melliCredential.getTerminalId());
         paymentRequest.setMerchantId(melliCredential.getMerchantId());
         paymentRequest.setSignDate(melliTripleDes
                 .encrypt(String.format("%s;%s;%s", melliCredential.getTerminalId(), orderId, paymentRequest.getAmount())));
-        return paymentRequest;
+        return paymentRequest; //h1nHk8huQA+Lh+4T6LLHdQ==
     }
 
     protected HttpEntity<PaymentRequest> paymentRequestHttpEntity(PaymentRequest paymentRequest){
