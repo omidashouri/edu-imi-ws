@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
@@ -45,7 +44,7 @@ public class PaymentRequest implements Serializable {
     @Schema(title = "amount", required = true,
             description = "Transaction Date and Time")
     @JsonProperty("LocalDateTime")
-    private DateTime localDateTime;
+    private String localDateTime;
 
     @Schema(title = "Return URL", required = true,
         description = "return url")
