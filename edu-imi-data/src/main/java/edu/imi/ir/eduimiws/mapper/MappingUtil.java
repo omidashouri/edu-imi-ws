@@ -40,4 +40,22 @@ public class MappingUtil {
     }
 
 
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface CreatorIdFromSecurityContext {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface CreatorFromSecurityContext {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface GenerateEntityPublicId {
+    }
+
 }

@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.utilities;
 
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -23,6 +24,12 @@ public class PublicIdUtil {
     public String generateUserId(int lenght) {
         return generateRandomString(lenght);
     }
+
+    @MappingUtil.GenerateEntityPublicId
+    public String generateEntityPublicId(String fakeInput){
+        return this.generateUniquePublicId();
+    }
+
 
     public String generateUniquePublicId()  {
 

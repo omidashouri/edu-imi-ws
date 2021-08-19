@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.services.mainparts;
 
+import edu.imi.ir.eduimiws.domain.mainparts.MelliDigitalPaymentEntity;
+import edu.imi.ir.eduimiws.mapper.mainparts.MelliDigitalPaymentMapper;
 import edu.imi.ir.eduimiws.models.request.melli.v1.PaymentRequest;
 import edu.imi.ir.eduimiws.models.response.melli.v1.PaymentResponse;
 import edu.imi.ir.eduimiws.repositories.mainparts.MelliDigitalPaymentRepository;
@@ -21,6 +23,7 @@ public class BankMelliServiceImpl implements BankMelliService{
 
 
     private final MelliDigitalPaymentRepository melliDigitalPaymentRepository;
+    private final MelliDigitalPaymentMapper melliDigitalPaymentMapper;
     private final MelliCredential melliCredential;
     private final RestTemplate restTemplate;
     private final MelliTripleDes melliTripleDes;
@@ -38,6 +41,14 @@ public class BankMelliServiceImpl implements BankMelliService{
                         this.paymentRequestHttpEntity(this.updateCredentialAndSignedData(paymentRequest)),
                         PaymentResponse.class);
         return paymentResponse;
+    }
+
+    @Override
+    public void saveMelliDigitalPaymentRequestByPaymentRequest(PaymentRequest paymentRequest) {
+/*        MelliDigitalPaymentEntity melliDigitalPayment = melliDigitalPaymentMapper
+                .toMelliDigitalPaymentEntity(paymentRequest, new CycleAvoidingMappingContext());*/
+//        complete it here
+        melliDigitalPaymentRepository.save(new MelliDigitalPaymentEntity());
     }
 
     protected String uriComponentsBuilderToString(String stringUri){

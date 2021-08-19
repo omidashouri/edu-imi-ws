@@ -4,7 +4,7 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 
 @NamedNativeQueries({
@@ -27,6 +27,9 @@ public class MelliDigitalPaymentEntity extends BaseEntity {
     @Column(name = "ORDER_ID")
     private Long orderId;
 
+    @Column(name = "REQUEST_ORDER_ID")
+    private Long requestOrderId;
+
     @Column(name = "LOCAL_DATE_TIME")
     private String localDateTime;
 
@@ -40,7 +43,7 @@ public class MelliDigitalPaymentEntity extends BaseEntity {
     private String additionalData;
 
     @Column(name = "MULTIPLEXING_DATA_ID")
-    private String multiplexingDataId;
+    private Long multiplexingDataId;
 
     @Column(name = "USER_ID")
     private String userId;
@@ -49,7 +52,7 @@ public class MelliDigitalPaymentEntity extends BaseEntity {
     private String applicationName;
 
     @Column(name = "PAN_AUTHENTICATION_TYPE")
-    private String panAuthenticationType;
+    private Long panAuthenticationType;
 
     @Column(name = "NATIONAL_CODE")
     private String nationalCode;
@@ -58,23 +61,23 @@ public class MelliDigitalPaymentEntity extends BaseEntity {
     private String cardHolderIdentity;
 
     @Column(name = "RES_CODE")
-    private String resCode;
+    private Long resCode;
 
     @Column(name = "TOKEN")
     private String token;
 
-    @Column(name = "")
+    @Column(name = "DESCRIPTION")
     private String description;
 
     @Column(name = "CREATOR_ID")
-    private String creatorId;
+    private Long creatorId;
 
     @Column(name = "CREATE_DATE_TS")
-    private Timestamp createDate;
+    private Timestamp createDateTs;
 
     @Column(name = "PUBLIC_ID")
     private String publicId;
 
     @Column(name = "DELETE_DATE_TS")
-    private Timestamp deleteDate;
+    private Timestamp deleteDateTs;
 }

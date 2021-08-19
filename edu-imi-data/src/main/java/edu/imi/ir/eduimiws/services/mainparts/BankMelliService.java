@@ -9,4 +9,6 @@ public interface BankMelliService {
 
     public PaymentResponse getToken(PaymentRequest paymentRequest);
 
+    public void saveMelliDigitalPaymentRequestByPaymentRequest(PaymentRequest paymentRequest);
+
 }
