@@ -23,6 +23,7 @@ import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.edu.PeriodApiService;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
+import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -34,7 +35,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -110,7 +110,7 @@ public class PeriodController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriods(@Parameter(hidden = true)
                                                                  @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -131,7 +131,7 @@ public class PeriodController {
     }
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriods(
@@ -191,7 +191,7 @@ public class PeriodController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/{periodName}/descriptive",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponse>>
@@ -255,7 +255,7 @@ public class PeriodController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/fields/{fieldPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriodsFields(@PathVariable String fieldPublicId,
@@ -281,7 +281,7 @@ public class PeriodController {
     }
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/fields/{fieldPublicId}/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriodsFields(
@@ -393,7 +393,7 @@ public class PeriodController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/periodResponseCustomTwo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponseCustomTwo>> queryPeriods(
@@ -493,7 +493,7 @@ public class PeriodController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/executors/{executorPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriodExecutors(@PathVariable String executorPublicId,
@@ -518,7 +518,7 @@ public class PeriodController {
 
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/executors/{executorPublicId}/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriodsByExecutorPublicId(@PathVariable String executorPublicId,

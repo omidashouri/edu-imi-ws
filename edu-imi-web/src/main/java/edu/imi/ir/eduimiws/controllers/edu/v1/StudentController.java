@@ -23,6 +23,7 @@ import edu.imi.ir.eduimiws.services.edu.StudentApiService;
 import edu.imi.ir.eduimiws.services.edu.StudentService;
 import edu.imi.ir.eduimiws.utilities.DateConvertor;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
+import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -34,7 +35,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -109,7 +109,7 @@ public class StudentController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<StudentResponse>> getStudents(@Parameter(hidden = true)
                                                                    @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -130,7 +130,7 @@ public class StudentController {
     }
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<StudentResponse>> getAllStudents(

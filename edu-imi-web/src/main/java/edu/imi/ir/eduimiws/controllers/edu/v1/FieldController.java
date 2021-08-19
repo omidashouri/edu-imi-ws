@@ -19,6 +19,7 @@ import edu.imi.ir.eduimiws.models.response.edu.FieldResponse;
 import edu.imi.ir.eduimiws.services.edu.FieldApiService;
 import edu.imi.ir.eduimiws.services.edu.FieldService;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
+import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -30,7 +31,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,13 +41,11 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -106,7 +104,7 @@ public class FieldController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<FieldResponse>> getFields(@Parameter(hidden = true)
                                                                      @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -127,7 +125,7 @@ public class FieldController {
     }
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<FieldResponse>> getAllFields(
@@ -236,7 +234,7 @@ public class FieldController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/descriptive",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<FieldResponse>> getFieldsWithStudentPeriodName(@Parameter(hidden = true)
                                                                                           @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -257,7 +255,7 @@ public class FieldController {
     }
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel/descriptive",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<FieldResponse>> getAllFieldsWithStudentPeriodName(

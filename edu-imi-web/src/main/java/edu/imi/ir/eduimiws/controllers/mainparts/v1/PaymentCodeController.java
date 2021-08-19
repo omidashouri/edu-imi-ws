@@ -12,12 +12,12 @@ import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponse;
-import edu.imi.ir.eduimiws.models.user.MyPrincipleUser;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
 import edu.imi.ir.eduimiws.services.mainparts.PaymentCodeService;
 import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeService;
 import edu.imi.ir.eduimiws.services.pmis.ProjectService;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
+import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -30,7 +30,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -40,12 +39,8 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
 
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
@@ -98,7 +93,7 @@ public class PaymentCodeController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PaymentCodeResponse>> getPaymentCodes(@Parameter(hidden = true)
                                                                            @SortDefault(sort = "paymentCode", direction = Sort.Direction.DESC)

@@ -9,6 +9,7 @@ import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.pmis.ExpenseCodeResponse;
 import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeService;
+import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -20,7 +21,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -83,7 +83,7 @@ public class ExpenseCodeController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<ExpenseCodeResponse>> getExpenseCodes(@Parameter(hidden = true)
                                                                    @SortDefault(sort = "expenseTitle", direction = Sort.Direction.DESC)

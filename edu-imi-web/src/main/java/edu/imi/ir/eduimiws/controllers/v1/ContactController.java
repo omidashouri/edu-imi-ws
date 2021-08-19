@@ -21,6 +21,7 @@ import edu.imi.ir.eduimiws.specifications.crm.ContactSpecification;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecificationBuilder;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.QueryDslAsQueryParam;
+import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -32,7 +33,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,13 +41,11 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -102,7 +100,7 @@ public class ContactController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<ContactResponse>> getContacts(@Parameter(hidden = true)
                                                                    @SortDefault(sort = "createDate",
@@ -125,7 +123,7 @@ public class ContactController {
 
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<ContactResponse>> getAllContacts(
@@ -294,7 +292,7 @@ public class ContactController {
             }
     )
     @QueryDslAsQueryParam
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/search/{criteria}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getContactBySearch(@PathVariable String criteria,

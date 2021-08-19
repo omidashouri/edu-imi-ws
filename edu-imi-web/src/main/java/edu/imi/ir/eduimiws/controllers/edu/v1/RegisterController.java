@@ -24,6 +24,7 @@ import edu.imi.ir.eduimiws.services.crm.AccountService;
 import edu.imi.ir.eduimiws.services.edu.*;
 import edu.imi.ir.eduimiws.utilities.DateConvertor;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
+import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -36,7 +37,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.time.StopWatch;
-import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -265,7 +265,7 @@ public class RegisterController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<RegisterResponse>> getRegisters(@Parameter(hidden = true)
                                                                      @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -286,7 +286,7 @@ public class RegisterController {
     }
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<RegisterResponse>> getAllRegisters(
@@ -395,7 +395,7 @@ public class RegisterController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/descriptive", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<RegisterResponse>> getRegistersWithStudentPeriodName(@Parameter(hidden = true)
                                                                                           @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -416,7 +416,7 @@ public class RegisterController {
     }
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel/descriptive",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<RegisterResponse>> getAllRegistersWithStudentPeriodName(

@@ -3,8 +3,8 @@ package edu.imi.ir.eduimiws;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +31,7 @@ class EduImiWsApplicationTests {
     private ObjectMapper objectMapper;
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         String detailsString = objectMapper
@@ -40,7 +40,7 @@ class EduImiWsApplicationTests {
         mockServer.verify();
     }
 
-    @Ignore
+    @Disabled
     @Test
     void contextLoads() {
     }

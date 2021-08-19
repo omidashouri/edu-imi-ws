@@ -4,16 +4,15 @@ import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.UserRolePrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
-import edu.imi.ir.eduimiws.exceptions.controllers.*;
+import edu.imi.ir.eduimiws.exceptions.controllers.BadRequestException;
+import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiUserContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.UserRegisterUserFastDtoMapper;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonFastDto;
 import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
-import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.request.UserRegister;
@@ -22,13 +21,13 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
 import edu.imi.ir.eduimiws.models.response.crm.UserRolePrivilegeResponse;
-import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponse;
 import edu.imi.ir.eduimiws.proxies.crm.CrmServiceProxy;
 import edu.imi.ir.eduimiws.security.ActiveUserService2;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.crm.PersonApiService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
+import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -40,12 +39,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
@@ -53,13 +50,11 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -207,7 +202,7 @@ public class UserController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<UserResponse>> getUsers(@Parameter(hidden = true)
                                                              @SortDefault(sort = "personalCode",
@@ -263,7 +258,7 @@ public class UserController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @DisableMethod
     @GetMapping(path = "/specification",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -294,7 +289,7 @@ public class UserController {
 
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<UserResponse>> getAllUsers(
@@ -354,7 +349,7 @@ public class UserController {
                             )
                     )
             })
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/username/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<UserResponse>> getUsersByUserName(@PathVariable String username,
                                                                        @Parameter(hidden = true)
@@ -377,7 +372,7 @@ public class UserController {
     }
 
     @Operation(hidden = true)
-    @PageableAsQueryParam
+    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/username/{username}/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<UserResponse>> getAllUsersByUserName(@PathVariable String username,
