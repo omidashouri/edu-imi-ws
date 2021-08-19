@@ -7579,14 +7579,100 @@ END;
 
 
 
+----------------------Spring Update
 
+edu-imi-data:
 
+<org.apache.cxf.version>3.4.4</org.apache.cxf.version>
 
+<dependency>
+    <groupId>org.springframework.ws</groupId>
+    <artifactId>spring-ws-security</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>com.fasterxml.woodstox</groupId>
+            <artifactId>woodstox-core</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>org.jvnet.staxex</groupId>
+            <artifactId>stax-ex</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
 
+------
 
+edu-imi-web:
 
+<dependency>
+    <artifactId>edu-imi-data</artifactId>
+    <groupId>education.imi.ir</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+    <exclusions>
+        <exclusion>
+            <groupId>com.fasterxml.woodstox</groupId>
+            <artifactId>woodstox-core</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>stax2-api</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </exclusion>
+<!--                <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </exclusion>-->
+    </exclusions>
+</dependency>
 
+<dependency>
+    <groupId>io.rest-assured</groupId>
+    <artifactId>rest-assured</artifactId>
+    <scope>test</scope>
+    <exclusions>
+        <exclusion>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
 
+------
+
+edu-imi-ws:
+
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.5.3</version>
+    <relativePath/>
+</parent>
+
+<dependency>
+    <groupId>com.sun.xml.bind</groupId>
+    <artifactId>jaxb-core</artifactId>
+    <version>3.0.2</version>
+</dependency>
+<dependency>
+    <groupId>com.sun.xml.bind</groupId>
+    <artifactId>jaxb-impl</artifactId>
+    <version>3.0.2</version>
+</dependency>
 
 
 
