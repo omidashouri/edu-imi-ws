@@ -170,6 +170,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                             @Param("periodCanRegisterOnline") String periodCanRegisterOnline,
                                                             @Param("periodType") String periodType, //termicType
                                                             @Param("periodFee") Long periodFee,
+                                                            @Param("periodDiscount") Long periodDiscount,
                                                             @Param("periodSchedule") String periodSchedule,
                                                             @Param("periodActivityStatus") Long periodActivityStatus,
                                                             @Param("periodDeleteStatus") Long periodDeleteStatus,

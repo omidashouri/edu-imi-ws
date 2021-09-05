@@ -50,6 +50,8 @@ public class PeriodProjectionCustomTwoDto implements Serializable {
 
     private Long fee;
 
+    private Long onlineRegCostPercent;
+
     private Long feeEquivalentFixed;
 
     private Long feeEquivalentVariable;

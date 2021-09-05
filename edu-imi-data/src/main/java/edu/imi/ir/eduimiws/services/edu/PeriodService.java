@@ -61,6 +61,7 @@ public interface PeriodService {
                                                              String periodCanRegisterOnline,
                                                              String periodType,
                                                              Long periodFee,
+                                                             Long periodDiscount,
                                                              String periodSchedule,
                                                              Long periodActivityStatus,
                                                              Long periodDeleteStatus,

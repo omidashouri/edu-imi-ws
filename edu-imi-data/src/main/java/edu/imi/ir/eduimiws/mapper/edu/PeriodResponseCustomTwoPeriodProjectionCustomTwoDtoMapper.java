@@ -7,7 +7,7 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        imports = {String.class,Long.class},
+        imports = {String.class, Long.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper {
@@ -27,6 +27,7 @@ public interface PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper {
                     expression = "java(" +
                             "(source.getType()!=null && source.getType().equalsIgnoreCase(\"termic\")) ? Long.sum(" +
                             "source.getFeeEquivalentFixed(),source.getFeeEquivalentVariable()) : source.getFee())"),
+            @Mapping(source = "onlineRegCostPercent", target = "periodDiscount"),
             @Mapping(source = "fieldCode", target = "fieldCode"),
             @Mapping(source = "fieldFName", target = "fieldName"),
             @Mapping(source = "fieldPublicId", target = "fieldPublicId"),
@@ -34,7 +35,7 @@ public interface PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper {
             @Mapping(source = "levelPublicId", target = "levelPublicId"),
             @Mapping(source = "levelDescription", target = "levelTitle"),
             @Mapping(source = "maxCapacity", target = "periodMaxCapacity"),
-            @Mapping(source = "name", target = "periodName"),
+            @Mapping(target = "periodName", expression = "java((source.getName()!=null && source.getName().contains(\" نام نوبت \"))?source.getName().replace(\" نام نوبت \",\" نوبت \"):(source.getName()!=null && source.getName().contains(\" نام  نوبت \"))?source.getName().replace(\" نام  نوبت \",\" نوبت \"):source.getName())"),
             @Mapping(source = "offerNumber", target = "offerNumber"),
             @Mapping(source = "regEndDate", target = "registerEndDate"),
             @Mapping(source = "regStartDate", target = "registerStartDate"),
@@ -49,4 +50,12 @@ public interface PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper {
 
     @IterableMapping(qualifiedByName = "PeriodProjectionCustomTwoToPeriodProjectionCustomTwoDto")
     List<PeriodResponseCustomTwo> periodEntitiesToPeriodResponseCustomTwoDtos(List<PeriodProjectionCustomTwoDto> sources);
+
+    @AfterMapping
+    default void handlePeriodFeeDiscount(@MappingTarget PeriodResponseCustomTwo target, PeriodProjectionCustomTwoDto source) {
+        if (source.getOnlineRegCostPercent() != null && source.getOnlineRegCostPercent() > 0 && source.getOnlineRegCostPercent() <= 100) {
+            if (target.getPeriodFee() != null && target.getPeriodFee() > 0)
+                target.setPeriodDiscountFee(target.getPeriodFee().doubleValue() * (1-(source.getOnlineRegCostPercent().doubleValue()/100)));
+        }
+    }
 }

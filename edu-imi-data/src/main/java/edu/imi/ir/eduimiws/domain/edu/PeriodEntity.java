@@ -318,8 +318,7 @@ import javax.persistence.*;
                         "    prd.fee as fee, " +
                         "    prd.schedule as schedule, " +
                         "    prd.activity_status as activityStatus, " +
-                        "    prd.delete_status as deleteStatus " +
-                        "    prd.delete_status as periodDeleteStatus, " +
+                        "    prd.delete_status as deleteStatus, " +
                         "    exc.first_name as executorFirstName, " +
                         "    exc.last_name as executorLastName " +
                         " FROM " +
@@ -399,6 +398,7 @@ import javax.persistence.*;
                         " prd.canRegisterOnline as canRegisterOnline, " +
                         " prd.type as type, " +
                         " prd.fee as fee, " +
+                        " prd.onlineRegCostPercent as onlineRegCostPercent, " +
                         " coalesce(prd.feeEquivalentFixed,0) as feeEquivalentFixed, " +
                         " coalesce(prd.feeEquivalentVariable,0) as feeEquivalentVariable, " +
                         " prd.schedule as schedule, " +
@@ -433,6 +433,7 @@ import javax.persistence.*;
                         " ( :periodCanRegisterOnline is null or prd.canRegisterOnline = :periodCanRegisterOnline ) AND " +
                         " ( :periodType is null or prd.type = :periodType ) AND " +
                         " ( :periodFee is null or prd.fee = :periodFee ) AND " +
+                        " ( :periodDiscount is null or prd.onlineRegCostPercent = :periodDiscount ) AND " +
                         " ( :periodSchedule is null or prd.schedule like concat('%',:periodSchedule,'%') ) AND " +
                         " ( :periodActivityStatus is null or prd.activityStatus = :periodActivityStatus ) AND " +
                         " ( :periodDeleteStatus is null or prd.deleteStatus = :periodDeleteStatus ) AND " +

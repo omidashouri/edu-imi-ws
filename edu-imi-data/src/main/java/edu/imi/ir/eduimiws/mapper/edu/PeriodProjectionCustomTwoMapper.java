@@ -26,6 +26,7 @@ public interface PeriodProjectionCustomTwoMapper {
                     expression = "java((new StringBuilder()).append(source.getExecutorFirstName()).append(' ').append(" +
                             "source.getExecutorLastName()).toString())"),
             @Mapping(source = "fee", target = "fee"),
+            @Mapping(source = "onlineRegCostPercent", target = "onlineRegCostPercent"),
             @Mapping(source = "feeEquivalentFixed", target = "feeEquivalentFixed"),
             @Mapping(source = "feeEquivalentVariable", target = "feeEquivalentVariable"),
             @Mapping(source = "fieldCode", target = "fieldCode"),

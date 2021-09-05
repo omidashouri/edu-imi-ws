@@ -72,6 +72,9 @@ public interface PeriodProjectionCustomTwo {
     @Value("#{target.fee}")
     Long getFee();
 
+    @Value("#{target.onlineRegCostPercent}")
+    Long getOnlineRegCostPercent();
+
     @Value("#{target.feeEquivalentFixed}")
     Long getFeeEquivalentFixed();
 

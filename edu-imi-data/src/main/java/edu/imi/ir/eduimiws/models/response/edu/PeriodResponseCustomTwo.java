@@ -81,6 +81,12 @@ public class PeriodResponseCustomTwo extends RepresentationModel<PeriodResponseC
     @Schema(title = "Period Fee", type = "number")
     private Long periodFee;
 
+    @Schema(title = "Period Discount", type = "number")
+    private Long periodDiscount;
+
+    @Schema(title = "Period Discount Fee", type = "number")
+    private Double periodDiscountFee;
+
     @Schema(title = "Period Schedule",maxLength = 250)
     private String periodSchedule;
 
