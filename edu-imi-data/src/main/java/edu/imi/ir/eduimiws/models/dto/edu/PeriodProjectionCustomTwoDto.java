@@ -66,6 +66,8 @@ public class PeriodProjectionCustomTwoDto implements Serializable {
 
     private Long periodId;
 
+    private String periodPublicId;
+
     private String executorFirstName;
 
     private String executorLastName;

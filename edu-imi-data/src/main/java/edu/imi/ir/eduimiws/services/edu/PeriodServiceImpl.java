@@ -142,8 +142,8 @@ public class PeriodServiceImpl implements PeriodService {
     }
 
     @Override
-    public Page<PeriodProjectionCustomTwo> queryAllPeriodsCustomTwo(String fieldPublicId, String eduCategoryPublicId,
-                                                                    String levelPublicId,
+    public Page<PeriodProjectionCustomTwo> queryAllPeriodsCustomTwo(String periodPublicId, String fieldPublicId,
+                                                                    String eduCategoryPublicId, String levelPublicId,
                                                                     String fieldCode, Long periodOfferNumber,
                                                                     String periodName, String levelDescription, String fieldName,
                                                                     String eduCategoryName, String periodStartDate,
@@ -157,8 +157,9 @@ public class PeriodServiceImpl implements PeriodService {
                                                                     String periodExecutorFirstName, String periodExecutorLastName,
                                                                     String periodExecutorFullName, Pageable pageable) {
 
-        Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages = periodRepository.queryAllPeriodCustomTwo(fieldPublicId, eduCategoryPublicId,
-                                                                                        levelPublicId,
+        Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages = periodRepository.queryAllPeriodCustomTwo(periodPublicId,
+                                                                                        fieldPublicId,
+                                                                                        eduCategoryPublicId, levelPublicId,
                                                                                         fieldCode, periodOfferNumber,
                                                                                         periodName, levelDescription,fieldName,
                                                                                         eduCategoryName, periodStartDate,

@@ -44,6 +44,7 @@ public interface PeriodProjectionCustomTwoMapper {
             @Mapping(source = "schedule", target = "schedule"),
             @Mapping(source = "totalUnit", target = "totalUnit"),
             @Mapping(source = "periodId", target = "periodId"),
+            @Mapping(source = "periodPublicId", target = "periodPublicId"),
             @Mapping(source = "type", target = "type")
 
     })

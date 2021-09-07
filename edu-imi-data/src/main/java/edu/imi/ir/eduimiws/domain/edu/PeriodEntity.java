@@ -380,7 +380,8 @@ import javax.persistence.*;
 
 @NamedQueries({
         @NamedQuery(name = "PeriodEntity.queryAllPeriodCustomTwo",
-                query = " select flda.fieldPublicId as fieldPublicId, " +
+                query = " select prda.periodPublicId as periodPublicId, " +
+                        " flda.fieldPublicId as fieldPublicId, " +
                         " edca.eduCategoryPublicId as eduCategoryPublicId, " +
                         " lvla.levelPublicId as levelPublicId, " +
                         " fld.code as fieldCode, " +
@@ -415,6 +416,7 @@ import javax.persistence.*;
                         " left join fld.eduCategory edc left join edc.eduCategoryApi edca " +
                         " left join fld.level lvl left join lvl.levelApi lvla " +
                         " where " +
+                        " ( :periodPublicId is null or prda.periodPublicId = :periodPublicId ) AND " +
                         " ( :fieldPublicId is null or flda.fieldPublicId = :fieldPublicId ) AND " +
                         " ( :eduCategoryPublicId is null or edca.eduCategoryPublicId = :eduCategoryPublicId ) AND " +
                         " ( :levelPublicId is null or lvla.levelPublicId = :levelPublicId ) AND " +

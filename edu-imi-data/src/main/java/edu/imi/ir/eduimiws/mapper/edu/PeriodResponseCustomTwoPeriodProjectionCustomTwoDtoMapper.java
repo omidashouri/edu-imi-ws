@@ -35,6 +35,7 @@ public interface PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper {
             @Mapping(source = "levelPublicId", target = "levelPublicId"),
             @Mapping(source = "levelDescription", target = "levelTitle"),
             @Mapping(source = "maxCapacity", target = "periodMaxCapacity"),
+            @Mapping(source = "periodPublicId", target = "periodPublicId"),
             @Mapping(target = "periodName", expression = "java((source.getName()!=null && source.getName().contains(\" نام نوبت \"))?source.getName().replace(\" نام نوبت \",\" نوبت \"):(source.getName()!=null && source.getName().contains(\" نام  نوبت \"))?source.getName().replace(\" نام  نوبت \",\" نوبت \"):source.getName())"),
             @Mapping(source = "offerNumber", target = "offerNumber"),
             @Mapping(source = "regEndDate", target = "registerEndDate"),

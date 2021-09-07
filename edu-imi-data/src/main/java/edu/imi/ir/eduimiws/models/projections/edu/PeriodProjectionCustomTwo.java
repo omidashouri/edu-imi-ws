@@ -15,6 +15,8 @@ public interface PeriodProjectionCustomTwo {
 //               @NamedNativeQuery SHOULD BE SAME with name field in @ConstructorResult or with name field in @ConstructorResult.
 
 
+    String getPeriodPublicId();
+
 //    @Value("#{target.field?.fieldApi?.fieldPublicId}")
     String getFieldPublicId();
 

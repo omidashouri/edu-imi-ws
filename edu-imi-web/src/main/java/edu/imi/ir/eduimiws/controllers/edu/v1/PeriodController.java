@@ -397,6 +397,7 @@ public class PeriodController {
     @GetMapping(path = "/periodResponseCustomTwo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponseCustomTwo>> queryPeriods(
+                                                                @RequestParam("periodPublicId") Optional<String> periodPublicId,
                                                                 @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
                                                                 @RequestParam("eduCategoryPublicId") Optional<String> eduCategoryPublicId,
                                                                 @RequestParam("levelPublicId") Optional<String> levelPublicId,
@@ -431,7 +432,8 @@ public class PeriodController {
                                                                          Pageable pageable) {
 
         Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages =
-                periodService.queryAllPeriodsCustomTwo(fieldPublicId.orElse(null),
+                periodService.queryAllPeriodsCustomTwo(periodPublicId.orElse(null),
+                        fieldPublicId.orElse(null),
                         eduCategoryPublicId.orElse(null), levelPublicId.orElse(null),
                         fieldCode.orElse(null), periodOfferNumber.orElse(null),
                         periodName.orElse(null), levelName.orElse(null),

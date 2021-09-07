@@ -152,7 +152,8 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
 
     @Query(name = "PeriodEntity.queryAllPeriodCustomTwo")
-    Page<PeriodProjectionCustomTwo> queryAllPeriodCustomTwo(@Param("fieldPublicId") String fieldPublicId,
+    Page<PeriodProjectionCustomTwo> queryAllPeriodCustomTwo(@Param("periodPublicId") String periodPublicId,
+                                                            @Param("fieldPublicId") String fieldPublicId,
                                                             @Param("eduCategoryPublicId") String eduCategoryPublicId,
                                                             @Param("levelPublicId") String levelPublicId,
                                                             @Param("fieldCode") String fieldCode, //marja
