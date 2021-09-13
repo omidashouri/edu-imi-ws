@@ -24,4 +24,17 @@ class MelliTripleDesTest {
         System.out.println("Decrypted bank Sample: >>   "+melliTripleDes.encryptBankSample("salam","XZewVTUH9U+hQgMCjMu9mKmF9srWLN/y"));
 //        pKp4/m+AFSA=
     }
+
+    @Test
+    void test2(){
+        String text1 = "مديريت فرآيندهاي كسب وكار نوبت يك";
+        System.out.println(text1);
+
+        String text2 = text1
+                .replaceAll("\u064A","\u06CC")
+                .replaceAll("\u0643","\u06A9");
+
+        System.out.println(text2);
+
+    }
 }
