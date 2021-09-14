@@ -16,7 +16,7 @@ public class PublicIdUtil {
 
     private final Random RANDOM = new SecureRandom();
     private final String ALPHABET = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-//    private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+    //    private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
     private static final char[] hexArray = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
     private final int ITERATIONS = 10000;
     private final int KEY_LENGHT = 256;
@@ -26,16 +26,16 @@ public class PublicIdUtil {
     }
 
     @MappingUtil.GenerateEntityPublicId
-    public String generateEntityPublicId(String fakeInput){
+    public String generateEntityPublicId(String fakeInput) {
         return this.generateUniquePublicId();
     }
 
 
-    public String generateUniquePublicId()  {
+    public String generateUniquePublicId() {
 
         String uniquePublicUserId = null;
         try {
-            uniquePublicUserId =  generateUniqueKeysWithUUIDAndMessageDigest();
+            uniquePublicUserId = generateUniqueKeysWithUUIDAndMessageDigest();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -50,7 +50,7 @@ public class PublicIdUtil {
         return generateRandomString(lenght);
     }
 
-//    generateType5UUID(NAMESPACE_URL, "google.com")
+    //    generateType5UUID(NAMESPACE_URL, "google.com")
     public static UUID generateType5UUID(String namespace, String name) throws UnsupportedEncodingException {
         String source = namespace + name;
         byte[] bytes = source.getBytes("UTF-8");

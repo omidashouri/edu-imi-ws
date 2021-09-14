@@ -22,6 +22,7 @@ import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseCustomTwo;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.edu.PeriodApiService;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
+import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -75,6 +76,7 @@ public class PeriodController {
     private final PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler periodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler;
     private final PagedResourcesAssembler<PeriodProjectionCustomTwoDto> periodProjectionCustomTwoDtoDtoPagedResourcesAssembler;
     private final PeriodProjectionCustomTwoMapper periodProjectionCustomTwoMapper;
+    private final ConvertorUtil convertorUtil;
 
     @Operation(
             summary = "find All periods",
@@ -344,18 +346,18 @@ public class PeriodController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getPeriodByPeriodPublicId(@PathVariable String periodPublicId) {
 
-            PeriodEntity period = periodService.findPeriodEntityByPeriodApiPublicId(periodPublicId);
-            if (period == null) {
-                throw new NotFoundException("requested period not found");
-            }
+        PeriodEntity period = periodService.findPeriodEntityByPeriodApiPublicId(periodPublicId);
+        if (period == null) {
+            throw new NotFoundException("requested period not found");
+        }
 
-            PeriodFastDto periodFastDto = periodFastDtoMapper
-                    .toPeriodFastDto(period, new CycleAvoidingMappingContext());
+        PeriodFastDto periodFastDto = periodFastDtoMapper
+                .toPeriodFastDto(period, new CycleAvoidingMappingContext());
 
-            PeriodResponse periodResponse =
-                    periodResponsePeriodFastDtoAssembler.toModel(periodFastDto);
+        PeriodResponse periodResponse =
+                periodResponsePeriodFastDtoAssembler.toModel(periodFastDto);
 
-            return ResponseEntity.ok(periodResponse);
+        return ResponseEntity.ok(periodResponse);
 
     }
 
@@ -397,39 +399,39 @@ public class PeriodController {
     @GetMapping(path = "/periodResponseCustomTwo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PeriodResponseCustomTwo>> queryPeriods(
-                                                                @RequestParam("periodPublicId") Optional<String> periodPublicId,
-                                                                @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
-                                                                @RequestParam("eduCategoryPublicId") Optional<String> eduCategoryPublicId,
-                                                                @RequestParam("levelPublicId") Optional<String> levelPublicId,
-                                                                @RequestParam("fieldCode") Optional<String> fieldCode,
-                                                                @RequestParam("periodOfferNumber") Optional<Long> periodOfferNumber,
-                                                                @RequestParam("periodName") Optional<String> periodName,
-                                                                @RequestParam("levelName") Optional<String> levelName,
-                                                                @RequestParam("fieldName") Optional<String> fieldName,
-                                                                @RequestParam("eduCategoryName") Optional<String> eduCategoryName,
-                                                                @RequestParam("periodStartDate") Optional<String> periodStartDate,
-                                                                @RequestParam("periodEndDate") Optional<String> periodEndDate,
-                                                                @RequestParam("registerStartDate") Optional<String> registerStartDate,
-                                                                @RequestParam("registerEndDate") Optional<String> registerEndDate,
-                                                                @RequestParam("periodMaxCapacity") Optional<Long> periodMaxCapacity,
-                                                                @RequestParam("periodHoldingType") Optional<String> periodHoldingType,
-                                                                @RequestParam("periodCanRegisterOnline") Optional<String> periodCanRegisterOnline,
-                                                                @RequestParam("periodType") Optional<String> periodType,
-                                                                @RequestParam("periodFee") Optional<Long> periodFee,
-                                                                @RequestParam("periodDiscount") Optional<Long> periodDiscount,
-                                                                @RequestParam("periodSchedule") Optional<String> periodSchedule,
-                                                                @RequestParam(value = "periodActivityStatus", defaultValue = "1") Optional<Long> periodActivityStatus,
-                                                                @RequestParam(value = "periodDeleteStatus", defaultValue = "1") Optional<Long> periodDeleteStatus,
-                                                                @RequestParam("periodTotalUnit") Optional<Long> periodTotalUnit,
-                                                                @RequestParam("periodExecutorFirstName") Optional<String> periodExecutorFirstName,
-                                                                @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
-                                                                @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
-                                                                @RequestParam("periodId") Optional<Long> periodId,
-                                                                @Parameter(hidden = true)
-                                                                 @SortDefault(sort = "regStartDate",
-                                                                         direction = Sort.Direction.DESC)
-                                                                 @PageableDefault(page = 1, size = 50, value = 10)
-                                                                         Pageable pageable) {
+            @RequestParam("periodPublicId") Optional<String> periodPublicId,
+            @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
+            @RequestParam("eduCategoryPublicId") Optional<String> eduCategoryPublicId,
+            @RequestParam("levelPublicId") Optional<String> levelPublicId,
+            @RequestParam("fieldCode") Optional<String> fieldCode,
+            @RequestParam("periodOfferNumber") Optional<Long> periodOfferNumber,
+            @RequestParam("periodName") Optional<String> periodName,
+            @RequestParam("levelName") Optional<String> levelName,
+            @RequestParam("fieldName") Optional<String> fieldName,
+            @RequestParam("eduCategoryName") Optional<String> eduCategoryName,
+            @RequestParam("periodStartDate") Optional<String> periodStartDate,
+            @RequestParam("periodEndDate") Optional<String> periodEndDate,
+            @RequestParam("registerStartDate") Optional<String> registerStartDate,
+            @RequestParam("registerEndDate") Optional<String> registerEndDate,
+            @RequestParam("periodMaxCapacity") Optional<Long> periodMaxCapacity,
+            @RequestParam("periodHoldingType") Optional<String> periodHoldingType,
+            @RequestParam("periodCanRegisterOnline") Optional<String> periodCanRegisterOnline,
+            @RequestParam("periodType") Optional<String> periodType,
+            @RequestParam("periodFee") Optional<Long> periodFee,
+            @RequestParam("periodDiscount") Optional<Long> periodDiscount,
+            @RequestParam("periodSchedule") Optional<String> periodSchedule,
+            @RequestParam(value = "periodActivityStatus", defaultValue = "1") Optional<Long> periodActivityStatus,
+            @RequestParam(value = "periodDeleteStatus", defaultValue = "1") Optional<Long> periodDeleteStatus,
+            @RequestParam("periodTotalUnit") Optional<Long> periodTotalUnit,
+            @RequestParam("periodExecutorFirstName") Optional<String> periodExecutorFirstName,
+            @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
+            @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
+            @RequestParam("periodId") Optional<Long> periodId,
+            @Parameter(hidden = true)
+            @SortDefault(sort = "regStartDate",
+                    direction = Sort.Direction.DESC)
+            @PageableDefault(page = 1, size = 50, value = 10)
+                    Pageable pageable) {
 
         Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages =
                 periodService.queryAllPeriodsCustomTwo(periodPublicId.orElse(null),
@@ -454,6 +456,9 @@ public class PeriodController {
 
         PagedModel<PeriodResponseCustomTwo> periodResponseCustomTwoPagedModel = periodProjectionCustomTwoDtoDtoPagedResourcesAssembler
                 .toModel(periodProjectionCustomTwoDtoPages, periodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler);
+
+        periodResponseCustomTwoPagedModel
+                .forEach(periodResponseCustomTwo -> convertorUtil.makeCharacterSetPerson(periodResponseCustomTwo));
 
         return ResponseEntity.ok(periodResponseCustomTwoPagedModel);
     }
