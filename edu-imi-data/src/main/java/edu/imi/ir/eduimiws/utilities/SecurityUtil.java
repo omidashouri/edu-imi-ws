@@ -24,4 +24,8 @@ public class SecurityUtil {
     protected PersonEntity getPersonEntityFromSecurityContext(){
         return  ((MyPrincipleUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
     }
+
+    public Long getPersonIdFromSecurityContext(){
+        return  this.getPersonEntityFromSecurityContext().getId();
+    }
 }

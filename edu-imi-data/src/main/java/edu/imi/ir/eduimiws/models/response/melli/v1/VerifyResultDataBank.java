@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.request.melli.v1;
+package edu.imi.ir.eduimiws.models.response.melli.v1;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,19 +10,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.server.core.Relation;
 
+import java.io.Serializable;
+
 @Schema(name = "melli",description = "melli payment request")
-@JsonRootName(value = "verifyResultData")
-@Relation(collectionRelation = "verifyResultData")
+@JsonRootName(value = "verifyResultDataBank")
+@Relation(collectionRelation = "verifyResultDataBank")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VerifyResultData {
+public class VerifyResultDataBank implements Serializable {
 
     @Schema(title = "Succeed",
             description = "Succeed")
     @JsonProperty("Succeed")
-    public Boolean succeed;
+    public Long succeed;
 
     @Schema(title = "Response Code",
             description = "Response Code")

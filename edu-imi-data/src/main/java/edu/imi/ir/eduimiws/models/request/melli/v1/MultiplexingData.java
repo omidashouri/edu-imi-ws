@@ -12,6 +12,8 @@ import org.springframework.hateoas.server.core.Relation;
 import java.io.Serializable;
 import java.util.List;
 
+//  Attention: change MultiplexingDataItem inner class to a separate class
+
 @Schema(name = "melli",description = "melli payment request")
 @JsonRootName(value = "multiplexingData")
 @Relation(collectionRelation = "multiplexingData")
@@ -25,7 +27,6 @@ public class MultiplexingData implements Serializable {
             description = "Multiplexing Type")
     @JsonProperty("MultiplexingType")
     public MultiplexingType type;
-
 
     @Schema(title = "Multiplexing Rows",
             description = "Multiplexing Rows")
@@ -80,25 +81,4 @@ public class MultiplexingData implements Serializable {
         Amount
     }
 
-
-    @Schema(name = "melli",description = "melli payment request")
-    @JsonRootName(value = "multiplexingDataItem")
-    @Relation(collectionRelation = "multiplexingDataItem")
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class MultiplexingDataItem
-    {
-
-        @Schema(title = "Iban Number",
-                description = "Iban Number")
-        @JsonProperty("IbanNumber")
-        public Integer ibanNumber;
-
-        @Schema(title = "Value",
-                description = "Value")
-        @JsonProperty("Value")
-        public Long value;
-    }
 }

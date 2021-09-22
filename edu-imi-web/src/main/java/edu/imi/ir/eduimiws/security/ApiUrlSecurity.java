@@ -68,6 +68,9 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/reqres/**")
                 .permitAll()
 
+                .antMatchers("/api/v1/callback/sadad/**")
+                .permitAll()
+
                 .antMatchers(HttpMethod.GET, apiUrlSecurityCredential.getVerificationEmailUrl())
                 .permitAll()
 
@@ -172,7 +175,9 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+//        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+
+        corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
 
         corsConfiguration.setAllowedMethods(Arrays.asList("*"));
 

@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.request.melli.v1;
+package edu.imi.ir.eduimiws.models.response.melli.v1;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -38,6 +38,6 @@ public class PurchaseResult implements Serializable {
 
     @Schema(title = "Verify Result Data",
             description = "Verify Result Data")
-    @JsonProperty("VerifyResultData")
-    public VerifyResultData verifyResultData;
+    @JsonProperty("VerifyResultDataBank")
+    public VerifyResultDataBank verifyResultDataBank;
 }

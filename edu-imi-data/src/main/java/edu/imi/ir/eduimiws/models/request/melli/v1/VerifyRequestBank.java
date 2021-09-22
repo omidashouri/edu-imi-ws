@@ -10,29 +10,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.io.Serializable;
-
 @Schema(name = "melli",description = "melli payment request")
-@JsonRootName(value = "payResultData")
-@Relation(collectionRelation = "payResultData")
+@JsonRootName(value = "verify")
+@Relation(collectionRelation = "verify")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PayResultData implements Serializable {
-
-    @Schema(title = "Merchant Id",
-            description = "ResponseCode")
-    @JsonProperty("ResCode")
-    public String resCode;
+public class VerifyRequestBank {
 
     @Schema(title = "Token",
             description = "Token")
     @JsonProperty("Token")
     public String token;
 
-    @Schema(title = "Description",
-            description = "Description")
-    @JsonProperty("Description")
-    public String description;
+    @Schema(title = "Sign Data",
+            description = "Sign Data")
+    @JsonProperty("SignData")
+    public String signData;
+
 }

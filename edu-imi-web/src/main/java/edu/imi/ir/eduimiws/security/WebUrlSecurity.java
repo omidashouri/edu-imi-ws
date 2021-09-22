@@ -14,6 +14,7 @@ public class WebUrlSecurity extends WebSecurityConfigurerAdapter {
                 .antMatcher("/web/**")
                 .authorizeRequests()
                 .antMatchers("/web/behpardakhts/**").permitAll()
+                .antMatchers("/web/v1/**").permitAll()
                 .antMatchers("**/swagger-ui/**","/swagger-ui/**","/v3/api-docs/**","/v3/api-docs","/v2/api-docs/**","/configuration/**","/swagger*/**","/webjars/**").permitAll()
                 .anyRequest().authenticated();
     }

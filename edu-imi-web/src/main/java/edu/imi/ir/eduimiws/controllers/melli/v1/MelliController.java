@@ -1,50 +1,291 @@
 package edu.imi.ir.eduimiws.controllers.melli.v1;
 
-import edu.imi.ir.eduimiws.models.request.melli.v1.PaymentRequest;
-import edu.imi.ir.eduimiws.models.response.melli.v1.PaymentResponse;
-import edu.imi.ir.eduimiws.services.mainparts.BankMelliService;
+import edu.imi.ir.eduimiws.domain.mainparts.MelliDigitalPaymentDataEntity;
+import edu.imi.ir.eduimiws.domain.mainparts.MelliDigitalPaymentEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.DateParseException;
+import edu.imi.ir.eduimiws.exceptions.controllers.FiledValueNullException;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.mainparts.melli.*;
+import edu.imi.ir.eduimiws.models.dto.mainparts.MelliDigitalPaymentDataDto;
+import edu.imi.ir.eduimiws.models.dto.mainparts.MelliDigitalPaymentDto;
+import edu.imi.ir.eduimiws.models.dto.mainparts.MelliVerifyDto;
+import edu.imi.ir.eduimiws.models.request.melli.v1.PaymentRequestMerchant;
+import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.models.response.melli.v1.PaymentDataResponseMerchant;
+import edu.imi.ir.eduimiws.models.response.melli.v1.PaymentResponseMerchant;
+import edu.imi.ir.eduimiws.models.response.melli.v1.VerifyResultDataMerchant;
+import edu.imi.ir.eduimiws.security.MelliCredential;
+import edu.imi.ir.eduimiws.services.mainparts.MelliDigitalPaymentDataService;
+import edu.imi.ir.eduimiws.services.mainparts.MelliDigitalPaymentService;
+import edu.imi.ir.eduimiws.services.mainparts.MelliVerifyService;
+import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
+import edu.imi.ir.eduimiws.utilities.MelliTripleDesImpl;
+import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
+import edu.imi.ir.eduimiws.utilities.SecurityUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
-@RequestMapping("/api/v1/mellies")
+@RequestMapping("/api/v1/sadadPayments")
 @RequiredArgsConstructor
-@Tag(name = "mellies", description = "The Melli Bank API")
+@Tag(name = "sadadPayments", description = "The Melli Bank API")
 public class MelliController {
 
-    private final BankMelliService bankMelliService;
+    private final MelliDigitalPaymentDataMapper melliDigitalPaymentDataMapper;
+    private final MelliDigitalPaymentDataService melliDigitalPaymentDataService;
+    private final MelliDigitalPaymentService melliDigitalPaymentService;
+    private final VerifyResultDataMerchantMapper verifyResultDataMerchantMapper;
+    private final MelliVerifyService melliVerifyService;
+    private final CycleAvoidingMappingContext cycleAvoidingMappingContext;
+    private final MelliDigitalPaymentMapper melliDigitalPaymentMapper;
+    private final MelliDigitalPaymentDtoMelliVerifyDtoMapper melliDigitalPaymentDtoMelliVerifyDtoMapper;
+    private final PaymentResponseMerchantMapper paymentResponseMerchantMapper;
+    private final PaymentDataResponseMerchantMapper paymentDataResponseMerchantMapper;
+    private final PaymentRequestMerchantMapper paymentRequestMerchantMapper;
+    private final MelliCredential melliCredential;
+    private final MelliTripleDesImpl melliTripleDesImpl;
+    private final ConvertorUtil convertorUtil;
+    private final SecurityUtil securityUtil;
+    private final PublicIdUtil publicIdUtil;
 
-    @GetMapping(path = "/getToken",
+
+    @Operation(
+            summary = "sadad payment get token",
+            description = "sadad payment get token",
+            security = @SecurityRequirement(name = "imi-security-key"),
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(schema = @Schema(implementation = PaymentRequestMerchant.class))
+            )
+    )
+    @Tags(value = {
+            @Tag(name = "sadadPayments")
+
+    })
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = PaymentResponseMerchant.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "paymentCode not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PostMapping(path = "/merchant/getToken",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public void getToken(){
+    public ResponseEntity<?> merchantGetToken(@RequestBody PaymentRequestMerchant paymentRequestMerchant) {
 
-        PaymentRequest paymentRequest = new PaymentRequest();
-        PaymentResponse paymentResponse = new PaymentResponse();
-        paymentRequest.setAmount(1000L);
-        paymentRequest.setReturnUrl("http://ashouri-pc.imi.ir:8080/edu-imi-ws/api/v1/mellies/bankResponse");
 
-        String date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ").format(new Date());
-        //2021-08-17T16:06:24.0000858+0430
-        String tail = date.substring(date.indexOf("+") + 1);
-        //"04:30"
-        tail = tail.substring(0, 2) + ":" + tail.substring(2);
-        //"04:30"
-        date = date.substring(0, date.indexOf("+") + 1) + tail;
-        //2021-08-17T16:06:24.0000858+04:30
-        paymentRequest.setLocalDateTime(date);
+        paymentRequestMerchant = convertorUtil.makeEmptyValueNull(paymentRequestMerchant);
 
-        paymentResponse = bankMelliService.getToken(paymentRequest);
 
-        System.out.println(paymentResponse.getToken());
+        if (paymentRequestMerchant.getMerchantOrderId() == null) {
+            throw new FiledValueNullException("Order Id is null");
+        }
+
+        if (paymentRequestMerchant.getAmount() == null) {
+            throw new FiledValueNullException("Amount is null");
+        }
+
+        if (paymentRequestMerchant.getReturnUrl() == null) {
+            throw new FiledValueNullException("Return Url is null");
+        }
+
+        if (paymentRequestMerchant.getLocalDateTime() == null) {
+            throw new FiledValueNullException("Locale Date Time null");
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'+04:30'");
+        try {
+            simpleDateFormat.parse(paymentRequestMerchant.getLocalDateTime());
+        } catch (ParseException e) {
+            throw new DateParseException("Locale Date Time Format is Not Correct");
+        }
+
+        MelliDigitalPaymentDto melliDigitalPaymentDto = paymentRequestMerchantMapper
+                .paymentRequestMerchantToMelliDigitalPaymentDto(paymentRequestMerchant,
+                        melliCredential);
+
+
+        melliDigitalPaymentMapper
+                .updateMelliDigitalPaymentEntity_BeforeSave(melliDigitalPaymentDto,
+                        melliDigitalPaymentService, publicIdUtil, securityUtil, melliTripleDesImpl);
+
+        //save request
+        MelliDigitalPaymentEntity melliDigitalPayment = melliDigitalPaymentMapper
+                .toMelliDigitalPaymentEntity(melliDigitalPaymentDto, cycleAvoidingMappingContext);
+
+        melliDigitalPayment = melliDigitalPaymentService.saveMelliDigitalPaymentEntity(melliDigitalPayment);
+        melliDigitalPaymentDto.setId(melliDigitalPayment.getId());
+
+        melliDigitalPaymentDto = melliDigitalPaymentService.getToken(melliDigitalPaymentDto);
+
+        melliDigitalPaymentMapper
+                .updateMelliDigitalPaymentByMelliDigitalPaymentDto_PaymentResponse(melliDigitalPayment, melliDigitalPaymentDto);
+
+        melliDigitalPaymentService.saveMelliDigitalPaymentEntity(melliDigitalPayment);
+
+        PaymentResponseMerchant paymentResponseMerchant = paymentResponseMerchantMapper
+                .melliDigitalPaymentDtoToPaymentResponseMerchant(melliDigitalPaymentDto);
+
+//        paymentRequest.setReturnUrl("http://ashouri-pc.imi.ir:8080/edu-imi-ws/api/v1/mellies/bankResponse");
+
+        return ResponseEntity.ok(paymentResponseMerchant);
+    }
+
+
+    @Operation(
+            summary = "Find Payment Request Data by public ID",
+            description = "Search Payment Requests by the public id",
+            tags = "sadadPayments",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = PaymentDataResponseMerchant.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "expenseCode not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/merchant/publicId/{paymentRequestPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getMelliDigitalPaymentRequestDataByDigitalPaymentPublicId(@PathVariable String paymentRequestPublicId) {
+
+        try {
+            MelliDigitalPaymentDataEntity melliDigitalPaymentData = melliDigitalPaymentDataService
+                    .findByMelliDigitalPaymentPublicId(paymentRequestPublicId);
+            if (melliDigitalPaymentData == null) {
+                throw new FiledValueNullException("Melli Digital Payment Data is null");
+            }
+
+            MelliDigitalPaymentDataDto melliDigitalPaymentDataDto = melliDigitalPaymentDataMapper
+                    .toMelliDigitalPaymentDataDto(melliDigitalPaymentData, publicIdUtil, securityUtil);
+
+            //--start refactor with join
+            MelliDigitalPaymentEntity melliDigitalPayment = melliDigitalPaymentService
+                    .findByPublicId(melliDigitalPaymentData.getMelliDigitalPaymentPublicId());
+
+            MelliDigitalPaymentDto melliDigitalPaymentDto = melliDigitalPaymentMapper
+                    .toMelliDigitalPaymentDto(melliDigitalPayment, cycleAvoidingMappingContext);
+
+            melliDigitalPaymentDataMapper
+                    .updateMelliDigitalPaymentDataDtoMelliDigitalPaymentDto_MerchantOrderId(melliDigitalPaymentDataDto, melliDigitalPaymentDto);
+            //end refactor with join
+
+            PaymentDataResponseMerchant paymentDataResponseMerchant = paymentDataResponseMerchantMapper
+                    .toPaymentDataResponseMerchant(melliDigitalPaymentDataDto);
+
+            return ResponseEntity.ok(paymentDataResponseMerchant);
+
+        } catch (Exception ex) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        }
+    }
+
+
+    @Operation(
+            summary = "verify payment by public ID",
+            description = "Verify Payment by the public id",
+            tags = "sadadPayments",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = VerifyResultDataMerchant.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "expenseCode not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/verify/{digitalPaymentRequestPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> verify(@PathVariable(value = "digitalPaymentRequestPublicId") String digitalPaymentRequestPublicId) {
+
+        MelliVerifyDto melliVerifyDto = new MelliVerifyDto();
+
+        MelliDigitalPaymentEntity melliDigitalPayment = melliDigitalPaymentService
+                .findByPublicId(digitalPaymentRequestPublicId);
+        if (melliDigitalPayment == null) {
+            throw new FiledValueNullException("Melli Digital Payment is null");
+        }
+
+        MelliDigitalPaymentDto melliDigitalPaymentDto =
+                melliDigitalPaymentMapper.toMelliDigitalPaymentDto(melliDigitalPayment, cycleAvoidingMappingContext);
+
+        melliVerifyDto = melliDigitalPaymentDtoMelliVerifyDtoMapper
+                .melliDigitalPaymentDtoToMelliVerifyDto(melliDigitalPaymentDto);
+
+        melliVerifyDto = melliVerifyService.verify(melliVerifyDto);
+
+        VerifyResultDataMerchant verifyResultDataMerchant = verifyResultDataMerchantMapper.
+                melliVerifyDtoToVerifyResultDataMerchant(melliVerifyDto);
+
+        return ResponseEntity.ok(verifyResultDataMerchant);
     }
 
 }

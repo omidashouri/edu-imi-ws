@@ -33,4 +33,8 @@ public class MelliCredential {
 
     private String ipgUriVerifyTransaction;
 
+    private String apiRefererUrl;
+
+    private String apiFixedCallBackUrl;
+
 }

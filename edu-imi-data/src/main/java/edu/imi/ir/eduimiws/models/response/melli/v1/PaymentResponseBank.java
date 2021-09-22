@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentResponse implements Serializable {
+public class PaymentResponseBank implements Serializable {
 
     @Schema(title = "Response Code",
             description = "Transaction Result")

@@ -58,4 +58,10 @@ public class MappingUtil {
     public @interface GenerateEntityPublicId {
     }
 
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface MelliTripleDesEncrypt {
+    }
+
 }

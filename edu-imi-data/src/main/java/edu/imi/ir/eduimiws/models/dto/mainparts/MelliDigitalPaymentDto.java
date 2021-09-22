@@ -15,9 +15,11 @@ public class MelliDigitalPaymentDto implements Serializable {
 
     private Long id;
 
+    private Long amount;
+
     private Long orderId;
 
-    private Long requestOrderId;
+    private Long merchantOrderId;
 
     private String localDateTime;
 
@@ -52,4 +54,25 @@ public class MelliDigitalPaymentDto implements Serializable {
     private String publicId;
 
     private Timestamp deleteDateTs;
+
+    private String merchantId;
+
+    private String terminalId;
+
+//    Verify Dto
+    private Long verifyId;
+
+    private String verifyPublicId;
+
+    private Long succeed;
+
+    private String retrivalRefNo;
+
+    private String systemTraceNo;
+
+    private Long verifyCreatorId;
+
+    private Timestamp verifyCreateDateTs;
+
+    private Timestamp verifyDeleteDateTs;
 }

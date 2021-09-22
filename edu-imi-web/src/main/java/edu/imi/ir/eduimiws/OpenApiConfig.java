@@ -275,8 +275,8 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi melliCodeApi() {
         return GroupedOpenApi.builder()
-                .setGroup("mellies")
-                .pathsToMatch("/api/v1/mellies/**")
+                .setGroup("sadadPayments")
+                .pathsToMatch("/api/v1/sadadPayments/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }

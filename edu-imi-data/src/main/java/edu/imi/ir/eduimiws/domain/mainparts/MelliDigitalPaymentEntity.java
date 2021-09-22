@@ -24,11 +24,15 @@ import java.sql.Timestamp;
 @Table(schema = "MAINPARTS", name = "TBL_MELLI_DIGITAL_PAYMENT")
 public class MelliDigitalPaymentEntity extends BaseEntity {
 
+
+    @Column(name = "AMOUNT")
+    private Long amount;
+
     @Column(name = "ORDER_ID")
     private Long orderId;
 
-    @Column(name = "REQUEST_ORDER_ID")
-    private Long requestOrderId;
+    @Column(name = "MERCHANT_ORDER_ID")
+    private Long merchantOrderId;
 
     @Column(name = "LOCAL_DATE_TIME")
     private String localDateTime;

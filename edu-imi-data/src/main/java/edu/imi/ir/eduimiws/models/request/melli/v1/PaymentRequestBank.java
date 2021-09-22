@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentRequest implements Serializable {
+public class PaymentRequestBank implements Serializable {
 
     @Schema(title = "Merchant Id", required = true,
             description = "Merchant Number(Shomare Pazirande)")
@@ -55,17 +55,17 @@ public class PaymentRequest implements Serializable {
     @Schema(title = "Sign Date", required = true,
         description = "Encrypting Transaction through Merchant key")
     @JsonProperty("SignData")
-    private String signDate;
+    private String signData;
 
     @Schema(title = "Additional data",
         description = "additional transaction information")
     @JsonProperty("AdditionalData")
-    private String additionalDate;
+    private String additionalData;
 
-    @Schema(title = "Multiplexing data",
+/*    @Schema(title = "Multiplexing data",
             description = "Division Information")
     @JsonProperty("MultiplexingData")
-    private MultiplexingData multiplexingData;
+    private MultiplexingData multiplexingData;*/
 
     @Schema(title = "User Id",
             description = "Card Holder Mobile Number")

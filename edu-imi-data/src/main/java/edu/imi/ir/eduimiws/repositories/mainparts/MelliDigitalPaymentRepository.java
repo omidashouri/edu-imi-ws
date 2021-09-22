@@ -8,4 +8,8 @@ public interface MelliDigitalPaymentRepository extends CrudRepository<MelliDigit
 
     @Query(name = "MelliDigitalPaymentEntity.selectOrderIdSequenceNumber",nativeQuery = true)
     Long queryLastOrderId();
+
+    MelliDigitalPaymentEntity findByOrderId(Long orderId);
+
+    MelliDigitalPaymentEntity findByPublicId(String publicId);
 }
