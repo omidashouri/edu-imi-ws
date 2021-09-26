@@ -14,7 +14,7 @@ import java.util.List;
 
 //  Attention: change MultiplexingDataItem inner class to a separate class
 
-@Schema(name = "melli",description = "melli payment request")
+@Schema(name = "melli",description = "melli Multiplexing Data")
 @JsonRootName(value = "multiplexingData")
 @Relation(collectionRelation = "multiplexingData")
 @Getter

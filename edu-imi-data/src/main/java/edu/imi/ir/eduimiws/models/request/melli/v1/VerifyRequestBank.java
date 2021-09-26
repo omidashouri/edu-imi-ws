@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.server.core.Relation;
 
-@Schema(name = "melli",description = "melli payment request")
+@Schema(name = "melliPayments",description = "melli verify request bank")
 @JsonRootName(value = "verify")
 @Relation(collectionRelation = "verify")
 @Getter

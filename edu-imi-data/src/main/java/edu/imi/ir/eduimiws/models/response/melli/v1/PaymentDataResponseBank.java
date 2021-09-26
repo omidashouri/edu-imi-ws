@@ -11,7 +11,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
-@Schema(name = "melli",description = "melli payment response")
+@Schema(name = "melli",description = "melli payment data response bank")
 @JsonRootName(value = "paymentRequestDataResponse")
 @Relation(collectionRelation = "paymentRequestDataResponse")
 @Getter

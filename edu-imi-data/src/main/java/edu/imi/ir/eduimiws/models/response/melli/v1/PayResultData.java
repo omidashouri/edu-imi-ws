@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 //NOOOOOOOOO
 
-@Schema(name = "melli",description = "melli payment request")
+@Schema(name = "melli",description = "melli Pay result data")
 @JsonRootName(value = "payResultData")
 @Relation(collectionRelation = "payResultData")
 @Getter

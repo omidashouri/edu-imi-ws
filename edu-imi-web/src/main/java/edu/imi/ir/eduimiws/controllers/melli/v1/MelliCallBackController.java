@@ -3,19 +3,10 @@ package edu.imi.ir.eduimiws.controllers.melli.v1;
 
 import edu.imi.ir.eduimiws.domain.mainparts.MelliDigitalPaymentEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.FiledValueNullException;
-import edu.imi.ir.eduimiws.mapper.mainparts.melli.MelliDigitalPaymentDataMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.MelliDigitalPaymentDataDto;
-import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.services.mainparts.MelliDigitalPaymentDataService;
 import edu.imi.ir.eduimiws.services.mainparts.MelliDigitalPaymentService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,22 +21,21 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/callback/sadad")
 @RequiredArgsConstructor
-@Tag(name = "sadadPayments", description = "The Melli Bank API")
+@Tag(name = "MelliPayments", description = "The Melli Bank API")
 public class MelliCallBackController {
 
     private final MelliDigitalPaymentDataService melliDigitalPaymentDataService;
-    private final MelliDigitalPaymentDataMapper melliDigitalPaymentDataMapper;
     private final MelliDigitalPaymentService melliDigitalPaymentService;
 
 
 
-    @Operation(
+   /* @Operation(
             summary = "redirect bank response",
             description = "redirect bank response",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @Tags(value = {
-            @Tag(name = "sadadPayments")
+            @Tag(name = "melliPayments")
 
     })
     @ApiResponses(
@@ -72,7 +62,7 @@ public class MelliCallBackController {
                             )
                     )
             }
-    )
+    )*/
     @PostMapping(path = "/publicId/{publicId}",
               consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE
                       , MediaType.APPLICATION_FORM_URLENCODED_VALUE}

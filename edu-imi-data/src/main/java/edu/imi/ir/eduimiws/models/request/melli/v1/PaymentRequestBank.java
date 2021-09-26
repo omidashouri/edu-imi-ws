@@ -12,7 +12,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
-@Schema(name = "melli",description = "melli payment request")
+@Schema(name = "melli",description = "melli payment request Bank")
 @JsonRootName(value = "paymentRequest")
 @Relation(collectionRelation = "paymentRequests")
 @Getter

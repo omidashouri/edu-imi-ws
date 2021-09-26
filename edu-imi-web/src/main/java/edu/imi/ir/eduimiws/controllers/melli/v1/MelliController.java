@@ -26,10 +26,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +41,7 @@ import java.text.SimpleDateFormat;
 @RestController
 @RequestMapping("/api/v1/sadadPayments")
 @RequiredArgsConstructor
-@Tag(name = "sadadPayments", description = "The Melli Bank API")
+@Tag(name = "MelliPayments", description = "The Melli Bank API")
 public class MelliController {
 
     private final MelliDigitalPaymentDataMapper melliDigitalPaymentDataMapper;
@@ -65,19 +63,14 @@ public class MelliController {
 
 
     @Operation(
-            summary = "sadad payment get token",
+            summary = "melli payment get token",
             description = "sadad payment get token",
             security = @SecurityRequirement(name = "imi-security-key"),
+            tags = "MelliPayments",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = PaymentRequestMerchant.class))
-            )
-    )
-    @Tags(value = {
-            @Tag(name = "sadadPayments")
-
-    })
-    @ApiResponses(
-            value = {
+            ),
+            responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "successful operation",
@@ -99,11 +92,13 @@ public class MelliController {
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
                     )
+
             }
     )
     @PostMapping(path = "/merchant/getToken",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> merchantGetToken(@RequestBody PaymentRequestMerchant paymentRequestMerchant) {
+    public ResponseEntity<?> merchantGetTokens(@RequestBody PaymentRequestMerchant paymentRequestMerchant) {
 
 
         paymentRequestMerchant = convertorUtil.makeEmptyValueNull(paymentRequestMerchant);
@@ -167,11 +162,9 @@ public class MelliController {
     @Operation(
             summary = "Find Payment Request Data by public ID",
             description = "Search Payment Requests by the public id",
-            tags = "sadadPayments",
-            security = @SecurityRequirement(name = "imi-security-key")
-    )
-    @ApiResponses(
-            value = {
+            tags = "melliPayments",
+            security = @SecurityRequirement(name = "imi-security-key"),
+            responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "successful operation",
@@ -196,6 +189,7 @@ public class MelliController {
             }
     )
     @GetMapping(path = "/merchant/publicId/{paymentRequestPublicId}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getMelliDigitalPaymentRequestDataByDigitalPaymentPublicId(@PathVariable String paymentRequestPublicId) {
 
@@ -234,11 +228,9 @@ public class MelliController {
     @Operation(
             summary = "verify payment by public ID",
             description = "Verify Payment by the public id",
-            tags = "sadadPayments",
-            security = @SecurityRequirement(name = "imi-security-key")
-    )
-    @ApiResponses(
-            value = {
+            tags = "melliPayments",
+            security = @SecurityRequirement(name = "imi-security-key"),
+            responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "successful operation",
@@ -263,6 +255,7 @@ public class MelliController {
             }
     )
     @GetMapping(path = "/verify/{digitalPaymentRequestPublicId}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> verify(@PathVariable(value = "digitalPaymentRequestPublicId") String digitalPaymentRequestPublicId) {
 
