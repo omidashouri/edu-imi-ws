@@ -10,7 +10,7 @@
     <form id="myRedirectForm" name="myRedirectForm" action="#"
           th:action="@{http://ashouri-pc.imi.ir:8080/edu-imi-ws/api/v1/reqres/bankResponse}"
           method="post">
-        <p>RefId: <input type="hidden" id="RefId" name="RefId" th:value="${nam}" /></p>
+        <p>RefId: <input type="hidden" id="RefId" name="RefId" th:value="${name}" /></p>
         <p>RefId: <input type="hidden" id="ResCode" name="ResCode" th:value="50" /></p>
         <noscript>
             <p><input type="submit" value="Submit" /></p>
