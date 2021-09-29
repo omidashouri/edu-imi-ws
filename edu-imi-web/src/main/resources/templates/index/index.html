@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IMI's API</title>
+    <!--  <link rel='shortcut icon' href='images/imi.png' type="image/x-icon" />-->
+</head>
+<script type="text/javascript">
+
+    var ur = window.document.location.href;
+    ur=ur.replace('http://','') ;
+    ur=ur.replace('https://','') ;
+    ur=ur.replace(':81','') ;
+    ur=ur.replace(':8080','') ;
+    ur=ur.replace(':8443','') ;
+    ur = "https://" + ur;
+    ur = ur.substring(0,ur.length-1) + ":8443/";
+    alert(ur);
+    window.document.location = ur + "edu-imi-ws/swagger-ui/index.html?configUrl=/edu-imi-ws/v3/api-docs/swagger-config";
+</script>
+</html>
