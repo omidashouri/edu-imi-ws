@@ -2,8 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!--    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
     <meta name="Referer" content="https://www.imi.ir/"/>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // const $ = jQuery;
+        $(document).ready(function () {
+            document.getElementById("sadadRedirectFrom").submit();
+        });
+        /*    $(document).ready(function(){
+               $("#sadadRedirectFrom").submit();
+            });*/
+    </script>
 </head>
 <body>
 <form id="sadadRedirectFrom" name="sadadRedirectFrom" action="#"
@@ -13,13 +23,5 @@
         <p><input type="submit" value="Submit" /></p>
     </noscript>
 </form>
-<script type="text/javascript">
-    $(document).ready(function () {
-        document.getElementById("sadadRedirectFrom").submit();
-    })
-/*    $(document).ready(function(){
-       $("#sadadRedirectFrom").submit();
-    });*/
-</script>
 </body>
 </html>
