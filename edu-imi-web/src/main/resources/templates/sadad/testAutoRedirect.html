@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!--    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
+    <meta name="Referer" content="https://www.imi.ir/"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- auto submit for redirect the form -->
+<!--    <script type="text/javascript">
+        // const $ = jQuery;
+        $(document).ready(function () {
+            document.getElementById("sadadRedirectFrom").submit();
+        });
+        /*    $(document).ready(function(){
+               $("#sadadRedirectFrom").submit();
+            });*/
+    </script>-->
+
+  <!-- auto redirect without submit the form -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var myval = /*[[${token}]]*/ "value_in_static";
+        /*]]*/
+        alert(myval);
+        var myurl = "https://sadad.shaparak.ir/Purchase?token="+myval;
+        alert(myurl);
+
+        $(document).ready(function () {
+            window.location.href = myurl;
+        });
+
+    </script>
+
+</head>
+<body>
+<form id="sadadRedirectFrom" name="sadadRedirectFrom" action="#"
+      th:action="@{https://sadad.shaparak.ir/Purchase(token = ${token})}"
+      method="get">
+
+   <!-- get values from controller -->
+    <p th:text="${token}"></p>
+    <p th:text="${session.session1}"></p>
+    <p th:text="${#servletContext.getAttribute('contextattribute1')}"></p>
+
+
+    <!-- /user?id=11 (right click view source to see correct url)-->
+    <p><a href="#" th:href="@{https://sadad.shaparak.ir/user(token=${token})}"></a>Link 1</p>
+    <!-- /user?id=11&name=11 -->
+    <p><a href="#" th:href="@{https://sadad.shaparak.ir/user(id=${token},name=${token})}"></a>Link 2 (query string)</p>
+    <!-- /user/11/name/11 -->
+    <p><a href="#" th:href="@{https://sadad.shaparak.ir/user/{id}/name/{name}(id=${token},name=${token})}"></a>Link 3 (path variable)</p>
+
+
+        <p><input type="submit" value="Submit" /></p>
+
+</form>
+</body>
+</html>

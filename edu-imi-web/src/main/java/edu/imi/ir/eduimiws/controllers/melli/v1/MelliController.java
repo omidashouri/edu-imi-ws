@@ -189,7 +189,6 @@ public class MelliController {
             }
     )
     @GetMapping(path = "/merchant/publicId/{paymentRequestPublicId}",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getMelliDigitalPaymentRequestDataByDigitalPaymentPublicId(@PathVariable String paymentRequestPublicId) {
 
@@ -255,7 +254,6 @@ public class MelliController {
             }
     )
     @GetMapping(path = "/verify/{digitalPaymentRequestPublicId}",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> verify(@PathVariable(value = "digitalPaymentRequestPublicId") String digitalPaymentRequestPublicId) {
 
@@ -266,6 +264,8 @@ public class MelliController {
         if (melliDigitalPayment == null) {
             throw new FiledValueNullException("Melli Digital Payment is null");
         }
+
+        //check if digitalPaymentRequestPublicId is in tbl_melli_digital_verify response the result (Do not save again)
 
         MelliDigitalPaymentDto melliDigitalPaymentDto =
                 melliDigitalPaymentMapper.toMelliDigitalPaymentDto(melliDigitalPayment, cycleAvoidingMappingContext);

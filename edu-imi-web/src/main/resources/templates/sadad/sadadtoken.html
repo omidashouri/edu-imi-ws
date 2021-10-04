@@ -5,23 +5,15 @@
 <!--    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
     <meta name="Referer" content="https://www.imi.ir/"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        // const $ = jQuery;
+    <!-- auto redirect without submit the form -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var myval = /*[[${token}]]*/ "value_in_static";
+        /*]]*/
+        var myurl = "https://sadad.shaparak.ir/Purchase?token="+myval;
         $(document).ready(function () {
-            document.getElementById("sadadRedirectFrom").submit();
+            window.location.href = myurl;
         });
-        /*    $(document).ready(function(){
-               $("#sadadRedirectFrom").submit();
-            });*/
     </script>
 </head>
-<body>
-<form id="sadadRedirectFrom" name="sadadRedirectFrom" action="#"
-      th:action="@{https://sadad.shaparak.ir/VPG/Purchase?token={id}(id = ${token})}"
-      method="post">
-    <noscript>
-        <p><input type="submit" value="Submit" /></p>
-    </noscript>
-</form>
-</body>
 </html>

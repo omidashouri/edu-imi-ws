@@ -25,14 +25,30 @@ public class SadadController {
     @GetMapping(path = "/token/{digitalPaymentToken}")
     public ModelAndView bankPayment(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    @PathVariable(value = "digitalPaymentToken") String digitalPaymentToken) throws URISyntaxException {
+                                    @PathVariable(value = "digitalPaymentToken") String digitalPaymentToken){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("sadad/sadadtoken.html");
+        modelAndView.addObject("token",digitalPaymentToken);
+        return modelAndView;
+    }
+
+
+//    testAutoRedirect
+// @GetMapping(path = "/token/{digitalPaymentToken}")
+    public ModelAndView testAutoRedirect(HttpServletRequest request,
+                                    HttpServletResponse response,
+//                                    @PathVariable(value = "digitalPaymentToken")
+                                                 String digitalPaymentToken) throws URISyntaxException {
+        request.setAttribute("attribute1",digitalPaymentToken);
+        request.getSession().setAttribute("session1",digitalPaymentToken);
+        request.getServletContext().setAttribute("contextattribute1",digitalPaymentToken);
         ModelAndView modelAndView = new ModelAndView();
         URI uri = new URI("https://sadad.shaparak.ir/Purchase/Index?token="+digitalPaymentToken);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Referer",melliCredential.getApiRefererUrl());
         httpHeaders.set("Referer",melliCredential.getApiRefererUrl());
         httpHeaders.setLocation(uri);
-        modelAndView.setViewName("sadad/sadadtoken.html");
+        modelAndView.setViewName("sadad/testAutoRedirect.html");
         modelAndView.addObject("token",digitalPaymentToken);
         return modelAndView;
     }
