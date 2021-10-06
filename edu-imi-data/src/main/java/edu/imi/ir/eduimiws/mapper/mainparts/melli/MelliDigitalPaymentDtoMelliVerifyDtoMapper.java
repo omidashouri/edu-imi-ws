@@ -36,4 +36,15 @@ public interface MelliDigitalPaymentDtoMelliVerifyDtoMapper {
     @BeanMapping(ignoreByDefault = true)
     @InheritInverseConfiguration(name = "melliDigitalPaymentDtoToMelliVerifyDto")
     MelliDigitalPaymentDto melliVerifyDtoToMelliDigitalPaymentDto(MelliVerifyDto source);
+
+    @Mappings({
+            @Mapping(source = "token", target = "token"),
+            @Mapping(source = "signData", target = "signData"),
+            @Mapping(source = "terminalId", target = "terminalId"),
+            @Mapping(source = "merchantOrderId", target = "merchantOrderId")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    void updateMelliVerifyDtoByMelliDigitalPaymentDto(@MappingTarget MelliVerifyDto target ,
+                                                      MelliDigitalPaymentDto source);
+
 }

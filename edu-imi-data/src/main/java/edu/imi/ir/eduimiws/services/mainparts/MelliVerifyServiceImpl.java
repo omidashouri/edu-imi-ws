@@ -64,6 +64,18 @@ public class MelliVerifyServiceImpl implements MelliVerifyService{
         return melliVerifyDto;
     }
 
+    @Override
+    public MelliVerifyDto findByMelliDigitalPaymentPublicId(String melliDigitalPaymentPublicId) {
+
+        MelliVerifyEntity melliVerify = melliVerifyRepository
+                .findByMelliDigitalPaymentPublicId(melliDigitalPaymentPublicId);
+
+        MelliVerifyDto melliVerifyDto = melliVerifyMapper
+                .toMelliVerifyDto(melliVerify);
+
+        return melliVerifyDto;
+    }
+
     protected String uriComponentsBuilderToString(String stringUri){
         return UriComponentsBuilder.fromUriString(stringUri).toUriString();
     }

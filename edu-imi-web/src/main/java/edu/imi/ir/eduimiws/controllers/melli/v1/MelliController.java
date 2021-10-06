@@ -257,7 +257,7 @@ public class MelliController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> verify(@PathVariable(value = "digitalPaymentRequestPublicId") String digitalPaymentRequestPublicId) {
 
-        MelliVerifyDto melliVerifyDto = new MelliVerifyDto();
+        MelliVerifyDto melliVerifyDto;
 
         MelliDigitalPaymentEntity melliDigitalPayment = melliDigitalPaymentService
                 .findByPublicId(digitalPaymentRequestPublicId);
@@ -265,15 +265,25 @@ public class MelliController {
             throw new FiledValueNullException("Melli Digital Payment is null");
         }
 
-        //check if digitalPaymentRequestPublicId is in tbl_melli_digital_verify response the result (Do not save again)
+//        check if record previously is verified or not
+        melliVerifyDto = melliVerifyService
+                .findByMelliDigitalPaymentPublicId(digitalPaymentRequestPublicId);
+
 
         MelliDigitalPaymentDto melliDigitalPaymentDto =
                 melliDigitalPaymentMapper.toMelliDigitalPaymentDto(melliDigitalPayment, cycleAvoidingMappingContext);
 
-        melliVerifyDto = melliDigitalPaymentDtoMelliVerifyDtoMapper
-                .melliDigitalPaymentDtoToMelliVerifyDto(melliDigitalPaymentDto);
+        if (melliVerifyDto == null) {
 
-        melliVerifyDto = melliVerifyService.verify(melliVerifyDto);
+            melliVerifyDto = melliDigitalPaymentDtoMelliVerifyDtoMapper
+                    .melliDigitalPaymentDtoToMelliVerifyDto(melliDigitalPaymentDto);
+
+            melliVerifyDto = melliVerifyService.verify(melliVerifyDto);
+
+        } else {
+            melliDigitalPaymentDtoMelliVerifyDtoMapper
+                    .updateMelliVerifyDtoByMelliDigitalPaymentDto(melliVerifyDto, melliDigitalPaymentDto);
+        }
 
         VerifyResultDataMerchant verifyResultDataMerchant = verifyResultDataMerchantMapper.
                 melliVerifyDtoToVerifyResultDataMerchant(melliVerifyDto);
