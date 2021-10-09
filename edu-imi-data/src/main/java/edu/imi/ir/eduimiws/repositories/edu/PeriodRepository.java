@@ -183,4 +183,6 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                             Pageable pageable);
 
 
+    @Query(name = "PeriodEntity.queryPeriodCustomTwoByPeriodPublicId")
+    PeriodProjectionCustomTwo queryPeriodCustomTwoByPeriodPublicId(@Param("periodPublicId") String periodPublicId);
 }

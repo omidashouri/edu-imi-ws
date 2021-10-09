@@ -176,6 +176,11 @@ public class PeriodServiceImpl implements PeriodService {
         return periodProjectionCustomTwoPages;
     }
 
+    @Override
+    public PeriodProjectionCustomTwo queryPeriodsCustomTwoByPeriodPublicId(String periodPublicId) {
+        return periodRepository.queryPeriodCustomTwoByPeriodPublicId(periodPublicId);
+    }
+
     protected Predicate<Object> isValueDefault = (input) -> {
         if (input == null)
             return false;

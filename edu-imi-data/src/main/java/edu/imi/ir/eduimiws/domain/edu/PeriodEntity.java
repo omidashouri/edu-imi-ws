@@ -452,6 +452,45 @@ import javax.persistence.*;
                         @QueryHint( name = QueryHints.HINT_COMMENT, value = "use cache for named query" ),
                 },
                 lockMode = LockModeType.READ*/
+        ),
+        @NamedQuery(name = "PeriodEntity.queryPeriodCustomTwoByPeriodPublicId",
+                query = " select prda.periodPublicId as periodPublicId, " +
+                        " flda.fieldPublicId as fieldPublicId, " +
+                        " edca.eduCategoryPublicId as eduCategoryPublicId, " +
+                        " lvla.levelPublicId as levelPublicId, " +
+                        " fld.code as fieldCode, " +
+                        " prd.offerNumber as offerNumber, " +
+                        " prd.name as name, " +
+                        " lvl.description as levelDescription, " +
+                        " fld.fname as fieldName, " +
+                        " edc.title as eduCategoryTitle, " +
+                        " prd.startDate as startDate, " +
+                        " prd.endDate as endDate, " +
+                        " prd.regStartDate as regStartDate, " +
+                        " prd.regEndDate as regEndDate, " +
+                        " prd.maxCapacity as maxCapacity, " +
+                        " prd.holdingType as holdingType, " +
+                        " prd.canRegisterOnline as canRegisterOnline, " +
+                        " prd.type as type, " +
+                        " prd.fee as fee, " +
+                        " prd.onlineRegCostPercent as onlineRegCostPercent, " +
+                        " coalesce(prd.feeEquivalentFixed,0) as feeEquivalentFixed, " +
+                        " coalesce(prd.feeEquivalentVariable,0) as feeEquivalentVariable, " +
+                        " prd.schedule as schedule, " +
+                        " prd.activityStatus as activityStatus, " +
+                        " prd.deleteStatus as deleteStatus, " +
+                        " prd.totalUnit as totalUnit, " +
+                        " prd.id as periodId, " +
+                        " exc.firstName as executorFirstName, " +
+                        " exc.lastName as executorLastName " +
+                        " from " +
+                        " PeriodEntity prd left join prd.periodApi prda " +
+                        " left join prd.executer exc " +
+                        " left join prd.field fld left join fld.fieldApi flda " +
+                        " left join fld.eduCategory edc left join edc.eduCategoryApi edca " +
+                        " left join fld.level lvl left join lvl.levelApi lvla " +
+                        " where " +
+                        " ( prda.periodPublicId = :periodPublicId ) ORDER BY regStartDate desc, name ASC NULLS LAST "
         )
 })
 

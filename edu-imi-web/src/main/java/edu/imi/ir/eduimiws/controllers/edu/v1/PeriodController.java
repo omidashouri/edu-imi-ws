@@ -463,6 +463,59 @@ public class PeriodController {
         return ResponseEntity.ok(periodResponseCustomTwoPagedModel);
     }
 
+    @Operation(
+            summary = "Find Period Response Custom Two by public ID",
+            description = "Search Period Response Custom Two by the public id",
+            tags = "periods",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = PeriodResponseCustomTwo.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "period not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/periodResponseCustomTwo/{periodPublicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getPeriodResponseCustomTwoByPeriodPublicId(@PathVariable String periodPublicId) {
+
+        PeriodProjectionCustomTwo periodProjectionCustomTwo = periodService.queryPeriodsCustomTwoByPeriodPublicId(periodPublicId);
+        if (periodProjectionCustomTwo == null) {
+            throw new NotFoundException("requested period not found");
+        }
+
+        PeriodProjectionCustomTwoDto periodProjectionCustomTwoDto = periodProjectionCustomTwoMapper
+                .periodProjectionCustomTwoToPeriodProjectionCustomTwoDto(periodProjectionCustomTwo);
+
+        PeriodResponseCustomTwo periodResponseCustomTwo =
+                periodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler
+                        .toModel(periodProjectionCustomTwoDto);
+
+        convertorUtil.makeCharacterSetPerson(periodResponseCustomTwo);
+
+        return ResponseEntity.ok(periodResponseCustomTwo);
+
+    }
+
 
     // ---------------------------------------------------------Not complete
 

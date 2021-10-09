@@ -72,4 +72,6 @@ public interface PeriodService {
                                                              String periodExecutorLastName,
                                                              String periodExecutorFullName,
                                                              Pageable pageable);
+
+    PeriodProjectionCustomTwo queryPeriodsCustomTwoByPeriodPublicId(String periodPublicId);
 }
