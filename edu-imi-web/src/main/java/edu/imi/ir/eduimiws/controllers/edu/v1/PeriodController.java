@@ -362,8 +362,8 @@ public class PeriodController {
     }
 
     @Operation(
-            summary = "query All periods",
-            description = "Search period detail pageable",
+            summary = "query All periods Custom Two",
+            description = "Search period Custom Two detail pageable",
             tags = "periodCustomTwo",
             security = @SecurityRequirement(name = "imi-security-key")
     )

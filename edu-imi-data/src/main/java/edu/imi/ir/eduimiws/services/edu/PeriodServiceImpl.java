@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.mapper.edu.PeriodOnlyMapper;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import edu.imi.ir.eduimiws.repositories.edu.PeriodRepository;
+import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ public class PeriodServiceImpl implements PeriodService {
 
     private final PeriodRepository periodRepository;
     private final PeriodOnlyMapper periodOnlyMapper;
+    private final ConvertorUtil convertorUtil;
 
     @Override
     public Page<PeriodEntity> findAllByDeleteStatusEqualsOneAndOrderPageable(Pageable pageable) {
@@ -157,12 +159,17 @@ public class PeriodServiceImpl implements PeriodService {
                                                                     String periodExecutorFirstName, String periodExecutorLastName,
                                                                     String periodExecutorFullName, Pageable pageable) {
 
+        String encodedPeriodName = convertorUtil.characterEncodingStringRequest.apply(periodName);
+        String encodedFieldName = convertorUtil.characterEncodingStringRequest.apply(fieldName);
+        String encodedEduCategoryName = convertorUtil.characterEncodingStringRequest.apply(eduCategoryName);
+
+
         Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages = periodRepository.queryAllPeriodCustomTwo(periodPublicId,
                                                                                         fieldPublicId,
                                                                                         eduCategoryPublicId, levelPublicId,
                                                                                         fieldCode, periodOfferNumber,
-                                                                                        periodName, levelDescription,fieldName,
-                                                                                        eduCategoryName, periodStartDate,
+                                                                                        encodedPeriodName, levelDescription,encodedFieldName,
+                                                                                        encodedEduCategoryName, periodStartDate,
                                                                                         periodEndDate, registerStartDate,
                                                                                         registerEndDate, periodMaxCapacity,
                                                                                         periodHoldingType, periodCanRegisterOnline,
