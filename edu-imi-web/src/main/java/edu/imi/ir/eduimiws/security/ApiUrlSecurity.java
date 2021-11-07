@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.security;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
@@ -26,6 +27,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -173,20 +175,25 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+        final CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
 
 //        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
 
-        corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
+                corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
 
-        corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+//        corsConfiguration.setAllowedMethods(List.of("*"));
 
-        corsConfiguration.setAllowCredentials(true);
+//      specify what we want to be displayed on the header
+        corsConfiguration.setExposedHeaders(List.of("Authorization","userPublicId"));
 
-        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+//        corsConfiguration.setAllowCredentials(true);
+
+//        corsConfiguration.setAllowedHeaders(List.of("*"));
 
         final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new CorsFilter(urlBasedCorsConfigurationSource));
+        filterRegistrationBean.setOrder(0);
         return urlBasedCorsConfigurationSource;
     }
 
