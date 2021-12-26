@@ -86,6 +86,7 @@ public class SpringAsyncConfiguration implements AsyncConfigurer {
     }*/
 
 
+//    SSL configuration
     @Bean
     public ServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
