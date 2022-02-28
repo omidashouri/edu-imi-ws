@@ -13,6 +13,7 @@ public interface PeriodProjectionCustomTwo {
 //               then name filed in projection with name field in entity and alias in @NamedQuery SHOULD BE SAME.
 //               2) when using projection in @NamedNativeQuery because we have @SqlResultSetMapping then alias name in
 //               @NamedNativeQuery SHOULD BE SAME with name field in @ConstructorResult or with name field in @ConstructorResult.
+//               3) use @Projection for @NamedQuery . and use @Value for @NamedNativeQuery.
 
 
     String getPeriodPublicId();
