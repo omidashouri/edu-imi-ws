@@ -8,6 +8,8 @@ import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
 import javax.xml.bind.JAXBElement;
 
+
+//IPaymentGateway is implemented by me, so any changes in the bank api should be affected here again
 public class SoapClientImpl2 extends WebServiceGatewaySupport implements IPaymentGateway {
     @Override
     public String bpRefundRequest(long terminalId, String userName, String userPassword, long orderId, long saleOrderId, long saleReferenceId, long refundAmount) {
@@ -16,6 +18,11 @@ public class SoapClientImpl2 extends WebServiceGatewaySupport implements IPaymen
 
     @Override
     public String bpSaleReferenceIdRequest(long terminalId, String userName, String userPassword, long orderId, long saleOrderId) {
+        return null;
+    }
+
+    @Override
+    public String bpRefundToPANRequestV2(String user, String password, Long pan, long amount, Long saleReferenceId, long terminalId, long orderId, String mobileNo) {
         return null;
     }
 
@@ -36,6 +43,11 @@ public class SoapClientImpl2 extends WebServiceGatewaySupport implements IPaymen
 
     @Override
     public String bpSettleRequest(long terminalId, String userName, String userPassword, long orderId, long saleOrderId, long saleReferenceId) {
+        return null;
+    }
+
+    @Override
+    public String bpRefundRequestV2(long terminalId, String userName, String userPassword, String destinationPan, String mobileNo, long orderId, long saleOrderId, long saleReferenceId, long refundAmount) {
         return null;
     }
 
@@ -100,7 +112,7 @@ public class SoapClientImpl2 extends WebServiceGatewaySupport implements IPaymen
     }
 
     @Override
-    public String bpRefundToPANRequest(String user, String password, Long pan, long amount, Long saleReferenceId, long terminalId) {
+    public String bpRefundToPANRequest(String user, String password, Long pan, long amount, Long saleReferenceId, long terminalId,String mobileNo,String orderId) {
         return null;
     }
 
