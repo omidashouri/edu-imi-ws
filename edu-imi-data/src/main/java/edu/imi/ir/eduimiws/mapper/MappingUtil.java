@@ -73,4 +73,24 @@ public class MappingUtil {
     public @interface MelliTripleDesEncrypt {
     }
 
+
+//    ---------------------------------------
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ConvertorUtil {
+    }
+
+    //    2.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface CharacterEncodingStringToPersian {
+    }
+
+
+//    ---------------------------------------
+
 }

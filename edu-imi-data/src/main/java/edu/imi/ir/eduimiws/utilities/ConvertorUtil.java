@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.utilities;
 
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.stereotype.Component;
 
@@ -7,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.function.Function;
 
 @Component
+@MappingUtil.ConvertorUtil
 public class ConvertorUtil {
 
     public <T> T makeEmptyValueNull(T object) {
@@ -46,6 +48,7 @@ public class ConvertorUtil {
         return object;
     }
 
+
     public Function<String, String> characterEncodingStringRequest = (String inputString) -> {
         String encodedString = null;
         if (inputString != null) {
@@ -55,4 +58,21 @@ public class ConvertorUtil {
         }
         return encodedString;
     };
+
+
+    public Function<String, String> characterEncodingStringRequestToPersian = (String inputString) -> {
+        String encodedString = null;
+        if (inputString != null) {
+            encodedString = inputString
+                    .replaceAll("\u064A", "\u06CC" )     //Y
+                    .replaceAll("\u0643","\u06A9" );    //K
+        }
+        return encodedString;
+    };
+
+    @MappingUtil.CharacterEncodingStringToPersian
+    public String CharacterEncodingStringToPersian(String input){
+            return this.characterEncodingStringRequestToPersian.apply(input);
+    }
+
 }

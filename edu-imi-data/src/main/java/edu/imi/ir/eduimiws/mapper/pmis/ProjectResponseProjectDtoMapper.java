@@ -1,22 +1,21 @@
 package edu.imi.ir.eduimiws.mapper.pmis;
 
-import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponse;
+import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring",
+        uses = {ConvertorUtil.class},       //use for @MappingUtil
+        imports = {ConvertorUtil.class},    //use for @Context or Java Expression
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface ProjectResponseProjectDtoMapper {
-
-    ProjectResponseProjectDtoMapper INSTANCE = Mappers.getMapper(ProjectResponseProjectDtoMapper.class);
-
 
 //    accountPublicId, creatorPublicId, mainContractPublicId, offerPublicId
 //    operationalPlanPublicId,
@@ -75,7 +74,7 @@ public interface ProjectResponseProjectDtoMapper {
     ProjectResponse toProjectResponse(ProjectDto projectDto, @Context CycleAvoidingMappingContext context);
 
     @BeanMapping(ignoreByDefault = true)
-    @InheritInverseConfiguration
+//    @InheritInverseConfiguration
     ProjectDto toProjectDto(ProjectResponse projectResponse, @Context CycleAvoidingMappingContext context);
 
     List<ProjectResponse> toProjectEntities(List<ProjectDto> ProjectDtos, @Context CycleAvoidingMappingContext context);
@@ -86,5 +85,16 @@ public interface ProjectResponseProjectDtoMapper {
     default void handleProjectPublicIds(ProjectDto projectDto, @MappingTarget ProjectResponse projectResponse) {
         new PersistenceUtils().cleanFromProxyByReadMethod(projectDto);
     }
+
+    default ProjectResponse characterEncodingPersianForProjectName(ProjectResponse source, @Context ConvertorUtil convertorUtil) {
+        source.setProjectName(convertorUtil.characterEncodingStringRequestToPersian.apply(source.getProjectName()));
+        return source;
+    }
+
+    @Mappings({
+            @Mapping(target = "projectName", qualifiedBy = {MappingUtil.ConvertorUtil.class, MappingUtil.CharacterEncodingStringToPersian.class})
+    })
+    @BeanMapping(ignoreByDefault = true)
+    void characterEncodingPersian_ProjectName(@MappingTarget ProjectResponse target, ProjectDto projectDto);
 
 }

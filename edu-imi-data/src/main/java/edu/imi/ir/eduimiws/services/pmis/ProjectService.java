@@ -14,4 +14,6 @@ public interface ProjectService {
 
     @MappingUtil.ProjectPublicIdToProjectDto
     ProjectDto findProjectDtoByProjectApiPublicId(String projectPublicId);
+
+    ProjectDto findProjectDtoByProjectCodeAndLastVersion(String projectCode, String lastVersion);
 }

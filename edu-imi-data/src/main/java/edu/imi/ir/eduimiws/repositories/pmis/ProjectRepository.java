@@ -1,6 +1,5 @@
 package edu.imi.ir.eduimiws.repositories.pmis;
 
-import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +16,7 @@ public interface ProjectRepository extends CrudRepository<ProjectEntity, Long> {
 
     @EntityGraph(value = "ProjectEntity.findProjectProjectApi", type = EntityGraph.EntityGraphType.LOAD)
     ProjectEntity findByProjectApi_ProjectPublicId(String projectPublicId);
+
+    @EntityGraph(value = "ProjectEntity.findProjectProjectApi", type = EntityGraph.EntityGraphType.LOAD)
+    ProjectEntity findByProjectCodeAndLastVersion(String projectCode, String lastVersion);
 }

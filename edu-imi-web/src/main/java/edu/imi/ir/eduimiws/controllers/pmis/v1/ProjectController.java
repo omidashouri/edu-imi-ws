@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.pmis.v1;
 
 import edu.imi.ir.eduimiws.assemblers.pmis.ProjectResponseAssembler;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.pmis.ProjectFastMapper;
@@ -10,8 +11,7 @@ import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponse;
 import edu.imi.ir.eduimiws.services.pmis.ProjectService;
-import edu.imi.ir.eduimiws.utilities.DisableMethod;
-import edu.imi.ir.eduimiws.utilities.QueryDslAsQueryParam;
+import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,10 +35,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,6 +48,8 @@ import java.util.stream.StreamSupport;
 @Tag(name = "projects", description = "The project API")
 public class ProjectController {
 
+    public static final String LAST_VERSION_YES = "y";
+    private final ConvertorUtil convertorUtil;
     private final ProjectService projectService;
     private final ProjectResponseProjectDtoMapper projectResponseProjectDtoMapper;
     private final ProjectFastMapper projectFastMapper;
@@ -175,26 +174,25 @@ public class ProjectController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getProjectByProjectPublicId(@PathVariable String projectPublicId) {
 
-            ProjectEntity project = projectService.findProjectEntityByProjectApiPublicId(projectPublicId);
-            if (project == null) {
-                throw new NotFoundException("requested project not found");
-            }
+        ProjectEntity project = projectService.findProjectEntityByProjectApiPublicId(projectPublicId);
+        if (project == null) {
+            throw new NotFoundException("requested project not found");
+        }
 
-            ProjectDto projectFastDto =
-                    projectFastMapper.toProjectDto(project, new CycleAvoidingMappingContext());
+        ProjectDto projectFastDto =
+                projectFastMapper.toProjectDto(project, new CycleAvoidingMappingContext());
 
-            ProjectResponse projectResponse =
-                    projectResponseAssembler.toModel(projectFastDto);
+        ProjectResponse projectResponse =
+                projectResponseAssembler.toModel(projectFastDto);
 
-            return ResponseEntity.ok(projectResponse);
+        return ResponseEntity.ok(projectResponse);
 
     }
 
 
     @Operation(
-            hidden = true,
-            summary = "Find Project by Query",
-            description = "Search project by Query",
+            summary = "Find Project by Project Public Id",
+            description = "Search project by by Project Public Id",
             tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
@@ -223,26 +221,18 @@ public class ProjectController {
                     )
             }
     )
-    @QueryDslAsQueryParam
-    @SwaggerUtil.PageableAsQueryParam
-    @DisableMethod
-    @GetMapping(path = "/search/{criteria}",
+    @GetMapping(path = "/lastVersionByProjectCode",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getProjectBySearch(@PathVariable String criteria,
-                                                @Parameter(hidden = true)
-                                                @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
-                                                @PageableDefault(page = 0, size = 10, value = 10)
-                                                        Pageable pageable) {
+    public ResponseEntity<?> getProjectLastVersionByProjectCode(@RequestParam("projectCode") String projectCode) {
 
-/*
-            if (criteria == null || criteria.length() == 0) {
-                throw new NotFoundException("requested project not found");
-            }
+        if (projectCode == null || projectCode.length() < 8) {
+            throw new NotAcceptableException("project code must contain eight digit");
+        }
 
-            BooleanExpression expression = new QueryDSLPredicatesBuilder<>(ProjectEntity.class)
-                    .with(criteria).build();
+        ProjectDto projectDto = projectService
+                .findProjectDtoByProjectCodeAndLastVersion(projectCode, LAST_VERSION_YES);
 
-            Page<ProjectEntity> projectPages =
+            /*Page<ProjectEntity> projectPages =
                     projectService.findAllByPredicate(expression, pageable);
 
             Page<ProjectDto> projectFastDtoPage = projectPages
@@ -250,12 +240,17 @@ public class ProjectController {
                             .toProjectDto(cp, new CycleAvoidingMappingContext()));
 
             PagedModel<ProjectResponse> projectResponsePagedModel = projectPagedResourcesAssembler
-                    .toModel(projectFastDtoPage, projectResponseAssembler);
+                    .toModel(projectFastDtoPage, projectResponseAssembler);*/
 
-            return ResponseEntity.ok(projectResponsePagedModel);
+        if (projectDto == null)
+            throw new NotFoundException(String.format("Not Found Any Project with project Code: %s", projectCode));
 
-        */
-        return null;
+        ProjectResponse projectResponse =
+                projectResponseAssembler.toModel(projectDto);
+
+        projectResponseProjectDtoMapper.characterEncodingPersianForProjectName(projectResponse, convertorUtil);
+
+        return ResponseEntity.ok(projectResponse);
     }
 
 }
