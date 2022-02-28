@@ -282,6 +282,33 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi hamkaranCodeApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("HamkaranApi")
+                .pathsToMatch("/api/v1/hamkarans/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi voucherListItemsApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("VoucherListItems")
+                .pathsToMatch("/api/v1/voucherListItems/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi voucherDeleteItemsApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("VoucherDeleteItems")
+                .pathsToMatch("/api/v1/voucherDeleteItems/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {
