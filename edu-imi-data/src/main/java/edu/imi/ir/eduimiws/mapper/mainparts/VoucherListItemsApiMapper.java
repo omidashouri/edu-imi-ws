@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+//Hint: Mapper Good Example, uses and import
+
 @Mapper(componentModel = "spring",
         imports = {SimpleDateFormat.class, Timestamp.class, Date.class},
         uses = {PublicIdUtil.class},
