@@ -52,9 +52,18 @@ public class MappingUtil {
     public @interface CreatorFromSecurityContext {
     }
 
+
+//    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface PublicIdUtil {
+    }
+
+//    2.define Element Type for method
     @Qualifier
     @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
+    @Retention(RetentionPolicy.CLASS)
     public @interface GenerateEntityPublicId {
     }
 

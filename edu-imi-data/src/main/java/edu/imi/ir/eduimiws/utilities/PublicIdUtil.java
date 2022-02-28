@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.UUID;
 
 @Component
+@MappingUtil.PublicIdUtil
 public class PublicIdUtil {
 
     private final Random RANDOM = new SecureRandom();
