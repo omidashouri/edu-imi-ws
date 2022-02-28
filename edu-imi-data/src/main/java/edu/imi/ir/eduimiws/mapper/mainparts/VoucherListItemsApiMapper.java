@@ -16,8 +16,8 @@ import java.util.List;
 //Hint: Mapper Good Example, uses and import
 
 @Mapper(componentModel = "spring",
-        imports = {SimpleDateFormat.class, Timestamp.class, Date.class},
-        uses = {PublicIdUtil.class},
+        imports = {SimpleDateFormat.class, Timestamp.class, Date.class},     //use for @Context or Java Expression
+        uses = {PublicIdUtil.class},                                         //use for @MappingUtil
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_FROM_CONFIG,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
