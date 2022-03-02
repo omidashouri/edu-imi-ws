@@ -5,7 +5,6 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
-import edu.imi.ir.eduimiws.domain.pmis.ProjectApiEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -55,7 +54,7 @@ public class PaymentCodeApiEntity extends BaseEntity {
     @Column(name = "REQUEST_DESCRIPTION",length = 500)
     private String requestDescription;
 
-    @Column(name = "NATIONAL_CODE",length = 10)
+    @Column(name = "NATIONAL_CODE",length = 11)
     private String nationalCode;
 
     @EqualsAndHashCode.Exclude
