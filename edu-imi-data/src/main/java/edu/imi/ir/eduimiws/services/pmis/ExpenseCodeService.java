@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+@MappingUtil.ExpenseCodeService
 public interface ExpenseCodeService {
 
     Page<ExpenseCodeApiEntity> findAll(Pageable pageable);
@@ -18,4 +19,10 @@ public interface ExpenseCodeService {
 
     @MappingUtil.ExpenseCodePublicIdToExpenseCodeApiDto
     ExpenseCodeApiDto findExpenseCodeApiDtoByExpenseCodePublicId(String expenseCodePublicId);
+
+    @MappingUtil.ProjectPublicIdToExpenseCodePublicId
+    String findExpenseCodePublicIdByProjectPublicId(String projectPublicId);
+
+    @MappingUtil.ProjectPublicIdToExpenseCodeApi
+    ExpenseCodeApiDto findExpenseCodeApiByProjectPublicId(String projectPublicId);
 }

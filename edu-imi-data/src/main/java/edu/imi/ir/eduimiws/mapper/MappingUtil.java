@@ -93,4 +93,29 @@ public class MappingUtil {
 
 //    ---------------------------------------
 
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ExpenseCodeService {
+    }
+
+    //    2.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ProjectPublicIdToExpenseCodePublicId {
+    }
+
+    //    2.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ProjectPublicIdToExpenseCodeApi {
+    }
+
+
+//    ---------------------------------------
+
 }

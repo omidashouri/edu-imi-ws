@@ -1,6 +1,5 @@
 package edu.imi.ir.eduimiws.mapper.mainparts;
 
-import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
@@ -10,7 +9,6 @@ import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.mainparts.BankApiService;
 import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeService;
 import edu.imi.ir.eduimiws.services.pmis.ProjectService;
-import org.hibernate.Hibernate;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -34,9 +32,12 @@ public interface PaymentCodeRequestMapper {
             @Mapping(target = "expenseCode",
                     expression = "java(paymentCodeRequest.getExpenseCode()!= null ? " +
                             "Long.valueOf(paymentCodeRequest.getExpenseCode()) : null)"),
-            @Mapping(source = "expenseCodePublicId", target = "expenseCodePublicId"),
-            @Mapping(source = "expenseCodePublicId", target = "expenseCodeApi",
-                    qualifiedBy = MappingUtil.ExpenseCodePublicIdToExpenseCodeApiDto.class),
+            @Mapping(source = "projectPublicId", target = "expenseCodePublicId",
+                    qualifiedBy = {MappingUtil.ExpenseCodeService.class,
+                            MappingUtil.ProjectPublicIdToExpenseCodePublicId.class}),
+            @Mapping(source = "projectPublicId", target = "expenseCodeApi",
+                    qualifiedBy = {MappingUtil.ExpenseCodeService.class,
+                            MappingUtil.ProjectPublicIdToExpenseCodeApi.class}),
             @Mapping(source = "nationalCode", target = "nationalCode"),
             @Mapping(source = "payerUserPublicId", target = "payerUserPublicId"),
             @Mapping(source = "payerUserPublicId", target = "payerUser",

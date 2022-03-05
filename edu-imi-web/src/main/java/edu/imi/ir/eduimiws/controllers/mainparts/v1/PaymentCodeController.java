@@ -222,9 +222,9 @@ public class PaymentCodeController {
                     content = @Content(schema = @Schema(implementation = PaymentCodeRequest.class))
             )
     )
-    @Tags( value = {
+    @Tags(value = {
 //            @Tag( name = "paymentCodeRequest"),
-            @Tag( name = "paymentCodes")
+            @Tag(name = "paymentCodes")
 
     })
     @ApiResponses(
@@ -256,19 +256,15 @@ public class PaymentCodeController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createPaymentByPaymentCodeRequest(@RequestBody PaymentCodeRequest paymentCodeRequest) {
 
-
-
         paymentCodeService.validatePaymentCodeRequestNullInputs(paymentCodeRequest);
 
         PaymentCodeApiDto paymentCodeApiDto = paymentCodeRequestMapper
                 .paymentCodeRequestToPaymentCodeApiDto(paymentCodeRequest, new CycleAvoidingMappingContext());
 
-
         paymentCodeService.validatePaymentCodeApiDtoNulls(paymentCodeApiDto);
 
         PaymentCodeApiEntity paymentCodeApi = paymentCodeMapper
                 .toPaymentCodeApiEntity(paymentCodeApiDto, new CycleAvoidingMappingContext());
-
 
         PaymentCodeApiEntity newPaymentCodeApi = paymentCodeService
                 .generatePaymentCodeAndPublicId(paymentCodeApi);
