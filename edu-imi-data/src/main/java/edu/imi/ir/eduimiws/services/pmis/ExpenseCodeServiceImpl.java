@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.pmis.ExpenseCodeApiFastMapper;
 import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
 import edu.imi.ir.eduimiws.repositories.pmis.ExpenseCodeRepository;
+import edu.imi.ir.eduimiws.utilities.ExpenseCodes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -77,16 +78,16 @@ public class ExpenseCodeServiceImpl implements ExpenseCodeService {
 
     public Map<Long, String> midProjectCodeExpenseCodePublicIdMap() {
         Map<Long, String> midProjectCodeExpenseCodeMap = new HashMap<>();
-        midProjectCodeExpenseCodeMap.put(212L, "265D5B996E16F64685C68E51DC18457A85595759158EAAEE5CD1C143A0CD0752"); //O
-        midProjectCodeExpenseCodeMap.put(221L, "D099908940230FF8DED290869251144C076F99867DD55C15897D7BAEAB4385D9"); //1
-        midProjectCodeExpenseCodeMap.put(222L, "E26DB13AC288BCCFFC486527ECBCD4B2A2DEEDB34E6F7BD7B2498E23BD06DBF5"); //2
-        midProjectCodeExpenseCodeMap.put(223L, "57D093943DB07A804DB7DFB1914B7B7DF587953BCF1BAA71847A7B058595F4FC"); //3
-        midProjectCodeExpenseCodeMap.put(245L, "993A6F9E1C6D6C0FC753DAE5A587091D623ADF2068C14D77B28E3511A0C63A07"); //4
-        midProjectCodeExpenseCodeMap.put(231L, "08A142BE0920A4807F79AEB140DD8A0C0F412EC444141C727554D617EDE18C6D"); //5
-        midProjectCodeExpenseCodeMap.put(233L, "DAD9166AED5CF98A4D1834F49BCE2B4BC9D3D32B9ECFC1286D48922FDFDB9169"); //6
-        midProjectCodeExpenseCodeMap.put(232L, "ED938B85A41A712D3B96ACA913437349238F80B63D4540974BDF54B53E8DF58B"); //7
-        midProjectCodeExpenseCodeMap.put(230L, "E88340C9C372655EDB0DCA84326A80A8C9460AB9FDCDF41A33086F2B74190F25"); //8
-        midProjectCodeExpenseCodeMap.put(234L, "E88340C9C372655EDB0DCA84326A80A8C9460AB9FDCDF41A33086F2B74190F25"); //8
+        midProjectCodeExpenseCodeMap.put(212L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(212)); //O
+        midProjectCodeExpenseCodeMap.put(221L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(221)); //1
+        midProjectCodeExpenseCodeMap.put(222L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(222)); //2
+        midProjectCodeExpenseCodeMap.put(223L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(223)); //3
+        midProjectCodeExpenseCodeMap.put(245L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(245)); //4
+        midProjectCodeExpenseCodeMap.put(231L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(231)); //5
+        midProjectCodeExpenseCodeMap.put(233L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(233)); //6
+        midProjectCodeExpenseCodeMap.put(232L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(232)); //7
+        midProjectCodeExpenseCodeMap.put(230L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(230)); //8
+        midProjectCodeExpenseCodeMap.put(234L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(234)); //8
 //        all other code return 9
         return midProjectCodeExpenseCodeMap;
     }
