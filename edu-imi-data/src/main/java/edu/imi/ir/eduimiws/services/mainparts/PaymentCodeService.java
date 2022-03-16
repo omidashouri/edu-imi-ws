@@ -4,9 +4,12 @@ import edu.imi.ir.eduimiws.domain.mainparts.PaymentCodeApiEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
+import edu.imi.ir.eduimiws.models.projections.mainparts.PaymentCodeApiProjection;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Map;
 
 public interface PaymentCodeService {
 
@@ -38,5 +41,7 @@ public interface PaymentCodeService {
     void validatePaymentCodeRequestNullInputs(PaymentCodeRequest paymentCodeRequest);
 
     void validatePaymentCodeApiDtoNulls(PaymentCodeApiDto paymentCodeApiDto);
+
+    Page<PaymentCodeApiProjection> queryAllPaymentCodeProjection(Map<String, String> queryParams);
 
 }

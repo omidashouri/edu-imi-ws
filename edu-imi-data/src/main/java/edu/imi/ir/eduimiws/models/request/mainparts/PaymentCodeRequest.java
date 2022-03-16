@@ -57,6 +57,11 @@ public class PaymentCodeRequest {
             type = "string", example = " ")
     private String payerContactPublicId;
 
+    @Schema(title = "Account Public Id",
+            description = "account public Id", maxLength =36,
+            type = "string", example = " ")
+    private String accountPublicId;
+
     @Schema(title = "Request IP",
             description = "request IP", maxLength = 16,
             type = "string", example = " ", nullable = true)

@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.mapper.mainparts;
 
 import edu.imi.ir.eduimiws.domain.mainparts.PaymentCodeApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.crm.AccountMapper;
 import edu.imi.ir.eduimiws.mapper.crm.ContactMapper;
 import edu.imi.ir.eduimiws.mapper.crm.PersonMapper;
 import edu.imi.ir.eduimiws.mapper.pmis.ExpenseCodeApiFastMapper;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring",
         uses = {ContactMapper.class, PersonMapper.class, BankApiMapper.class,
-                ExpenseCodeApiFastMapper.class, ProjectFastMapper.class},
+                ExpenseCodeApiFastMapper.class, ProjectFastMapper.class, AccountMapper.class},
         imports = {PersistenceUtils.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
@@ -52,7 +53,10 @@ public interface PaymentCodeApiMapper {
             @Mapping(source = "project.projectApi.projectPublicId", target = "projectPublicId"),
             @Mapping(source = "requestCode", target = "requestCode"),
             @Mapping(source = "requestDescription", target = "requestDescription"),
-            @Mapping(source = "requestIp", target = "requestIp")
+            @Mapping(source = "requestIp", target = "requestIp"),
+            @Mapping(source = "account", target = "account", qualifiedByName = "toAccountDto"),
+            @Mapping(source = "account.id", target = "accountId"),
+            @Mapping(source = "account.accountApi.accountPublicId", target = "accountPublicId")
     })
     @BeanMapping(ignoreByDefault = true)
     PaymentCodeApiDto toPaymentCodeApiDto(PaymentCodeApiEntity PaymentCodeApiEntity,
@@ -67,6 +71,7 @@ public interface PaymentCodeApiMapper {
             @Mapping(source = "payerUser", target = "payerUser", qualifiedByName = "personDtoToPersonEntity"),
             @Mapping(source = "payerContact", target = "payerContact", qualifiedByName = "toContactEntity"),
             @Mapping(source = "project", target = "project", qualifiedByName = "toProjectEntity"),
+            @Mapping(source = "account", target = "account", qualifiedByName = "toAccountEntity"),
             @Mapping(source = "createDateTs", target = "createDateTs"),
             @Mapping(source = "deleteDateTs", target = "deleteDateTs"),
             @Mapping(source = "description", target = "description"),

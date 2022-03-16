@@ -4,6 +4,7 @@ import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
+import edu.imi.ir.eduimiws.services.crm.AccountService;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.mainparts.BankApiService;
@@ -16,7 +17,8 @@ import java.util.List;
 @Mapper(componentModel = "spring",
         imports = {java.lang.Long.class},
         uses = {BankApiService.class, ContactService.class,
-                PersonService.class, ProjectService.class, ExpenseCodeService.class},
+                PersonService.class, ProjectService.class,
+                ExpenseCodeService.class, AccountService.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PaymentCodeRequestMapper {
@@ -48,6 +50,10 @@ public interface PaymentCodeRequestMapper {
             @Mapping(source = "projectPublicId", target = "projectPublicId"),
             @Mapping(source = "projectPublicId", target = "project",
                     qualifiedBy = MappingUtil.ProjectPublicIdToProjectDto.class),
+            @Mapping(source = "accountPublicId", target = "accountPublicId"),
+            @Mapping(source = "accountPublicId", target = "account",
+                    qualifiedBy = {MappingUtil.AccountService.class,
+                            MappingUtil.AccountPublicIdToAccountDto.class}),
             @Mapping(source = "requestDescription", target = "requestDescription"),
             @Mapping(source = "requestIp", target = "requestIp")
     })
@@ -115,6 +121,10 @@ public interface PaymentCodeRequestMapper {
             if (paymentCodeRequest.getPayerContactPublicId() != null &&
                     paymentCodeRequest.getPayerContactPublicId().equalsIgnoreCase("string"))
                 paymentCodeRequest.setPayerContactPublicId(null);
+
+            if (paymentCodeRequest.getAccountPublicId() != null &&
+                    paymentCodeRequest.getAccountPublicId().equalsIgnoreCase("string"))
+                paymentCodeRequest.setAccountPublicId(null);
         }
     }
 
@@ -174,6 +184,13 @@ public interface PaymentCodeRequestMapper {
                                         paymentCodeApiDto.getPayerUser().getFirstName()
                                                 + ' ' +
                                                 paymentCodeApiDto.getPayerUser().getLastName()));
+            }
+            if (paymentCodeApiDto.getAccount() == null) {
+                paymentCodeApiDto
+                        .setRequestDescription(
+                                String.format("%s , %s",
+                                        paymentCodeApiDto.getDescription() != null ? paymentCodeApiDto.getDescription() : "",
+                                        paymentCodeApiDto.getAccount().getAccountName()));
             }
         }
     }

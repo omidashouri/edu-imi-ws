@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
-
+@MappingUtil.PersonService
 public interface PersonService {
 //NU
 /*    PersonEntity findById(Long id);

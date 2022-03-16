@@ -9,16 +9,16 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.sql.Timestamp;
 
-@Schema(name = "paymentCodes", description = "Class representing a payment code in the application.")
+@Schema(name = "paymentCodeResponseDescriptive", description = "Class representing a payment code descriptive in the application.")
 @EqualsAndHashCode(callSuper = false)
-@JsonRootName(value = "paymentCode")
-@Relation(collectionRelation = "paymentCodes")
+@JsonRootName(value = "paymentCodeResponseDescriptive")
+@Relation(collectionRelation = "paymentCodeResponseDescriptives")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentCodeResponse extends RepresentationModel<PaymentCodeResponse> {
+public class PaymentCodeResponseDescriptive extends RepresentationModel<PaymentCodeResponseDescriptive> {
 
 
     @Schema(title = "Payment Code", maxLength=17)
@@ -47,9 +47,13 @@ public class PaymentCodeResponse extends RepresentationModel<PaymentCodeResponse
 
     private Long expenseCode;
 
+    private String expenseTitle;
+
     private String projectPublicId;
 
     private String projectCode;
+
+    private String projectName;
 
     private String bankApiPublicId;
 
@@ -59,5 +63,9 @@ public class PaymentCodeResponse extends RepresentationModel<PaymentCodeResponse
 
     private String payerContactPublicId;
 
-    private String accountPublicId;
+    private String payerContactMobilePhone;
+
+    private String payerContactFullName;
+
+    private String accountName;
 }

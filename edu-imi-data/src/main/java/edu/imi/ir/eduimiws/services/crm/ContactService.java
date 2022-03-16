@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+@MappingUtil.ContactService
 public interface ContactService {
 
 //NU

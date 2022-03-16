@@ -9,35 +9,69 @@ import java.lang.annotation.Target;
 
 public class MappingUtil {
 
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ProjectService {
+    }
+
+    //    2.define Element Type for method
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ProjectPublicIdToProjectDto {
     }
 
+//  ---
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface BankService {
+    }
+
+    //    2.define Element Type for method
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface BankPublicIdToBankDto {
     }
 
+//    ---
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ContactService {
+    }
+
+    //    2.define Element Type for method
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ContactPublicIdToContactDto {
     }
 
+//  ---
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface PersonService {
+    }
+
+//    2.define Element Type for method
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface PersonPublicIdToPersonDto {
     }
 
-    @Qualifier
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface ExpenseCodePublicIdToExpenseCodeApiDto {
-    }
+//  ---
 
 
     @Qualifier
@@ -104,15 +138,39 @@ public class MappingUtil {
     //    2.define Element Type for method
     @Qualifier
     @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ExpenseCodePublicIdToExpenseCodeApiDto {
+    }
+
+    //    3.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
     public @interface ProjectPublicIdToExpenseCodePublicId {
+    }
+
+    //    4.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ProjectPublicIdToExpenseCodeApi {
+    }
+
+
+//    ---------------------------------------
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface AccountService {
     }
 
     //    2.define Element Type for method
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
-    public @interface ProjectPublicIdToExpenseCodeApi {
+    public @interface AccountPublicIdToAccountDto {
     }
 
 

@@ -10,11 +10,13 @@ import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.models.dto.mainparts.BankApiDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
 import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;
+import edu.imi.ir.eduimiws.models.projections.mainparts.PaymentCodeApiProjection;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
 import edu.imi.ir.eduimiws.models.user.MyPrincipleUser;
 import edu.imi.ir.eduimiws.repositories.mainparts.PaymentCodeRepository;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
 import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeService;
+import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
 import edu.imi.ir.eduimiws.utilities.DateConvertor;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -42,6 +45,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
     private final DateConvertor dateConvertor;
     private final BankApiService bankApiService;
     private final ExpenseCodeService expenseCodeService;
+    private final ConvertorUtil convertorUtil;
 
 
     @Override
@@ -114,7 +118,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
 
         String nationalEconomicCode = nationalCode;
 
-        if(checkStringByLength.test(nationalCode,10))
+        if (checkStringByLength.test(nationalCode, 10))
             nationalEconomicCode = "0".concat(nationalEconomicCode);
 
 
@@ -242,6 +246,34 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         String paymentCode = concatenateAllInputsForPaymentCode(nationalCode,
                 String.valueOf(expenseCodeApi.getExpenseCode()), project.getProjectCode(), bankTwoDigitPaymentCode);
         return paymentCode;
+    }
+
+    @Override
+    public Page<PaymentCodeApiProjection> queryAllPaymentCodeProjection(Map<String, String> queryParams) {
+
+        String paymentCode, requestDescription, nationalCode,
+                expenseCode, expenseTitle, projectCode,
+                projectName, payerContactMobilePhone,
+                payerContactFullName, accountName;
+
+        paymentCode = convertorUtil.findKey(queryParams, "paymentCode").orElse(null);
+        requestDescription = convertorUtil.findKey(queryParams, "requestDescription").orElse(null);
+        nationalCode = convertorUtil.findKey(queryParams, "nationalCode").orElse(null);
+        expenseCode = convertorUtil.findKey(queryParams, "expenseCode").orElse(null);
+        expenseTitle = convertorUtil.findKey(queryParams, "expenseTitle").orElse(null);
+        projectCode = convertorUtil.findKey(queryParams, "projectCode").orElse(null);
+        projectName = convertorUtil.findKey(queryParams, "projectName").orElse(null);
+        payerContactMobilePhone = convertorUtil.findKey(queryParams, "payerContactMobilePhone").orElse(null);
+        payerContactFullName = convertorUtil.findKey(queryParams, "payerContactFullName").orElse(null);
+        accountName = convertorUtil.findKey(queryParams, "accountName").orElse(null);
+
+        Pageable pageable = convertorUtil.getPageableFromQueryParam(queryParams, "nationalCode");
+
+        return paymentCodeRepository.queryAllPaymentCodeApiProjection(paymentCode, requestDescription,
+                nationalCode, expenseCode, expenseTitle,
+                projectCode, projectName,
+                payerContactMobilePhone, payerContactFullName,
+                accountName, pageable);
     }
 
 }

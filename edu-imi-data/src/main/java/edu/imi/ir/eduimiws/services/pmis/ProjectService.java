@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+@MappingUtil.ProjectService
 public interface ProjectService {
 
     Page<ProjectEntity> findAllProjectEntityPages(Pageable pageable);

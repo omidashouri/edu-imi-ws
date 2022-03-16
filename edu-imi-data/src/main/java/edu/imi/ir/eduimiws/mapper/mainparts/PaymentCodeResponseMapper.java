@@ -1,13 +1,8 @@
 package edu.imi.ir.eduimiws.mapper.mainparts;
 
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.mapper.crm.ContactMapper;
-import edu.imi.ir.eduimiws.mapper.crm.PersonMapper;
-import edu.imi.ir.eduimiws.mapper.pmis.ExpenseCodeApiFastMapper;
-import edu.imi.ir.eduimiws.mapper.pmis.ProjectFastMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
 import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponse;
-import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -34,6 +29,7 @@ public interface PaymentCodeResponseMapper {
             @Mapping(source = "payerUserPublicId", target = "payerUserPublicId"),
             @Mapping(source = "projectCode", target = "projectCode"),
             @Mapping(source = "projectPublicId", target = "projectPublicId"),
+            @Mapping(source = "accountPublicId", target = "accountPublicId"),
             @Mapping(source = "requestCode", target = "requestCode"),
             @Mapping(source = "requestDescription", target = "requestDescription"),
             @Mapping(source = "requestIp", target = "requestIp")

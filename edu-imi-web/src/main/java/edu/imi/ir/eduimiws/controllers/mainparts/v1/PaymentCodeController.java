@@ -1,17 +1,21 @@
 package edu.imi.ir.eduimiws.controllers.mainparts.v1;
 
 import edu.imi.ir.eduimiws.assemblers.mainparts.PaymentCodeResponseAssembler;
+import edu.imi.ir.eduimiws.assemblers.mainparts.PaymentCodeResponseDescriptiveAssembler;
 import edu.imi.ir.eduimiws.domain.mainparts.PaymentCodeApiEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.FiledValueNullException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiMapper;
+import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeRequestMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
+import edu.imi.ir.eduimiws.models.projections.mainparts.PaymentCodeApiProjection;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponse;
+import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponseDescriptive;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
 import edu.imi.ir.eduimiws.services.mainparts.PaymentCodeService;
 import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeService;
@@ -42,6 +46,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/paymentCodes")
@@ -53,10 +61,77 @@ public class PaymentCodeController {
     private final ExpenseCodeService expenseCodeService;
     private final ProjectService projectService;
     private final PaymentCodeApiMapper paymentCodeMapper;
+    private final PaymentCodeApiProjectionMapper paymentCodeApiProjectionMapper;
     private final PaymentCodeResponseAssembler paymentCodeResponseAssembler;
-    private final PagedResourcesAssembler<PaymentCodeApiDto> paymentCodeDtoPagedResourcesAssembler;
+    private final PaymentCodeResponseDescriptiveAssembler paymentCodeResponseDescriptiveAssembler;
+    private final PagedResourcesAssembler<PaymentCodeApiDto> paymentCodeApiDtoPagedResourcesAssembler;
     private final DigitalPaymentCredential digitalPaymentCredential;
     private final PaymentCodeRequestMapper paymentCodeRequestMapper;
+
+
+    @Operation(
+            summary = "find All paymentCodes descriptive",
+            description = "Search paymentCode descriptive detail pageable",
+            tags = "paymentCodes",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PaymentCodeResponseDescriptive.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.PaymentCodeResponseDescriptiveAsQueryParam
+    @GetMapping(path = "/paymentCodeDescriptive",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<PaymentCodeResponseDescriptive>> getPaymentCodeDescriptive(@Parameter(hidden = true)
+                                                                                @RequestParam Map<String, String> queryParams) {
+
+//        periodController → queryPeriods
+//        hamkaranController → getDeletedFinancialBySearchQuery
+
+
+        String searchQuery = queryParams.keySet().stream()
+                .filter(Objects::nonNull)
+                .map(key -> key + "=" + queryParams.get(key))
+                .collect(Collectors.joining("&"));
+
+       String searchQuery2= "nationalCode=0075175266";
+
+
+        Page<PaymentCodeApiProjection> paymentCodeApiProjections =
+                paymentCodeService.queryAllPaymentCodeProjection(queryParams);
+
+       Page<PaymentCodeApiDto> paymentCodeApiDtoPage = paymentCodeApiProjections
+                .map(paymentCodeApiProjectionMapper::toPaymentCodeApiDto);
+
+         PagedModel<PaymentCodeResponseDescriptive> paymentCodeResponseDescriptivesPagedModel = paymentCodeApiDtoPagedResourcesAssembler
+                .toModel(paymentCodeApiDtoPage, paymentCodeResponseDescriptiveAssembler);
+
+             return ResponseEntity.ok(paymentCodeResponseDescriptivesPagedModel);
+    }
 
 
     @Operation(
@@ -99,15 +174,14 @@ public class PaymentCodeController {
                                                                            @SortDefault(sort = "paymentCode", direction = Sort.Direction.DESC)
                                                                            @PageableDefault(page = 0, size = 10, value = 10)
                                                                                    Pageable pageable) {
-
-        Page<PaymentCodeApiEntity> PaymentCodePages =
+        Page<PaymentCodeApiEntity> paymentCodePages =
                 paymentCodeService.findAll(pageable);
 
-        Page<PaymentCodeApiDto> paymentCodeApiDtoPage = PaymentCodePages
+        Page<PaymentCodeApiDto> paymentCodeApiDtoPage = paymentCodePages
                 .map(p -> paymentCodeMapper
                         .toPaymentCodeApiDto(p, new CycleAvoidingMappingContext()));
 
-        PagedModel<PaymentCodeResponse> paymentCodeResponsePagedModel = paymentCodeDtoPagedResourcesAssembler
+        PagedModel<PaymentCodeResponse> paymentCodeResponsePagedModel = paymentCodeApiDtoPagedResourcesAssembler
                 .toModel(paymentCodeApiDtoPage, paymentCodeResponseAssembler);
 
         return ResponseEntity.ok(paymentCodeResponsePagedModel);
@@ -207,7 +281,7 @@ public class PaymentCodeController {
                 .map(p -> paymentCodeMapper
                         .toPaymentCodeApiDto(p, new CycleAvoidingMappingContext()));
 
-        PagedModel<PaymentCodeResponse> paymentCodeResponsePagedModel = paymentCodeDtoPagedResourcesAssembler
+        PagedModel<PaymentCodeResponse> paymentCodeResponsePagedModel = paymentCodeApiDtoPagedResourcesAssembler
                 .toModel(paymentCodeApiDtoPage, paymentCodeResponseAssembler);
 
         return ResponseEntity.ok(paymentCodeResponsePagedModel);

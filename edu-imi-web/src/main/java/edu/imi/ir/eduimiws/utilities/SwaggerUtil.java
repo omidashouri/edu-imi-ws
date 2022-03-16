@@ -108,4 +108,60 @@ public class SwaggerUtil {
     public @interface HamkaranDeletedFinancialAsQueryParam {
 
     }
+
+
+    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @Parameter(in = ParameterIn.QUERY
+            , description = "payment code"
+            , name = "paymentCode"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "request description"
+            , name = "requestDescription"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "national code or national identification"
+            , name = "nationalCode"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "expense Code"
+            , name = "expenseCode"
+            , content = @Content(schema = @Schema(type = "integer")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "expense title"
+            , name = "expenseTitle"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "project code"
+            , name = "projectCode"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "project name"
+            , name = "projectName"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Mobile Phone"
+            , name = "payerContactMobilePhone"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Full Name"
+            , name = "payerContactFullName"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Zero-based page index (0..N)"
+            , name = "page"
+            , content = @Content(schema = @Schema(type = "integer", defaultValue = "0")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "The size of the page to be returned"
+            , name = "size"
+            , content = @Content(schema = @Schema(type = "integer", defaultValue = "20")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Sorting criteria in the format: property(,asc|desc). "
+            + "Default sort order is ascending."
+            , name = "sort"
+            , content = @Content(schema = @Schema(type = "string")))
+    public @interface PaymentCodeResponseDescriptiveAsQueryParam {
+
+    }
 }
