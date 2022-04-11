@@ -60,28 +60,14 @@ public interface PaymentCodeResponseDescriptiveMapper {
     @IterableMapping(qualifiedByName = "paymentCodeApiDtoToPaymentCodeResponseDescriptive")
     List<PaymentCodeResponseDescriptive> paymentCodeApiDtosToPaymentCodeResponseDescriptives(List<PaymentCodeApiDto> sources,
                                                                                              @Context CycleAvoidingMappingContext context);
-//todo:refactor remove redundant comments
+
     @Named("getFullNameFromContact")
     default String getFullNameFromContactDto(ContactDto contactDto) {
-//        String firstName = "", lastName = "";
-
-        String result;
         return Optional.of(contactDto)
                 .filter(Objects::nonNull)
                 .map(c -> String.format("%s %s",
                         Objects.nonNull(c.getFirstName()) ? c.getFirstName() : null,
                         Objects.nonNull(c.getLastName()) ? c.getLastName() : null
                 )).orElse(null);
-
-/*        if (Objects.isNull(contactDto))
-            return "";
-
-        if (Objects.nonNull(contactDto.getFirstName()))
-            firstName = contactDto.getFirstName();
-
-        if (Objects.nonNull(contactDto.getLastName()))
-            lastName = contactDto.getLastName();
-
-        return String.format("%s %s",firstName, lastName);*/
     }
 }

@@ -13,7 +13,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-//todo: replace pcae.JOINED_TABLE_NAME_IN_ENTITY by abbreviation in join, ex: pcae.creator → crt
+
 @NamedQueries({
         @NamedQuery(name = "PaymentCodeApiEntity.queryPageablePaymentCodeApiProjection",
                 query = " select " +
