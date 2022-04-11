@@ -6,6 +6,8 @@ import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Map;
+
 @MappingUtil.ProjectService
 public interface ProjectService {
 
@@ -17,4 +19,8 @@ public interface ProjectService {
     ProjectDto findProjectDtoByProjectApiPublicId(String projectPublicId);
 
     ProjectDto findProjectDtoByProjectCodeAndLastVersion(String projectCode, String lastVersion);
+
+    Page<ProjectDto> findAllPageableProjectForPaymentCode(Pageable pageable);
+
+    Page<ProjectDto> findAllPageableProjectForPaymentCodeByQueryParam(Map<String,String> queryParams);
 }

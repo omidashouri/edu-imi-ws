@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import edu.imi.ir.eduimiws.models.helper.DefaultValues;
 import edu.imi.ir.eduimiws.security.ApiUrlSecurityCredential;
 import edu.imi.ir.eduimiws.security.AuthenticationCredential;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
@@ -195,6 +196,12 @@ public class AppConfig {
     @ConfigurationProperties(prefix = "digitalpaymentcredential")
     public DigitalPaymentCredential digitalPayMentCredential() {
         return new DigitalPaymentCredential();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "defaultvalues")
+    public DefaultValues defaultValues() {
+        return new DefaultValues();
     }
 
 /*    @PostConstruct

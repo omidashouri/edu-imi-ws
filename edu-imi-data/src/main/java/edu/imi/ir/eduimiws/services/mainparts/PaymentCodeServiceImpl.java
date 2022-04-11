@@ -178,10 +178,10 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         if (isInputNullOrEqualString().test(paymentCodeRequest.getBankApiPublicId())) {
             paymentCodeRequest.setBankApiPublicId(digitalPaymentCredential.getMelliPublicId());
         }
-/*        if (isInputNullOrEqualString().test(paymentCodeRequest.getPayerContactPublicId())
-                && isInputNullOrEqualString().test(paymentCodeRequest.getPayerUserPublicId())) {
-            throw new NotAcceptableException("both payer contact and payer user public Id are null");
-        }*/
+        if (isInputNullOrEqualString().test(paymentCodeRequest.getPayerContactPublicId())
+                || isInputNullOrEqualString().test(paymentCodeRequest.getAccountPublicId())) {
+            throw new NotAcceptableException("contactPublicId or accountPublicId should have value");
+        }
     }
 
     @Override
@@ -197,8 +197,8 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         if (isNull().test(paymentCodeApiDto.getProject()))
             throw new NotFoundException("Project Not Found");
 
-/*        if (isNull().test(paymentCodeApiDto.getPayerUser()) && isNull().test(paymentCodeApiDto.getPayerContact()))
-            throw new NotFoundException("Payer Not Found");*/
+        if (isNull().test(paymentCodeApiDto.getPayerContact()) || isNull().test(paymentCodeApiDto.getAccount()))
+            throw new NotFoundException("contact or account Not Found");
     }
 
     protected Predicate<String> checkStringIsNull =

@@ -164,4 +164,36 @@ public class SwaggerUtil {
     public @interface PaymentCodeResponseDescriptiveAsQueryParam {
 
     }
+
+
+    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Project Public Id"
+            , name = "projectPublicId"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Project Code"
+            , name = "projectCode"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Project Name"
+            , name = "projectName"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Zero-based page index (0..N)"
+            , name = "page"
+            , content = @Content(schema = @Schema(type = "integer", defaultValue = "0")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "The size of the page to be returned"
+            , name = "size"
+            , content = @Content(schema = @Schema(type = "integer", defaultValue = "20")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Sorting criteria in the format: property(,asc|desc). "
+            + "Default sort order is ascending."
+            , name = "sort"
+            , content = @Content(schema = @Schema(type = "string")))
+    public @interface ProjectResponseForPaymentCodeAsQueryParam {
+
+    }
 }

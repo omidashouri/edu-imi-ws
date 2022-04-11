@@ -3,12 +3,9 @@ package edu.imi.ir.eduimiws.mapper.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
-import org.hibernate.Hibernate;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -17,8 +14,6 @@ import java.util.List;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface ContactFastDtoMapper {
-
-    ContactFastDtoMapper INSTANCE = Mappers.getMapper(ContactFastDtoMapper.class);
 
 /*
     accountPublicId, salutationPublicId, currencyPublicId, managerPublicId, assistantPublicId, parentPublicId
@@ -29,6 +24,7 @@ public interface ContactFastDtoMapper {
 
 */
 
+    @Named("toContactFastDto")
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "contactWebService.contactPublicId", target = "contactPublicId"),
@@ -113,16 +109,19 @@ public interface ContactFastDtoMapper {
     @BeanMapping(ignoreByDefault = true)
     ContactFastDto toContactFastDto(ContactEntity contactEntity, @Context CycleAvoidingMappingContext context);
 
+    @Named("toContactEntity")
     @BeanMapping(ignoreByDefault = true)
     @InheritInverseConfiguration
     @Mappings({
-            @Mapping(source = "id",target = "id"),
-            @Mapping(source = "account",target = "account")
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "account", target = "account")
     })
     ContactEntity toContactEntity(ContactFastDto contactFastDto, @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toContactEntity")
     List<ContactEntity> toContactEntities(List<ContactFastDto> ContactFastDtos, @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toContactFastDto")
     List<ContactFastDto> toContactFastDtos(List<ContactEntity> contactEntities, @Context CycleAvoidingMappingContext context);
 
     @BeforeMapping
@@ -130,5 +129,29 @@ public interface ContactFastDtoMapper {
         new PersistenceUtils().cleanFromProxyByReadMethod(contactEntity);
     }
 
+    @Mappings({
+            @Mapping(source = "nationCode", target = "nationCode"),
+            @Mapping(source = "firstName", target = "firstName"),
+            @Mapping(source = "middleName", target = "middleName"),
+            @Mapping(source = "lastName", target = "lastName"),
+            @Mapping(source = "mobilePhone", target = "mobilePhone"),
+            @Mapping(source = "birthdate", target = "birthdate")
+    })
+    @BeanMapping(ignoreByDefault = true,
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateContactByContactFactDtoForPaymentCode(ContactFastDto contactFastDto,
+                                                     @MappingTarget ContactEntity contact);
+
+
+    @Mappings({
+            @Mapping(source = "nationCode", target = "nationCode"),
+            @Mapping(source = "firstName", target = "firstName"),
+            @Mapping(source = "middleName", target = "middleName"),
+            @Mapping(source = "lastName", target = "lastName"),
+            @Mapping(source = "mobilePhone", target = "mobilePhone"),
+            @Mapping(source = "birthdate", target = "birthdate")
+    })
+    @BeanMapping(ignoreByDefault = true)
+     ContactEntity updateContactByContactFactDtoForPaymentCode(ContactFastDto contactFastDto);
 
 }

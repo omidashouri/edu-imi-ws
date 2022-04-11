@@ -458,7 +458,7 @@ public class PeriodController {
                 .toModel(periodProjectionCustomTwoDtoPages, periodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler);
 
         periodResponseCustomTwoPagedModel
-                .forEach(periodResponseCustomTwo -> convertorUtil.makeCharacterSetPerson(periodResponseCustomTwo));
+                .forEach(periodResponseCustomTwo -> convertorUtil.makeCharacterSetPersian(periodResponseCustomTwo));
 
         return ResponseEntity.ok(periodResponseCustomTwoPagedModel);
     }
@@ -510,7 +510,7 @@ public class PeriodController {
                 periodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler
                         .toModel(periodProjectionCustomTwoDto);
 
-        convertorUtil.makeCharacterSetPerson(periodResponseCustomTwo);
+        convertorUtil.makeCharacterSetPersian(periodResponseCustomTwo);
 
         return ResponseEntity.ok(periodResponseCustomTwo);
 

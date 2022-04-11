@@ -22,7 +22,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "EDU", sequenceName = "SEQ_EDU_CATEGORY", allocationSize = 1)
 @Table(schema = "EDU", name = "TBL_EDU_CATEGORY")

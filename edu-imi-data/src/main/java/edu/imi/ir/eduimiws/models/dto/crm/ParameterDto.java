@@ -15,9 +15,15 @@ public class ParameterDto implements Serializable {
 
     private Long id;
 
+    private String parameterPublicId;
+
     private String paramName;
 
     private String paramValue;
 
-    private ParameterDto mainParamId;
+    private Long mainParamId;
+    private String mainParamPublicId;
+    private ParameterDto mainParamDto;
+
+    private ParameterApiDto parameterApiDto;
 }

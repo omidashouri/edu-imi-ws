@@ -21,6 +21,12 @@ public interface ContactService {
 
     List<ContactFastDto> findContactByNationalCode(String nationalCode);
 
+    Page<ContactFastDto> findContactByNationalCodeForPaymentCode(String nationalCode, Pageable pageable);
+
+    ContactFastDto updateContactForPaymentCode(ContactFastDto newContactFastDto, ContactEntity editableContact);
+
+    ContactFastDto createContactForPaymentCode(ContactFastDto newContactFastDto);
+
     Long getContactNumberByNationalCode(String nationalCode);
 
     Page<ContactEntity> findAllContactEntityPages(Pageable pageable);
@@ -31,6 +37,8 @@ public interface ContactService {
     ContactDto findContactDtoByContactApiPublicId(String contactPublicId);
 
     List<ContactEntity> findCotactsByIds(List<Long> contactIds);
+
+    ContactFastDto findContactById(Long contactId);
 
     ContactEntity saveContact(ContactEntity newContact);
 

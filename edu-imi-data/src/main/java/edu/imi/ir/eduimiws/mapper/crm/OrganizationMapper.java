@@ -1,13 +1,10 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
-import edu.imi.ir.eduimiws.domain.crm.OrganizationApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.OrganizationEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
-import edu.imi.ir.eduimiws.models.dto.crm.OrganizationApiDto;
 import edu.imi.ir.eduimiws.models.dto.crm.OrganizationDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -17,9 +14,8 @@ import java.util.List;
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface OrganizationMapper {
 
-    OrganizationMapper INSTANCE = Mappers.getMapper(OrganizationMapper.class);
 
-
+    @Named("toOrganizationDto")
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "account.id", target = "accountId"),
@@ -62,12 +58,17 @@ public interface OrganizationMapper {
             , @Context CycleAvoidingMappingContext context);
 
 
+    @Named("toOrganization")
     @InheritInverseConfiguration
     OrganizationEntity toOrganization(OrganizationDto organizationDto, @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toOrganizationDto")
+    List<OrganizationDto> toOrganizationDtos(List<OrganizationEntity> organizationEntities, @Context CycleAvoidingMappingContext context);
+
+    @IterableMapping(qualifiedByName = "toOrganization")
     List<OrganizationEntity> toOrganizationEntities(List<OrganizationDto> organizationDtos, @Context CycleAvoidingMappingContext context);
 
-    List<OrganizationDto> toOrganizationDtos(List<OrganizationEntity> organizationEntities, @Context CycleAvoidingMappingContext context);
+
 
     @BeforeMapping
     default void handleLazyInitialization(OrganizationEntity organization, @MappingTarget OrganizationDto organizationDto) {

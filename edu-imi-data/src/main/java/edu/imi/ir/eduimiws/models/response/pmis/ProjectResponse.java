@@ -3,11 +3,6 @@ package edu.imi.ir.eduimiws.models.response.pmis;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
-import edu.imi.ir.eduimiws.models.dto.crm.PersonDto;
-import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
-import edu.imi.ir.eduimiws.models.dto.pmis.ProjectTypeDto;
-import edu.imi.ir.eduimiws.models.response.crm.UserContactResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;

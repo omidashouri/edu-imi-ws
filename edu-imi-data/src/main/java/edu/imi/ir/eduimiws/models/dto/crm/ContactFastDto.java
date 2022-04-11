@@ -1,7 +1,5 @@
 package edu.imi.ir.eduimiws.models.dto.crm;
 
-import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
-import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import lombok.*;
 
 import java.io.Serializable;
@@ -221,5 +219,7 @@ public class ContactFastDto implements Serializable {
 
     private String personPublicId;
     private Long personId;
+
+    private String fullName;
 
 }

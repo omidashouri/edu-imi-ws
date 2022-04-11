@@ -7,21 +7,19 @@ import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.hibernate.Hibernate;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        uses = {AccountApiMapper.class},
+        uses = {AccountApiMapper.class, CompanyMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface AccountMapper {
 
-    AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
-
     @Named("toAccountDto")
     @Mappings({
             @Mapping(source = "id", target = "id"),
+            @Mapping(source = "company", target = "company", qualifiedByName = "toCompanyDto"),
             @Mapping(source = "accountApi.accountPublicId", target = "accountPublicId"),
             @Mapping(source = "accessType", target = "accessType"),
             @Mapping(source = "accountAdditionalInfoId", target = "accountAdditionalInfoId"),
@@ -89,8 +87,9 @@ public interface AccountMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mappings({
             @Mapping(source = "id",target = "id"),
-            @Mapping(source = "accountApi",target = "accountApi"),
+//            @Mapping(source = "accountApi",target = "accountApi"),
             @Mapping(source = "accessType", target = "accessType"),
+            @Mapping(source = "company", target = "company", qualifiedByName = "toCompanyEntity"),
             @Mapping(source = "accountAdditionalInfoId", target = "accountAdditionalInfoId"),
             @Mapping(source = "accountEnName", target = "accountEnName"),
             @Mapping(source = "accountLogo", target = "accountLogo"),
@@ -150,14 +149,16 @@ public interface AccountMapper {
     AccountEntity toAccountEntity(AccountDto accountDto
             , @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toAccountEntity")
     List<AccountEntity> toAccountEntities(List<AccountDto> accountDtos,
                                           @Context CycleAvoidingMappingContext context);
 
+    @IterableMapping(qualifiedByName = "toAccountDto")
     List<AccountDto> toAccountDtos(List<AccountEntity> accountEntities,
                                    @Context CycleAvoidingMappingContext context);
 
 
-    @BeforeMapping
+/*    @BeforeMapping
     default void handleLazyFetchExceptionEntity(AccountEntity account) {
         if (account != null) {
             //        Account Public Id
@@ -165,9 +166,9 @@ public interface AccountMapper {
                 account.setAccountApi(null);
             }
         }
-    }
+    }*/
 
-    @BeforeMapping
+/*    @BeforeMapping
     default void handleLazyFetchExceptionDto(AccountDto accountDto) {
 
         if (accountDto != null) {
@@ -176,6 +177,13 @@ public interface AccountMapper {
                 accountDto.setAccountApi(null);
             }
         }
+    }*/
+
+    @BeforeMapping
+    @InheritConfiguration(name = "toAccountDto")
+    default void handleAccountPublicIds(AccountEntity accountEntity,
+                                           @MappingTarget AccountDto accountDto) {
+        new PersistenceUtils().cleanFromProxyByReadMethod(accountEntity);
     }
 
     @AfterMapping
@@ -228,5 +236,29 @@ public interface AccountMapper {
             }
         }
     }
+
+
+    //Points: this type of update do not create new instance for return Type
+    @Mappings({
+            @Mapping(source = "economicalCode", target = "economicalCode"),
+            @Mapping(source = "accountName", target = "accountName"),
+            @Mapping(source = "mainPhone", target = "mainPhone"),
+            @Mapping(source = "otherPhone", target = "otherPhone")
+    })
+    @BeanMapping(ignoreByDefault = true,
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateAccountByAccountDtoForPaymentCode(AccountDto accountDto,
+                                                     @MappingTarget AccountEntity account);
+
+//Points: this type of update create new instance for return Type
+    @Mappings({
+            @Mapping(source = "economicalCode", target = "economicalCode"),
+            @Mapping(source = "accountName", target = "accountName"),
+            @Mapping(source = "mainPhone", target = "mainPhone"),
+            @Mapping(source = "otherPhone", target = "otherPhone")
+    })
+    @BeanMapping(ignoreByDefault = true,
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    AccountEntity updateAccountByAccountDtoForPaymentCode(AccountDto accountDto);
 }
 

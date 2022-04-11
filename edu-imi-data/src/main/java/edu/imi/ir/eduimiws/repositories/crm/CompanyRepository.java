@@ -10,4 +10,7 @@ public interface CompanyRepository extends CrudRepository<CompanyEntity, Long> {
 
     @EntityGraph(value = "CompanyEntity.findByCompanyApi", type = EntityGraph.EntityGraphType.LOAD)
     CompanyEntity findByCompanyApi_CompanyPublicId(String companyPublicId);
+
+    @EntityGraph(value = "CompanyEntity.findByCompanyApi", type = EntityGraph.EntityGraphType.LOAD)
+    CompanyEntity readById(Long id);
 }

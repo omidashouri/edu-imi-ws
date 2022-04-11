@@ -4,6 +4,9 @@ package edu.imi.ir.eduimiws.services.crm;
 import edu.imi.ir.eduimiws.domain.crm.ContactApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.crm.ContactApiMapper;
+import edu.imi.ir.eduimiws.models.dto.crm.ContactApiDto;
 import edu.imi.ir.eduimiws.repositories.crm.ContactApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class ContactApiServiceImpl implements ContactApiService {
 
 
     private final ContactApiRepository contactApiRepository;
+    private final ContactApiMapper contactApiMapper;
     private final PublicIdUtil publicIdUtil;
 //NU
 /*    @Override
@@ -48,6 +52,15 @@ public class ContactApiServiceImpl implements ContactApiService {
                 .filter(Objects::nonNull)
                 .map(ContactApiEntity::getContact)
                 .orElse(new ContactEntity());
+    }
+
+    @Override
+    public ContactApiDto findContactApiDtoByContactPublicId(String contactPublicId) {
+        return contactApiRepository
+                .findByContactPublicId(contactPublicId)
+                .filter(Objects::nonNull)
+                .map(ca-> contactApiMapper.contactApiEntityToContactApiDto(ca,new CycleAvoidingMappingContext()))
+                .orElse(null);
     }
 
     @Override

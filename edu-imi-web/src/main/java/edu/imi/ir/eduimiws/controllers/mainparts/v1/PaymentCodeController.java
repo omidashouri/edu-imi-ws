@@ -330,6 +330,7 @@ public class PaymentCodeController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createPaymentByPaymentCodeRequest(@RequestBody PaymentCodeRequest paymentCodeRequest) {
 
+
         paymentCodeService.validatePaymentCodeRequestNullInputs(paymentCodeRequest);
 
         PaymentCodeApiDto paymentCodeApiDto = paymentCodeRequestMapper

@@ -40,7 +40,47 @@ import java.util.List;
               attributeNodes = {
                       @NamedAttributeNode(value = "account")
               }
-    )
+    ),
+        @NamedEntityGraph(name = "ContactEntity.findContactContactApi",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "contactWebService")
+                }
+        )
+})
+
+@NamedQueries({
+        @NamedQuery(name = "ContactEntity.queryPageablePaymentCodeApiProjection",
+                query = " select " +
+                        " con.id as id,"+
+                        " cona.contactPublicId as contactPublicId,"+
+                        " con.nationCode as nationCode, " +
+                        " con.firstName as firstName, " +
+                        " con.middleName as middleName," +
+                        " con.lastName as lastName," +
+                        " con.mobilePhone as mobilePhone," +
+                        " con.birthdate as birthdate " +
+                        " from " +
+                        " ContactEntity con " +
+                        " left join con.contactWebService cona " +
+                        " where " +
+                        " ( :id is null or con.id = :id ) AND " +
+                        " ( :contactPublicId is null or cona.contactPublicId = :contactPublicId ) AND " +
+                        " ( :nationalCode is null or con.nationCode = :nationalCode ) AND " +
+                        " ( :firstName is null or con.firstName like concat('%',:firstName,'%') ) AND " +
+                        " ( :middleName is null or con.middleName like concat('%',:middleName,'%') ) AND " +
+                        " ( :lastName is null or con.lastName like concat('%',:lastName,'%') ) AND " +
+                        " ( :mobilePhone is null or con.mobilePhone like concat('%',:mobilePhone,'%') ) AND " +
+                        " ( :birthDate is null or con.birthdate like concat('%',:birthDate,'%') ) AND " +
+                        " ( :fullName is null or concat(con.firstName,' ',con.middleName,' ',con.lastName)  like concat('%',:fullName,'%') ) "
+                /*       " ORDER BY con.lastName desc NULLS LAST "
+                hints =  {
+                        @QueryHint( name = QueryHints.HINT_FLUSH_MODE, value = "AUTO" ),
+                        @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true"),
+                        @QueryHint(name = QueryHints.HINT_READONLY,value = "true"),
+                        @QueryHint( name = QueryHints.HINT_COMMENT, value = "use cache for named query" ),
+                },
+                lockMode = LockModeType.READ*/
+        )
 })
 
 @Getter

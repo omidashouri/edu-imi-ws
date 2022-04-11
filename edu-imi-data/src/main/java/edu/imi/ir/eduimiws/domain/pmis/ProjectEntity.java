@@ -21,6 +21,35 @@ import javax.persistence.*;
 })
 
 
+@NamedQueries({
+        @NamedQuery(name = "ProjectEntity.queryPageablePaymentCodeApiProjection",
+                query = " select " +
+                        " prj.id as id,"+
+                        " prja.projectPublicId as projectPublicId ,"+
+                        " prj.projectCode as projectCode , " +
+                        " prj.projectName as projectName , " +
+                        " prj.lastVersion as lastVersion " +
+                        " from " +
+                        " ProjectEntity prj " +
+                        " left join prj.projectApi prja " +
+                        " where " +
+                        " ( :id is null or prj.id = :id ) AND " +
+                        " ( :projectPublicId is null or prja.projectPublicId = :projectPublicId ) AND " +
+                        " ( :projectCode is null or prj.projectCode like concat('%',:projectCode,'%') ) AND " +
+                        " ( :projectName is null or prj.projectName like concat('%',:projectName,'%') ) AND " +
+                        " ( :lastVersion is null or prj.lastVersion = :lastVersion ) "
+                /*       " ORDER BY con.lastName desc NULLS LAST "
+                hints =  {
+                        @QueryHint( name = QueryHints.HINT_FLUSH_MODE, value = "AUTO" ),
+                        @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true"),
+                        @QueryHint(name = QueryHints.HINT_READONLY,value = "true"),
+                        @QueryHint( name = QueryHints.HINT_COMMENT, value = "use cache for named query" ),
+                },
+                lockMode = LockModeType.READ*/
+        )
+})
+
+
 
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)//,region = "period")
@@ -50,7 +79,7 @@ public class ProjectEntity extends BaseEntity {
     @Column(name = "PROJECT_NAME", length =500 )
     private String projectName;
 
-    @Column(name = "PROJECT_CODE", length =20 )
+    @Column(name = "PROJECT_CODE", length =30 )
     private String projectCode;
 
     @Column(name = "START_DATE", length =10 )

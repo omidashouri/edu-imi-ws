@@ -5,9 +5,11 @@ import com.querydsl.core.types.Predicate;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.crm.ContactForPaymentCodeProjectionContactFastDtoMapper;
 import edu.imi.ir.eduimiws.mapper.crm.ContactMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
+import edu.imi.ir.eduimiws.models.projections.crm.ContactForPaymentCodeProjection;
 import edu.imi.ir.eduimiws.repositories.crm.ContactRepository;
 import edu.imi.ir.eduimiws.repositories.crm.querydsl.ContactQueryDslRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -29,6 +33,7 @@ public class ContactServiceImpl implements ContactService {
     private final ContactRepository contactRepository;
     private final ContactQueryDslRepository contactQueryDslRepository;
     private final ContactFastDtoMapper contactFastDtoMapper;
+    private final ContactForPaymentCodeProjectionContactFastDtoMapper contactForPaymentCodeProjectionContactFastDtoMapper;
     private final ContactMapper contactMapper;
 
     @Override
@@ -39,6 +44,38 @@ public class ContactServiceImpl implements ContactService {
         List<ContactFastDto> contactFastDtos = contactFastDtoMapper
                 .toContactFastDtos(contactEntities, new CycleAvoidingMappingContext());
         return contactFastDtos;
+    }
+
+    @Override
+    public Page<ContactFastDto> findContactByNationalCodeForPaymentCode(String nationalCode, Pageable pageable) {
+        Page<ContactForPaymentCodeProjection> contactForPaymentCodeProjections = contactRepository
+                .queryPageableContactForPaymentCodeProjection(null, null, nationalCode, null,
+                        null, null, null, null, null, pageable);
+
+        return contactForPaymentCodeProjections
+                .map(contactForPaymentCodeProjectionContactFastDtoMapper::contactForPaymentCodeProjectionToContactFastDto);
+    }
+
+    @Override
+    public ContactFastDto updateContactForPaymentCode(ContactFastDto newContactFastDto, ContactEntity editableContact) {
+
+        contactFastDtoMapper.updateContactByContactFactDtoForPaymentCode(newContactFastDto, editableContact);
+
+        ContactEntity updatedContact = contactRepository.save(editableContact);
+
+        return contactFastDtoMapper.toContactFastDto(updatedContact, new CycleAvoidingMappingContext());
+
+    }
+
+    @Override
+    public ContactFastDto createContactForPaymentCode(ContactFastDto newContactFastDto) {
+
+        ContactEntity newContact = contactFastDtoMapper
+                .updateContactByContactFactDtoForPaymentCode(newContactFastDto);
+
+        ContactEntity savedContact = contactRepository.save(newContact);
+
+        return contactFastDtoMapper.toContactFastDto(savedContact, new CycleAvoidingMappingContext());
     }
 
     @Override
@@ -75,6 +112,16 @@ public class ContactServiceImpl implements ContactService {
         List<ContactEntity> contacts = contactRepository
                 .findByIdIn(contactIds);
         return contacts;
+    }
+
+    @Override
+    public ContactFastDto findContactById(Long contactId) {
+        ContactEntity contact = contactRepository.readById(contactId);
+        ContactFastDto contactFastDto = Optional.of(contact)
+                .filter(Objects::nonNull)
+                .map(ce -> contactFastDtoMapper.toContactFastDto(ce, new CycleAvoidingMappingContext()))
+                .orElse(new ContactFastDto());
+        return contactFastDto;
     }
 
     @Override

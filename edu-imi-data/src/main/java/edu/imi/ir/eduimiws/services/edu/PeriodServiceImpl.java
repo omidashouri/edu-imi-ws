@@ -159,9 +159,9 @@ public class PeriodServiceImpl implements PeriodService {
                                                                     String periodExecutorFirstName, String periodExecutorLastName,
                                                                     String periodExecutorFullName, Pageable pageable) {
 
-        String encodedPeriodName = convertorUtil.characterEncodingStringRequest.apply(periodName);
-        String encodedFieldName = convertorUtil.characterEncodingStringRequest.apply(fieldName);
-        String encodedEduCategoryName = convertorUtil.characterEncodingStringRequest.apply(eduCategoryName);
+        String encodedPeriodName = convertorUtil.characterEncodingInputStringForDb.apply(periodName);
+        String encodedFieldName = convertorUtil.characterEncodingInputStringForDb.apply(fieldName);
+        String encodedEduCategoryName = convertorUtil.characterEncodingInputStringForDb.apply(eduCategoryName);
 
 
         Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages = periodRepository.queryAllPeriodCustomTwo(periodPublicId,

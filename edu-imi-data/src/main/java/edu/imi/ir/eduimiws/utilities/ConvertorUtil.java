@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.utilities;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Component
+@Slf4j
 @MappingUtil.ConvertorUtil
 public class ConvertorUtil {
 
@@ -29,50 +31,156 @@ public class ConvertorUtil {
                     }
                 }
             } catch (IllegalAccessException e) {
-                System.out.println("later correct it");
+                log.error("later correct it > " + e.getMessage());
             }
         }
         return object;
     }
 
-    public <T> T makeCharacterSetPerson(T object) {
+    /**
+     * use 'persian' or 'db' for Type
+     *
+     * @param object
+     * @param type
+     * @param <T>,   String
+     * @return <T>
+     */
+    public <T> T changeInstanceCharAndNumSetByType(T object, String type) {
+
+        for (Field field : object.getClass().getDeclaredFields()) {
+            try {
+                if (field.getType().isAssignableFrom(String.class)) {
+                    String fieldName = field.getName();
+                    if (!fieldName.toUpperCase().contains("PUBLICID")) {
+                        String readValue = (String) FieldUtils.readDeclaredField(object, fieldName, true);
+                        if (readValue != null) {
+                            String charSet;
+                            if (type != null && type.equalsIgnoreCase("db")) {
+                                charSet = getDbCharAndNum(readValue);
+                            } else {
+                                charSet = getPersianCharAndNum(readValue);
+                            }
+                            FieldUtils.writeDeclaredField(object, field.getName(), charSet, true);
+                        }
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                log.error("later correct it > " + e.getMessage());
+            }
+        }
+        return object;
+    }
+
+
+    /**
+     *  change to db char, used for mapper
+     * @param object
+     * @param <T>
+     * @return <T>
+     */
+    public <T> T changeInstanceCharAndNumSetByTypeDb(T object) {
+        return this.changeInstanceCharAndNumSetByType(object, "db");
+    }
+
+    public <T> T makeCharacterSetPersian(T object) {
 
         for (Field field : object.getClass().getDeclaredFields()) {
             try {
                 if (field.getType().isAssignableFrom(String.class)) {
                     String readValue = (String) FieldUtils.readDeclaredField(object, field.getName(), true);
                     if (readValue != null) {
-                        String persianChar = readValue
-                                .replaceAll("\u064A", "\u06CC")      //Y
-                                .replaceAll("\u0643", "\u06A9");     //K
+                        String persianChar = getPersianChar(readValue);
                         FieldUtils.writeDeclaredField(object, field.getName(), persianChar, true);
                     }
                 }
             } catch (IllegalAccessException e) {
-                System.out.println("later correct it");
+                log.error("later correct it > " + e.getMessage());
             }
         }
         return object;
     }
 
+    private String getPersianCharAndNum(String readValue) {
+        String persianCharAndNum = this.getPersianNum(this.getPersianChar(readValue));
+        return persianCharAndNum;
+    }
 
-    public Function<String, String> characterEncodingStringRequest = (String inputString) -> {
+    private String getPersianChar(String readValue) {
+        String persianChar = readValue
+                .replaceAll("\u064A", "\u06CC")      //Y
+                .replaceAll("\u0643", "\u06A9");     //K
+        return persianChar;
+    }
+
+    private String getPersianNum(String readValue) {
+        String persianNum = readValue
+                .replaceAll("0", "\u06F0")         //0
+                .replaceAll("1", "\u06F1")         //1
+                .replaceAll("2", "\u06F2")         //2
+                .replaceAll("3", "\u06F3")         //3
+                .replaceAll("4", "\u06F4")         //4
+                .replaceAll("5", "\u06F5")         //5
+                .replaceAll("6", "\u06F6")         //6
+                .replaceAll("7", "\u06F7")         //7
+                .replaceAll("8", "\u06F8")         //8
+                .replaceAll("9", "\u06F9");        //9
+        return persianNum;
+    }
+
+
+    public Function<String, String> characterEncodingInputStringForDb = (String inputString) -> {
         String encodedString = null;
         if (inputString != null) {
-            encodedString = inputString
-                    .replaceAll("\u06CC", "\u064A")     //Y
-                    .replaceAll("\u06A9", "\u0643");    //K
+            encodedString = this.getDbCharAndNum(inputString);
         }
         return encodedString;
     };
 
+    public String getDbCharAndNum(String readValue) {
+        String dbCharAndNum = this.getDbNum(this.getDbChar(readValue));
+        return dbCharAndNum;
+    }
+
+    private String getDbChar(String readValue) {
+        String dbChar = readValue
+                .replaceAll("\u06CC", "\u064A")    //Y
+                .replaceAll("\u06A9", "\u0643");    //K
+        return dbChar;
+    }
+
+    private String getDbNum(String inputString) {
+        String dbNum = inputString
+                .replaceAll("\u06F0", "0")         //0
+                .replaceAll("\u06F1", "1")         //1
+                .replaceAll("\u06F2", "2")         //2
+                .replaceAll("\u06F3", "3")         //3
+                .replaceAll("\u06F4", "4")         //4
+                .replaceAll("\u06F5", "5")         //5
+                .replaceAll("\u06F6", "6")         //6
+                .replaceAll("\u06F7", "7")         //7
+                .replaceAll("\u06F8", "8")         //8
+                .replaceAll("\u06F9", "9");        //9
+        return dbNum;
+    }
 
     public Function<String, String> characterEncodingStringRequestToPersian = (String inputString) -> {
         String encodedString = null;
         if (inputString != null) {
-            encodedString = inputString
+            encodedString = this.getPersianCharAndNum(inputString);
+
+/*                    inputString
                     .replaceAll("\u064A", "\u06CC")     //Y
-                    .replaceAll("\u0643", "\u06A9");    //K
+                    .replaceAll("\u0643", "\u06A9")    //K
+                    .replaceAll("0","\u06F0")         //0
+                    .replaceAll("1","\u06F1")         //1
+                    .replaceAll("2","\u06F2")         //2
+                    .replaceAll("3","\u06F3")         //3
+                    .replaceAll("4","\u06F4")         //4
+                    .replaceAll("5","\u06F5")         //5
+                    .replaceAll("6","\u06F6")         //6
+                    .replaceAll("7","\u06F7")         //7
+                    .replaceAll("8","\u06F8")         //8
+                    .replaceAll("9","\u06F9");        //9*/
         }
         return encodedString;
     };

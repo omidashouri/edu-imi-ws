@@ -1,15 +1,19 @@
 package edu.imi.ir.eduimiws.controllers.pmis.v1;
 
 import edu.imi.ir.eduimiws.assemblers.pmis.ProjectResponseAssembler;
+import edu.imi.ir.eduimiws.assemblers.pmis.ProjectResponseForPaymentCodeProjectDtoAssembler;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.pmis.ProjectFastMapper;
+import edu.imi.ir.eduimiws.mapper.pmis.ProjectResponseForPaymentCodeProjectDtoMapper;
 import edu.imi.ir.eduimiws.mapper.pmis.ProjectResponseProjectDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponseDescriptive;
 import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponse;
+import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponseForPaymentCode;
 import edu.imi.ir.eduimiws.services.pmis.ProjectService;
 import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
@@ -38,6 +42,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -52,10 +57,11 @@ public class ProjectController {
     private final ConvertorUtil convertorUtil;
     private final ProjectService projectService;
     private final ProjectResponseProjectDtoMapper projectResponseProjectDtoMapper;
+    private final ProjectResponseForPaymentCodeProjectDtoMapper projectResponseForPaymentCodeProjectDtoMapper;
     private final ProjectFastMapper projectFastMapper;
     private final ProjectResponseAssembler projectResponseAssembler;
-    private final PagedResourcesAssembler<ProjectDto> projectPagedResourcesAssembler;
-
+    private final PagedResourcesAssembler<ProjectDto> projectDtoPagedResourcesAssembler;
+    private final ProjectResponseForPaymentCodeProjectDtoAssembler projectResponseForPaymentCodeProjectDtoAssembler;
 
     @Operation(
             summary = "find All projects",
@@ -106,7 +112,7 @@ public class ProjectController {
                 .map(cp -> projectFastMapper
                         .toProjectDto(cp, new CycleAvoidingMappingContext()));
 
-        PagedModel<ProjectResponse> projectResponsePagedModel = projectPagedResourcesAssembler
+        PagedModel<ProjectResponse> projectResponsePagedModel = projectDtoPagedResourcesAssembler
                 .toModel(projectFastDtoPage, projectResponseAssembler);
 
         return ResponseEntity.ok(projectResponsePagedModel);
@@ -251,6 +257,170 @@ public class ProjectController {
         projectResponseProjectDtoMapper.characterEncodingPersianForProjectName(projectResponse, convertorUtil);
 
         return ResponseEntity.ok(projectResponse);
+    }
+
+
+    @Operation(
+            summary = "find All projects for payment codes",
+            description = "Search projects for payment code detail pageable",
+            tags = "projects",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ProjectResponseForPaymentCode.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.PageableAsQueryParam
+    @GetMapping(path = "/forPaymentCodes",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ProjectResponseForPaymentCode>> getProjectsForPaymentCode(@Parameter(hidden = true)
+                                                                                               @SortDefault(sort = "projectName",
+                                                                                                       direction = Sort.Direction.DESC)
+                                                                                               @PageableDefault(page = 0, size = 10, value = 10)
+                                                                                                       Pageable pageable) {
+
+        Page<ProjectDto> projectDtoPages =
+                projectService.findAllPageableProjectForPaymentCode(pageable);
+
+        PagedModel<ProjectResponseForPaymentCode> projectResponseForPaymentCodePagedModel = projectDtoPagedResourcesAssembler
+                .toModel(projectDtoPages, projectResponseForPaymentCodeProjectDtoAssembler);
+
+        projectResponseForPaymentCodePagedModel.getContent().forEach(projectResponseForPaymentCode -> {
+            convertorUtil.changeInstanceCharAndNumSetByType(projectResponseForPaymentCode, "persian");
+        });
+
+        return ResponseEntity.ok(projectResponseForPaymentCodePagedModel);
+    }
+
+    @Operation(
+            summary = "Find Project for payment code by public ID",
+            description = "Search project for payment code by the public id",
+            tags = "projects",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = ProjectResponseForPaymentCode.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "period not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @GetMapping(path = "/publicId/{projectPublicId}/forPaymentCode",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getProjectByProjectPublicIdForPaymentCode(@PathVariable String projectPublicId) {
+
+
+        String projectPublicIdDbChar = convertorUtil.getDbCharAndNum(projectPublicId);
+
+        ProjectEntity project = projectService.findProjectEntityByProjectApiPublicId(projectPublicIdDbChar);
+        if (project == null) {
+            throw new NotFoundException("requested project not found");
+        }
+
+        ProjectDto projectDto =
+                projectFastMapper.toProjectDto(project, new CycleAvoidingMappingContext());
+
+        ProjectResponseForPaymentCode projectResponseForPaymentCode =
+                projectResponseForPaymentCodeProjectDtoAssembler.toModel(projectDto);
+
+        return ResponseEntity.ok(projectResponseForPaymentCode);
+
+    }
+
+    @Operation(
+            summary = "find All project for payment code parameterized",
+            description = "Search project for payment code pageable parameterized",
+            tags = "projects",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PaymentCodeResponseDescriptive.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.ProjectResponseForPaymentCodeAsQueryParam
+    @GetMapping(path = "/forPaymentCodes/parameterized",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ProjectResponseForPaymentCode>> getProjectResponseForPaymentCodeWithParameter(@Parameter(hidden = true)
+                                                                                                @RequestParam Map<String, String> queryParams) {
+
+
+        Page<ProjectDto> projectDtos =
+                projectService.findAllPageableProjectForPaymentCodeByQueryParam(queryParams);
+
+        PagedModel<ProjectResponseForPaymentCode> paymentCodeResponseDescriptivesPagedModel = projectDtoPagedResourcesAssembler
+                .toModel(projectDtos, projectResponseForPaymentCodeProjectDtoAssembler);
+
+        paymentCodeResponseDescriptivesPagedModel.getContent().forEach(projectResponseForPaymentCode -> {
+            convertorUtil.changeInstanceCharAndNumSetByType(projectResponseForPaymentCode, "persian");
+        });
+
+        return ResponseEntity.ok(paymentCodeResponseDescriptivesPagedModel);
     }
 
 }

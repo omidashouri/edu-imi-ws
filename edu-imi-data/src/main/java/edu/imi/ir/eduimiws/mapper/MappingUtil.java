@@ -176,4 +176,22 @@ public class MappingUtil {
 
 //    ---------------------------------------
 
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface CompanyService {
+    }
+
+    //    2.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ImiCompanyPublicId {
+    }
+
+
+//    ---------------------------------------
+
 }

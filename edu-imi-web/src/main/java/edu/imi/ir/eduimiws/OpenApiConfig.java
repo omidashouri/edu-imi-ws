@@ -309,6 +309,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi AccountsApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("Accounts")
+                .pathsToMatch("/api/v1/accounts/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {
