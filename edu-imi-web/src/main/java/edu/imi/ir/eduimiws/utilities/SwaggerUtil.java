@@ -149,6 +149,14 @@ public class SwaggerUtil {
             , name = "payerContactFullName"
             , content = @Content(schema = @Schema(type = "string")))
     @Parameter(in = ParameterIn.QUERY
+            , description = "Economical Code"
+            , name = "economicalCode"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Account Name"
+            , name = "accountName"
+            , content = @Content(schema = @Schema(type = "string")))
+    @Parameter(in = ParameterIn.QUERY
             , description = "Zero-based page index (0..N)"
             , name = "page"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "0")))

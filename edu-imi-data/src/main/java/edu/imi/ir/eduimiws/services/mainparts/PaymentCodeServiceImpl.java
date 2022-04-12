@@ -252,9 +252,8 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
     public Page<PaymentCodeApiProjection> queryAllPaymentCodeProjection(Map<String, String> queryParams) {
 
         String paymentCode, requestDescription, nationalCode,
-                expenseCode, expenseTitle, projectCode,
-                projectName, payerContactMobilePhone,
-                payerContactFullName, accountName;
+                expenseCode, expenseTitle, projectCode, projectName,
+                payerContactMobilePhone, payerContactFullName, accountName, economicalCode;
 
         paymentCode = convertorUtil.findKey(queryParams, "paymentCode").orElse(null);
         requestDescription = convertorUtil.findKey(queryParams, "requestDescription").orElse(null);
@@ -265,6 +264,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         projectName = convertorUtil.findKey(queryParams, "projectName").orElse(null);
         payerContactMobilePhone = convertorUtil.findKey(queryParams, "payerContactMobilePhone").orElse(null);
         payerContactFullName = convertorUtil.findKey(queryParams, "payerContactFullName").orElse(null);
+        economicalCode = convertorUtil.findKey(queryParams, "economicalCode").orElse(null);
         accountName = convertorUtil.findKey(queryParams, "accountName").orElse(null);
 
         Pageable pageable = convertorUtil.getPageableFromQueryParam(queryParams, "nationalCode");
@@ -272,7 +272,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         return paymentCodeRepository.queryAllPaymentCodeApiProjection(paymentCode, requestDescription,
                 nationalCode, expenseCode, expenseTitle,
                 projectCode, projectName,
-                payerContactMobilePhone, payerContactFullName,
+                payerContactMobilePhone, payerContactFullName, economicalCode,
                 accountName, pageable);
     }
 

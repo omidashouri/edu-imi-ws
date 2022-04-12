@@ -72,6 +72,10 @@ public class PaymentCodeApiDto implements Serializable {
     private String payerContactPublicId;
     private Long payerContactId;
 
+    private String economicalCode;
+
+    private String accountName;
+
     private AccountDto account;
     private String accountPublicId;
     private Long accountId;

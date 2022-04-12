@@ -39,6 +39,7 @@ import java.sql.Timestamp;
                         " pca.contactPublicId as payerContactPublicId, " +
                         " pc.mobilePhone as payerContactMobilePhone, " +
                         " concat(pc.firstName,' ',pc.lastName) as payerContactFullName, " +
+                        " acc.economicalCode as economicalCode, " +
                         " acc.accountName as accountName, " +
                         " acca.accountPublicId as accountPublicId " +
                         " from " +
@@ -60,7 +61,8 @@ import java.sql.Timestamp;
                         " ( :projectName is null or prj.projectName like concat('%',:projectName,'%') ) AND " +
                         " ( :payerContactMobilePhone is null or pc.mobilePhone = :payerContactMobilePhone ) AND " +
                         " ( :payerContactFullName is null or concat(pc.firstName,' ',pc.lastName)  like concat('%',:payerContactFullName,'%') ) AND " +
-                        " ( :accountName is null or acc.accountName = :accountName ) " +
+                        " ( :economicalCode is null or acc.economicalCode = :economicalCode ) AND " +
+                        " ( :accountName is null or acc.accountName like concat('%',:accountName,'%') ) " +
                         " ORDER BY pcae.requestDescription desc NULLS LAST "
                 /*hints =  {
                         @QueryHint( name = QueryHints.HINT_FLUSH_MODE, value = "AUTO" ),

@@ -40,6 +40,7 @@ public interface PaymentCodeResponseDescriptiveMapper {
             @Mapping(source = "payerContactPublicId", target = "payerContactPublicId"),
             @Mapping(source = "payerContact.mobilePhone", target = "payerContactMobilePhone"),
             @Mapping(source = "payerContact", target = "payerContactFullName", qualifiedByName = "getFullNameFromContact"),
+            @Mapping(source = "account.economicalCode", target = "economicalCode"),
             @Mapping(source = "account.accountName", target = "accountName")
     })
     @BeanMapping(ignoreByDefault = true)

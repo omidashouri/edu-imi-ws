@@ -67,5 +67,7 @@ public class PaymentCodeResponseDescriptive extends RepresentationModel<PaymentC
 
     private String payerContactFullName;
 
+    private String economicalCode;
+
     private String accountName;
 }

@@ -67,6 +67,8 @@ public interface PaymentCodeApiProjection {
 
      String getPayerContactFullName();
 
+    String getEconomicalCode();
+
     String getAccountName();
 
     String getAccountPublicId();

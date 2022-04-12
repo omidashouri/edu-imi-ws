@@ -60,6 +60,8 @@ public interface PaymentCodeApiProjectionMapper {
                     qualifiedBy = {MappingUtil.ContactService.class,
                             MappingUtil.ContactPublicIdToContactDto.class}),
             @Mapping(source = "accountPublicId", target = "accountPublicId"),
+            @Mapping(source = "economicalCode", target = "economicalCode"),
+            @Mapping(source = "accountName", target = "accountName"),
             @Mapping(source = "accountPublicId", target = "account",
                     qualifiedBy = {MappingUtil.AccountService.class,
                             MappingUtil.AccountPublicIdToAccountDto.class})

@@ -29,6 +29,7 @@ public interface PaymentCodeRepository extends CrudRepository<PaymentCodeApiEnti
                                         @Param("projectName") String projectName,
                                         @Param("payerContactMobilePhone") String payerContactMobilePhone,
                                         @Param("payerContactFullName") String payerContactFullName,
+                                        @Param("economicalCode") String economicalCode,
                                         @Param("accountName") String accountName,
                                         Pageable pageable);
 

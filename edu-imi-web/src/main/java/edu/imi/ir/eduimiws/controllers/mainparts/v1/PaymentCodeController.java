@@ -47,8 +47,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
@@ -108,18 +106,6 @@ public class PaymentCodeController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PaymentCodeResponseDescriptive>> getPaymentCodeDescriptive(@Parameter(hidden = true)
                                                                                 @RequestParam Map<String, String> queryParams) {
-
-//        periodController → queryPeriods
-//        hamkaranController → getDeletedFinancialBySearchQuery
-
-
-        String searchQuery = queryParams.keySet().stream()
-                .filter(Objects::nonNull)
-                .map(key -> key + "=" + queryParams.get(key))
-                .collect(Collectors.joining("&"));
-
-       String searchQuery2= "nationalCode=0075175266";
-
 
         Page<PaymentCodeApiProjection> paymentCodeApiProjections =
                 paymentCodeService.queryAllPaymentCodeProjection(queryParams);
