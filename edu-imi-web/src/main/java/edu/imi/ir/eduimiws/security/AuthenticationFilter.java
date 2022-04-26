@@ -7,7 +7,6 @@ import edu.imi.ir.eduimiws.utilities.AppProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -97,10 +97,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .builder()
                 .setSubject(userName)
                 .claim("userPublicId", userPublicId)
-                .setExpiration(new Date(System.currentTimeMillis() + Long.valueOf(appProperties.getExpirationTime()).intValue()))
+                .setExpiration(Date.from(Instant.now().plusMillis(Long.valueOf(appProperties.getExpirationTime()))))
                 .signWith(SignatureAlgorithm.HS512, appProperties.getTokenSecret())
                 .compact();
 
+//        new Date(System.currentTimeMillis() + Long.valueOf(appProperties.getExpirationTime()).intValue())
 //    get bean from context, bean name is name of class start with lowercase
 //        UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
 
