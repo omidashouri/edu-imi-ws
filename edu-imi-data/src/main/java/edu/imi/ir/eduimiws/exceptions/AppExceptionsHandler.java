@@ -5,9 +5,11 @@ import edu.imi.ir.eduimiws.exceptions.controllers.*;
 import edu.imi.ir.eduimiws.exceptions.services.RoleServiceException;
 import edu.imi.ir.eduimiws.exceptions.services.UserServiceException;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
@@ -15,7 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.time.LocalDateTime;
 
 
-//@ControllerAdvice
+@ControllerAdvice
 public class AppExceptionsHandler {
 
     String dateTime = LocalDateTime.now().toString();
@@ -177,6 +179,16 @@ public class AppExceptionsHandler {
                 new ErrorMessage(dateTime, HttpStatus.NOT_ACCEPTABLE.toString()
                         , exception.getMessage())
                 , HttpStatus.NOT_ACCEPTABLE
+        );
+    }
+
+    @ExceptionHandler(value = {ExpiredJwtTokenException.class})
+    public ResponseEntity<?> handleExpiredJwtTokenException(ExpiredJwtException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.UNAUTHORIZED.toString(),
+                        "token is expired!")
+                , HttpStatus.UNAUTHORIZED
         );
     }
 

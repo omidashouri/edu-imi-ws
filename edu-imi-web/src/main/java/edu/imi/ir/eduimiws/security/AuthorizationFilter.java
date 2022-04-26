@@ -2,11 +2,13 @@ package edu.imi.ir.eduimiws.security;
 
 import edu.imi.ir.eduimiws.configurations.SpringApplicationContext;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.ExpiredJwtTokenException;
 import edu.imi.ir.eduimiws.models.user.MyPrincipleUser;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.crm.PersonApiService;
 import edu.imi.ir.eduimiws.utilities.AppProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -62,10 +64,18 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
         if (token != null) {
             token = token.replace(appProperties.getTokenPrefix(), "");
 
-            Claims claims = Jwts.parser()
-                    .setSigningKey(appProperties.getTokenSecret())
-                    .parseClaimsJws(token)
-                    .getBody();
+            Claims claims;
+
+            try {
+                claims = Jwts.parser()
+                        .setSigningKey(appProperties.getTokenSecret())
+                        .parseClaimsJws(token)
+                        .getBody();
+            } catch (ExpiredJwtException expiredJwtException){
+                throw new ExpiredJwtTokenException(expiredJwtException.getHeader(),
+                        expiredJwtException.getClaims(), expiredJwtException.getMessage());
+            }
+
             String user = claims.getSubject();
             String userPublicId = String.valueOf(claims.get("userPublicId"));
 
