@@ -31,4 +31,6 @@ public class HamkaranCredential {
 
     private String apiUriGetDeletedFinancial;
 
+    private String apiUriGetHumanResource;
+
 }

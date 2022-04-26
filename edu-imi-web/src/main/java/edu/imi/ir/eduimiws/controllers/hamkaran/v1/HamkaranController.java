@@ -3,9 +3,11 @@ package edu.imi.ir.eduimiws.controllers.hamkaran.v1;
 import edu.imi.ir.eduimiws.mapper.hamkaran.HamkaranAuthenticationTokenResponseMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.hamkaran.HamkaranDeletedFinancialResponseMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.hamkaran.HamkaranFinancialResponseMapper;
+import edu.imi.ir.eduimiws.mapper.mainparts.hamkaran.HamkaranHumanResourceResponseMapper;
 import edu.imi.ir.eduimiws.models.dto.hamkaran.HamkaranAuthenticationTokenDto;
 import edu.imi.ir.eduimiws.models.dto.hamkaran.HamkaranDeletedFinancialResponseDto;
 import edu.imi.ir.eduimiws.models.dto.hamkaran.HamkaranFinancialResponseDto;
+import edu.imi.ir.eduimiws.models.dto.hamkaran.HamkaranHumanResourceResponseDto;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.hamkaran.v1.HamkaranAuthenticationTokenResponse;
 import edu.imi.ir.eduimiws.models.response.hamkaran.v1.HamkaranDeletedFinancialResponse;
@@ -85,7 +87,7 @@ import java.util.stream.Collectors;
 //    ---
 //    todo: read new api from old erp
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HAMKARAN')")
 @RestController
 @RequestMapping("/api/v1/hamkarans")
 @RequiredArgsConstructor
@@ -94,6 +96,7 @@ public class HamkaranController {
 
     private final HamkaranService hamkaranService;
     private final HamkaranFinancialResponseMapper hamkaranFinancialResponseMapper;
+    private final HamkaranHumanResourceResponseMapper hamkaranHumanResourceResponseMapper;
     private final HamkaranAuthenticationTokenResponseMapper hamkaranAuthenticationTokenResponseMapper;
     private final HamkaranDeletedFinancialResponseMapper hamkaranDeletedFinancialResponseMapper;
 
@@ -102,7 +105,7 @@ public class HamkaranController {
             summary = "hamkaran get token",
             description = "hamkaran get token",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "HamkaranAuthenticationTokenResponse",
+            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -148,7 +151,7 @@ public class HamkaranController {
             summary = "hamkaran get financial",
             description = "hamkaran get financial",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "HamkaranFinancialResponse",
+            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -219,7 +222,7 @@ public class HamkaranController {
             summary = "hamkaran get financial",
             description = "hamkaran get financial",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "HamkaranFinancialResponse",
+            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -276,7 +279,7 @@ public class HamkaranController {
             summary = "hamkaran get financial deleted",
             description = "hamkaran get financial deleted",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "HamkaranDeletedFinancialResponse",
+            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -329,6 +332,69 @@ public class HamkaranController {
 
         return ResponseEntity.ok(hamkaranDeletedFinancialResponse);
     }
+
+
+    @Operation(
+            summary = "hamkaran get Human Resource",
+            description = "hamkaran get Human Resource",
+            security = @SecurityRequirement(name = "imi-security-key"),
+            tags = "Hamkarans",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = HamkaranHumanResourceResponseDto.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "authentication token not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+
+            }
+    )
+    @GetMapping(path = "/humanResource/searchQuery",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getHumanResourceBySearchQuery(@RequestParam Optional<String> limit,
+                                                       @RequestParam Optional<String> yearmonth,
+                                                       @RequestParam Optional<String> shomare_personeli,
+                                                       @RequestParam Optional<String> createDateTime,
+                                                       @RequestParam Optional<String> editDateTime,
+                                                       @Parameter(hidden = true) @RequestParam Map<String, String> allParams
+    ) {
+
+//        https://sanati.imi.ir/api/v1/hr/filter?yearmonth=140009
+
+        HamkaranHumanResourceResponseDto hamkaranHumanResourceResponseDto = new HamkaranHumanResourceResponseDto();
+        String searchQuery = allParams.keySet().stream()
+                .filter(Objects::nonNull)
+                .map(key -> key + "=" + allParams.get(key))
+                .collect(Collectors.joining("&"));
+
+
+        hamkaranHumanResourceResponseDto.setSearchQuery(searchQuery);
+
+        hamkaranHumanResourceResponseDto = hamkaranService
+                .searchHamkaranHumanResourceResponseBySearchQuery(hamkaranHumanResourceResponseDto);
+
+/*        HamkaranHumanResourceResponse hamkaranHumanResourceResponse =
+                hamkaranHumanResourceResponseMapper.toHamkaranHumanResourceResponse(hamkaranHumanResourceResponseDto);*/
+
+        return ResponseEntity.ok(hamkaranHumanResourceResponseDto);
+    }
+
+
 
 
 

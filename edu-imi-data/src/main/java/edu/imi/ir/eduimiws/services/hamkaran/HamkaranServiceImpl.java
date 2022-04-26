@@ -4,12 +4,15 @@ package edu.imi.ir.eduimiws.services.hamkaran;
 import edu.imi.ir.eduimiws.mapper.hamkaran.HamkaranAuthenticationTokenResponseMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.hamkaran.HamkaranDeletedFinancialResponseMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.hamkaran.HamkaranFinancialResponseMapper;
+import edu.imi.ir.eduimiws.mapper.mainparts.hamkaran.HamkaranHumanResourceResponseMapper;
 import edu.imi.ir.eduimiws.models.dto.hamkaran.HamkaranAuthenticationTokenDto;
 import edu.imi.ir.eduimiws.models.dto.hamkaran.HamkaranDeletedFinancialResponseDto;
 import edu.imi.ir.eduimiws.models.dto.hamkaran.HamkaranFinancialResponseDto;
+import edu.imi.ir.eduimiws.models.dto.hamkaran.HamkaranHumanResourceResponseDto;
 import edu.imi.ir.eduimiws.models.response.hamkaran.v1.HamkaranAuthenticationTokenResponse;
 import edu.imi.ir.eduimiws.models.response.hamkaran.v1.HamkaranDeletedFinancialResponse;
 import edu.imi.ir.eduimiws.models.response.hamkaran.v1.HamkaranFinancialResponse;
+import edu.imi.ir.eduimiws.models.response.hamkaran.v1.HamkaranHumanResourceResponse;
 import edu.imi.ir.eduimiws.security.HamkaranCredential;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,7 @@ public class HamkaranServiceImpl implements HamkaranService {
 
     private final HamkaranAuthenticationTokenResponseMapper hamkaranAuthenticationTokenResponseMapper;
     private final HamkaranFinancialResponseMapper hamkaranFinancialResponseMapper;
+    private final HamkaranHumanResourceResponseMapper hamkaranHumanResourceResponseMapper;
     private final HamkaranDeletedFinancialResponseMapper hamkaranDeletedFinancialResponseMapper;
     private final HamkaranCredential hamkaranCredential;
     private final RestTemplate restTemplate;
@@ -78,6 +82,32 @@ public class HamkaranServiceImpl implements HamkaranService {
         hamkaranFinancialResponseDto.setSearchQuery(searchQuery);
 
         return hamkaranFinancialResponseDto;
+    }
+
+    @Override
+    public HamkaranHumanResourceResponseDto searchHamkaranHumanResourceResponseBySearchQuery(HamkaranHumanResourceResponseDto hamkaranHumanResourceResponseDto) {
+
+        HamkaranHumanResourceResponse hamkaranHumanResourceResponse;
+        String searchQuery = hamkaranHumanResourceResponseDto.getSearchQuery();
+        String completeHumanResourceUri = String.format(hamkaranCredential.getApiUriGetHumanResource(), searchQuery);
+
+        ResponseEntity<HamkaranHumanResourceResponse> hamkaranFinancialResponseEntity =
+                restTemplate.exchange(this.uriComponentsBuilderToString(completeHumanResourceUri),
+                        HttpMethod.GET, this.requestHttpEntity(true, hamkaranCredential),
+                        HamkaranHumanResourceResponse.class);
+
+        hamkaranHumanResourceResponse = hamkaranFinancialResponseEntity.getBody();
+        //todo: later handle it
+        if (hamkaranHumanResourceResponse == null) {
+
+        }
+
+        hamkaranHumanResourceResponseDto = hamkaranHumanResourceResponseMapper
+                .toHamkaranHumanResourceResponseDto(hamkaranHumanResourceResponse);
+
+        hamkaranHumanResourceResponseDto.setSearchQuery(searchQuery);
+
+        return hamkaranHumanResourceResponseDto;
     }
 
     @Override

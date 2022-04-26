@@ -73,7 +73,7 @@ EDU: EDU_LEVEL -> EDU_CATEGORY -> COURSE_CATEGORY -> TEAM -> TEAM_PRESENTED_COUR
   /
   ALTER TRIGGER "CRM"."TBL_CONTACT_API_TRG" ENABLE;
 
-##
+
 create or replace TRIGGER "CRM"."TBL_CONTACT_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_CONTACT
     REFERENCING OLD AS OLD NEW AS NEW
     FOR EACH ROW WHEN (1=1)
@@ -747,8 +747,11 @@ CREATE SEQUENCE  "CRM"."SEQ_ROLE_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999
  (ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID) 
  values 
  (CRM.SEQ_ROLE_API_ID.nextval,'ROLE_EDUCATION',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);
-       
-             
+
+Insert into CRM.TBL_ROLE_API
+(ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID)
+values
+(CRM.SEQ_ROLE_API_ID.nextval,'ROLE_HAMKARAN',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);            
              
 ---------------- PRIVILEGE --------------
 
@@ -888,9 +891,10 @@ Insert into CRM.TBL_ROLE_PRIVILEGE_API (ID,ROLE_API_ID,PRIVILEGE_API_ID) values 
  %%IMPORTANT%%   
     --PERSON_API_ID=4221 (find by my id)
 Insert into CRM.TBL_PERSON_ROLE_API (ID,PERSON_API_ID,ROLE_API_ID) values (CRM.SEQ_PERSON_ROLE_API.nextval,3847,1); 
--NOROUZI:173697,TAHAEI:240,Jafari:204
+-NOROUZI:173697,TAHAEI:240,Jafari:204, admin_3:191259 (Hamkaran),
 Insert into CRM.TBL_PERSON_ROLE_API (ID,PERSON_API_ID,ROLE_API_ID) values (CRM.SEQ_PERSON_ROLE_API.nextval,173697,1);
 Insert into CRM.TBL_PERSON_ROLE_API (ID,PERSON_API_ID,ROLE_API_ID) values (CRM.SEQ_PERSON_ROLE_API.nextval,240,1);
+ Insert into CRM.TBL_PERSON_ROLE_API (ID,PERSON_API_ID,ROLE_API_ID) values (CRM.SEQ_PERSON_ROLE_API.nextval,191259,21);
  
 ------------------------------
 
@@ -6432,7 +6436,7 @@ create or replace TRIGGER "EDU"."TBL_STUDENT_COURSE_API_IU" AFTER INSERT OR UPDA
                              FROM
                                  EDU.tbl_STUDENT_COURSE mt
                                  LEFT JOIN EDU.TBL_STUDENT_COURSE_API api ON mt.id = api.STUDENT_COURSE_id
-                                 LEFT JOIN EDU.tbl_REGISTER sect ON mt.REGISTER_id = sect.id
+                                 LEFT JOIN CRM.tbl_REGISTER sect ON mt.REGISTER_id = sect.id
                                  LEFT JOIN EDU.tbl_REGISTER_api secapi ON sect.id = secapi.REGISTER_id
                                  LEFT JOIN EDU.tbl_PERIOD_COURSE thrd ON mt.PERIOD_COURSE_id = thrd.id
                                  LEFT JOIN EDU.tbl_PERIOD_COURSE_api thrdapi ON thrd.id = thrdapi.PERIOD_COURSE_id
@@ -7835,7 +7839,7 @@ crm.TBL_MALI_LISTITEMS
 
 
 
-##
+
 https://sanati.imi.ir/api/v1/fin/filter?limit=50&salemali=1400&datetime_create=2021-04-14T08:28:21.353&datetime_edit=2021-04-14T08:43:36.32
 
 select crm.public_UUID() from dual
@@ -8216,6 +8220,359 @@ END;
 
 
 
+--------------- TBL_MESSAGE ---------------
+
+
+CREATE SEQUENCE  "CRM"."SEQ_MESSAGE_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+
+CREATE TABLE "CRM"."TBL_MESSAGE_API"
+(	"ID" NUMBER NOT NULL ENABLE,
+    "MESSAGE_ID" NUMBER,
+    "MESSAGE_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    "USER_CREATOR_ID" NUMBER,
+    "USER_CREATOR_PUBLIC_ID" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    "CREATE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+    "EDIT_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+    "DELETE_DATE_TS" TIMESTAMP (6) WITH TIME ZONE,
+    "DESCRIPTION" NVARCHAR2(500) COLLATE "USING_NLS_COMP",
+    "DELETE_MESSAGE_ID" NUMBER,
+    CONSTRAINT "TBL_MESSAGE_API_PK" PRIMARY KEY ("ID")
+    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255
+    TABLESPACE "USERS"  ENABLE,
+    CONSTRAINT "TBL_MESSAGE_API_FK1" FOREIGN KEY ("MESSAGE_ID")
+    REFERENCES "CRM"."TBL_MESSAGE" ("ID") ENABLE,
+    CONSTRAINT "TBL_MESSAGE_API_FK2" FOREIGN KEY ("USER_CREATOR_ID")
+    REFERENCES "CRM"."TBL_PERSON" ("ID") ENABLE
+)  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED
+PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255
+NOCOMPRESS LOGGING
+TABLESPACE "USERS" ;
+
+CREATE OR REPLACE EDITIONABLE TRIGGER "CRM"."TBL_MESSAGE_API_TRG"
+BEFORE INSERT ON TBL_MESSAGE_API
+FOR EACH ROW
+BEGIN
+    <<COLUMN_SEQUENCES>>
+    BEGIN
+    IF INSERTING AND :NEW.ID IS NULL THEN
+    SELECT SEQ_MESSAGE_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+    END IF;
+    END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "CRM"."TBL_MESSAGE_API_TRG" ENABLE;
+
+
+
+CREATE OR REPLACE TRIGGER "CRM"."TBL_MESSAGE_API_IU" AFTER
+INSERT OR UPDATE ON crm.tbl_message
+REFERENCING
+OLD AS old
+NEW AS new
+FOR EACH ROW
+WHEN ( 1 = 1 )
+DECLARE
+ts_           TIMESTAMP(6);
+uuid_         NVARCHAR2(500 CHAR);
+apipublicid_  NVARCHAR2(500 CHAR);
+BEGIN
+ts_ := systimestamp;
+uuid_ := crm.public_uuid;
+    IF inserting THEN
+        IF :new.user_creator_id IS NOT NULL THEN
+        SELECT
+        api.person_public_id
+        INTO apipublicid_
+        FROM
+        crm.tbl_person_api api
+        WHERE
+        api.person_id = :new.user_creator_id;
+        END IF;
+        INSERT INTO crm.tbl_message_api (
+            id,
+            message_public_id,
+            create_date_ts,
+            message_id,
+            user_creator_id,
+            user_creator_public_id
+        ) VALUES (
+            crm.seq_message_api.nextval,
+            uuid_,
+            ts_,
+            :new.id,
+            :new.user_creator_id,
+            apipublicid_
+        );
+
+    END IF;
+
+    IF updating THEN
+        UPDATE crm.tbl_message_api
+        SET
+            edit_date_ts = ts_
+        WHERE
+            message_id = :old.id;
+    END IF;
+
+END;
+
+create or replace TRIGGER "CRM"."TBL_MESSAGE_API_D" BEFORE DELETE ON CRM.TBL_MESSAGE
+REFERENCING OLD AS OLD NEW AS NEW
+FOR EACH ROW WHEN (1=1)
+declare
+TS_ TIMESTAMP(6);
+UUID_ nvarchar2(500 char) ;
+ID_API number;
+BEGIN
+    TS_ := systimestamp;
+    UUID_ := CRM.public_uuid;
+    IF DELETING THEN
+        SELECT api.ID INTO ID_API
+        FROM CRM.TBL_MESSAGE_API api
+        WHERE api.MESSAGE_id = :old.id;
+        
+        update CRM.tbl_MESSAGE_api api
+        set  
+        api.MESSAGE_id = null,
+        api.delete_date_ts = TS_,
+        api.delete_MESSAGE_id = :old.id,
+        api.USER_CREATOR_id = null
+        where api.id = ID_API;
+    END IF;
+END;
+
+
+create or replace procedure   CRM.UUID_MESSAGE_API IS
+begin
+    declare
+    cursor c_t is
+SELECT
+    mt.id as MESSAGEID,
+    mt.USER_CREATOR_id as PERSONID,
+    secapi.person_public_id PERSONPUBLICID
+FROM
+    CRM.tbl_MESSAGE mt
+    LEFT JOIN CRM.tbl_MESSAGE_api api ON mt.id = api.MESSAGE_id
+    LEFT JOIN CRM.tbl_person sect ON mt.USER_CREATOR_id = sect.id
+    LEFT JOIN CRM.tbl_person_api secapi ON sect.id = secapi.person_id
+WHERE
+    api.MESSAGE_id IS NULL
+ORDER BY
+    MESSAGEID ASC;
+    begin
+        for r_t in c_t loop
+            INSERT INTO CRM.tbl_MESSAGE_api(
+                id,
+                MESSAGE_public_id,
+                create_date_ts,
+                MESSAGE_id,
+                USER_CREATOR_id,
+                USER_CREATOR_public_id
+                )VALUES(
+                CRM.SEQ_MESSAGE_API.nextval,
+                crm.public_uuid,
+                systimestamp,
+                r_t."MESSAGEID",
+                r_t."PERSONID",
+                r_t."PERSONPUBLICID"
+            );
+        end loop;
+    end;
+commit;
+end;
+
+begin
+crm.UUID_MESSAGE_API;
+end;
+
+
+--------------- TBL_MESSAGE ---------------
+
+
+##--------------- TBL_MESSAGE_RECIEVER ---------------
+
+
+CREATE SEQUENCE  "CRM"."SEQ_MESSAGE_RECIEVER_API"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+
+CREATE TABLE TBL_MESSAGE_RECIEVER_API
+(
+ID NUMBER NOT NULL
+, MESSAGE_RECIEVER_ID NUMBER
+, MESSAGE_RECIEVER_PUBLIC_ID NVARCHAR2(500)
+, USER_ID NUMBER
+, USER_PUBLIC_ID NVARCHAR2(500)
+, MESSAGE_ID NUMBER
+, MESSAGE_PUBLIC_ID NVARCHAR2(500)
+, CREATE_DATE_TS TIMESTAMP WITH TIME ZONE
+, EDIT_DATE_TS TIMESTAMP WITH TIME ZONE
+, DELETE_DATE_TS TIMESTAMP WITH TIME ZONE
+, DESCRIPTION NVARCHAR2(500)
+, DELETE_MESSAGE_RECIEVER_ID NUMBER
+, CONSTRAINT TBL_MESSAGE_RECIEVER_API_PK PRIMARY KEY
+(
+ID
+)
+ENABLE
+);
+
+CREATE TRIGGER TBL_MESSAGE_RECIEVER_API_TRG
+BEFORE INSERT ON TBL_MESSAGE_RECIEVER_API
+FOR EACH ROW
+BEGIN
+<<COLUMN_SEQUENCES>>
+BEGIN
+IF INSERTING AND :NEW.ID IS NULL THEN
+SELECT SEQ_MESSAGE_RECIEVER_API.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
+END IF;
+END COLUMN_SEQUENCES;
+END;
+/
+
+
+
+create or replace TRIGGER "CRM"."TBL_MESSAGE_RECIEVER_API_IU" AFTER INSERT OR UPDATE ON CRM.TBL_MESSAGE_RECIEVER
+    REFERENCING OLD AS OLD NEW AS NEW
+    FOR EACH ROW WHEN (1=1)
+    declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    APIPUBLICID_ nvarchar2(500 char); --MESSAGE
+    APIIPUBLICID_ nvarchar2(500 char); --USER
+BEGIN
+    TS_ := systimestamp;
+    UUID_ := CRM.public_uuid;
+    if inserting then
+        IF :NEW.MESSAGE_id is not null THEN
+            SELECT api.MESSAGE_public_id INTO APIPUBLICID_
+            FROM CRM.tbl_MESSAGE_api api
+            WHERE api.MESSAGE_id = :new.MESSAGE_id;
+        END IF;
+    --
+        IF :NEW.USER_id is not null THEN
+            SELECT api.person_public_id INTO APIIPUBLICID_
+            FROM CRM.tbl_person_api api
+            WHERE api.person_id = :new.USER_id;
+        END IF;
+        insert into CRM.tbl_MESSAGE_RECIEVER_api
+            (id, MESSAGE_RECIEVER_public_id, create_date_ts,
+            MESSAGE_RECIEVER_id, MESSAGE_id, MESSAGE_public_id, USER_id, USER_public_id)
+        values
+            (CRM.SEQ_MESSAGE_RECIEVER_API.nextval, UUID_, TS_,
+            :new.id, :new.MESSAGE_ID, APIPUBLICID_, :new.USER_ID, APIIPUBLICID_);
+    end if;
+    if updating then
+        update CRM.tbl_MESSAGE_RECIEVER_api
+        set  
+        edit_date_ts = TS_
+        where MESSAGE_RECIEVER_id = :old.id;
+        --MESSAGE
+        if :new.MESSAGE_ID is not null and :new.MESSAGE_ID != nvl(:old.MESSAGE_ID,0) THEN
+            SELECT api.MESSAGE_public_id INTO APIPUBLICID_
+            FROM CRM.tbl_MESSAGE_api api
+            WHERE api.MESSAGE_id = :new.MESSAGE_id;
+            --
+            update CRM.tbl_MESSAGE_RECIEVER_api
+            set
+            MESSAGE_id = :new.MESSAGE_id,
+            MESSAGE_public_id = APIPUBLICID_
+            where MESSAGE_RECIEVER_id = :old.id;
+        end if;
+        --USER
+        if :new.USER_ID is not null and :new.USER_ID != nvl(:old.USER_ID,0) THEN
+            SELECT api.person_public_id INTO APIIPUBLICID_
+            FROM CRM.tbl_person_api api
+            WHERE api.person_id = :new.USER_id;
+            --
+            update CRM.tbl_MESSAGE_RECIEVER_api
+            set
+            USER_id = :new.USER_id,
+            USER_public_id = APIIPUBLICID_
+            where MESSAGE_RECIEVER_id = :old.id;
+        end if;
+    end if;
+END;
+
+create or replace TRIGGER "CRM"."TBL_MESSAGE_RECIEVER_API_D" BEFORE DELETE ON CRM.TBL_MESSAGE_RECIEVER
+    REFERENCING OLD AS OLD NEW AS NEW
+    FOR EACH ROW WHEN (1=1)
+    declare
+    TS_ TIMESTAMP(6);
+    UUID_ nvarchar2(500 char) ;
+    ID_API number;
+    BEGIN
+        TS_ := systimestamp;
+        UUID_ := CRM.public_uuid;
+        IF DELETING THEN
+            SELECT api.ID INTO ID_API
+            FROM CRM.TBL_MESSAGE_RECIEVER_API api
+            WHERE api.MESSAGE_RECIEVER_id = :old.id;
+            update CRM.tbl_MESSAGE_RECIEVER_api api
+            set  
+            api.MESSAGE_RECIEVER_id = null,
+            api.delete_date_ts = TS_,
+            api.delete_MESSAGE_RECIEVER_id = :old.id,
+            api.MESSAGE_id = null,
+            api.USER_id = null
+            where api.id = ID_API;
+        END IF;
+    END;
+
+
+create or replace procedure CRM.UUID_MESSAGE_RECIEVER_API IS
+begin
+    declare
+    cursor c_t is
+    SELECT
+    mt.id as MESSAGERECIEVERID,
+    mt.MESSAGE_id as MESSAGEID,
+    secapi.MESSAGE_public_id MESSAGEPUBLICID,
+    mt.USER_id as USERID,
+    trdapi.PERSON_public_id USERPUBLICID
+    FROM
+    CRM.tbl_MESSAGE_RECIEVER mt
+    LEFT JOIN CRM.tbl_MESSAGE_RECIEVER_api api ON mt.id = api.MESSAGE_RECIEVER_id
+    LEFT JOIN CRM.tbl_MESSAGE sect ON mt.MESSAGE_id = sect.id
+    LEFT JOIN CRM.tbl_MESSAGE_api secapi ON sect.id = secapi.MESSAGE_id
+    LEFT JOIN CRM.tbl_person trdt ON mt.USER_id = trdt.id
+    LEFT JOIN CRM.tbl_person_api trdapi ON trdt.id = trdapi.PERSON_id
+    WHERE
+    api.MESSAGE_RECIEVER_id IS NULL
+    ORDER BY
+    MESSAGERECIEVERID ASC;
+        begin
+            for r_t in c_t loop
+                INSERT INTO CRM.tbl_MESSAGE_RECIEVER_api(
+                    id,
+                    MESSAGE_RECIEVER_public_id,
+                    create_date_ts,
+                    MESSAGE_RECIEVER_id,
+                    MESSAGE_id,
+                    MESSAGE_public_id,
+                    USER_id,
+                    USER_public_id
+                )VALUES(
+                    CRM.SEQ_MESSAGE_RECIEVER_API.nextval,
+                    crm.public_uuid,
+                    systimestamp,
+                    r_t."MESSAGERECIEVERID",
+                    r_t."MESSAGEID",
+                    r_t."MESSAGEPUBLICID",
+                    r_t."USERID",
+                    r_t."USERPUBLICID"
+                );
+            end loop;
+        end;
+    commit;
+end;
+
+
+      begin
+      crm.UUID_MESSAGE_RECIEVER_API;
+      end; 
+
+
+
+--------------- TBL_MESSAGE_RECIEVER ---------------
 
 
 
