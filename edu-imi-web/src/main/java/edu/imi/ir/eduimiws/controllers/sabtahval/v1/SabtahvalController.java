@@ -6,9 +6,9 @@ import edu.imi.ir.eduimiws.exceptions.controllers.FiledValueNullException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NationalCodeNullException;
 import edu.imi.ir.eduimiws.mapper.sabtahval.EstelamPersonInfoRequestMapper;
 import edu.imi.ir.eduimiws.models.dto.sabtahval.PersonInfoDto;
+import edu.imi.ir.eduimiws.models.request.sabtahval.EstelamPersonInfoRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
-import edu.imi.ir.eduimiws.models.request.sabtahval.EstelamPersonInfoRequest;
 import edu.imi.ir.eduimiws.models.response.sabtahval.EstelamResultResponse;
 import edu.imi.ir.eduimiws.models.response.sabtahval.EstelamVersionResponse;
 import edu.imi.ir.eduimiws.models.sabtahval.GetVersionResponse;
@@ -22,11 +22,16 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/v1/sabtahval")
 @RequiredArgsConstructor

@@ -64,8 +64,8 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/admin/**").access("hasRole('admin') and hasIpAddress('0:0:0:0:0:0:0:1')")
                 .permitAll()
 
-                .antMatchers("/**/sabtahval/**")
-                .access(this.createHasIpRangeExpression())
+//                .antMatchers("/**/sabtahval/**")
+//                .access(this.createHasIpRangeExpression())
 
                 .antMatchers("/api/v1/reqres/**")
                 .permitAll()
@@ -220,7 +220,7 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
         String ipRanges = apiUrlSecurityCredential.getIpRanges();
         List<String> validIps = Arrays.asList(ipRanges.split("\\s*,\\s*"));
         String hasIpRangeAccessExpresion = validIps.stream()
-                .collect(Collectors.joining("') or hasIpAddress('", "hasIpAddress('", "')"));
+                .collect(Collectors.joining("') or hasIpAddress('", "hasIpAddress('", "') and isAuthenticated()"));
         return hasIpRangeAccessExpresion;
     }
 
