@@ -179,7 +179,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
             paymentCodeRequest.setBankApiPublicId(digitalPaymentCredential.getMelliPublicId());
         }
         if (isInputNullOrEqualString().test(paymentCodeRequest.getPayerContactPublicId())
-                || isInputNullOrEqualString().test(paymentCodeRequest.getAccountPublicId())) {
+                && isInputNullOrEqualString().test(paymentCodeRequest.getAccountPublicId())) {
             throw new NotAcceptableException("contactPublicId or accountPublicId should have value");
         }
     }
@@ -197,7 +197,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         if (isNull().test(paymentCodeApiDto.getProject()))
             throw new NotFoundException("Project Not Found");
 
-        if (isNull().test(paymentCodeApiDto.getPayerContact()) || isNull().test(paymentCodeApiDto.getAccount()))
+        if (isNull().test(paymentCodeApiDto.getPayerContact()) && isNull().test(paymentCodeApiDto.getAccount()))
             throw new NotFoundException("contact or account Not Found");
     }
 

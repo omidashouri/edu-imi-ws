@@ -165,17 +165,6 @@ public interface PaymentCodeRequestMapper {
                                                     paymentCodeApiDto.getPayerUser().getLastName()));
                 }
             }
-            if (paymentCodeApiDto.getPayerUser() == null) {
-                if (paymentCodeApiDto.getPayerContact() != null) {
-                    paymentCodeApiDto
-                            .setRequestDescription(
-                                    String.format("%s , %s",
-                                            paymentCodeApiDto.getDescription() != null ? paymentCodeApiDto.getDescription() : "",
-                                            paymentCodeApiDto.getPayerContact().getFirstName()
-                                                    + ' ' +
-                                                    paymentCodeApiDto.getPayerContact().getLastName()));
-                }
-            }
             if (paymentCodeApiDto.getPayerContact() != null && paymentCodeApiDto.getPayerUser() != null) {
                 paymentCodeApiDto
                         .setRequestDescription(
@@ -185,7 +174,7 @@ public interface PaymentCodeRequestMapper {
                                                 + ' ' +
                                                 paymentCodeApiDto.getPayerUser().getLastName()));
             }
-            if (paymentCodeApiDto.getAccount() == null) {
+            if (paymentCodeApiDto.getAccount() != null) {
                 paymentCodeApiDto
                         .setRequestDescription(
                                 String.format("%s , %s",
