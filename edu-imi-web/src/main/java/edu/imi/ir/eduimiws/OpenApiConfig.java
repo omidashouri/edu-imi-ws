@@ -318,6 +318,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi FarapayamakApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("Farapayamaks")
+                .pathsToMatch("/api/v1/farapayamaks/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {

@@ -8,6 +8,7 @@ import edu.imi.ir.eduimiws.models.helper.DefaultValues;
 import edu.imi.ir.eduimiws.security.ApiUrlSecurityCredential;
 import edu.imi.ir.eduimiws.security.AuthenticationCredential;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
+import edu.imi.ir.eduimiws.security.FarapayamakCredential;
 import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -202,6 +203,12 @@ public class AppConfig {
     @ConfigurationProperties(prefix = "defaultvalues")
     public DefaultValues defaultValues() {
         return new DefaultValues();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "farapayamakcredential")
+    public FarapayamakCredential farapayamakCredential() {
+        return new FarapayamakCredential();
     }
 
 /*    @PostConstruct

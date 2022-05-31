@@ -7,9 +7,11 @@ import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.FiledValueNullException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
+import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiDtoFarapayamakSendSmsDtoMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeRequestMapper;
+import edu.imi.ir.eduimiws.models.dto.crm.FarapayamakSendSmsDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
 import edu.imi.ir.eduimiws.models.projections.mainparts.PaymentCodeApiProjection;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
@@ -17,6 +19,8 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponse;
 import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponseDescriptive;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
+import edu.imi.ir.eduimiws.security.FarapayamakCredential;
+import edu.imi.ir.eduimiws.services.crm.FarapayamakServiceAsync;
 import edu.imi.ir.eduimiws.services.mainparts.PaymentCodeService;
 import edu.imi.ir.eduimiws.services.pmis.ExpenseCodeService;
 import edu.imi.ir.eduimiws.services.pmis.ProjectService;
@@ -65,7 +69,9 @@ public class PaymentCodeController {
     private final PagedResourcesAssembler<PaymentCodeApiDto> paymentCodeApiDtoPagedResourcesAssembler;
     private final DigitalPaymentCredential digitalPaymentCredential;
     private final PaymentCodeRequestMapper paymentCodeRequestMapper;
-
+    private final FarapayamakServiceAsync farapayamakServiceAsync;
+    private final PaymentCodeApiDtoFarapayamakSendSmsDtoMapper paymentCodeApiDtoFarapayamakSendSmsDtoMapper;
+    private final FarapayamakCredential farapayamakCredential;
 
     @Operation(
             summary = "find All paymentCodes descriptive",
@@ -105,18 +111,18 @@ public class PaymentCodeController {
     @GetMapping(path = "/paymentCodeDescriptive",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<PaymentCodeResponseDescriptive>> getPaymentCodeDescriptive(@Parameter(hidden = true)
-                                                                                @RequestParam Map<String, String> queryParams) {
+                                                                                                @RequestParam Map<String, String> queryParams) {
 
         Page<PaymentCodeApiProjection> paymentCodeApiProjections =
                 paymentCodeService.queryAllPaymentCodeProjection(queryParams);
 
-       Page<PaymentCodeApiDto> paymentCodeApiDtoPage = paymentCodeApiProjections
+        Page<PaymentCodeApiDto> paymentCodeApiDtoPage = paymentCodeApiProjections
                 .map(paymentCodeApiProjectionMapper::toPaymentCodeApiDto);
 
-         PagedModel<PaymentCodeResponseDescriptive> paymentCodeResponseDescriptivesPagedModel = paymentCodeApiDtoPagedResourcesAssembler
+        PagedModel<PaymentCodeResponseDescriptive> paymentCodeResponseDescriptivesPagedModel = paymentCodeApiDtoPagedResourcesAssembler
                 .toModel(paymentCodeApiDtoPage, paymentCodeResponseDescriptiveAssembler);
 
-             return ResponseEntity.ok(paymentCodeResponseDescriptivesPagedModel);
+        return ResponseEntity.ok(paymentCodeResponseDescriptivesPagedModel);
     }
 
 
@@ -337,6 +343,15 @@ public class PaymentCodeController {
 
         PaymentCodeResponse paymentCodeResponse =
                 paymentCodeResponseAssembler.toModel(savedPaymentCodeApiDto);
+
+        if (savedPaymentCodeApi.getPayerContact() != null && savedPaymentCodeApi.getPayerContact().getMobilePhone() != null) {
+            FarapayamakSendSmsDto farapayamakSendSmsDto = paymentCodeApiDtoFarapayamakSendSmsDtoMapper
+                    .paymentCodeApiDtoToFarapayamakSendSmsDto(savedPaymentCodeApiDto, farapayamakCredential);
+            farapayamakSendSmsDto.setText(String.format("سازمان مدیریت صنعتی \n  شناسه پرداخت: \n %s \n بابت: %s",
+                    savedPaymentCodeApiDto.getPaymentCode(), savedPaymentCodeApi.getProject().getProjectName()));
+
+            farapayamakServiceAsync.sendSMS(farapayamakSendSmsDto);
+        }
 
         return ResponseEntity.ok(paymentCodeResponse);
     }

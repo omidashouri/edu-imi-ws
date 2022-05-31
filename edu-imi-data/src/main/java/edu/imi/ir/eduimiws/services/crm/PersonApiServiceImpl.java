@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiIdProjectionMapper;
+import edu.imi.ir.eduimiws.mapper.crm.PersonApiMapper;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonApiIdProjection;
 import edu.imi.ir.eduimiws.repositories.crm.PersonApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
@@ -34,6 +35,7 @@ public class PersonApiServiceImpl implements PersonApiService {
     private final RoleApiService roleApiService;
 //    private final ContactApiService contactWebServiceService;
     private final PublicIdUtil publicIdUtil;
+    private final PersonApiMapper personApiMapper;
 
 
     @Override
@@ -71,6 +73,11 @@ public class PersonApiServiceImpl implements PersonApiService {
 
         PersonApiEntity personApiEntity = personApiRepository.findByPersonId(personId);
         return personApiEntity;
+    }
+
+    @Override
+    public String findPersonPublicIdByPersonId(Long personId) {
+        return this.findByPersonId(personId).getPersonPublicId();
     }
 //NU
 /*    @Override

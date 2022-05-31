@@ -6,10 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.QueryHint;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,7 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     PersonEntity findByPersonApiEntity_PersonPublicId(String personPublicId);
 
     @EntityGraph(value = "PersonEntity.findPersonSubGraphPersonApiSelectedLanguage",type = EntityGraph.EntityGraphType.LOAD)
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
     PersonEntity readByPersonApiEntity_PersonPublicId(String personPublicId);
 
     Page<PersonEntity> findAll(Pageable pageable);

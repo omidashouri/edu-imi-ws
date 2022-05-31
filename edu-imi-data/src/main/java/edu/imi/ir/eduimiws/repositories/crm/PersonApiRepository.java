@@ -6,14 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.QueryHint;
 import java.util.List;
 
 @Repository
 public interface PersonApiRepository extends CrudRepository<PersonApiEntity,Long> {
 
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
     PersonApiEntity findByPersonId(Long personId);
 
     @EntityGraph("PersonApiEntity.personApiFastGraph")
@@ -21,7 +24,9 @@ public interface PersonApiRepository extends CrudRepository<PersonApiEntity,Long
 
     PersonApiEntity findByPersonPublicId(String personPublicId);
 
-    @EntityGraph(value = "PersonApiEntity.findPersonApiWithPersonRolePrivilegeSubGraph",type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "PersonApiEntity.findPersonApiWithPersonRolePrivilegeSubGraph",
+            type = EntityGraph.EntityGraphType.FETCH)
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
     PersonApiEntity readByPersonPublicId(String personPublicId);
 
     Page<PersonApiEntity> findAll(Pageable pageable);

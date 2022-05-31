@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.utilities;
 import com.ghasemkiani.util.DateFields;
 import com.ghasemkiani.util.SimplePersianCalendar;
 import com.ghasemkiani.util.icu.PersianCalendar;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +12,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+@MappingUtil.DateConvertor
 @Component
 @Slf4j
 public class DateConvertor {
@@ -235,6 +238,18 @@ public class DateConvertor {
         String sDate = todayDate.toString();
         String[] mDate = sDate.split("-");
         return this.convertMiToKh(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
+    }
+
+    @MappingUtil.JalaliDateFromLocalDateTime
+    public String jalaliDateFromLocalDateTime(LocalDateTime localDateTime){
+        String georgianDate = localDateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd"));
+        String[] mDate = georgianDate.split("-");
+        return this.convertMiToKh(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
+    }
+
+    @MappingUtil.TimeFromLocalDateTime
+    public String timeFromLocalDateTime(LocalDateTime localDateTime){
+        return localDateTime.format(DateTimeFormatter.ofPattern("HH:MM:SS"));
     }
 
     //#1

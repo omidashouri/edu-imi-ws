@@ -13,7 +13,6 @@ import org.springframework.hateoas.server.core.Relation;
 @JsonRootName(value = "privilege")
 @Relation(collectionRelation = "privileges")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor

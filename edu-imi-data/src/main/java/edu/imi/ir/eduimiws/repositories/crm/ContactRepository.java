@@ -6,10 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.QueryHint;
 import java.util.List;
 
 @Repository
@@ -41,6 +43,7 @@ public interface ContactRepository extends CrudRepository<ContactEntity, Long>
 
 
     @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonApi", type = EntityGraph.EntityGraphType.LOAD)
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
     ContactEntity findByContactWebService_ContactPublicId(String contactPublicId);
 
     @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonApiAndContactApi", type = EntityGraph.EntityGraphType.LOAD)

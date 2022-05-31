@@ -2,10 +2,12 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 
 import java.util.Collection;
 import java.util.List;
 
+@MappingUtil.PersonApiService
 public interface PersonApiService {
 //NU
 //    PersonApiEntity findByPersonEntity(PersonEntity personEntity);
@@ -16,6 +18,9 @@ public interface PersonApiService {
 
 //    NU
     PersonApiEntity findByPersonId(Long personId);
+
+    @MappingUtil.PersonIdToPersonPublicId
+    String findPersonPublicIdByPersonId(Long personId);
 
     PersonApiEntity findByUserNameFast(String userName);
 

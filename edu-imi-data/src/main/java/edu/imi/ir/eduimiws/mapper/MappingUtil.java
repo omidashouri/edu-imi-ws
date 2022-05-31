@@ -74,6 +74,13 @@ public class MappingUtil {
 //  ---
 
 
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface SecurityUtil {
+    }
+
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
@@ -83,9 +90,28 @@ public class MappingUtil {
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
+    public @interface CreatorFromSecurityContextFakeDto {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface CreatorFullNameFromSecurityContext {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
     public @interface CreatorFromSecurityContext {
     }
 
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface PersonIdFromSecurityContext {
+    }
+
+//  ---
 
 //    1.define Element Type for class
     @Qualifier
@@ -189,6 +215,89 @@ public class MappingUtil {
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
     public @interface ImiCompanyPublicId {
+    }
+
+
+//    ---------------------------------------
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface MessageApiUtil {
+    }
+
+    //    2.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface MessageIdToMessagePublicId {
+    }
+
+
+//    ---------------------------------------
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface PersonApiService {
+    }
+
+    //    2.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface PersonIdToPersonPublicId {
+    }
+
+
+//    ---------------------------------------
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface CommonUtils {
+    }
+
+    //    2.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ListStringToCommaSeparatorString {
+    }
+
+    //    3.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface CommaSeparatorStringToListString {
+    }
+
+
+//    ---------------------------------------
+
+
+    //    1.define Element Type for class
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface DateConvertor {
+    }
+
+    //    2.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface JalaliDateFromLocalDateTime {
+    }
+
+    //    3.define Element Type for method
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimeFromLocalDateTime {
     }
 
 

@@ -6,9 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.QueryHint;
 
 @Repository
 public interface ProjectRepository extends CrudRepository<ProjectEntity, Long> {
@@ -18,6 +21,7 @@ public interface ProjectRepository extends CrudRepository<ProjectEntity, Long> {
 
 
     @EntityGraph(value = "ProjectEntity.findProjectProjectApi", type = EntityGraph.EntityGraphType.LOAD)
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
     ProjectEntity findByProjectApi_ProjectPublicId(String projectPublicId);
 
     @EntityGraph(value = "ProjectEntity.findProjectProjectApi", type = EntityGraph.EntityGraphType.LOAD)

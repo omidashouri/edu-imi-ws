@@ -6,15 +6,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.QueryHint;
 
 @Repository
 public interface AccountRepository extends CrudRepository<AccountEntity, Long> {
 
 
     @EntityGraph(value = "AccountEntity.findAccountContactCompany", type = EntityGraph.EntityGraphType.LOAD)
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
     AccountEntity findByAccountApi_AccountPublicId(String accountPublicId);
 
     @EntityGraph(value = "AccountEntity.findAllJoins", type = EntityGraph.EntityGraphType.LOAD)
