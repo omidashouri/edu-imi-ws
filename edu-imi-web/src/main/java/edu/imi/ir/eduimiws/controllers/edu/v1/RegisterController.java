@@ -54,7 +54,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -151,10 +153,13 @@ public class RegisterController {
 
 //      ------------------------------------------------------------------------------------------  CompletableFuture
 
-        Pageable pageable = PageRequest.of(0,400);
+        Pageable pageable = PageRequest.of(0,200);
 
-        Page<RegisterEntity> registerOnePage =  registerService
+/*        Page<RegisterEntity> registerOnePage =  registerService
                 .findAllByOrderPageable(pageable);
+          while(!registerOnePage.isLast()){
+            registerService.findAllByOrderPageable(registerOnePage.nextPageable());
+                */
 
         int totalPages =  registerService
                 .findAllByOrderPageable(pageable)
@@ -164,14 +169,12 @@ public class RegisterController {
 
         List<Integer> pagez =  IntStream.rangeClosed(0,totalPages).boxed().collect(Collectors.toList());
 
-/*        while(!registerOnePage.isLast()){
-            registerService.findAllByOrderPageable(registerOnePage.nextPageable());
-        }*/
 
 
         StopWatch stopWatch = new StopWatch();
-        ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(10);
+        ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(6);
 
+        Instant start =  Instant.now();
         stopWatch.start();
         List<CompletableFuture<Page<RegisterEntity>>>  register_cf_p =
                 pagez.stream()
@@ -183,6 +186,7 @@ public class RegisterController {
 
         CompletableFuture<Void> cfAllOf = CompletableFuture.allOf(register_cf_p.toArray(new CompletableFuture[totalPages]));
         stopWatch.stop();
+        Instant end =  Instant.now();
 
         List<RegisterEntity> registerEntities =
                 cfAllOf.thenApply(v->register_cf_p.stream()
@@ -192,7 +196,7 @@ public class RegisterController {
                 .join();
 
 
-        System.out.println(stopWatch.getTime()+" >>>>>> "+registerEntities.size());
+        System.out.println(end.getNano()-start.getNano()+" >>>>>> "+registerEntities.size());
 
 
 
@@ -778,22 +782,5 @@ public class RegisterController {
         returnValue.setOperationName(RequestOperationName.CREATE_NEW_ENTITIES.name());
         returnValue.setDescription(newRegisterApi.size() + " New Public Id Generated");
         return ResponseEntity.ok(returnValue);
-    }
-
-    private ResponseEntity<?> conflictRegisterCount() {
-        return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString()
-                        , "register count is null or zero")
-                , HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
-
-
-    private ResponseEntity<?> registerNotFound() {
-        return new ResponseEntity<>(
-                new ErrorMessage(new Date(), HttpStatus.NOT_FOUND.toString()
-                        , "requested register not found")
-                , HttpStatus.NOT_FOUND
-        );
     }
 }
