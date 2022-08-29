@@ -1,10 +1,12 @@
-package edu.imi.ir.eduimiws.models.dto.crm;
+package edu.imi.ir.eduimiws.models.dto.crm.farapayamak;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Getter
@@ -23,4 +25,12 @@ public class FarapayamakReturnedSendSmsDto implements Serializable {
 
     @JsonProperty("StrRetStatus")
     private String strRetStatus;
+
+    @JsonProperty("MyBase")
+    private MyBaseDto myBaseDto;
+
+    @JsonProperty("Data")
+    private List<DataDto> dataDtos = new ArrayList<>();
+
+
 }

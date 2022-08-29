@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.dto.crm;
+package edu.imi.ir.eduimiws.models.dto.crm.farapayamak;
 
 
 import lombok.*;
@@ -28,6 +28,12 @@ public class FarapayamakSendSmsDto implements Serializable {
 
     private Long creatorId;
     private String creatorFullName;
+
+    private Integer location;
+    private Integer index;
+    private Integer count;
+
+    /*private Long recId;*/
 
 
 }
