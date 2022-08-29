@@ -155,4 +155,10 @@ public class SabtahvalController {
         return ResponseEntity.ok(estelamResultResponse);
     }
 
+//todo: complete it
+    public ResponseEntity<?> getImageSmat(){
+        return null;
+    }
+
+
 }
