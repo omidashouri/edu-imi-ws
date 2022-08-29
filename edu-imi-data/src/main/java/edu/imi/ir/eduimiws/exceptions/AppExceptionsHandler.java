@@ -4,7 +4,9 @@ package edu.imi.ir.eduimiws.exceptions;
 import edu.imi.ir.eduimiws.exceptions.controllers.*;
 import edu.imi.ir.eduimiws.exceptions.services.RoleServiceException;
 import edu.imi.ir.eduimiws.exceptions.services.UserServiceException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.*;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.utilities.BehdadException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -191,5 +193,247 @@ public class AppExceptionsHandler {
                 , HttpStatus.UNAUTHORIZED
         );
     }
+
+    //    Behdad Exception --->
+    @ExceptionHandler(value = {IdentifierIsExistException.class})
+    public ResponseEntity<?> handleIdentifierIsExistException(IdentifierIsExistException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString(),
+                         BehdadException._IdentifierIsExist.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {IdentifierIsNotEffectiveException.class})
+    public ResponseEntity<?> handleIdentifierIsNotEffectiveException(IdentifierIsNotEffectiveException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._IdentifierIsNotEffective.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {IdentifierNotFoundException.class})
+    public ResponseEntity<?> handleIdentifierNotFoundException(IdentifierNotFoundException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._IdentifierNotFound.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidAccountNumberException.class})
+    public ResponseEntity<?> handleInvalidAccountNumberException(InvalidAccountNumberException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidAccountNumber.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidAmountException.class})
+    public ResponseEntity<?> handleInvalidAmountException(InvalidAmountException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidAmount.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidCredentialException.class})
+    public ResponseEntity<?> handleInvalidCredentialException(InvalidCredentialException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidCredential.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidDateException.class})
+    public ResponseEntity<?> handleInvalidDateException(InvalidDateException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidDate.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidIdentifierCodeException.class})
+    public ResponseEntity<?> handleInvalidIdentifierCodeException(InvalidIdentifierCodeException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidIdentifierCode.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidIdentifierControlTypeException.class})
+    public ResponseEntity<?> handleInvalidIdentifierControlTypeException(InvalidIdentifierControlTypeException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidIdentifierControlType.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidIdentifierException.class})
+    public ResponseEntity<?> handleInvalidIdentifierException(InvalidIdentifierException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidIdentifier.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidIdentifierTypeException.class})
+    public ResponseEntity<?> handleInvalidIdentifierTypeException(InvalidIdentifierTypeException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidIdentifierType.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidPageNumberException.class})
+    public ResponseEntity<?> handleInvalidPageNumberException(InvalidPageNumberException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidPageNumber.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidPageSizeException.class})
+    public ResponseEntity<?> handleInvalidPageSizeException(InvalidPageSizeException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidPageSize.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {InvalidTransactionTypeException.class})
+    public ResponseEntity<?> handleInvalidTransactionTypeException(InvalidTransactionTypeException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._InvalidTransactionType.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {PageSizeIsTooMuchException.class})
+    public ResponseEntity<?> handlePageSizeIsTooMuchException(PageSizeIsTooMuchException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._PageSizeIsTooMuch.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {PasswordIsNotStrongException.class})
+    public ResponseEntity<?> handlePasswordIsNotStrongException(PasswordIsNotStrongException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._PasswordIsNotStrong.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+    @ExceptionHandler(value = {TooMuchAccountsException.class})
+    public ResponseEntity<?> handleTooMuchAccountsException(TooMuchAccountsException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._TooMuchAccounts.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {UnableToAuthenticateException.class})
+    public ResponseEntity<?> handleUnableToAuthenticateException(UnableToAuthenticateException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._UnableToAuthenticate.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {UnableToChangePasswordException.class})
+    public ResponseEntity<?> handleUnableToChangePasswordException(UnableToChangePasswordException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._UnableToChangePassword.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {UnableToGenerateIdentifierException.class})
+    public ResponseEntity<?> handleUnableToGenerateIdentifierException(UnableToGenerateIdentifierException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._UnableToGenerateIdentifier.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {UnableToGetTransactionsException.class})
+    public ResponseEntity<?> handleUnableToGetTransactionsException(UnableToGetTransactionsException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._UnableToGetTransactions.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {UserTemporarilySuspendedException.class})
+    public ResponseEntity<?> handleUserTemporarilySuspendedException(UserTemporarilySuspendedException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._UserTemporarilySuspended.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {VerhoeffException.class})
+    public ResponseEntity<?> handleVerhoeffException(VerhoeffException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._Verhoeff.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(value = {TransactionDoesNotBelongToAccountException.class})
+    public ResponseEntity<?> handleTransactionDoesNotBelongToAccountException(TransactionDoesNotBelongToAccountException exception, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorMessage(dateTime, HttpStatus.METHOD_NOT_ALLOWED.toString()
+                        , BehdadException._TransactionDoesNotBelongToAccount.getMessage_fa())
+                , HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    //   <--- Behdad Exception
 
 }

@@ -73,6 +73,10 @@ public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/callback/sadad/**")
                 .permitAll()
 
+                /*→1
+                .antMatchers("/api/v1/behdad/**")
+                .permitAll()*/
+
                 .antMatchers(HttpMethod.GET, apiUrlSecurityCredential.getVerificationEmailUrl())
                 .permitAll()
 

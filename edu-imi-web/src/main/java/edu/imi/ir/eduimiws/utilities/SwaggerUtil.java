@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.utilities;
 
+/*import edu.imi.ir.eduimiws.models.behdad.account.AccountTransactionFilter;
+import edu.imi.ir.eduimiws.models.behdad.account.Paging;*/
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -202,6 +204,24 @@ public class SwaggerUtil {
             , name = "sort"
             , content = @Content(schema = @Schema(type = "string")))
     public @interface ProjectResponseForPaymentCodeAsQueryParam {
+
+    }
+
+
+    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @Parameter(in = ParameterIn.QUERY
+            , description = "AccountTransactionFilter"
+            , name = "accountTransactionFilter"
+//             remove comments
+//            , content = @Content(schema = @Schema(implementation = AccountTransactionFilter.class)))
+    )
+    @Parameter(in = ParameterIn.QUERY
+            , description = "Paging"
+            , name = "paging"
+//            , content = @Content(schema = @Schema(implementation = Paging.class)))
+    )
+    public @interface PagedDestinationSideTransactionsAsQueryParam {
 
     }
 }

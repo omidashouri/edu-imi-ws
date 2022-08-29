@@ -313,6 +313,27 @@
                                         <extraarg>true</extraarg>
                                     </extraargs>
                                 </wsdlOption>
+<!--                                BehdadService -->
+<!-- →1                               <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/behdadAccountService.xml</wsdl>
+                                    <extraargs>
+                                        <extraarg>-verbose</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>edu.imi.ir.eduimiws.models.behdad.account</extraarg>
+                                        <extraarg>-exsh</extraarg>
+                                        <extraarg>true</extraarg>
+                                    </extraargs>
+                                </wsdlOption>-->
+<!--                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/behdadIdentifierService.xml</wsdl>
+                                    <extraargs>
+                                        <extraarg>-verbose</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>edu.imi.ir.eduimiws.models.behdad.identifier</extraarg>
+                                        <extraarg>-exsh</extraarg>
+                                        <extraarg>true</extraarg>
+                                    </extraargs>
+                                </wsdlOption>-->
                             </wsdlOptions>
                         </configuration>
                         <goals>

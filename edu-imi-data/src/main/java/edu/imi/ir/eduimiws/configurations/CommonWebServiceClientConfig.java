@@ -1,7 +1,16 @@
 package edu.imi.ir.eduimiws.configurations;
 
 
+/*→1
+import edu.imi.ir.eduimiws.models.behdad.account.AccountService;
+import edu.imi.ir.eduimiws.models.behdad.account.Credential;*/
+
+//import edu.imi.ir.eduimiws.models.behdad.account.BehdadAccountServiceWsdlImpl;
+/*import edu.imi.ir.eduimiws.models.behdad.identifier.IdentifierService;
+import edu.imi.ir.eduimiws.models.behdad.identifier.IdentifierServiceImplService;*/
+
 import edu.imi.ir.eduimiws.models.dto.sabtahval.SabtahvalCredential;
+import edu.imi.ir.eduimiws.security.BehdadCredential;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
 import edu.imi.ir.eduimiws.services.api.reqres.SOAPConnector;
 import edu.imi.ir.eduimiws.services.api.reqres.SoapClientImpl2;
@@ -12,21 +21,27 @@ import org.apache.http.client.protocol.RequestDefaultHeaders;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.io.Resource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
 @Configuration
 @PropertySources({
+        @PropertySource("classpath:application-dev.properties"),
+        @PropertySource("classpath:application-prod.properties"),
         @PropertySource("classpath:security.properties")
 })
 public class CommonWebServiceClientConfig {
@@ -34,6 +49,24 @@ public class CommonWebServiceClientConfig {
 
     @Autowired
     DigitalPaymentCredential digitalPaymentCredential;
+
+    @Autowired
+    BehdadCredential behdadCredential;
+
+    @Value("${server.ssl.trust-store}")
+    private Resource trustStore;
+
+    @Value("${server.ssl.trust-store-password}")
+    private String trustStorePassword;
+
+    @PostConstruct
+    private void configureSSL() throws IOException {
+//        URL trustStoreResource = CommonWebServiceClientConfig.class.getResource( "jks/bb.pfx" );
+//        String path = trustStoreResource.toURI().getPath();
+/*        String path = trustStore.getURI().getPath();
+        System.setProperty("javax.net.ssl.trustStore", path);
+        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");*/
+    }
 
     @Bean
     @ConfigurationProperties(prefix = "sabtahvalcredential")
@@ -196,6 +229,141 @@ public class CommonWebServiceClientConfig {
     }*/
 
 //   <<< ------------------------- SABTE AHVAL
+
+
+//    Behdad (Bank Markazi) --------------------->>>>
+/*    @Bean
+    public AccountService accountServiceBehdad(){
+        return new AccountServiceImplService().getAccountServiceImplPort();
+    }*/
+
+/* 1→
+    @Bean
+    public Jaxb2Marshaller jaxb2BehdadAccountMarshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        marshaller.setPackagesToScan(behdadCredential.getAccountPackagesToScan());
+        return marshaller;
+    }
+
+    @Bean
+    WebServiceTemplate webServiceTemplateBehdadAccount() throws Exception {
+        WebServiceTemplate wsTemplate = new WebServiceTemplate();
+        wsTemplate.setDefaultUri(behdadCredential.getAccountUri());
+//        wsTemplate.setMessageSender(this.behdadAccountHttpComponentsMessageSender());
+        wsTemplate.setMessageSender(this.behdadAccountHttpComponentsMessageSenderTwo());
+        wsTemplate.setMarshaller(jaxb2BehdadAccountMarshaller());
+        wsTemplate.setUnmarshaller(jaxb2BehdadAccountMarshaller());
+        return wsTemplate;
+    }
+
+    public HttpComponentsMessageSender behdadAccountHttpComponentsMessageSender() throws Exception {
+        HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
+        httpComponentsMessageSender.setHttpClient(this.behdadAccountHttpClient());
+        return httpComponentsMessageSender;
+    }
+
+    public HttpClient behdadAccountHttpClient() throws Exception {
+        return HttpClientBuilder.create().setSSLSocketFactory(this.behdadAccountSslConnectionSocketFactory())
+                .addInterceptorFirst(new HttpComponentsMessageSender.RemoveSoapHeadersInterceptor()).build();
+    }
+
+    public SSLConnectionSocketFactory behdadAccountSslConnectionSocketFactory() throws Exception {
+        // NoopHostnameVerifier essentially turns hostname verification off as otherwise following error
+        // is thrown: java.security.cert.CertificateException: No name matching localhost found
+        return new SSLConnectionSocketFactory(this.behdadAccountSSLContext(), NoopHostnameVerifier.INSTANCE);
+    }
+
+    public SSLContext behdadAccountSSLContext() throws Exception {
+        return SSLContextBuilder
+                .create()
+                .loadTrustMaterial(trustStore.getFile(), trustStorePassword.toCharArray()).build();
+    }*/
+
+//    second solution:
+
+
+
+//    https://www.baeldung.com/java-trustanchors-parameter-must-be-non-empty
+//    https://stackoverflow.com/questions/46794775/spring-ws-client-authentication-with-server-and-client-certificates
+//todo: download and add behdad certificate from wsl to keystore → uncomment *
+//todo: import imi to java certs
+//todo: add keystore to the wsdl
+//todo: if still error add imi keystore as keystore
+//todo: remove all other open jdk 17 or 11
+//todo: continue with java 11
+
+
+//    → uncomment *
+
+
+  /* 2→
+    @Bean
+    public HttpsUrlConnectionMessageSender behdadAccountHttpComponentsMessageSenderTwo() throws Exception {
+//        HttpsUrlConnectionMessageSender messageSender = new BasicAuthHttpsConnectionMessageSender(username, password);
+        HttpsUrlConnectionMessageSender messageSender = new HttpsUrlConnectionMessageSender();
+        messageSender.setTrustManagers(this.trustManagersFactoryBean().getObject());
+        messageSender.setKeyManagers(keyManagersFactoryBean().getObject());
+        return messageSender;
+    }
+
+    @Bean
+    public KeyManagersFactoryBean keyManagersFactoryBean() throws GeneralSecurityException, IOException {
+        KeyManagersFactoryBean keyManagersFactoryBean = new KeyManagersFactoryBean();
+//        keyManagersFactoryBean.setKeyStore(keyStore().getObject());
+//        keyManagersFactoryBean.setPassword("Im!@1401");
+        KeyStore keyStoreDefault = KeyStoreUtils.loadDefaultKeyStore();
+        keyManagersFactoryBean.setKeyStore(keyStoreDefault);
+        return keyManagersFactoryBean;
+    }
+
+    @Bean
+    public KeyStoreFactoryBean keyStore() throws GeneralSecurityException, IOException {
+        KeyStoreFactoryBean keyStoreFactoryBean = new KeyStoreFactoryBean();
+        keyStoreFactoryBean.setLocation(new ClassPathResource("imi.jks"));
+        keyStoreFactoryBean.setPassword("Im!@1401");
+        return keyStoreFactoryBean;
+    }
+
+    @Bean
+    public TrustManagersFactoryBean trustManagersFactoryBean() throws GeneralSecurityException, IOException {
+        TrustManagersFactoryBean trustManagersFactoryBean = new TrustManagersFactoryBean();
+//        trustManagersFactoryBean.setKeyStore(trustStore().getObject());
+        KeyStore trustStoreDefaults = KeyStoreUtils.loadDefaultTrustStore();
+        trustManagersFactoryBean.setKeyStore(trustStoreDefaults);
+        return trustManagersFactoryBean;
+    }
+
+    @Bean
+    public KeyStoreFactoryBean trustStore() {
+        KeyStoreFactoryBean keyStoreFactoryBean = new KeyStoreFactoryBean();
+        keyStoreFactoryBean.setLocation(new ClassPathResource(trustStore.getFilename())); // "truststore.jks" Located in src/main/resources
+        keyStoreFactoryBean.setPassword(trustStorePassword);
+        return keyStoreFactoryBean;
+    }
+
+
+    @Bean
+    Credential credentialAccount(){
+        Credential credentialAccount = new Credential();
+        credentialAccount.setUsername(behdadCredential.getAccountUsername());
+        credentialAccount.setPassword(behdadCredential.getAccountPassword());
+        return credentialAccount;
+    }*/
+
+/*    @Bean
+    public IdentifierService identifierServiceBehdad(){
+        return new IdentifierServiceImplService().getIdentifierServiceImplPort();
+    }
+
+    @Bean
+    edu.imi.ir.eduimiws.models.behdad.identifier.Credential credentialIdentifier(){
+        edu.imi.ir.eduimiws.models.behdad.identifier.Credential credentialIdentifier = new edu.imi.ir.eduimiws.models.behdad.identifier.Credential();
+        credentialIdentifier.setUsername(behdadCredential.getIdentifierUsername());
+        credentialIdentifier.setPassword(behdadCredential.getIdentifierPassword());
+        return credentialIdentifier;
+    }*/
+
+//   <<< ------------------------- Behdad (Bank Markazi)
 
 }
 

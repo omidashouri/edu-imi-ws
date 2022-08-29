@@ -1,0 +1,787 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="com.misc.bis.behdad.service"
+                  name="AccountService" targetNamespace="com.misc.bis.behdad.service">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="com.misc.bis.behdad.service" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="com.misc.bis.behdad.service" version="1.0">
+  <xs:element name="changePassword" type="tns:changePassword"/>
+  <xs:element name="changePasswordResponse" type="tns:changePasswordResponse"/>
+  <xs:element name="clearAccountControlType" type="tns:clearAccountControlType"/>
+  <xs:element name="clearAccountControlTypeResponse" type="tns:clearAccountControlTypeResponse"/>
+  <xs:element name="getAccountBalance" type="tns:getAccountBalance"/>
+  <xs:element name="getAccountBalanceResponse" type="tns:getAccountBalanceResponse"/>
+  <xs:element name="getAccountControlType" type="tns:getAccountControlType"/>
+  <xs:element name="getAccountControlTypeResponse" type="tns:getAccountControlTypeResponse"/>
+  <xs:element name="getAccountNumbers" type="tns:getAccountNumbers"/>
+  <xs:element name="getAccountNumbersResponse" type="tns:getAccountNumbersResponse"/>
+  <xs:element name="getBankTransactionsDetails" type="tns:getBankTransactionsDetails"/>
+  <xs:element name="getBankTransactionsDetailsResponse" type="tns:getBankTransactionsDetailsResponse"/>
+  <xs:element name="getMultipleAccountTransactionsDetails" type="tns:getMultipleAccountTransactionsDetails"/>
+  <xs:element name="getMultipleAccountTransactionsDetailsResponse" type="tns:getMultipleAccountTransactionsDetailsResponse"/>
+  <xs:element name="getPagedDestinationSideTransactions" type="tns:getPagedDestinationSideTransactions"/>
+  <xs:element name="getPagedDestinationSideTransactionsResponse" type="tns:getPagedDestinationSideTransactionsResponse"/>
+  <xs:element name="getPagedSourceSideTransactions" type="tns:getPagedSourceSideTransactions"/>
+  <xs:element name="getPagedSourceSideTransactionsResponse" type="tns:getPagedSourceSideTransactionsResponse"/>
+  <xs:element name="setAccountControlType" type="tns:setAccountControlType"/>
+  <xs:element name="setAccountControlTypeResponse" type="tns:setAccountControlTypeResponse"/>
+  <xs:complexType name="setAccountControlType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+      <xs:element minOccurs="0" name="createModel" type="tns:accountControlCreateModel"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="credential">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="password" type="xs:string"/>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="accountControlCreateModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="accountNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="controlType" type="xs:string"/>
+      <xs:element minOccurs="0" name="identifierType" type="xs:string"/>
+      <xs:element minOccurs="0" name="toDate" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setAccountControlTypeResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="changePassword">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="changePasswordRequest" type="tns:changePasswordRequest"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="changePasswordRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="newPassword" type="xs:string"/>
+      <xs:element minOccurs="0" name="password" type="xs:string"/>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="changePasswordResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getAccountBalance">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+      <xs:element minOccurs="0" name="accountInfo" type="tns:accountInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="accountInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="accountNumber" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAccountBalanceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:balanceInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="balanceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credit" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="monetary" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="reportDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="systemBlock" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="userBlock" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPagedDestinationSideTransactions">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+      <xs:element minOccurs="0" name="sideTransactionsRequest" type="tns:sideTransactionsRequest"/>
+      <xs:element minOccurs="0" name="paging" type="tns:paging"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sideTransactionsRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="accountNumber" type="xs:string"/>
+      <xs:element name="transactionId" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="paging">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="pageNumber" type="xs:int"/>
+      <xs:element minOccurs="0" name="recordCount" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPagedDestinationSideTransactionsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:pagedData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="pagedData">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="currentPageData" nillable="true" type="xs:anyType"/>
+      <xs:element minOccurs="0" name="pageNumber" type="xs:int"/>
+      <xs:element minOccurs="0" name="pageSize" type="xs:int"/>
+      <xs:element minOccurs="0" name="totalCount" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="accountTransactionInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="accountNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="amount" type="xs:decimal"/>
+      <xs:element name="transactionId" type="xs:long"/>
+      <xs:element minOccurs="0" name="transactionIdentifier" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getBankTransactionsDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+      <xs:element minOccurs="0" name="filter" type="tns:accountTransactionFilter"/>
+      <xs:element minOccurs="0" name="paging" type="tns:paging"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="accountTransactionFilter">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="accountNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="fromDateTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="paymentIdentifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="toDateTime" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getBankTransactionsDetailsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:pagedData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bankTransaction">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="accountNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="amount" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="balance" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="cardNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="destinationAccountNumber" type="xs:string"/>
+      <xs:element name="groupTransfer" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="iban" type="xs:string"/>
+      <xs:element minOccurs="0" name="sourceAccountNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="traceNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionId" type="xs:long"/>
+      <xs:element minOccurs="0" name="transactionIdentifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionMediaSerial" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionMediaType" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionMethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionStan" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionStatusDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionStatusTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionStatusType" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="transactionType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPagedSourceSideTransactions">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+      <xs:element minOccurs="0" name="sideTransactionsRequest" type="tns:sideTransactionsRequest"/>
+      <xs:element minOccurs="0" name="paging" type="tns:paging"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPagedSourceSideTransactionsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:pagedData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAccountControlType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+      <xs:element minOccurs="0" name="accountInfo" type="tns:accountInfo"/>
+      <xs:element minOccurs="0" name="identifierType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAccountControlTypeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMultipleAccountTransactionsDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+      <xs:element minOccurs="0" name="filter" type="tns:multipleAccountTransactionFilter"/>
+      <xs:element minOccurs="0" name="paging" type="tns:paging"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="multipleAccountTransactionFilter">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="accountNumbers" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="fromDateTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="paymentIdentifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="toDateTime" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMultipleAccountTransactionsDetailsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:pagedData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="clearAccountControlType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+      <xs:element minOccurs="0" name="accountInfo" type="tns:accountInfo"/>
+      <xs:element minOccurs="0" name="identifierType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="clearAccountControlTypeResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getAccountNumbers">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="credential" type="tns:credential"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAccountNumbersResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:accountInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidCredentialException" type="tns:InvalidCredentialException"/>
+  <xs:complexType name="InvalidCredentialException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UnableToAuthenticateException" type="tns:UnableToAuthenticateException"/>
+  <xs:complexType name="UnableToAuthenticateException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PasswordShouldBeChangeException" type="tns:PasswordShouldBeChangeException"/>
+  <xs:complexType name="PasswordShouldBeChangeException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidCertificateException" type="tns:InvalidCertificateException"/>
+  <xs:complexType name="InvalidCertificateException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UserTemporarilySuspendedException" type="tns:UserTemporarilySuspendedException"/>
+  <xs:complexType name="UserTemporarilySuspendedException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UnableToGetClientCertificateInfo" type="tns:UnableToGetClientCertificateInfo"/>
+  <xs:complexType name="UnableToGetClientCertificateInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExpiredOrNotValidCertificateException" type="tns:ExpiredOrNotValidCertificateException"/>
+  <xs:complexType name="ExpiredOrNotValidCertificateException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidIdentifierControlTypeException" type="tns:InvalidIdentifierControlTypeException"/>
+  <xs:complexType name="InvalidIdentifierControlTypeException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidIdentifierTypeException" type="tns:InvalidIdentifierTypeException"/>
+  <xs:complexType name="InvalidIdentifierTypeException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidDateException" type="tns:InvalidDateException"/>
+  <xs:complexType name="InvalidDateException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PasswordIsNotStrongException" type="tns:PasswordIsNotStrongException"/>
+  <xs:complexType name="PasswordIsNotStrongException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UnableToChangePasswordException" type="tns:UnableToChangePasswordException"/>
+  <xs:complexType name="UnableToChangePasswordException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PageSizeIsTooMuchException" type="tns:PageSizeIsTooMuchException"/>
+  <xs:complexType name="PageSizeIsTooMuchException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidPageNumberException" type="tns:InvalidPageNumberException"/>
+  <xs:complexType name="InvalidPageNumberException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidTransactionTypeException" type="tns:InvalidTransactionTypeException"/>
+  <xs:complexType name="InvalidTransactionTypeException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidPageSizeException" type="tns:InvalidPageSizeException"/>
+  <xs:complexType name="InvalidPageSizeException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransactionDoesNotBelongToAccount" type="tns:TransactionDoesNotBelongToAccount"/>
+  <xs:complexType name="TransactionDoesNotBelongToAccount">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UnableToGetTransactionsException" type="tns:UnableToGetTransactionsException"/>
+  <xs:complexType name="UnableToGetTransactionsException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TooMuchAccountsException" type="tns:TooMuchAccountsException"/>
+  <xs:complexType name="TooMuchAccountsException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="InvalidCredentialException">
+    <wsdl:part element="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setAccountControlTypeResponse">
+    <wsdl:part element="ns1:setAccountControlTypeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAccountBalance">
+    <wsdl:part element="ns1:getAccountBalance" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPagedDestinationSideTransactions">
+    <wsdl:part element="ns1:getPagedDestinationSideTransactions" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAccountBalanceResponse">
+    <wsdl:part element="ns1:getAccountBalanceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPagedSourceSideTransactions">
+    <wsdl:part element="ns1:getPagedSourceSideTransactions" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="changePasswordResponse">
+    <wsdl:part element="ns1:changePasswordResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidIdentifierControlTypeException">
+    <wsdl:part element="ns1:InvalidIdentifierControlTypeException" name="InvalidIdentifierControlTypeException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPagedDestinationSideTransactionsResponse">
+    <wsdl:part element="ns1:getPagedDestinationSideTransactionsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PageSizeIsTooMuchException">
+    <wsdl:part element="ns1:PageSizeIsTooMuchException" name="PageSizeIsTooMuchException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAccountControlTypeResponse">
+    <wsdl:part element="ns1:getAccountControlTypeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidPageNumberException">
+    <wsdl:part element="ns1:InvalidPageNumberException" name="InvalidPageNumberException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UnableToAuthenticateException">
+    <wsdl:part element="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getBankTransactionsDetailsResponse">
+    <wsdl:part element="ns1:getBankTransactionsDetailsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPagedSourceSideTransactionsResponse">
+    <wsdl:part element="ns1:getPagedSourceSideTransactionsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidTransactionTypeException">
+    <wsdl:part element="ns1:InvalidTransactionTypeException" name="InvalidTransactionTypeException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidPageSizeException">
+    <wsdl:part element="ns1:InvalidPageSizeException" name="InvalidPageSizeException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UnableToGetTransactionsException">
+    <wsdl:part element="ns1:UnableToGetTransactionsException" name="UnableToGetTransactionsException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidCertificateException">
+    <wsdl:part element="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMultipleAccountTransactionsDetailsResponse">
+    <wsdl:part element="ns1:getMultipleAccountTransactionsDetailsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UserTemporarilySuspendedException">
+    <wsdl:part element="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMultipleAccountTransactionsDetails">
+    <wsdl:part element="ns1:getMultipleAccountTransactionsDetails" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidIdentifierTypeException">
+    <wsdl:part element="ns1:InvalidIdentifierTypeException" name="InvalidIdentifierTypeException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PasswordIsNotStrongException">
+    <wsdl:part element="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PasswordShouldBeChangeException">
+    <wsdl:part element="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setAccountControlType">
+    <wsdl:part element="ns1:setAccountControlType" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="changePassword">
+    <wsdl:part element="ns1:changePassword" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TooMuchAccountsException">
+    <wsdl:part element="ns1:TooMuchAccountsException" name="TooMuchAccountsException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAccountNumbersResponse">
+    <wsdl:part element="ns1:getAccountNumbersResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getBankTransactionsDetails">
+    <wsdl:part element="ns1:getBankTransactionsDetails" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="clearAccountControlTypeResponse">
+    <wsdl:part element="ns1:clearAccountControlTypeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UnableToChangePasswordException">
+    <wsdl:part element="ns1:UnableToChangePasswordException" name="UnableToChangePasswordException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UnableToGetClientCertificateInfo">
+    <wsdl:part element="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ExpiredOrNotValidCertificateException">
+    <wsdl:part element="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TransactionDoesNotBelongToAccount">
+    <wsdl:part element="ns1:TransactionDoesNotBelongToAccount" name="TransactionDoesNotBelongToAccount">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAccountControlType">
+    <wsdl:part element="ns1:getAccountControlType" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="clearAccountControlType">
+    <wsdl:part element="ns1:clearAccountControlType" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidDateException">
+    <wsdl:part element="ns1:InvalidDateException" name="InvalidDateException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAccountNumbers">
+    <wsdl:part element="ns1:getAccountNumbers" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AccountService">
+    <wsdl:operation name="setAccountControlType">
+      <wsdl:input message="ns1:setAccountControlType" name="setAccountControlType">
+    </wsdl:input>
+      <wsdl:output message="ns1:setAccountControlTypeResponse" name="setAccountControlTypeResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidIdentifierTypeException" name="InvalidIdentifierTypeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidIdentifierControlTypeException" name="InvalidIdentifierControlTypeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidDateException" name="InvalidDateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="changePassword">
+      <wsdl:input message="ns1:changePassword" name="changePassword">
+    </wsdl:input>
+      <wsdl:output message="ns1:changePasswordResponse" name="changePasswordResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToChangePasswordException" name="UnableToChangePasswordException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAccountBalance">
+      <wsdl:input message="ns1:getAccountBalance" name="getAccountBalance">
+    </wsdl:input>
+      <wsdl:output message="ns1:getAccountBalanceResponse" name="getAccountBalanceResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPagedDestinationSideTransactions">
+      <wsdl:input message="ns1:getPagedDestinationSideTransactions" name="getPagedDestinationSideTransactions">
+    </wsdl:input>
+      <wsdl:output message="ns1:getPagedDestinationSideTransactionsResponse" name="getPagedDestinationSideTransactionsResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:PageSizeIsTooMuchException" name="PageSizeIsTooMuchException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:TransactionDoesNotBelongToAccount" name="TransactionDoesNotBelongToAccount">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidPageNumberException" name="InvalidPageNumberException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidTransactionTypeException" name="InvalidTransactionTypeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidPageSizeException" name="InvalidPageSizeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getBankTransactionsDetails">
+      <wsdl:input message="ns1:getBankTransactionsDetails" name="getBankTransactionsDetails">
+    </wsdl:input>
+      <wsdl:output message="ns1:getBankTransactionsDetailsResponse" name="getBankTransactionsDetailsResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:PageSizeIsTooMuchException" name="PageSizeIsTooMuchException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidDateException" name="InvalidDateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidPageNumberException" name="InvalidPageNumberException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidPageSizeException" name="InvalidPageSizeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToGetTransactionsException" name="UnableToGetTransactionsException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPagedSourceSideTransactions">
+      <wsdl:input message="ns1:getPagedSourceSideTransactions" name="getPagedSourceSideTransactions">
+    </wsdl:input>
+      <wsdl:output message="ns1:getPagedSourceSideTransactionsResponse" name="getPagedSourceSideTransactionsResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:PageSizeIsTooMuchException" name="PageSizeIsTooMuchException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:TransactionDoesNotBelongToAccount" name="TransactionDoesNotBelongToAccount">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidPageNumberException" name="InvalidPageNumberException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidTransactionTypeException" name="InvalidTransactionTypeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidPageSizeException" name="InvalidPageSizeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAccountControlType">
+      <wsdl:input message="ns1:getAccountControlType" name="getAccountControlType">
+    </wsdl:input>
+      <wsdl:output message="ns1:getAccountControlTypeResponse" name="getAccountControlTypeResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidIdentifierTypeException" name="InvalidIdentifierTypeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMultipleAccountTransactionsDetails">
+      <wsdl:input message="ns1:getMultipleAccountTransactionsDetails" name="getMultipleAccountTransactionsDetails">
+    </wsdl:input>
+      <wsdl:output message="ns1:getMultipleAccountTransactionsDetailsResponse" name="getMultipleAccountTransactionsDetailsResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:PageSizeIsTooMuchException" name="PageSizeIsTooMuchException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:TooMuchAccountsException" name="TooMuchAccountsException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidDateException" name="InvalidDateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidPageNumberException" name="InvalidPageNumberException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidPageSizeException" name="InvalidPageSizeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToGetTransactionsException" name="UnableToGetTransactionsException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="clearAccountControlType">
+      <wsdl:input message="ns1:clearAccountControlType" name="clearAccountControlType">
+    </wsdl:input>
+      <wsdl:output message="ns1:clearAccountControlTypeResponse" name="clearAccountControlTypeResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidIdentifierTypeException" name="InvalidIdentifierTypeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAccountNumbers">
+      <wsdl:input message="ns1:getAccountNumbers" name="getAccountNumbers">
+    </wsdl:input>
+      <wsdl:output message="ns1:getAccountNumbersResponse" name="getAccountNumbersResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:UnableToGetClientCertificateInfo" name="UnableToGetClientCertificateInfo">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:ExpiredOrNotValidCertificateException" name="ExpiredOrNotValidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordIsNotStrongException" name="PasswordIsNotStrongException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UnableToAuthenticateException" name="UnableToAuthenticateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCredentialException" name="InvalidCredentialException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:PasswordShouldBeChangeException" name="PasswordShouldBeChangeException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:InvalidCertificateException" name="InvalidCertificateException">
+    </wsdl:fault>
+      <wsdl:fault message="ns1:UserTemporarilySuspendedException" name="UserTemporarilySuspendedException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

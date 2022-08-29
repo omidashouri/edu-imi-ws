@@ -16,6 +16,7 @@ public class RootUrlSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("**/swagger-ui/**","/swagger-ui/**","/v3/api-docs/**","/v3/api-docs","/v2/api-docs/**","/configuration/**","/swagger*/**","/webjars/**").permitAll()
                 .antMatchers(HttpMethod.POST,"**/afterPaymentResponse").permitAll()
                 .antMatchers(HttpMethod.POST,"**/v1/callback/sadad/publicId/**").permitAll()
+//                .antMatchers("**/api/v1/behdad/**").permitAll()
 //                .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
         ;

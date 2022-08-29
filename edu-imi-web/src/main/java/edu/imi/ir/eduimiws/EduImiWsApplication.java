@@ -15,6 +15,8 @@ public class EduImiWsApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(EduImiWsApplication.class, args);
+/*        System.setProperty("javax.net.ssl.trustStore", "jks/ks.keystore");
+        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");*/
     }
 
 }

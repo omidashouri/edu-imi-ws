@@ -327,6 +327,24 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi behdadAccountApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("BehdadAccounts")
+                .pathsToMatch("/api/v1/behdad/accounts/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi behdadIdentifierApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("BehdadIdentifiers")
+                .pathsToMatch("/api/v1/behdad/identifiers/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {

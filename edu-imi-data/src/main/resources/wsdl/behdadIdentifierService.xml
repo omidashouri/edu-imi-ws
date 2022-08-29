@@ -1,0 +1,485 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://service.identifier.behdad.bis.misc.com/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:ns1="com.misc.bis.behdad.service" name="IdentifierServiceImplService"
+                  targetNamespace="http://service.identifier.behdad.bis.misc.com/">
+  <wsdl:import location="https://behdadservices.cbinasim.ir:6060/behdad-identifier/identifierservice?wsdl=IdentifierService.wsdl" namespace="com.misc.bis.behdad.service">
+    </wsdl:import>
+  <wsdl:binding name="IdentifierServiceImplServiceSoapBinding" type="ns1:IdentifierService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="isVerhoeff">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="isVerhoeff">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="isVerhoeffResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidIdentifierException">
+        <soap:fault name="InvalidIdentifierException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateIdentifier">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateIdentifier">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateIdentifierResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidAllotmentItemInfoException">
+        <soap:fault name="InvalidAllotmentItemInfoException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToGenerateIdentifierException">
+        <soap:fault name="UnableToGenerateIdentifierException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="changePassword">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="changePassword">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="changePasswordResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToChangePasswordException">
+        <soap:fault name="UnableToChangePasswordException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateIdentifierByOrganInfo">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateIdentifierByOrganInfo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateIdentifierByOrganInfoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidAllotmentItemInfoException">
+        <soap:fault name="InvalidAllotmentItemInfoException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToGenerateIdentifierException">
+        <soap:fault name="UnableToGenerateIdentifierException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="isEffectiveIdentifier">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="isEffectiveIdentifier">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="isEffectiveIdentifierResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="IdentifierNotFoundException">
+        <soap:fault name="IdentifierNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="isExistIdentifier">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="isExistIdentifier">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="isExistIdentifierResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addIdentifiers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addIdentifiers">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addIdentifiersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeIdentifiers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="removeIdentifiers">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="removeIdentifiersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getActiveIdentifiers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getActiveIdentifiers">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getActiveIdentifiersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="isValidIdentifier">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="isValidIdentifier">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="isValidIdentifierResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addIdentifier">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addIdentifier">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addIdentifierResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidIdentifierCodeException">
+        <soap:fault name="InvalidIdentifierCodeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidAmountException">
+        <soap:fault name="InvalidAmountException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidAccountNumberException">
+        <soap:fault name="InvalidAccountNumberException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="IdentifierIsExistException">
+        <soap:fault name="IdentifierIsExistException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidDateException">
+        <soap:fault name="InvalidDateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAccountNumbers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAccountNumbers">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAccountNumbersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeIdentifier">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="removeIdentifier">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="removeIdentifierResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnableToGetClientCertificateInfo">
+        <soap:fault name="UnableToGetClientCertificateInfo" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ExpiredOrNotValidCertificateException">
+        <soap:fault name="ExpiredOrNotValidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordIsNotStrongException">
+        <soap:fault name="PasswordIsNotStrongException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToAuthenticateException">
+        <soap:fault name="UnableToAuthenticateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialException">
+        <soap:fault name="InvalidCredentialException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PasswordShouldBeChangeException">
+        <soap:fault name="PasswordShouldBeChangeException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="IdentifierNotFoundException">
+        <soap:fault name="IdentifierNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCertificateException">
+        <soap:fault name="InvalidCertificateException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserTemporarilySuspendedException">
+        <soap:fault name="UserTemporarilySuspendedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IdentifierServiceImplService">
+    <wsdl:port binding="tns:IdentifierServiceImplServiceSoapBinding" name="IdentifierServiceImplPort">
+      <soap:address location="https://behdadservices.cbinasim.ir:6060/behdad-identifier/identifierservice"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
