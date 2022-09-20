@@ -17,7 +17,7 @@ public class FarapayamakCredential {
     private String sendSmsUrl;
     private String getBasePriceUrl;
     private String getCreditUrl;
-   /* private String getUserNumbersUrl;*/
+     private String getUserNumbersUrl;
     private String getMessagesUrl;
-  /*  private String getDeliveries2Url;*/
+    private String getDeliveries2Url;
 }

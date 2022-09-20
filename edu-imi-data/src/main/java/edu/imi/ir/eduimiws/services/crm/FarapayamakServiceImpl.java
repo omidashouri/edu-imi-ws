@@ -100,7 +100,7 @@ public class FarapayamakServiceImpl implements FarapayamakService {
         return farapayamakReturnedSendSmsDto.getBody();
     }
 
- /*   @Override
+    @Override
     public FarapayamakReturnedSendSmsDto getUserNumbers() {
         String completeGetUserNumbersUri = String.format(farapayamakCredential.getGetCreditUrl());
 
@@ -112,7 +112,7 @@ public class FarapayamakServiceImpl implements FarapayamakService {
                         FarapayamakReturnedSendSmsDto.class);
 
         return farapayamakReturnedSendSmsDto.getBody();
-    }*/
+    }
 
     @Override
     public FarapayamakReturnedSendSmsDto getMessagesFromFarapayamak(FarapayamakSendSmsDto farapayamakSendSmsDto) {
@@ -129,7 +129,6 @@ public class FarapayamakServiceImpl implements FarapayamakService {
         HttpEntity httpEntity = new HttpEntity(requestBody);*/
 
 
-
         Map responseBody = new HashMap();
 
         ResponseEntity<FarapayamakReturnedSendSmsDto> farapayamakReturnedSendSmsDto =
@@ -143,20 +142,21 @@ public class FarapayamakServiceImpl implements FarapayamakService {
         return farapayamakReturnedSendSmsDto.getBody();
     }
 
-  /* @Override
+    @Override
     public FarapayamakReturnedSendSmsDto getDeliveries2(FarapayamakSendSmsDto farapayamakSendSmsDto) {
-
         String completeGetDeliveries2Uri = String.format(farapayamakCredential.getGetDeliveries2Url());
+
         HttpEntity<?> userNamePasswordRequestEntity = getUserNamePasswordRequestEntity();
 
+        Map responseBody = new HashMap();
         ResponseEntity<FarapayamakReturnedSendSmsDto> farapayamakReturnedSendSmsDto =
                 restTemplate.exchange(completeGetDeliveries2Uri,
-                        HttpMethod.POST, userNamePasswordRequestEntity,
+                        HttpMethod.POST, this.requestHttpEntity(farapayamakSendSmsDto),
                         FarapayamakReturnedSendSmsDto.class);
-
+        /* farapayamakReturnedSendSmsDto.toString();*/
         return farapayamakReturnedSendSmsDto.getBody();
 
-    }*/
+    }
 
 
 /*    @Override

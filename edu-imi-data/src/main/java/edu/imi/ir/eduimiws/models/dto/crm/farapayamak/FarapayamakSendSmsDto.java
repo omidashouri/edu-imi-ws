@@ -33,7 +33,7 @@ public class FarapayamakSendSmsDto implements Serializable {
     private Integer index;
     private Integer count;
 
-    /*private Long recId;*/
+    private  Long recId;
 
 
 }

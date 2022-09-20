@@ -4,13 +4,11 @@ package edu.imi.ir.eduimiws.controllers.crm.v1;
 import edu.imi.ir.eduimiws.mapper.crm.*;
 import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakReturnedSendSmsDto;
 import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakSendSmsDto;
+import edu.imi.ir.eduimiws.models.request.crm.farapayamak.GetDeliveries2RequestForFarapayamak;
 import edu.imi.ir.eduimiws.models.request.crm.farapayamak.GetMessagesRequestForFarapayamak;
 import edu.imi.ir.eduimiws.models.request.crm.farapayamak.SendSmsRequestForFarapayamak;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
-import edu.imi.ir.eduimiws.models.response.crm.farapayamak.GetBasePriceResponseForFarapayamak;
-import edu.imi.ir.eduimiws.models.response.crm.farapayamak.GetCreditResponseForFarapayamak;
-import edu.imi.ir.eduimiws.models.response.crm.farapayamak.GetMessagesResponseForFarapayamak;
-import edu.imi.ir.eduimiws.models.response.crm.farapayamak.SendSmsResponseForFarapayamak;
+import edu.imi.ir.eduimiws.models.response.crm.farapayamak.*;
 import edu.imi.ir.eduimiws.security.FarapayamakCredential;
 import edu.imi.ir.eduimiws.services.crm.FarapayamakService;
 import edu.imi.ir.eduimiws.utilities.CommonUtils;
@@ -49,10 +47,12 @@ public class FarapayamakController {
     private final CommonUtils commonUtils;
     private final GetBasePriceForFarapayamakFarapayamakReturnedSendSmsDtoMapper getBasePriceForFarapayamakFarapayamakReturnedSendSmsDtoMapper;
     private final GetCreditForFarapayamakFarapayamakReturnedSendSmsDtoMapper getCreditForFarapayamakFarapayamakReturnedSendSmsDtoMapper;
-   /* private final GetUserNumbersForFarapayamakFarapayamakReturnedSendSmsDtoMapper getUserNumbersForFarapayamakFarapayamakReturnedSendSmsDtoMapper;*/
+    private final GetUserNumbersForFarapayamakFarapayamakReturnedSendSmsDtoMapper getUserNumbersForFarapayamakFarapayamakReturnedSendSmsDtoMapper;
     private final GetMessagesRequestForFarapayamakFarapayamakSendSmsDtoMapper getMessagesRequestForFarapayamakFarapayamakSendSmsDtoMapper;
     private final FarapayamakReturnedSendSmsDtoGetMessagesResponseForFarapayamakMapper farapayamakReturnedSendSmsDtoGetMessagesResponseForFarapayamakMapper;
-   /* private final GetDeliveries2RequestForFarapayamakToFarapayamakSendSmsDtoMapper getDeliveries2RequestForFarapayamakToFarapayamakSendSmsDtoMapper;*/
+    private final GetDeliveries2RequestForFarapayamakToFarapayamakSendSmsDtoMapper getDeliveries2RequestForFarapayamakToFarapayamakSendSmsDtoMapper;
+    private final FarapayamakReturnedSendSmsDtoGetDeliveries2ReponseForFarapayamakMapper farapayamakReturnedSendSmsDtoGetDeliveries2ReponseForFarapayamakMapper;
+
     //        todo: implement update message status
 //        todo: add messageReceiverPublicId(z) to farapayamakReturnedSendSmsDto → SendSmsResponseForFarapayamak (for future uses)
 
@@ -204,8 +204,7 @@ public class FarapayamakController {
         return ResponseEntity.ok(getCreditResponseForFarapayamak);
     }
 
-
-  /*  @Operation(
+    @Operation(
             summary = "Get User Numbers From farapayamak",
             description = "Get User Numbers From Farapayamak",
             security = @SecurityRequirement(name = "imi-security-key")
@@ -238,12 +237,12 @@ public class FarapayamakController {
 
         FarapayamakReturnedSendSmsDto farapayamakReturnedSendSmsDto = farapayamakService.getUserNumbers();
 
-
         GetUserNumbersResponseForFarapayamak getUserNumbersResponseForFarapayamak = getUserNumbersForFarapayamakFarapayamakReturnedSendSmsDtoMapper
                 .toGetUserNumbersResponseForFarapayamak(farapayamakReturnedSendSmsDto);
 
         return ResponseEntity.ok(getUserNumbersResponseForFarapayamak);
-    }*/
+
+    }
 
     @Operation(
             summary = "Get Messages From Farapayamak",
@@ -274,7 +273,8 @@ public class FarapayamakController {
     )
     @PostMapping(path = "/getMessagesFromFarapayamak",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getMessagesFromFarapayamak(@RequestBody GetMessagesRequestForFarapayamak getMessagesRequestForFarapayamak) {
+    public ResponseEntity<?> getMessagesFromFarapayamak(@RequestBody GetMessagesRequestForFarapayamak
+                                                                getMessagesRequestForFarapayamak) {
 
         List<FarapayamakReturnedSendSmsDto> farapayamakReturnedSendSmsDtos = new ArrayList<>();
 
@@ -298,14 +298,22 @@ public class FarapayamakController {
         return ResponseEntity.ok(getMessagesResponseForFarapayamak);
     }
 
-  /*  @PostMapping(path = "/getDeliveries2",
+    @PostMapping(path = "/getDeliveries2Farapayamak",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getDeliveries2Farapayamak(@RequestBody GetDeliveries2RequestForFarapayamak getDeliveries2RequestForFarapayamak) {
 
-          FarapayamakSendSmsDto farapayamakSendSmsDto = getDeliveries2RequestForFarapayamakToFarapayamakSendSmsDtoMapper
-                  .toFarapayamakSendSmsDto(getDeliveries2RequestForFarapayamak);
+        FarapayamakSendSmsDto farapayamakSendSmsDto = getDeliveries2RequestForFarapayamakToFarapayamakSendSmsDtoMapper
+                .toFarapayamakSendSmsDto(getDeliveries2RequestForFarapayamak);
 
-        return null;
-    }*/
+        sendSmsRequestForFarapayamakFarapayamakSendSmsDtoMapper
+                .handleFarapayamakCredentials(farapayamakCredential, farapayamakSendSmsDto);
 
+        FarapayamakReturnedSendSmsDto farapayamakReturnedSendSmsDto = farapayamakService.getDeliveries2(farapayamakSendSmsDto);
+
+        GetDeliveries2ResponseForFarapayamak getDeliveries2ResponseForFarapayamak =
+                farapayamakReturnedSendSmsDtoGetDeliveries2ReponseForFarapayamakMapper
+                        .farapayamakReturnedSendSmsDtoGetDeliveries2ReponseForFarapayamak(farapayamakReturnedSendSmsDto);
+
+        return ResponseEntity.ok(getDeliveries2ResponseForFarapayamak);
+    }
 }

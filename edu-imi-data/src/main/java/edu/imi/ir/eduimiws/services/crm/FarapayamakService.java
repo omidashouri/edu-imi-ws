@@ -15,9 +15,11 @@ public interface FarapayamakService {
 
     FarapayamakReturnedSendSmsDto getCredit();
 
-  /*  FarapayamakReturnedSendSmsDto getUserNumbers();*/
+   FarapayamakReturnedSendSmsDto getUserNumbers();
 
     FarapayamakReturnedSendSmsDto getMessagesFromFarapayamak(FarapayamakSendSmsDto farapayamakSendSmsDto);
+
+    FarapayamakReturnedSendSmsDto getDeliveries2(FarapayamakSendSmsDto farapayamakSendSmsDto);
 
 /*    FarapayamakReturnedSendSmsDto getDeliveries2(FarapayamakSendSmsDto farapayamakSendSmsDto);*/
 
