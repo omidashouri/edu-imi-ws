@@ -16,6 +16,7 @@ import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponse;
 import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponseForPaymentCode;
 import edu.imi.ir.eduimiws.services.pmis.ProjectService;
 import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
+import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -261,6 +262,7 @@ public class ProjectController {
 
 
     @Operation(
+            hidden = true,
             summary = "find All projects for payment codes",
             description = "Search projects for payment code detail pageable",
             tags = "projects",
@@ -294,6 +296,7 @@ public class ProjectController {
                             )
                     )
             })
+    @DisableMethod
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/forPaymentCodes",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -317,6 +320,7 @@ public class ProjectController {
     }
 
     @Operation(
+            hidden = true,
             summary = "Find Project for payment code by public ID",
             description = "Search project for payment code by the public id",
             tags = "projects",
@@ -347,6 +351,7 @@ public class ProjectController {
                     )
             }
     )
+    @DisableMethod
     @GetMapping(path = "/publicId/{projectPublicId}/forPaymentCode",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getProjectByProjectPublicIdForPaymentCode(@PathVariable String projectPublicId) {
@@ -370,6 +375,7 @@ public class ProjectController {
     }
 
     @Operation(
+            hidden = true,
             summary = "find All project for payment code parameterized",
             description = "Search project for payment code pageable parameterized",
             tags = "projects",
@@ -403,6 +409,7 @@ public class ProjectController {
                             )
                     )
             })
+    @DisableMethod
     @SwaggerUtil.ProjectResponseForPaymentCodeAsQueryParam
     @GetMapping(path = "/forPaymentCodes/parameterized",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -422,5 +429,122 @@ public class ProjectController {
 
         return ResponseEntity.ok(paymentCodeResponseDescriptivesPagedModel);
     }
+
+
+
+
+    @Operation(
+            summary = "find All projects for Deposit code Api",
+            description = "Search projects for Deposit code Api pageable",
+            tags = "projects",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ProjectResponseForPaymentCode.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.PageableAsQueryParam
+    @GetMapping(path = "/forDepositCodeApi",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ProjectResponseForPaymentCode>> getProjectsForDepositCode(@Parameter(hidden = true)
+                                                                                               @SortDefault(sort = "projectName",
+                                                                                                       direction = Sort.Direction.DESC)
+                                                                                               @PageableDefault(page = 0, size = 10, value = 10)
+                                                                                                       Pageable pageable) {
+
+        Page<ProjectDto> projectDtoPages =
+                projectService.findAllPageableProjectForPaymentCode(pageable);
+
+        PagedModel<ProjectResponseForPaymentCode> projectResponseForPaymentCodePagedModel = projectDtoPagedResourcesAssembler
+                .toModel(projectDtoPages, projectResponseForPaymentCodeProjectDtoAssembler);
+
+        projectResponseForPaymentCodePagedModel.getContent().forEach(projectResponseForPaymentCode -> {
+            convertorUtil.changeInstanceCharAndNumSetByType(projectResponseForPaymentCode, "persian");
+        });
+
+        return ResponseEntity.ok(projectResponseForPaymentCodePagedModel);
+    }
+
+
+
+    @Operation(
+            summary = "find All project for Deposit code Api parameterized",
+            description = "Search project for Deposit code Api pageable parameterized",
+            tags = "projects",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PaymentCodeResponseDescriptive.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.ProjectResponseForPaymentCodeAsQueryParam
+    @GetMapping(path = "/forDepositCodeApi/parameterized",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ProjectResponseForPaymentCode>> getProjectResponseForDepositCodeApiWithParameter(@Parameter(hidden = true)
+                                                                                                                   @RequestParam Map<String, String> queryParams) {
+
+
+        Page<ProjectDto> projectDtos =
+                projectService.findAllPageableProjectForPaymentCodeByQueryParam(queryParams);
+
+        PagedModel<ProjectResponseForPaymentCode> paymentCodeResponseDescriptivesPagedModel = projectDtoPagedResourcesAssembler
+                .toModel(projectDtos, projectResponseForPaymentCodeProjectDtoAssembler);
+
+        paymentCodeResponseDescriptivesPagedModel.getContent().forEach(projectResponseForPaymentCode -> {
+            convertorUtil.changeInstanceCharAndNumSetByType(projectResponseForPaymentCode, "persian");
+        });
+
+        return ResponseEntity.ok(paymentCodeResponseDescriptivesPagedModel);
+    }
+
+
 
 }

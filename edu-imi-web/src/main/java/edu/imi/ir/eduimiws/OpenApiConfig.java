@@ -345,6 +345,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi projectDepositCodeApiApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("ProjectDepositCodeApis")
+                .pathsToMatch("/api/v1/projectDepositCodeApis/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {
