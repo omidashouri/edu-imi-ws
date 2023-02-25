@@ -1,13 +1,10 @@
 package edu.imi.ir.eduimiws.mapper.pmis;
 
 import edu.imi.ir.eduimiws.domain.pmis.ProjectApiEntity;
-import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.pmis.ProjectApiDto;
-import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface ProjectApiFastMapper {
-    ProjectApiFastMapper INSTANCE = Mappers.getMapper(ProjectApiFastMapper.class);
+
 
     @Mappings({
             @Mapping(source = "createDateTs", target = "createDateTs"),
