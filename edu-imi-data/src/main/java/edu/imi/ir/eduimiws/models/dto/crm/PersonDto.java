@@ -15,6 +15,8 @@ public class PersonDto implements Serializable {
 
     private Long id;
 
+    private String personPublicId;
+
     private String firstName;
 
     private String lastName;

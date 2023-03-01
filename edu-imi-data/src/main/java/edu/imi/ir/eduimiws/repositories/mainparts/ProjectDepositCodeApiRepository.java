@@ -22,15 +22,15 @@ public interface ProjectDepositCodeApiRepository extends CrudRepository<ProjectD
     @EntityGraph(value = "ProjectDepositCodeApiEntity.findProjectProjectApi",
             type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    ProjectDepositCodeApiDto findByPublicId(String publicId);
+    ProjectDepositCodeApiEntity findByPublicId(String publicId);
 
-    ProjectDepositCodeApiDto save(ProjectDepositCodeApiDto newProjectDepositCodeApi);
-
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    List<ProjectDepositCodeApiDto> findAllByPublicIdIn(List<String> projectDepositCodeApiPublicIds);
+    ProjectDepositCodeApiEntity save(ProjectDepositCodeApiDto newProjectDepositCodeApi);
 
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    Page<ProjectDepositCodeApiEntity> findAllByDepositCode(String depositCode, Pageable pageable);
+    List<ProjectDepositCodeApiEntity> findAllByPublicIdIn(List<String> projectDepositCodeApiPublicIds);
+
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    Page<ProjectDepositCodeApiEntity> findByDepositCode(String depositCode, Pageable pageable);
 
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
     ProjectDepositCodeApiEntity findByProject_ProjectCodeAndDepositCode(String projectCode, String depositCode);
@@ -39,5 +39,6 @@ public interface ProjectDepositCodeApiRepository extends CrudRepository<ProjectD
             type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
     Page<ProjectDepositCodeApiEntity> findByProject_ProjectNameContaining(String projectName, Pageable pageable);
+
 
 }

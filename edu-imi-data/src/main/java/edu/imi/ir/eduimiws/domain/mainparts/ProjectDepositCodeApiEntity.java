@@ -15,12 +15,24 @@ import java.sql.Timestamp;
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "ProjectDepositCodeApiEntity.findProjectProjectApi",
                 attributeNodes = {
-                        @NamedAttributeNode(value = "project",subgraph = "project-subGraph")
+                        @NamedAttributeNode(value = "project",subgraph = "project-subGraph"),
+                        @NamedAttributeNode(value = "creator",subgraph = "creator-subGraph"),
+                        @NamedAttributeNode(value = "editor",subgraph = "editor-subGraph")
                 },
                 subgraphs = {
                         @NamedSubgraph(name = "project-subGraph",
                                 attributeNodes = {
                                         @NamedAttributeNode(value = "projectApi")
+                                }
+                        ),
+                        @NamedSubgraph(name = "creator-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "personApiEntity")
+                                }
+                        ),
+                        @NamedSubgraph(name = "editor-subGraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "personApiEntity")
                                 }
                         )
                 }

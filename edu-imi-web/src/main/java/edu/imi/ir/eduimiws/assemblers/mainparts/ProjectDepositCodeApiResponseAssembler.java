@@ -1,7 +1,9 @@
 package edu.imi.ir.eduimiws.assemblers.mainparts;
 
+import edu.imi.ir.eduimiws.controllers.crm.v1.UserController;
 import edu.imi.ir.eduimiws.controllers.mainparts.v1.ProjectDepositCodeApiController;
 import edu.imi.ir.eduimiws.controllers.mainparts.v1.VoucherListItemsController;
+import edu.imi.ir.eduimiws.controllers.pmis.v1.ProjectController;
 import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiResponseMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
 import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponse;
@@ -38,6 +40,30 @@ public class ProjectDepositCodeApiResponseAssembler extends RepresentationModelA
                                     .getByPublicId(projectDepositCodeApiDto.getPublicId()))
                             .withSelfRel());
         }
+        if (projectDepositCodeApiDto.getCreatorPublicId() != null) {
+            projectDepositCodeApiResponse
+                    .add(linkTo(
+                            methodOn(
+                                    UserController.class)
+                                    .getUserByUserPublicId(projectDepositCodeApiDto.getCreatorPublicId()))
+                            .withRel("creator"));
+        }
+        if (projectDepositCodeApiDto.getEditorPublicId() != null) {
+            projectDepositCodeApiResponse
+                    .add(linkTo(
+                            methodOn(
+                                    UserController.class)
+                                    .getUserByUserPublicId(projectDepositCodeApiDto.getEditorPublicId()))
+                            .withRel("editor"));
+        }
+        if (projectDepositCodeApiDto.getProjectPublicId() != null) {
+            projectDepositCodeApiResponse
+                    .add(linkTo(
+                            methodOn(
+                                    ProjectController.class)
+                                    .getProjectByProjectPublicId(projectDepositCodeApiDto.getProjectPublicId()))
+                            .withRel("project"));
+        }
 
         return projectDepositCodeApiResponse;
     }
@@ -49,10 +75,10 @@ public class ProjectDepositCodeApiResponseAssembler extends RepresentationModelA
         CollectionModel<ProjectDepositCodeApiResponse> projectDepositCodeApiResponseCollectionModel = super.toCollectionModel(projectDepositCodeApiDtos);
 
         Pageable pageable = Pageable.unpaged();
-//todo: remove comment when find all is created
-/*        projectDepositCodeApiResponseCollectionModel
+
+        projectDepositCodeApiResponseCollectionModel
                 .add(linkTo(methodOn(ProjectDepositCodeApiController.class)
-                        .getProjectDepositCodeApis(pageable)).withRel("projectDepositCodeApis"));*/
+                        .getProjectDepositCodes(pageable)).withRel("projectDepositCodeApis"));
 
         return projectDepositCodeApiResponseCollectionModel;
     }

@@ -15,11 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 @Service
@@ -32,20 +29,21 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
     private final ProjectDepositCodeApiMapper projectDepositCodeApiMapper;
     private final PersonMapper personMapper;
 
-    @Override
-    public Page<ProjectDepositCodeApiEntity> findAllProjectDepositCodeApiEntityPages(Pageable pageable) {
-        Page<ProjectDepositCodeApiEntity> projectDepositCodeApiEntityPages = projectDepositCodeApiRepository
-                .findAll(pageable);
-        return projectDepositCodeApiEntityPages;
+   @Override
+    public Page<ProjectDepositCodeApiDto> findAll(Pageable pageable) {
+        return projectDepositCodeApiRepository
+                .findAll(pageable)
+                .map(p->projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
     }
 
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByPublicId(String publicId) {
 
-        ProjectDepositCodeApiDto findProjectDepositCodeApiDto =
+        ProjectDepositCodeApiEntity projectDepositCodeApi =
                 projectDepositCodeApiRepository.findByPublicId(publicId);
 
-        return findProjectDepositCodeApiDto;
+        return projectDepositCodeApiMapper
+                .toProjectDepositCodeApiDto(projectDepositCodeApi);
     }
 
     @Override
@@ -60,9 +58,11 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
     @Override
     public ProjectDepositCodeApiDto updateDepositCodeApi(ProjectDepositCodeApiDto newProjectDepositCodeApiDto, ProjectDepositCodeApiEntity editTblProjectDepositCodeApi) {
 
-        projectDepositCodeApiMapper.updateProjectCodeApiByProjectDepositCodeApiDto(newProjectDepositCodeApiDto, editTblProjectDepositCodeApi);
+        projectDepositCodeApiMapper
+                .updateProjectCodeApiByProjectDepositCodeApiDto(newProjectDepositCodeApiDto, editTblProjectDepositCodeApi);
 
-        ProjectDepositCodeApiEntity updateProjectDepositCodeApi = projectDepositCodeApiRepository.save(editTblProjectDepositCodeApi);
+        ProjectDepositCodeApiEntity updateProjectDepositCodeApi =
+                projectDepositCodeApiRepository.save(editTblProjectDepositCodeApi);
 
         return projectDepositCodeApiMapper.toProjectDepositCodeApiDto(updateProjectDepositCodeApi);
     }
@@ -84,7 +84,7 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
                 .toProjectDepositCodeApiDto(savedProjectDepositCodeApi);
     }
 
-    @Override
+ /*   @Override
     public List<ProjectDepositCodeApiEntity> findAll() {
 
         Iterable<ProjectDepositCodeApiEntity> projectDepositCodeApiIterable = projectDepositCodeApiRepository.findAll();
@@ -95,28 +95,39 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
 
         return projectDepositCodeApis;
 
-    }
+    }*/
 
     @Override
-    public ProjectDepositCodeApiEntity findProjectDepositCodeApiEntityPublicId(String publicId) {
+    public ProjectDepositCodeApiDto findProjectDepositCodeApiEntityPublicId(String publicId) {
 
         ProjectDepositCodeApiEntity projectDepositCodeApi =
-                projectDepositCodeApiRepository.findProjectDepositCodeApiEntityByPublicId(publicId);
+                projectDepositCodeApiRepository
+                        .findProjectDepositCodeApiEntityByPublicId(publicId);
 
-        return projectDepositCodeApi;
+        return projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApi);
     }
 
     @Override
-    public Page<ProjectDepositCodeApiEntity> findAllByDepositCode(String depositCode, Pageable pageable) {
+    public Page<ProjectDepositCodeApiDto> findByDepositCode(String depositCode, Pageable pageable) {
 
-        return projectDepositCodeApiRepository.findAllByDepositCode(depositCode, pageable);
+        return projectDepositCodeApiRepository
+                .findByDepositCode(depositCode, pageable)
+                .map(p->projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
     }
 
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByProjectCodeAndDepositCode(String projectCode, String depositCode) {
         return projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApiRepository
-                        .findByProject_ProjectCodeAndDepositCode(projectCode, depositCode));
+                .findByProject_ProjectCodeAndDepositCode(projectCode, depositCode));
     }
+
+    @Override
+    public Page<ProjectDepositCodeApiDto> findByProjectNameContaining(String projectName, Pageable pageable) {
+        return projectDepositCodeApiRepository
+                .findByProject_ProjectNameContaining(projectName, pageable)
+                .map(p->projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+    }
+
 
     @Override
     public void validateProjectDepositCodeApiRequestNullInputs(ProjectDepositCodeApiRequest projectDepositCodeApiRequest) {
@@ -132,6 +143,11 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
         if (isNull().test(projectDepositCodeApiDto.getProjectDto()))
             throw new NotFoundException("Project Not Found");
     }
+
+   /* @Override
+    public void deleteProjectDepositCodeApi(String publicId) {
+        projectDepositCodeApiRepository.deleteByPublicId(publicId);
+    }*/
 
     protected Predicate<String> isInputNullOrEqualString() {
         Predicate<String> isNull = input -> input == null;

@@ -30,9 +30,13 @@ public class ProjectDepositCodeApiDto implements Serializable {
 
     private PersonDto creatorDto;
     private Long creatorId;
+    private String creatorPublicId;
+    private String creatorFullName;
 
     private PersonDto editorDto;
     private Long editorId;
+    private String editorPublicId;
+    private String editorFullName;
 
     private String depositCode;
     private String description;

@@ -17,6 +17,8 @@ import org.mapstruct.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Named("ProjectDepositCodeApiMapper")
 @Mapper(componentModel = "spring",
@@ -31,17 +33,27 @@ public interface ProjectDepositCodeApiMapper {
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "publicId", target = "publicId"),
             @Mapping(source = "project.id", target = "projectId"),
+            @Mapping(source = "project.projectName", target = "projectName"),
+            @Mapping(source = "project.projectCode", target = "projectCode"),
+            @Mapping(source = "project.projectApi.projectPublicId", target = "projectPublicId"),
+            @Mapping(source = "project.lastVersion", target = "projectLastVersion"),
             @Mapping(source = "depositCode", target = "depositCode"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "createDateTs", target = "createDateTs"),
             @Mapping(source = "deleteDateTs", target = "deleteDateTs"),
             @Mapping(source = "editDateTs", target = "editDateTs"),
             @Mapping(source = "creator.id", target = "creatorId"),
+            @Mapping(source = "creator.personApiEntity.personPublicId", target = "creatorPublicId"),
             @Mapping(source = "editor.id", target = "editorId"),
+            @Mapping(source = "editor.personApiEntity.personPublicId", target = "editorPublicId"),
             @Mapping(source = "creator", target = "creatorDto",
                     qualifiedByName = "personEntityToPersonDtoForDepositCodeApi"),
+            @Mapping(source = "creator", target = "creatorFullName",
+                    qualifiedByName = "fullNameFormPersonEntityForDepositCodeApi"),
             @Mapping(source = "editor", target = "editorDto",
                     qualifiedByName = "personEntityToPersonDtoForDepositCodeApi"),
+            @Mapping(source = "editor", target = "editorFullName",
+                    qualifiedByName = "fullNameFormPersonEntityForDepositCodeApi"),
             @Mapping(source = "project", target = "projectDto",
                     qualifiedByName = "toProjectDtoForDepositCodeApi")
 
@@ -154,9 +166,23 @@ public interface ProjectDepositCodeApiMapper {
     @Mappings({
             @Mapping(source = "id",target = "id"),
             @Mapping(source = "firstName",target = "firstName"),
-            @Mapping(source = "lastName",target = "lastName")
+            @Mapping(source = "lastName",target = "lastName"),
+            @Mapping(source = "personApiEntity.personPublicId",target = "personPublicId"),
     })
     @BeanMapping(ignoreByDefault = true)
     PersonDto personEntityToPersonDtoForDepositCodeApi(PersonEntity personEntity);
+
+    @Named("fullNameFormPersonEntityForDepositCodeApi")
+    default String fullNameFormPersonEntityForDepositCodeApi(PersonEntity personEntity) {
+
+        return Optional.of(personEntity)
+                .filter(Objects::nonNull)
+                .map(c -> String.format("%s %s",
+                        Objects.nonNull(c.getFirstName()) ? c.getFirstName() : "",
+                        Objects.nonNull(c.getLastName()) ? c.getLastName() : ""
+                ))
+                .map(fn->fn.trim().replaceAll(" +"," "))
+                .orElse(null);
+    }
 
 }

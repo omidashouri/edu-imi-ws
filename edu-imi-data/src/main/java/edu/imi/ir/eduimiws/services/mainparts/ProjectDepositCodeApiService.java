@@ -8,11 +8,9 @@ import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiRequest
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface ProjectDepositCodeApiService {
 
-    Page<ProjectDepositCodeApiEntity> findAllProjectDepositCodeApiEntityPages(Pageable pageable);
+    Page<ProjectDepositCodeApiDto> findAll(Pageable pageable);
 
     ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByPublicId(String publicId);
 
@@ -23,16 +21,20 @@ public interface ProjectDepositCodeApiService {
 
     ProjectDepositCodeApiDto save(ProjectDepositCodeApiDto newProjectDepositCodeApiDto);
 
-    List<ProjectDepositCodeApiEntity> findAll();
+    //  List<ProjectDepositCodeApiEntity> findAll();
 
-    ProjectDepositCodeApiEntity findProjectDepositCodeApiEntityPublicId(String publicId);
+    ProjectDepositCodeApiDto findProjectDepositCodeApiEntityPublicId(String publicId);
 
-    Page<ProjectDepositCodeApiEntity> findAllByDepositCode(String depositCode, Pageable pageable);
+    Page<ProjectDepositCodeApiDto> findByDepositCode(String depositCode, Pageable pageable);
 
-    ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByProjectCodeAndDepositCode(String projectCode, String depositCode);
+    ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByProjectCodeAndDepositCode(String projectCode,
+                                                                                     String depositCode);
+
+    Page<ProjectDepositCodeApiDto> findByProjectNameContaining(String projectName, Pageable pageable);
 
     void validateProjectDepositCodeApiRequestNullInputs(ProjectDepositCodeApiRequest projectDepositCodeApiRequest);
 
     void validateProjectDepositCodeApiDtoNulls(ProjectDepositCodeApiDto projectDepositCodeApiDto);
+
 
 }

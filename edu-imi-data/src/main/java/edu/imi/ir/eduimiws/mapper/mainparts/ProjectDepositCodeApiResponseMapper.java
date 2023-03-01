@@ -19,7 +19,11 @@ public interface ProjectDepositCodeApiResponseMapper {
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "projectDto.projectPublicId", target = "projectPublicId"),
             @Mapping(source = "projectDto.projectCode", target = "projectCode"),
-            @Mapping(source = "projectDto.projectName", target = "projectName")
+            @Mapping(source = "projectDto.projectName", target = "projectName"),
+            @Mapping(source = "creatorPublicId", target = "creatorPublicId"),
+            @Mapping(source = "creatorFullName", target = "creatorFullName"),
+            @Mapping(source = "editorPublicId", target = "editorPublicId"),
+            @Mapping(source = "editorFullName", target = "editorFullName")
     })
     @BeanMapping(ignoreByDefault = true)
     ProjectDepositCodeApiResponse toProjectDepositCodeApiResponse(ProjectDepositCodeApiDto source);

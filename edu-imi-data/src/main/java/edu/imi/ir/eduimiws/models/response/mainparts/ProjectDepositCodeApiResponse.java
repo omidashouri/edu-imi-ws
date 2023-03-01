@@ -40,8 +40,20 @@ public class ProjectDepositCodeApiResponse  extends RepresentationModel<ProjectD
     @Schema(title = "Project Name", maxLength =500 )
     private String projectName;
 
+    @Schema(title = "Creator Public Id", maxLength =36 )
+    private String creatorPublicId;
+
+    @Schema(title = "Creator Full Name", maxLength =500 )
+    private String creatorFullName;
+
     @Schema(title = "Create Date", maxLength = 30)
     private String createDateTs;
+
+    @Schema(title = "Editor Public Id", maxLength =36 )
+    private String editorPublicId;
+
+    @Schema(title = "Editor Full Name", maxLength =500 )
+    private String editorFullName;
 
     @Schema(title = "Edit Date", maxLength = 30)
     private Timestamp editDateTs;
