@@ -1,7 +1,9 @@
 package edu.imi.ir.eduimiws.controllers.mainparts.v1;
 
 import edu.imi.ir.eduimiws.assemblers.mainparts.ProjectDepositCodeApiResponseAssembler;
+import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
+import edu.imi.ir.eduimiws.mapper.crm.PersonMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiRequestMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
@@ -35,6 +37,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
 
 @RestController
 @RequestMapping("/api/v1/projectDepositCodeApis")
@@ -47,6 +55,7 @@ public class ProjectDepositCodeApiController {
     private final PagedResourcesAssembler<ProjectDepositCodeApiDto> projectDepositCodeApiDtoPagedResourcesAssembler;
     private final ProjectDepositCodeApiRequestMapper depositCodeApiRequestMapper;
     private final ProjectDepositCodeApiMapper projectDepositCodeApiMapper;
+    private final PersonMapper personMapper;
     private final CommonUtils commonUtils;
     private final ConvertorUtil convertorUtil;
 
@@ -90,19 +99,21 @@ public class ProjectDepositCodeApiController {
                 projectDepositCodeApiService.findProjectDepositCodeApiDtoByPublicId(publicId);
 
         if (projectDepositCodeApiDto == null) {
-            throw new NotFoundException("requested project code api not found");
+            throw new NotFoundException("requested project deposit code api not found");
         }
 
         ProjectDepositCodeApiResponse projectDepositCodeApiResponse =
                 projectDepositCodeApiResponseAssembler.toModel(projectDepositCodeApiDto);
+
+        changeInstanceToPersianCharAndNum(List.of(projectDepositCodeApiResponse));
 
         return ResponseEntity.ok(projectDepositCodeApiResponse);
     }
 
 
     @Operation(
-            summary = "Create Project Deposit Code Api Response by national code and Expense Public Id and Project Public Id",
-            description = "Search depositCode By Public Id and Project Public Id",
+            summary = "Create Project Deposit Code Api Response by Project Public Id and deposit code and description ",
+            description = "Create Project Deposit Code Api Response by Project Public Id and deposit code and description",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = ProjectDepositCodeApiRequest.class))
@@ -150,22 +161,17 @@ public class ProjectDepositCodeApiController {
 //        todo: optional add validate depositCode
         projectDepositCodeApiService.validateProjectDepositCodeApiDtoNulls(projectDepositCodeApiDto);
 
+        projectDepositCodeApiMapper.setPublicIdCreatorCreateDateTs(projectDepositCodeApiDto, personMapper);
+
         ProjectDepositCodeApiDto savedProjectDepositCodeApiDto =
                 projectDepositCodeApiService.save(projectDepositCodeApiDto);
 
-//#
         ProjectDepositCodeApiResponse projectDepositCodeApiResponse =
                 projectDepositCodeApiResponseAssembler.toModel(savedProjectDepositCodeApiDto);
 
         //        todo: optional for sending SMS
-/*        if (projectDepositCodeApiRequest.getApplicantMobileNumber() != null) {
-            FarapayamakSendSmsDto farapayamakSendSmsDto = paymentCodeApiDtoFarapayamakSendSmsDtoMapper
-                    .paymentCodeApiDtoToFarapayamakSendSmsDto(savedPaymentCodeApiDto, farapayamakCredential);
-            farapayamakSendSmsDto.setText(String.format("سازمان مدیریت صنعتی \n  شناسه پرداخت: \n %s \n بابت: %s",
-                    savedPaymentCodeApiDto.getPaymentCode(), savedPaymentCodeApi.getProject().getProjectName()));
 
-            farapayamakServiceAsync.sendSMS(farapayamakSendSmsDto);
-        }*/
+        changeInstanceToPersianCharAndNum(List.of(projectDepositCodeApiResponse));
 
         return ResponseEntity.ok(projectDepositCodeApiResponse);
     }
@@ -206,21 +212,24 @@ public class ProjectDepositCodeApiController {
                     )
             })
     @SwaggerUtil.PageableAsQueryParam
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(path = "/all",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<PagedModel<ProjectDepositCodeApiResponse>> getProjectDepositCodes(@Parameter(hidden = true)
                                                                                             @SortDefault(sort = "id",
                                                                                                     direction = Sort.Direction.DESC)
                                                                                             @PageableDefault(page = 0, size = 10, value = 10)
                                                                                                     Pageable pageable) {
 
-        Page<ProjectDepositCodeApiDto> projectDepositCodeApiPages = projectDepositCodeApiService.findAll(pageable);
+        Page<ProjectDepositCodeApiDto> projectDepositCodeApiPages = projectDepositCodeApiService.findAllAndDeleteDateTsIsNull(pageable);
 
         if (projectDepositCodeApiPages.getContent().isEmpty() || projectDepositCodeApiPages.getContent().size() < 1)
             throw new NotFoundException("Project Deposit Codes  Not Found");
 
         PagedModel<ProjectDepositCodeApiResponse> depositCodeApiResponsePagedModel =
                 projectDepositCodeApiDtoPagedResourcesAssembler
-                .toModel(projectDepositCodeApiPages, projectDepositCodeApiResponseAssembler);
+                        .toModel(projectDepositCodeApiPages, projectDepositCodeApiResponseAssembler);
+
+        changeInstanceToPersianCharAndNum(depositCodeApiResponsePagedModel.getContent());
 
         return ResponseEntity.ok(depositCodeApiResponsePagedModel);
     }
@@ -283,78 +292,206 @@ public class ProjectDepositCodeApiController {
         PagedModel<ProjectDepositCodeApiResponse> depositCodeApiResponsePagedModel = projectDepositCodeApiDtoPagedResourcesAssembler
                 .toModel(projectDepositCodeApiDtoPages, projectDepositCodeApiResponseAssembler);
 
+        changeInstanceToPersianCharAndNum(depositCodeApiResponsePagedModel.getContent());
+
         return ResponseEntity.ok(depositCodeApiResponsePagedModel);
     }
 
-   /* @DeleteMapping(path = "/{deleteProjectDepositCodeApiId}",
-    produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?>deleteProjectDepositCodeApiByPublicId(@PathVariable String publicId){
-        projectDepositCodeApiService.findProjectDepositCodeApiDtoByPublicId(publicId);
+    @Operation(
+            summary = "Delete Project Deposit Code Api By Public Id",
+            description = "Delete ProjectDepositCodeApi by Public Id",
+            tags = "projectDepositCodeApis",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = String.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @DeleteMapping(path = "/publicId/{publicId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> deleteProjectDepositCodeApiByPublicId(@PathVariable String publicId) {
+
+        ProjectDepositCodeApiDto projectDepositCodeApiDto = projectDepositCodeApiService
+                .findProjectDepositCodeApiDtoByPublicId(publicId);
+        if (Objects.isNull(projectDepositCodeApiDto))
+            throw new NotFoundException("Project Deposit Code Api Not Found");
+
+        if (Objects.nonNull(projectDepositCodeApiDto.getDeleteDateTs()))
+            throw new NotAcceptableException("Project Deposit Code Api Is Already Deleted");
+
+        projectDepositCodeApiDto.setDeleteDateTs(new Timestamp(new Date().getTime()));
+
+        ProjectDepositCodeApiDto savedProjectDepositCodeApiDto =
+                projectDepositCodeApiService.save(projectDepositCodeApiDto);
+
         return ResponseEntity.ok("record deleted");
-    }*/
+    }
 
 
-   /* @PutMapping(path = "/forDipositCode",
+    @Operation(
+            summary = "Update Project Deposit Code Api",
+            description = "Update Project Deposit Code Api",
+            tags = "contacts",
+            security = @SecurityRequirement(name = "imi-security-key"),
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(schema = @Schema(implementation = ProjectDepositCodeApiRequest.class))
+            )
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = ProjectDepositCodeApiResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "period not found",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PutMapping(path = "/projectDepositCodeApiRequest",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> updateProjectDepositCodeApiForDepositCode(@RequestBody ProjectDepositCodeApiRequest
-                                                                               projectDepositCodeApiRequest) {
-        String projectPublicId = projectDepositCodeApiRequest.getProjectPublicId();
-        ProjectDepositCodeApiEntity editTblProjectDepositCodeApi = null;
-        ProjectDepositCodeApiDto newProjectDepositCodeApiDto;
+    public ResponseEntity<?> updateProjectDepositCodeApi(@RequestBody ProjectDepositCodeApiRequest
+                                                                 projectDepositCodeApiRequest) {
+        String projectDepositCodeApiPublicId = projectDepositCodeApiRequest.getPublicId();
+        ProjectDepositCodeApiDto editProjectDepositCodeApiDto = new ProjectDepositCodeApiDto();
 
         commonUtils.nullInstanceFieldsForValues(projectDepositCodeApiRequest, List.of("string", ""));
 
         convertorUtil.changeInstanceCharAndNumSetByType(projectDepositCodeApiRequest, "db");
 
-        if (projectPublicId != null) {
-            editTblProjectDepositCodeApi = projectDepositCodeApiService.findProjectDepositCodeApiDtoByProjectPublicId(projectPublicId);
+        if (projectDepositCodeApiPublicId != null) {
+            editProjectDepositCodeApiDto = projectDepositCodeApiService
+                    .findProjectDepositCodeApiDtoByPublicId(projectDepositCodeApiPublicId);
         }
-        if (editTblProjectDepositCodeApi == null) {
-            throw new NotFoundException("requested project not found")
+        if (editProjectDepositCodeApiDto == null) {
+            throw new NotFoundException("requested project api dto not found");
         }
+        if (Objects.nonNull(editProjectDepositCodeApiDto.getDeleteDateTs()))
+            throw new NotAcceptableException("Project Deposit Code Api Is Already Deleted");
 
+        projectDepositCodeApiMapper
+                .setEditorEditDateTs(editProjectDepositCodeApiDto, personMapper);
 
-    }*/
+        depositCodeApiRequestMapper
+                .updateProjectDepositCodeApiDto(projectDepositCodeApiRequest, editProjectDepositCodeApiDto);
+
+        ProjectDepositCodeApiDto updatedProjectApiDto =
+                projectDepositCodeApiService.save(editProjectDepositCodeApiDto);
+
+        ProjectDepositCodeApiResponse projectDepositCodeApiResponse =
+                projectDepositCodeApiResponseAssembler.toModel(updatedProjectApiDto);
+
+        changeInstanceToPersianCharAndNum(List.of(projectDepositCodeApiResponse));
+
+        return ResponseEntity.ok(projectDepositCodeApiResponse);
+    }
+
+    private void changeInstanceToPersianCharAndNum(Collection<ProjectDepositCodeApiResponse> content) {
+        content.forEach(projectDepositCodeApi -> {
+            convertorUtil.changeInstanceCharAndNumSetByType(projectDepositCodeApi, "persian");
+        });
+    }
+
+    @Operation(
+            summary = "find All Project Deposit Codes deleted",
+            description = "Search projectDepositCodes deleted detail pageable",
+            tags = "projectDepositCodeApis",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ProjectDepositCodeApiResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.PageableAsQueryParam
+    @GetMapping(path = "/all/deleted",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ProjectDepositCodeApiResponse>> getProjectDepositCodesDeleted(@Parameter(hidden = true)
+                                                                                                   @SortDefault(sort = "id",
+                                                                                                           direction = Sort.Direction.DESC)
+                                                                                                   @PageableDefault(page = 0, size = 10, value = 10)
+                                                                                                           Pageable pageable) {
+
+        Page<ProjectDepositCodeApiDto> projectDepositCodeApiPages =
+                projectDepositCodeApiService.findAllByDeleteDateTsNotNull(pageable);
+
+        if (projectDepositCodeApiPages.getContent().isEmpty() || projectDepositCodeApiPages.getContent().size() < 1)
+            throw new NotFoundException("Project Deposit Codes  Not Found");
+
+        PagedModel<ProjectDepositCodeApiResponse> depositCodeApiResponsePagedModel =
+                projectDepositCodeApiDtoPagedResourcesAssembler
+                        .toModel(projectDepositCodeApiPages, projectDepositCodeApiResponseAssembler);
+
+        changeInstanceToPersianCharAndNum(depositCodeApiResponsePagedModel.getContent());
+
+        return ResponseEntity.ok(depositCodeApiResponsePagedModel);
+
+    }
 }
-    /*   @GetMapping(path = "/all",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> allProjectDepositCodeApi() {
-        List<ProjectDepositCodeApiEntity> projectDepositCodeApiEntities = projectDepositCodeApiService.findAll();
-        return ResponseEntity.ok(projectDepositCodeApiEntities);
-    }*/
 
-    /*    @GetMapping(path = "/findByProjectPublicId",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getProjectDepositCodeApiByProjectPublicId(@PathVariable String projectPublicId) {
 
-        ProjectDepositCodeApiDto projectDepositCodeApiDto = projectDepositCodeApiService.findProjectDepositCodeApiDtoByProjectPublicId(projectPublicId);
-        if (projectDepositCodeApiDto == null) {
-            throw new NotFoundException("requested project not found");
-        }
-
-        //   ProjectDepositCodeApiDto projectDepositCodeApiDto1 = projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApiDto, new CycleAvoidingMappingContext());
-
-        return null;
-    }*/
-
-/*    public ResponseEntity<PagedModel<ProjectDepositCodeApiResponse>> getProjectDepositCodeApis(@Parameter(hidden = true)
-                                                                                       @SortDefault(sort = "publicId", direction = Sort.Direction.DESC)
-                                                                                       @PageableDefault(page = 0, size = 10, value = 10)
-                                                                                               Pageable pageable) {
-
-*//*        Page<VoucherListItemsApiEntity> voucherListItemsPages =
-                voucherListItemsService.findAllByDeleteStatusIsNull(pageable);
-
-        Page<VoucherListItemsApiDto> voucherListItemsApiDtoPage = voucherListItemsPages
-                .map(voucherListItemsApiMapper::voucherListItemsApiToVoucherListItemsApiDto);
-
-        PagedModel<VoucherListItemsApiResponse> voucherListItemsResponsePagedModel = voucherListItemsApiDtoPagedResourcesAssembler
-                .toModel(voucherListItemsApiDtoPage, voucherListItemsApiResponseAssembler);
-
-        return ResponseEntity.ok(voucherListItemsResponsePagedModel);*//*
-        return ResponseEntity.ok(null);
-    }*/
 
 
 

@@ -30,4 +30,17 @@ public interface ProjectDepositCodeApiRequestMapper {
     @IterableMapping(qualifiedByName = "toProjectDepositCodeApiDto")
     List<ProjectDepositCodeApiDto> toProjectDepositCodeApiDtos(List<ProjectDepositCodeApiRequest> sources);
 
+    @Mappings({
+            @Mapping(source = "projectPublicId", target = "projectDto",
+                    qualifiedBy = {MappingUtil.ProjectService.class,
+                            MappingUtil.ProjectPublicIdToProjectDto.class}),
+            @Mapping(source = "projectPublicId", target = "projectPublicId"),
+            @Mapping(source = "depositCode", target = "depositCode"),
+            @Mapping(source = "description", target = "description")
+    })
+    @BeanMapping(ignoreByDefault = true,
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateProjectDepositCodeApiDto(ProjectDepositCodeApiRequest source,
+                                        @MappingTarget ProjectDepositCodeApiDto target);
+
 }

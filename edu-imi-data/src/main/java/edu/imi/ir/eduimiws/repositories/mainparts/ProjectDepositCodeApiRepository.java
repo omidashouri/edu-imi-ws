@@ -14,15 +14,18 @@ import java.util.List;
 public interface ProjectDepositCodeApiRepository extends CrudRepository<ProjectDepositCodeApiEntity, Long> {
 
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    Page<ProjectDepositCodeApiEntity> findAll(Pageable pageable);
+    Page<ProjectDepositCodeApiEntity> findAllByDeleteDateTsIsNull(Pageable pageable);
 
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    ProjectDepositCodeApiEntity findProjectDepositCodeApiEntityByPublicId(String publicId);
+    Page<ProjectDepositCodeApiEntity> findAllByDeleteDateTsNotNull(Pageable pageable);
+
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    ProjectDepositCodeApiEntity findProjectDepositCodeApiEntityByPublicIdAndDeleteDateTsIsNull(String publicId);
 
     @EntityGraph(value = "ProjectDepositCodeApiEntity.findProjectProjectApi",
             type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    ProjectDepositCodeApiEntity findByPublicId(String publicId);
+    ProjectDepositCodeApiEntity findByPublicIdAndDeleteDateTsIsNull(String publicId);
 
     ProjectDepositCodeApiEntity save(ProjectDepositCodeApiDto newProjectDepositCodeApi);
 
@@ -30,15 +33,14 @@ public interface ProjectDepositCodeApiRepository extends CrudRepository<ProjectD
     List<ProjectDepositCodeApiEntity> findAllByPublicIdIn(List<String> projectDepositCodeApiPublicIds);
 
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    Page<ProjectDepositCodeApiEntity> findByDepositCode(String depositCode, Pageable pageable);
+    Page<ProjectDepositCodeApiEntity> findByDeleteDateTsIsNullAndDepositCode(String depositCode, Pageable pageable);
 
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    ProjectDepositCodeApiEntity findByProject_ProjectCodeAndDepositCode(String projectCode, String depositCode);
+    ProjectDepositCodeApiEntity findByDeleteDateTsIsNullAndProject_ProjectCodeAndDepositCode(String projectCode, String depositCode);
 
     @EntityGraph(value = "ProjectDepositCodeApiEntity.findProjectProjectApi",
             type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
-    Page<ProjectDepositCodeApiEntity> findByProject_ProjectNameContaining(String projectName, Pageable pageable);
-
+    Page<ProjectDepositCodeApiEntity> findByDeleteDateTsIsNullAndProject_ProjectNameContaining(String projectName, Pageable pageable);
 
 }

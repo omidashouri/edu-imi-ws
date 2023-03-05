@@ -20,7 +20,6 @@ public class ProjectDepositCodeApiResponseAssembler extends RepresentationModelA
 
     private final ProjectDepositCodeApiResponseMapper projectDepositCodeApiResponseMapper;
 
-
     public ProjectDepositCodeApiResponseAssembler(ProjectDepositCodeApiResponseMapper projectDepositCodeApiResponseMapper) {
         super(VoucherListItemsController.class, ProjectDepositCodeApiResponse.class);
         this.projectDepositCodeApiResponseMapper = projectDepositCodeApiResponseMapper;

@@ -59,7 +59,7 @@ public class PersonApiServiceImpl implements PersonApiService {
     public Page<PersonApiEntity> findAllPageByPageAndSize(int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
 
-        Page<PersonApiEntity> pagedResult = personWebServiceRepository.findAll(pageable);
+        Page<PersonApiEntity> pagedResult = personWebServiceRepository.findAllAndDeleteDateTsIsNull(pageable);
 
         if(pagedResult.hasContent()) {
             return pagedResult;

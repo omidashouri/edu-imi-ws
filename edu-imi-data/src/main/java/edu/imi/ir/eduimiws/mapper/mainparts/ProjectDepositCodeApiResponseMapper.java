@@ -22,8 +22,10 @@ public interface ProjectDepositCodeApiResponseMapper {
             @Mapping(source = "projectDto.projectName", target = "projectName"),
             @Mapping(source = "creatorPublicId", target = "creatorPublicId"),
             @Mapping(source = "creatorFullName", target = "creatorFullName"),
+            @Mapping(source = "createDateTs", target = "createDateTs"),
             @Mapping(source = "editorPublicId", target = "editorPublicId"),
-            @Mapping(source = "editorFullName", target = "editorFullName")
+            @Mapping(source = "editDateTs", target = "editDateTs"),
+            @Mapping(source = "deleteDateTs", target = "deleteDateTs")
     })
     @BeanMapping(ignoreByDefault = true)
     ProjectDepositCodeApiResponse toProjectDepositCodeApiResponse(ProjectDepositCodeApiDto source);

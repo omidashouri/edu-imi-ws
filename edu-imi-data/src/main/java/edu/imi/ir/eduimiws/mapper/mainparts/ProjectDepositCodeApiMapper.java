@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Named("ProjectDepositCodeApiMapper")
 @Mapper(componentModel = "spring",
-        imports = {java.sql.Timestamp.class,java.util.Date.class, SecurityUtil.class},
+        imports = {java.sql.Timestamp.class, java.util.Date.class, SecurityUtil.class},
         uses = {ProjectService.class, PublicIdUtil.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
@@ -94,7 +94,7 @@ public interface ProjectDepositCodeApiMapper {
 
 
     default void setPublicIdCreatorCreateDateTs(@MappingTarget ProjectDepositCodeApiDto depositCodeApiDto,
-                                                @Context       PersonMapper personMapper ){
+                                                @Context PersonMapper personMapper) {
 
         depositCodeApiDto.setPublicId(new PublicIdUtil().generateUniquePublicId());
         depositCodeApiDto
@@ -106,7 +106,7 @@ public interface ProjectDepositCodeApiMapper {
     }
 
     default void setEditorEditDateTs(@MappingTarget ProjectDepositCodeApiDto depositCodeApiDto,
-                                     @Context       PersonMapper personMapper ){
+                                     @Context PersonMapper personMapper) {
         depositCodeApiDto
                 .setEditorDto(this
                         .personEntityToPersonDtoForDepositCodeApi(new SecurityUtil()
@@ -120,11 +120,11 @@ public interface ProjectDepositCodeApiMapper {
     //          1- ProjectDepositCodeApiDto → through publicID (in Service)
 
     @Mappings({
-            @Mapping(source = "depositCode",target = "depositCode"),
-            @Mapping(source = "projectPublicId",target = "projectDto",
+            @Mapping(source = "depositCode", target = "depositCode"),
+            @Mapping(source = "projectPublicId", target = "projectDto",
                     qualifiedBy = {MappingUtil.ProjectService.class,
                             MappingUtil.ProjectPublicIdToProjectDto.class}),
-            @Mapping(source = "description",target = "description")
+            @Mapping(source = "description", target = "description")
     })
     @BeanMapping(ignoreByDefault = true,
             nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -155,19 +155,19 @@ public interface ProjectDepositCodeApiMapper {
 
     @Named("personDtoToPersonEntityForDepositCodeApi")
     @Mappings({
-            @Mapping(source = "id",target = "id"),
-            @Mapping(source = "firstName",target = "firstName"),
-            @Mapping(source = "lastName",target = "lastName")
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "firstName", target = "firstName"),
+            @Mapping(source = "lastName", target = "lastName")
     })
     @BeanMapping(ignoreByDefault = true)
     PersonEntity personDtoToPersonEntityForDepositCodeApi(PersonDto personDto);
 
     @Named("personEntityToPersonDtoForDepositCodeApi")
     @Mappings({
-            @Mapping(source = "id",target = "id"),
-            @Mapping(source = "firstName",target = "firstName"),
-            @Mapping(source = "lastName",target = "lastName"),
-            @Mapping(source = "personApiEntity.personPublicId",target = "personPublicId"),
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "firstName", target = "firstName"),
+            @Mapping(source = "lastName", target = "lastName"),
+            @Mapping(source = "personApiEntity.personPublicId", target = "personPublicId"),
     })
     @BeanMapping(ignoreByDefault = true)
     PersonDto personEntityToPersonDtoForDepositCodeApi(PersonEntity personEntity);
@@ -181,7 +181,7 @@ public interface ProjectDepositCodeApiMapper {
                         Objects.nonNull(c.getFirstName()) ? c.getFirstName() : "",
                         Objects.nonNull(c.getLastName()) ? c.getLastName() : ""
                 ))
-                .map(fn->fn.trim().replaceAll(" +"," "))
+                .map(fn -> fn.trim().replaceAll(" +", " "))
                 .orElse(null);
     }
 

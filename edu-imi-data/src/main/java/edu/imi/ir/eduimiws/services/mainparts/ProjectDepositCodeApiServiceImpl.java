@@ -3,7 +3,6 @@ package edu.imi.ir.eduimiws.services.mainparts;
 import edu.imi.ir.eduimiws.domain.mainparts.ProjectDepositCodeApiEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
-import edu.imi.ir.eduimiws.mapper.crm.PersonMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
 import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiRequest;
@@ -27,20 +26,27 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
 
     private final ProjectDepositCodeApiRepository projectDepositCodeApiRepository;
     private final ProjectDepositCodeApiMapper projectDepositCodeApiMapper;
-    private final PersonMapper personMapper;
+//    private final PersonMapper personMapper;
 
-   @Override
-    public Page<ProjectDepositCodeApiDto> findAll(Pageable pageable) {
+    @Override
+    public Page<ProjectDepositCodeApiDto> findAllAndDeleteDateTsIsNull(Pageable pageable) {
         return projectDepositCodeApiRepository
-                .findAll(pageable)
-                .map(p->projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+                .findAllByDeleteDateTsIsNull(pageable)
+                .map(p -> projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
     }
+
+    @Override
+    public Page<ProjectDepositCodeApiDto> findAllByDeleteDateTsNotNull(Pageable pageable) {
+        return projectDepositCodeApiRepository.findAllByDeleteDateTsNotNull(pageable)
+                .map(p -> projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+    }
+
 
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByPublicId(String publicId) {
 
         ProjectDepositCodeApiEntity projectDepositCodeApi =
-                projectDepositCodeApiRepository.findByPublicId(publicId);
+                projectDepositCodeApiRepository.findByPublicIdAndDeleteDateTsIsNull(publicId);
 
         return projectDepositCodeApiMapper
                 .toProjectDepositCodeApiDto(projectDepositCodeApi);
@@ -49,13 +55,10 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByProjectPublicId(String projectPublicId) {
 
-     /* return projectDepositCodeApiMapper
-              .toProjectDepositCodeApiDto(this.findProjectDepositCodeApiDtoByProjectPublicId(projectPublicId),
-                      new CycleAvoidingMappingContext());*/
         return null;
     }
 
-    @Override
+/*    @Override
     public ProjectDepositCodeApiDto updateDepositCodeApi(ProjectDepositCodeApiDto newProjectDepositCodeApiDto, ProjectDepositCodeApiEntity editTblProjectDepositCodeApi) {
 
         projectDepositCodeApiMapper
@@ -65,16 +68,15 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
                 projectDepositCodeApiRepository.save(editTblProjectDepositCodeApi);
 
         return projectDepositCodeApiMapper.toProjectDepositCodeApiDto(updateProjectDepositCodeApi);
-    }
+    }*/
 
     @Override
     public ProjectDepositCodeApiDto save(ProjectDepositCodeApiDto newProjectDepositCodeApiDto) {
 
-        ProjectDepositCodeApiEntity newProjectDepositCodeApi = new ProjectDepositCodeApiEntity();
+//         newProjectDepositCodeApi = new ProjectDepositCodeApiEntity();
+//      projectDepositCodeApiMapper.setPublicIdCreatorCreateDateTs(newProjectDepositCodeApiDto, personMapper);
 
-        projectDepositCodeApiMapper.setPublicIdCreatorCreateDateTs(newProjectDepositCodeApiDto, personMapper);
-
-        newProjectDepositCodeApi = projectDepositCodeApiMapper
+        ProjectDepositCodeApiEntity newProjectDepositCodeApi = projectDepositCodeApiMapper
                 .toProjectDepositCodeApiEntity(newProjectDepositCodeApiDto);
 
         ProjectDepositCodeApiEntity savedProjectDepositCodeApi =
@@ -84,25 +86,12 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
                 .toProjectDepositCodeApiDto(savedProjectDepositCodeApi);
     }
 
- /*   @Override
-    public List<ProjectDepositCodeApiEntity> findAll() {
-
-        Iterable<ProjectDepositCodeApiEntity> projectDepositCodeApiIterable = projectDepositCodeApiRepository.findAll();
-
-        List<ProjectDepositCodeApiEntity> projectDepositCodeApis = StreamSupport
-                .stream(projectDepositCodeApiIterable.spliterator(), false)
-                .collect(Collectors.toList());
-
-        return projectDepositCodeApis;
-
-    }*/
-
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiEntityPublicId(String publicId) {
 
         ProjectDepositCodeApiEntity projectDepositCodeApi =
                 projectDepositCodeApiRepository
-                        .findProjectDepositCodeApiEntityByPublicId(publicId);
+                        .findProjectDepositCodeApiEntityByPublicIdAndDeleteDateTsIsNull(publicId);
 
         return projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApi);
     }
@@ -111,21 +100,21 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
     public Page<ProjectDepositCodeApiDto> findByDepositCode(String depositCode, Pageable pageable) {
 
         return projectDepositCodeApiRepository
-                .findByDepositCode(depositCode, pageable)
-                .map(p->projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+                .findByDeleteDateTsIsNullAndDepositCode(depositCode, pageable)
+                .map(p -> projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
     }
 
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByProjectCodeAndDepositCode(String projectCode, String depositCode) {
         return projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApiRepository
-                .findByProject_ProjectCodeAndDepositCode(projectCode, depositCode));
+                .findByDeleteDateTsIsNullAndProject_ProjectCodeAndDepositCode(projectCode, depositCode));
     }
 
     @Override
     public Page<ProjectDepositCodeApiDto> findByProjectNameContaining(String projectName, Pageable pageable) {
         return projectDepositCodeApiRepository
-                .findByProject_ProjectNameContaining(projectName, pageable)
-                .map(p->projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+                .findByDeleteDateTsIsNullAndProject_ProjectNameContaining(projectName, pageable)
+                .map(p -> projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
     }
 
 
@@ -144,10 +133,6 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
             throw new NotFoundException("Project Not Found");
     }
 
-   /* @Override
-    public void deleteProjectDepositCodeApi(String publicId) {
-        projectDepositCodeApiRepository.deleteByPublicId(publicId);
-    }*/
 
     protected Predicate<String> isInputNullOrEqualString() {
         Predicate<String> isNull = input -> input == null;

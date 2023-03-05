@@ -40,9 +40,4 @@ public class ProjectDepositCodeApiRequest {
             type = "string", example = " ")
     private String description;
 
-    @Schema(title = "Applicant Mobile Number",
-            description = "mobile number", maxLength =11,
-            type = "string", example = " ")
-    private String applicantMobileNumber;
-
 }

@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.services.mainparts;
 
 
-import edu.imi.ir.eduimiws.domain.mainparts.ProjectDepositCodeApiEntity;
+
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
 import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiRequest;
@@ -10,18 +10,20 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProjectDepositCodeApiService {
 
-    Page<ProjectDepositCodeApiDto> findAll(Pageable pageable);
+    Page<ProjectDepositCodeApiDto> findAllAndDeleteDateTsIsNull(Pageable pageable);
+
+    Page<ProjectDepositCodeApiDto> findAllByDeleteDateTsNotNull(Pageable pageable);
 
     ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByPublicId(String publicId);
 
     @MappingUtil.ProjectPublicIdToProjectDto
     ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByProjectPublicId(String projectPublicId);
 
-    ProjectDepositCodeApiDto updateDepositCodeApi(ProjectDepositCodeApiDto newProjectDepositCodeApiDto, ProjectDepositCodeApiEntity editTblProjectDepositCodeApi);
+//    ProjectDepositCodeApiDto updateDepositCodeApi(ProjectDepositCodeApiDto newProjectDepositCodeApiDto, ProjectDepositCodeApiEntity editTblProjectDepositCodeApi);
 
     ProjectDepositCodeApiDto save(ProjectDepositCodeApiDto newProjectDepositCodeApiDto);
 
-    //  List<ProjectDepositCodeApiEntity> findAll();
+    //  List<ProjectDepositCodeApiEntity> findAllAndDeleteDateTsIsNull();
 
     ProjectDepositCodeApiDto findProjectDepositCodeApiEntityPublicId(String publicId);
 
