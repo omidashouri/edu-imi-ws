@@ -1,8 +1,8 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
-import edu.imi.ir.eduimiws.models.dto.crm.FarapayamakReturnedSendSmsDto;
-import edu.imi.ir.eduimiws.models.request.crm.SendSmsResponseForFarapayamak;
+import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakReturnedSendSmsDto;
+import edu.imi.ir.eduimiws.models.response.crm.farapayamak.SendSmsResponseForFarapayamak;
 import edu.imi.ir.eduimiws.utilities.CommonUtils;
 import org.mapstruct.*;
 
