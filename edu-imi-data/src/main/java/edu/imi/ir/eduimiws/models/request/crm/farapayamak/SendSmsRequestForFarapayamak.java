@@ -1,10 +1,11 @@
-package edu.imi.ir.eduimiws.models.request.crm;
+package edu.imi.ir.eduimiws.models.request.crm.farapayamak;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
@@ -12,7 +13,8 @@ import org.springframework.hateoas.server.core.Relation;
 import java.util.ArrayList;
 import java.util.List;
 
-@Schema(name = "farapayamaks", description = "Class representing a send sms from farapayamak in the application.")
+@Tag(name = "farapayamaks")
+@Schema(name = "sendSmsRequestForFarapayamak", description = "Class representing a send sms from farapayamak in the application.")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "sendSmsRequestForFarapayamak")
 @Relation(collectionRelation = "sendSmsRequestForFarapayamaks")
