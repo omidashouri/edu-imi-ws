@@ -35,5 +35,7 @@ public class FarapayamakSendSmsDto implements Serializable {
 
     private  Long recId;
 
+    //unknown usage
+    private Long requestEntityId;
 
 }
