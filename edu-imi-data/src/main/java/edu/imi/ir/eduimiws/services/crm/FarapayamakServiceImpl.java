@@ -1,7 +1,11 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.mapper.crm.*;
-import edu.imi.ir.eduimiws.models.dto.crm.*;
+import edu.imi.ir.eduimiws.models.dto.crm.FarapayamakDto;
+import edu.imi.ir.eduimiws.models.dto.crm.MessageDto;
+import edu.imi.ir.eduimiws.models.dto.crm.MessageReceiverDto;
+import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakReturnedSendSmsDto;
+import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakSendSmsDto;
 import edu.imi.ir.eduimiws.security.FarapayamakCredential;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -168,6 +172,7 @@ public class FarapayamakServiceImpl implements FarapayamakService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAcceptCharset(Arrays.asList(StandardCharsets.UTF_8));
 //        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         HttpEntity<?> requestHttpEntity = new HttpEntity<>(farapayamakSendSmsDto, headers);
