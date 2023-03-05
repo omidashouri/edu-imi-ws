@@ -145,8 +145,10 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Page<ContactEntity> findAllByPredicate(Predicate predicate, Pageable pageable) {
-        Page<ContactEntity> contactPages = contactQueryDslRepository.findAll(predicate, pageable);
-        return contactPages;
+//        later check usage
+/*        Page<ContactEntity> contactPages = contactQueryDslRepository.findAll(predicate, pageable);
+        return contactPages;*/
+        return null;
     }
 
 //NU
