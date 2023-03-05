@@ -11,7 +11,6 @@ import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.models.projections.crm.ContactForPaymentCodeProjection;
 import edu.imi.ir.eduimiws.repositories.crm.ContactRepository;
-import edu.imi.ir.eduimiws.repositories.crm.querydsl.ContactQueryDslRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,7 +30,7 @@ import java.util.Optional;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
-    private final ContactQueryDslRepository contactQueryDslRepository;
+//    private final ContactQueryDslRepository contactQueryDslRepository;
     private final ContactFastDtoMapper contactFastDtoMapper;
     private final ContactForPaymentCodeProjectionContactFastDtoMapper contactForPaymentCodeProjectionContactFastDtoMapper;
     private final ContactMapper contactMapper;
@@ -138,9 +137,10 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Long countByPredicate(Predicate predicate) {
-        Object o = contactQueryDslRepository.count(predicate);
-        Long contactCount = Long.valueOf(contactQueryDslRepository.count(predicate));
-        return contactCount != null ? contactCount.longValue() : null;
+//        Object o = contactQueryDslRepository.count(predicate);
+//        Long contactCount = Long.valueOf(contactQueryDslRepository.count(predicate));
+//        return contactCount != null ? contactCount.longValue() : null;
+        return null;
     }
 
     @Override
