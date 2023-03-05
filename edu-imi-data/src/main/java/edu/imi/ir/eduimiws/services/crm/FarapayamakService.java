@@ -21,7 +21,7 @@ public interface FarapayamakService {
 
     FarapayamakReturnedSendSmsDto getDeliveries2(FarapayamakSendSmsDto farapayamakSendSmsDto);
 
-/*    FarapayamakReturnedSendSmsDto getDeliveries2(FarapayamakSendSmsDto farapayamakSendSmsDto);*/
+
 
 //    List<FarapayamakReturnedSendSmsDto> sendSmsAsync(FarapayamakSendSmsDto farapayamakSendSmsDto);
 
