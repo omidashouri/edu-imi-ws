@@ -11,7 +11,7 @@ import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiDtoFarapayamakSendSmsD
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeRequestMapper;
-import edu.imi.ir.eduimiws.models.dto.crm.FarapayamakSendSmsDto;
+import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakSendSmsDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
 import edu.imi.ir.eduimiws.models.projections.mainparts.PaymentCodeApiProjection;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
