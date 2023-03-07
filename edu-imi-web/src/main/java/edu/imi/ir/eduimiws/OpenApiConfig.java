@@ -354,6 +354,16 @@ public class OpenApiConfig {
                 .build();
     }
 
+
+/*    @Bean
+    public GroupedOpenApi periodCertificateSmsApiApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("PeriodCertificateSmsApi")
+                .pathsToMatch("/api/v1/periodCrtificateSmsApis/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }*/
+
 //    Later correct Them
 /*    @Bean
     public GroupedOpenApi rqresApi() {

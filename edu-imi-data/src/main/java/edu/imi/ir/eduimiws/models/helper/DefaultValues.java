@@ -13,6 +13,9 @@ public class DefaultValues {
     private String imiCompanyPublicId;
     private Long persianLanguageId;
     private Long imiCompanyApiId;
+    private String certificateDeliverySmsCompanyText;
+    private String certificateDeliverySmsPersonalText;
+
 
 
 }
