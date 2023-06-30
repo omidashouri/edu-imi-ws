@@ -1,15 +1,25 @@
 package edu.imi.ir.eduimiws.controllers.mainparts.v1;
 
 import edu.imi.ir.eduimiws.assemblers.mainparts.ProjectDepositCodeApiResponseAssembler;
+import edu.imi.ir.eduimiws.assemblers.mainparts.ProjectDepositCodeApiResponseCustomThreeProjectDepositCodeApiProjectionCustomThreeDtoAssembler;
+import edu.imi.ir.eduimiws.assemblers.mainparts.ProjectDepositCodeApiResponseCustomTwoProjectDepositCodeApiProjectionCustomTwoDtoAssembler;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.crm.PersonMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiMapper;
+import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiProjectionCustomThreeMapper;
+import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiProjectionCustomTwoMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiRequestMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
+import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiProjectionCustomThreeDto;
+import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiProjectionCustomTwoDto;
+import edu.imi.ir.eduimiws.models.projections.mainparts.ProjectDepositCodeApiProjectionCustomThree;
+import edu.imi.ir.eduimiws.models.projections.mainparts.ProjectDepositCodeApiProjectionCustomTwo;
 import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponse;
+import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponseCustomThree;
+import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponseCustomTwo;
 import edu.imi.ir.eduimiws.services.mainparts.ProjectDepositCodeApiService;
 import edu.imi.ir.eduimiws.utilities.CommonUtils;
 import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
@@ -27,6 +37,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -35,15 +46,14 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
-
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/projectDepositCodeApis")
 @RequiredArgsConstructor
@@ -55,6 +65,12 @@ public class ProjectDepositCodeApiController {
     private final PagedResourcesAssembler<ProjectDepositCodeApiDto> projectDepositCodeApiDtoPagedResourcesAssembler;
     private final ProjectDepositCodeApiRequestMapper depositCodeApiRequestMapper;
     private final ProjectDepositCodeApiMapper projectDepositCodeApiMapper;
+    private final ProjectDepositCodeApiProjectionCustomTwoMapper projectDepositCodeApiProjectionCustomTwoMapper;
+    private final ProjectDepositCodeApiProjectionCustomThreeMapper projectDepositCodeApiProjectionCustomThreeMapper;
+    private final ProjectDepositCodeApiResponseCustomTwoProjectDepositCodeApiProjectionCustomTwoDtoAssembler projectDepositCodeApiResponseCustomTwoProjectDepositCodeApiProjectionCustomTwoDtoAssembler;
+    private final ProjectDepositCodeApiResponseCustomThreeProjectDepositCodeApiProjectionCustomThreeDtoAssembler projectDepositCodeApiResponseCustomThreeProjectDepositCodeApiProjectionCustomThreeDtoAssembler;
+    private final PagedResourcesAssembler<ProjectDepositCodeApiProjectionCustomTwoDto> projectDepositCodeApiProjectionCustomTwoDtoDtoPagedResourcesAssembler;
+    private final PagedResourcesAssembler<ProjectDepositCodeApiProjectionCustomThreeDto> projectDepositCodeApiProjectionCustomThreeDtoPagedResourcesAssembler;
     private final PersonMapper personMapper;
     private final CommonUtils commonUtils;
     private final ConvertorUtil convertorUtil;
@@ -489,10 +505,317 @@ public class ProjectDepositCodeApiController {
         return ResponseEntity.ok(depositCodeApiResponsePagedModel);
 
     }
+
+
+    @Operation(
+            summary = "find All Project Deposit Codes Custom Two",
+            description = "Search projectDepositCodeApi Custom Two detail pageable",
+            tags = "projectDepositCodeApis",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ProjectDepositCodeApiResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.PageableAsQueryParam
+    @GetMapping(path = "/projectDepositCodeApiResponseCustomTwo",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ProjectDepositCodeApiResponseCustomTwo>> getProjectDepositCodeApiCustomTwo(
+            @RequestParam("publicId") Optional<String> publicId,
+            @RequestParam("depositCode") Optional<String> depositCode,
+            @RequestParam("description") Optional<String> description,
+            @RequestParam("createDateTs") Optional<Timestamp> createDateTs,
+            @RequestParam("editDateTs") Optional<Timestamp> editDateTs,
+            @RequestParam("deleteDateTs") Optional<Timestamp> deleteDateTs,
+            @RequestParam("projectName") Optional<String> projectName,
+            @RequestParam("projectCode") Optional<String> projectCode,
+            @RequestParam("creatorFullName") Optional<String> creatorFullName,
+            @RequestParam("editorFullName") Optional<String> editorFullName,
+            @Parameter(hidden = true)
+            @SortDefault(sort = "projectName", direction = Sort.Direction.DESC)
+            @PageableDefault(page = 1, size = 50, value = 10)
+                    Pageable pageable) {
+
+        Page<ProjectDepositCodeApiProjectionCustomTwo> projectDepositCodeApiResponseCustomTwoPages =
+                projectDepositCodeApiService.queryAllProjectDepositCodeApiCustomTwo(publicId.orElse(null),
+                        depositCode.orElse(null),
+                        description.orElse(null),
+                        createDateTs.orElse(null),
+                        editDateTs.orElse(null),
+                        deleteDateTs.orElse(null),
+                        projectName.orElse(null),
+                        projectCode.orElse(null),
+                        creatorFullName.orElse(null),
+                        editorFullName.orElse(null), pageable);
+
+
+//
+        Page<ProjectDepositCodeApiProjectionCustomTwoDto> projectDepositCodeApiProjectionCustomTwoDtoPages = projectDepositCodeApiResponseCustomTwoPages
+                .map(projectDepositCodeApiProjectionCustomTwoMapper::projectDepositCodeApiProjectionCustomTwoToProjectDepositCodeApiProjectionCustomTwoDto);
+
+
+        PagedModel<ProjectDepositCodeApiResponseCustomTwo> projectDepositCodeApiResponseCustomTwoPagedModel = projectDepositCodeApiProjectionCustomTwoDtoDtoPagedResourcesAssembler
+                .toModel(projectDepositCodeApiProjectionCustomTwoDtoPages, projectDepositCodeApiResponseCustomTwoProjectDepositCodeApiProjectionCustomTwoDtoAssembler);
+        projectDepositCodeApiResponseCustomTwoPagedModel
+                .forEach(projectDepositCodeApiResponseCustomTwo -> convertorUtil.makeCharacterSetPersian(projectDepositCodeApiResponseCustomTwo));
+        return ResponseEntity.ok(projectDepositCodeApiResponseCustomTwoPagedModel);
+
+    }
+
+    @Operation(
+            summary = "find All Project Deposit Codes Custom Three",
+            description = "Search projectDepositCodeApi Custom Three detail pageable",
+            tags = "projectDepositCodeApis",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ProjectDepositCodeApiResponseCustomThree.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.PageableAsQueryParam
+    @GetMapping(path = "/projectDepositCodeApiResponseCustomThree",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ProjectDepositCodeApiResponseCustomThree>> getProjectDepositCodeApiCustomThree(
+            @RequestParam("publicId") Optional<String> publicId,
+            @RequestParam("depositCode") Optional<String> depositCode,
+            @RequestParam("description") Optional<String> description,
+            @RequestParam("createDateTs") Optional<Timestamp> createDateTs,
+            @RequestParam("editDateTs") Optional<Timestamp> editDateTs,
+            @RequestParam("deleteDateTs") Optional<Timestamp> deleteDateTs,
+            @RequestParam("projectName") Optional<String> projectName,
+            @RequestParam("projectCode") Optional<String> projectCode,
+            @RequestParam("projectCreateDate") Optional<String> projectCreateDate,
+            @RequestParam("projectStatusId") Optional<Long> projectStatusId,
+            @RequestParam("projectTypeName") Optional<String> projectTypeName,
+            @RequestParam("startDatePlan") Optional<String> startDatePlan,
+            @RequestParam("endDatePlan") Optional<String> endDatePlan,
+            @RequestParam("lastVersion") Optional<String> lastVersion,
+            @RequestParam("statusForTimeshit") Optional<Character> statusForTimeshit,
+            @RequestParam("creatorFullName") Optional<String> creatorFullName,
+            @RequestParam("editorFullName") Optional<String> editorFullName,
+            @RequestParam("executor") Optional<String> executor,
+            @RequestParam("projectPublicId") Optional<String> projectPublicId,
+            @Parameter(hidden = true)
+            //@SortDefault(sort = "project.projectName", direction = Sort.Direction.DESC)
+           @PageableDefault(page = 1, size = 50, value = 10)
+                    Pageable pageable) {
+
+        Page<ProjectDepositCodeApiProjectionCustomThree> projectDepositCodeApiResponseCustomThreePages =
+                projectDepositCodeApiService.queryAllProjectDepositCodeApiCustomThree(publicId.orElse(null),
+                        depositCode.orElse(null),
+                        description.orElse(null),
+                        createDateTs.orElse(null),
+                        editDateTs.orElse(null),
+                        deleteDateTs.orElse(null),
+                        projectName.orElse(null),
+                        projectCode.orElse(null),
+                        projectCreateDate.orElse(null),
+                        projectStatusId.orElse(null),
+                        projectTypeName.orElse(null),
+                        startDatePlan.orElse(null),
+                        endDatePlan.orElse(null),
+                        lastVersion.orElse(null),
+                        statusForTimeshit.orElse(null),
+                        creatorFullName.orElse(null),
+                        editorFullName.orElse(null),
+                        executor.orElse(null),
+                        projectPublicId.orElse(null),pageable);
+
+        Page<ProjectDepositCodeApiProjectionCustomThreeDto> projectDepositCodeApiProjectionCustomThreeDtoPages =
+                projectDepositCodeApiResponseCustomThreePages
+                        .map(projectDepositCodeApiProjectionCustomThreeMapper::projectDepositCodeApiProjectionCustomThreeToProjectDepositCodeApiProjectionCustomThreeDto);
+
+
+/*        projectDepositCodeApiProjectionCustomThreeDtoPages.getContent().stream()
+         .sorted(Comparator.comparing(ProjectDepositCodeApiProjectionCustomThreeDto::getDepositCode,
+                Comparator.nullsFirst(Comparator.naturalOrder())));*/
+
+        /*Pageable.unpaged();
+        List<ProjectDepositCodeApiProjectionCustomThreeDto> projectDepositCodeApiProjectionCustomThreeDtos =
+                projectDepositCodeApiProjectionCustomThreeDtoPages
+                .getContent().stream()
+                .filter(pd -> Objects.isNull(pd.getDepositCode()))
+                .collect(Collectors.toList());
+        PageImpl<ProjectDepositCodeApiProjectionCustomThreeDto> projectDepositCodeApiProjectionCustomThreeDtos1 =
+                new PageImpl<>(projectDepositCodeApiProjectionCustomThreeDtos);*/
+
+        PagedModel<ProjectDepositCodeApiResponseCustomThree> projectDepositCodeApiResponseCustomThreePagedModel =
+                projectDepositCodeApiProjectionCustomThreeDtoPagedResourcesAssembler
+                .toModel(projectDepositCodeApiProjectionCustomThreeDtoPages,
+                        projectDepositCodeApiResponseCustomThreeProjectDepositCodeApiProjectionCustomThreeDtoAssembler);
+
+        projectDepositCodeApiResponseCustomThreePagedModel
+                .forEach(projectDepositCodeApiResponseCustomThree ->
+                        convertorUtil.makeCharacterSetPersian(projectDepositCodeApiResponseCustomThree));
+
+        return ResponseEntity.ok(projectDepositCodeApiResponseCustomThreePagedModel);
+/*        List<ProjectDepositCodeApiResponseCustomThree> projectDepositCodeApiResponseCustomThrees =
+                projectDepositCodeApiResponseCustomThreePagedModel.getContent().stream().collect(Collectors.toList());*/
+    }
+
+
+    @Operation(
+            summary = "find All Project Deposit Codes Custom Three Deposit Null",
+            description = "Search projectDepositCodeApi Custom Three Deposit Null detail pageable",
+            tags = "projectDepositCodeApis",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ProjectDepositCodeApiResponseCustomThree.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.PageableAsQueryParam
+    @GetMapping(path = "/projectDepositCodeApiResponseCustomThreeDepositNull",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PagedModel<ProjectDepositCodeApiResponseCustomThree>> getProjectDepositCodeApiCustomThreeDepositNull(
+            @RequestParam("publicId") Optional<String> publicId,
+            @RequestParam("depositCode") Optional<String> depositCode,
+            @RequestParam("description") Optional<String> description,
+            @RequestParam("createDateTs") Optional<Timestamp> createDateTs,
+            @RequestParam("editDateTs") Optional<Timestamp> editDateTs,
+            @RequestParam("deleteDateTs") Optional<Timestamp> deleteDateTs,
+            @RequestParam("projectName") Optional<String> projectName,
+            @RequestParam("projectCode") Optional<String> projectCode,
+            @RequestParam("projectCreateDate") Optional<String> projectCreateDate,
+            @RequestParam("projectStatusId") Optional<Long> projectStatusId,
+            @RequestParam("projectTypeName") Optional<String> projectTypeName,
+            @RequestParam("startDatePlan") Optional<String> startDatePlan,
+            @RequestParam("endDatePlan") Optional<String> endDatePlan,
+            @RequestParam("lastVersion") Optional<String> lastVersion,
+            @RequestParam("statusForTimeshit") Optional<Character> statusForTimeshit,
+            @RequestParam("creatorFullName") Optional<String> creatorFullName,
+            @RequestParam("editorFullName") Optional<String> editorFullName,
+            @RequestParam("executor") Optional<String> executor,
+            @RequestParam("projectPublicId") Optional<String> projectPublicId,
+            @Parameter(hidden = true)
+            //@SortDefault(sort = "project.projectName", direction = Sort.Direction.DESC)
+            @PageableDefault(page = 1, size = 50, value = 10)
+                    Pageable pageable) {
+
+        Page<ProjectDepositCodeApiProjectionCustomThree> projectDepositCodeApiResponseCustomThreePages =
+                projectDepositCodeApiService.queryAllProjectDepositCodeApiCustomThree(publicId.orElse(null),
+                        depositCode.orElse(null),
+                        description.orElse(null),
+                        createDateTs.orElse(null),
+                        editDateTs.orElse(null),
+                        deleteDateTs.orElse(null),
+                        projectName.orElse(null),
+                        projectCode.orElse(null),
+                        projectCreateDate.orElse(null),
+                        projectStatusId.orElse(null),
+                        projectTypeName.orElse(null),
+                        startDatePlan.orElse(null),
+                        endDatePlan.orElse(null),
+                        lastVersion.orElse(null),
+                        statusForTimeshit.orElse(null),
+                        creatorFullName.orElse(null),
+                        editorFullName.orElse(null),
+                        executor.orElse(null),
+                        projectPublicId.orElse(null), Pageable.unpaged());
+
+        Page<ProjectDepositCodeApiProjectionCustomThreeDto> projectDepositCodeApiProjectionCustomThreeDtoPages =
+                projectDepositCodeApiResponseCustomThreePages
+                        .map(projectDepositCodeApiProjectionCustomThreeMapper::projectDepositCodeApiProjectionCustomThreeToProjectDepositCodeApiProjectionCustomThreeDto);
+
+
+/*        projectDepositCodeApiProjectionCustomThreeDtoPages.getContent().stream()
+         .sorted(Comparator.comparing(ProjectDepositCodeApiProjectionCustomThreeDto::getDepositCode,
+                Comparator.nullsFirst(Comparator.naturalOrder())));*/
+
+        /*Pageable.unpaged();*/
+        List<ProjectDepositCodeApiProjectionCustomThreeDto> projectDepositCodeApiProjectionCustomThreeDtos =
+                projectDepositCodeApiProjectionCustomThreeDtoPages
+                .getContent().stream()
+                .filter(pd -> Objects.isNull(pd.getDepositCode()))
+                .collect(Collectors.toList());
+        PageImpl<ProjectDepositCodeApiProjectionCustomThreeDto> projectDepositCodeApiProjectionCustomThreeDtos1 =
+                new PageImpl<>(projectDepositCodeApiProjectionCustomThreeDtos);
+
+        PagedModel<ProjectDepositCodeApiResponseCustomThree> projectDepositCodeApiResponseCustomThreePagedModel =
+                projectDepositCodeApiProjectionCustomThreeDtoPagedResourcesAssembler
+                        .toModel(projectDepositCodeApiProjectionCustomThreeDtos1,
+                                projectDepositCodeApiResponseCustomThreeProjectDepositCodeApiProjectionCustomThreeDtoAssembler);
+
+        projectDepositCodeApiResponseCustomThreePagedModel
+                .forEach(projectDepositCodeApiResponseCustomThree ->
+                        convertorUtil.makeCharacterSetPersian(projectDepositCodeApiResponseCustomThree));
+
+        return ResponseEntity.ok(projectDepositCodeApiResponseCustomThreePagedModel);
+/*        List<ProjectDepositCodeApiResponseCustomThree> projectDepositCodeApiResponseCustomThrees =
+                projectDepositCodeApiResponseCustomThreePagedModel.getContent().stream().collect(Collectors.toList());*/
+    }
+
 }
-
-
-
-
-
 
