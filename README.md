@@ -751,8 +751,14 @@ CREATE SEQUENCE  "CRM"."SEQ_ROLE_API_ID"  MINVALUE 1 MAXVALUE 999999999999999999
 Insert into CRM.TBL_ROLE_API
 (ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID)
 values
-(CRM.SEQ_ROLE_API_ID.nextval,'ROLE_HAMKARAN',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);            
-             
+(CRM.SEQ_ROLE_API_ID.nextval,'ROLE_HAMKARAN',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);      
+
+Insert into CRM.TBL_ROLE_API
+(ID,NAME,PRIVILEGE_ID,CREATE_DATE_TS,EDIT_DATE_TS,DESCRIPTION,CREATOR_ID,EDITOR_ID,DELETE_DATE_TS,PERSON_API_ID,ROLE_PUBLIC_ID)
+values
+(CRM.SEQ_ROLE_API_ID.nextval,'ROLE_PROJECTDEPOSITCODE',null,systimestamp,null,null,null,null,null,null,CRM.public_uuid);
+
+
 ---------------- PRIVILEGE --------------
 
 
