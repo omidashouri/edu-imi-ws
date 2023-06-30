@@ -53,7 +53,7 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER','ROLE_PROJECTDEPOSITCODE')")
 @RestController
 @RequestMapping("/api/v1/projectDepositCodeApis")
 @RequiredArgsConstructor
