@@ -43,7 +43,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER','ROLE_PROJECTDEPOSITCODE')")
 @RestController
 @RequestMapping("/api/v1/projectDepositCodeApis")
 @RequiredArgsConstructor
