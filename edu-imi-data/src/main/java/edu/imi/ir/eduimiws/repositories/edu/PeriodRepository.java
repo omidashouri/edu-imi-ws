@@ -216,7 +216,10 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                               @Param("canRegisterOnline") String canRegisterOnline,
                                                               @Param("type") String type,
                                                               @Param("schedule") String schedule,
-                                                              @Param("planId") Long planId
+                                                              @Param("planId") Long planId,
+                                                              @Param("betweenRegStartDate") String betweenRegStartDate,
+                                                              @Param("betweenRegEndDate") String betweenRegEndDate,
+                                                              @Param("fullName") String fullName
                                                       );
 
 

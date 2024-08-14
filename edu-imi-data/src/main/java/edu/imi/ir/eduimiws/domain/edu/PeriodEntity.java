@@ -275,8 +275,8 @@ import javax.persistence.*;
                       " ( :projectName = '-999' OR prj.PROJECT_NAME = :projectName ) AND " +
                       " ( :depositCode = '-999' OR pdca.DEPOSIT_CODE = :depositCode ) AND " +
                       " ( :projectCode = '-999' OR prj.PROJECT_CODE = :projectCode ) AND " +
-                      " ( :executorFirstName = '-999' OR exc.FIRST_NAME  = :executorFirstName ) AND " +
-                      " ( :executorLastName = '-999' OR exc.LAST_NAME = :executorLastName ) AND " +
+                      " ( :executorFirstName = '-999' OR exc.FIRST_NAME  like '%'|| :executorFirstName ||'%' ) AND " +
+                      " ( :executorLastName = '-999' OR exc.LAST_NAME like '%'|| :executorLastName ||'%' ) AND " +
                       " ( :startDate = '-999' OR prd.START_DATE = :startDate ) AND " +
                       " ( :endDate = '-999' OR prd.END_DATE = :endDate ) AND " +
                       " ( :regStartDate = '-999' OR prd.REG_START_DATE = :regStartDate ) AND " +
@@ -285,7 +285,11 @@ import javax.persistence.*;
                       " ( :canRegisterOnline = '-999' OR prd.CAN_REGISTER_ONLINE  = :canRegisterOnline ) AND " +
                       " ( :type = '-999' OR prd.TYPE = :type ) AND " +
                       " ( :schedule = '-999' OR prd.SCHEDULE = :schedule ) AND " +
-                      " ( :planId = -999 OR prd.PLAN_ID  = :planId )  ",
+                      " ( :planId = -999 OR prd.PLAN_ID  = :planId )  AND " +
+                      " ( :betweenRegStartDate = '-999' OR prd.REG_START_DATE >= :betweenRegStartDate )  AND " +
+                      " ( :betweenRegEndDate = '-999' OR prd.REG_END_DATE <= :betweenRegEndDate )  AND " +
+                      " ( :fullName = '-999' OR exc.FIRST_NAME||' '||exc.LAST_NAME like '%'|| :fullName || '%') " +
+                      " ORDER BY regStartDate desc, prd.NAME ASC ",
                 resultSetMapping = "periodCustomFour"),
         @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnlyById",
                 query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +

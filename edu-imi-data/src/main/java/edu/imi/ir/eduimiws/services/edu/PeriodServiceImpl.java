@@ -206,8 +206,10 @@ public class PeriodServiceImpl implements PeriodService {
                                                                       String ExecutorFullName, String depositCode,
                                                                       String projectCode, String projectName,
                                                                       String projectPublicId,
-                                                                      String publicId,
-                                                                      Long planId) {
+                                                                      String publicId, Long planId,
+                                                                      String betweenRegStartDate,
+                                                                      String betweenRegEndDate,
+                                                                      String fullName) {
 
         String encodedPeriodName = convertorUtil.characterEncodingInputStringForDb.apply(periodName);
         String encodedFieldName = convertorUtil.characterEncodingInputStringForDb.apply(fieldName);
@@ -250,7 +252,10 @@ public class PeriodServiceImpl implements PeriodService {
                                                        this.checkNullStringParam(canRegisterOnline),
                                                        this.checkNullStringParam(type),
                                                        this.checkNullStringParam(schedule),
-                                                       this.checkNullLongParam(planId)
+                                                       this.checkNullLongParam(planId),
+                                                       this.checkNullStringParam(betweenRegStartDate),
+                                                       this.checkNullStringParam(betweenRegEndDate),
+                                                        this.checkNullStringParam(fullName)
                 );
         return periodProjectionCustomFours;
     }

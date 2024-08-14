@@ -563,14 +563,12 @@ public class PeriodController {
             @RequestParam("totalUnit") Optional<Long> periodTotalUnit,
             @RequestParam("executorFirstName") Optional<String> periodExecutorFirstName,
             @RequestParam("executorLastName") Optional<String> periodExecutorLastName,
-            @RequestParam("planId") Optional<Long> planId ,
-           //   @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
+            @RequestParam("planId") Optional<Long> planId,
+            @RequestParam("betweenRegStartDate") Optional<String> betweenRegStartDate,
+            @RequestParam("betweenRegEndDate") Optional<String> betweenRegEndDate,
+            @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName
            // @RequestParam("periodId") Optional<Long> periodId,
-            @Parameter(hidden = true)
-            @SortDefault(sort = "regStartDate",
-                    direction = Sort.Direction.DESC)
-            @PageableDefault(page = 1, size = 50, value = 10)
-                    Pageable pageable) {
+                    ) {
 
         List<PeriodProjectionCustomFour> periodProjectionCustomFours =
                 periodService.queryAllPeriodsCustomFour(periodPublicId.orElse(null),
@@ -592,10 +590,11 @@ public class PeriodController {
                         null,null,
                         null,
                         periodExecutorFirstName.orElse(null), periodExecutorLastName.orElse(null),
-//                        periodExecutorFullName.orElse(null),
                         null, depositCode.orElse(null),projectCode.orElse(null),
                         projectName.orElse(null),projectPublicId.orElse(null),
-                        depositPublicId.orElse(null),planId.orElse(null)
+                        depositPublicId.orElse(null),planId.orElse(null),
+                        betweenRegStartDate.orElse(null),betweenRegEndDate.orElse(null),
+                        periodExecutorFullName.orElse(null)
                 );
 
 

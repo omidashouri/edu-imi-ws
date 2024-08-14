@@ -94,7 +94,10 @@ public interface PeriodService {
                                                                String projectCode, String projectName,
                                                                String projectPublicId,
                                                                String depositPublicId,
-                                                               Long planId);
+                                                               Long planId,
+                                                               String betweenRegStartDate,
+                                                               String betweenRegEndDate,
+                                                               String fullName);
 
     PeriodProjectionCustomTwo queryPeriodsCustomTwoByPeriodPublicId(String periodPublicId);
 }
