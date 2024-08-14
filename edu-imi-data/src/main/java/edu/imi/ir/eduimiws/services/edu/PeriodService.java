@@ -1,13 +1,14 @@
 package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomFour;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-
+//___periodfour
 public interface PeriodService {
 
     Page<PeriodEntity> findAllByDeleteStatusEqualsOneAndOrderPageable(Pageable pageable);
@@ -72,6 +73,28 @@ public interface PeriodService {
                                                              String periodExecutorLastName,
                                                              String periodExecutorFullName,
                                                              Pageable pageable);
+
+    List<PeriodProjectionCustomFour> queryAllPeriodsCustomFour(String periodPublicId, String fieldPublicId,
+                                                               String eduCategoryPublicId, String levelPublicId,
+                                                               String fieldCode, Long offerNumber,
+                                                               String periodName, String levelDescription,
+                                                               String fieldName, String eduCategoryName,
+                                                               String periodStartDate, String periodEndDate,
+                                                               String registerStartDate, String registerEndDate,
+                                                               Long maxCapacity, String periodHoldingType,
+                                                               String periodCanRegisterOnline, String periodType,
+                                                               Long fee, Long periodDiscount,
+                                                               String periodSchedule, Long activityStatus,
+                                                               Long deleteStatus, Long totalUnit,
+                                                               Long feeEquivalentFixed,
+                                                               Long feeEquivalentVariable,
+                                                               Long periodId, String periodExecutorFirstName,
+                                                               String periodExecutorLastName,
+                                                               String periodExecutorFullName, String depositCode,
+                                                               String projectCode, String projectName,
+                                                               String projectPublicId,
+                                                               String depositPublicId,
+                                                               Long planId);
 
     PeriodProjectionCustomTwo queryPeriodsCustomTwoByPeriodPublicId(String periodPublicId);
 }

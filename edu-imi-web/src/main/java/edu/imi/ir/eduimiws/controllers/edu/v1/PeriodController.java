@@ -9,15 +9,20 @@ import edu.imi.ir.eduimiws.exceptions.controllers.InternalServerErrorException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodFastDtoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodProjectionCustomFourMapper;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodProjectionCustomTwoMapper;
+import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseCustomFourPeriodProjectionCustomFourDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodFastDto;
+import edu.imi.ir.eduimiws.models.dto.edu.PeriodProjectionCustomFourDto;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodProjectionCustomTwoDto;
+import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomFour;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
+import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseCustomFour;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseCustomTwo;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.edu.PeriodApiService;
@@ -59,6 +64,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+//___periodfour
 
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
@@ -76,6 +82,8 @@ public class PeriodController {
     private final PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler periodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler;
     private final PagedResourcesAssembler<PeriodProjectionCustomTwoDto> periodProjectionCustomTwoDtoDtoPagedResourcesAssembler;
     private final PeriodProjectionCustomTwoMapper periodProjectionCustomTwoMapper;
+    private final PeriodProjectionCustomFourMapper periodProjectionCustomFourMapper;
+    private final PeriodResponseCustomFourPeriodProjectionCustomFourDtoMapper periodResponseCustomFourPeriodProjectionCustomFourDtoMapper;
     private final ConvertorUtil convertorUtil;
 
     @Operation(
@@ -462,6 +470,146 @@ public class PeriodController {
 
         return ResponseEntity.ok(periodResponseCustomTwoPagedModel);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Operation(
+            summary = "query All periods Custom Four",
+            description = "Search period Custom Four detail",
+            tags = "periodCustomFour",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = PeriodResponseCustomFour.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @SwaggerUtil.PageableAsQueryParam
+    @GetMapping(path = "/periodResponseCustomFour",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<PeriodResponseCustomFour>> queryPeriodsCustomFour(
+            @RequestParam("periodPublicId") Optional<String> periodPublicId,
+            @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
+            @RequestParam("eduCategoryPublicId") Optional<String> eduCategoryPublicId,
+            @RequestParam("levelPublicId") Optional<String> levelPublicId,
+            @RequestParam("projectPublicId") Optional<String> projectPublicId,
+            @RequestParam("publicId") Optional<String> depositPublicId,
+            @RequestParam("code") Optional<String> fieldCode,
+            @RequestParam("depositCode") Optional<String> depositCode,
+            @RequestParam("projectCode") Optional<String> projectCode,
+            @RequestParam("offerNumber") Optional<Long> periodOfferNumber,
+            @RequestParam("fName") Optional<String> fieldName,
+            @RequestParam("name") Optional<String> periodName,
+            @RequestParam("projectName") Optional<String> projectName,
+            @RequestParam("levelDescription") Optional<String> levelDescription,
+            @RequestParam("eduCategoryTitle") Optional<String> eduCategoryName,
+            @RequestParam("startDate") Optional<String> periodStartDate,
+            @RequestParam("endDate") Optional<String> periodEndDate,
+            @RequestParam("regStartDate") Optional<String> registerStartDate,
+            @RequestParam("regEndDate") Optional<String> registerEndDate,
+            @RequestParam("maxCapacity") Optional<Long> periodMaxCapacity,
+            @RequestParam("holdingType") Optional<String> periodHoldingType,
+            @RequestParam("canRegisterOnline") Optional<String> periodCanRegisterOnline,
+            @RequestParam("type") Optional<String> periodType,
+            @RequestParam("fee") Optional<Long> periodFee,
+            @RequestParam("periodDiscount") Optional<Long> periodDiscount,
+            @RequestParam("schedule") Optional<String> periodSchedule,
+            @RequestParam(value = "activityStatus", defaultValue = "1") Optional<Long> periodActivityStatus,
+            @RequestParam(value = "deleteStatus", defaultValue = "1") Optional<Long> periodDeleteStatus,
+            @RequestParam("totalUnit") Optional<Long> periodTotalUnit,
+            @RequestParam("executorFirstName") Optional<String> periodExecutorFirstName,
+            @RequestParam("executorLastName") Optional<String> periodExecutorLastName,
+            @RequestParam("planId") Optional<Long> planId ,
+           //   @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName,
+           // @RequestParam("periodId") Optional<Long> periodId,
+            @Parameter(hidden = true)
+            @SortDefault(sort = "regStartDate",
+                    direction = Sort.Direction.DESC)
+            @PageableDefault(page = 1, size = 50, value = 10)
+                    Pageable pageable) {
+
+        List<PeriodProjectionCustomFour> periodProjectionCustomFours =
+                periodService.queryAllPeriodsCustomFour(periodPublicId.orElse(null),
+                        fieldPublicId.orElse(null),
+                        eduCategoryPublicId.orElse(null), levelPublicId.orElse(null),
+                        fieldCode.orElse(null), periodOfferNumber.orElse(null),
+                        periodName.orElse(null),
+                        levelDescription.orElse(null),
+                        fieldName.orElse(null), eduCategoryName.orElse(null),
+                        periodStartDate.orElse(null), periodEndDate.orElse(null),
+                        registerStartDate.orElse(null), registerEndDate.orElse(null),
+                        periodMaxCapacity.orElse(null), periodHoldingType.orElse(null),
+                        periodCanRegisterOnline.orElse(null), periodType.orElse(null),
+                        periodFee.orElse(null),
+                        periodDiscount.orElse(null),
+                        periodSchedule.orElse(null),
+                        periodActivityStatus.orElse(null), periodDeleteStatus.orElse(null),
+                        periodTotalUnit.orElse(null),
+                        null,null,
+                        null,
+                        periodExecutorFirstName.orElse(null), periodExecutorLastName.orElse(null),
+//                        periodExecutorFullName.orElse(null),
+                        null, depositCode.orElse(null),projectCode.orElse(null),
+                        projectName.orElse(null),projectPublicId.orElse(null),
+                        depositPublicId.orElse(null),planId.orElse(null)
+                );
+
+
+        List<PeriodProjectionCustomFourDto> periodProjectionCustomFourDtos =
+                periodProjectionCustomFourMapper
+                        .periodProjectionCustomFourToPeriodProjectionCustomFourDtos(periodProjectionCustomFours);
+
+        List<PeriodResponseCustomFour> periodResponseCustomFours = periodResponseCustomFourPeriodProjectionCustomFourDtoMapper
+                .periodProjectionCustomFourDtoToPeriodResponseCustomFours(periodProjectionCustomFourDtos);
+
+        return ResponseEntity.ok(periodResponseCustomFours);
+    }
+
+
 
     @Operation(
             summary = "Find Period Response Custom Two by public ID",

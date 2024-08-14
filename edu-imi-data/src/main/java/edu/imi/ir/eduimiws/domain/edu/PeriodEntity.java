@@ -2,15 +2,13 @@ package edu.imi.ir.eduimiws.domain.edu;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
+import edu.imi.ir.eduimiws.models.projections.edu.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
-
+//___periodfour
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
                 attributeNodes = {
@@ -84,6 +82,52 @@ import javax.persistence.*;
             }
         ),
         @SqlResultSetMapping(
+                name = "periodCustomFour",
+                classes = {
+                        @ConstructorResult(
+                                targetClass = PeriodProjectionCustomFour.class,
+                                columns = {
+                                        @ColumnResult(name = "periodId", type = Long.class) ,
+                                        @ColumnResult(name = "offerNumber", type = Long.class) ,
+                                        @ColumnResult(name = "totalUnit", type = Long.class) ,
+                                        @ColumnResult(name = "maxCapacity", type = Long.class) ,
+                                        @ColumnResult(name = "fee", type = Long.class) ,
+                                        @ColumnResult(name = "onlineRegCostPercent", type = Long.class) ,
+                                        @ColumnResult(name = "feeEquivalentFixed", type = Long.class) ,
+                                        @ColumnResult(name = "feeEquivalentVariable", type = Long.class) ,
+                                        @ColumnResult(name = "periodActivityStatus", type = Long.class) ,
+                                        @ColumnResult(name = "periodDeleteStatus", type = Long.class) ,
+                                        @ColumnResult(name = "periodPublicId", type = String.class) ,
+                                        @ColumnResult(name = "fieldPublicId", type = String.class) ,
+                                        @ColumnResult(name = "eduCategoryPublicId", type = String.class) ,
+                                        @ColumnResult(name = "levelPublicId", type = String.class) ,
+                                        @ColumnResult(name = "projectPublicId", type = String.class) ,
+                                        @ColumnResult(name = "publicId", type = String.class) ,
+                                        @ColumnResult(name = "fieldCode", type = String.class) ,
+                                        @ColumnResult(name = "fieldName", type = String.class) ,
+                                        @ColumnResult(name = "periodName", type = String.class) ,
+                                        @ColumnResult(name = "levelDescription", type = String.class) ,
+                                        @ColumnResult(name = "eduCategoryTitle", type = String.class) ,
+                                        @ColumnResult(name = "projectName", type = String.class) ,
+                                        @ColumnResult(name = "depositCode", type = String.class) ,
+                                        @ColumnResult(name = "projectCode", type = String.class) ,
+                                        @ColumnResult(name = "executorFirstName", type = String.class) ,
+                                        @ColumnResult(name = "executorLastName", type = String.class) ,
+                                        @ColumnResult(name = "startDate", type = String.class) ,
+                                        @ColumnResult(name = "endDate", type = String.class) ,
+                                        @ColumnResult(name = "regStartDate", type = String.class) ,
+                                        @ColumnResult(name = "regEndDate", type = String.class) ,
+                                        @ColumnResult(name = "holdingType", type = String.class) ,
+                                        @ColumnResult(name = "canRegisterOnline", type = String.class) ,
+                                        @ColumnResult(name = "type", type = String.class) ,
+                                        @ColumnResult(name = "schedule", type = String.class),
+                                        @ColumnResult(name = "planId", type = Long.class)
+
+                                }
+                        )
+                }
+        ),
+        @SqlResultSetMapping(
             name = "periodProjectionCustomOne",
             classes = {
                 @ConstructorResult(
@@ -151,11 +195,98 @@ import javax.persistence.*;
                 }
         )
     })
+
 @NamedNativeQueries({
         @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnly",
                 query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
                         " EDIT_DATE as periodEditDateR  from EDU.TBL_PERIOD ",
                 resultSetMapping = "periodOnly"),
+        @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodCustomFour",
+                query = " select prd.ID as periodId, " +
+                        " prd.OFFER_NUMBER as offerNumber, " +
+                        " prd.TOTAL_UNIT as totalUnit, " +
+                        " prd.MAX_CAPACITY as maxCapacity," +
+                        " prd.FEE as fee, " +
+                        " prd.ONLINE_REG_COST_PERCENT as onlineRegCostPercent," +
+                        " nvl(prd.FEE_EQUIVALENT_FIXED,0) as feeEquivalentFixed, " +
+                        " nvl(prd.FEE_EQUIVALENT_VARIABLE,0) as feeEquivalentVariable, " +
+                        " prd.ACTIVITY_STATUS as periodActivityStatus, " +
+                        " prd.DELETE_STATUS as periodDeleteStatus, " +
+                        " prda.PERIOD_PUBLIC_ID as periodPublicId," +
+                        " flda.FIELD_PUBLIC_ID as fieldPublicId, " +
+                        " edca.EDU_CATEGORY_PUBLIC_ID as eduCategoryPublicId, " +
+                        " lvla.LEVEL_PUBLIC_ID as levelPublicId, " +
+                        " prja.PROJECT_PUBLIC_ID as projectPublicId, " +
+                        " pdca.PUBLIC_ID as publicId, " +
+                        " fld.CODE as  fieldCode, " +
+                        " fld.FNAME as fieldName, " +
+                        " prd.NAME as periodName, " +
+                        " lvl.DESCRIPTION as levelDescription, " +
+                        " edc.TITLE as eduCategoryTitle, " +
+                        " prj.PROJECT_NAME as projectName, " +
+                        " pdca.DEPOSIT_CODE as depositCode, " +
+                        " prj.PROJECT_CODE as projectCode, " +
+                        " exc.FIRST_NAME as executorFirstName, " +
+                        " exc.LAST_NAME as executorLastName, " +
+                        " prd.START_DATE as startDate, " +
+                        " prd.END_DATE as endDate, " +
+                        " prd.REG_START_DATE as regStartDate, " +
+                        " prd.REG_END_DATE as regEndDate, " +
+                        " prd.HOLDING_TYPE as holdingType, " +
+                        " prd.CAN_REGISTER_ONLINE as canRegisterOnline, " +
+                        " prd.TYPE as type, " +
+                        " prd.SCHEDULE as schedule," +
+                        " prd.PLAN_ID as planId " +
+                        " from EDU.TBL_PERIOD prd " +
+                        "    LEFT JOIN edu.tbl_period_api                     prda ON prd.id = prda.period_id " +
+                        "    LEFT JOIN crm.tbl_person                         exc ON prd.executer_id = exc.id " +
+                        "    LEFT JOIN edu.tbl_field                          fld ON prd.field_id = fld.id " +
+                        "    LEFT JOIN edu.tbl_field_api                      flda ON fld.id = flda.field_id " +
+                        "    LEFT JOIN edu.tbl_edu_category                   edc ON fld.category_id = edc.id " +
+                        "    LEFT JOIN edu.tbl_edu_category_api               edca ON edc.id = edca.edu_category_id " +
+                        "    LEFT JOIN edu.tbl_level                          lvl ON fld.level_id = lvl.id " +
+                        "    LEFT JOIN edu.tbl_level_api                      lvla ON lvl.id = lvla.level_id " +
+                        "    LEFT JOIN mainparts.tbl_project_deposit_code_api pdca ON prd.plan_id = pdca.project_id " +
+                        "    LEFT JOIN pmis.tbl_project                       prj ON pdca.project_id = prj.id " +
+                        "    LEFT JOIN pmis.tbl_project_api                   prja ON prj.id = prja.project_id " +
+                        " where " +
+                        " 1=1 AND " +
+                      " ( :periodId = -999 OR prd.id = :periodId ) AND " +
+                      " ( :offerNumber = -999 OR prd.OFFER_NUMBER = :offerNumber ) AND " +
+                      " ( :totalUnit = -999 OR prd.TOTAL_UNIT = :totalUnit ) AND " +
+                      " ( :maxCapacity = -999 OR prd.MAX_CAPACITY = :maxCapacity ) AND " +
+                      " ( :fee = -999 OR prd.FEE = :fee ) AND " +
+                      " ( :onlineRegCostPercent = -999 OR prd.ONLINE_REG_COST_PERCENT = :onlineRegCostPercent ) AND " +
+                      " ( :feeEquivalentFixed = -999 OR prd.FEE_EQUIVALENT_FIXED = :feeEquivalentFixed ) AND " +
+                      " ( :feeEquivalentVariable = -999 OR prd.FEE_EQUIVALENT_VARIABLE = :feeEquivalentVariable ) AND " +
+                      " ( :activityStatus = -999 OR prd.ACTIVITY_STATUS = :activityStatus ) AND " +
+                      " ( :deleteStatus = -999 OR prd.DELETE_STATUS = :deleteStatus ) AND " +
+                      " ( :periodPublicId = '-999' OR prda.PERIOD_PUBLIC_ID = :periodPublicId ) AND " +
+                      " ( :fieldPublicId = '-999' OR flda.FIELD_PUBLIC_ID = :fieldPublicId ) AND " +
+                      " ( :eduCategoryPublicId = '-999' OR edca.EDU_CATEGORY_PUBLIC_ID = :eduCategoryPublicId ) AND " +
+                      " ( :levelPublicId = '-999' OR lvla.LEVEL_PUBLIC_ID = :levelPublicId )  AND " +
+                      " ( :projectPublicId = '-999' OR prja.PROJECT_PUBLIC_ID = :projectPublicId ) AND " +
+                      " ( :publicId = '-999' OR pdca.PUBLIC_ID = :publicId ) AND " +
+                      " ( :fieldCode = '-999' OR fld.CODE  = :fieldCode ) AND " +
+                      " ( :fieldName = '-999' OR fld.FNAME  = :fieldName ) AND " +
+                      " ( :periodName = '-999' OR prd.NAME = :periodName ) AND " +
+                      " ( :levelDescription = '-999' OR lvl.DESCRIPTION = :levelDescription ) AND " +
+                      " ( :eduCategoryTitle = '-999' OR edc.TITLE = :eduCategoryTitle ) AND " +
+                      " ( :projectName = '-999' OR prj.PROJECT_NAME = :projectName ) AND " +
+                      " ( :depositCode = '-999' OR pdca.DEPOSIT_CODE = :depositCode ) AND " +
+                      " ( :projectCode = '-999' OR prj.PROJECT_CODE = :projectCode ) AND " +
+                      " ( :executorFirstName = '-999' OR exc.FIRST_NAME  = :executorFirstName ) AND " +
+                      " ( :executorLastName = '-999' OR exc.LAST_NAME = :executorLastName ) AND " +
+                      " ( :startDate = '-999' OR prd.START_DATE = :startDate ) AND " +
+                      " ( :endDate = '-999' OR prd.END_DATE = :endDate ) AND " +
+                      " ( :regStartDate = '-999' OR prd.REG_START_DATE = :regStartDate ) AND " +
+                      " ( :regEndDate = '-999' OR prd.REG_END_DATE = :regEndDate ) AND " +
+                      " ( :holdingType = '-999' OR prd.HOLDING_TYPE = :holdingType ) AND " +
+                      " ( :canRegisterOnline = '-999' OR prd.CAN_REGISTER_ONLINE  = :canRegisterOnline ) AND " +
+                      " ( :type = '-999' OR prd.TYPE = :type ) AND " +
+                      " ( :schedule = '-999' OR prd.SCHEDULE = :schedule ) AND " +
+                      " ( :planId = -999 OR prd.PLAN_ID  = :planId )  ",
+                resultSetMapping = "periodCustomFour"),
         @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnlyById",
                 query = " select ID as idR, DELETE_STATUS as deleteStatusR, CAN_REGISTER_ONLINE as canRegisterOnlineR, " +
                         " EDIT_DATE as periodEditDateR from EDU.TBL_PERIOD where ID in (:periodIds) ",
@@ -375,7 +506,7 @@ import javax.persistence.*;
                         "    ON edc.id=edca.edu_category_id " +
                         " ) "
         )
-})
+    })
 
 
 @NamedQueries({

@@ -1,9 +1,7 @@
 package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodOnly;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomOne;
-import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
+import edu.imi.ir.eduimiws.models.projections.edu.*;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.QueryHint;
 import java.util.List;
-
+//___periodfour
 @Repository
 public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
@@ -181,6 +179,46 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                             @Param("periodExecutorLastName") String periodExecutorLastName,
                                                             @Param("periodExecutorFullName") String periodExecutorFullName,
                                                             Pageable pageable);
+
+    @Query(name = "PeriodEntity.selectAllPeriodCustomFour",
+            nativeQuery = true)
+    List<PeriodProjectionCustomFour> queryAllPeriodCustomFour(@Param("periodId") Long periodId,
+                                                              @Param("offerNumber") Long offerNumber ,
+                                                              @Param("totalUnit") Long totalUnit,
+                                                              @Param("maxCapacity") Long maxCapacity,
+                                                              @Param("fee") Long fee,
+                                                              @Param("onlineRegCostPercent") Long onlineRegCostPercent,
+                                                              @Param("feeEquivalentFixed") Long feeEquivalentFixed,
+                                                              @Param("feeEquivalentVariable") Long feeEquivalentVariable,
+                                                              @Param("activityStatus") Long activityStatus,
+                                                              @Param("deleteStatus") Long deleteStatus,
+                                                              @Param("periodPublicId") String periodPublicId,
+                                                              @Param("fieldPublicId") String fieldPublicId,
+                                                              @Param("eduCategoryPublicId") String eduCategoryPublicId,
+                                                              @Param("levelPublicId") String levelPublicId ,
+                                                              @Param("projectPublicId") String projectPublicId,
+                                                              @Param("publicId") String publicId,
+                                                              @Param("fieldCode") String fieldCode,
+                                                              @Param("fieldName") String fieldName,
+                                                              @Param("periodName") String periodName,
+                                                              @Param("levelDescription") String levelDescription,
+                                                              @Param("eduCategoryTitle") String eduCategoryTitle,
+                                                              @Param("projectName") String projectName,
+                                                              @Param("depositCode") String depositCode,
+                                                              @Param("projectCode") String projectCode,
+                                                              @Param("executorFirstName") String executorFirstName,
+                                                              @Param("executorLastName") String executorLastName,
+                                                              @Param("startDate") String startDate,
+                                                              @Param("endDate") String endDate,
+                                                              @Param("regStartDate") String regStartDate,
+                                                              @Param("regEndDate") String regEndDate,
+                                                              @Param("holdingType") String holdingType,
+                                                              @Param("canRegisterOnline") String canRegisterOnline,
+                                                              @Param("type") String type,
+                                                              @Param("schedule") String schedule,
+                                                              @Param("planId") Long planId
+                                                      );
+
 
 
     @Query(name = "PeriodEntity.queryPeriodCustomTwoByPeriodPublicId")
