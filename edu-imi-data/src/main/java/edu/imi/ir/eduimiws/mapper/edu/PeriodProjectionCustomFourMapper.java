@@ -34,7 +34,7 @@ public interface PeriodProjectionCustomFourMapper {
             @Mapping(source = "fieldPublicId", target = "fieldPublicId"),
             @Mapping(source = "holdingType", target = "holdingType"),
             @Mapping(source = "levelPublicId", target = "levelPublicId"),
-            @Mapping(source = "description", target = "levelDescription"),
+            @Mapping(source = "levelTitle", target = "levelTitle"),
             @Mapping(source = "maxCapacity", target = "maxCapacity"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "offerNumber", target = "offerNumber"),
@@ -45,7 +45,13 @@ public interface PeriodProjectionCustomFourMapper {
             @Mapping(source = "totalUnit", target = "totalUnit"),
             @Mapping(source = "id", target = "periodId"),
             @Mapping(source = "periodPublicId", target = "periodPublicId"),
-            @Mapping(source = "type", target = "type")
+            @Mapping(source = "type", target = "type"),
+            @Mapping(source = "projectPublicId", target = "projectPublicId"),
+            @Mapping(source = "publicId", target = "depositPublicId"),
+            @Mapping(source = "projectName", target = "projectName"),
+            @Mapping(source = "depositCode", target = "depositCode"),
+            @Mapping(source = "projectCode", target = "projectCode"),
+            @Mapping(source = "planId", target = "planId")
 
     })
     PeriodProjectionCustomFourDto periodProjectionCustomFourToPeriodProjectionCustomFourDto(PeriodProjectionCustomFour source);

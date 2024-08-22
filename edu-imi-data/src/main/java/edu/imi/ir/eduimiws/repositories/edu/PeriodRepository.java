@@ -201,7 +201,7 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
                                                               @Param("fieldCode") String fieldCode,
                                                               @Param("fieldName") String fieldName,
                                                               @Param("periodName") String periodName,
-                                                              @Param("levelDescription") String levelDescription,
+                                                              @Param("levelTitle") String levelTitle,
                                                               @Param("eduCategoryTitle") String eduCategoryTitle,
                                                               @Param("projectName") String projectName,
                                                               @Param("depositCode") String depositCode,

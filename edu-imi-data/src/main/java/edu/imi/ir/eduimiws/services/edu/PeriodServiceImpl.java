@@ -190,7 +190,7 @@ public class PeriodServiceImpl implements PeriodService {
     public List<PeriodProjectionCustomFour> queryAllPeriodsCustomFour(String periodPublicId, String fieldPublicId,
                                                                       String eduCategoryPublicId, String levelPublicId,
                                                                       String fieldCode, Long offerNumber,
-                                                                      String periodName, String levelDescription,
+                                                                      String periodName, String levelTitle,
                                                                       String fieldName, String eduCategoryTitle,
                                                                       String startDate, String endDate,
                                                                       String regStartDate, String regEndDate,
@@ -199,11 +199,9 @@ public class PeriodServiceImpl implements PeriodService {
                                                                       Long fee, Long periodDiscount,
                                                                       String schedule, Long activityStatus,
                                                                       Long deleteStatus, Long totalUnit,
-                                                                      Long feeEquivalentFixed,
-                                                                      Long feeEquivalentVariable,
-                                                                      Long periodId, String executorFirstName,
+                                                                      String executorFirstName,
                                                                       String executorLastName,
-                                                                      String ExecutorFullName, String depositCode,
+                                                                      String depositCode,
                                                                       String projectCode, String projectName,
                                                                       String projectPublicId,
                                                                       String publicId, Long planId,
@@ -215,17 +213,19 @@ public class PeriodServiceImpl implements PeriodService {
         String encodedFieldName = convertorUtil.characterEncodingInputStringForDb.apply(fieldName);
         String encodedEduCategoryTitle = convertorUtil.characterEncodingInputStringForDb.apply(eduCategoryTitle);
         String encodedProjectName = convertorUtil.characterEncodingInputStringForDb.apply(projectName);
+        String encodedExecutorFullName = convertorUtil.characterEncodingInputStringForDb.apply(fullName);
+        String encodedLevelTitle = convertorUtil.characterEncodingInputStringForDb.apply(levelTitle);
 
 
         List<PeriodProjectionCustomFour> periodProjectionCustomFours =
-            periodRepository.queryAllPeriodCustomFour(this.checkNullLongParam(periodId),
+            periodRepository.queryAllPeriodCustomFour(this.checkNullLongParam(null),
                                                        this.checkNullLongParam(offerNumber),
                                                        this.checkNullLongParam(totalUnit),
                                                        this.checkNullLongParam(maxCapacity),
                                                        this.checkNullLongParam(fee),
                                                        this.checkNullLongParam(periodDiscount),
-                                                       this.checkNullLongParam(feeEquivalentFixed),
-                                                       this.checkNullLongParam(feeEquivalentVariable),
+                                                       this.checkNullLongParam(null),
+                                                       this.checkNullLongParam(null),
                                                        this.checkNullLongParam(activityStatus),
                                                        this.checkNullLongParam(deleteStatus),
                                                        this.checkNullStringParam(periodPublicId),
@@ -237,7 +237,7 @@ public class PeriodServiceImpl implements PeriodService {
                                                        this.checkNullStringParam(fieldCode),
                                                        this.checkNullStringParam(encodedFieldName),
                                                        this.checkNullStringParam(encodedPeriodName),
-                                                       this.checkNullStringParam(levelDescription),
+                                                       this.checkNullStringParam(encodedLevelTitle),
                                                        this.checkNullStringParam(encodedEduCategoryTitle),
                                                        this.checkNullStringParam(encodedProjectName),
                                                        this.checkNullStringParam(depositCode),
@@ -255,7 +255,7 @@ public class PeriodServiceImpl implements PeriodService {
                                                        this.checkNullLongParam(planId),
                                                        this.checkNullStringParam(betweenRegStartDate),
                                                        this.checkNullStringParam(betweenRegEndDate),
-                                                        this.checkNullStringParam(fullName)
+                                                        this.checkNullStringParam(encodedExecutorFullName)
                 );
         return periodProjectionCustomFours;
     }

@@ -106,7 +106,7 @@ import javax.persistence.*;
                                         @ColumnResult(name = "fieldCode", type = String.class) ,
                                         @ColumnResult(name = "fieldName", type = String.class) ,
                                         @ColumnResult(name = "periodName", type = String.class) ,
-                                        @ColumnResult(name = "levelDescription", type = String.class) ,
+                                        @ColumnResult(name = "levelTitle", type = String.class) ,
                                         @ColumnResult(name = "eduCategoryTitle", type = String.class) ,
                                         @ColumnResult(name = "projectName", type = String.class) ,
                                         @ColumnResult(name = "depositCode", type = String.class) ,
@@ -221,7 +221,7 @@ import javax.persistence.*;
                         " fld.CODE as  fieldCode, " +
                         " fld.FNAME as fieldName, " +
                         " prd.NAME as periodName, " +
-                        " lvl.DESCRIPTION as levelDescription, " +
+                        " lvl.DESCRIPTION as levelTitle, " +
                         " edc.TITLE as eduCategoryTitle, " +
                         " prj.PROJECT_NAME as projectName, " +
                         " pdca.DEPOSIT_CODE as depositCode, " +
@@ -268,11 +268,11 @@ import javax.persistence.*;
                       " ( :projectPublicId = '-999' OR prja.PROJECT_PUBLIC_ID = :projectPublicId ) AND " +
                       " ( :publicId = '-999' OR pdca.PUBLIC_ID = :publicId ) AND " +
                       " ( :fieldCode = '-999' OR fld.CODE  = :fieldCode ) AND " +
-                      " ( :fieldName = '-999' OR fld.FNAME  = :fieldName ) AND " +
-                      " ( :periodName = '-999' OR prd.NAME = :periodName ) AND " +
-                      " ( :levelDescription = '-999' OR lvl.DESCRIPTION = :levelDescription ) AND " +
-                      " ( :eduCategoryTitle = '-999' OR edc.TITLE = :eduCategoryTitle ) AND " +
-                      " ( :projectName = '-999' OR prj.PROJECT_NAME = :projectName ) AND " +
+                      " ( :fieldName = '-999' OR fld.FNAME like '%'|| :fieldName ||'%' ) AND " +
+                      " ( :periodName = '-999' OR prd.NAME like '%'|| :periodName ||'%' ) AND " +
+                      " ( :levelTitle = '-999' OR lvl.DESCRIPTION like '%'|| :levelTitle ||'%' ) AND " +
+                      " ( :eduCategoryTitle = '-999' OR edc.TITLE like '%'|| :eduCategoryTitle ||'%' ) AND " +
+                      " ( :projectName = '-999' OR prj.PROJECT_NAME like '%'|| :projectName ||'%' ) AND " +
                       " ( :depositCode = '-999' OR pdca.DEPOSIT_CODE = :depositCode ) AND " +
                       " ( :projectCode = '-999' OR prj.PROJECT_CODE = :projectCode ) AND " +
                       " ( :executorFirstName = '-999' OR exc.FIRST_NAME  like '%'|| :executorFirstName ||'%' ) AND " +
@@ -288,7 +288,8 @@ import javax.persistence.*;
                       " ( :planId = -999 OR prd.PLAN_ID  = :planId )  AND " +
                       " ( :betweenRegStartDate = '-999' OR prd.REG_START_DATE >= :betweenRegStartDate )  AND " +
                       " ( :betweenRegEndDate = '-999' OR prd.REG_END_DATE <= :betweenRegEndDate )  AND " +
-                      " ( :fullName = '-999' OR exc.FIRST_NAME||' '||exc.LAST_NAME like '%'|| :fullName || '%') " +
+                      " ( :fullName = '-999' OR exc.FIRST_NAME||' '||exc.LAST_NAME like '%'|| :fullName || '%') AND " +
+                      " ( pdca.DELETE_DATE_TS IS NULL)" +
                       " ORDER BY regStartDate desc, prd.NAME ASC ",
                 resultSetMapping = "periodCustomFour"),
         @NamedNativeQuery(name = "PeriodEntity.selectAllPeriodOnlyById",

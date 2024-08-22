@@ -24,7 +24,7 @@ public class PeriodProjectionCustomFourDto implements Serializable {
 
     private Long offerNumber;
 
-    private String levelDescription;
+    private String levelTitle;
 
     private String name;
 
@@ -73,4 +73,16 @@ public class PeriodProjectionCustomFourDto implements Serializable {
     private String executorLastName;
     
     private String executorFullName;
+
+    private String projectPublicId;
+
+    private String depositPublicId;
+
+    private String projectName;
+
+    private String depositCode;
+
+    private String projectCode;
+
+    private Long planId;
 }

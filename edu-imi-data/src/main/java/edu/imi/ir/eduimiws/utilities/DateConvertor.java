@@ -1030,4 +1030,8 @@ public class DateConvertor {
         tail = tail.substring(0, 2) + ":" + tail.substring(2);
         return date.substring(0, date.indexOf("+") + 1) + tail;
     }
+
+    public String getCurrentYear(){
+        return this.jalaliDateFromLocalDateTime(LocalDateTime.now()).split("/")[0];
+    }
 }

@@ -26,7 +26,7 @@ public class PeriodProjectionCustomFour {
     String code;
     String fName;
     String name;
-    String description;
+    String levelTitle;
     String eduCategoryTitle;
     String projectName;
 

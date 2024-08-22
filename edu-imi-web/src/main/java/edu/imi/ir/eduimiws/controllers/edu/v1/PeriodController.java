@@ -28,6 +28,7 @@ import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.edu.PeriodApiService;
 import edu.imi.ir.eduimiws.services.edu.PeriodService;
 import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
+import edu.imi.ir.eduimiws.utilities.DateConvertor;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,6 +86,7 @@ public class PeriodController {
     private final PeriodProjectionCustomFourMapper periodProjectionCustomFourMapper;
     private final PeriodResponseCustomFourPeriodProjectionCustomFourDtoMapper periodResponseCustomFourPeriodProjectionCustomFourDtoMapper;
     private final ConvertorUtil convertorUtil;
+    private final DateConvertor dateConvertor;
 
     @Operation(
             summary = "find All periods",
@@ -528,7 +530,6 @@ public class PeriodController {
                             )
                     )
             })
-    @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/periodResponseCustomFour",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<PeriodResponseCustomFour>> queryPeriodsCustomFour(
@@ -538,36 +539,35 @@ public class PeriodController {
             @RequestParam("levelPublicId") Optional<String> levelPublicId,
             @RequestParam("projectPublicId") Optional<String> projectPublicId,
             @RequestParam("publicId") Optional<String> depositPublicId,
-            @RequestParam("code") Optional<String> fieldCode,
+            @RequestParam("fieldCode") Optional<String> fieldCode,
             @RequestParam("depositCode") Optional<String> depositCode,
             @RequestParam("projectCode") Optional<String> projectCode,
-            @RequestParam("offerNumber") Optional<Long> periodOfferNumber,
-            @RequestParam("fName") Optional<String> fieldName,
-            @RequestParam("name") Optional<String> periodName,
+            @RequestParam("periodOfferNumber") Optional<Long> periodOfferNumber,
+            @RequestParam("fieldName") Optional<String> fieldName,
+            @RequestParam("periodName") Optional<String> periodName,
             @RequestParam("projectName") Optional<String> projectName,
-            @RequestParam("levelDescription") Optional<String> levelDescription,
+            @RequestParam("levelTitle") Optional<String> levelTitle,
             @RequestParam("eduCategoryTitle") Optional<String> eduCategoryName,
-            @RequestParam("startDate") Optional<String> periodStartDate,
-            @RequestParam("endDate") Optional<String> periodEndDate,
-            @RequestParam("regStartDate") Optional<String> registerStartDate,
-            @RequestParam("regEndDate") Optional<String> registerEndDate,
-            @RequestParam("maxCapacity") Optional<Long> periodMaxCapacity,
-            @RequestParam("holdingType") Optional<String> periodHoldingType,
-            @RequestParam("canRegisterOnline") Optional<String> periodCanRegisterOnline,
-            @RequestParam("type") Optional<String> periodType,
-            @RequestParam("fee") Optional<Long> periodFee,
+            @RequestParam("periodStartDate") Optional<String> periodStartDate,
+            @RequestParam("periodEndDate") Optional<String> periodEndDate,
+            @RequestParam("registerStartDate") Optional<String> registerStartDate,
+            @RequestParam("registerEndDate") Optional<String> registerEndDate,
+            @RequestParam("periodMaxCapacity") Optional<Long> periodMaxCapacity,
+            @RequestParam("periodHoldingType") Optional<String> periodHoldingType,
+            @RequestParam("periodCanRegisterOnline") Optional<String> periodCanRegisterOnline,
+            @RequestParam("periodType") Optional<String> periodType,
+            @RequestParam("periodFee") Optional<Long> periodFee,
             @RequestParam("periodDiscount") Optional<Long> periodDiscount,
-            @RequestParam("schedule") Optional<String> periodSchedule,
-            @RequestParam(value = "activityStatus", defaultValue = "1") Optional<Long> periodActivityStatus,
-            @RequestParam(value = "deleteStatus", defaultValue = "1") Optional<Long> periodDeleteStatus,
-            @RequestParam("totalUnit") Optional<Long> periodTotalUnit,
-            @RequestParam("executorFirstName") Optional<String> periodExecutorFirstName,
-            @RequestParam("executorLastName") Optional<String> periodExecutorLastName,
+            @RequestParam("periodSchedule") Optional<String> periodSchedule,
+            @RequestParam(value = "periodActivityStatus", defaultValue = "1") Optional<Long> periodActivityStatus,
+            @RequestParam(value = "periodDeleteStatus", defaultValue = "1") Optional<Long> periodDeleteStatus,
+            @RequestParam("periodTotalUnit") Optional<Long> periodTotalUnit,
+            @RequestParam("periodExecutorFirstName") Optional<String> periodExecutorFirstName,
+            @RequestParam("periodExecutorLastName") Optional<String> periodExecutorLastName,
             @RequestParam("planId") Optional<Long> planId,
-            @RequestParam("betweenRegStartDate") Optional<String> betweenRegStartDate,
+            @RequestParam(value = "betweenRegStartDate",defaultValue = "1403/01/01") Optional<String> betweenRegStartDate,
             @RequestParam("betweenRegEndDate") Optional<String> betweenRegEndDate,
             @RequestParam("periodExecutorFullName") Optional<String> periodExecutorFullName
-           // @RequestParam("periodId") Optional<Long> periodId,
                     ) {
 
         List<PeriodProjectionCustomFour> periodProjectionCustomFours =
@@ -576,7 +576,7 @@ public class PeriodController {
                         eduCategoryPublicId.orElse(null), levelPublicId.orElse(null),
                         fieldCode.orElse(null), periodOfferNumber.orElse(null),
                         periodName.orElse(null),
-                        levelDescription.orElse(null),
+                        levelTitle.orElse(null),
                         fieldName.orElse(null), eduCategoryName.orElse(null),
                         periodStartDate.orElse(null), periodEndDate.orElse(null),
                         registerStartDate.orElse(null), registerEndDate.orElse(null),
@@ -587,16 +587,16 @@ public class PeriodController {
                         periodSchedule.orElse(null),
                         periodActivityStatus.orElse(null), periodDeleteStatus.orElse(null),
                         periodTotalUnit.orElse(null),
-                        null,null,
-                        null,
                         periodExecutorFirstName.orElse(null), periodExecutorLastName.orElse(null),
-                        null, depositCode.orElse(null),projectCode.orElse(null),
+                        depositCode.orElse(null),projectCode.orElse(null),
                         projectName.orElse(null),projectPublicId.orElse(null),
                         depositPublicId.orElse(null),planId.orElse(null),
-                        betweenRegStartDate.orElse(null),betweenRegEndDate.orElse(null),
+                        betweenRegStartDate.orElse(null),
+                        betweenRegEndDate.orElse(null),
                         periodExecutorFullName.orElse(null)
                 );
-
+//        dateConvertor.getCurrentYear().concat("\\").concat("01").concat("\\").concat("01")
+//        dateConvertor.getCurrentYear().concat("\\").concat("12").concat("\\").concat("29")
 
         List<PeriodProjectionCustomFourDto> periodProjectionCustomFourDtos =
                 periodProjectionCustomFourMapper
@@ -604,6 +604,9 @@ public class PeriodController {
 
         List<PeriodResponseCustomFour> periodResponseCustomFours = periodResponseCustomFourPeriodProjectionCustomFourDtoMapper
                 .periodProjectionCustomFourDtoToPeriodResponseCustomFours(periodProjectionCustomFourDtos);
+
+        periodResponseCustomFours
+               .forEach(periodResponseCustomFour -> convertorUtil.makeCharacterSetPersian(periodResponseCustomFour));
 
         return ResponseEntity.ok(periodResponseCustomFours);
     }
