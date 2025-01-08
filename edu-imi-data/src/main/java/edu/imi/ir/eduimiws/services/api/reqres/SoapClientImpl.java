@@ -4,7 +4,6 @@ package edu.imi.ir.eduimiws.services.api.reqres;
 import edu.imi.ir.eduimiws.models.wsdl.BpPayRequest;
 import edu.imi.ir.eduimiws.models.wsdl.BpPayRequestResponse;
 import edu.imi.ir.eduimiws.models.wsdl.ObjectFactory;
-import edu.imi.ir.eduimiws.models.wsdl.PaymentGatewayImplService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class SoapClientImpl {
 
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
             WebServiceTemplate springWSTemplate = context.getBean(WebServiceTemplate.class);
-        PaymentGatewayImplService paymentGatewayImplService = new PaymentGatewayImplService();
+//        PaymentGatewayImplService paymentGatewayImplService = new PaymentGatewayImplService();
 
 //      OR 1 >>>
 

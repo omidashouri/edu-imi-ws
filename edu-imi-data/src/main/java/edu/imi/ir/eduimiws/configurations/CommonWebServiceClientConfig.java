@@ -53,11 +53,11 @@ public class CommonWebServiceClientConfig {
     @Autowired
     BehdadCredential behdadCredential;
 
-    @Value("${server.ssl.trust-store}")
+/*    @Value("${server.ssl.trust-store}")
     private Resource trustStore;
 
     @Value("${server.ssl.trust-store-password}")
-    private String trustStorePassword;
+    private String trustStorePassword;*/
 
     @PostConstruct
     private void configureSSL() throws IOException {

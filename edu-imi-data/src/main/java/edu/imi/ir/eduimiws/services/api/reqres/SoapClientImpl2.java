@@ -47,7 +47,17 @@ public class SoapClientImpl2 extends WebServiceGatewaySupport implements IPaymen
     }
 
     @Override
+    public String bpVerifySettleRequest(long terminalId, String userName, String userPassword, long orderId, long saleOrderId, long saleReferenceId) {
+        return null;
+    }
+
+    @Override
     public String bpRefundRequestV2(long terminalId, String userName, String userPassword, String destinationPan, String mobileNo, long orderId, long saleOrderId, long saleReferenceId, long refundAmount) {
+        return null;
+    }
+
+    @Override
+    public Boolean soh() {
         return null;
     }
 

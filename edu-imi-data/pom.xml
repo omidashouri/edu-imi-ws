@@ -303,7 +303,8 @@
                             </additionalJvmArgs>
                             <!--                            <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>-->
                             <wsdlOptions>
-                                <wsdlOption>
+<!-- Bank Mellat → -->
+<!--                                <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/wsdl/bankMellat.xml</wsdl>
                                     <extraargs>
                                         <extraarg>-verbose</extraarg>
@@ -312,8 +313,9 @@
                                         <extraarg>-exsh</extraarg>
                                         <extraarg>true</extraarg>
                                     </extraargs>
-                                </wsdlOption>
-<!--                                BehdadService -->
+                                </wsdlOption>-->
+<!-- ← Bank Mellat -->
+<!-- BehdadService -->
 <!-- →1                               <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/wsdl/behdadAccountService.xml</wsdl>
                                     <extraargs>
