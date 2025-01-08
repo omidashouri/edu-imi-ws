@@ -1,9 +1,10 @@
 package edu.imi.ir.eduimiws.services.api.reqres;
 
-import edu.imi.ir.eduimiws.models.wsdl.BpPayRequest;
-import edu.imi.ir.eduimiws.models.wsdl.BpPayRequestResponse;
-import edu.imi.ir.eduimiws.models.wsdl.IPaymentGateway;
-import edu.imi.ir.eduimiws.models.wsdl.ObjectFactory;
+
+import edu.imi.ir.eduimiws.models.wsdl.mellat.BpPayRequest;
+import edu.imi.ir.eduimiws.models.wsdl.mellat.BpPayRequestResponse;
+import edu.imi.ir.eduimiws.models.wsdl.mellat.IPaymentGateway;
+import edu.imi.ir.eduimiws.models.wsdl.mellat.ObjectFactory;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
 import javax.xml.bind.JAXBElement;

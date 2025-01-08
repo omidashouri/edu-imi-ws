@@ -346,10 +346,19 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public GroupedOpenApi projectDepositCodeApiApi() {
+    public GroupedOpenApi projectDepositCodeApi() {
         return GroupedOpenApi.builder()
                 .setGroup("ProjectDepositCodeApis")
                 .pathsToMatch("/api/v1/projectDepositCodeApis/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi attendanceApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("AttendanceApis")
+                .pathsToMatch("/api/v1/attendance/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
