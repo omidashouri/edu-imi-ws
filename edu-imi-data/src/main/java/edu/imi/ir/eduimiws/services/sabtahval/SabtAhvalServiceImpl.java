@@ -5,7 +5,7 @@ import edu.imi.ir.eduimiws.mapper.sabtahval.*;
 import edu.imi.ir.eduimiws.models.dto.sabtahval.*;
 import edu.imi.ir.eduimiws.models.response.sabtahval.EstelamResultResponse;
 import edu.imi.ir.eduimiws.models.response.sabtahval.EstelamVersionResponse;
-import edu.imi.ir.eduimiws.models.sabtahval.*;
+import edu.imi.ir.eduimiws.models.wsdl.sabtahval.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

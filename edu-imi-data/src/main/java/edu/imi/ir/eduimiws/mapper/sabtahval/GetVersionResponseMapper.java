@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.mapper.sabtahval;
 
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.sabtahval.GetVersionResponseDto;
-import edu.imi.ir.eduimiws.models.sabtahval.GetVersionResponse;
+import edu.imi.ir.eduimiws.models.wsdl.sabtahval.GetVersionResponse;
 import edu.imi.ir.eduimiws.models.sabtahval.adapter.StringByteArrayAdapter;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;

@@ -79,6 +79,6 @@ public class MelliTripleDesImpl implements MelliTripleDes{
         Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS7Padding", new BouncyCastleProvider());
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] buf = cipher.doFinal(message.getBytes("UTF-8"));
-        return org.bouncycastle.util.encoders.Base64.toBase64String(buf);
+        return Base64.encodeBase64String(buf);
     }
 }

@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.models.dto.sabtahval;
 
 
-import edu.imi.ir.eduimiws.models.sabtahval.GetEstelam3;
+import edu.imi.ir.eduimiws.models.wsdl.sabtahval.GetEstelam3;
 import lombok.*;
 
 @Data
