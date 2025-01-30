@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.servces;
 
 import org.springframework.core.io.InputStreamSource;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 
