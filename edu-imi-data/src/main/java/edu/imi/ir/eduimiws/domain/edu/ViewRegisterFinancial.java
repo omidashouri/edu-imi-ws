@@ -4,7 +4,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import lombok.*;
 import org.hibernate.annotations.Immutable;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Getter

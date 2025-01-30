@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 
-import javax.persistence.QueryHint;
+import jakarta.persistence.QueryHint;
 
 public interface TermPresentedGroupRepository extends CrudRepository<TermPresentedGroupEntity, Long> {
 

@@ -8,7 +8,7 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 import java.sql.Timestamp;
 
 

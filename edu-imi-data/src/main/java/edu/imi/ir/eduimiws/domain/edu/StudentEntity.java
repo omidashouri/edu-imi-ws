@@ -8,7 +8,7 @@ import edu.imi.ir.eduimiws.models.projections.edu.StudentOnly;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 @NamedEntityGraphs({

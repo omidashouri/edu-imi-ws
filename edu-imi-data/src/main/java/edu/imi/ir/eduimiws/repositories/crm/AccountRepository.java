@@ -11,7 +11,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.QueryHint;
+import jakarta.persistence.QueryHint;
 
 @Repository
 public interface AccountRepository extends CrudRepository<AccountEntity, Long> {

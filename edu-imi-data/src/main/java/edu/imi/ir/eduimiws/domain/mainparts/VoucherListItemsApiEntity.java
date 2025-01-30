@@ -4,7 +4,7 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.models.projections.mainparts.VoucherListItemsDeleted;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 

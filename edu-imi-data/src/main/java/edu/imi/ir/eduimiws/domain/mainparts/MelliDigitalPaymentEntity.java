@@ -3,7 +3,7 @@ package edu.imi.ir.eduimiws.domain.mainparts;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 

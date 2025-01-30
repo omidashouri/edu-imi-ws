@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.models.projections.edu.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 //___periodfour
 @NamedEntityGraphs({

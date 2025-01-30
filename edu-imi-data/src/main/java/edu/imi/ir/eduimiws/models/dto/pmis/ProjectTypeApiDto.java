@@ -3,10 +3,10 @@ package edu.imi.ir.eduimiws.models.dto.pmis;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectTypeEntity;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import java.io.Serializable;
 
 @Data

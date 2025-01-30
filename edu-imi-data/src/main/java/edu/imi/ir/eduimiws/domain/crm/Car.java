@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.domain.crm;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;

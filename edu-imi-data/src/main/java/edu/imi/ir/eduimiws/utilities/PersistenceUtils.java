@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
 
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUtil;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceUtil;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;

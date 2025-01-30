@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.hateoas.server.core.Relation;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 
 //___periodfour
 @Schema(name = "PeriodResponseCustomFour",description = "Class representing a period in the application.")

@@ -4,7 +4,7 @@ import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import edu.imi.ir.eduimiws.domain.crm.OrganizationEntity;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 

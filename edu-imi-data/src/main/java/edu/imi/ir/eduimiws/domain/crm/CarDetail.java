@@ -3,7 +3,7 @@ package edu.imi.ir.eduimiws.domain.crm;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @SequenceGenerator(name = "entity_sequence", schema = "CRM", sequenceName = "SEQ_CAR_DETAIL_ID", allocationSize = 1)

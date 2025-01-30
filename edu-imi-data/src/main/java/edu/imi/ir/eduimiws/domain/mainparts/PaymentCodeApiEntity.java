@@ -10,7 +10,7 @@ import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 

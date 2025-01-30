@@ -5,7 +5,7 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "FieldCourseEntity.fieldCourseApi",

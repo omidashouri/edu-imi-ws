@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.jpa.QueryHints;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 

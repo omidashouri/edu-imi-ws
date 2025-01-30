@@ -3,7 +3,7 @@ package edu.imi.ir.eduimiws.domain.edu;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Getter
 @Setter

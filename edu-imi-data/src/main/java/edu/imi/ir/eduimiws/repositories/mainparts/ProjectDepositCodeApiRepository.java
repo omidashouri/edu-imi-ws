@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.QueryHint;
+import jakarta.persistence.QueryHint;
 import java.sql.Timestamp;
 import java.util.List;
 

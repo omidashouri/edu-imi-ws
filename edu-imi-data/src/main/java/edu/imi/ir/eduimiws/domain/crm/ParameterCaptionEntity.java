@@ -4,7 +4,7 @@ package edu.imi.ir.eduimiws.domain.crm;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 
