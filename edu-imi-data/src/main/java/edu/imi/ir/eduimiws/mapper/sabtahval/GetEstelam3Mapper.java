@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.mapper.sabtahval;
 
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.sabtahval.GetEstelam3Dto;
-import edu.imi.ir.eduimiws.models.sabtahval.GetEstelam3;
+import edu.imi.ir.eduimiws.models.wsdl.sabtahval.GetEstelam3;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

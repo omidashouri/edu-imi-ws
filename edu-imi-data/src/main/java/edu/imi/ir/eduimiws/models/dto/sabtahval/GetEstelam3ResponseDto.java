@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.models.dto.sabtahval;
 
-import edu.imi.ir.eduimiws.models.sabtahval.EstelamResult3;
+import edu.imi.ir.eduimiws.models.wsdl.sabtahval.EstelamResult3;
 import lombok.*;
 
 import java.io.Serializable;

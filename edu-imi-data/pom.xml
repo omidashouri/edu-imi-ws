@@ -344,7 +344,9 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+
+<!-- SabtAhval → -->
+<!--            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>${org.codehaus.mojo.jaxb2-maven-plugin.version}</version>
@@ -364,13 +366,13 @@
                             </xjbSources>
                             <packageName>edu.imi.ir.eduimiws.models.sabtahval</packageName>
                             <addGeneratedAnnotation>true</addGeneratedAnnotation>
-                            <!--  Other configuration options-->
+                            &lt;!&ndash;  Other configuration options&ndash;&gt;
                             <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
                 </executions>
-
-            </plugin>
+            </plugin>-->
+<!-- ← SabtAhval -->
         </plugins>
     </build>
 
