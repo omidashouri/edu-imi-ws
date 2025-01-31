@@ -6,7 +6,9 @@ import edu.imi.ir.eduimiws.models.user.MyErpUser;
 import edu.imi.ir.eduimiws.utilities.AppProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,28 +22,33 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-
+@Component
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     //    this class is import with extending  UsernamePasswordAuthenticationFilter
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager1;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
+    public AuthenticationFilter(AuthenticationManager authenticationManager1) {
+        super(authenticationManager1);
+        this.authenticationManager1 = authenticationManager1;
     }
 
     @Autowired
     private AppProperties appProperties;
     //omiddo:    remove later myUserDetailsService
-    MyUserDetailsService myUserDetailsService = new MyUserDetailsService();//RM
 
-
-    private String contentType;
+    @PostConstruct  // This ensures it's set after bean construction
+    public void init() {
+        this.setFilterProcessesUrl("/api/users/login");
+    }
 
     //    this method is used for authenticating user when request come to server
     @Override
@@ -49,7 +56,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
 
-            contentType = req.getHeader("Accept");
+//           String contentType = req.getHeader("Accept");
 
 //            our class model for reading username and password
             UserLoginRequestModel creds = new ObjectMapper()
@@ -71,7 +78,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 
 //            use the method we implement in our service to identify user
-            return authenticationManager.authenticate(
+            return authenticationManager1.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             creds.getUsername(),
                             creds.getPassword(),

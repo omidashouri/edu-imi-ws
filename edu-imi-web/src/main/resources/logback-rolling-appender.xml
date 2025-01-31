@@ -17,7 +17,7 @@
         <!--        <layout class="ch.qos.logback.classic.PatternLayout">-->
         <!--            <Pattern>%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable</Pattern>-->
         <encoder>
-            <pattern>%clr(%d{ISO8601}){blue} | %highlight(%-5level) | [%clr(%t){blue}] | %clr(%C{1.}){yellow}: %msg%n%throwable</pattern>
+            <pattern>%clr(%d{ISO8601}){blue} | %highlight(%-5level) | [%clr(%t){blue}] | %clr(%C{1}){yellow}: %msg%n%throwable</pattern>
             <charset>utf8</charset>
         </encoder>
 

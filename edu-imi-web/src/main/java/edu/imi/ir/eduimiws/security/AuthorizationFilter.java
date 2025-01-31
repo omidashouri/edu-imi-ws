@@ -10,7 +10,9 @@ import edu.imi.ir.eduimiws.utilities.AppProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,22 +24,25 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 
-    private final UserService userService = null;
+    private final AppProperties appProperties;
+    private final PersonApiService personApiService;
 
-    public AuthorizationFilter(AuthenticationManager authenticationManager) {
-        super(authenticationManager);
+    public AuthorizationFilter(@Lazy AuthenticationManager authenticationManager1, AppProperties appProperties, PersonApiService personApiService) {
+        super(authenticationManager1);
+        this.appProperties = appProperties;
+        this.personApiService = personApiService;
     }
-
-    @Autowired
-    private AppProperties appProperties;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

@@ -229,6 +229,32 @@
             <artifactId>guava</artifactId>
             <version>33.4.0-jre</version>
         </dependency>
+<!--        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>-->
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+        </dependency>
+
+        <!-- JAX-WS Runtime (GlassFish implementation) -->
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-ri</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+
+        <!-- Jakarta XML Binding (JAXB) for QName -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.soap</groupId>
+            <artifactId>jakarta.xml.soap-api</artifactId>
+        </dependency>
+
         <!--#-->
         <dependency>
             <groupId>org.apache.cxf</groupId>

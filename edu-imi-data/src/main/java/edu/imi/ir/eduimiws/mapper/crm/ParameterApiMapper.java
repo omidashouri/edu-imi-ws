@@ -10,7 +10,6 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        uses = {ParameterMapper.class},
         imports = {PublicIdUtil.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
@@ -20,7 +19,7 @@ public interface ParameterApiMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "parameter.id", target = "parameterId"),
-            @Mapping(source = "parameter", target = "parameterDto",qualifiedByName = "parameterEntityToParameterDto"),
+//            @Mapping(source = "parameter", target = "parameterDto",qualifiedByName = "parameterEntityToParameterDto"),
             @Mapping(source = "parameterPublicId", target = "parameterPublicId"),
             @Mapping(source = "deletedParameterId", target = "deletedParameterId"),
             @Mapping(source = "createDateTs", target = "createDateTs"),

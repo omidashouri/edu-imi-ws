@@ -7,11 +7,10 @@ import edu.imi.ir.eduimiws.models.dto.crm.CompanyDto;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import org.mapstruct.*;
+import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
-        uses = {CompanyApiMapper.class, ContactMapper.class,
-                ParameterMapper.class, LanguageMapper.class,
-                AccountMapper.class},
+        uses = {ParameterMapper.class, LanguageMapper.class},
         imports = {PublicIdUtil.class},
         unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
@@ -66,7 +65,7 @@ public interface CompanyMapper {
             @Mapping(source = "territory", target = "territory"),
             @Mapping(source = "language", target = "language", qualifiedByName = "languageDtoToLanguageEntity"),
             @Mapping(source = "calenderType", target = "calenderType"),
-            @Mapping(source = "mainAccount", target = "mainAccount", qualifiedByName = "toAccountEntity"),
+//            @Mapping(source = "mainAccount", target = "mainAccount", qualifiedByName = "toAccountEntity"),
             @Mapping(source = "isMain", target = "isMain"),
             @Mapping(source = "logo", target = "logo")
     })

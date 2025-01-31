@@ -13,21 +13,22 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.access.method.MapBasedMethodSecurityMetadataSource;
 import org.springframework.security.access.method.MethodSecurityMetadataSource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,193 +40,91 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @ComponentScans({@ComponentScan("edu.imi.ir.eduimiws.*")})
-public class ApiUrlSecurity extends WebSecurityConfigurerAdapter {
+public class ApiUrlSecurity {
 
-    private final UserService userService;
-    private final ErpPasswordEncoder bCryptPasswordEncoder;
+/*    private final UserService userService;
+    private final ErpPasswordEncoder bCryptPasswordEncoder;*/
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final ApiUrlSecurityCredential apiUrlSecurityCredential;
+    private final AuthenticationFilter authenticationFilter;
+    private final AuthorizationFilter authorizationFilter;
     private final DigitalPaymentCredential digitalPayMentCredential;
 
 
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .antMatcher("/api/**")
-                .cors().and()
 
-                .csrf().disable().authorizeRequests()
-
-                .antMatchers(HttpMethod.POST, apiUrlSecurityCredential.getSignUpUrl())
-                .permitAll()
-
-                .antMatchers(HttpMethod.POST, "/api/v1/reqres/**")
-//                .antMatchers("/admin/**").access("hasRole('admin') and hasIpAddress('0:0:0:0:0:0:0:1')")
-                .permitAll()
-
-//                .antMatchers("/**/sabtahval/**")
-//                .access(this.createHasIpRangeExpression())
-
-                .antMatchers("/api/v1/reqres/**")
-                .permitAll()
-
-                .antMatchers("/api/v1/callback/sadad/**")
-                .permitAll()
-
-                /*→1
-                .antMatchers("/api/v1/behdad/**")
-                .permitAll()*/
-
-                .antMatchers(HttpMethod.GET, apiUrlSecurityCredential.getVerificationEmailUrl())
-                .permitAll()
-
-                .antMatchers(HttpMethod.POST, apiUrlSecurityCredential.getPasswordResetRequestUrl())
-                .permitAll()
-
-                .antMatchers(HttpMethod.POST, apiUrlSecurityCredential.getPasswordResetUrl())
-                .permitAll()
-
-//                .antMatchers(HttpMethod.POST, securityProperties.getBehpardakhtAfterPaymentResponseUrl())
-                .antMatchers(HttpMethod.POST, digitalPayMentCredential.getBehpardakhtCredential().getAfterPaymentResponseUrl())
-                .permitAll()
-/*
-                .antMatchers(appProperties.getH2Console())
-                .permitAll()
-*/
-
-                .antMatchers(apiUrlSecurityCredential.getSwaggerUiAntMatchers())
-                .permitAll()
-
-//                or .hasAuthority("ADMIN")
-//                .antMatchers("/delete/**").hasRole("ADMIN")
-//                .antMatchers("/secure/**").access("hasRole('ADMIN')")
-//                .antMatchers("/secure/**").access("hasAuthority('ROLE_ADMIN')")
-//                .antMatchers("/secure/**").access("request.method == 'GET'")
-
-                .anyRequest()
-                .authenticated()
-
-//                .and().logout().permitAll()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout","POST"))
-
-/*                .and().sessionManagement()
-                .maximumSessions(1).sessionRegistry(sessionRegistry())
-                .and().sessionFixation().none()*/
-
-                .and()
-
-                .exceptionHandling()
-                .authenticationEntryPoint(customAuthenticationEntryPoint)// handles bad credentials
-                .accessDeniedHandler(customAccessDeniedHandler)
-                .and()
-
-                .addFilter(getAuthenticationFilter())
-
-                .addFilter(new AuthorizationFilter(authenticationManager()))
-/*                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                .maximumSessions(2).sessionRegistry(sessionRegistry())
-                .and().sessionFixation().none();*/
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        httpSecurity.headers().frameOptions().disable();
-    }
-
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-/*        authenticationManagerBuilder.userDetailsService(userService)
-                //omiddo: do my implementation for password encoding
-                .passwordEncoder(bCryptPasswordEncoder);*/
-
-        authenticationManagerBuilder
-                .authenticationProvider(daoAuthenticationProvider())
-/*
-//              omiddo: in future develop this part
-               .inMemoryAuthentication()
-               .withUser("admiin").password("{noop}admiin").roles("ADMIN")
-               .and()
-               .withUser("useer").password("{noop}useer").roles("USER")
-*/
-        ;
-    }
-
-    public AuthenticationFilter getAuthenticationFilter() throws Exception {
-        final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
-/*        filter.setAllowSessionCreation(true);
-        filter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy());*/
-        filter.setFilterProcessesUrl("/api/users/login");
-        return filter;
-    }
-
-/*    @Bean
-    public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new RegisterSessionAuthenticationStrategy(sessionRegistry());
-    }*/
-
-/*    public CsrfTokenRepository csrfTokenRepository() {
-        return new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository());
-    }*/
 
     @Bean
-    public AuthenticationProvider daoAuthenticationProvider() {
-        final DaoAuthenticationProvider daoAuthenticationProvider =
-                new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userService);
-        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
-        return daoAuthenticationProvider;
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .securityMatcher("/api/**")
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        // Permit all for signup and various POST endpoints
+                        .requestMatchers(HttpMethod.POST, apiUrlSecurityCredential.getSignUpUrl()).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/reqres/**").permitAll()
+                        .requestMatchers("/api/v1/callback/sadad/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, apiUrlSecurityCredential.getVerificationEmailUrl()).permitAll()
+                        .requestMatchers(HttpMethod.POST, apiUrlSecurityCredential.getPasswordResetRequestUrl()).permitAll()
+                        .requestMatchers(HttpMethod.POST, apiUrlSecurityCredential.getPasswordResetUrl()).permitAll()
+                        .requestMatchers(HttpMethod.POST, digitalPayMentCredential.getBehpardakhtCredential().getAfterPaymentResponseUrl()).permitAll()
+
+                        // Permit Swagger UI and docs URLs
+                        .requestMatchers(apiUrlSecurityCredential.getSwaggerUiAntMatchers()).permitAll()
+
+                        // All other requests should be authenticated
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
+                .addFilter(authenticationFilter)
+                .addFilter(authorizationFilter)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        httpSecurity.headers(headers -> headers.frameOptions(Customizer. withDefaults()));  // Disable frame options for H2 console if needed
+/*        httpSecurity.headers(headers -> headers
+                .frameOptions(frame -> frame.disable())
+        );*/
+        return httpSecurity.build();
     }
 
+    // Define the AuthenticationProvider for the DaoAuthenticationProvider
+
+
+    // Define the CORS configuration source
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
+        //      specify what we want to be displayed on the header
+        corsConfiguration.setExposedHeaders(List.of("Authorization", "userPublicId"));
 
-//        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-
-                corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
-
-//        corsConfiguration.setAllowedMethods(List.of("*"));
-
-//      specify what we want to be displayed on the header
-        corsConfiguration.setExposedHeaders(List.of("Authorization","userPublicId"));
-
-//        corsConfiguration.setAllowCredentials(true);
-
-//        corsConfiguration.setAllowedHeaders(List.of("*"));
-
-        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new CorsFilter(urlBasedCorsConfigurationSource));
-        filterRegistrationBean.setOrder(0);
-        return urlBasedCorsConfigurationSource;
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
-
+    // Enable method-level security
     @EnableGlobalMethodSecurity(prePostEnabled = true)
     public static class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
-
         public MethodSecurityMetadataSource customMethodSecurityMetadataSource() {
             Map<String, List<ConfigAttribute>> methodMap = new HashMap<>();
             methodMap.put("edu.imi.ir.eduimiws.controllers.v1.ContactController.getContactCountByNationalCode*",
                     SecurityConfig.createList("ROLE_ADMIN"));
             return new MapBasedMethodSecurityMetadataSource(methodMap);
         }
-
     }
 
-    //        join your comma separated ips into an expression for the .access() method
+    //join your comma separated ips into an expression for the .access() method
+    // Helper function to handle IP range validation (if needed)
     private String createHasIpRangeExpression() {
-
         String ipRanges = apiUrlSecurityCredential.getIpRanges();
         List<String> validIps = Arrays.asList(ipRanges.split("\\s*,\\s*"));
-        String hasIpRangeAccessExpresion = validIps.stream()
+        return validIps.stream()
                 .collect(Collectors.joining("') or hasIpAddress('", "hasIpAddress('", "') and isAuthenticated()"));
-        return hasIpRangeAccessExpresion;
     }
 
 }
