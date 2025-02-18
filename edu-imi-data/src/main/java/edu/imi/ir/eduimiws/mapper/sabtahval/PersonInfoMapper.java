@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.mapper.sabtahval;
 
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.models.dto.sabtahval.PersonInfoDto;
-import edu.imi.ir.eduimiws.models.sabtahval.PersonInfo;
+import edu.imi.ir.eduimiws.models.wsdl.sabtahval.PersonInfo;
 import edu.imi.ir.eduimiws.models.sabtahval.adapter.StringByteArrayAdapter;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;

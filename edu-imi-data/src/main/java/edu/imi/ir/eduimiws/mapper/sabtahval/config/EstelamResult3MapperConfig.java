@@ -3,7 +3,7 @@ package edu.imi.ir.eduimiws.mapper.sabtahval.config;
 
 import edu.imi.ir.eduimiws.mapper.sabtahval.EstelamResultMapper;
 import edu.imi.ir.eduimiws.models.dto.sabtahval.EstelamResult3Dto;
-import edu.imi.ir.eduimiws.models.sabtahval.EstelamResult3;
+import edu.imi.ir.eduimiws.models.wsdl.sabtahval.EstelamResult3;
 import edu.imi.ir.eduimiws.models.sabtahval.adapter.StringByteArrayAdapter;
 import org.mapstruct.*;
 

@@ -11,7 +11,7 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.crm.UserResponse;
 import edu.imi.ir.eduimiws.models.response.sabtahval.EstelamResultResponse;
 import edu.imi.ir.eduimiws.models.response.sabtahval.EstelamVersionResponse;
-import edu.imi.ir.eduimiws.models.sabtahval.GetVersionResponse;
+import edu.imi.ir.eduimiws.models.wsdl.sabtahval.GetVersionResponse;
 import edu.imi.ir.eduimiws.services.sabtahval.SabtahvalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
