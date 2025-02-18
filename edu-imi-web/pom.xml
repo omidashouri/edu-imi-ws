@@ -17,7 +17,7 @@
 
     <properties>
         <jquery-ui.version>1.12.1</jquery-ui.version>
-        <bootstrap.version>4.5.3</bootstrap.version>
+        <bootstrap.version>5.0.0</bootstrap.version>
         <bootstrap-datepicker.version>1.9.0</bootstrap-datepicker.version>
         <org.webjars.jquery.version>3.5.1</org.webjars.jquery.version>
         <popper.js.version>2.5.2</popper.js.version>
