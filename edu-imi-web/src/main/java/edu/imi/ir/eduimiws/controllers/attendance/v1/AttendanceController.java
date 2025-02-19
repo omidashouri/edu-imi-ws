@@ -16,7 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -167,7 +170,7 @@ public class AttendanceController {
             })
     @GetMapping(path = "/getAllIoRecordsByDate",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getIoRecordsByDate(@PathVariable String date) {
+    public ResponseEntity<?> getAllIoRecordsByDate(@RequestParam String date) {
         // Get the SOAP interface
         EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
                 .getEtsGeneralDataProviderServiceSoap();
@@ -216,7 +219,7 @@ public class AttendanceController {
             })
     @GetMapping(path = "/getAllMissionRegistrationsByDate",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getMissionRegistrationsByDate(@PathVariable String date) {
+    public ResponseEntity<?> getMissionRegistrationsByDate(@RequestParam String date) {
         // Get the SOAP interface
         EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
                 .getEtsGeneralDataProviderServiceSoap();
@@ -265,7 +268,7 @@ public class AttendanceController {
             })
     @GetMapping(path = "/getAllVacationRegistrationsByDate",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getAllVacationRegistrationsByDate(@PathVariable String date) {
+    public ResponseEntity<?> getAllVacationRegistrationsByDate(@RequestParam String date) {
         // Get the SOAP interface
         EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
                 .getEtsGeneralDataProviderServiceSoap();
@@ -275,5 +278,101 @@ public class AttendanceController {
 
         // Process the result
         return ResponseEntity.ok(VacationRegistrationsByDate);
+    }
+
+    @Operation(
+            summary = "get All Organization Chart List",
+            description = " ",
+            tags = "attendance",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ArrayOfOrganizationChartDataModel.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @GetMapping(path = "/getAllOrganizationChartList",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getAllOrganizationChartList() {
+        // Get the SOAP interface
+        EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
+                .getEtsGeneralDataProviderServiceSoap();
+
+        // Call the `getAllCurrentlyEmployees` method
+        ArrayOfOrganizationChartDataModel AllOrganizationChartList = soap.getAllOrganizationChartList();
+
+        // Process the result
+        return ResponseEntity.ok(AllOrganizationChartList);
+    }
+
+    @Operation(
+            summary = "get All Currently Employees Result",
+            description = " ",
+            tags = "attendance",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ArrayOfEmployeeDataModel.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @GetMapping(path = "/getAllCurrentlyEmployeesResult",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getAllCurrentlyEmployeesResult() {
+        // Get the SOAP interface
+        EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
+                .getEtsGeneralDataProviderServiceSoap();
+
+        // Call the `getAllCurrentlyEmployees` method
+        ArrayOfEmployeeDataModel employees = soap.getAllCurrentlyEmployees();
+
+        // Process the result
+        return ResponseEntity.ok(employees);
     }
 }
