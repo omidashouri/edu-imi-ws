@@ -29,7 +29,7 @@ import java.util.Map;
 @Tag(name = "Attendance", description = "Attendance API")
 public class AttendanceController {
 
-
+    private final EmployeeService employeeService;
     private final EtsGeneralDataProviderService etsGeneralDataProviderService;
 
     @Operation(
@@ -69,18 +69,7 @@ public class AttendanceController {
     @GetMapping(path = "/getAllEmployees",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getAllEmployees() {
-
-
-        // Get the SOAP interface
-        EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
-                .getEtsGeneralDataProviderServiceSoap();
-
-        // Call the `getAllCurrentlyEmployees` method
-        ArrayOfEmployeeDataModel employees = soap.getAllEmployees();
-
-        // Process the result
-        return ResponseEntity.ok(employees);
-
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     @Operation(
