@@ -1,12 +1,12 @@
-package edu.imi.ir.eduimiws.models.dto.atc;
+package edu.imi.ir.eduimiws.models.dto.attendance;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeDataModelDto implements Serializable {

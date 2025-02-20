@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.dto.atc;
+package edu.imi.ir.eduimiws.models.dto.attendance;
 
 
 import lombok.*;

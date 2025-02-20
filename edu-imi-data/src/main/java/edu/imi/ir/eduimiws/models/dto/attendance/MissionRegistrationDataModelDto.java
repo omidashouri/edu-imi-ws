@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.models.dto.atc;
+package edu.imi.ir.eduimiws.models.dto.attendance;
 
 import lombok.*;
 
@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VacationRegistrationDataModelDto implements Serializable {
+public class MissionRegistrationDataModelDto implements Serializable {
 
-    private static final long serialVersionUID = 7732845258589930457L;
+    private static final long serialVersionUID = 4287572270452960973L;
 
     private Long id;
     private String employeeCode;
@@ -22,8 +22,8 @@ public class VacationRegistrationDataModelDto implements Serializable {
     private String beginTimeInText;
     private String endDateInText;
     private String endTimeInText;
-    private String vacationName;
-    private String vacationTypeInText;
+    private String missionName;
+    private String missionTypeInText;
     private String acceptanceStateInText;
     private String sourceTypeInText;
 

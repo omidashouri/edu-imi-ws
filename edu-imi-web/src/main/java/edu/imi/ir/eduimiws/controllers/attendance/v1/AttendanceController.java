@@ -2,9 +2,10 @@ package edu.imi.ir.eduimiws.controllers.attendance.v1;
 
 
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.models.response.attendance.response.EmployeeResponse;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.*;
+import edu.imi.ir.eduimiws.services.attendance.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/attendance")
@@ -47,7 +46,7 @@ public class AttendanceController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                            schema = @Schema(implementation = ArrayOfEmployeeDataModel.class)
+                                            schema = @Schema(implementation = EmployeeResponse.class)
                                     )
                             )
                     ),
