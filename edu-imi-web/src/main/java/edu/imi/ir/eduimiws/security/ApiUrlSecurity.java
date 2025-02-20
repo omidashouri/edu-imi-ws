@@ -62,6 +62,7 @@ public class ApiUrlSecurity {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // Permit all for signup and various POST endpoints
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers(HttpMethod.POST, apiUrlSecurityCredential.getSignUpUrl()).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/reqres/**").permitAll()
                         .requestMatchers("/api/v1/callback/sadad/**").permitAll()

@@ -9,8 +9,8 @@ public interface MessageApiService {
 
     MessageApiEntity findEntityByMessageId(Long messageId);
 
-    MessageApiDto findDtoByMessageId(Long messageId);
-
-    @MappingUtil.MessageIdToMessagePublicId
-    String findMessageApiPublicIdByMessageId(Long messageId);
+//    MessageApiDto findDtoByMessageId(Long messageId);
+//
+//    @MappingUtil.MessageIdToMessagePublicId
+//    String findMessageApiPublicIdByMessageId(Long messageId);
 }

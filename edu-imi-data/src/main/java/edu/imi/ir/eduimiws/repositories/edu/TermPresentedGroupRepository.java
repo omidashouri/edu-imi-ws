@@ -18,7 +18,7 @@ public interface TermPresentedGroupRepository extends CrudRepository<TermPresent
             type = EntityGraph.EntityGraphType.LOAD)
     TermPresentedGroupEntity findByTermPresentedGroupApi_TermPresentedGroupPublicId(String termPresentedGroupPublicId);
 
-    @Cacheable("termPresentedGroup")
+    //@Cacheable("termPresentedGroup")
     @EntityGraph(value = "TermPresentedGroupEntity.findAllWithTermPresentedCourseAGraphFieldCourse", type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
             @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),

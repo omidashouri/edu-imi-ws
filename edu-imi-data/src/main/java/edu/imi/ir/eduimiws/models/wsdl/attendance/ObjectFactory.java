@@ -1,17 +1,17 @@
 
 package edu.imi.ir.eduimiws.models.wsdl.attendance;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
-import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.XmlElementDecl;
+import jakarta.xml.bind.annotation.XmlRegistry;
 
 
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the ir.imi.testwebcard.domain.soap package. 
- * <p>An ObjectFactory allows you to programatically 
+ * generated in the edu.imi.ir.eduimiws.models.wsdl.attendance package. 
+ * <p>An ObjectFactory allows you to programmatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
  * content can consist of schema derived interfaces 
@@ -24,29 +24,29 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _String_QNAME = new QName("http://tempuri.org/", "string");
-    private final static QName _Boolean_QNAME = new QName("http://tempuri.org/", "boolean");
-    private final static QName _ArrayOfValidEmployeeRange_QNAME = new QName("http://tempuri.org/", "ArrayOfValidEmployeeRange");
-    private final static QName _ArrayOfString_QNAME = new QName("http://tempuri.org/", "ArrayOfString");
-    private final static QName _ArrayOfDevicePerson_QNAME = new QName("http://tempuri.org/", "ArrayOfDevicePerson");
-    private final static QName _ArrayOfOrganizationChartDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfOrganizationChartDataModel");
-    private final static QName _ArrayOfEmployeeDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfEmployeeDataModel");
-    private final static QName _Long_QNAME = new QName("http://tempuri.org/", "long");
-    private final static QName _ArrayOfEmployeeInfo_QNAME = new QName("http://tempuri.org/", "ArrayOfEmployeeInfo");
-    private final static QName _UiRequestCartableIds_QNAME = new QName("http://tempuri.org/", "UiRequestCartableIds");
-    private final static QName _PeriodCalculationInfo_QNAME = new QName("http://tempuri.org/", "PeriodCalculationInfo");
-    private final static QName _ArrayOfPeriodCalculationInfo_QNAME = new QName("http://tempuri.org/", "ArrayOfPeriodCalculationInfo");
-    private final static QName _ArrayOfIoRecordDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfIoRecordDataModel");
-    private final static QName _ArrayOfStaffIOs_QNAME = new QName("http://tempuri.org/", "ArrayOfStaffIOs");
-    private final static QName _ArrayOfVacationRegistrationDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfVacationRegistrationDataModel");
-    private final static QName _ArrayOfMissionRegistrationDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfMissionRegistrationDataModel");
-    private final static QName _ArrayOfEmployeeDataModelWithKey_QNAME = new QName("http://tempuri.org/", "ArrayOfEmployeeDataModelWithKey");
-    private final static QName _ArrayOfDailyExtraWorkPermissionDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfDailyExtraWorkPermissionDataModel");
-    private final static QName _ArrayOfSpecialExtraWorkDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfSpecialExtraWorkDataModel");
-    private final static QName _ArrayOfCalendarDayListDto_QNAME = new QName("http://tempuri.org/", "ArrayOfCalendarDayListDto");
+    private static final QName _String_QNAME = new QName("http://tempuri.org/", "string");
+    private static final QName _Boolean_QNAME = new QName("http://tempuri.org/", "boolean");
+    private static final QName _ArrayOfValidEmployeeRange_QNAME = new QName("http://tempuri.org/", "ArrayOfValidEmployeeRange");
+    private static final QName _ArrayOfString_QNAME = new QName("http://tempuri.org/", "ArrayOfString");
+    private static final QName _ArrayOfDevicePerson_QNAME = new QName("http://tempuri.org/", "ArrayOfDevicePerson");
+    private static final QName _ArrayOfOrganizationChartDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfOrganizationChartDataModel");
+    private static final QName _ArrayOfEmployeeDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfEmployeeDataModel");
+    private static final QName _Long_QNAME = new QName("http://tempuri.org/", "long");
+    private static final QName _ArrayOfEmployeeInfo_QNAME = new QName("http://tempuri.org/", "ArrayOfEmployeeInfo");
+    private static final QName _UiRequestCartableIds_QNAME = new QName("http://tempuri.org/", "UiRequestCartableIds");
+    private static final QName _PeriodCalculationInfo_QNAME = new QName("http://tempuri.org/", "PeriodCalculationInfo");
+    private static final QName _ArrayOfPeriodCalculationInfo_QNAME = new QName("http://tempuri.org/", "ArrayOfPeriodCalculationInfo");
+    private static final QName _ArrayOfIoRecordDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfIoRecordDataModel");
+    private static final QName _ArrayOfStaffIOs_QNAME = new QName("http://tempuri.org/", "ArrayOfStaffIOs");
+    private static final QName _ArrayOfVacationRegistrationDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfVacationRegistrationDataModel");
+    private static final QName _ArrayOfMissionRegistrationDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfMissionRegistrationDataModel");
+    private static final QName _ArrayOfEmployeeDataModelWithKey_QNAME = new QName("http://tempuri.org/", "ArrayOfEmployeeDataModelWithKey");
+    private static final QName _ArrayOfDailyExtraWorkPermissionDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfDailyExtraWorkPermissionDataModel");
+    private static final QName _ArrayOfSpecialExtraWorkDataModel_QNAME = new QName("http://tempuri.org/", "ArrayOfSpecialExtraWorkDataModel");
+    private static final QName _ArrayOfCalendarDayListDto_QNAME = new QName("http://tempuri.org/", "ArrayOfCalendarDayListDto");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ir.imi.testwebcard.domain.soap
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: edu.imi.ir.eduimiws.models.wsdl.attendance
      * 
      */
     public ObjectFactory() {
@@ -55,6 +55,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Test }
      * 
+     * @return
+     *     the new instance of {@link Test }
      */
     public Test createTest() {
         return new Test();
@@ -63,6 +65,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link TestResponse }
      * 
+     * @return
+     *     the new instance of {@link TestResponse }
      */
     public TestResponse createTestResponse() {
         return new TestResponse();
@@ -71,6 +75,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link CheckTimeAttendanceSystemHasThirdPartyWebServicec }
      * 
+     * @return
+     *     the new instance of {@link CheckTimeAttendanceSystemHasThirdPartyWebServicec }
      */
     public CheckTimeAttendanceSystemHasThirdPartyWebServicec createCheckTimeAttendanceSystemHasThirdPartyWebServicec() {
         return new CheckTimeAttendanceSystemHasThirdPartyWebServicec();
@@ -79,6 +85,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link CheckTimeAttendanceSystemHasThirdPartyWebServicecResponse }
      * 
+     * @return
+     *     the new instance of {@link CheckTimeAttendanceSystemHasThirdPartyWebServicecResponse }
      */
     public CheckTimeAttendanceSystemHasThirdPartyWebServicecResponse createCheckTimeAttendanceSystemHasThirdPartyWebServicecResponse() {
         return new CheckTimeAttendanceSystemHasThirdPartyWebServicecResponse();
@@ -87,6 +95,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IsValidPerson }
      * 
+     * @return
+     *     the new instance of {@link IsValidPerson }
      */
     public IsValidPerson createIsValidPerson() {
         return new IsValidPerson();
@@ -95,6 +105,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IsValidPersonResponse }
      * 
+     * @return
+     *     the new instance of {@link IsValidPersonResponse }
      */
     public IsValidPersonResponse createIsValidPersonResponse() {
         return new IsValidPersonResponse();
@@ -103,6 +115,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllValidEmployeeRange }
      * 
+     * @return
+     *     the new instance of {@link GetAllValidEmployeeRange }
      */
     public GetAllValidEmployeeRange createGetAllValidEmployeeRange() {
         return new GetAllValidEmployeeRange();
@@ -111,6 +125,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllValidEmployeeRangeResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllValidEmployeeRangeResponse }
      */
     public GetAllValidEmployeeRangeResponse createGetAllValidEmployeeRangeResponse() {
         return new GetAllValidEmployeeRangeResponse();
@@ -119,6 +135,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfValidEmployeeRange }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfValidEmployeeRange }
      */
     public ArrayOfValidEmployeeRange createArrayOfValidEmployeeRange() {
         return new ArrayOfValidEmployeeRange();
@@ -127,6 +145,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IsValidPersonStringDate }
      * 
+     * @return
+     *     the new instance of {@link IsValidPersonStringDate }
      */
     public IsValidPersonStringDate createIsValidPersonStringDate() {
         return new IsValidPersonStringDate();
@@ -135,6 +155,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IsValidPersonStringDateResponse }
      * 
+     * @return
+     *     the new instance of {@link IsValidPersonStringDateResponse }
      */
     public IsValidPersonStringDateResponse createIsValidPersonStringDateResponse() {
         return new IsValidPersonStringDateResponse();
@@ -143,6 +165,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetValidCardList }
      * 
+     * @return
+     *     the new instance of {@link GetValidCardList }
      */
     public GetValidCardList createGetValidCardList() {
         return new GetValidCardList();
@@ -151,6 +175,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetValidCardListResponse }
      * 
+     * @return
+     *     the new instance of {@link GetValidCardListResponse }
      */
     public GetValidCardListResponse createGetValidCardListResponse() {
         return new GetValidCardListResponse();
@@ -159,6 +185,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfString }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfString }
      */
     public ArrayOfString createArrayOfString() {
         return new ArrayOfString();
@@ -167,6 +195,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetOrganizationChartList }
      * 
+     * @return
+     *     the new instance of {@link GetOrganizationChartList }
      */
     public GetOrganizationChartList createGetOrganizationChartList() {
         return new GetOrganizationChartList();
@@ -175,6 +205,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetOrganizationChartListResponse }
      * 
+     * @return
+     *     the new instance of {@link GetOrganizationChartListResponse }
      */
     public GetOrganizationChartListResponse createGetOrganizationChartListResponse() {
         return new GetOrganizationChartListResponse();
@@ -183,6 +215,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IsValidReserve }
      * 
+     * @return
+     *     the new instance of {@link IsValidReserve }
      */
     public IsValidReserve createIsValidReserve() {
         return new IsValidReserve();
@@ -191,6 +225,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IsValidReserveResponse }
      * 
+     * @return
+     *     the new instance of {@link IsValidReserveResponse }
      */
     public IsValidReserveResponse createIsValidReserveResponse() {
         return new IsValidReserveResponse();
@@ -199,6 +235,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetDailyMissionsOrVacations }
      * 
+     * @return
+     *     the new instance of {@link GetDailyMissionsOrVacations }
      */
     public GetDailyMissionsOrVacations createGetDailyMissionsOrVacations() {
         return new GetDailyMissionsOrVacations();
@@ -207,6 +245,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetDailyMissionsOrVacationsResponse }
      * 
+     * @return
+     *     the new instance of {@link GetDailyMissionsOrVacationsResponse }
      */
     public GetDailyMissionsOrVacationsResponse createGetDailyMissionsOrVacationsResponse() {
         return new GetDailyMissionsOrVacationsResponse();
@@ -215,6 +255,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetDevicePersons }
      * 
+     * @return
+     *     the new instance of {@link GetDevicePersons }
      */
     public GetDevicePersons createGetDevicePersons() {
         return new GetDevicePersons();
@@ -223,6 +265,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetDevicePersonsResponse }
      * 
+     * @return
+     *     the new instance of {@link GetDevicePersonsResponse }
      */
     public GetDevicePersonsResponse createGetDevicePersonsResponse() {
         return new GetDevicePersonsResponse();
@@ -231,6 +275,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfDevicePerson }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfDevicePerson }
      */
     public ArrayOfDevicePerson createArrayOfDevicePerson() {
         return new ArrayOfDevicePerson();
@@ -239,6 +285,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetTimeAttendancePcCheckByEmployeeCode }
      * 
+     * @return
+     *     the new instance of {@link GetTimeAttendancePcCheckByEmployeeCode }
      */
     public GetTimeAttendancePcCheckByEmployeeCode createGetTimeAttendancePcCheckByEmployeeCode() {
         return new GetTimeAttendancePcCheckByEmployeeCode();
@@ -247,6 +295,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetTimeAttendancePcCheckByEmployeeCodeResponse }
      * 
+     * @return
+     *     the new instance of {@link GetTimeAttendancePcCheckByEmployeeCodeResponse }
      */
     public GetTimeAttendancePcCheckByEmployeeCodeResponse createGetTimeAttendancePcCheckByEmployeeCodeResponse() {
         return new GetTimeAttendancePcCheckByEmployeeCodeResponse();
@@ -255,6 +305,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllOrganizationChartList }
      * 
+     * @return
+     *     the new instance of {@link GetAllOrganizationChartList }
      */
     public GetAllOrganizationChartList createGetAllOrganizationChartList() {
         return new GetAllOrganizationChartList();
@@ -263,6 +315,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllOrganizationChartListResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllOrganizationChartListResponse }
      */
     public GetAllOrganizationChartListResponse createGetAllOrganizationChartListResponse() {
         return new GetAllOrganizationChartListResponse();
@@ -271,6 +325,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfOrganizationChartDataModel }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfOrganizationChartDataModel }
      */
     public ArrayOfOrganizationChartDataModel createArrayOfOrganizationChartDataModel() {
         return new ArrayOfOrganizationChartDataModel();
@@ -279,6 +335,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgId }
      * 
+     * @return
+     *     the new instance of {@link GetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgId }
      */
     public GetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgId createGetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgId() {
         return new GetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgId();
@@ -287,6 +345,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgIdResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgIdResponse }
      */
     public GetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgIdResponse createGetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgIdResponse() {
         return new GetAllSubsetOrganizationChartsWithEmployeesByCurrentOrgIdResponse();
@@ -295,6 +355,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllEmployeesOfOneOrganizationChartWithAllSubsets }
      * 
+     * @return
+     *     the new instance of {@link GetAllEmployeesOfOneOrganizationChartWithAllSubsets }
      */
     public GetAllEmployeesOfOneOrganizationChartWithAllSubsets createGetAllEmployeesOfOneOrganizationChartWithAllSubsets() {
         return new GetAllEmployeesOfOneOrganizationChartWithAllSubsets();
@@ -303,6 +365,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllEmployeesOfOneOrganizationChartWithAllSubsetsResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllEmployeesOfOneOrganizationChartWithAllSubsetsResponse }
      */
     public GetAllEmployeesOfOneOrganizationChartWithAllSubsetsResponse createGetAllEmployeesOfOneOrganizationChartWithAllSubsetsResponse() {
         return new GetAllEmployeesOfOneOrganizationChartWithAllSubsetsResponse();
@@ -311,6 +375,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfEmployeeDataModel }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfEmployeeDataModel }
      */
     public ArrayOfEmployeeDataModel createArrayOfEmployeeDataModel() {
         return new ArrayOfEmployeeDataModel();
@@ -319,6 +385,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllEmployees }
      * 
+     * @return
+     *     the new instance of {@link GetAllEmployees }
      */
     public GetAllEmployees createGetAllEmployees() {
         return new GetAllEmployees();
@@ -327,6 +395,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllEmployeesResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllEmployeesResponse }
      */
     public GetAllEmployeesResponse createGetAllEmployeesResponse() {
         return new GetAllEmployeesResponse();
@@ -335,6 +405,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetOrganizationChartIdByEmployeeById }
      * 
+     * @return
+     *     the new instance of {@link GetOrganizationChartIdByEmployeeById }
      */
     public GetOrganizationChartIdByEmployeeById createGetOrganizationChartIdByEmployeeById() {
         return new GetOrganizationChartIdByEmployeeById();
@@ -343,6 +415,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetOrganizationChartIdByEmployeeByIdResponse }
      * 
+     * @return
+     *     the new instance of {@link GetOrganizationChartIdByEmployeeByIdResponse }
      */
     public GetOrganizationChartIdByEmployeeByIdResponse createGetOrganizationChartIdByEmployeeByIdResponse() {
         return new GetOrganizationChartIdByEmployeeByIdResponse();
@@ -351,6 +425,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetOrganizationChartIdByEmployee }
      * 
+     * @return
+     *     the new instance of {@link GetOrganizationChartIdByEmployee }
      */
     public GetOrganizationChartIdByEmployee createGetOrganizationChartIdByEmployee() {
         return new GetOrganizationChartIdByEmployee();
@@ -359,6 +435,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetOrganizationChartIdByEmployeeResponse }
      * 
+     * @return
+     *     the new instance of {@link GetOrganizationChartIdByEmployeeResponse }
      */
     public GetOrganizationChartIdByEmployeeResponse createGetOrganizationChartIdByEmployeeResponse() {
         return new GetOrganizationChartIdByEmployeeResponse();
@@ -367,6 +445,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllEmployeesInfo }
      * 
+     * @return
+     *     the new instance of {@link GetAllEmployeesInfo }
      */
     public GetAllEmployeesInfo createGetAllEmployeesInfo() {
         return new GetAllEmployeesInfo();
@@ -375,6 +455,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllEmployeesInfoResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllEmployeesInfoResponse }
      */
     public GetAllEmployeesInfoResponse createGetAllEmployeesInfoResponse() {
         return new GetAllEmployeesInfoResponse();
@@ -383,6 +465,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfEmployeeInfo }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfEmployeeInfo }
      */
     public ArrayOfEmployeeInfo createArrayOfEmployeeInfo() {
         return new ArrayOfEmployeeInfo();
@@ -391,6 +475,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllEmployeesWithOrgId }
      * 
+     * @return
+     *     the new instance of {@link GetAllEmployeesWithOrgId }
      */
     public GetAllEmployeesWithOrgId createGetAllEmployeesWithOrgId() {
         return new GetAllEmployeesWithOrgId();
@@ -399,6 +485,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllEmployeesWithOrgIdResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllEmployeesWithOrgIdResponse }
      */
     public GetAllEmployeesWithOrgIdResponse createGetAllEmployeesWithOrgIdResponse() {
         return new GetAllEmployeesWithOrgIdResponse();
@@ -407,6 +495,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetEmployeeFullNameFromLoginResult }
      * 
+     * @return
+     *     the new instance of {@link GetEmployeeFullNameFromLoginResult }
      */
     public GetEmployeeFullNameFromLoginResult createGetEmployeeFullNameFromLoginResult() {
         return new GetEmployeeFullNameFromLoginResult();
@@ -415,6 +505,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetEmployeeFullNameFromLoginResultResponse }
      * 
+     * @return
+     *     the new instance of {@link GetEmployeeFullNameFromLoginResultResponse }
      */
     public GetEmployeeFullNameFromLoginResultResponse createGetEmployeeFullNameFromLoginResultResponse() {
         return new GetEmployeeFullNameFromLoginResultResponse();
@@ -423,6 +515,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUiRequestCartableCount }
      * 
+     * @return
+     *     the new instance of {@link GetUiRequestCartableCount }
      */
     public GetUiRequestCartableCount createGetUiRequestCartableCount() {
         return new GetUiRequestCartableCount();
@@ -431,6 +525,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUiRequestCartableCountResponse }
      * 
+     * @return
+     *     the new instance of {@link GetUiRequestCartableCountResponse }
      */
     public GetUiRequestCartableCountResponse createGetUiRequestCartableCountResponse() {
         return new GetUiRequestCartableCountResponse();
@@ -439,6 +535,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUiRequestCartableIds }
      * 
+     * @return
+     *     the new instance of {@link GetUiRequestCartableIds }
      */
     public GetUiRequestCartableIds createGetUiRequestCartableIds() {
         return new GetUiRequestCartableIds();
@@ -447,6 +545,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUiRequestCartableIdsResponse }
      * 
+     * @return
+     *     the new instance of {@link GetUiRequestCartableIdsResponse }
      */
     public GetUiRequestCartableIdsResponse createGetUiRequestCartableIdsResponse() {
         return new GetUiRequestCartableIdsResponse();
@@ -455,6 +555,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link UiRequestCartableIds }
      * 
+     * @return
+     *     the new instance of {@link UiRequestCartableIds }
      */
     public UiRequestCartableIds createUiRequestCartableIds() {
         return new UiRequestCartableIds();
@@ -463,6 +565,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddVacationRegistrationPermission }
      * 
+     * @return
+     *     the new instance of {@link AddVacationRegistrationPermission }
      */
     public AddVacationRegistrationPermission createAddVacationRegistrationPermission() {
         return new AddVacationRegistrationPermission();
@@ -471,6 +575,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddVacationRegistrationPermissionResponse }
      * 
+     * @return
+     *     the new instance of {@link AddVacationRegistrationPermissionResponse }
      */
     public AddVacationRegistrationPermissionResponse createAddVacationRegistrationPermissionResponse() {
         return new AddVacationRegistrationPermissionResponse();
@@ -479,6 +585,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddMissionRegistrationPermission }
      * 
+     * @return
+     *     the new instance of {@link AddMissionRegistrationPermission }
      */
     public AddMissionRegistrationPermission createAddMissionRegistrationPermission() {
         return new AddMissionRegistrationPermission();
@@ -487,6 +595,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddMissionRegistrationPermissionResponse }
      * 
+     * @return
+     *     the new instance of {@link AddMissionRegistrationPermissionResponse }
      */
     public AddMissionRegistrationPermissionResponse createAddMissionRegistrationPermissionResponse() {
         return new AddMissionRegistrationPermissionResponse();
@@ -495,6 +605,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddDailyExtraWorkPermission }
      * 
+     * @return
+     *     the new instance of {@link AddDailyExtraWorkPermission }
      */
     public AddDailyExtraWorkPermission createAddDailyExtraWorkPermission() {
         return new AddDailyExtraWorkPermission();
@@ -503,6 +615,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddDailyExtraWorkPermissionResponse }
      * 
+     * @return
+     *     the new instance of {@link AddDailyExtraWorkPermissionResponse }
      */
     public AddDailyExtraWorkPermissionResponse createAddDailyExtraWorkPermissionResponse() {
         return new AddDailyExtraWorkPermissionResponse();
@@ -511,6 +625,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddSpecialExtraWorkPermission }
      * 
+     * @return
+     *     the new instance of {@link AddSpecialExtraWorkPermission }
      */
     public AddSpecialExtraWorkPermission createAddSpecialExtraWorkPermission() {
         return new AddSpecialExtraWorkPermission();
@@ -519,6 +635,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddSpecialExtraWorkPermissionResponse }
      * 
+     * @return
+     *     the new instance of {@link AddSpecialExtraWorkPermissionResponse }
      */
     public AddSpecialExtraWorkPermissionResponse createAddSpecialExtraWorkPermissionResponse() {
         return new AddSpecialExtraWorkPermissionResponse();
@@ -527,6 +645,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddVacationRegistration }
      * 
+     * @return
+     *     the new instance of {@link AddVacationRegistration }
      */
     public AddVacationRegistration createAddVacationRegistration() {
         return new AddVacationRegistration();
@@ -535,6 +655,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddVacationRegistrationResponse }
      * 
+     * @return
+     *     the new instance of {@link AddVacationRegistrationResponse }
      */
     public AddVacationRegistrationResponse createAddVacationRegistrationResponse() {
         return new AddVacationRegistrationResponse();
@@ -543,6 +665,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddMissionRegistration }
      * 
+     * @return
+     *     the new instance of {@link AddMissionRegistration }
      */
     public AddMissionRegistration createAddMissionRegistration() {
         return new AddMissionRegistration();
@@ -551,6 +675,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddMissionRegistrationResponse }
      * 
+     * @return
+     *     the new instance of {@link AddMissionRegistrationResponse }
      */
     public AddMissionRegistrationResponse createAddMissionRegistrationResponse() {
         return new AddMissionRegistrationResponse();
@@ -559,6 +685,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddMissionRegistrationEx }
      * 
+     * @return
+     *     the new instance of {@link AddMissionRegistrationEx }
      */
     public AddMissionRegistrationEx createAddMissionRegistrationEx() {
         return new AddMissionRegistrationEx();
@@ -567,6 +695,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddMissionRegistrationExResponse }
      * 
+     * @return
+     *     the new instance of {@link AddMissionRegistrationExResponse }
      */
     public AddMissionRegistrationExResponse createAddMissionRegistrationExResponse() {
         return new AddMissionRegistrationExResponse();
@@ -575,6 +705,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetEmployeeCodeByKeyNumber }
      * 
+     * @return
+     *     the new instance of {@link GetEmployeeCodeByKeyNumber }
      */
     public GetEmployeeCodeByKeyNumber createGetEmployeeCodeByKeyNumber() {
         return new GetEmployeeCodeByKeyNumber();
@@ -583,6 +715,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetEmployeeCodeByKeyNumberResponse }
      * 
+     * @return
+     *     the new instance of {@link GetEmployeeCodeByKeyNumberResponse }
      */
     public GetEmployeeCodeByKeyNumberResponse createGetEmployeeCodeByKeyNumberResponse() {
         return new GetEmployeeCodeByKeyNumberResponse();
@@ -591,6 +725,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetRemainUiEmployeeVacationTypeRepository }
      * 
+     * @return
+     *     the new instance of {@link GetRemainUiEmployeeVacationTypeRepository }
      */
     public GetRemainUiEmployeeVacationTypeRepository createGetRemainUiEmployeeVacationTypeRepository() {
         return new GetRemainUiEmployeeVacationTypeRepository();
@@ -599,6 +735,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetRemainUiEmployeeVacationTypeRepositoryResponse }
      * 
+     * @return
+     *     the new instance of {@link GetRemainUiEmployeeVacationTypeRepositoryResponse }
      */
     public GetRemainUiEmployeeVacationTypeRepositoryResponse createGetRemainUiEmployeeVacationTypeRepositoryResponse() {
         return new GetRemainUiEmployeeVacationTypeRepositoryResponse();
@@ -607,6 +745,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetRemainUiEmployeeVacationTypeRepositoryList }
      * 
+     * @return
+     *     the new instance of {@link GetRemainUiEmployeeVacationTypeRepositoryList }
      */
     public GetRemainUiEmployeeVacationTypeRepositoryList createGetRemainUiEmployeeVacationTypeRepositoryList() {
         return new GetRemainUiEmployeeVacationTypeRepositoryList();
@@ -615,6 +755,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetRemainUiEmployeeVacationTypeRepositoryListResponse }
      * 
+     * @return
+     *     the new instance of {@link GetRemainUiEmployeeVacationTypeRepositoryListResponse }
      */
     public GetRemainUiEmployeeVacationTypeRepositoryListResponse createGetRemainUiEmployeeVacationTypeRepositoryListResponse() {
         return new GetRemainUiEmployeeVacationTypeRepositoryListResponse();
@@ -623,6 +765,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetFunctionalityList }
      * 
+     * @return
+     *     the new instance of {@link GetFunctionalityList }
      */
     public GetFunctionalityList createGetFunctionalityList() {
         return new GetFunctionalityList();
@@ -631,6 +775,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetFunctionalityListResponse }
      * 
+     * @return
+     *     the new instance of {@link GetFunctionalityListResponse }
      */
     public GetFunctionalityListResponse createGetFunctionalityListResponse() {
         return new GetFunctionalityListResponse();
@@ -639,6 +785,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetFunctionalityWinPayList }
      * 
+     * @return
+     *     the new instance of {@link GetFunctionalityWinPayList }
      */
     public GetFunctionalityWinPayList createGetFunctionalityWinPayList() {
         return new GetFunctionalityWinPayList();
@@ -647,6 +795,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetFunctionalityWinPayListResponse }
      * 
+     * @return
+     *     the new instance of {@link GetFunctionalityWinPayListResponse }
      */
     public GetFunctionalityWinPayListResponse createGetFunctionalityWinPayListResponse() {
         return new GetFunctionalityWinPayListResponse();
@@ -655,6 +805,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PeriodCalculationInfo }
      * 
+     * @return
+     *     the new instance of {@link PeriodCalculationInfo }
      */
     public PeriodCalculationInfo createPeriodCalculationInfo() {
         return new PeriodCalculationInfo();
@@ -663,6 +815,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllPeriodFunctionalityWinPayList }
      * 
+     * @return
+     *     the new instance of {@link GetAllPeriodFunctionalityWinPayList }
      */
     public GetAllPeriodFunctionalityWinPayList createGetAllPeriodFunctionalityWinPayList() {
         return new GetAllPeriodFunctionalityWinPayList();
@@ -671,6 +825,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllPeriodFunctionalityWinPayListResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllPeriodFunctionalityWinPayListResponse }
      */
     public GetAllPeriodFunctionalityWinPayListResponse createGetAllPeriodFunctionalityWinPayListResponse() {
         return new GetAllPeriodFunctionalityWinPayListResponse();
@@ -679,6 +835,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfPeriodCalculationInfo }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfPeriodCalculationInfo }
      */
     public ArrayOfPeriodCalculationInfo createArrayOfPeriodCalculationInfo() {
         return new ArrayOfPeriodCalculationInfo();
@@ -687,6 +845,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPeriodCalculationInfo }
      * 
+     * @return
+     *     the new instance of {@link GetPeriodCalculationInfo }
      */
     public GetPeriodCalculationInfo createGetPeriodCalculationInfo() {
         return new GetPeriodCalculationInfo();
@@ -695,6 +855,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPeriodCalculationInfoResponse }
      * 
+     * @return
+     *     the new instance of {@link GetPeriodCalculationInfoResponse }
      */
     public GetPeriodCalculationInfoResponse createGetPeriodCalculationInfoResponse() {
         return new GetPeriodCalculationInfoResponse();
@@ -703,6 +865,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetDayCalculationInfo }
      * 
+     * @return
+     *     the new instance of {@link GetDayCalculationInfo }
      */
     public GetDayCalculationInfo createGetDayCalculationInfo() {
         return new GetDayCalculationInfo();
@@ -711,6 +875,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetDayCalculationInfoResponse }
      * 
+     * @return
+     *     the new instance of {@link GetDayCalculationInfoResponse }
      */
     public GetDayCalculationInfoResponse createGetDayCalculationInfoResponse() {
         return new GetDayCalculationInfoResponse();
@@ -719,6 +885,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PersistIoRecrd }
      * 
+     * @return
+     *     the new instance of {@link PersistIoRecrd }
      */
     public PersistIoRecrd createPersistIoRecrd() {
         return new PersistIoRecrd();
@@ -727,6 +895,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PersistIoRecrdResponse }
      * 
+     * @return
+     *     the new instance of {@link PersistIoRecrdResponse }
      */
     public PersistIoRecrdResponse createPersistIoRecrdResponse() {
         return new PersistIoRecrdResponse();
@@ -735,6 +905,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIoSources }
      * 
+     * @return
+     *     the new instance of {@link GetIoSources }
      */
     public GetIoSources createGetIoSources() {
         return new GetIoSources();
@@ -743,6 +915,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIoSourcesResponse }
      * 
+     * @return
+     *     the new instance of {@link GetIoSourcesResponse }
      */
     public GetIoSourcesResponse createGetIoSourcesResponse() {
         return new GetIoSourcesResponse();
@@ -751,6 +925,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllIoRecordsByDate }
      * 
+     * @return
+     *     the new instance of {@link GetAllIoRecordsByDate }
      */
     public GetAllIoRecordsByDate createGetAllIoRecordsByDate() {
         return new GetAllIoRecordsByDate();
@@ -759,6 +935,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllIoRecordsByDateResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllIoRecordsByDateResponse }
      */
     public GetAllIoRecordsByDateResponse createGetAllIoRecordsByDateResponse() {
         return new GetAllIoRecordsByDateResponse();
@@ -767,6 +945,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfIoRecordDataModel }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfIoRecordDataModel }
      */
     public ArrayOfIoRecordDataModel createArrayOfIoRecordDataModel() {
         return new ArrayOfIoRecordDataModel();
@@ -775,6 +955,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIORecordPerDateRange }
      * 
+     * @return
+     *     the new instance of {@link GetIORecordPerDateRange }
      */
     public GetIORecordPerDateRange createGetIORecordPerDateRange() {
         return new GetIORecordPerDateRange();
@@ -783,6 +965,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIORecordPerDateRangeResponse }
      * 
+     * @return
+     *     the new instance of {@link GetIORecordPerDateRangeResponse }
      */
     public GetIORecordPerDateRangeResponse createGetIORecordPerDateRangeResponse() {
         return new GetIORecordPerDateRangeResponse();
@@ -791,6 +975,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIORecordPerPersistOn }
      * 
+     * @return
+     *     the new instance of {@link GetIORecordPerPersistOn }
      */
     public GetIORecordPerPersistOn createGetIORecordPerPersistOn() {
         return new GetIORecordPerPersistOn();
@@ -799,6 +985,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIORecordPerPersistOnResponse }
      * 
+     * @return
+     *     the new instance of {@link GetIORecordPerPersistOnResponse }
      */
     public GetIORecordPerPersistOnResponse createGetIORecordPerPersistOnResponse() {
         return new GetIORecordPerPersistOnResponse();
@@ -807,6 +995,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIORecordAfterId }
      * 
+     * @return
+     *     the new instance of {@link GetIORecordAfterId }
      */
     public GetIORecordAfterId createGetIORecordAfterId() {
         return new GetIORecordAfterId();
@@ -815,6 +1005,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIORecordAfterIdResponse }
      * 
+     * @return
+     *     the new instance of {@link GetIORecordAfterIdResponse }
      */
     public GetIORecordAfterIdResponse createGetIORecordAfterIdResponse() {
         return new GetIORecordAfterIdResponse();
@@ -823,6 +1015,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIoRecordInDayByEmployeeCode }
      * 
+     * @return
+     *     the new instance of {@link GetIoRecordInDayByEmployeeCode }
      */
     public GetIoRecordInDayByEmployeeCode createGetIoRecordInDayByEmployeeCode() {
         return new GetIoRecordInDayByEmployeeCode();
@@ -831,6 +1025,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIoRecordInDayByEmployeeCodeResponse }
      * 
+     * @return
+     *     the new instance of {@link GetIoRecordInDayByEmployeeCodeResponse }
      */
     public GetIoRecordInDayByEmployeeCodeResponse createGetIoRecordInDayByEmployeeCodeResponse() {
         return new GetIoRecordInDayByEmployeeCodeResponse();
@@ -839,6 +1035,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfStaffIOs }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfStaffIOs }
      */
     public ArrayOfStaffIOs createArrayOfStaffIOs() {
         return new ArrayOfStaffIOs();
@@ -847,6 +1045,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIsExitOverTimeList }
      * 
+     * @return
+     *     the new instance of {@link GetIsExitOverTimeList }
      */
     public GetIsExitOverTimeList createGetIsExitOverTimeList() {
         return new GetIsExitOverTimeList();
@@ -855,6 +1055,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetIsExitOverTimeListResponse }
      * 
+     * @return
+     *     the new instance of {@link GetIsExitOverTimeListResponse }
      */
     public GetIsExitOverTimeListResponse createGetIsExitOverTimeListResponse() {
         return new GetIsExitOverTimeListResponse();
@@ -863,6 +1065,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IsPresent }
      * 
+     * @return
+     *     the new instance of {@link IsPresent }
      */
     public IsPresent createIsPresent() {
         return new IsPresent();
@@ -871,6 +1075,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IsPresentResponse }
      * 
+     * @return
+     *     the new instance of {@link IsPresentResponse }
      */
     public IsPresentResponse createIsPresentResponse() {
         return new IsPresentResponse();
@@ -879,6 +1085,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllVacationRegistrationsByDate }
      * 
+     * @return
+     *     the new instance of {@link GetAllVacationRegistrationsByDate }
      */
     public GetAllVacationRegistrationsByDate createGetAllVacationRegistrationsByDate() {
         return new GetAllVacationRegistrationsByDate();
@@ -887,6 +1095,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllVacationRegistrationsByDateResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllVacationRegistrationsByDateResponse }
      */
     public GetAllVacationRegistrationsByDateResponse createGetAllVacationRegistrationsByDateResponse() {
         return new GetAllVacationRegistrationsByDateResponse();
@@ -895,6 +1105,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfVacationRegistrationDataModel }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfVacationRegistrationDataModel }
      */
     public ArrayOfVacationRegistrationDataModel createArrayOfVacationRegistrationDataModel() {
         return new ArrayOfVacationRegistrationDataModel();
@@ -903,6 +1115,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllMissionRegistrationsByDate }
      * 
+     * @return
+     *     the new instance of {@link GetAllMissionRegistrationsByDate }
      */
     public GetAllMissionRegistrationsByDate createGetAllMissionRegistrationsByDate() {
         return new GetAllMissionRegistrationsByDate();
@@ -911,6 +1125,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllMissionRegistrationsByDateResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllMissionRegistrationsByDateResponse }
      */
     public GetAllMissionRegistrationsByDateResponse createGetAllMissionRegistrationsByDateResponse() {
         return new GetAllMissionRegistrationsByDateResponse();
@@ -919,6 +1135,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfMissionRegistrationDataModel }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfMissionRegistrationDataModel }
      */
     public ArrayOfMissionRegistrationDataModel createArrayOfMissionRegistrationDataModel() {
         return new ArrayOfMissionRegistrationDataModel();
@@ -927,6 +1145,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetListOfEmployeeEvents }
      * 
+     * @return
+     *     the new instance of {@link GetListOfEmployeeEvents }
      */
     public GetListOfEmployeeEvents createGetListOfEmployeeEvents() {
         return new GetListOfEmployeeEvents();
@@ -935,6 +1155,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetListOfEmployeeEventsResponse }
      * 
+     * @return
+     *     the new instance of {@link GetListOfEmployeeEventsResponse }
      */
     public GetListOfEmployeeEventsResponse createGetListOfEmployeeEventsResponse() {
         return new GetListOfEmployeeEventsResponse();
@@ -943,6 +1165,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllCurrentlyEmployees }
      * 
+     * @return
+     *     the new instance of {@link GetAllCurrentlyEmployees }
      */
     public GetAllCurrentlyEmployees createGetAllCurrentlyEmployees() {
         return new GetAllCurrentlyEmployees();
@@ -951,6 +1175,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllCurrentlyEmployeesResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllCurrentlyEmployeesResponse }
      */
     public GetAllCurrentlyEmployeesResponse createGetAllCurrentlyEmployeesResponse() {
         return new GetAllCurrentlyEmployeesResponse();
@@ -959,6 +1185,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllCurrentlyEmployeesWithKey }
      * 
+     * @return
+     *     the new instance of {@link GetAllCurrentlyEmployeesWithKey }
      */
     public GetAllCurrentlyEmployeesWithKey createGetAllCurrentlyEmployeesWithKey() {
         return new GetAllCurrentlyEmployeesWithKey();
@@ -967,6 +1195,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllCurrentlyEmployeesWithKeyResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllCurrentlyEmployeesWithKeyResponse }
      */
     public GetAllCurrentlyEmployeesWithKeyResponse createGetAllCurrentlyEmployeesWithKeyResponse() {
         return new GetAllCurrentlyEmployeesWithKeyResponse();
@@ -975,6 +1205,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfEmployeeDataModelWithKey }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfEmployeeDataModelWithKey }
      */
     public ArrayOfEmployeeDataModelWithKey createArrayOfEmployeeDataModelWithKey() {
         return new ArrayOfEmployeeDataModelWithKey();
@@ -983,6 +1215,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllExtraWorkPermissionsByDate }
      * 
+     * @return
+     *     the new instance of {@link GetAllExtraWorkPermissionsByDate }
      */
     public GetAllExtraWorkPermissionsByDate createGetAllExtraWorkPermissionsByDate() {
         return new GetAllExtraWorkPermissionsByDate();
@@ -991,6 +1225,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllExtraWorkPermissionsByDateResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllExtraWorkPermissionsByDateResponse }
      */
     public GetAllExtraWorkPermissionsByDateResponse createGetAllExtraWorkPermissionsByDateResponse() {
         return new GetAllExtraWorkPermissionsByDateResponse();
@@ -999,6 +1235,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfDailyExtraWorkPermissionDataModel }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfDailyExtraWorkPermissionDataModel }
      */
     public ArrayOfDailyExtraWorkPermissionDataModel createArrayOfDailyExtraWorkPermissionDataModel() {
         return new ArrayOfDailyExtraWorkPermissionDataModel();
@@ -1007,6 +1245,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllSpecialExtraWorksByPeriodId }
      * 
+     * @return
+     *     the new instance of {@link GetAllSpecialExtraWorksByPeriodId }
      */
     public GetAllSpecialExtraWorksByPeriodId createGetAllSpecialExtraWorksByPeriodId() {
         return new GetAllSpecialExtraWorksByPeriodId();
@@ -1015,6 +1255,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAllSpecialExtraWorksByPeriodIdResponse }
      * 
+     * @return
+     *     the new instance of {@link GetAllSpecialExtraWorksByPeriodIdResponse }
      */
     public GetAllSpecialExtraWorksByPeriodIdResponse createGetAllSpecialExtraWorksByPeriodIdResponse() {
         return new GetAllSpecialExtraWorksByPeriodIdResponse();
@@ -1023,6 +1265,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfSpecialExtraWorkDataModel }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfSpecialExtraWorkDataModel }
      */
     public ArrayOfSpecialExtraWorkDataModel createArrayOfSpecialExtraWorkDataModel() {
         return new ArrayOfSpecialExtraWorkDataModel();
@@ -1031,6 +1275,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetCalendarWorkDayTypes }
      * 
+     * @return
+     *     the new instance of {@link GetCalendarWorkDayTypes }
      */
     public GetCalendarWorkDayTypes createGetCalendarWorkDayTypes() {
         return new GetCalendarWorkDayTypes();
@@ -1039,6 +1285,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetCalendarWorkDayTypesResponse }
      * 
+     * @return
+     *     the new instance of {@link GetCalendarWorkDayTypesResponse }
      */
     public GetCalendarWorkDayTypesResponse createGetCalendarWorkDayTypesResponse() {
         return new GetCalendarWorkDayTypesResponse();
@@ -1047,6 +1295,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfCalendarDayListDto }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfCalendarDayListDto }
      */
     public ArrayOfCalendarDayListDto createArrayOfCalendarDayListDto() {
         return new ArrayOfCalendarDayListDto();
@@ -1055,6 +1305,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetCalendarWorkDayTypesByEmployee }
      * 
+     * @return
+     *     the new instance of {@link GetCalendarWorkDayTypesByEmployee }
      */
     public GetCalendarWorkDayTypesByEmployee createGetCalendarWorkDayTypesByEmployee() {
         return new GetCalendarWorkDayTypesByEmployee();
@@ -1063,6 +1315,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetCalendarWorkDayTypesByEmployeeResponse }
      * 
+     * @return
+     *     the new instance of {@link GetCalendarWorkDayTypesByEmployeeResponse }
      */
     public GetCalendarWorkDayTypesByEmployeeResponse createGetCalendarWorkDayTypesByEmployeeResponse() {
         return new GetCalendarWorkDayTypesByEmployeeResponse();
@@ -1071,6 +1325,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ValidEmployeeRange }
      * 
+     * @return
+     *     the new instance of {@link ValidEmployeeRange }
      */
     public ValidEmployeeRange createValidEmployeeRange() {
         return new ValidEmployeeRange();
@@ -1079,6 +1335,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link DevicePerson }
      * 
+     * @return
+     *     the new instance of {@link DevicePerson }
      */
     public DevicePerson createDevicePerson() {
         return new DevicePerson();
@@ -1087,6 +1345,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link OrganizationChartDataModel }
      * 
+     * @return
+     *     the new instance of {@link OrganizationChartDataModel }
      */
     public OrganizationChartDataModel createOrganizationChartDataModel() {
         return new OrganizationChartDataModel();
@@ -1095,6 +1355,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link EmployeeDataModel }
      * 
+     * @return
+     *     the new instance of {@link EmployeeDataModel }
      */
     public EmployeeDataModel createEmployeeDataModel() {
         return new EmployeeDataModel();
@@ -1103,6 +1365,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link EmployeeInfo }
      * 
+     * @return
+     *     the new instance of {@link EmployeeInfo }
      */
     public EmployeeInfo createEmployeeInfo() {
         return new EmployeeInfo();
@@ -1111,6 +1375,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfLong }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfLong }
      */
     public ArrayOfLong createArrayOfLong() {
         return new ArrayOfLong();
@@ -1119,6 +1385,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ArrayOfDouble }
      * 
+     * @return
+     *     the new instance of {@link ArrayOfDouble }
      */
     public ArrayOfDouble createArrayOfDouble() {
         return new ArrayOfDouble();
@@ -1127,6 +1395,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IoRecordDataModel }
      * 
+     * @return
+     *     the new instance of {@link IoRecordDataModel }
      */
     public IoRecordDataModel createIoRecordDataModel() {
         return new IoRecordDataModel();
@@ -1135,6 +1405,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link StaffIOs }
      * 
+     * @return
+     *     the new instance of {@link StaffIOs }
      */
     public StaffIOs createStaffIOs() {
         return new StaffIOs();
@@ -1143,6 +1415,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link VacationRegistrationDataModel }
      * 
+     * @return
+     *     the new instance of {@link VacationRegistrationDataModel }
      */
     public VacationRegistrationDataModel createVacationRegistrationDataModel() {
         return new VacationRegistrationDataModel();
@@ -1151,6 +1425,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link MissionRegistrationDataModel }
      * 
+     * @return
+     *     the new instance of {@link MissionRegistrationDataModel }
      */
     public MissionRegistrationDataModel createMissionRegistrationDataModel() {
         return new MissionRegistrationDataModel();
@@ -1159,6 +1435,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link EmployeeDataModelWithKey }
      * 
+     * @return
+     *     the new instance of {@link EmployeeDataModelWithKey }
      */
     public EmployeeDataModelWithKey createEmployeeDataModelWithKey() {
         return new EmployeeDataModelWithKey();
@@ -1167,6 +1445,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link DailyExtraWorkPermissionDataModel }
      * 
+     * @return
+     *     the new instance of {@link DailyExtraWorkPermissionDataModel }
      */
     public DailyExtraWorkPermissionDataModel createDailyExtraWorkPermissionDataModel() {
         return new DailyExtraWorkPermissionDataModel();
@@ -1175,6 +1455,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link SpecialExtraWorkDataModel }
      * 
+     * @return
+     *     the new instance of {@link SpecialExtraWorkDataModel }
      */
     public SpecialExtraWorkDataModel createSpecialExtraWorkDataModel() {
         return new SpecialExtraWorkDataModel();
@@ -1183,6 +1465,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link CalendarDayListDto }
      * 
+     * @return
+     *     the new instance of {@link CalendarDayListDto }
      */
     public CalendarDayListDto createCalendarDayListDto() {
         return new CalendarDayListDto();
@@ -1198,7 +1482,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "string")
     public JAXBElement<String> createString(String value) {
-        return new JAXBElement<String>(_String_QNAME, String.class, null, value);
+        return new JAXBElement<>(_String_QNAME, String.class, null, value);
     }
 
     /**
@@ -1211,7 +1495,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "boolean")
     public JAXBElement<Boolean> createBoolean(Boolean value) {
-        return new JAXBElement<Boolean>(_Boolean_QNAME, Boolean.class, null, value);
+        return new JAXBElement<>(_Boolean_QNAME, Boolean.class, null, value);
     }
 
     /**
@@ -1224,7 +1508,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfValidEmployeeRange")
     public JAXBElement<ArrayOfValidEmployeeRange> createArrayOfValidEmployeeRange(ArrayOfValidEmployeeRange value) {
-        return new JAXBElement<ArrayOfValidEmployeeRange>(_ArrayOfValidEmployeeRange_QNAME, ArrayOfValidEmployeeRange.class, null, value);
+        return new JAXBElement<>(_ArrayOfValidEmployeeRange_QNAME, ArrayOfValidEmployeeRange.class, null, value);
     }
 
     /**
@@ -1237,7 +1521,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfString")
     public JAXBElement<ArrayOfString> createArrayOfString(ArrayOfString value) {
-        return new JAXBElement<ArrayOfString>(_ArrayOfString_QNAME, ArrayOfString.class, null, value);
+        return new JAXBElement<>(_ArrayOfString_QNAME, ArrayOfString.class, null, value);
     }
 
     /**
@@ -1250,7 +1534,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfDevicePerson")
     public JAXBElement<ArrayOfDevicePerson> createArrayOfDevicePerson(ArrayOfDevicePerson value) {
-        return new JAXBElement<ArrayOfDevicePerson>(_ArrayOfDevicePerson_QNAME, ArrayOfDevicePerson.class, null, value);
+        return new JAXBElement<>(_ArrayOfDevicePerson_QNAME, ArrayOfDevicePerson.class, null, value);
     }
 
     /**
@@ -1263,7 +1547,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfOrganizationChartDataModel")
     public JAXBElement<ArrayOfOrganizationChartDataModel> createArrayOfOrganizationChartDataModel(ArrayOfOrganizationChartDataModel value) {
-        return new JAXBElement<ArrayOfOrganizationChartDataModel>(_ArrayOfOrganizationChartDataModel_QNAME, ArrayOfOrganizationChartDataModel.class, null, value);
+        return new JAXBElement<>(_ArrayOfOrganizationChartDataModel_QNAME, ArrayOfOrganizationChartDataModel.class, null, value);
     }
 
     /**
@@ -1276,7 +1560,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfEmployeeDataModel")
     public JAXBElement<ArrayOfEmployeeDataModel> createArrayOfEmployeeDataModel(ArrayOfEmployeeDataModel value) {
-        return new JAXBElement<ArrayOfEmployeeDataModel>(_ArrayOfEmployeeDataModel_QNAME, ArrayOfEmployeeDataModel.class, null, value);
+        return new JAXBElement<>(_ArrayOfEmployeeDataModel_QNAME, ArrayOfEmployeeDataModel.class, null, value);
     }
 
     /**
@@ -1289,7 +1573,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "long")
     public JAXBElement<Long> createLong(Long value) {
-        return new JAXBElement<Long>(_Long_QNAME, Long.class, null, value);
+        return new JAXBElement<>(_Long_QNAME, Long.class, null, value);
     }
 
     /**
@@ -1302,7 +1586,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfEmployeeInfo")
     public JAXBElement<ArrayOfEmployeeInfo> createArrayOfEmployeeInfo(ArrayOfEmployeeInfo value) {
-        return new JAXBElement<ArrayOfEmployeeInfo>(_ArrayOfEmployeeInfo_QNAME, ArrayOfEmployeeInfo.class, null, value);
+        return new JAXBElement<>(_ArrayOfEmployeeInfo_QNAME, ArrayOfEmployeeInfo.class, null, value);
     }
 
     /**
@@ -1315,7 +1599,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "UiRequestCartableIds")
     public JAXBElement<UiRequestCartableIds> createUiRequestCartableIds(UiRequestCartableIds value) {
-        return new JAXBElement<UiRequestCartableIds>(_UiRequestCartableIds_QNAME, UiRequestCartableIds.class, null, value);
+        return new JAXBElement<>(_UiRequestCartableIds_QNAME, UiRequestCartableIds.class, null, value);
     }
 
     /**
@@ -1328,7 +1612,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "PeriodCalculationInfo")
     public JAXBElement<PeriodCalculationInfo> createPeriodCalculationInfo(PeriodCalculationInfo value) {
-        return new JAXBElement<PeriodCalculationInfo>(_PeriodCalculationInfo_QNAME, PeriodCalculationInfo.class, null, value);
+        return new JAXBElement<>(_PeriodCalculationInfo_QNAME, PeriodCalculationInfo.class, null, value);
     }
 
     /**
@@ -1341,7 +1625,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfPeriodCalculationInfo")
     public JAXBElement<ArrayOfPeriodCalculationInfo> createArrayOfPeriodCalculationInfo(ArrayOfPeriodCalculationInfo value) {
-        return new JAXBElement<ArrayOfPeriodCalculationInfo>(_ArrayOfPeriodCalculationInfo_QNAME, ArrayOfPeriodCalculationInfo.class, null, value);
+        return new JAXBElement<>(_ArrayOfPeriodCalculationInfo_QNAME, ArrayOfPeriodCalculationInfo.class, null, value);
     }
 
     /**
@@ -1354,7 +1638,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfIoRecordDataModel")
     public JAXBElement<ArrayOfIoRecordDataModel> createArrayOfIoRecordDataModel(ArrayOfIoRecordDataModel value) {
-        return new JAXBElement<ArrayOfIoRecordDataModel>(_ArrayOfIoRecordDataModel_QNAME, ArrayOfIoRecordDataModel.class, null, value);
+        return new JAXBElement<>(_ArrayOfIoRecordDataModel_QNAME, ArrayOfIoRecordDataModel.class, null, value);
     }
 
     /**
@@ -1367,7 +1651,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfStaffIOs")
     public JAXBElement<ArrayOfStaffIOs> createArrayOfStaffIOs(ArrayOfStaffIOs value) {
-        return new JAXBElement<ArrayOfStaffIOs>(_ArrayOfStaffIOs_QNAME, ArrayOfStaffIOs.class, null, value);
+        return new JAXBElement<>(_ArrayOfStaffIOs_QNAME, ArrayOfStaffIOs.class, null, value);
     }
 
     /**
@@ -1380,7 +1664,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfVacationRegistrationDataModel")
     public JAXBElement<ArrayOfVacationRegistrationDataModel> createArrayOfVacationRegistrationDataModel(ArrayOfVacationRegistrationDataModel value) {
-        return new JAXBElement<ArrayOfVacationRegistrationDataModel>(_ArrayOfVacationRegistrationDataModel_QNAME, ArrayOfVacationRegistrationDataModel.class, null, value);
+        return new JAXBElement<>(_ArrayOfVacationRegistrationDataModel_QNAME, ArrayOfVacationRegistrationDataModel.class, null, value);
     }
 
     /**
@@ -1393,7 +1677,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfMissionRegistrationDataModel")
     public JAXBElement<ArrayOfMissionRegistrationDataModel> createArrayOfMissionRegistrationDataModel(ArrayOfMissionRegistrationDataModel value) {
-        return new JAXBElement<ArrayOfMissionRegistrationDataModel>(_ArrayOfMissionRegistrationDataModel_QNAME, ArrayOfMissionRegistrationDataModel.class, null, value);
+        return new JAXBElement<>(_ArrayOfMissionRegistrationDataModel_QNAME, ArrayOfMissionRegistrationDataModel.class, null, value);
     }
 
     /**
@@ -1406,7 +1690,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfEmployeeDataModelWithKey")
     public JAXBElement<ArrayOfEmployeeDataModelWithKey> createArrayOfEmployeeDataModelWithKey(ArrayOfEmployeeDataModelWithKey value) {
-        return new JAXBElement<ArrayOfEmployeeDataModelWithKey>(_ArrayOfEmployeeDataModelWithKey_QNAME, ArrayOfEmployeeDataModelWithKey.class, null, value);
+        return new JAXBElement<>(_ArrayOfEmployeeDataModelWithKey_QNAME, ArrayOfEmployeeDataModelWithKey.class, null, value);
     }
 
     /**
@@ -1419,7 +1703,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfDailyExtraWorkPermissionDataModel")
     public JAXBElement<ArrayOfDailyExtraWorkPermissionDataModel> createArrayOfDailyExtraWorkPermissionDataModel(ArrayOfDailyExtraWorkPermissionDataModel value) {
-        return new JAXBElement<ArrayOfDailyExtraWorkPermissionDataModel>(_ArrayOfDailyExtraWorkPermissionDataModel_QNAME, ArrayOfDailyExtraWorkPermissionDataModel.class, null, value);
+        return new JAXBElement<>(_ArrayOfDailyExtraWorkPermissionDataModel_QNAME, ArrayOfDailyExtraWorkPermissionDataModel.class, null, value);
     }
 
     /**
@@ -1432,7 +1716,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfSpecialExtraWorkDataModel")
     public JAXBElement<ArrayOfSpecialExtraWorkDataModel> createArrayOfSpecialExtraWorkDataModel(ArrayOfSpecialExtraWorkDataModel value) {
-        return new JAXBElement<ArrayOfSpecialExtraWorkDataModel>(_ArrayOfSpecialExtraWorkDataModel_QNAME, ArrayOfSpecialExtraWorkDataModel.class, null, value);
+        return new JAXBElement<>(_ArrayOfSpecialExtraWorkDataModel_QNAME, ArrayOfSpecialExtraWorkDataModel.class, null, value);
     }
 
     /**
@@ -1445,7 +1729,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "ArrayOfCalendarDayListDto")
     public JAXBElement<ArrayOfCalendarDayListDto> createArrayOfCalendarDayListDto(ArrayOfCalendarDayListDto value) {
-        return new JAXBElement<ArrayOfCalendarDayListDto>(_ArrayOfCalendarDayListDto_QNAME, ArrayOfCalendarDayListDto.class, null, value);
+        return new JAXBElement<>(_ArrayOfCalendarDayListDto_QNAME, ArrayOfCalendarDayListDto.class, null, value);
     }
 
 }

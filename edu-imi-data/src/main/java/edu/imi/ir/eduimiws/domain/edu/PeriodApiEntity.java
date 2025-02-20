@@ -30,7 +30,7 @@ import jakarta.persistence.*;
                     })
     })
 })
-@Cacheable
+//@Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "periodApi")
 @Getter
 @Setter

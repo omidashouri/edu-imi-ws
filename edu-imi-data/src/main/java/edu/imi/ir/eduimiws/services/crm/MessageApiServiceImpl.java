@@ -19,22 +19,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class MessageApiServiceImpl implements MessageApiService{
 
     private final MessageApiRepository messageApiRepository;
-    private final MessageApiMapper messageApiMapper;
+//    private final MessageApiMapper messageApiMapper;
 
     @Override
     public MessageApiEntity findEntityByMessageId(Long messageId) {
         return messageApiRepository.findByMessageId(messageId);
     }
 
-    @Override
-    public MessageApiDto findDtoByMessageId(Long messageId) {
-        MessageApiEntity messageApi = this.findEntityByMessageId(messageId);
-        return messageApiMapper.toMessageApiDto(messageApi, new CycleAvoidingMappingContext());
-
-    }
-
-    @Override
-    public String findMessageApiPublicIdByMessageId(Long messageId) {
-        return this.findEntityByMessageId(messageId).getMessagePublicId();
-    }
+//    @Override
+//    public MessageApiDto findDtoByMessageId(Long messageId) {
+//        MessageApiEntity messageApi = this.findEntityByMessageId(messageId);
+//        return messageApiMapper.toMessageApiDto(messageApi, new CycleAvoidingMappingContext());
+//
+//    }
+//
+//    @Override
+//    public String findMessageApiPublicIdByMessageId(Long messageId) {
+//        return this.findEntityByMessageId(messageId).getMessagePublicId();
+//    }
 }

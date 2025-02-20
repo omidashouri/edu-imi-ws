@@ -27,9 +27,9 @@ public interface MessageReceiverMapper {
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "message.id", target = "messageId"),
             @Mapping(source = "message", target = "messageDto", qualifiedByName = "toMessageDto"),
-            @Mapping(source = "message.id", target = "messagePublicId", qualifiedBy = {
-                    MappingUtil.MessageApiUtil.class, MappingUtil.MessageIdToMessagePublicId.class
-            }),
+//            @Mapping(source = "message.id", target = "messagePublicId", qualifiedBy = {
+//                    MappingUtil.MessageApiUtil.class, MappingUtil.MessageIdToMessagePublicId.class
+//            }),
             @Mapping(source = "user.id", target = "userId"),
             @Mapping(source = "user", target = "userDto", qualifiedByName = "personEntityToPersonDto"),
             @Mapping(source = "user.id", target = "userPublicId", qualifiedBy = {

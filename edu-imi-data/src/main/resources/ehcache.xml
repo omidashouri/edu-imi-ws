@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <ehcache:config
-        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-        xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
-        xmlns:ehcache='http://www.ehcache.org/v3'
-        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+        xmlns:ehcache="http://www.ehcache.org/v3"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+                        http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
 
     <ehcache:service>
         <jsr107:defaults  enable-management="true" enable-statistics="true">
@@ -12,7 +13,8 @@
     </ehcache:service>
 
     <!-- Persistent cache directory -->
-    <ehcache:persistence directory="/run/media/omidashouri/Archive/0_0/cache"/>
+<!--    <ehcache:persistence directory="/run/media/omidashouri/Archive/0_0/cache"/>-->
+    <ehcache:persistence directory="C:\\Users\\omid\\cache"/>
 
     <!-- Default cache template -->
     <ehcache:cache-template name="default">

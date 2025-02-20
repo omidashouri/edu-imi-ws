@@ -40,7 +40,7 @@ public interface FieldRepository extends CrudRepository<FieldEntity, Long> {
     })
     FieldEntity findByFieldApi_FieldPublicId(String fieldPublicId);
 
-    @Cacheable("fieldDescriptiveLevel")
+    //@Cacheable("fieldDescriptiveLevel")
     @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
             @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
@@ -50,7 +50,7 @@ public interface FieldRepository extends CrudRepository<FieldEntity, Long> {
     })
     Page<FieldEntity> findByFieldApiIsNotNullAndFieldApi_LevelPublicId(String levelPublicId, Pageable pageable);
 
-    @Cacheable("fieldDescriptiveEduCategory")
+    //@Cacheable("fieldDescriptiveEduCategory")
     @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
             @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),

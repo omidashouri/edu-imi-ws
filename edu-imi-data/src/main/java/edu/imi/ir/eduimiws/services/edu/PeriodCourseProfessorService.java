@@ -11,6 +11,6 @@ public interface PeriodCourseProfessorService {
 
     PeriodCourseProfessorEntity findByPeriodCourseProfessorPublicId(String periodCourseProfessorPublicId);
 
-    @Cacheable(value = "periodCourseProfessor")
+    //@Cacheable(value = "periodCourseProfessor")
     Page<PeriodCourseProfessorEntity> findAllByPeriodCourseProfessorFieldNamePageable(Pageable pageable);
 }

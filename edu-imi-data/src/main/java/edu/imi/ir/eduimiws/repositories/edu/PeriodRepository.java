@@ -19,7 +19,7 @@ import java.util.List;
 public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
 
-    @Cacheable("period")
+    //@Cacheable("period")
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
             type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),

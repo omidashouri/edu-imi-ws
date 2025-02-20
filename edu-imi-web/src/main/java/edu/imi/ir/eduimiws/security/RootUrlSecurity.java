@@ -18,10 +18,12 @@ public class RootUrlSecurity {
         httpSecurity
                 .securityMatcher("/**")
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/edu-imi-ws/v3/api-docs/swagger-config").permitAll()
                         .requestMatchers("**/swagger-ui/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs", "/v2/api-docs/**", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "**/afterPaymentResponse").permitAll()
                         .requestMatchers(HttpMethod.POST, "**/v1/callback/sadad/publicId/**").permitAll()
-                        .anyRequest().authenticated()
+//                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

@@ -23,7 +23,7 @@ public interface RegisterService {
 
     CompletableFuture<List<RegisterEntity>> findAllByDeleteStatusIsNotNullThread() throws ExecutionException, InterruptedException;
 
-    @Cacheable(value = "register")
+    //@Cacheable(value = "register")
     Page<RegisterEntity> findAllWithStudentPeriodNameByOrderPageable(Pageable pageable);
 
     RegisterEntity findByRegisterPublicId(String registerPublicId);

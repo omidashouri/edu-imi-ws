@@ -20,7 +20,7 @@ public interface PeriodCourseProfessorRepository extends CrudRepository<PeriodCo
             type = EntityGraph.EntityGraphType.LOAD)
     PeriodCourseProfessorEntity findByPeriodCourseProfessorApi_PriodCoursProfesorPublicId(String periodCourseProfessorPublicId);
 
-    @Cacheable("periodCourseProfessor")
+    //@Cacheable("periodCourseProfessor")
     @EntityGraph(value = "PeriodCourseProfessorEntity.periodCourseProfessorApiEntityAndPeriodCourseProfessorFieldEntity",
             type = EntityGraph.EntityGraphType.LOAD)
     @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),

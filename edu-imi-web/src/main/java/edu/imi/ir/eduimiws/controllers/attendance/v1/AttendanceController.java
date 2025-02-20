@@ -3,7 +3,6 @@ package edu.imi.ir.eduimiws.controllers.attendance.v1;
 
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.ArrayOfEmployeeDataModel;
-import edu.imi.ir.eduimiws.models.wsdl.attendance.EmployeeDataModel;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.EtsGeneralDataProviderService;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.EtsGeneralDataProviderServiceSoap;
 import io.swagger.v3.oas.annotations.Operation;

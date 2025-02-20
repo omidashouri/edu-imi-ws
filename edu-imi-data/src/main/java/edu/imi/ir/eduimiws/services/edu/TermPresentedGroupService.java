@@ -11,7 +11,7 @@ public interface TermPresentedGroupService {
 
     TermPresentedGroupEntity findByTermPresentedGroupPublicId(String termPresentedGroupPublicId);
 
-    @Cacheable(value = "termPresentedGroup")
+    //@Cacheable(value = "termPresentedGroup")
     Page<TermPresentedGroupEntity>
     selectAllWithCoursePeriodTermProfessorFieldCourseTermPresentedCourseByOrderPageable(Pageable pageable);
 }

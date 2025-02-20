@@ -41,7 +41,7 @@ public interface PeriodService {
 
     List<PeriodEntity> findAllById(List<Long> periodIds);
 
-    @Cacheable(value = "period", cacheManager = "jCacheCacheManager")
+    //@Cacheable(value = "period", cacheManager = "jCacheCacheManager")
     Page<PeriodEntity> findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable(String periodName, Pageable pageable);
 
     Page<PeriodProjectionCustomTwo> queryAllPeriodsCustomTwo(String PeriodPublicId,

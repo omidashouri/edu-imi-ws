@@ -20,10 +20,10 @@ public interface FieldService {
 
     FieldEntity findByFieldPublicId(String fieldPublicId);
 
-    @Cacheable(value = "fieldDescriptiveLevel", cacheManager = "jCacheCacheManager")
+    //@Cacheable(value = "fieldDescriptiveLevel", cacheManager = "jCacheCacheManager")
     Page<FieldEntity> findAllByLevelPublicIdPageable(String levelPublicId, Pageable pageable);
 
-    @Cacheable(value = "fieldDescriptiveEduCategory", cacheManager = "jCacheCacheManager")
+    //@Cacheable(value = "fieldDescriptiveEduCategory", cacheManager = "jCacheCacheManager")
     Page<FieldEntity> findAllByEduCategoryPublicIdPageable(String eduCategoryPublicId, Pageable pageable);
 
 //    FieldEntity findWithStudentPeriodNameByFieldPublicId(String fieldPublicId);

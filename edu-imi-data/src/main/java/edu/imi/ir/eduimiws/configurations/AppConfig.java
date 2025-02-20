@@ -38,7 +38,7 @@ import java.util.Properties;
         @PropertySource("classpath:application.properties"),
         @PropertySource("classpath:security.properties")
 })
-@EnableCaching
+//@EnableCaching
 public class AppConfig {
 
     @Bean
@@ -103,7 +103,7 @@ public class AppConfig {
         return cacheManager;
     }*/
 
-    @Bean
+/*    @Bean
     public JCacheCacheManager jCacheCacheManager(JCacheManagerFactoryBean jCacheManagerFactoryBean) {
         JCacheCacheManager jCacheCacheManager = new JCacheCacheManager();
         jCacheCacheManager.setCacheManager(jCacheManagerFactoryBean.getObject());
@@ -115,7 +115,7 @@ public class AppConfig {
         JCacheManagerFactoryBean jCacheManagerFactoryBean = new JCacheManagerFactoryBean();
         jCacheManagerFactoryBean.setCacheManagerUri(getClass().getResource("/ehcache.xml").toURI());
         return jCacheManagerFactoryBean;
-    }
+    }*/
 
     @Bean
     public SpringApplicationContext springApplicationContext() {

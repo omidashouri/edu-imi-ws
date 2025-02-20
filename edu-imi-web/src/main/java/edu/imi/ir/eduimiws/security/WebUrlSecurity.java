@@ -15,9 +15,10 @@ public class WebUrlSecurity {
         httpSecurity
                 .securityMatcher("/web/**")
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/web/sadad/**").permitAll()
                         .requestMatchers("**/swagger-ui/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs", "/v2/api-docs/**", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
-                        .anyRequest().authenticated()
+//                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

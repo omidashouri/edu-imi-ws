@@ -1,98 +1,98 @@
 
 package edu.imi.ir.eduimiws.models.wsdl.attendance;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for PeriodCalculationInfo complex type.
+ * <p>Java class for PeriodCalculationInfo complex type</p>.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>The following schema fragment specifies the expected content contained within this class.</p>
  * 
- * <pre>
- * &lt;complexType name="PeriodCalculationInfo"&gt;
- *   &lt;complexContent&gt;
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;sequence&gt;
- *         &lt;element name="PCntDay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="FCntDay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdAmtAlwHurry" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdCntAlwHurry" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwhAmtNalwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwhAmtAlwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwAmtNormalNalwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwAmtNormalAlwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwSpecialExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwAmtExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdAmtAlwDelay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdCntAlwDelay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="AccruedHolidayInDay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="AccruedHolidayInMinutes" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="DeficitAccruedHolidayInDay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="DeficitAccruedHolidayInMinutes" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacAmtTotalPaidVacation" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="MisAmtTotalMission" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationRemaining" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationQuota" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="NwAmtTotalNightWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdAmtWorkDeficit" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdAmtAbs" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdCntAbs" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdAmtHurry" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdCntHurry" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdAmtNalwExit" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdAmtDelay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdCntDelay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdCntNalwExit" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="WdSpecialWorkDeficit" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="PaidDaysCount" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="PAmtInMission" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="PAmtInVacation" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="ServiceDelay" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="FFuncMin" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="PresenceInWorkIntervals" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SpecialVacation" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SpecialDeficitVacation" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="AssignedBoundWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwmhAmtAlwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwmAmtExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwsAmtNalwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="EwsAmtAlwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="MoreFunctionality" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="LessFunctionality" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SequenceWorkingDetails10Percent" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SequenceWorkingDetails15Percent" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SequenceWorkingDetails22Percent" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SequenceWorkingDetails35Percent" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SequenceWorkingDetails10PercentCount" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SequenceWorkingDetails15PercentCount" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SequenceWorkingDetails22PercentCount" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="SequenceWorkingDetails35PercentCount" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationHourlyIsRight" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationDailyIsRight" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationDailyIsRightInDays" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationSickHourly" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationSickDaily" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationSickDailyInDays" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationNotPaidHourly" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationNotPaidDaily" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationNotPaidDailyInDays" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="MissionDailyInDays" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="VacationRemainingTransferedFromPreviousYear" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="FridayWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="HolidayWork" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="CustomFunctionality" type="{http://tempuri.org/}ArrayOfDouble" minOccurs="0"/&gt;
- *         &lt;element name="PeriodId" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
- *         &lt;element name="PeriodName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="IsDefaultYear" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
- *       &lt;/sequence&gt;
- *     &lt;/restriction&gt;
- *   &lt;/complexContent&gt;
- * &lt;/complexType&gt;
- * </pre>
+ * <pre>{@code
+ * <complexType name="PeriodCalculationInfo">
+ *   <complexContent>
+ *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       <sequence>
+ *         <element name="PCntDay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="FCntDay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdAmtAlwHurry" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdCntAlwHurry" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwhAmtNalwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwhAmtAlwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwAmtNormalNalwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwAmtNormalAlwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwSpecialExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwAmtExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdAmtAlwDelay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdCntAlwDelay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="AccruedHolidayInDay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="AccruedHolidayInMinutes" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="DeficitAccruedHolidayInDay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="DeficitAccruedHolidayInMinutes" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacAmtTotalPaidVacation" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="MisAmtTotalMission" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationRemaining" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationQuota" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="NwAmtTotalNightWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdAmtWorkDeficit" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdAmtAbs" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdCntAbs" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdAmtHurry" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdCntHurry" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdAmtNalwExit" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdAmtDelay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdCntDelay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdCntNalwExit" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="WdSpecialWorkDeficit" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="PaidDaysCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="PAmtInMission" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="PAmtInVacation" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="ServiceDelay" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="FFuncMin" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="PresenceInWorkIntervals" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SpecialVacation" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SpecialDeficitVacation" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="AssignedBoundWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwmhAmtAlwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwmAmtExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwsAmtNalwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="EwsAmtAlwExtraWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="MoreFunctionality" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="LessFunctionality" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SequenceWorkingDetails10Percent" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SequenceWorkingDetails15Percent" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SequenceWorkingDetails22Percent" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SequenceWorkingDetails35Percent" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SequenceWorkingDetails10PercentCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SequenceWorkingDetails15PercentCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SequenceWorkingDetails22PercentCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="SequenceWorkingDetails35PercentCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationHourlyIsRight" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationDailyIsRight" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationDailyIsRightInDays" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationSickHourly" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationSickDaily" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationSickDailyInDays" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationNotPaidHourly" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationNotPaidDaily" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationNotPaidDailyInDays" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="MissionDailyInDays" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="VacationRemainingTransferedFromPreviousYear" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="FridayWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="HolidayWork" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         <element name="CustomFunctionality" type="{http://tempuri.org/}ArrayOfDouble" minOccurs="0"/>
+ *         <element name="PeriodId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         <element name="PeriodName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="IsDefaultYear" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *       </sequence>
+ *     </restriction>
+ *   </complexContent>
+ * </complexType>
+ * }</pre>
  * 
  * 
  */

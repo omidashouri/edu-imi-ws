@@ -24,9 +24,9 @@ public interface MessageMapper {
     @Named("toMessageDto")
     @Mappings({
             @Mapping(source = "id", target = "id"),
-            @Mapping(source = "id", target = "messagePublicId",
-                    qualifiedBy = {MappingUtil.MessageApiUtil.class,
-                            MappingUtil.MessageIdToMessagePublicId.class}),
+//            @Mapping(source = "id", target = "messagePublicId",
+//                    qualifiedBy = {MappingUtil.MessageApiUtil.class,
+//                            MappingUtil.MessageIdToMessagePublicId.class}),
             @Mapping(source = "subject", target = "subject"),
             @Mapping(source = "userCreator", target = "userCreatorDto", qualifiedByName = "personEntityToPersonDto"),
             @Mapping(source = "userCreator.id", target = "userCreatorId"),

@@ -1,32 +1,32 @@
 
 package edu.imi.ir.eduimiws.models.wsdl.attendance;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for UiRequestCartableIds complex type.
+ * <p>Java class for UiRequestCartableIds complex type</p>.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>The following schema fragment specifies the expected content contained within this class.</p>
  * 
- * <pre>
- * &lt;complexType name="UiRequestCartableIds"&gt;
- *   &lt;complexContent&gt;
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;sequence&gt;
- *         &lt;element name="IORecordRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/&gt;
- *         &lt;element name="VacationRegistrationRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/&gt;
- *         &lt;element name="MissionRegistrationRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/&gt;
- *         &lt;element name="DailyExtraWorkPermissionRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/&gt;
- *         &lt;element name="StandbyPermissionRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/&gt;
- *       &lt;/sequence&gt;
- *     &lt;/restriction&gt;
- *   &lt;/complexContent&gt;
- * &lt;/complexType&gt;
- * </pre>
+ * <pre>{@code
+ * <complexType name="UiRequestCartableIds">
+ *   <complexContent>
+ *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       <sequence>
+ *         <element name="IORecordRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/>
+ *         <element name="VacationRegistrationRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/>
+ *         <element name="MissionRegistrationRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/>
+ *         <element name="DailyExtraWorkPermissionRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/>
+ *         <element name="StandbyPermissionRequests" type="{http://tempuri.org/}ArrayOfLong" minOccurs="0"/>
+ *       </sequence>
+ *     </restriction>
+ *   </complexContent>
+ * </complexType>
+ * }</pre>
  * 
  * 
  */
