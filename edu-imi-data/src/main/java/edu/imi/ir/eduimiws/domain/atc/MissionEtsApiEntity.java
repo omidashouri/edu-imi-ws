@@ -19,6 +19,11 @@ import javax.persistence.*;
 
 public class MissionEtsApiEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
+    @Column(name = "ID")
+    private Long id;
+
     @Column(name = "PERNO", length = 10)
     private String perNo;
 
@@ -61,10 +66,7 @@ public class MissionEtsApiEntity extends BaseEntity {
     @JoinColumn(name = "PERSON_ID")
     private PersonEntity person;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
-    @Column(name = "ID")
-    private Long id;
+
 
     @Column(name = "YEAR", length = 4)
     private String year;

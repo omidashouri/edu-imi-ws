@@ -19,6 +19,11 @@ import javax.persistence.*;
 
 public class MorkhasiEtsApiEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
+    @Column(name = "ID")
+    private Long id;
+
     @Column(name = "PAGENO")
     private Long pageNo;
 
@@ -52,10 +57,6 @@ public class MorkhasiEtsApiEntity extends BaseEntity {
     @JoinColumn(name = "PERSON_ID")
     private PersonEntity person;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
-    @Column(name = "ID")
-    private Long id;
 
     //@EqualsAndHashCode.Exclude
     //@ToString.Exclude

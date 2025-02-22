@@ -19,6 +19,11 @@ import javax.persistence.*;
 
 public class DayMorEtsApiEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
+    @Column(name = "ID")
+    private Long id;
+
     @Column(name = "PAGENO")
     private Long pageNo;
 
@@ -52,10 +57,7 @@ public class DayMorEtsApiEntity extends BaseEntity {
     //@JoinColumn(name = "CREATOR)
     // private PersonEntity creator;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
-    @Column(name = "ID")
-    private Long id;
+
 
 
     @Column(name = "YEAR", length = 4)

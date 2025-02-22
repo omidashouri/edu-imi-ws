@@ -17,10 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/attendance")
@@ -108,18 +105,48 @@ public class AttendanceController {
     @GetMapping(path = "/getAllEmployeesInfo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getAllEmployeesInfo() {
+        return ResponseEntity.ok(employeeService.getAllEmployeesInfo());
+
+    }
 
 
-        // Get the SOAP interface
-        EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
-                .getEtsGeneralDataProviderServiceSoap();
-
-        // Call the `getAllCurrentlyEmployees` method
-        ArrayOfEmployeeInfo allEmployeesInfo = soap.getAllEmployeesInfo();
-
-        // Process the result
-        return ResponseEntity.ok(allEmployeesInfo);
-
+    @Operation(
+            summary = "update All Employees Info",
+            description = " ",
+            tags = "attendance",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                            schema = @Schema(implementation = String.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PutMapping(path = "/updateAllEmployeesInfo",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> updateAllEmployeesInfo() {
+        employeeService.updateAllEmployeeInfo();
+        return ResponseEntity.ok("successful operation");
     }
 
     @Operation(
