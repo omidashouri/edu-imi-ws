@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 @MappingUtil.DateConvertor
@@ -241,15 +243,44 @@ public class DateConvertor {
     }
 
     @MappingUtil.JalaliDateFromLocalDateTime
-    public String jalaliDateFromLocalDateTime(LocalDateTime localDateTime){
+    public String jalaliDateFromLocalDateTime(LocalDateTime localDateTime) {
         String georgianDate = localDateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd"));
         String[] mDate = georgianDate.split("-");
         return this.convertMiToKh(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
     }
 
     @MappingUtil.TimeFromLocalDateTime
-    public String timeFromLocalDateTime(LocalDateTime localDateTime){
+    public String timeFromLocalDateTime(LocalDateTime localDateTime) {
         return localDateTime.format(DateTimeFormatter.ofPattern("HH:MM:SS"));
+    }
+
+    @MappingUtil.XMLGregorianCalendarToJalaliDate
+    public String XMLGregorianCalendarToJalaliDate(XMLGregorianCalendar inputGregorianDate) {
+
+        String jalaliDate = null;
+        try {
+            if (inputGregorianDate == null) {
+                return jalaliDate;
+            }
+
+            TimeZone timeZone = TimeZone.getTimeZone("Asia/Tehran");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            sdf.setTimeZone(timeZone);
+            Date gregorianDate = null;
+
+            gregorianDate = sdf.parse(inputGregorianDate.toString());
+
+            PersianCalendar persianCalendar = new PersianCalendar(gregorianDate);
+            int persianYear = persianCalendar.get(PersianCalendar.YEAR);
+            int persianMonth = persianCalendar.get(PersianCalendar.MONTH) + 1;
+            int persianDay = persianCalendar.get(PersianCalendar.DAY_OF_MONTH);
+
+            jalaliDate = persianYear + "/" + String.format("%02d", persianMonth) + "/" + String.format("%02d", persianDay);
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return jalaliDate;
     }
 
     //#1
@@ -867,7 +898,7 @@ public class DateConvertor {
                     + (Long.valueOf(StartTime
                     .split(":")[1]).intValue() * 60 * 1000);
             int endTimeInMin = (Long.valueOf(
-                    endTime.split(":")[0])
+                            endTime.split(":")[0])
                     .intValue() * 3600 * 1000)
                     + (Long.valueOf(endTime
                     .split(":")[1]).intValue() * 60 * 1000);
@@ -1016,22 +1047,23 @@ public class DateConvertor {
         }
     }
 
-    public Timestamp getCurrentTimeStampWithZoneIdTehran(){
+    public Timestamp getCurrentTimeStampWithZoneIdTehran() {
         return Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Tehran")));
     }
 
     /**
      * author Omid Ashouri (Attention: Method is copied from Bank Melli Sample)
+     *
      * @return
      */
-    public String getBankMelliPaymentDate(){
+    public String getBankMelliPaymentDate() {
         String date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ").format(new Date());
         String tail = date.substring(date.indexOf("+") + 1);
         tail = tail.substring(0, 2) + ":" + tail.substring(2);
         return date.substring(0, date.indexOf("+") + 1) + tail;
     }
 
-    public String getCurrentYear(){
+    public String getCurrentYear() {
         return this.jalaliDateFromLocalDateTime(LocalDateTime.now()).split("/")[0];
     }
 }

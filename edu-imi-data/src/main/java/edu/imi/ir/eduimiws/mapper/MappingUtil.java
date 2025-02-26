@@ -300,6 +300,12 @@ public class MappingUtil {
     public @interface TimeFromLocalDateTime {
     }
 
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface XMLGregorianCalendarToJalaliDate {
+    }
+
 
 //    ---------------------------------------
 
