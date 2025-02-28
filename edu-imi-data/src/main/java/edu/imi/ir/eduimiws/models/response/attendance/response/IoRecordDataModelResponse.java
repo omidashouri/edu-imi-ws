@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.models.response.attendance.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import edu.imi.ir.eduimiws.utilities.attendance.AcceptanceState;
 import edu.imi.ir.eduimiws.utilities.attendance.DayOfWeek;
@@ -29,8 +30,8 @@ public class IoRecordDataModelResponse implements Serializable {
     private DayOfWeek dayOfWeek;
     private String jalaliDate;
     private String time;
+    @JsonProperty("RecordIoType")
     private RecordIoType recordIoType;
     private AcceptanceState acceptanceState;
-
     private IoSourceType ioSourceType;
 }

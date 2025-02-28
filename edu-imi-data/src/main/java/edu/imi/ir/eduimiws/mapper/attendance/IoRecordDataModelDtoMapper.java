@@ -1,10 +1,8 @@
 package edu.imi.ir.eduimiws.mapper.attendance;
 
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
-import edu.imi.ir.eduimiws.models.dto.attendance.EmployeeInfoDto;
 import edu.imi.ir.eduimiws.models.dto.attendance.IoRecordDataModelDto;
 import edu.imi.ir.eduimiws.models.response.attendance.response.IoRecordDataModelResponse;
-import edu.imi.ir.eduimiws.models.wsdl.attendance.EmployeeInfo;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.IoRecordDataModel;
 import edu.imi.ir.eduimiws.utilities.attendance.AcceptanceState;
 import edu.imi.ir.eduimiws.utilities.attendance.DayOfWeek;
@@ -41,7 +39,7 @@ public interface IoRecordDataModelDtoMapper {
             @Mapping(source = "acceptanceStateInText", target = "acceptanceState",
                     qualifiedBy = {MappingUtil.AcceptanceStateConverter.class,
                             MappingUtil.AcceptanceStateByName.class}),
-            @Mapping(source = "ioSourceTypeInText", target = "ioSourceCode",
+            @Mapping(source = "ioSourceTypeInText", target = "ioSourceType",
                     qualifiedBy = {MappingUtil.IoSourceTypeConverter.class,
                             MappingUtil.IoSourceTypeByName.class}),
     })

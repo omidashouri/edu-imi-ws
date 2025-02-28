@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.controllers.attendance.v1;
 
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.attendance.response.EmployeeResponse;
+import edu.imi.ir.eduimiws.models.response.attendance.response.IoRecordDataModelResponse;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.*;
 import edu.imi.ir.eduimiws.services.attendance.EmployeeService;
 import edu.imi.ir.eduimiws.services.attendance.IoRecordDataModelEtsService;
@@ -166,7 +167,7 @@ public class AttendanceController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                            schema = @Schema(implementation = ArrayOfIoRecordDataModel.class)
+                                            schema = @Schema(implementation = IoRecordDataModelResponse.class)
                                     )
                             )
                     ),
@@ -188,17 +189,7 @@ public class AttendanceController {
     @GetMapping(path = "/getAllIoRecordsByDate",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getAllIoRecordsByDate(@RequestParam String date) {
-        // Get the SOAP interface
-        EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
-                .getEtsGeneralDataProviderServiceSoap();
-
-//        todo: here
-        // Call the `getAllCurrentlyEmployees` method
-        ArrayOfIoRecordDataModel allIoRecordDataModel = soap.getAllIoRecordsByDate(date);
-
-        // Process the result
-        return ResponseEntity.ok(allIoRecordDataModel);
-
+        return ResponseEntity.ok(ioRecordDataModelEtsService.getAllIoRecordsFromApiByDate(date));
     }
 
     @Operation(

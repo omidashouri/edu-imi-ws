@@ -1,27 +1,24 @@
 package edu.imi.ir.eduimiws.utilities.attendance;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
+import lombok.Getter;
 
 import java.util.Objects;
+@Getter
 @MappingUtil.AcceptanceStateConverter
 public enum AcceptanceState {
-    Approved(1L,"تایید شده");
+    APPROVED(1L,"تایید شده"),
+    UNKNOWN(-1L,"نامشخص");
 
-    private Long code;
-    private String name;
 
-    private AcceptanceState(Long code, String name) {
+    private final Long code;
+    private final String name;
+
+    AcceptanceState(Long code, String name) {
         this.code = code;
         this.name = name;
-    }
-
-    public Long getCode() {
-        return code;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public static AcceptanceState getAcceptanceStateByCode(Long code) {
@@ -30,7 +27,7 @@ public enum AcceptanceState {
                 return acceptanceState;
             }
         }
-        return null;
+        return AcceptanceState.UNKNOWN;
     }
 
     @JsonCreator
@@ -41,6 +38,15 @@ public enum AcceptanceState {
                 return acceptanceState;
             }
         }
-        return null;
+        return AcceptanceState.UNKNOWN;
+    }
+
+    @JsonValue
+    public String toValue() {
+        for (AcceptanceState acceptanceState : AcceptanceState.values()) {
+            if (acceptanceState == this)
+                return acceptanceState.getName();
+        }
+        return AcceptanceState.UNKNOWN.getName();
     }
 }

@@ -32,7 +32,7 @@ public class IoRecordDataModelDto implements Serializable {
     private String acceptanceStateInText;
     private AcceptanceState acceptanceState;
     private String ioSourceTypeInText;
-    private IoSourceType ioSourceCode;
+    private IoSourceType ioSourceType;
     private Timestamp createDateTs;
     private Timestamp editDateTs;
     private String Description;
