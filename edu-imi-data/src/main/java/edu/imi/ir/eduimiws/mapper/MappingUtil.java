@@ -309,4 +309,63 @@ public class MappingUtil {
 
 //    ---------------------------------------
 
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface DayOfWeekConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DayOfWeekByPersianName {
+    }
+
+//    ---------------------------------------
+
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface RecordIoTypeConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface RecordIoTypeByName {
+    }
+
+
+//    ---------------------------------------
+
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface AcceptanceStateConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AcceptanceStateByName {
+    }
+
+
+//    ---------------------------------------
+
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface IoSourceTypeConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface IoSourceTypeByName {
+    }
+
+
+//    ---------------------------------------
+
 }

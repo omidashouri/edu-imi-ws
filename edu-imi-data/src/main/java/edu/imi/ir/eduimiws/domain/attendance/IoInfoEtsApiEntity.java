@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.domain.atc;
+package edu.imi.ir.eduimiws.domain.attendance;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;

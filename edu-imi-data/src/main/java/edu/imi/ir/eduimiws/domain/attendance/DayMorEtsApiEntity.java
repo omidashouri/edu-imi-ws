@@ -1,4 +1,4 @@
-package edu.imi.ir.eduimiws.domain.atc;
+package edu.imi.ir.eduimiws.domain.attendance;
 
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
@@ -14,10 +14,10 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@SequenceGenerator(name = "entity_sequence", schema = "ATC", sequenceName = "SEQ_MORKHASI_ETS_API", allocationSize = 1)
-@Table(schema = "ATC", name = "TBL_MORKHASI_ETS_API")
+@SequenceGenerator(name = "entity_sequence", schema = "ATC", sequenceName = "SEQ_DAYMOR_ETS_API", allocationSize = 1)
+@Table(schema = "ATC", name = "TBL_DAYMOR_ETS_API")
 
-public class MorkhasiEtsApiEntity extends BaseEntity {
+public class DayMorEtsApiEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
@@ -33,17 +33,11 @@ public class MorkhasiEtsApiEntity extends BaseEntity {
     @Column(name = "BEGINDATE", length = 5)
     private String beginDate;
 
-    @Column(name = "BEGINTIME", length = 5)
-    private String beginTime;
-
-    @Column(name = "DESCRIPT", length = 230)
-    private String descript;
-
     @Column(name = "ENDDATE", length = 5)
     private String endDate;
 
-    @Column(name = "INDECISIVE")
-    private Long indecisive;
+    @Column(name = "DESCRIPT", length = 230)
+    private String descript;
 
     @Column(name = "RECDATE", length = 5)
     private String recDate;
@@ -57,14 +51,15 @@ public class MorkhasiEtsApiEntity extends BaseEntity {
     @JoinColumn(name = "PERSON_ID")
     private PersonEntity person;
 
-
     //@EqualsAndHashCode.Exclude
     //@ToString.Exclude
     //@ManyToOne(fetch = FetchType.LAZY)
-    //  @JoinColumn(name = "CREATOR)
+    //@JoinColumn(name = "CREATOR)
     // private PersonEntity creator;
+
+
+
 
     @Column(name = "YEAR", length = 4)
     private String year;
-
 }

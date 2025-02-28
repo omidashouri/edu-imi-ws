@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.mapper.attendance;
 
 
-import edu.imi.ir.eduimiws.domain.atc.EmployeeInfoEtsApiEntity;
+import edu.imi.ir.eduimiws.domain.attendance.EmployeeInfoEtsApiEntity;
 import edu.imi.ir.eduimiws.models.dto.attendance.EmployeeInfoDto;
 import edu.imi.ir.eduimiws.models.response.attendance.response.EmployeeInfoResponse;
 import org.mapstruct.*;

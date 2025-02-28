@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.services.attendance;
 
-import edu.imi.ir.eduimiws.domain.atc.EmployeeInfoEtsApiEntity;
+import edu.imi.ir.eduimiws.domain.attendance.EmployeeInfoEtsApiEntity;
 import edu.imi.ir.eduimiws.mapper.attendance.EmployeeDataModelMapper;
 import edu.imi.ir.eduimiws.mapper.attendance.EmployeeInfoDtoMapper;
 import edu.imi.ir.eduimiws.mapper.attendance.EmployeeInfoMapper;

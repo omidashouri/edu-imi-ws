@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.attendance.response.EmployeeResponse;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.*;
 import edu.imi.ir.eduimiws.services.attendance.EmployeeService;
+import edu.imi.ir.eduimiws.services.attendance.IoRecordDataModelEtsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AttendanceController {
 
     private final EmployeeService employeeService;
+    private final IoRecordDataModelEtsService ioRecordDataModelEtsService;
     private final EtsGeneralDataProviderService etsGeneralDataProviderService;
 
     @Operation(
@@ -190,6 +192,7 @@ public class AttendanceController {
         EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
                 .getEtsGeneralDataProviderServiceSoap();
 
+//        todo: here
         // Call the `getAllCurrentlyEmployees` method
         ArrayOfIoRecordDataModel allIoRecordDataModel = soap.getAllIoRecordsByDate(date);
 
