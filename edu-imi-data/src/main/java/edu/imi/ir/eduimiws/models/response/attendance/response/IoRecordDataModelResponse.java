@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import edu.imi.ir.eduimiws.utilities.attendance.AcceptanceState;
 import edu.imi.ir.eduimiws.utilities.attendance.DayOfWeek;
-import edu.imi.ir.eduimiws.utilities.attendance.IoSourceType;
+import edu.imi.ir.eduimiws.utilities.attendance.SourceType;
 import edu.imi.ir.eduimiws.utilities.attendance.RecordIoType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,8 +30,8 @@ public class IoRecordDataModelResponse implements Serializable {
     private DayOfWeek dayOfWeek;
     private String jalaliDate;
     private String time;
-    @JsonProperty("RecordIoType")
+//    @JsonProperty("RecordIoType")
     private RecordIoType recordIoType;
     private AcceptanceState acceptanceState;
-    private IoSourceType ioSourceType;
+    private SourceType sourceType;
 }

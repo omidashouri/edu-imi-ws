@@ -2,7 +2,7 @@ package edu.imi.ir.eduimiws.models.dto.attendance;
 
 import edu.imi.ir.eduimiws.utilities.attendance.AcceptanceState;
 import edu.imi.ir.eduimiws.utilities.attendance.DayOfWeek;
-import edu.imi.ir.eduimiws.utilities.attendance.IoSourceType;
+import edu.imi.ir.eduimiws.utilities.attendance.SourceType;
 import edu.imi.ir.eduimiws.utilities.attendance.RecordIoType;
 import lombok.*;
 
@@ -32,7 +32,7 @@ public class IoRecordDataModelDto implements Serializable {
     private String acceptanceStateInText;
     private AcceptanceState acceptanceState;
     private String ioSourceTypeInText;
-    private IoSourceType ioSourceType;
+    private SourceType ioSourceType;
     private Timestamp createDateTs;
     private Timestamp editDateTs;
     private String Description;

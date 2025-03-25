@@ -47,8 +47,8 @@ public class IoRecordDataModelEtsApiEntity  extends BaseEntity implements Serial
     private AcceptanceState acceptanceState;
 
     @Column(name = "IOSOURCE_TYPE")
-    @Convert(converter = IoSourceTypeConverter.class)
-    private IoSourceType ioSourceType;
+    @Convert(converter = SourceTypeConverter.class)
+    private SourceType sourceType;
 
     @Column(name = "CREATE_DATE_TS")
     private Timestamp createDateTs;

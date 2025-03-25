@@ -2,10 +2,10 @@ package edu.imi.ir.eduimiws.utilities.attendance;
 
 import javax.persistence.AttributeConverter;
 
-public class IoSourceTypeConverter implements AttributeConverter<IoSourceType, Long> {
+public class SourceTypeConverter implements AttributeConverter<SourceType, Long> {
 
     @Override
-    public Long convertToDatabaseColumn(IoSourceType attribute) {
+    public Long convertToDatabaseColumn(SourceType attribute) {
         if (attribute == null) {
             return null;
         }
@@ -13,10 +13,10 @@ public class IoSourceTypeConverter implements AttributeConverter<IoSourceType, L
     }
 
     @Override
-    public IoSourceType convertToEntityAttribute(Long dbData) {
+    public SourceType convertToEntityAttribute(Long dbData) {
         if (dbData == null) {
             return null;
         }
-        return IoSourceType.getIoSourceTypeByCode(dbData);
+        return SourceType.getSourceTypeByCode(dbData);
     }
 }

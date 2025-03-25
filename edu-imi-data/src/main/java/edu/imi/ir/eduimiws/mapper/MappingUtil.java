@@ -356,13 +356,28 @@ public class MappingUtil {
     @Qualifier
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.CLASS)
-    public @interface IoSourceTypeConverter {
+    public @interface SourceTypeConverter {
     }
 
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface IoSourceTypeByName {
+    public @interface SourceTypeByName {
+    }
+
+
+//    ---------------------------------------
+
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface MissionNameConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface MissionNameByName {
     }
 
 

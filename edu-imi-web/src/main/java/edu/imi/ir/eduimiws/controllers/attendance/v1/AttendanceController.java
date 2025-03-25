@@ -7,6 +7,8 @@ import edu.imi.ir.eduimiws.models.response.attendance.response.IoRecordDataModel
 import edu.imi.ir.eduimiws.models.wsdl.attendance.*;
 import edu.imi.ir.eduimiws.services.attendance.EmployeeService;
 import edu.imi.ir.eduimiws.services.attendance.IoRecordDataModelEtsService;
+import edu.imi.ir.eduimiws.services.attendance.MissionRegistrationDataModelEtsService;
+import edu.imi.ir.eduimiws.validators.JalaliDateValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -29,6 +31,7 @@ public class AttendanceController {
 
     private final EmployeeService employeeService;
     private final IoRecordDataModelEtsService ioRecordDataModelEtsService;
+    private final MissionRegistrationDataModelEtsService missionRegistrationDataModelEtsService;
     private final EtsGeneralDataProviderService etsGeneralDataProviderService;
 
     @Operation(
@@ -228,16 +231,8 @@ public class AttendanceController {
             })
     @GetMapping(path = "/getAllMissionRegistrationsByDate",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getMissionRegistrationsByDate(@RequestParam String date) {
-        // Get the SOAP interface
-        EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
-                .getEtsGeneralDataProviderServiceSoap();
-
-        // Call the `getAllCurrentlyEmployees` method
-        ArrayOfMissionRegistrationDataModel allMissionRegistrationsByDate = soap.getAllMissionRegistrationsByDate(date);
-
-        // Process the result
-        return ResponseEntity.ok(allMissionRegistrationsByDate);
+    public ResponseEntity<?> getMissionRegistrationsByDate(@RequestParam @JalaliDateValidation String date) {
+        return ResponseEntity.ok(missionRegistrationDataModelEtsService.getAllMissonRegistrationFromApiByDate(date));
 
     }
 

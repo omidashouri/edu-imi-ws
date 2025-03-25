@@ -6,14 +6,14 @@ import edu.imi.ir.eduimiws.models.response.attendance.response.IoRecordDataModel
 import edu.imi.ir.eduimiws.models.wsdl.attendance.IoRecordDataModel;
 import edu.imi.ir.eduimiws.utilities.attendance.AcceptanceState;
 import edu.imi.ir.eduimiws.utilities.attendance.DayOfWeek;
-import edu.imi.ir.eduimiws.utilities.attendance.IoSourceType;
+import edu.imi.ir.eduimiws.utilities.attendance.SourceType;
 import edu.imi.ir.eduimiws.utilities.attendance.RecordIoType;
 import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        uses = {DayOfWeek.class, RecordIoType.class, AcceptanceState.class, IoSourceType.class},
+        uses = {DayOfWeek.class, RecordIoType.class, AcceptanceState.class, SourceType.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface IoRecordDataModelDtoMapper {
@@ -40,8 +40,8 @@ public interface IoRecordDataModelDtoMapper {
                     qualifiedBy = {MappingUtil.AcceptanceStateConverter.class,
                             MappingUtil.AcceptanceStateByName.class}),
             @Mapping(source = "ioSourceTypeInText", target = "ioSourceType",
-                    qualifiedBy = {MappingUtil.IoSourceTypeConverter.class,
-                            MappingUtil.IoSourceTypeByName.class}),
+                    qualifiedBy = {MappingUtil.SourceTypeConverter.class,
+                            MappingUtil.SourceTypeByName.class}),
     })
     IoRecordDataModelDto fromIoRecordDataModel(IoRecordDataModel source);
 
@@ -59,7 +59,7 @@ public interface IoRecordDataModelDtoMapper {
             @Mapping(source = "finalTimeInText", target = "time"),
             @Mapping(source = "recordIoType", target = "recordIoType"),
             @Mapping(source = "acceptanceState", target = "acceptanceState"),
-            @Mapping(source = "ioSourceType", target = "ioSourceType")
+            @Mapping(source = "ioSourceType", target = "sourceType")
     })
     IoRecordDataModelResponse toIoRecordDataModelResponse(IoRecordDataModelDto source);
 
