@@ -383,4 +383,19 @@ public class MappingUtil {
 
 //    ---------------------------------------
 
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface VacationNameConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface VacationNameByName {
+    }
+
+
+//    ---------------------------------------
+
 }

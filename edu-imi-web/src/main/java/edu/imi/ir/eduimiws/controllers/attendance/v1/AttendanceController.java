@@ -4,10 +4,13 @@ package edu.imi.ir.eduimiws.controllers.attendance.v1;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.attendance.response.EmployeeResponse;
 import edu.imi.ir.eduimiws.models.response.attendance.response.IoRecordDataModelResponse;
+import edu.imi.ir.eduimiws.models.response.attendance.response.MissionRegistrationDataModelResponse;
+import edu.imi.ir.eduimiws.models.response.attendance.response.VacationRegistrationDataModelResponse;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.*;
 import edu.imi.ir.eduimiws.services.attendance.EmployeeService;
 import edu.imi.ir.eduimiws.services.attendance.IoRecordDataModelEtsService;
 import edu.imi.ir.eduimiws.services.attendance.MissionRegistrationDataModelEtsService;
+import edu.imi.ir.eduimiws.services.attendance.VacationRegistrationDataModelEtsService;
 import edu.imi.ir.eduimiws.validators.JalaliDateValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -32,6 +35,7 @@ public class AttendanceController {
     private final EmployeeService employeeService;
     private final IoRecordDataModelEtsService ioRecordDataModelEtsService;
     private final MissionRegistrationDataModelEtsService missionRegistrationDataModelEtsService;
+    private final VacationRegistrationDataModelEtsService vacationRegistrationDataModelEtsService;
     private final EtsGeneralDataProviderService etsGeneralDataProviderService;
 
     @Operation(
@@ -210,7 +214,7 @@ public class AttendanceController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                            schema = @Schema(implementation = ArrayOfMissionRegistrationDataModel.class)
+                                            schema = @Schema(implementation = MissionRegistrationDataModelResponse.class)
                                     )
                             )
                     ),
@@ -251,7 +255,7 @@ public class AttendanceController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                            schema = @Schema(implementation = ArrayOfVacationRegistrationDataModel.class)
+                                            schema = @Schema(implementation = VacationRegistrationDataModelResponse.class)
                                     )
                             )
                     ),
@@ -272,17 +276,10 @@ public class AttendanceController {
             })
     @GetMapping(path = "/getAllVacationRegistrationsByDate",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> getAllVacationRegistrationsByDate(@RequestParam String date) {
-        // Get the SOAP interface
-        EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
-                .getEtsGeneralDataProviderServiceSoap();
-
-        // Call the `getAllCurrentlyEmployees` method
-        ArrayOfVacationRegistrationDataModel VacationRegistrationsByDate = soap.getAllVacationRegistrationsByDate(date);
-
-        // Process the result
-        return ResponseEntity.ok(VacationRegistrationsByDate);
+    public ResponseEntity<?> getVacationRegistrationsByDate(@RequestParam @JalaliDateValidation String date) {
+        return ResponseEntity.ok(vacationRegistrationDataModelEtsService.getAllVacationRegistrationFromApiByDate(date));
     }
+
 
     @Operation(
             summary = "get All Organization Chart List",
