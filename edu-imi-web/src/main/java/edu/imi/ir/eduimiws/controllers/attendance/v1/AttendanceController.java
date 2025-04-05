@@ -5,12 +5,9 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.attendance.response.EmployeeResponse;
 import edu.imi.ir.eduimiws.models.response.attendance.response.IoRecordDataModelResponse;
 import edu.imi.ir.eduimiws.models.response.attendance.response.MissionRegistrationDataModelResponse;
-import edu.imi.ir.eduimiws.models.response.attendance.response.VacationRegistrationDataModelResponse;
+import edu.imi.ir.eduimiws.models.response.attendance.response.OrganizationChartDataModelResponse;
 import edu.imi.ir.eduimiws.models.wsdl.attendance.*;
-import edu.imi.ir.eduimiws.services.attendance.EmployeeService;
-import edu.imi.ir.eduimiws.services.attendance.IoRecordDataModelEtsService;
-import edu.imi.ir.eduimiws.services.attendance.MissionRegistrationDataModelEtsService;
-import edu.imi.ir.eduimiws.services.attendance.VacationRegistrationDataModelEtsService;
+import edu.imi.ir.eduimiws.services.attendance.*;
 import edu.imi.ir.eduimiws.validators.JalaliDateValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -36,6 +33,7 @@ public class AttendanceController {
     private final IoRecordDataModelEtsService ioRecordDataModelEtsService;
     private final MissionRegistrationDataModelEtsService missionRegistrationDataModelEtsService;
     private final VacationRegistrationDataModelEtsService vacationRegistrationDataModelEtsService;
+    private final OrganizationChartDataModelEtsService organizationChartDataModelEtsService;
     private final EtsGeneralDataProviderService etsGeneralDataProviderService;
 
     @Operation(
@@ -134,7 +132,7 @@ public class AttendanceController {
                             responseCode = "200",
                             description = "successful operation",
                             content = @Content(
-                                            schema = @Schema(implementation = String.class)
+                                    schema = @Schema(implementation = String.class)
                             )
                     ),
                     @ApiResponse(
@@ -233,7 +231,7 @@ public class AttendanceController {
                             )
                     )
             })
-    @GetMapping(path = "/getAllMissionRegistrationsByDate",
+    @GetMapping(path = "getllMissionRegistrationsByDate",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getMissionRegistrationsByDate(@RequestParam @JalaliDateValidation String date) {
         return ResponseEntity.ok(missionRegistrationDataModelEtsService.getAllMissonRegistrationFromApiByDate(date));
@@ -255,7 +253,7 @@ public class AttendanceController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                            schema = @Schema(implementation = VacationRegistrationDataModelResponse.class)
+                                            schema = @Schema(implementation = ArrayOfVacationRegistrationDataModel.class)
                                     )
                             )
                     ),
@@ -296,7 +294,7 @@ public class AttendanceController {
                             description = "successful operation",
                             content = @Content(
                                     array = @ArraySchema(
-                                            schema = @Schema(implementation = ArrayOfOrganizationChartDataModel.class)
+                                            schema = @Schema(implementation = OrganizationChartDataModelResponse.class)
                                     )
                             )
                     ),
@@ -318,15 +316,8 @@ public class AttendanceController {
     @GetMapping(path = "/getAllOrganizationChartList",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getAllOrganizationChartList() {
-        // Get the SOAP interface
-        EtsGeneralDataProviderServiceSoap soap = etsGeneralDataProviderService
-                .getEtsGeneralDataProviderServiceSoap();
+        return ResponseEntity.ok(organizationChartDataModelEtsService.getAllOrganizationChart());
 
-        // Call the `getAllCurrentlyEmployees` method
-        ArrayOfOrganizationChartDataModel AllOrganizationChartList = soap.getAllOrganizationChartList();
-
-        // Process the result
-        return ResponseEntity.ok(AllOrganizationChartList);
     }
 
     @Operation(

@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.models.dto.attendance;
 import lombok.*;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 
 @Data
@@ -16,5 +17,9 @@ public class OrganizationChartDataModelDto implements Serializable {
 
     private Long organizationChartId;
     private String organizationChartName;
+    private EmployeeDataModelDto employeeDataModelDto;
+    private Timestamp createDateTs;
+    private Timestamp editDateTs;
+    private String Description;
 
 }
