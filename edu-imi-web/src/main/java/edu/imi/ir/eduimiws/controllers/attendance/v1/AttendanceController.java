@@ -451,4 +451,44 @@ public class AttendanceController {
     public ResponseEntity<?> getFunctionalityList(@RequestParam String employeeCode, @RequestParam LocalDateTime fromDate, @RequestParam LocalDateTime toDate ) {
         return ResponseEntity.ok(functionalityListService.getFunctionalityList(employeeCode, fromDate, toDate));
     }
+
+    @Operation(
+            summary = "get All Currently Employees",
+            description = " ",
+            tags = "attendance",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = EmployeeResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @GetMapping(path = "/getAllCurrentlyEmployees",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getAllCurrentlyEmployees() {
+        return ResponseEntity.ok(employeeService.getAllCurrentlyEmployees());
+    }
 }

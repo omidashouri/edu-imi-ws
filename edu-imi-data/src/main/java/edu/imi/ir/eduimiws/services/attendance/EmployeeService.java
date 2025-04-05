@@ -11,4 +11,6 @@ public interface EmployeeService {
     List<EmployeeResponse> getAllEmployees();
     List<EmployeeInfoResponse> getAllEmployeesInfo();
     void updateAllEmployeeInfo();
+    List<EmployeeResponse> getAllCurrentlyEmployees();
+
 }

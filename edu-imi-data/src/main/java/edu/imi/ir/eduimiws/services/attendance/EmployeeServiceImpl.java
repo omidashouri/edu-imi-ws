@@ -84,6 +84,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    @Override
+    public List<EmployeeResponse> getAllCurrentlyEmployees() {
+        ArrayOfEmployeeDataModel employeeDataModel = this.getEtsSoapService().getAllCurrentlyEmployees();
+        return Stream.of(employeeDataModel)
+                .filter(Objects::nonNull)
+                .map(ArrayOfEmployeeDataModel::getEmployeeDataModel)
+                .filter(Objects::nonNull)
+                .map(employeeDataModelMapper::toEmployeeDataModelDtoList)
+                .map(employeeResponseMapper::toEmployeeResponseList)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
     private EtsGeneralDataProviderServiceSoap getEtsSoapService() {
         return etsGeneralDataProviderService.getEtsGeneralDataProviderServiceSoap();
     }
