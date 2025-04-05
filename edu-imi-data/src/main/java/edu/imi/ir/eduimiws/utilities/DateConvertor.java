@@ -7,6 +7,8 @@ import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -14,10 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @MappingUtil.DateConvertor
@@ -281,6 +280,27 @@ public class DateConvertor {
             throw new RuntimeException(e);
         }
         return jalaliDate;
+    }
+
+    @MappingUtil.LocalDateTimeToXMLGregorianCalendar
+    public XMLGregorianCalendar localDateTimeToXMLGregorianCalendar(LocalDateTime inputLocalDateTime) {
+
+        XMLGregorianCalendar xmlGregorianCalendar = null;
+        try {
+            if (inputLocalDateTime == null) {
+                return xmlGregorianCalendar;
+            }
+
+            GregorianCalendar gregorianCalendar = GregorianCalendar.from(
+                    inputLocalDateTime.atZone(ZoneId.of("Asia/Tehran"))
+            );
+
+            xmlGregorianCalendar  = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        return xmlGregorianCalendar;
     }
 
     //#1

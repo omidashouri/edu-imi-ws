@@ -307,6 +307,13 @@ public class MappingUtil {
     }
 
 
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface LocalDateTimeToXMLGregorianCalendar {
+    }
+
+
 //    ---------------------------------------
 
     @Qualifier

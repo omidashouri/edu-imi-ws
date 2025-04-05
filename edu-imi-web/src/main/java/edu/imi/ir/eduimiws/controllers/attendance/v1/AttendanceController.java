@@ -23,6 +23,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/api/v1/attendance")
 @RequiredArgsConstructor
@@ -35,6 +38,7 @@ public class AttendanceController {
     private final VacationRegistrationDataModelEtsService vacationRegistrationDataModelEtsService;
     private final OrganizationChartDataModelEtsService organizationChartDataModelEtsService;
     private final EtsGeneralDataProviderService etsGeneralDataProviderService;
+    private final FunctionalityListService functionalityListService;
 
     @Operation(
             summary = "get All Employees",
@@ -406,5 +410,45 @@ public class AttendanceController {
 
         // Process the result
         return ResponseEntity.ok(employees);
+    }
+
+    @Operation(
+            summary = "get Functionality List",
+            description = " ",
+            tags = "attendance",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            headers = {@Header(name = "authorization", description = "authorization description"),
+                                    @Header(name = "userPublicId")},
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ArrayList.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal Server Error",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @GetMapping(path = "/getFunctionalityList",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> getFunctionalityList(@RequestParam String employeeCode, @RequestParam LocalDateTime fromDate, @RequestParam LocalDateTime toDate ) {
+        return ResponseEntity.ok(functionalityListService.getFunctionalityList(employeeCode, fromDate, toDate));
     }
 }
