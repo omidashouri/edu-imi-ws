@@ -30,6 +30,16 @@ public class IoRecordDataModelEtsServiceImpl implements IoRecordDataModelEtsServ
         return ioRecordDataModelResponses;
     }
 
+    @Override
+    public List<IoRecordDataModelResponse> getIoRecordByDateRange(String jalaliFromDate, String jalaliToDate) {
+        ArrayOfIoRecordDataModel allIoRecordDataModel = getEtsSoapService().getIORecordPerDateRange(jalaliFromDate,jalaliToDate);
+        List<IoRecordDataModelResponse> ioRecordDataModelResponses =  allIoRecordDataModel.getIoRecordDataModel()
+                .stream().map(ioRecordDataModelDtoMapper::fromIoRecordDataModel)
+                .map(ioRecordDataModelDtoMapper::toIoRecordDataModelResponse)
+                .collect(Collectors.toList());
+        return ioRecordDataModelResponses;
+    }
+
     private EtsGeneralDataProviderServiceSoap getEtsSoapService() {
         return etsGeneralDataProviderService.getEtsGeneralDataProviderServiceSoap();
     }

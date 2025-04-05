@@ -7,4 +7,5 @@ import java.util.List;
 public interface IoRecordDataModelEtsService {
 
     List<IoRecordDataModelResponse> getAllIoRecordsFromApiByDate(String jalaliDate);
+    List<IoRecordDataModelResponse> getIoRecordByDateRange(String jalaliFromDate, String jalaliToDate);
 }
