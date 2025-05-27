@@ -363,6 +363,15 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi behdadNewApi() {
+        return GroupedOpenApi.builder()
+                .setGroup("BehdadNewApis")
+                .pathsToMatch("/api/v1/behdad/new/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
 
 /*    @Bean
     public GroupedOpenApi periodCertificateSmsApiApi() {
