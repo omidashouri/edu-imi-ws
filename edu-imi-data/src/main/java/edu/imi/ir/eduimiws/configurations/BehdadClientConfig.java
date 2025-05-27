@@ -78,7 +78,7 @@ public class BehdadClientConfig {
         HTTPConduit httpConduit = (HTTPConduit) client.getConduit();
 
         // Configure the client certificate
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        KeyStore keyStore = KeyStore.getInstance("PKCS12","BC");
         InputStream keyStoreStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("pfx/behdadcer.pfx");
         if (keyStoreStream == null) {
             throw new RuntimeException("Keystore file not found");
