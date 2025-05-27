@@ -39,7 +39,7 @@ public class BehdadServiceImpl implements BehdadService {
             List<AccountInfo> accountNumbers = accountService1.getAccountServiceImplPort()
                                                     .getAccountNumbers(credential1);*/
 
-            accountService = BehdadClientConfig.createAccountServiceProxy();
+            accountService = this.getAccountServiceByProxy();
             return accountService.getAccountNumbers(credential1);
 
 //            return null;
@@ -81,4 +81,9 @@ public class BehdadServiceImpl implements BehdadService {
             throw new RuntimeException(e);
         }
     }*/
+
+
+    private AccountService getAccountServiceByProxy() throws Exception {
+       return BehdadClientConfig.createAccountServiceProxy();
+    }
 }
