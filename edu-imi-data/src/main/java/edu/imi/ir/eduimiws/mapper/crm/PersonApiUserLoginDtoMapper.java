@@ -7,7 +7,7 @@ import edu.imi.ir.eduimiws.models.dto.crm.UserLoginDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PersonApiUserLoginDtoMapper {
 
     PersonApiUserLoginDtoMapper INSTANCE = Mappers.getMapper(PersonApiUserLoginDtoMapper.class);

@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * For Generating Field Api Public Id
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface FieldEntityFieldApiFromProjectionMapper {
 
     FieldEntityFieldApiFromProjectionMapper INSTANCE = Mappers.

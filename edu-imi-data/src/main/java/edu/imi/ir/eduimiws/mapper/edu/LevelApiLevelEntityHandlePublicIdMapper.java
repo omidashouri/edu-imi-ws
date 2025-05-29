@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * For Generating Level Api Public Id
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface LevelApiLevelEntityHandlePublicIdMapper {
 
     LevelApiLevelEntityHandlePublicIdMapper INSTANCE = Mappers.

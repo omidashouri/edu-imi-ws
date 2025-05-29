@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.models.dto.crm.PersonApiDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PersonApiMapper {
 
     PersonApiMapper INSTANCE = Mappers.getMapper(PersonApiMapper.class);

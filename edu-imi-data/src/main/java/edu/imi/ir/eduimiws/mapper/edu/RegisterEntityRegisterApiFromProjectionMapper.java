@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 /**
  * For Generating Register Api Public Id
  */

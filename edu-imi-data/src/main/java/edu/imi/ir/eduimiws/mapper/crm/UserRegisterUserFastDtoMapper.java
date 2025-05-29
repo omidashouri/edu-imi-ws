@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserRegisterUserFastDtoMapper {
 
     UserRegisterUserFastDtoMapper INSTANCE = Mappers.getMapper(UserRegisterUserFastDtoMapper.class);
