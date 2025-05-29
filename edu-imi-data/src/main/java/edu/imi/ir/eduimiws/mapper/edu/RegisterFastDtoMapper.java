@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RegisterFastDtoMapper {
 
     RegisterFastDtoMapper INSTANCE = Mappers.getMapper(RegisterFastDtoMapper.class);

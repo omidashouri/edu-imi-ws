@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * For Generating Period Api Public Id
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+@Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
 public interface PeriodEntityPeriodApiFromProjectionMapper {
 
     PeriodEntityPeriodApiFromProjectionMapper INSTANCE = Mappers.

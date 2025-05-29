@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PersonApiIdProjectionMapper {
 
     PersonApiIdProjectionMapper INSTANCE = Mappers.getMapper(PersonApiIdProjectionMapper.class);

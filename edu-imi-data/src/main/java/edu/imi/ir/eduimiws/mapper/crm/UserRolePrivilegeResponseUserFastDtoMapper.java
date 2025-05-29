@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserRolePrivilegeResponseUserFastDtoMapper {
 
     UserRolePrivilegeResponseUserFastDtoMapper INSTANCE = Mappers.getMapper(UserRolePrivilegeResponseUserFastDtoMapper.class);

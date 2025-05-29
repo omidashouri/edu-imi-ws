@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 //User is PersonEntity plus PersonApiEntity
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserFastDtoMapper {
 
     UserFastDtoMapper INSTANCE = Mappers.getMapper(UserFastDtoMapper.class);

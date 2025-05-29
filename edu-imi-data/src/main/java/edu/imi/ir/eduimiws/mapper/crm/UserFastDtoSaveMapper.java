@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserFastDtoSaveMapper {
 
     UserFastDtoSaveMapper INSTANCE = Mappers.getMapper(UserFastDtoSaveMapper.class);

@@ -12,7 +12,8 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+@Mapper(componentModel = "spring",
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
 ,imports = {ContactPublicIdzService.class})
 public interface ContactResponseContactFastDtoMapper {
 

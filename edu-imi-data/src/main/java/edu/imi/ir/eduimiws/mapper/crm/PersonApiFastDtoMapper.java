@@ -6,7 +6,7 @@ import edu.imi.ir.eduimiws.models.dto.crm.PersonApiFastDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PersonApiFastDtoMapper {
 
     PersonApiFastDtoMapper INSTANCE = Mappers.getMapper(PersonApiFastDtoMapper.class);

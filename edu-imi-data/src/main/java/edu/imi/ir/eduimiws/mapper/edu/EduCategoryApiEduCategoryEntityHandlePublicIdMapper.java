@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * For Generating EduCategory Api Public Id
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EduCategoryApiEduCategoryEntityHandlePublicIdMapper {
 
     EduCategoryApiEduCategoryEntityHandlePublicIdMapper INSTANCE = Mappers.getMapper(EduCategoryApiEduCategoryEntityHandlePublicIdMapper.class);

@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface StudentOnlyMapper {
 
     PeriodOnlyMapper INSTANCE = Mappers.getMapper(PeriodOnlyMapper.class);
