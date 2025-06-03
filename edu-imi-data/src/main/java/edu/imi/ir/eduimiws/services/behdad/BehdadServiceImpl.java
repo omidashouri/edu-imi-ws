@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.services.behdad;
 
+import edu.imi.ir.eduimiws.configurations.BehdadAccountServiceContext;
 import edu.imi.ir.eduimiws.configurations.BehdadClientConfig;
 import edu.imi.ir.eduimiws.configurations.UseClientCertificate;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.BalanceInfoMapper;
@@ -20,14 +21,11 @@ public class BehdadServiceImpl implements BehdadService {
     private final BalanceInfoNewMapper balanceInfoNewMapper;
 
 
-    // Expose the CXF port
-/*    public AccountService getAccountServicePort() {
-        AccountServiceImplService accountServiceImplService = new AccountServiceImplService();
-        return accountServiceImplService.getAccountServiceImplPort();
-    }*/
+    private final BehdadAccountServiceContext behdadAccountServiceContext;
 
+
+    @UseClientCertificate
     @Override
-//    @UseClientCertificate
     public List<AccountInfo> getAccountNumbers() {
         AccountService accountService = null;
 
@@ -41,8 +39,7 @@ public class BehdadServiceImpl implements BehdadService {
             List<AccountInfo> accountNumbers = accountService1.getAccountServiceImplPort()
                                                     .getAccountNumbers(credential1);*/
 
-            accountService = this.getAccountServiceByProxy();
-            return accountService.getAccountNumbers(getCredential());
+            return this.getAccountServiceByProxy().getAccountNumbers(getCredential());
 
 //            return null;
         } catch (Exception e) {
@@ -86,6 +83,7 @@ public class BehdadServiceImpl implements BehdadService {
         }
     }*/
 
+    @UseClientCertificate
     @Override
     public BalanceInfoDto getAccountBalance(String accountNumber) {
 
@@ -93,7 +91,8 @@ public class BehdadServiceImpl implements BehdadService {
            AccountService accountService = this.getAccountServiceByProxy();
            AccountInfo accountInfo = new AccountInfo();
            accountInfo.setAccountNumber(accountNumber);
-           BalanceInfo balanceInfo = accountService.getAccountBalance(getCredential(), accountInfo);
+           BalanceInfo balanceInfo = this.getAccountServiceByProxy()
+                   .getAccountBalance(getCredential(), accountInfo);
            if (balanceInfo == null) {
                return null;
            }
@@ -105,7 +104,7 @@ public class BehdadServiceImpl implements BehdadService {
     }
 
     private AccountService getAccountServiceByProxy() throws Exception {
-       return BehdadClientConfig.createAccountServiceProxy();
+       return behdadAccountServiceContext.getAccountService();
     }
 
     private Credential getCredential(){

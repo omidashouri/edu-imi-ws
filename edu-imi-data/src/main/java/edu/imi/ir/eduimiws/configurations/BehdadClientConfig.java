@@ -23,42 +23,6 @@ import java.security.KeyStore;
 @Configuration
 public class BehdadClientConfig {
 
-    public static void configureClientCertificate(Object servicePort) throws Exception {
-        Client client = ClientProxy.getClient(servicePort);
-        HTTPConduit httpConduit = (HTTPConduit) client.getConduit();
-
-
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-//        FileInputStream keyStoreStream = new FileInputStream("path/to/client-certificate.pfx");
-        Path path  = Paths.get(ResourceLoader.class.getClassLoader().getResource("pfx/behdadcer.pfx").toURI().getPath());
-        InputStream keyStoreStream = Files.newInputStream(path);
-
-        if (keyStoreStream == null) {
-            throw new RuntimeException("Keystore file not found in resources");
-        }
-
-        keyStore.load(keyStoreStream, "Im!@0075175266".toCharArray());
-
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        kmf.init(keyStore, "Im!@0075175266".toCharArray());
-
-        // Load truststore (optional, to trust server certificate)
-/*        KeyStore trustStore = KeyStore.getInstance("JKS");
-        FileInputStream trustStoreStream = new FileInputStream("path/to/truststore.jks");
-        trustStore.load(trustStoreStream, "truststore_password".toCharArray());
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        tmf.init(trustStore);*/
-
-        // Set TLS parameters
-        TLSClientParameters tlsParams = new TLSClientParameters();
-        tlsParams.setKeyManagers(kmf.getKeyManagers());
-//        tlsParams.setTrustManagers(tmf.getTrustManagers());
-
-        // You can disable CN check if needed (not recommended for prod)
-        tlsParams.setDisableCNCheck(true);
-        httpConduit.setTlsClientParameters(tlsParams);
-    }
-
 
     public static AccountService createAccountServiceProxy() throws Exception {
         // Step 1: Initialize ProxyFactoryBean
