@@ -1,9 +1,7 @@
 package edu.imi.ir.eduimiws.services.behdad;
 
 import edu.imi.ir.eduimiws.configurations.BehdadAccountServiceContext;
-import edu.imi.ir.eduimiws.configurations.BehdadClientConfig;
-import edu.imi.ir.eduimiws.configurations.UseClientCertificate;
-import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.BalanceInfoMapper;
+import edu.imi.ir.eduimiws.configurations.BehdadClientCertificate;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.BalanceInfoNewMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.*;
@@ -11,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
@@ -24,7 +21,7 @@ public class BehdadServiceImpl implements BehdadService {
     private final BehdadAccountServiceContext behdadAccountServiceContext;
 
 
-    @UseClientCertificate
+    @BehdadClientCertificate
     @Override
     public List<AccountInfo> getAccountNumbers() {
         AccountService accountService = null;
@@ -83,7 +80,7 @@ public class BehdadServiceImpl implements BehdadService {
         }
     }*/
 
-    @UseClientCertificate
+    @BehdadClientCertificate
     @Override
     public BalanceInfoDto getAccountBalance(String accountNumber) {
 

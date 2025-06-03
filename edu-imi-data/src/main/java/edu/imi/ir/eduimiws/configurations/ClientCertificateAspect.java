@@ -17,7 +17,7 @@ public class ClientCertificateAspect {
 
     private final BehdadAccountServiceContext behdadAccountServiceContext;
 
-    @Around("@annotation(UseClientCertificate)")
+    @Around("@annotation(BehdadClientCertificate)")
     public Object applyClientCertificate(ProceedingJoinPoint pjp) throws Throwable {
         Object target = pjp.getTarget();
 

@@ -5,11 +5,13 @@ import edu.imi.ir.eduimiws.mapper.mainparts.behdad.ChangePasswordRequestMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.PagedDataMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.PagingMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.*;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;
 import edu.imi.ir.eduimiws.models.request.behdad.*;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.behdad.ListAccountTransactionInfosResponse;
 import edu.imi.ir.eduimiws.models.response.behdad.PagedDataAccountTransactionInfoResponse;
 import edu.imi.ir.eduimiws.models.response.behdad.PagedDataBankTransactionResponse;
+import edu.imi.ir.eduimiws.models.wsdl.behdad.BalanceInfo;
 import edu.imi.ir.eduimiws.services.mainparts.BehdadAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -131,11 +133,10 @@ public class BehdadAccountController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getAccountBalance(@PathVariable String accountNumber) {
 
-/*        List<String> accountNumbers = null;
         BalanceInfoDto balanceInfoDto = behdadAccountService.getAccountBalance(accountNumber);
         BalanceInfo balanceInfo = balanceInfoMapper.toBalanceInfo(balanceInfoDto);
-        return ResponseEntity.ok(balanceInfo);*/
-        return null;
+        System.out.println("salam");
+        return ResponseEntity.ok(balanceInfo);
     }
 
 
