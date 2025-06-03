@@ -2,6 +2,9 @@ package edu.imi.ir.eduimiws.services.behdad;
 
 import edu.imi.ir.eduimiws.configurations.BehdadClientConfig;
 import edu.imi.ir.eduimiws.configurations.UseClientCertificate;
+import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.BalanceInfoMapper;
+import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.BalanceInfoNewMapper;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class BehdadServiceImpl implements BehdadService {
+    private final BalanceInfoNewMapper balanceInfoNewMapper;
 
 
     // Expose the CXF port
@@ -24,11 +28,9 @@ public class BehdadServiceImpl implements BehdadService {
 
     @Override
 //    @UseClientCertificate
-    public List<AccountInfo> getAccountNumbers(Credential credential) {
+    public List<AccountInfo> getAccountNumbers() {
         AccountService accountService = null;
-        Credential credential1 = new Credential();
-        credential1.setUsername("2210008719");
-        credential1.setPassword("Im!@0075175266");
+
         try {
 
 //            List<AccountInfo> accountNumbers = new AccountServiceImplPortImpl().getAccountNumbers(credential1);
@@ -40,7 +42,7 @@ public class BehdadServiceImpl implements BehdadService {
                                                     .getAccountNumbers(credential1);*/
 
             accountService = this.getAccountServiceByProxy();
-            return accountService.getAccountNumbers(credential1);
+            return accountService.getAccountNumbers(getCredential());
 
 //            return null;
         } catch (Exception e) {
@@ -48,6 +50,8 @@ public class BehdadServiceImpl implements BehdadService {
         }
 
     }
+
+
 /*        try {
             Credential credential1 = new Credential();
             credential1.setUsername("2210008719");
@@ -82,8 +86,32 @@ public class BehdadServiceImpl implements BehdadService {
         }
     }*/
 
+    @Override
+    public BalanceInfoDto getAccountBalance(String accountNumber) {
+
+       try{
+           AccountService accountService = this.getAccountServiceByProxy();
+           AccountInfo accountInfo = new AccountInfo();
+           accountInfo.setAccountNumber(accountNumber);
+           BalanceInfo balanceInfo = accountService.getAccountBalance(getCredential(), accountInfo);
+           if (balanceInfo == null) {
+               return null;
+           }
+           return balanceInfoNewMapper.toBalanceInfoDto(balanceInfo);
+       } catch (Exception e) {
+
+           throw new RuntimeException("خطا در دریافت مانده حساب از سرویس بهداد", e);
+       }
+    }
 
     private AccountService getAccountServiceByProxy() throws Exception {
        return BehdadClientConfig.createAccountServiceProxy();
+    }
+
+    private Credential getCredential(){
+        Credential credential = new Credential();
+        credential.setUsername("2210008719");
+        credential.setPassword("Im!@0075175266");
+        return credential;
     }
 }

@@ -1,17 +1,15 @@
 package edu.imi.ir.eduimiws.mapper.mainparts.behdad.account;
 
-/*import edu.imi.ir.eduimiws.models.behdad.account.BalanceInfo;
-import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;*/
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;
+import edu.imi.ir.eduimiws.models.wsdl.behdad.BalanceInfo;
+import org.mapstruct.*;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import java.util.List;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-public interface BalanceInfoMapper {
-/*
+public interface BalanceInfoNewMapper {
 
     @Named("toBalanceInfoDto")
     @Mappings({
@@ -42,6 +40,6 @@ public interface BalanceInfoMapper {
 
     @IterableMapping(qualifiedByName = "toBalanceInfoDto")
     List<BalanceInfoDto> toBalanceInfoDtos(List<BalanceInfo> balanceInfos);
-*/
 
-    }
+}
+
