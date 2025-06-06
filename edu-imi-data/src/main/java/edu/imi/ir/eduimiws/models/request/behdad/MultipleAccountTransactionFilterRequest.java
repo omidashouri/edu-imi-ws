@@ -29,7 +29,7 @@ public class MultipleAccountTransactionFilterRequest {
     private List<String> accountNumbers;
     @JsonProperty("fromDateTime")
     private String fromDateTime;
-    @JsonProperty("paymentIdentifier")
+    @JsonProperty(value = "paymentIdentifier",defaultValue = "null")
     private String paymentIdentifier;
     @JsonProperty("toDateTime")
     private String toDateTime;
