@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.models.request.behdad;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -20,8 +21,10 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Paging implements Serializable {
+public class PagingRequest implements Serializable {
 
+    @JsonProperty("pageNumber")
     private Integer pageNumber;
+    @JsonProperty("recordCount")
     private Integer recordCount;
 }

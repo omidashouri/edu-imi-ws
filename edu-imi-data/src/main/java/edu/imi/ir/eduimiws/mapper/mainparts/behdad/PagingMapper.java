@@ -1,17 +1,27 @@
 package edu.imi.ir.eduimiws.mapper.mainparts.behdad;
 
-/*import edu.imi.ir.eduimiws.models.behdad.account.Paging;
+/*import edu.imi.ir.eduimiws.models.behdad.account.PagingRequest;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagingDto;*/
 
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagingDto;
+import edu.imi.ir.eduimiws.models.request.behdad.PagingRequest;
+import edu.imi.ir.eduimiws.models.wsdl.behdad.Paging;
+import org.mapstruct.*;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PagingMapper {
-/*
+
+    @Named("toPagingDtoFromRequest")
+    @Mappings({
+            @Mapping(source = "pageNumber", target = "pageNumber"),
+            @Mapping(source = "recordCount", target = "recordCount")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    PagingDto toPagingDtoFromRequest(PagingRequest paging);
 
     @Named("toPagingDto")
     @Mappings({
@@ -36,6 +46,5 @@ public interface PagingMapper {
 
     @IterableMapping(qualifiedByName = "toPagingDto")
     List<PagingDto> toPagingDtos(List<Paging> pagings);
-*/
 
 }

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class BalanceInfoDto implements Serializable {
 
     private static final long serialVersionUID = -5584311086342397933L;

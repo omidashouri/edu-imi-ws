@@ -11,22 +11,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.io.Serializable;
+import java.util.List;
 
 @Tag(name = "behdadaccounts")
-@Schema(name = "PagedMultipleAccountTransactionsDetailsRequest",
+@Schema(name = "MultipleAccountTransactionFilterRequest",
         description = "Class representing Paged Multiple Account Transactions Details Request ")
-@JsonRootName(value = "pagedMultipleAccountTransactionsDetailsRequest")
-@Relation(collectionRelation = "pagedMultipleAccountTransactionsDetailsRequests")
+@JsonRootName(value = "multipleAccountTransactionFilterRequest")
+@Relation(collectionRelation = "multipleAccountTransactionFilterRequest")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PagedMultipleAccountTransactionsDetailsRequest implements Serializable {
+public class MultipleAccountTransactionFilterRequest {
 
-    @JsonProperty("multipleAccountTransactionFilter")
-    private MultipleAccountTransactionFilterRequest multipleAccountTransactionFilterRequest;
-    @JsonProperty("paging")
-    private PagingRequest pagingRequest;
+    @JsonProperty("accountNumbers")
+    private List<String> accountNumbers;
+    @JsonProperty("fromDateTime")
+    private String fromDateTime;
+    @JsonProperty("paymentIdentifier")
+    private String paymentIdentifier;
+    @JsonProperty("toDateTime")
+    private String toDateTime;
 }

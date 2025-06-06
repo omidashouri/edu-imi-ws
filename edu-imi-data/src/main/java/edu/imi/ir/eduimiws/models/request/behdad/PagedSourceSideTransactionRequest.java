@@ -24,5 +24,5 @@ import java.io.Serializable;
 public class PagedSourceSideTransactionRequest implements Serializable {
 
     private SideTransactionsRequest sideTransactionsRequest;
-    private Paging paging;
+    private PagingRequest pagingRequest;
 }

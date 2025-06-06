@@ -4,22 +4,35 @@ package edu.imi.ir.eduimiws.services.mainparts;
 /*import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
 import edu.imi.ir.eduimiws.exceptions.services.behdad.*;
 import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidCredentialException;
-import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidDateException;
+
 import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidIdentifierTypeException;
-import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidPageNumberException;
-import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidPageSizeException;
+
+
 import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidTransactionTypeException;
-import edu.imi.ir.eduimiws.exceptions.services.behdad.PageSizeIsTooMuchException;
+
 import edu.imi.ir.eduimiws.exceptions.services.behdad.PasswordIsNotStrongException;
-import edu.imi.ir.eduimiws.exceptions.services.behdad.TooMuchAccountsException;
+
 import edu.imi.ir.eduimiws.exceptions.services.behdad.UnableToAuthenticateException;
-import edu.imi.ir.eduimiws.exceptions.services.behdad.UnableToGetTransactionsException;
+
 import edu.imi.ir.eduimiws.exceptions.services.behdad.UserTemporarilySuspendedException;*/
 
 import edu.imi.ir.eduimiws.configurations.BehdadAccountServiceContext;
 import edu.imi.ir.eduimiws.configurations.BehdadClientCertificate;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.*;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.ExpiredOrNotValidCertificateException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidCertificateException;
 import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidCredentialException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidDateException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidIdentifierTypeException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidPageNumberException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.InvalidPageSizeException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.PageSizeIsTooMuchException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.PasswordIsNotStrongException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.PasswordShouldBeChangeException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.TooMuchAccountsException;
 import edu.imi.ir.eduimiws.exceptions.services.behdad.UnableToAuthenticateException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.UnableToGetTransactionsException;
+import edu.imi.ir.eduimiws.exceptions.services.behdad.UserTemporarilySuspendedException;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.ChangePasswordRequestMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.PagedDataMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.PagingMapper;
@@ -31,7 +44,6 @@ import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.*;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,8 +56,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BehdadAccountServiceImpl implements BehdadAccountService {
 
-/*    private final AccountService accountServiceBehdad;
-    private final Credential credentialAccount;*/
     private final ChangePasswordRequestMapper changePasswordRequestMapper;
     private final BalanceInfoMapper balanceInfoMapper;
     private final AccountControlCreateModelMapper accountControlCreateModelMapper;
@@ -60,29 +70,34 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
     @Override
     @BehdadClientCertificate
     public List<String> getAccountNumbers() {
+        log.info("enter method: BehdadAccountServiceImpl.getAccountNumbers()");
         List<AccountInfo> accountInfos = new ArrayList<>();
         try {
             accountInfos = this.getAccountServiceByProxy().getAccountNumbers(getCredential());
+            if (accountInfos == null) {
+                return null;
+            }
         } catch (InvalidCredentialException_Exception e) {
             throw new InvalidCredentialException();
         } catch (UnableToAuthenticateException_Exception e) {
             throw new UnableToAuthenticateException();
         } catch (UnableToGetClientCertificateInfo_Exception e) {
-            throw new RuntimeException(e);
+            throw new UnableToGetClientCertificateInfoException();
         } catch (UserTemporarilySuspendedException_Exception e) {
-            throw new RuntimeException(e);
+            throw new UserTemporarilySuspendedException();
         } catch (InvalidCertificateException_Exception e) {
-            throw new RuntimeException(e);
+            throw new InvalidCertificateException();
         } catch (PasswordIsNotStrongException_Exception e) {
-            throw new RuntimeException(e);
+            throw new PasswordIsNotStrongException();
         } catch (ExpiredOrNotValidCertificateException_Exception e) {
-            throw new RuntimeException(e);
+            throw new ExpiredOrNotValidCertificateException();
         } catch (PasswordShouldBeChangeException_Exception e) {
-            throw new RuntimeException(e);
+            throw new PasswordShouldBeChangeException();
         }
         List<String> accountNumbers = accountInfos.stream()
                 .map(AccountInfo::getAccountNumber)
                 .collect(Collectors.toList());
+        log.info("exit method BehdadAccountServiceImpl.getAccountNumbers(),  arg={} ", accountNumbers);
         return accountNumbers;
     }
 
@@ -125,53 +140,72 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
     @BehdadClientCertificate
     @Override
     public BalanceInfoDto getAccountBalance(String accountNumber)  {
+        log.info("enter method: BehdadAccountServiceImpl.getAccountBalance(),  arg={} ", accountNumber);
+        BalanceInfo balanceInfo;
         try{
-            AccountService accountService = this.getAccountServiceByProxy();
             AccountInfo accountInfo = new AccountInfo();
             accountInfo.setAccountNumber(accountNumber);
-            BalanceInfo balanceInfo = this.getAccountServiceByProxy()
+            balanceInfo = this.getAccountServiceByProxy()
                     .getAccountBalance(getCredential(), accountInfo);
             if (balanceInfo == null) {
                 return null;
             }
-            return balanceInfoMapper.toBalanceInfoDto(balanceInfo);
-        } catch (Exception e) {
 
-            throw new RuntimeException("خطا در دریافت مانده حساب از سرویس بهداد", e);
-        }
-
-/*        BalanceInfo balanceInfo = null;
-        try {
-            balanceInfo = accountServiceBehdad.getAccountBalance(credentialAccount, accountNumber);
         } catch (InvalidCredentialException_Exception e) {
             throw new InvalidCredentialException();
-        } catch (UnableToAuthenticateException_Exception e) {
-            throw new UnableToAuthenticateException();
-        } catch (PasswordIsNotStrongException_Exception e) {
-            throw new PasswordIsNotStrongException();
+        } catch (UnableToGetClientCertificateInfo_Exception e) {
+            throw new UnableToGetClientCertificateInfoException();
         } catch (UserTemporarilySuspendedException_Exception e) {
             throw new UserTemporarilySuspendedException();
+        } catch (UnableToAuthenticateException_Exception e) {
+            throw new UnableToAuthenticateException();
+        } catch (InvalidCertificateException_Exception e) {
+            throw new InvalidCertificateException();
+        } catch (PasswordIsNotStrongException_Exception e) {
+            throw new PasswordIsNotStrongException();
+        } catch (ExpiredOrNotValidCertificateException_Exception e) {
+            throw new ExpiredOrNotValidCertificateException();
+        } catch (PasswordShouldBeChangeException_Exception e) {
+            throw new PasswordShouldBeChangeException();
         }
-        return balanceInfoMapper.toBalanceInfoDto(balanceInfo);*/
-      //  return null;
+        BalanceInfoDto  balanceInfoDto = balanceInfoMapper.toBalanceInfoDto(balanceInfo);
+        log.info("exit method BehdadAccountServiceImpl.getAccountBalance(),  arg={} ", balanceInfoDto.toString());
+        return balanceInfoDto;
     }
 
     @Override
     public String getAccountControlType(String accountNumber, String identifierType) {
-        String accountControlType = null;
-/*        try {
-            accountControlType = accountServiceBehdad.getAccountControlType(credentialAccount, accountNumber, identifierType);
+        log.info("enter method: BehdadAccountServiceImpl.getAccountControlType(),  arg1={} , arg2={}", accountNumber, identifierType);
+        String accountControlType;
+        AccountInfo accountInfo = new AccountInfo();
+        accountInfo.setAccountNumber(accountNumber);
+        try {
+            accountControlType = this.getAccountServiceByProxy().
+                    getAccountControlType(this.getCredential(), accountInfo, identifierType);
+            if (accountControlType == null) {
+                return null;
+            }
+
         } catch (InvalidCredentialException_Exception e) {
             throw new InvalidCredentialException();
-        } catch (UnableToAuthenticateException_Exception e) {
-            throw new UnableToAuthenticateException();
-        } catch (InvalidIdentifierTypeException_Exception e) {
-            throw new InvalidIdentifierTypeException();
-        } catch (PasswordIsNotStrongException_Exception e) {
-            throw new PasswordIsNotStrongException();
+        } catch (UnableToGetClientCertificateInfo_Exception e) {
+            throw new UnableToGetClientCertificateInfoException();
         } catch (UserTemporarilySuspendedException_Exception e) {
             throw new UserTemporarilySuspendedException();
-        }*/
+        } catch (UnableToAuthenticateException_Exception e) {
+            throw new UnableToAuthenticateException();
+        } catch (InvalidCertificateException_Exception e) {
+            throw new InvalidCertificateException();
+        } catch (PasswordIsNotStrongException_Exception e) {
+            throw new PasswordIsNotStrongException();
+        } catch (ExpiredOrNotValidCertificateException_Exception e) {
+            throw new ExpiredOrNotValidCertificateException();
+        } catch (PasswordShouldBeChangeException_Exception e) {
+            throw new PasswordShouldBeChangeException();
+        } catch (InvalidIdentifierTypeException_Exception e) {
+            throw new InvalidIdentifierTypeException();
+        }
+        log.info("exit method BehdadAccountServiceImpl.getAccountControlType(),  arg={} ", accountControlType);
         return accountControlType;
     }
 
@@ -180,7 +214,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             AccountTransactionFilterDto accountTransactionFilterDto,
             PagingDto pagingDto)  {
 /*        AccountTransactionFilter accountTransactionFilter = accountTransactionFilterMapper.toAccountTransactionFilter(accountTransactionFilterDto);
-        Paging paging = getPagingFromPagingDto(pagingDto);
+        PagingRequest paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
         try {
             pagedData = accountServiceBehdad.getBankTransactionsDetails(credentialAccount, accountTransactionFilter, paging);
@@ -240,11 +274,13 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto,
             PagingDto pagingDto)  {
 
-/*        MultipleAccountTransactionFilter multipleAccountTransactionFilter = multipleAccountTransactionFilterMapper.toMultipleAccountTransactionFilter(multipleAccountTransactionFilterDto);
+        MultipleAccountTransactionFilter multipleAccountTransactionFilter = multipleAccountTransactionFilterMapper
+                .toMultipleAccountTransactionFilter(multipleAccountTransactionFilterDto);
         Paging paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
         try {
-            pagedData = accountServiceBehdad.getMultipleAccountTransactionsDetails(credentialAccount, multipleAccountTransactionFilter, paging);
+            pagedData = this.getAccountServiceByProxy()
+                    .getMultipleAccountTransactionsDetails(this.getCredential(), multipleAccountTransactionFilter, paging);
         } catch (InvalidCredentialException_Exception e) {
             throw new InvalidCredentialException();
         } catch (InvalidPageNumberException_Exception e) {
@@ -265,9 +301,16 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new InvalidDateException();
         } catch (PasswordIsNotStrongException_Exception e) {
             throw new PasswordIsNotStrongException();
+        } catch (UnableToGetClientCertificateInfo_Exception e) {
+            throw new UnableToGetClientCertificateInfoException();
+        } catch (InvalidCertificateException_Exception e) {
+            throw new InvalidCertificateException();
+        } catch (ExpiredOrNotValidCertificateException_Exception e) {
+            throw new ExpiredOrNotValidCertificateException();
+        } catch (PasswordShouldBeChangeException_Exception e) {
+            throw new PasswordShouldBeChangeException();
         }
-        return pagedDataMapper.toPagedDataDto(pagedData);*/
-        return null;
+        return pagedDataMapper.toPagedDataDto(pagedData);
     }
 
     @Override
@@ -275,7 +318,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             SideTransactionsRequestDto sideTransactionsRequestDto,
             PagingDto pagingDto) {
  /*       SideTransactionsRequest sideTransactionsRequest = sideTransactionsRequestMapper.toSideTransactionsRequest(sideTransactionsRequestDto);
-        Paging paging = getPagingFromPagingDto(pagingDto);
+        PagingRequest paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData;
         try {
             pagedData = accountServiceBehdad.getPagedDestinationSideTransactions(credentialAccount, sideTransactionsRequest, paging);
@@ -307,7 +350,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             SideTransactionsRequestDto sideTransactionsRequestDto,
             PagingDto pagingDto)  {
 /*        SideTransactionsRequest sideTransactionsRequest = sideTransactionsRequestMapper.toSideTransactionsRequest(sideTransactionsRequestDto);
-        Paging paging = getPagingFromPagingDto(pagingDto);
+        PagingRequest paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
         try {
             pagedData = accountServiceBehdad.getPagedSourceSideTransactions(credentialAccount, sideTransactionsRequest, paging);
@@ -336,7 +379,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
 
     @Override
     public PagedDataDto getPendingTransactions(String accountNumber, PagingDto pagingDto)  {
- /*       Paging paging = getPagingFromPagingDto(pagingDto);
+ /*       PagingRequest paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
         try {
             pagedData = accountServiceBehdad.getPendingTransactions(credentialAccount, accountNumber, paging);
@@ -404,9 +447,9 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         }*/
     }
 
-/*    private Paging getPagingFromPagingDto(PagingDto pagingDto) {
+    private Paging getPagingFromPagingDto(PagingDto pagingDto) {
         return pagingMapper.toPaging(pagingDto);
-    }*/
+    }
 
     private AccountService getAccountServiceByProxy() {
         return behdadAccountServiceContext.getAccountService();

@@ -5,13 +5,17 @@ import edu.imi.ir.eduimiws.mapper.mainparts.behdad.ChangePasswordRequestMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.PagedDataMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.PagingMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.*;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagingDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.MultipleAccountTransactionFilterDto;
 import edu.imi.ir.eduimiws.models.request.behdad.*;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.behdad.ListAccountTransactionInfosResponse;
 import edu.imi.ir.eduimiws.models.response.behdad.PagedDataAccountTransactionInfoResponse;
 import edu.imi.ir.eduimiws.models.response.behdad.PagedDataBankTransactionResponse;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.BalanceInfo;
+import edu.imi.ir.eduimiws.models.wsdl.behdad.PagedData;
 import edu.imi.ir.eduimiws.services.mainparts.BehdadAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -183,7 +187,7 @@ public class BehdadAccountController {
 
 /*        AccountTransactionFilterDto accountTransactionFilterDto = accountTransactionFilterMapper
                 .toAccountTransactionFilterDto(pagedAccountTransactionFilter.getAccountTransactionFilter());
-        PagingDto pagingDto = pagingMapper.toPagingDto(pagedAccountTransactionFilter.getPaging());
+        PagingDto pagingDto = pagingMapper.toPagingDto(pagedAccountTransactionFilter.getPagingRequest());
         PagedDataDto pagedDataDto = behdadAccountService
                 .getBankTransactionDetails(accountTransactionFilterDto, pagingDto);
         PagedData pagedData = pagedDataMapper.toPagedData(pagedDataDto);
@@ -236,7 +240,7 @@ public class BehdadAccountController {
 
 /*        SideTransactionsRequestDto sideTransactionsRequestDto = sideTransactionsRequestMapper
                 .toSideTransactionsRequestDto(pagedSideTransactionsRequest.getSideTransactionsRequest());
-        PagingDto pagingDto = pagingMapper.toPagingDto(pagedSideTransactionsRequest.getPaging());
+        PagingDto pagingDto = pagingMapper.toPagingDto(pagedSideTransactionsRequest.getPagingRequest());
         PagedDataDto pagedDataDto = behdadAccountService
                 .getPagedDestinationSideTransactions(sideTransactionsRequestDto, pagingDto);
         PagedData pagedData = pagedDataMapper.toPagedData(pagedDataDto);
@@ -336,7 +340,7 @@ public class BehdadAccountController {
 
 /*        SideTransactionsRequestDto sideTransactionsRequestDto = sideTransactionsRequestMapper
                 .toSideTransactionsRequestDto(pagedSourceSideTransactionRequest.getSideTransactionsRequest());
-        PagingDto pagingDto = pagingMapper.toPagingDto(pagedSourceSideTransactionRequest.getPaging());
+        PagingDto pagingDto = pagingMapper.toPagingDto(pagedSourceSideTransactionRequest.getPagingRequest());
         PagedDataDto pagedDataDto = behdadAccountService
                 .getPagedSourceSideTransactions(sideTransactionsRequestDto, pagingDto);
         PagedData pagedData = pagedDataMapper.toPagedData(pagedDataDto);
@@ -625,14 +629,13 @@ public class BehdadAccountController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getMultipleAccountTransactionsDetails(@RequestBody PagedMultipleAccountTransactionsDetailsRequest pagedMultipleAccountTransactionsDetailsRequest) {
 
-/*        MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto = multipleAccountTransactionFilterMapper
-                .toMultipleAccountTransactionFilterDto(pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilter());
-        PagingDto pagingDto = pagingMapper.toPagingDto(pagedMultipleAccountTransactionsDetailsRequest.getPaging());
+        MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto = multipleAccountTransactionFilterMapper
+                .toMultipleAccountTransactionFilterDtoFromRequest(pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilterRequest());
+        PagingDto pagingDto = pagingMapper.toPagingDtoFromRequest(pagedMultipleAccountTransactionsDetailsRequest.getPagingRequest());
         PagedDataDto pagedDataDto = behdadAccountService
                 .getMultipleAccountTransactionsDetails(multipleAccountTransactionFilterDto, pagingDto);
         PagedData pagedData = pagedDataMapper.toPagedData(pagedDataDto);
-        return ResponseEntity.ok(pagedData);*/
-        return null;
+        return ResponseEntity.ok(pagedData);
     }
 
 

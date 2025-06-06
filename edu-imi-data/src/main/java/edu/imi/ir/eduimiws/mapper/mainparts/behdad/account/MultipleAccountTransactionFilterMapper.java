@@ -3,15 +3,27 @@ package edu.imi.ir.eduimiws.mapper.mainparts.behdad.account;
 /*import edu.imi.ir.eduimiws.models.behdad.account.MultipleAccountTransactionFilter;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.MultipleAccountTransactionFilterDto;*/
 
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.MultipleAccountTransactionFilterDto;
+import edu.imi.ir.eduimiws.models.request.behdad.MultipleAccountTransactionFilterRequest;
+import edu.imi.ir.eduimiws.models.wsdl.behdad.MultipleAccountTransactionFilter;
+import org.mapstruct.*;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface MultipleAccountTransactionFilterMapper {
-/*
+
+    @Named("toMultipleAccountTransactionFilterDtoFromRequest")
+    @Mappings({
+            @Mapping(source = "accountNumbers", target = "accountNumbers"),
+            @Mapping(source = "fromDateTime", target = "fromDateTime"),
+            @Mapping(source = "paymentIdentifier", target = "paymentIdentifier"),
+            @Mapping(source = "toDateTime", target = "toDateTime")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    MultipleAccountTransactionFilterDto toMultipleAccountTransactionFilterDtoFromRequest(MultipleAccountTransactionFilterRequest multipleAccountTransactionFilter);
 
     @Named("toMultipleAccountTransactionFilterDto")
     @Mappings({
@@ -40,6 +52,4 @@ public interface MultipleAccountTransactionFilterMapper {
 
     @IterableMapping(qualifiedByName = "toMultipleAccountTransactionFilterDto")
     List<MultipleAccountTransactionFilterDto> toMultipleAccountTransactionFilterDtos(List<MultipleAccountTransactionFilter> multipleAccountTransactionFilters);
-*/
-
 }

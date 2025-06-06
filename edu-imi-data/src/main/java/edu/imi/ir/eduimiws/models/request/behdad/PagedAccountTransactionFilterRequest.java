@@ -27,7 +27,7 @@ public class PagedAccountTransactionFilterRequest implements Serializable {
             description = "Account Transaction Filter")
     private AccountTransactionFilter accountTransactionFilter;
 
-    @Schema(title = "Paging",
-            description = "Paging Account Transaction Filter")
-    private Paging paging;
+    @Schema(title = "PagingRequest",
+            description = "PagingRequest Account Transaction Filter")
+    private PagingRequest pagingRequest;
 }

@@ -5,15 +5,17 @@ import edu.imi.ir.eduimiws.models.behdad.account.PagedData;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;*/
 
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
+import edu.imi.ir.eduimiws.models.wsdl.behdad.PagedData;
+import org.mapstruct.*;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PagedDataMapper {
-/*
+
 
     @Named("toPagedDataDto")
     @Mappings({
@@ -41,7 +43,7 @@ public interface PagedDataMapper {
 
     @IterableMapping(qualifiedByName = "toPagedDataDto")
     List<PagedDataDto> toPagedDataDtos(List<PagedData> pagedDataes);
-*/
+
 
 
 }
