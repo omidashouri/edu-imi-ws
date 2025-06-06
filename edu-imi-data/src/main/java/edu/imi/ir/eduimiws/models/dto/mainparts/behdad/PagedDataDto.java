@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PagedDataDto implements Serializable {
 
     private static final long serialVersionUID = 5993971974209193660L;

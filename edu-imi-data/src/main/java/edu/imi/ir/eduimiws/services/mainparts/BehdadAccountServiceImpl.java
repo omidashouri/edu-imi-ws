@@ -101,6 +101,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return accountNumbers;
     }
 
+    @BehdadClientCertificate
     @Override
     public void changePassword(ChangePasswordRequestDto changePasswordRequestDto) {
        /* ChangePasswordRequest changePasswordRequest = changePasswordRequestMapper
@@ -120,8 +121,9 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         }*/
     }
 
+    @BehdadClientCertificate
     @Override
-    public void clearAccountControlType(String accountNumber, String identifierType)  {
+    public void clearAccountControlType(String accountNumber, String identifierType) {
 /*        try {
             accountServiceBehdad.clearAccountControlType(credentialAccount, accountNumber, identifierType);
         } catch (InvalidCredentialException_Exception e) {
@@ -139,10 +141,10 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
 
     @BehdadClientCertificate
     @Override
-    public BalanceInfoDto getAccountBalance(String accountNumber)  {
+    public BalanceInfoDto getAccountBalance(String accountNumber) {
         log.info("enter method: BehdadAccountServiceImpl.getAccountBalance(),  arg={} ", accountNumber);
         BalanceInfo balanceInfo;
-        try{
+        try {
             AccountInfo accountInfo = new AccountInfo();
             accountInfo.setAccountNumber(accountNumber);
             balanceInfo = this.getAccountServiceByProxy()
@@ -168,11 +170,12 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         } catch (PasswordShouldBeChangeException_Exception e) {
             throw new PasswordShouldBeChangeException();
         }
-        BalanceInfoDto  balanceInfoDto = balanceInfoMapper.toBalanceInfoDto(balanceInfo);
+        BalanceInfoDto balanceInfoDto = balanceInfoMapper.toBalanceInfoDto(balanceInfo);
         log.info("exit method BehdadAccountServiceImpl.getAccountBalance(),  arg={} ", balanceInfoDto.toString());
         return balanceInfoDto;
     }
 
+    @BehdadClientCertificate
     @Override
     public String getAccountControlType(String accountNumber, String identifierType) {
         log.info("enter method: BehdadAccountServiceImpl.getAccountControlType(),  arg1={} , arg2={}", accountNumber, identifierType);
@@ -209,10 +212,11 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return accountControlType;
     }
 
+    @BehdadClientCertificate
     @Override
     public PagedDataDto getBankTransactionDetails(
             AccountTransactionFilterDto accountTransactionFilterDto,
-            PagingDto pagingDto)  {
+            PagingDto pagingDto) {
 /*        AccountTransactionFilter accountTransactionFilter = accountTransactionFilterMapper.toAccountTransactionFilter(accountTransactionFilterDto);
         PagingRequest paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
@@ -241,6 +245,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return null;
     }
 
+    @BehdadClientCertificate
     @Override
     public List<AccountTransactionInfoDto> getDestinationSideTransactions(String accountNumber, long transactionId) {
 /*        List<AccountTransactionInfo> accountTransactionInfos = null;
@@ -269,11 +274,13 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return null;
     }
 
+    @BehdadClientCertificate
     @Override
     public PagedDataDto getMultipleAccountTransactionsDetails(
             MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto,
-            PagingDto pagingDto)  {
-
+            PagingDto pagingDto) {
+        log.info("enter method: BehdadAccountServiceImpl.getMultipleAccountTransactionsDetails(multipleAccountTransactionFilterDto,pagingDto),  " +
+                "arg1={} , arg2={}", multipleAccountTransactionFilterDto, pagingDto);
         MultipleAccountTransactionFilter multipleAccountTransactionFilter = multipleAccountTransactionFilterMapper
                 .toMultipleAccountTransactionFilter(multipleAccountTransactionFilterDto);
         Paging paging = getPagingFromPagingDto(pagingDto);
@@ -310,9 +317,12 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         } catch (PasswordShouldBeChangeException_Exception e) {
             throw new PasswordShouldBeChangeException();
         }
-        return pagedDataMapper.toPagedDataDto(pagedData);
+        PagedDataDto pagedDataDto = pagedDataMapper.toPagedDataDto(pagedData);
+        log.info("exit method BehdadAccountServiceImpl.getMultipleAccountTransactionsDetails(),  arg={} ", pagedDataDto);
+        return pagedDataDto;
     }
 
+    @BehdadClientCertificate
     @Override
     public PagedDataDto getPagedDestinationSideTransactions(
             SideTransactionsRequestDto sideTransactionsRequestDto,
@@ -345,10 +355,11 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return null;
     }
 
+    @BehdadClientCertificate
     @Override
     public PagedDataDto getPagedSourceSideTransactions(
             SideTransactionsRequestDto sideTransactionsRequestDto,
-            PagingDto pagingDto)  {
+            PagingDto pagingDto) {
 /*        SideTransactionsRequest sideTransactionsRequest = sideTransactionsRequestMapper.toSideTransactionsRequest(sideTransactionsRequestDto);
         PagingRequest paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
@@ -377,8 +388,9 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return null;
     }
 
+    @BehdadClientCertificate
     @Override
-    public PagedDataDto getPendingTransactions(String accountNumber, PagingDto pagingDto)  {
+    public PagedDataDto getPendingTransactions(String accountNumber, PagingDto pagingDto) {
  /*       PagingRequest paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
         try {
@@ -396,8 +408,9 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return null;
     }
 
+    @BehdadClientCertificate
     @Override
-    public List<AccountTransactionInfoDto> getSourceSideTransactions(String accountNumber, long transactionId)  {
+    public List<AccountTransactionInfoDto> getSourceSideTransactions(String accountNumber, long transactionId) {
 /*        List<AccountTransactionInfo> accountTransactionInfos = null;
         try {
             accountTransactionInfos = accountServiceBehdad
@@ -425,8 +438,9 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return null;
     }
 
+    @BehdadClientCertificate
     @Override
-    public void setAccountControlType(AccountControlCreateModelDto accountControlCreateModelDto)  {
+    public void setAccountControlType(AccountControlCreateModelDto accountControlCreateModelDto) {
 /*        AccountControlCreateModel accountControlCreateModel = accountControlCreateModelMapper.toAccountControlCreateModel(accountControlCreateModelDto);
         try {
             accountServiceBehdad.setAccountControlType(credentialAccount, accountControlCreateModel);
@@ -455,7 +469,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         return behdadAccountServiceContext.getAccountService();
     }
 
-    private Credential getCredential(){
+    private Credential getCredential() {
         Credential credential = new Credential();
         credential.setUsername("2210008719");
         credential.setPassword("Im!@0075175266");

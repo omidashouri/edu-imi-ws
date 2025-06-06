@@ -42,7 +42,7 @@ public class BehdadAccountController {
 
 
     private final BehdadAccountService behdadAccountService;
-//→1    private final AccountService accountService;
+    //→1    private final AccountService accountService;
     private final BalanceInfoMapper balanceInfoMapper;
     private final AccountTransactionFilterMapper accountTransactionFilterMapper;
     private final SideTransactionsRequestMapper sideTransactionsRequestMapper;
@@ -577,7 +577,7 @@ public class BehdadAccountController {
             })
     @PostMapping(path = "/accountControlType",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> setAccountControlType(){
+    public ResponseEntity<?> setAccountControlType() {
 //            (@RequestBody AccountControlCreateModel accountControlCreateModel) {
 
 /*        AccountControlCreateModelDto accountControlCreateModelDto = accountControlCreateModelMapper
@@ -629,6 +629,16 @@ public class BehdadAccountController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getMultipleAccountTransactionsDetails(@RequestBody PagedMultipleAccountTransactionsDetailsRequest pagedMultipleAccountTransactionsDetailsRequest) {
 
+        if (pagedMultipleAccountTransactionsDetailsRequest != null) {
+            if (pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilterRequest() != null) {
+                if (pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilterRequest().getPaymentIdentifier() != null) {
+                    if ("null".equalsIgnoreCase(pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilterRequest().getPaymentIdentifier()) ||
+                            "string".equalsIgnoreCase(pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilterRequest().getPaymentIdentifier())) {
+                        pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilterRequest().setPaymentIdentifier(null);
+                    }
+                }
+            }
+        }
         MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto = multipleAccountTransactionFilterMapper
                 .toMultipleAccountTransactionFilterDtoFromRequest(pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilterRequest());
         PagingDto pagingDto = pagingMapper.toPagingDtoFromRequest(pagedMultipleAccountTransactionsDetailsRequest.getPagingRequest());
@@ -637,7 +647,6 @@ public class BehdadAccountController {
         PagedData pagedData = pagedDataMapper.toPagedData(pagedDataDto);
         return ResponseEntity.ok(pagedData);
     }
-
 
 
     @Operation(
@@ -677,7 +686,7 @@ public class BehdadAccountController {
             })
     @PostMapping(path = "/changePassword",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> changePassword(){
+    public ResponseEntity<?> changePassword() {
 //    (@RequestBody ChangePasswordRequest changePasswordRequest) {
 
 
