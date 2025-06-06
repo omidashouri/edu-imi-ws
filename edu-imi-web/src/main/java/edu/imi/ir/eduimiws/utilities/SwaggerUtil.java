@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.utilities;
 
 /*import edu.imi.ir.eduimiws.models.behdad.account.AccountTransactionFilter;
-import edu.imi.ir.eduimiws.models.behdad.account.PagingRequest;*/
+import edu.imi.ir.eduimiws.models.behdad.account.Paging;*/
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -217,9 +217,9 @@ public class SwaggerUtil {
 //            , content = @Content(schema = @Schema(implementation = AccountTransactionFilter.class)))
     )
     @Parameter(in = ParameterIn.QUERY
-            , description = "PagingRequest"
+            , description = "Paging"
             , name = "paging"
-//            , content = @Content(schema = @Schema(implementation = PagingRequest.class)))
+//            , content = @Content(schema = @Schema(implementation = Paging.class)))
     )
     public @interface PagedDestinationSideTransactionsAsQueryParam {
 
