@@ -317,7 +317,9 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         } catch (PasswordShouldBeChangeException_Exception e) {
             throw new PasswordShouldBeChangeException();
         }
+
         PagedDataDto pagedDataDto = pagedDataMapper.toPagedDataDto(pagedData);
+        pagedDataDto.addSourceObjects();
         log.info("exit method BehdadAccountServiceImpl.getMultipleAccountTransactionsDetails(),  arg={} ", pagedDataDto);
         return pagedDataDto;
     }
