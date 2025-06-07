@@ -25,7 +25,11 @@ public class PagedDataDto implements Serializable {
 
     public void addSourceObjects() {
         if (currentPageData != null && currentPageData.size() >0) {
-            this.currentPageData.stream().forEach(p -> sourceObjects.add((SourceObject) p));
+            this.currentPageData.stream().forEach(p ->{
+                SourceObject so = new SourceObject();
+                so.addObject(p);
+                sourceObjects.add(so);
+            });
         }
     }
 
