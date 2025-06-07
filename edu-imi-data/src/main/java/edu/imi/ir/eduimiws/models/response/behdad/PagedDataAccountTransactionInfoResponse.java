@@ -20,7 +20,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PagedDataAccountTransactionInfoResponse extends PagedDataResponse<AccountTransactionInfo>{
+public class PagedDataAccountTransactionInfoResponse {
 
 /*  do not uncomment
     private List<AccountTransactionInfo> accountTransactionInfos;

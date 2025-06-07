@@ -19,7 +19,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PagedDataBankTransactionResponse extends PagedDataResponse<BankTransaction>{
+public class PagedDataBankTransactionResponse {
 
 /*  do not uncomment
     private List<BankTransaction> bankTransactions;
