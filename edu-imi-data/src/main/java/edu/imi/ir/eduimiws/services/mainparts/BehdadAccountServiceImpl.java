@@ -276,7 +276,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
 
     @BehdadClientCertificate
     @Override
-    public PagedDataDto getMultipleAccountTransactionsDetails(
+    public PagedDataMultipleAccountTransactionsDetailsDto getMultipleAccountTransactionsDetails(
             MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto,
             PagingDto pagingDto) {
         log.info("enter method: BehdadAccountServiceImpl.getMultipleAccountTransactionsDetails(multipleAccountTransactionFilterDto,pagingDto),  " +
@@ -318,10 +318,14 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordShouldBeChangeException();
         }
 
-        PagedDataDto pagedDataDto = pagedDataMapper.toPagedDataDto(pagedData);
-        pagedDataDto.addSourceObjects();
-        log.info("exit method BehdadAccountServiceImpl.getMultipleAccountTransactionsDetails(),  arg={} ", pagedDataDto);
-        return pagedDataDto;
+
+
+
+        PagedDataMultipleAccountTransactionsDetailsDto pagedDataMultipleAccountTransactionsDetailsDto = pagedDataMapper
+                .toPagedDataMultipleAccountTransactionsDetailsDto(pagedData);
+        pagedDataMultipleAccountTransactionsDetailsDto.castObjectsToTransactionDetails();
+        log.info("exit method BehdadAccountServiceImpl.getMultipleAccountTransactionsDetails(),  arg={} ", pagedDataMultipleAccountTransactionsDetailsDto);
+        return pagedDataMultipleAccountTransactionsDetailsDto;
     }
 
     @BehdadClientCertificate

@@ -24,7 +24,7 @@ public interface BehdadAccountService {
 
     List<AccountTransactionInfoDto> getDestinationSideTransactions( String accountNumber, long transactionId) ;
 
-    PagedDataDto getMultipleAccountTransactionsDetails( MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto, PagingDto pagingDto) ;
+    PagedDataMultipleAccountTransactionsDetailsDto getMultipleAccountTransactionsDetails( MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto, PagingDto pagingDto) ;
 
     PagedDataDto getPagedDestinationSideTransactions( SideTransactionsRequestDto sideTransactionsRequestDto, PagingDto pagingDto) ;
 

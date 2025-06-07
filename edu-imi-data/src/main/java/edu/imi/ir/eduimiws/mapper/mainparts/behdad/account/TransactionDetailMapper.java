@@ -2,9 +2,7 @@ package edu.imi.ir.eduimiws.mapper.mainparts.behdad.account;
 
 
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.SourceObject;
-import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;
-import edu.imi.ir.eduimiws.models.response.behdad.TransactionDetail;
-import edu.imi.ir.eduimiws.models.wsdl.behdad.BalanceInfo;
+import edu.imi.ir.eduimiws.models.response.behdad.AccountTransactionsDetail;
 import edu.imi.ir.eduimiws.utilities.behdad.TransactionMediaType;
 import org.mapstruct.*;
 
@@ -44,7 +42,7 @@ public interface TransactionDetailMapper {
             @Mapping(source = "fields", target = "transactionType", qualifiedByName = "extractTransactionType")*/
     })
     @BeanMapping(ignoreByDefault = true)
-    TransactionDetail toTransactionDetail(SourceObject  source);
+    AccountTransactionsDetail toTransactionDetail(SourceObject  source);
 
     @Named("extractAccountNumber")
     default String extractAccountNumber(Map<String, Object> fields) {
@@ -62,5 +60,5 @@ public interface TransactionDetailMapper {
     }
 
     @IterableMapping(qualifiedByName = "toTransactionDetail")
-    List<TransactionDetail> toTransactionDetails(List<SourceObject> sources);
+    List<AccountTransactionsDetail> toTransactionDetails(List<SourceObject> sources);
 }

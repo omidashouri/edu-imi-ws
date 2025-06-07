@@ -1,6 +1,5 @@
 package edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account;
 
-import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.SourceObject;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.PagedData;
 import lombok.*;
 
@@ -20,11 +19,13 @@ public class PagedDataMultipleAccountTransactionsDetailsDto extends PagedData im
 
     private static final long serialVersionUID = 1L;
     private List<Object> currentPageData;
-    private List<SourceObject> sourceObjects = new ArrayList<>();
+    private List<AccountTransactionsDetailDto> accountTransactionsDetailDtos = new ArrayList<>();
 
-    public void addSourceObjects() {
+    public void castObjectsToTransactionDetails() {
         if (currentPageData != null && currentPageData.size() >0) {
-            this.currentPageData.stream().forEach(p -> sourceObjects.add((SourceObject) p));
+            this.currentPageData.stream()
+                    .map(p->(AccountTransactionsDetailDto) p)
+                    .forEach(accountTransactionsDetailDtos::add);
         }
     }
 }

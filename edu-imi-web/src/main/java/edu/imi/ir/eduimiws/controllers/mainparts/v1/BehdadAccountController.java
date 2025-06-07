@@ -5,17 +5,16 @@ import edu.imi.ir.eduimiws.mapper.mainparts.behdad.ChangePasswordRequestMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.PagedDataMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.PagingMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.*;
-import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagingDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.MultipleAccountTransactionFilterDto;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.PagedDataMultipleAccountTransactionsDetailsDto;
 import edu.imi.ir.eduimiws.models.request.behdad.*;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.behdad.ListAccountTransactionInfosResponse;
 import edu.imi.ir.eduimiws.models.response.behdad.PagedDataAccountTransactionInfoResponse;
 import edu.imi.ir.eduimiws.models.response.behdad.PagedDataBankTransactionResponse;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.BalanceInfo;
-import edu.imi.ir.eduimiws.models.wsdl.behdad.PagedData;
 import edu.imi.ir.eduimiws.services.mainparts.BehdadAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -642,10 +641,11 @@ public class BehdadAccountController {
         MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto = multipleAccountTransactionFilterMapper
                 .toMultipleAccountTransactionFilterDtoFromRequest(pagedMultipleAccountTransactionsDetailsRequest.getMultipleAccountTransactionFilterRequest());
         PagingDto pagingDto = pagingMapper.toPagingDtoFromRequest(pagedMultipleAccountTransactionsDetailsRequest.getPagingRequest());
-        PagedDataDto pagedDataDto = behdadAccountService
+        PagedDataMultipleAccountTransactionsDetailsDto pagedDataDto = behdadAccountService
                 .getMultipleAccountTransactionsDetails(multipleAccountTransactionFilterDto, pagingDto);
-        PagedData pagedData = pagedDataMapper.toPagedData(pagedDataDto);
-        return ResponseEntity.ok(pagedData);
+/*        PagedData pagedData = pagedDataMapper.toPagedData(pagedDataDto);
+        return ResponseEntity.ok(pagedData);*/
+        return ResponseEntity.ok("salam");
     }
 
 

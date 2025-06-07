@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionDetail implements Serializable {
+public class AccountTransactionsDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

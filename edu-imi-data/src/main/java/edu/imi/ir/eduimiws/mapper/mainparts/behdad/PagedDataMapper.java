@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;*/
 
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
+import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.PagedDataMultipleAccountTransactionsDetailsDto;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.PagedData;
 import org.mapstruct.*;
 
@@ -43,6 +44,16 @@ public interface PagedDataMapper {
 
     @IterableMapping(qualifiedByName = "toPagedDataDto")
     List<PagedDataDto> toPagedDataDtos(List<PagedData> pagedDataes);
+
+    @Named("toPagedDataMultipleAccountTransactionsDetailsDto")
+    @Mappings({
+            @Mapping(source = "currentPageData", target = "currentPageData"),
+            @Mapping(source = "pageNumber", target = "pageNumber"),
+            @Mapping(source = "pageSize", target = "pageSize"),
+            @Mapping(source = "totalCount", target = "totalCount")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    PagedDataMultipleAccountTransactionsDetailsDto toPagedDataMultipleAccountTransactionsDetailsDto(PagedData pagedData);
 
 
 
