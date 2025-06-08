@@ -403,6 +403,60 @@ public class MappingUtil {
     }
 
 
+//    -----------------Behdad----------------------
+
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface TransactionStatusTypeConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TransactionStatusTypeByCode {
+    }
+
+
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface TransactionMediaTypeConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TransactionMediaTypeByCode {
+    }
+
+
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface TransactionMethodConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TransactionMethodByCode {
+    }
+
+
+    @Qualifier
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface TransactionTypeConverter {
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TransactionTypeByCode {
+    }
+
+
 //    ---------------------------------------
 
 }

@@ -2,10 +2,12 @@ package edu.imi.ir.eduimiws.utilities.behdad;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import lombok.Getter;
 
 import java.util.Objects;
 
+@MappingUtil.TransactionMethodConverter
 @Getter
 public enum TransactionMethod {
 
@@ -85,6 +87,7 @@ public enum TransactionMethod {
         this.description = description;
     }
 
+    @MappingUtil.TransactionMethodByCode
     @JsonCreator
     public static TransactionMethod getTransactionMethod(String code) {
         for (TransactionMethod transactionMethod : TransactionMethod.values()) {

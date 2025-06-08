@@ -2,10 +2,12 @@ package edu.imi.ir.eduimiws.utilities.behdad;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import lombok.Getter;
 
 import java.util.Objects;
 
+@MappingUtil.TransactionMediaTypeConverter
 @Getter
 public enum TransactionMediaType {
 
@@ -79,6 +81,7 @@ public enum TransactionMediaType {
         this.title = title;
     }
 
+    @MappingUtil.TransactionMediaTypeByCode
     @JsonCreator
     public static TransactionMediaType getTransactionMediaType(String code) {
         for (TransactionMediaType transactionMediaType : TransactionMediaType.values()) {

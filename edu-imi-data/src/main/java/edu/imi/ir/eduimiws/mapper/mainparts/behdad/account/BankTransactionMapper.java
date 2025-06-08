@@ -1,12 +1,19 @@
 package edu.imi.ir.eduimiws.mapper.mainparts.behdad.account;
 
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BankTransactionDto;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.BankTransaction;
+import edu.imi.ir.eduimiws.utilities.behdad.TransactionMediaType;
+import edu.imi.ir.eduimiws.utilities.behdad.TransactionMethod;
+import edu.imi.ir.eduimiws.utilities.behdad.TransactionStatusType;
+import edu.imi.ir.eduimiws.utilities.behdad.TransactionType;
 import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring",
+        uses = {TransactionMediaType.class, TransactionMethod.class,
+                TransactionStatusType.class, TransactionType.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface BankTransactionMapper {
@@ -28,13 +35,22 @@ public interface BankTransactionMapper {
             @Mapping(source = "transactionId", target = "transactionId"),
             @Mapping(source = "transactionIdentifier", target = "transactionIdentifier"),
             @Mapping(source = "transactionMediaSerial", target = "transactionMediaSerial"),
-            @Mapping(source = "transactionMethod", target = "transactionMethod"),
+            @Mapping(source = "transactionMediaType", target = "transactionMediaType",
+                    qualifiedBy = {MappingUtil.TransactionMediaTypeConverter.class,
+                            MappingUtil.TransactionMediaTypeByCode.class}),
+            @Mapping(source = "transactionMethod", target = "transactionMethod",
+                    qualifiedBy = {MappingUtil.TransactionMethodConverter.class,
+                            MappingUtil.TransactionMethodByCode.class}),
             @Mapping(source = "transactionStan", target = "transactionStan"),
             @Mapping(source = "transactionStatusDate", target = "transactionStatusDate"),
             @Mapping(source = "transactionStatusTime", target = "transactionStatusTime"),
-            @Mapping(source = "transactionStatusType", target = "transactionStatusType"),
+            @Mapping(source = "transactionStatusType", target = "transactionStatusType",
+                    qualifiedBy = {MappingUtil.TransactionStatusTypeConverter.class,
+                            MappingUtil.TransactionStatusTypeByCode.class}),
             @Mapping(source = "transactionTime", target = "transactionTime"),
-            @Mapping(source = "transactionType", target = "transactionType")
+            @Mapping(source = "transactionType", target = "transactionType",
+                    qualifiedBy = {MappingUtil.TransactionTypeConverter.class,
+                            MappingUtil.TransactionTypeByCode.class})
     })
     @BeanMapping(ignoreByDefault = true)
     BankTransactionDto toBankTransactionDto(BankTransaction source);

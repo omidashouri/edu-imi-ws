@@ -2,10 +2,12 @@ package edu.imi.ir.eduimiws.utilities.behdad;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import lombok.Getter;
 
 import java.util.Objects;
 
+@MappingUtil.TransactionStatusTypeConverter
 @Getter
 public enum TransactionStatusType {
 
@@ -26,6 +28,7 @@ public enum TransactionStatusType {
         this.description = description;
     }
 
+    @MappingUtil.TransactionStatusTypeByCode
     @JsonCreator
     public static TransactionStatusType getTransactionStatusType(String code) {
         for (TransactionStatusType transactionMediaType : TransactionStatusType.values()) {
