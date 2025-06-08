@@ -26,6 +26,6 @@ import java.util.List;
 public class PagedDataMultipleAccountTransactionsDetailsResponse extends PagedDataResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private List<AccountTransactionsDetail> multipleAccountTransactionsDetails = new ArrayList<>();
+    private List<BankTransactionResponse> multipleAccountTransactionsDetails = new ArrayList<>();
 
 }

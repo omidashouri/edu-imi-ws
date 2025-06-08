@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.models.response.behdad;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import edu.imi.ir.eduimiws.utilities.behdad.TransactionMediaType;
@@ -13,18 +14,16 @@ import org.springframework.hateoas.server.core.Relation;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-@Schema(name = "behdadaccounts", description = "Class representing Account Transaction Info")
+@Schema(name = "behdadaccounts", description = "Class representing Bank Transaction")
 @EqualsAndHashCode(callSuper = false)
-@JsonRootName(value = "transactionDetail")
-@Relation(collectionRelation = "transactionDetails")
+@JsonRootName(value = "bankTransaction")
+@Relation(collectionRelation = "bankTransactions")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountTransactionsDetail implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class BankTransactionResponse implements Serializable {
 
     private String accountNumber;
     private BigDecimal amount;
@@ -49,5 +48,4 @@ public class AccountTransactionsDetail implements Serializable {
     private TransactionStatusType transactionStatusType;
     private String transactionTime; //HH:mm:ss
     private TransactionType transactionType;
-
 }

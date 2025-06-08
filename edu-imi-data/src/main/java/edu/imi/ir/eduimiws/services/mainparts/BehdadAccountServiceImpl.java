@@ -321,11 +321,11 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
 
 
 
-        PagedDataMultipleAccountTransactionsDetailsDto pagedDataMultipleAccountTransactionsDetailsDto = pagedDataMapper
-                .toPagedDataMultipleAccountTransactionsDetailsDto(pagedData);
-        pagedDataMultipleAccountTransactionsDetailsDto.castObjectsToTransactionDetails();
-        log.info("exit method BehdadAccountServiceImpl.getMultipleAccountTransactionsDetails(),  arg={} ", pagedDataMultipleAccountTransactionsDetailsDto);
-        return pagedDataMultipleAccountTransactionsDetailsDto;
+/*        PagedDataMultipleAccountTransactionsDetailsDto pagedDataMultipleAccountTransactionsDetailsDto = pagedDataMapper
+                .toPagedDataMultipleAccountTransactionsDetailsDto(pagedData);*/
+
+        log.info("exit method BehdadAccountServiceImpl.getMultipleAccountTransactionsDetails(),  arg={} ", "new Object()");
+        return null;
     }
 
     @BehdadClientCertificate

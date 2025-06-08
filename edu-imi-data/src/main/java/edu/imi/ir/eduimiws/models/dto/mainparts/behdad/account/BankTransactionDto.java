@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountTransactionsDetailDto implements Serializable {
+public class BankTransactionDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

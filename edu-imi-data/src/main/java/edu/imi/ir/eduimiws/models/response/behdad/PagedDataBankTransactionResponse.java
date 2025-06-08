@@ -22,7 +22,7 @@ import org.springframework.hateoas.server.core.Relation;
 public class PagedDataBankTransactionResponse {
 
 /*  do not uncomment
-    private List<BankTransaction> bankTransactions;
+    private List<BankTransactionResponse> bankTransactions;
     private Integer pageNumber;
     private Integer pageSize;
     private Long totalCount;*/

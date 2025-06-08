@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account;
 
+import edu.imi.ir.eduimiws.models.wsdl.behdad.BankTransaction;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.PagedData;
 import lombok.*;
 
@@ -19,13 +20,24 @@ public class PagedDataMultipleAccountTransactionsDetailsDto extends PagedData im
 
     private static final long serialVersionUID = 1L;
     private List<Object> currentPageData;
-    private List<AccountTransactionsDetailDto> accountTransactionsDetailDtos = new ArrayList<>();
+    private List<BankTransaction> bankTransactionWsdls = new ArrayList<>();
+    private List<BankTransactionDto> bankTransactionDtos = new ArrayList<>();
 
-    public void castObjectsToTransactionDetails() {
-        if (currentPageData != null && currentPageData.size() >0) {
-            this.currentPageData.stream()
-                    .map(p->(AccountTransactionsDetailDto) p)
-                    .forEach(accountTransactionsDetailDtos::add);
+    public void castObjectsTobankTransactionWsdls() {
+        if (isBankTransactionWsdlsNull()) {
+            if (currentPageData != null && currentPageData.size() > 0) {
+                this.currentPageData.stream()
+                        .map(p -> (BankTransaction) p)
+                        .forEach(bankTransactionWsdls::add);
+            }
         }
+    }
+
+    public boolean isBankTransactionWsdlsNull() {
+        return bankTransactionWsdls == null || bankTransactionWsdls.isEmpty();
+    }
+
+    public boolean isBankTransactionDtosNull() {
+        return bankTransactionDtos == null || bankTransactionDtos.isEmpty();
     }
 }

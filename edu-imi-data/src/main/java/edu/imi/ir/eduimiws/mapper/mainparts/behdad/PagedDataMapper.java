@@ -5,8 +5,9 @@ import edu.imi.ir.eduimiws.models.behdad.account.PagedData;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.BalanceInfoDto;*/
 
+import edu.imi.ir.eduimiws.mapper.mainparts.behdad.account.BankTransactionMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
-import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.account.PagedDataMultipleAccountTransactionsDetailsDto;
+import edu.imi.ir.eduimiws.models.wsdl.behdad.BankTransaction;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.PagedData;
 import org.mapstruct.*;
 
@@ -28,32 +29,28 @@ public interface PagedDataMapper {
     @BeanMapping(ignoreByDefault = true)
     PagedDataDto toPagedDataDto(PagedData pagedData);
 
-
-    @Named("toPagedData")
-    @BeanMapping(ignoreByDefault = true)
-    @Mappings({
-            @Mapping(source = "currentPageData", target = "currentPageData"),
-            @Mapping(source = "pageNumber", target = "pageNumber"),
-            @Mapping(source = "pageSize", target = "pageSize"),
-            @Mapping(source = "totalCount", target = "totalCount")
-    })
-    PagedData toPagedData(PagedDataDto pagedDataDto);
-
-    @IterableMapping(qualifiedByName = "toPagedData")
-    List<PagedData> toPagedDatas(List<PagedDataDto> pagedDataDtos);
-
     @IterableMapping(qualifiedByName = "toPagedDataDto")
     List<PagedDataDto> toPagedDataDtos(List<PagedData> pagedDataes);
 
-    @Named("toPagedDataMultipleAccountTransactionsDetailsDto")
-    @Mappings({
-            @Mapping(source = "currentPageData", target = "currentPageData"),
-            @Mapping(source = "pageNumber", target = "pageNumber"),
-            @Mapping(source = "pageSize", target = "pageSize"),
-            @Mapping(source = "totalCount", target = "totalCount")
-    })
-    @BeanMapping(ignoreByDefault = true)
-    PagedDataMultipleAccountTransactionsDetailsDto toPagedDataMultipleAccountTransactionsDetailsDto(PagedData pagedData);
+    @AfterMapping
+    default void handleDtoAccountPublicId(PagedData source,
+                                          @MappingTarget PagedDataDto target,
+                                          BankTransactionMapper bankTransactionMapper) {
+        if(target.isBankTransactionWsdlsNull()){
+            if (!target.isCurrentPageDataNull()) {
+                source.getCurrentPageData().stream()
+                        .map(p -> (BankTransaction) p)
+                        .forEach(target.getBankTransactionWsdls()::add);
+            }
+        }
+
+        if(target.isBankTransactionDtosNull()){
+            if (!target.isBankTransactionWsdlsNull()) {
+               target.setBankTransactionDtos(bankTransactionMapper
+                       .toBankTransactionDtos(target.getBankTransactionWsdls()));
+            }
+        }
+    }
 
 
 
