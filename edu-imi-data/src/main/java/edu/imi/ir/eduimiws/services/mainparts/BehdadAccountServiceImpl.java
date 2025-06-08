@@ -66,6 +66,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
     private final PagedDataMapper pagedDataMapper;
     private final MultipleAccountTransactionFilterMapper multipleAccountTransactionFilterMapper;
     private final BehdadAccountServiceContext behdadAccountServiceContext;
+    private final BankTransactionMapper bankTransactionMapper;
 
     @Override
     @BehdadClientCertificate
@@ -318,7 +319,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordShouldBeChangeException();
         }
 
-        PagedDataDto pagedDataDto = pagedDataMapper.toPagedDataDto(pagedData);
+        PagedDataDto pagedDataDto = pagedDataMapper.toPagedDataDto(pagedData, bankTransactionMapper);
 
 
 /*        PagedDataMultipleAccountTransactionsDetailsDto pagedDataMultipleAccountTransactionsDetailsDto = pagedDataMapper

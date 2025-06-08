@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,8 +18,8 @@ public class PagedDataDto implements Serializable {
 
     private static final long serialVersionUID = 5993971974209193660L;
     private List<Object> currentPageData;
-    private List<BankTransaction> bankTransactionWsdls;
-    private List<BankTransactionDto> bankTransactionDtos;
+    private List<BankTransaction> bankTransactionWsdls = new ArrayList<>();
+    private List<BankTransactionDto> bankTransactionDtos = new ArrayList<>();
     private Integer pageNumber;
     private Integer pageSize;
     private Long totalCount;

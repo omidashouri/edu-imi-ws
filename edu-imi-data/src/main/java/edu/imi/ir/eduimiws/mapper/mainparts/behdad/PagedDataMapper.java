@@ -10,8 +10,10 @@ import edu.imi.ir.eduimiws.models.dto.mainparts.behdad.PagedDataDto;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.BankTransaction;
 import edu.imi.ir.eduimiws.models.wsdl.behdad.PagedData;
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
@@ -27,19 +29,22 @@ public interface PagedDataMapper {
             @Mapping(source = "totalCount", target = "totalCount")
     })
     @BeanMapping(ignoreByDefault = true)
-    PagedDataDto toPagedDataDto(PagedData pagedData);
+    PagedDataDto toPagedDataDto(PagedData pagedData,
+                                @Context BankTransactionMapper bankTransactionMapper);
 
     @IterableMapping(qualifiedByName = "toPagedDataDto")
-    List<PagedDataDto> toPagedDataDtos(List<PagedData> pagedDataes);
+    List<PagedDataDto> toPagedDataDtos(List<PagedData> pagedDataes,
+                                       @Context BankTransactionMapper bankTransactionMapper);
 
     @AfterMapping
-    default void handleDtoAccountPublicId(PagedData source,
+    default void convertListObjects(PagedData source,
                                           @MappingTarget PagedDataDto target,
-                                          BankTransactionMapper bankTransactionMapper) {
+                                          @Context BankTransactionMapper bankTransactionMapper) {
         if(target.isBankTransactionWsdlsNull()){
             if (!target.isCurrentPageDataNull()) {
                 source.getCurrentPageData().stream()
                         .map(p -> (BankTransaction) p)
+                        .collect(Collectors.toList())
                         .forEach(target.getBankTransactionWsdls()::add);
             }
         }
