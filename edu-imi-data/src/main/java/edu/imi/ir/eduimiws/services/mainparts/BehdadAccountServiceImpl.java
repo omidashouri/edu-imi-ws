@@ -318,7 +318,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordShouldBeChangeException();
         }
 
-
+        PagedDataDto pagedDataDto = pagedDataMapper.toPagedDataDto(pagedData);
 
 
 /*        PagedDataMultipleAccountTransactionsDetailsDto pagedDataMultipleAccountTransactionsDetailsDto = pagedDataMapper
