@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
-@Schema(name = "behdadaccounts", description = "Class representing Account Transaction Info")
+/*@Schema(name = "behdadaccounts", description = "Class representing Account Transaction Info")
 @EqualsAndHashCode(callSuper = false)
 @JsonRootName(value = "transactionDetail")
 @Relation(collectionRelation = "transactionDetails")
@@ -16,6 +16,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor*/
 public class TransactionDetail implements Serializable {
 }
