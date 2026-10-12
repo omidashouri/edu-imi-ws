@@ -1,0 +1,29 @@
+
+-in the root of project:
+#cd C:\Users\omid\IdeaProjects\edu-imi-ws>
+
+1)Check in the SAME terminal before packaging:
+#java -version
+#.\mvnw.cmd -v
+
+-Both must show Java 25. If not:
+#$env:JAVA_HOME = "C:\MyProgram\jdk\jdk-25.0.4.1"
+#$env:Path = "$env:JAVA_HOME\bin;" + $env:Path
+#java -version
+
+2) Build the Maven base image: (once)
+#docker build -f docker/Dockerfile.maven -t edu-imi-ws-maven:25 .
+
+3) Package the jar:
+#docker run --rm -v "${PWD}:/build" -v edu-imi-ws-m2:/root/.m2 -w /build edu-imi-ws-maven:25 mvn -B -DskipTests package
+
+-or Host Maven (only if Java 25 is active)
+#.\mvnw.cmd -B -DskipTests package
+
+3.1)Confirm jar:
+#Test-Path .\edu-imi-web\target\edu-imi-web.jar
+
+4) Build & run the app:
+#docker compose build
+#docker compose up -d
+#docker compose logs -f

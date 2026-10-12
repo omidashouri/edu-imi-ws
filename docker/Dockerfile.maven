@@ -1,0 +1,19 @@
+# Reusable build image: JDK 25 + Maven.
+# Build once, reuse for every package: edu-imi-ws-maven:25
+FROM eclipse-temurin:25-jdk
+
+ARG MAVEN_VERSION=3.9.11
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl ca-certificates tar \
+    && curl -fsSL "https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${MAVEN_VERSION}/apache-maven-${MAVEN_VERSION}-bin.tar.gz" \
+        | tar -xz -C /opt \
+    && ln -s "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin/mvn \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV MAVEN_HOME=/opt/apache-maven-${MAVEN_VERSION}
+ENV PATH="${MAVEN_HOME}/bin:${PATH}"
+
+WORKDIR /build
+
+CMD ["mvn", "-version"]

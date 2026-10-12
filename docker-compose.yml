@@ -1,6 +1,8 @@
 services:
   edu-imi-ws:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: edu-imi-ws:local
     env_file:
       - .env
