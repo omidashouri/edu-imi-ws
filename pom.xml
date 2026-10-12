@@ -36,16 +36,11 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <org.springdoc.version>3.1.1</org.springdoc.version>
         <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
-        <!-- stay on 5.x; 6.x needs broader test migration -->
-        <rest-assured.version>5.5.7</rest-assured.version>
-        <org.modelmapper.version>3.2.7</org.modelmapper.version>
         <!-- jjwt 0.9.x API still used in web security; do not bump to 0.12+ without code changes -->
         <io.jsonwebtoken.version>0.9.1</io.jsonwebtoken.version>
         <com.sun.xml.ws.version>4.0.5</com.sun.xml.ws.version>
-        <!-- CXF 3.6.x stays on javax.* (CXF 4.x is Jakarta-only) -->
-        <org.apache.cxf.version>3.6.13</org.apache.cxf.version>
+        <!-- CXF codegen only (runtime CXF not used); 3.6.x stays on javax.* -->
         <org.apache.cxf.cxf-codegen-plugin.version>3.6.13</org.apache.cxf.cxf-codegen-plugin.version>
-        <org.apache.cxf.xjc-utils.version>3.3.4</org.apache.cxf.xjc-utils.version>
         <org.codehaus.mojo.jaxb2-maven-plugin.version>2.5.0</org.codehaus.mojo.jaxb2-maven-plugin.version>
         <httpclient.version>4.5.14</httpclient.version>
         <guava.version>33.7.2-jre</guava.version>
@@ -76,44 +71,9 @@
                 <version>${org.springdoc.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.rest-assured</groupId>
-                <artifactId>rest-assured</artifactId>
-                <version>${rest-assured.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.rest-assured</groupId>
-                <artifactId>json-path</artifactId>
-                <version>${rest-assured.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.rest-assured</groupId>
-                <artifactId>json-schema-validator</artifactId>
-                <version>${rest-assured.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.rest-assured</groupId>
-                <artifactId>spring-mock-mvc</artifactId>
-                <version>${rest-assured.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.modelmapper</groupId>
-                <artifactId>modelmapper</artifactId>
-                <version>${org.modelmapper.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${io.jsonwebtoken.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-frontend-jaxws</artifactId>
-                <version>${org.apache.cxf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf.xjc-utils</groupId>
-                <artifactId>cxf-xjc-runtime</artifactId>
-                <version>${org.apache.cxf.xjc-utils.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
