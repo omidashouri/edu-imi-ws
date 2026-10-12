@@ -15,20 +15,7 @@
 
     <properties>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
-        <!-- mapstruct / springdoc versions come from parent -->
-        <org.modelmapper.version>3.2.7</org.modelmapper.version>
-        <!-- jjwt 0.9.x API is still used in JwtTokenUtil / filters; do not bump to 0.12+ without code changes -->
-        <io.jsonwebtoken.version>0.9.1</io.jsonwebtoken.version>
-        <com.sun.xml.ws.version>4.0.5</com.sun.xml.ws.version>
-        <!-- CXF 3.6.x stays on javax.* (CXF 4.x is Jakarta-only) -->
-        <org.apache.cxf.version>3.6.13</org.apache.cxf.version>
-        <org.apache.cxf.cxf-codegen-plugin.version>3.6.13</org.apache.cxf.cxf-codegen-plugin.version>
-        <org.apache.cxf.xjc-utils.version>3.3.4</org.apache.cxf.xjc-utils.version>
-        <ir.ghasemkiani.version>2.1.7</ir.ghasemkiani.version>
-        <org.codehaus.mojo.jaxb2-maven-plugin.version>2.5.0</org.codehaus.mojo.jaxb2-maven-plugin.version>
-        <httpclient.version>4.5.14</httpclient.version>
-        <guava.version>33.7.2-jre</guava.version>
-        <bouncycastle.version>1.86</bouncycastle.version>
+        <!-- shared library versions come from parent -->
     </properties>
 
     <dependencies>
@@ -112,17 +99,14 @@
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>${org.modelmapper.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>${io.jsonwebtoken.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
-            <version>${org.springdoc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ws</groupId>
@@ -145,7 +129,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -186,12 +169,10 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
-            <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.ws</groupId>
@@ -216,7 +197,6 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>${org.apache.cxf.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.fasterxml.woodstox</groupId>
@@ -227,7 +207,6 @@
         <dependency>
             <groupId>org.apache.cxf.xjc-utils</groupId>
             <artifactId>cxf-xjc-runtime</artifactId>
-            <version>${org.apache.cxf.xjc-utils.version}</version>
         </dependency>
         <dependency>
             <groupId>wsdl4j</groupId>
