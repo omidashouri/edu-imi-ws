@@ -16,20 +16,19 @@
     <packaging>jar</packaging>
 
     <properties>
-        <jquery-ui.version>1.12.1</jquery-ui.version>
-        <bootstrap.version>4.5.3</bootstrap.version>
-        <bootstrap-datepicker.version>1.9.0</bootstrap-datepicker.version>
-        <org.webjars.jquery.version>3.5.1</org.webjars.jquery.version>
-        <popper.js.version>2.5.2</popper.js.version>
-        <jackson-dataformat-xml.version>2.11.3</jackson-dataformat-xml.version>
-        <org.springdoc.version>3.1.1</org.springdoc.version>
+        <!-- WebJars are not managed by Spring Boot; keep versions local -->
+        <jquery-ui.version>1.14.1</jquery-ui.version>
+        <bootstrap.version>4.6.2</bootstrap.version>
+        <bootstrap-datepicker.version>1.10.0</bootstrap-datepicker.version>
+        <org.webjars.jquery.version>3.7.1</org.webjars.jquery.version>
+        <popper.js.version>2.11.7</popper.js.version>
     </properties>
 
     <dependencies>
         <dependency>
             <artifactId>edu-imi-data</artifactId>
             <groupId>education.imi.ir</groupId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.fasterxml.woodstox</groupId>
@@ -47,10 +46,6 @@
                     <groupId>com.sun.xml.bind</groupId>
                     <artifactId>jaxb-impl</artifactId>
                 </exclusion>
-<!--                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>-->
             </exclusions>
         </dependency>
         <dependency>
@@ -66,7 +61,6 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-<!--        check later dependencies if remove no problem-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web-services</artifactId>
@@ -94,16 +88,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -113,21 +97,6 @@
                     <artifactId>asm</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
