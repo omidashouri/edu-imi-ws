@@ -50,7 +50,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Account Numbers",
             description = "Behdad Account Numbers",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -96,7 +95,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Account Balance",
             description = "Behdad Account Balance",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -142,7 +140,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Bank Transactions Details",
             description = "Behdad Bank Transactions Details",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = PagedAccountTransactionFilterRequest.class))
@@ -197,7 +194,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Paged Destination Side Transactions",
             description = "Behdad Paged Destination Side Transactions",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = PagedSideTransactionsRequest.class))
@@ -247,7 +243,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "List Destination Side Transactions",
             description = "Behdad List Destination Side Transactions",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -295,7 +290,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Paged Source Side Transactions",
             description = "Behdad Paged Source Side Transactions",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = PagedSideTransactionsRequest.class))
@@ -347,7 +341,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "List Source Side Transactions",
             description = "Behdad List Source Side Transactions",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -397,7 +390,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Paged Pending Transactions",
             description = "Behdad Paged Pending Transactions",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -447,7 +439,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Account Control Type",
             description = "Behdad Account Control Type",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -492,7 +483,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Account Control Type",
             description = "Behdad Account Control Type",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -536,7 +526,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Account Control Type",
             description = "Behdad Account Control Type",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = AccountControlCreateModelRequest.class))
@@ -586,7 +575,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Paged Source Side Transactions",
             description = "Behdad Paged Source Side Transactions",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = PagedMultipleAccountTransactionsDetailsRequest.class))
@@ -639,7 +627,6 @@ public class BehdadAccountController {
     @Operation(
             summary = "Change Password",
             description = "Behdad changePassword",
-            tags = "behdadaccounts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
 //                    content = @Content(schema = @Schema(implementation = ChangePasswordRequest.class))

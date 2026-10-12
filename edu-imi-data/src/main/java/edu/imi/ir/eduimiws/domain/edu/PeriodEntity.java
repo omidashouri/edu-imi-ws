@@ -29,7 +29,7 @@ import jakarta.persistence.*;
                         attributeNodes = {
                                 @NamedAttributeNode(value = "personApiEntity")
                         },
-                        type = PersonApiEntity.class)
+                        type = PersonEntity.class)
         }
         ),
         @NamedEntityGraph(name = "PeriodEntity.findPeriodSubGraphFieldApi",
@@ -42,7 +42,7 @@ import jakarta.persistence.*;
                         attributeNodes = {
                                 @NamedAttributeNode(value = "fieldApi")
                         },
-                        type = FieldApiEntity.class
+                        type = FieldEntity.class
                 )
             }
         ),
@@ -57,7 +57,7 @@ import jakarta.persistence.*;
                                 attributeNodes = {
                                         @NamedAttributeNode(value = "personApiEntity")
                                 },
-                                type = PersonApiEntity.class)
+                                type = PersonEntity.class)
                 }
         ),
         @NamedEntityGraph(name = "PeriodEntity.periodApiEntity",

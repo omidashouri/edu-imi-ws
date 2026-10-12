@@ -79,7 +79,6 @@ public class ContactController {
     @Operation(
             summary = "find All contacts",
             description = "Search contact detail pageable",
-            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -163,7 +162,6 @@ public class ContactController {
             hidden = true,
             summary = "Update Contact by public ID",
             description = "Update contact by the public id",
-            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -222,7 +220,6 @@ public class ContactController {
     @Operation(
             summary = "Find Contact by public ID",
             description = "Search contact by the public id",
-            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -273,7 +270,6 @@ public class ContactController {
     @Operation(
             summary = "Find Contact by Query",
             description = "Search contact by Query",
-            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -375,7 +371,7 @@ public class ContactController {
                     )
             }
     )
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/{nationalCode}/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getContactCountByNationalCode(@PathVariable String nationalCode) {
@@ -400,7 +396,6 @@ public class ContactController {
     @Operation(
             summary = "Find Contact by national Code",
             description = "Search contact by the national Code",
-            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -449,7 +444,6 @@ public class ContactController {
     @Operation(
             summary = "Find Contact by national Code for payment code",
             description = "Search contact by the national Code for payment code",
-            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -505,7 +499,6 @@ public class ContactController {
     @Operation(
             summary = "Update Contact for Payment Code by public ID",
             description = "Update contact for Payment Code by the public id",
-            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = ContactRequestForPaymentCode.class))
@@ -576,7 +569,6 @@ public class ContactController {
     @Operation(
             summary = "Create Contact for Payment Code",
             description = "Create contact for Payment Code",
-            tags = "contacts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = ContactRequestForPaymentCode.class))

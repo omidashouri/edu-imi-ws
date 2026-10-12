@@ -76,7 +76,6 @@ public class PaymentCodeController {
     @Operation(
             summary = "find All paymentCodes descriptive",
             description = "Search paymentCode descriptive detail pageable",
-            tags = "paymentCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -129,7 +128,6 @@ public class PaymentCodeController {
     @Operation(
             summary = "find All paymentCodes",
             description = "Search paymentCode detail pageable",
-            tags = "paymentCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -182,7 +180,6 @@ public class PaymentCodeController {
     @Operation(
             summary = "Find PaymentCode by public ID",
             description = "Search paymentCode by the public id",
-            tags = "paymentCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -231,7 +228,6 @@ public class PaymentCodeController {
     @Operation(
             summary = "Find PaymentCode by Payment Code",
             description = "Search paymentCode by the Payment Code",
-            tags = "paymentCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -360,7 +356,6 @@ public class PaymentCodeController {
             hidden = true,
             summary = "Create PaymentCode by national code and Expense Public Id and Project Public Id",
             description = "Search paymentCode by national code and Expense Public Id and Project Public Id",
-            tags = "paymentCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

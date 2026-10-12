@@ -91,7 +91,6 @@ public class PeriodController {
     @Operation(
             summary = "find All periods",
             description = "Search period detail pageable",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -172,7 +171,6 @@ public class PeriodController {
             summary = "find All periods Descriptive by Period Name",
             description = "Search period descriptive detail pageable by Period Name." +
                     "('periodName' is optional, use single space to fetch all records)",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -236,7 +234,6 @@ public class PeriodController {
     @Operation(
             summary = "find All periods by field public Id",
             description = "Search period detail pageable by field public Id",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -324,7 +321,6 @@ public class PeriodController {
     @Operation(
             summary = "Find Period by public ID",
             description = "Search period by the public id",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -616,7 +612,6 @@ public class PeriodController {
     @Operation(
             summary = "Find Period Response Custom Two by public ID",
             description = "Search Period Response Custom Two by the public id",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -673,7 +668,6 @@ public class PeriodController {
     @Operation(
             summary = "find All period executors",
             description = "Search period executors pageable",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -758,7 +752,6 @@ public class PeriodController {
             hidden = true,
             summary = "Generate Executor Public Id",
             description = "generate public id for new executors",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -833,7 +826,6 @@ public class PeriodController {
             summary = "Find new period numbers",
             description = "search for new periods that do not have period public id " +
                     "by comparing max id period and period web service entity. ",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -912,7 +904,6 @@ public class PeriodController {
             hidden = true,
             summary = "Generate Period Public Id",
             description = "generate public id for new periods",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -986,7 +977,6 @@ public class PeriodController {
             hidden = true,
             summary = "Update Field Public Id",
             description = "update public id for new fields",
-            tags = "periods",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

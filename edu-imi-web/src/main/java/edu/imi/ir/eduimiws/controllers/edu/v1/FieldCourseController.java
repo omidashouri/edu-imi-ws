@@ -57,7 +57,6 @@ public class FieldCourseController {
     @Operation(
             summary = "find All fieldCourses",
             description = "Search fieldCourse detail pageable",
-            tags = "fieldCourses",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -137,7 +136,6 @@ public class FieldCourseController {
     @Operation(
             summary = "Find FieldCourse by public ID",
             description = "Search fieldCourse by the public id",
-            tags = "fieldCourses",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

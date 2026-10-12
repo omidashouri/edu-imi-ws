@@ -68,7 +68,6 @@ public class LevelController {
     @Operation(
             summary = "find All levels",
             description = "Search level detail pageable",
-            tags = "levels",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -148,7 +147,6 @@ public class LevelController {
     @Operation(
             summary = "Find Level by Description",
             description = "Search Level by Description",
-            tags = "Levels",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -201,7 +199,6 @@ public class LevelController {
     @Operation(
             summary = "Find Level by public ID",
             description = "Search level by the public id",
-            tags = "levels",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -254,7 +251,6 @@ public class LevelController {
             summary = "Find new level numbers",
             description = "search for new levels that do not have level public id " +
                     "by comparing max id level and level web service entity. ",
-            tags = "levels",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -332,7 +328,6 @@ public class LevelController {
             hidden = true,
             summary = "Generate Level Public Id",
             description = "generate public id for new levels",
-            tags = "levels",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

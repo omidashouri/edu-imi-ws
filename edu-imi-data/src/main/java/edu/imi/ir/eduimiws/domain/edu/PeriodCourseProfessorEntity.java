@@ -38,7 +38,7 @@ import jakarta.persistence.*;
                                 attributeNodes = {
                                         @NamedAttributeNode(value = "field")
                                 },
-                                type = FieldEntity.class)
+                                type = PeriodEntity.class)
                 }
         )
 })

@@ -18,7 +18,7 @@ public interface RoleApiRepository extends CrudRepository<RoleApiEntity, Long> {
 
     Collection<RoleApiEntity> findAllByNameAndPrivilegesIn(String roleName, List<PrivilegeApiEntity> privilegeApis);
 
-    @Query(" from RoleApiEntity r left join r.privileges p where r.id=8L and p.id=85L")
+    @Query("select distinct r from RoleApiEntity r left join r.privileges p where r.id = 8 and p.id = 85")
     List<RoleApiEntity> findByp();
 
     Page<RoleApiEntity> findAllByOrderByCreateDateTsDesc(Pageable pageable);

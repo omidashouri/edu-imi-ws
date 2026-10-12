@@ -78,7 +78,6 @@ public class StudentController {
     @Operation(
             summary = "find All students",
             description = "Search student detail pageable",
-            tags = "students",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -159,7 +158,6 @@ public class StudentController {
     @Operation(
             summary = "Find Student by public ID",
             description = "Search student by the public id",
-            tags = "students",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -211,7 +209,6 @@ public class StudentController {
             summary = "Find new student numbers",
             description = "search for new students that do not have student public id " +
                     "by comparing max id student and student web service entity. ",
-            tags = "students",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -290,7 +287,6 @@ public class StudentController {
             hidden = true,
             summary = "Generate Student Public Id",
             description = "generate public id for new students",
-            tags = "students",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -365,7 +361,6 @@ public class StudentController {
             hidden = true,
             summary = "Create New Student ",
             description = "Create new students",
-            tags = "students",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

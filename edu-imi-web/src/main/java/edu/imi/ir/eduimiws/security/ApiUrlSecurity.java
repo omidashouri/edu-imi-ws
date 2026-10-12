@@ -7,19 +7,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
-import org.springframework.security.access.method.MapBasedMethodSecurityMetadataSource;
-import org.springframework.security.access.method.MethodSecurityMetadataSource;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,11 +23,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+@Configuration
 @Order(1)
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -55,11 +46,14 @@ public class ApiUrlSecurity {
 
 
     @Bean
+    @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .securityMatcher("/api/**")
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // Permit all for signup and various POST endpoints
                         .requestMatchers("/**").permitAll()
@@ -70,9 +64,6 @@ public class ApiUrlSecurity {
                         .requestMatchers(HttpMethod.POST, apiUrlSecurityCredential.getPasswordResetRequestUrl()).permitAll()
                         .requestMatchers(HttpMethod.POST, apiUrlSecurityCredential.getPasswordResetUrl()).permitAll()
                         .requestMatchers(HttpMethod.POST, digitalPayMentCredential.getBehpardakhtCredential().getAfterPaymentResponseUrl()).permitAll()
-
-                        // Permit Swagger UI and docs URLs
-                        .requestMatchers(apiUrlSecurityCredential.getSwaggerUiAntMatchers()).permitAll()
 
                         // All other requests should be authenticated
                         .anyRequest().authenticated()
@@ -108,15 +99,8 @@ public class ApiUrlSecurity {
         return source;
     }
 
-    // Enable method-level security
-    @EnableGlobalMethodSecurity(prePostEnabled = true)
-    public static class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
-        public MethodSecurityMetadataSource customMethodSecurityMetadataSource() {
-            Map<String, List<ConfigAttribute>> methodMap = new HashMap<>();
-            methodMap.put("edu.imi.ir.eduimiws.controllers.v1.ContactController.getContactCountByNationalCode*",
-                    SecurityConfig.createList("ROLE_ADMIN"));
-            return new MapBasedMethodSecurityMetadataSource(methodMap);
-        }
+    @EnableMethodSecurity
+    public static class MethodSecurityConfig {
     }
 
     //join your comma separated ips into an expression for the .access() method

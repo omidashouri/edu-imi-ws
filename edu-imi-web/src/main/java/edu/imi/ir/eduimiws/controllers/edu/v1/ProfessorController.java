@@ -56,7 +56,6 @@ public class ProfessorController {
     @Operation(
             summary = "find All professors",
             description = "Search professor detail pageable",
-            tags = "professors",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -137,7 +136,6 @@ public class ProfessorController {
     @Operation(
             summary = "Find Professor by public ID",
             description = "Search professor by the public id",
-            tags = "professors",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

@@ -56,7 +56,6 @@ public class CourseController {
     @Operation(
             summary = "find All courses",
             description = "Search course detail pageable",
-            tags = "courses",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -137,7 +136,6 @@ public class CourseController {
     @Operation(
             summary = "Find Course by public ID",
             description = "Search course by the public id",
-            tags = "courses",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

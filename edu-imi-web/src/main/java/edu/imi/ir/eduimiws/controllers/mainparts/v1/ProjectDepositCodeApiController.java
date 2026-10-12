@@ -196,7 +196,6 @@ public class ProjectDepositCodeApiController {
     @Operation(
             summary = "find All Project Deposit Codes",
             description = "Search projectDepositCode detail pageable",
-            tags = "projectDepositCodeApis",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -254,7 +253,6 @@ public class ProjectDepositCodeApiController {
     @Operation(
             summary = "Find Project Deposit Code Api By Project Name",
             description = "Search ProjectDepositCodeApi by the Project Name",
-            tags = "projectDepositCodeApis",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -316,7 +314,6 @@ public class ProjectDepositCodeApiController {
     @Operation(
             summary = "Delete Project Deposit Code Api By Public Id",
             description = "Delete ProjectDepositCodeApi by Public Id",
-            tags = "projectDepositCodeApis",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -450,7 +447,6 @@ public class ProjectDepositCodeApiController {
     @Operation(
             summary = "find All Project Deposit Codes deleted",
             description = "Search projectDepositCodes deleted detail pageable",
-            tags = "projectDepositCodeApis",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -510,7 +506,6 @@ public class ProjectDepositCodeApiController {
     @Operation(
             summary = "find All Project Deposit Codes Custom Two",
             description = "Search projectDepositCodeApi Custom Two detail pageable",
-            tags = "projectDepositCodeApis",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -589,7 +584,6 @@ public class ProjectDepositCodeApiController {
     @Operation(
             summary = "find All Project Deposit Codes Custom Three",
             description = "Search projectDepositCodeApi Custom Three detail pageable",
-            tags = "projectDepositCodeApis",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -705,7 +699,6 @@ public class ProjectDepositCodeApiController {
     @Operation(
             summary = "find All Project Deposit Codes Custom Three Deposit Null",
             description = "Search projectDepositCodeApi Custom Three Deposit Null detail pageable",
-            tags = "projectDepositCodeApis",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

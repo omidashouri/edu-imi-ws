@@ -67,7 +67,6 @@ public class EduCategoryController {
     @Operation(
             summary = "find All eduCategories",
             description = "Search eduCategory detail pageable",
-            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -147,7 +146,6 @@ public class EduCategoryController {
     @Operation(
             summary = "Find EduCategory by public ID",
             description = "Search eduCategory by the public id",
-            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -198,7 +196,6 @@ public class EduCategoryController {
     @Operation(
             summary = "Find EduCategory by Title",
             description = "Search eduCategory by Title",
-            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -251,7 +248,6 @@ public class EduCategoryController {
             summary = "Find new eduCategory numbers",
             description = "search for new eduCategories that do not have eduCategory public id " +
                     "by comparing max id eduCategory and eduCategory web service entity. ",
-            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -328,7 +324,6 @@ public class EduCategoryController {
             hidden = true,
             summary = "Generate EduCategory Public Id",
             description = "generate public id for new eduCategories",
-            tags = "eduCategories",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

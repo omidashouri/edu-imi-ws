@@ -25,13 +25,13 @@ import jakarta.persistence.*;
                                 attributeNodes = {
                                         @NamedAttributeNode(value = "levelApi")
                                 },
-                                type = LevelApiEntity.class),
+                                type = LevelEntity.class),
                         @NamedSubgraph(
                                 name = "eduCategory-subGraph",
                                 attributeNodes = {
                                         @NamedAttributeNode(value = "eduCategoryApi")
                                 },
-                                type = EduCategoryApiEntity.class)
+                                type = EduCategoryEntity.class)
                 }
         )
 })

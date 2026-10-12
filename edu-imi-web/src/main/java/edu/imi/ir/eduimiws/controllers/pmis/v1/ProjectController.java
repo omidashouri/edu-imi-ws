@@ -67,7 +67,6 @@ public class ProjectController {
     @Operation(
             summary = "find All projects",
             description = "Search project detail pageable",
-            tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -149,7 +148,6 @@ public class ProjectController {
     @Operation(
             summary = "Find Project by public ID",
             description = "Search project by the public id",
-            tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -200,7 +198,6 @@ public class ProjectController {
     @Operation(
             summary = "Find Project by Project Public Id",
             description = "Search project by by Project Public Id",
-            tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -265,7 +262,6 @@ public class ProjectController {
             hidden = true,
             summary = "find All projects for payment codes",
             description = "Search projects for payment code detail pageable",
-            tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -323,7 +319,6 @@ public class ProjectController {
             hidden = true,
             summary = "Find Project for payment code by public ID",
             description = "Search project for payment code by the public id",
-            tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -378,7 +373,6 @@ public class ProjectController {
             hidden = true,
             summary = "find All project for payment code parameterized",
             description = "Search project for payment code pageable parameterized",
-            tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -436,7 +430,6 @@ public class ProjectController {
     @Operation(
             summary = "find All projects for Deposit code Api",
             description = "Search projects for Deposit code Api pageable",
-            tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -494,7 +487,6 @@ public class ProjectController {
     @Operation(
             summary = "find All project for Deposit code Api parameterized",
             description = "Search project for Deposit code Api pageable parameterized",
-            tags = "projects",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

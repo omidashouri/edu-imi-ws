@@ -44,7 +44,6 @@ public class BehdadIdentifierController {
     @Operation(
             summary = "Bank Transactions Details",
             description = "Behdad Bank Transactions Details",
-            tags = "behdadidentifiers",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = IdentifierIsVerhoeffRequest.class))
@@ -228,7 +227,6 @@ public class BehdadIdentifierController {
     @Operation(
             summary = "Bank Transactions Details",
             description = "Behdad Bank Transactions Details",
-            tags = "behdadidentifiers",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = IdentifierIsVerhoeffRequest.class))
@@ -278,7 +276,6 @@ public class BehdadIdentifierController {
     @Operation(
             summary = "Bank Transactions Details",
             description = "Behdad Bank Transactions Details",
-            tags = "behdadidentifiers",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = IdentifierIsVerhoeffRequest.class))
@@ -330,7 +327,6 @@ public class BehdadIdentifierController {
     @Operation(
             summary = "Bank Transactions Details",
             description = "Behdad Bank Transactions Details",
-            tags = "behdadidentifiers",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = IdentifierGenerateIdentifierByOrganRequest.class))
@@ -426,7 +422,6 @@ public class BehdadIdentifierController {
     @Operation(
             summary = "Bank Transactions Details",
             description = "Behdad Bank Transactions Details",
-            tags = "behdadidentifiers",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = BatchIdentifierRemoveInfoRequest.class))

@@ -13,7 +13,7 @@
 
     <artifactId>edu-imi-web</artifactId>
 
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <jquery-ui.version>1.12.1</jquery-ui.version>
@@ -22,7 +22,7 @@
         <org.webjars.jquery.version>3.5.1</org.webjars.jquery.version>
         <popper.js.version>2.5.2</popper.js.version>
         <jackson-dataformat-xml.version>2.11.3</jackson-dataformat-xml.version>
-        <org.springdoc.version>1.3.0</org.springdoc.version>
+        <org.springdoc.version>3.1.1</org.springdoc.version>
     </properties>
 
     <dependencies>
@@ -52,11 +52,6 @@
                     <artifactId>guava</artifactId>
                 </exclusion>-->
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -184,6 +179,7 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -199,11 +195,13 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-path</artifactId>
+            <version>${rest-assured.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
+            <version>${rest-assured.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -219,35 +217,19 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-mock-mvc</artifactId>
+            <version>${rest-assured.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>${org.springdoc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-webmvc-core</artifactId>
-            <version>${org.springdoc.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.github.classgraph</groupId>
-                    <artifactId>classgraph</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-data-rest</artifactId>
-            <version>${org.springdoc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-security</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${org.springdoc.version}</version>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <finalName>edu-imi-web</finalName>
+    </build>
 
 </project>

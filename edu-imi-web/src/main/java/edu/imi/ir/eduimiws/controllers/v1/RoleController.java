@@ -59,7 +59,6 @@ public class RoleController {
     @Operation(
             summary = "find All roles",
             description = "Search role detail pageable",
-            tags = "roles",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -140,7 +139,6 @@ public class RoleController {
     @Operation(
             summary = "Find Role by public ID",
             description = "Search role by the public id",
-            tags = "roles",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -191,7 +189,6 @@ public class RoleController {
             hidden = true,
             summary = "Create Role",
             description = "Role ",
-            tags = "roles",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

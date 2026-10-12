@@ -28,7 +28,7 @@ public interface FieldRepository extends CrudRepository<FieldEntity, Long> {
 
 //    ERROR No property readAll found for type FieldEntity!
 /*    @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     Page<FieldEntity> readAll(Pageable pageable);*/
 
     @EntityGraph(value = "FieldEntity.findFieldSubGraphLevelApiServiceAndEduCategoryApiService", type = EntityGraph.EntityGraphType.LOAD)

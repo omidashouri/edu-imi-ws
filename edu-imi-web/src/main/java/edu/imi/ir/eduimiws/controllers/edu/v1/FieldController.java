@@ -73,7 +73,6 @@ public class FieldController {
     @Operation(
             summary = "find All fields",
             description = "Search field detail pageable",
-            tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -153,7 +152,6 @@ public class FieldController {
     @Operation(
             summary = "Find Field by public ID",
             description = "Search field by the public id",
-            tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -203,7 +201,6 @@ public class FieldController {
     @Operation(
             summary = "find All fields with level and education category information",
             description = "Search field detail pageable with level and education category information",
-            tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -283,7 +280,6 @@ public class FieldController {
     @Operation(
             summary = "Find Field by public ID ",
             description = "Search field by the public id ",
-            tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -334,7 +330,6 @@ public class FieldController {
     @Operation(
             summary = "Find Fields by Level Public ID ",
             description = "Search field by Level public id ",
-            tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -386,7 +381,6 @@ public class FieldController {
     @Operation(
             summary = "Find Fields by Education Category Public ID ",
             description = "Search field by Education Category public id ",
-            tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -441,7 +435,6 @@ public class FieldController {
             summary = "Find new field numbers",
             description = "search for new fields that do not have field public id " +
                     "by comparing max id field and field web service entity. ",
-            tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -519,7 +512,6 @@ public class FieldController {
             hidden = true,
             summary = "Generate Field Public Id",
             description = "generate public id for new fields",
-            tags = "fields",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

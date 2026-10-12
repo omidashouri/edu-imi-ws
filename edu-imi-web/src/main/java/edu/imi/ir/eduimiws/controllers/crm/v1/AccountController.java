@@ -66,7 +66,6 @@ public class AccountController {
     @Operation(
             summary = "find All accounts for payment codes",
             description = "Search accounts for payment code detail pageable",
-            tags = "accounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -176,7 +175,6 @@ public class AccountController {
     @Operation(
             summary = "Find Account by economical Code for payment code",
             description = "Search account by the economical Code for payment code",
-            tags = "accounts",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -238,7 +236,6 @@ public class AccountController {
     @Operation(
             summary = "Update Account for Payment Code by economical ID",
             description = "Update account for Payment Code by the economical id",
-            tags = "accounts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = AccountRequestForPaymentCode.class))
@@ -312,7 +309,6 @@ public class AccountController {
     @Operation(
             summary = "Create Account for Payment Code",
             description = "Create account for Payment Code",
-            tags = "accounts",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = AccountRequestForPaymentCode.class))

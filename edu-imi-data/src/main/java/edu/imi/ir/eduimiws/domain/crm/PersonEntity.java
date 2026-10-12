@@ -30,7 +30,7 @@ import jakarta.persistence.*;
                         @NamedSubgraph(name = "contact-subGraph",
                                 attributeNodes = {
                                         @NamedAttributeNode(value = "contactWebService")
-                                },type = ContactApiEntity.class
+                                },type = ContactEntity.class
                         )
                 }
         ),

@@ -26,8 +26,7 @@ public class BehPardakhtController {
 
     @Operation(
             summary = "Behpardakht Response",
-            description = "Behpardakht Response after Payment",
-            tags = "behpardakhts"
+            description = "Behpardakht Response after Payment"
     )
     @ApiResponses(
             value = {

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.QueryHint;
@@ -18,21 +19,22 @@ import java.util.List;
 public interface RegisterRepository extends CrudRepository<RegisterEntity, Long> {
 
 //    @EntityGraph(attributePaths = {"registerApi"})
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     Page<RegisterEntity> findAllByDeleteStatusIsNotNull(Pageable pageable);
 
     @EntityGraph(attributePaths = {"registerApi"})
     List<RegisterEntity> findTop10ByDeleteStatusIsNotNull();
 
+    @RestResource(path = "findAllByDeleteStatusIsNotNullList", rel = "findAllByDeleteStatusIsNotNullList")
     @EntityGraph(attributePaths = {"registerApi"})
     List<RegisterEntity> findAllByDeleteStatusIsNotNull();
 
     @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService",
             type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     Page<RegisterEntity> readAllByDeleteStatusIsNotNull(Pageable pageable);
 
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     RegisterEntity findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(String studentPublicId);
 
     @EntityGraph(value = "RegisterEntity.findRegisterSubGraphStudentApiServiceAndPeriodApiService",

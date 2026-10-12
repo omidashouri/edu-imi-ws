@@ -20,7 +20,7 @@ import java.util.List;
                       @NamedSubgraph(name = "persons-subGraph",
                               attributeNodes = {
                                       @NamedAttributeNode(value = "personApiEntity")
-                              },type = PersonApiEntity.class
+                              },type = PersonEntity.class
                       )
               }
       ),
@@ -32,7 +32,7 @@ import java.util.List;
                 @NamedSubgraph(name = "persons-subGraph",
                         attributeNodes = {
                                 @NamedAttributeNode(value = "personApiEntity")
-                        },type = PersonApiEntity.class
+                        },type = PersonEntity.class
                 )
         }
     ),

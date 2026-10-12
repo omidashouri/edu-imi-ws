@@ -171,7 +171,6 @@ public class UserController {
     @Operation(
             summary = "find All users",
             description = "Search user detail pageable",
-            tags = "users",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -318,7 +317,6 @@ public class UserController {
     @Operation(
             summary = "find All users by username",
             description = "Search user by username pageable",
-            tags = "users",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -404,7 +402,6 @@ public class UserController {
             summary = "Count new user numbers",
             description = "search for new users that do not have user public id " +
                     "by comparing person id in person entity and person web service entity. ",
-            tags = "users",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -479,7 +476,6 @@ public class UserController {
     @Operation(
             summary = "Find user by national Code",
             description = "Search user by the national Code",
-            tags = "users",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -533,7 +529,6 @@ public class UserController {
             hidden = true,
             summary = "Register User",
             description = "register User",
-            tags = "users",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -673,7 +668,6 @@ public class UserController {
             hidden = true,
             summary = "Role User",
             description = "role User",
-            tags = "users",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

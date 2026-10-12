@@ -96,7 +96,6 @@ public class RegisterController {
             hidden = true,
             summary = "find All registers not pageable",
             description = "Search register details",
-            tags = "registers",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -238,7 +237,6 @@ public class RegisterController {
     @Operation(
             summary = "find All registers",
             description = "Search register detail pageable",
-            tags = "registers",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -318,7 +316,6 @@ public class RegisterController {
     @Operation(
             summary = "Find Register by public ID",
             description = "Search register by the public id",
-            tags = "registers",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -368,7 +365,6 @@ public class RegisterController {
     @Operation(
             summary = "find All registers with student and period name",
             description = "Search register detail pageable with student and period name",
-            tags = "registers",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -448,7 +444,6 @@ public class RegisterController {
     @Operation(
             summary = "Find Register by public ID with student and period name",
             description = "Search register by the public id with student and period name",
-            tags = "registers",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -501,7 +496,6 @@ public class RegisterController {
             hidden = true,
             summary = "Register Student in Period ",
             description = "Register Student in period",
-            tags = "registers",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -636,7 +630,6 @@ public class RegisterController {
             summary = "Find new register numbers",
             description = "search for new registers that do not have register public id " +
                     "by comparing max id register and register web service entity. ",
-            tags = "registers",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -714,7 +707,6 @@ public class RegisterController {
             hidden = true,
             summary = "Generate Register Public Id",
             description = "generate public id for new registers",
-            tags = "registers",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

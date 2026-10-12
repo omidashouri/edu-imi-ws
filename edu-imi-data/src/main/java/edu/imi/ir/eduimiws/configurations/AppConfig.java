@@ -3,7 +3,7 @@ package edu.imi.ir.eduimiws.configurations;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.fasterxml.jackson.datatype.hibernate7.Hibernate7Module;
 import edu.imi.ir.eduimiws.models.helper.DefaultValues;
 import edu.imi.ir.eduimiws.security.ApiUrlSecurityCredential;
 import edu.imi.ir.eduimiws.security.AuthenticationCredential;
@@ -13,7 +13,7 @@ import edu.imi.ir.eduimiws.utilities.ClobHelper;
 import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.cache.jcache.JCacheManagerFactoryBean;
@@ -144,7 +144,7 @@ public class AppConfig {
         MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.registerModule(new Hibernate5Module());
+        objectMapper.registerModule(new Hibernate7Module());
         jsonConverter.setObjectMapper(objectMapper);
         return jsonConverter;
     }

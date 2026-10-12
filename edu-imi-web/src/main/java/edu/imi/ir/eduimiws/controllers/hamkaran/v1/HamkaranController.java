@@ -105,7 +105,6 @@ public class HamkaranController {
             summary = "hamkaran get token",
             description = "hamkaran get token",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -151,7 +150,6 @@ public class HamkaranController {
             summary = "hamkaran get financial",
             description = "hamkaran get financial",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -222,7 +220,6 @@ public class HamkaranController {
             summary = "hamkaran get financial",
             description = "hamkaran get financial",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -279,7 +276,6 @@ public class HamkaranController {
             summary = "hamkaran get financial deleted",
             description = "hamkaran get financial deleted",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -338,7 +334,6 @@ public class HamkaranController {
             summary = "hamkaran get Human Resource",
             description = "hamkaran get Human Resource",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "Hamkarans",
             responses = {
                     @ApiResponse(
                             responseCode = "200",

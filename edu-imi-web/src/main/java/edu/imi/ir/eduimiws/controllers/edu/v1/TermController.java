@@ -57,7 +57,6 @@ public class TermController {
     @Operation(
             summary = "find All terms",
             description = "Search term detail pageable",
-            tags = "terms",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -137,7 +136,6 @@ public class TermController {
     @Operation(
             summary = "Find Term by public ID",
             description = "Search term by the public id",
-            tags = "terms",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

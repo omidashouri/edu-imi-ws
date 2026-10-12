@@ -55,7 +55,6 @@ public class PrivilegeController {
     @Operation(
             summary = "find All privileges",
             description = "Search privilege detail pageable",
-            tags = "privileges",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -135,7 +134,6 @@ public class PrivilegeController {
     @Operation(
             summary = "Find Privilege by public ID",
             description = "Search privilege by the public id",
-            tags = "privileges",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -186,7 +184,6 @@ public class PrivilegeController {
             hidden = true,
             summary = "Create Privilege",
             description = "Privilege ",
-            tags = "privileges",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

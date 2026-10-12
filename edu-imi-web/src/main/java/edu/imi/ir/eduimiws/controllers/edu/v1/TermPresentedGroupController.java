@@ -57,7 +57,6 @@ public class TermPresentedGroupController {
     @Operation(
             summary = "find All term course professors",
             description = "Search term Course Professors detail pageable",
-            tags = "termCourseProfessorss",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -137,7 +136,6 @@ public class TermPresentedGroupController {
     @Operation(
             summary = "Find TermCourseProfessor by public ID",
             description = "Search term course professors by the public id",
-            tags = "termCourseProfessors",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -189,7 +187,6 @@ public class TermPresentedGroupController {
     @Operation(
             summary = "find All term course professors with student and period name",
             description = "Search term course professors detail pageable with student and period name",
-            tags = "termCourseProfessors",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

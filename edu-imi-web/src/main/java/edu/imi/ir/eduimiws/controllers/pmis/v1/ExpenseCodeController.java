@@ -52,7 +52,6 @@ public class ExpenseCodeController {
     @Operation(
             summary = "find All expenseCodes",
             description = "Search expenseCode detail pageable",
-            tags = "expenseCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -106,7 +105,6 @@ public class ExpenseCodeController {
     @Operation(
             summary = "Find ExpenseCode by public ID",
             description = "Search expenseCode by the public id",
-            tags = "expenseCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -160,7 +158,6 @@ public class ExpenseCodeController {
     @Operation(
             summary = "Find ExpenseCode by code",
             description = "Search expenseCode by the code",
-            tags = "expenseCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -214,7 +211,6 @@ public class ExpenseCodeController {
     @Operation(
             summary = "Find ExpenseCode by Expense Title",
             description = "Search expenseCode by the Expense Title",
-            tags = "expenseCodes",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

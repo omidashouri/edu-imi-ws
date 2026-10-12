@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/attendance")
 @RequiredArgsConstructor
+@ConditionalOnBean(EtsGeneralDataProviderService.class)
 @Tag(name = "Attendance", description = "Attendance API")
 public class AttendanceController {
 
@@ -33,7 +35,6 @@ public class AttendanceController {
     @Operation(
             summary = "get All Employees",
             description = " ",
-            tags = "attendance",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(

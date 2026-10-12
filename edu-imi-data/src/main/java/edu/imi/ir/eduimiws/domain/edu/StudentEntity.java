@@ -23,7 +23,7 @@ import jakarta.persistence.*;
                                 attributeNodes = {
                                         @NamedAttributeNode(value = "personApiEntity")
                                 },
-                                type = PersonApiEntity.class)
+                                type = PersonEntity.class)
                 }
         ),
         @NamedEntityGraph(name = "StudentEntity.findStudentApi",

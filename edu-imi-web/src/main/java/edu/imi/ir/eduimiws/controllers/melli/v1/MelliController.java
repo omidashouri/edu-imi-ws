@@ -66,7 +66,6 @@ public class MelliController {
             summary = "melli payment get token",
             description = "sadad payment get token",
             security = @SecurityRequirement(name = "imi-security-key"),
-            tags = "MelliPayments",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = PaymentRequestMerchant.class))
             ),
@@ -162,7 +161,6 @@ public class MelliController {
     @Operation(
             summary = "Find Payment Request Data by public ID",
             description = "Search Payment Requests by the public id",
-            tags = "melliPayments",
             security = @SecurityRequirement(name = "imi-security-key"),
             responses = {
                     @ApiResponse(
@@ -227,7 +225,6 @@ public class MelliController {
     @Operation(
             summary = "verify payment by public ID",
             description = "Verify Payment by the public id",
-            tags = "melliPayments",
             security = @SecurityRequirement(name = "imi-security-key"),
             responses = {
                     @ApiResponse(

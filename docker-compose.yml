@@ -1,0 +1,20 @@
+services:
+  edu-imi-ws:
+    build: .
+    image: edu-imi-ws:local
+    env_file:
+      - .env
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    volumes:
+      - ./certs:/certs:ro
+    networks:
+      - app
+    restart: unless-stopped
+
+networks:
+  app:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
