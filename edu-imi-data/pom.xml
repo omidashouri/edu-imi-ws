@@ -15,18 +15,20 @@
 
     <properties>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
-        <org.mapstruct.version>1.6.3</org.mapstruct.version>
-        <org.modelmapper.varsion>2.3.8</org.modelmapper.varsion>
+        <!-- mapstruct / springdoc versions come from parent -->
+        <org.modelmapper.version>3.2.7</org.modelmapper.version>
+        <!-- jjwt 0.9.x API is still used in JwtTokenUtil / filters; do not bump to 0.12+ without code changes -->
         <io.jsonwebtoken.version>0.9.1</io.jsonwebtoken.version>
-        <org.springdoc.version>3.1.1</org.springdoc.version>
-        <com.sun.xml.ws.version>4.0.3</com.sun.xml.ws.version>
-        <org.apache.cxf.version>3.4.0</org.apache.cxf.version>
-        <org.apache.cxf.xjc-utils.version>3.3.1</org.apache.cxf.xjc-utils.version>
-<!--        <h2.version>1.4.200</h2.version>-->
+        <com.sun.xml.ws.version>4.0.5</com.sun.xml.ws.version>
+        <!-- CXF 3.6.x stays on javax.* (CXF 4.x is Jakarta-only) -->
+        <org.apache.cxf.version>3.6.13</org.apache.cxf.version>
+        <org.apache.cxf.cxf-codegen-plugin.version>3.6.13</org.apache.cxf.cxf-codegen-plugin.version>
+        <org.apache.cxf.xjc-utils.version>3.3.4</org.apache.cxf.xjc-utils.version>
         <ir.ghasemkiani.version>2.1.7</ir.ghasemkiani.version>
-        <org.apache.cxf.cxf-codegen-plugin.version>3.4.1</org.apache.cxf.cxf-codegen-plugin.version>
         <org.codehaus.mojo.jaxb2-maven-plugin.version>2.5.0</org.codehaus.mojo.jaxb2-maven-plugin.version>
-        <org.json.json>20210307</org.json.json>
+        <httpclient.version>4.5.14</httpclient.version>
+        <guava.version>33.7.2-jre</guava.version>
+        <bouncycastle.version>1.86</bouncycastle.version>
     </properties>
 
     <dependencies>
@@ -87,24 +89,6 @@
             <artifactId>ehcache</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>
-        <!--        <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                    <version>${h2.version}</version>
-                    <scope>runtime</scope>
-                </dependency>-->
-        <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc17</artifactId>
             <scope>runtime</scope>
@@ -113,20 +97,6 @@
             <groupId>com.oracle.database.nls</groupId>
             <artifactId>orai18n</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -140,23 +110,14 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>${org.modelmapper.varsion}</version>
+            <version>${org.modelmapper.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${io.jsonwebtoken.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -184,18 +145,16 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.14</version>
+            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
         </dependency>
-        <!-- JAXB for Java 11 -->
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
         </dependency>
-        <!-- JAXWS for Java 11 -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
@@ -219,8 +178,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--#-->
-        <!--  for Java 21 -->
         <dependency>
             <groupId>javax.xml.ws</groupId>
             <artifactId>jaxws-api</artifactId>
@@ -229,31 +186,23 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
-            <version>1.81</version>
+            <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>33.4.0-jre</version>
+            <version>${guava.version}</version>
         </dependency>
-<!--        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-        </dependency>-->
         <dependency>
             <groupId>jakarta.xml.ws</groupId>
             <artifactId>jakarta.xml.ws-api</artifactId>
         </dependency>
-
-        <!-- JAX-WS Runtime (GlassFish implementation) -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-ri</artifactId>
-            <version>4.0.2</version>
+            <version>${com.sun.xml.ws.version}</version>
             <type>pom</type>
         </dependency>
-
-        <!-- Jakarta XML Binding (JAXB) for QName -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
