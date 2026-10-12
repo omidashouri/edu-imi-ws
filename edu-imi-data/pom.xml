@@ -345,7 +345,7 @@
             </plugin>-->
 
 <!--  Disable Plugin WSDL  → -->
-<!--            <plugin>
+            <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
                 <version>${org.apache.cxf.cxf-codegen-plugin.version}</version>
@@ -354,16 +354,13 @@
                         <id>process-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <additionalJvmArgs>
-                                -Djavax.xml.accessExternalDTD=all
-                                -Djavax.xml.accessExternalSchema=all
-                            </additionalJvmArgs>
-                            &lt;!&ndash;                            <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>&ndash;&gt;
-                            <wsdlOptions>-->
+                            <additionalJvmArgs>-Djavax.xml.accessExternalDTD=all -Djavax.xml.accessExternalSchema=all</additionalJvmArgs>
+                                                        <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
+                            <wsdlOptions>
 <!-- ← Disable Plugin WSDL -->
 
 <!-- Bank Mellat → -->
-<!--                                <wsdlOption>
+                                <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/wsdl/bankMellat.xml</wsdl>
                                     <extraargs>
                                         <extraarg>-verbose</extraarg>
@@ -372,7 +369,7 @@
                                         <extraarg>-exsh</extraarg>
                                         <extraarg>true</extraarg>
                                     </extraargs>
-                                </wsdlOption>-->
+                                </wsdlOption>
 <!-- ← Bank Mellat -->
 <!-- BehdadService -->
 <!-- →1                               <wsdlOption>
@@ -396,18 +393,18 @@
                                     </extraargs>
                                 </wsdlOption>-->
 <!--  Disable Plugin WSDL  → -->
-<!--                            </wsdlOptions>
+                            </wsdlOptions>
                         </configuration>
                         <goals>
                             <goal>wsdl2java</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
 <!-- ← Disable Plugin WSDL -->
 
 <!-- SabtAhval → -->
-<!--            <plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>${org.codehaus.mojo.jaxb2-maven-plugin.version}</version>
@@ -427,12 +424,12 @@
                             </xjbSources>
                             <packageName>edu.imi.ir.eduimiws.models.sabtahval</packageName>
                             <addGeneratedAnnotation>true</addGeneratedAnnotation>
-                            &lt;!&ndash;  Other configuration options&ndash;&gt;
+                            <!--  Other configuration options-->
                             <clearOutputDir>false</clearOutputDir>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
 <!-- ← SabtAhval -->
         </plugins>
     </build>
