@@ -18,34 +18,34 @@ import java.util.List;
 
 public interface ProjectDepositCodeApiRepository extends CrudRepository<ProjectDepositCodeApiEntity, Long> {
 
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     Page<ProjectDepositCodeApiEntity> findAllByDeleteDateTsIsNull(Pageable pageable);
 
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     Page<ProjectDepositCodeApiEntity> findAllByDeleteDateTsNotNull(Pageable pageable);
 
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     ProjectDepositCodeApiEntity findProjectDepositCodeApiEntityByPublicIdAndDeleteDateTsIsNull(String publicId);
 
     @EntityGraph(value = "ProjectDepositCodeApiEntity.findProjectProjectApi",
             type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     ProjectDepositCodeApiEntity findByPublicIdAndDeleteDateTsIsNull(String publicId);
 
     ProjectDepositCodeApiEntity save(ProjectDepositCodeApiDto newProjectDepositCodeApi);
 
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     List<ProjectDepositCodeApiEntity> findAllByPublicIdIn(List<String> projectDepositCodeApiPublicIds);
 
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     Page<ProjectDepositCodeApiEntity> findByDeleteDateTsIsNullAndDepositCode(String depositCode, Pageable pageable);
 
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     ProjectDepositCodeApiEntity findByDeleteDateTsIsNullAndProject_ProjectCodeAndDepositCode(String projectCode, String depositCode);
 
     @EntityGraph(value = "ProjectDepositCodeApiEntity.findProjectProjectApi",
             type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     Page<ProjectDepositCodeApiEntity> findByDeleteDateTsIsNullAndProject_ProjectNameContaining(String projectName, Pageable pageable);
 
     @Query(name = "ProjectDepositCodeApiEntity.queryAllProjectDepositCodeApiCustomTwo")
@@ -62,7 +62,7 @@ public interface ProjectDepositCodeApiRepository extends CrudRepository<ProjectD
                                                                                           Pageable pageable);
 
 
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     @Query(name = "ProjectDepositCodeApiEntity.queryAllProjectDepositCodeApiCustomThree")
     Page<ProjectDepositCodeApiProjectionCustomThree> queryAllProjectDepositCodeApiCustomThree(@Param("publicId") String publicId,
                                                                                               @Param("depositCode") String depositCode,

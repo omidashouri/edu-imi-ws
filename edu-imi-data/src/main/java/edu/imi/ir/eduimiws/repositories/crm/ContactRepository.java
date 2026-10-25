@@ -43,7 +43,7 @@ public interface ContactRepository extends CrudRepository<ContactEntity, Long>
 
 
     @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonApi", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     ContactEntity findByContactWebService_ContactPublicId(String contactPublicId);
 
     @EntityGraph(value = "ContactEntity.findContactSubGraphPersonsPersonApiAndContactApi", type = EntityGraph.EntityGraphType.LOAD)

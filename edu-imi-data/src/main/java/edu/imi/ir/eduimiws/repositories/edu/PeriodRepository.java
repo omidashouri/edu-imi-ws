@@ -2,7 +2,6 @@ package edu.imi.ir.eduimiws.repositories.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.PeriodEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.*;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -19,16 +18,11 @@ import java.util.List;
 public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
 
 
-    //@Cacheable("period")
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApiAndLevelAndEduCategoryAndExecutor",
             type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints({@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
-            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
-//            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHE_REGION,value = "period"),
-//            @QueryHint(name = org.hibernate.jpa.QueryHints.SPEC_HINT_TIMEOUT,value = "5000"),
-            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHE_MODE, value = "PUT"), //VERY IMPORTANT
-            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
-            @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+    @QueryHints({
+            @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_FLUSH_MODE, value = "AUTO"),
+            @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true")
     })
     Page<PeriodEntity>
     readAllByDeleteStatusIsNotNullAndDeleteStatusEqualsAndNameContains(Long deleteStatus,
@@ -40,7 +34,6 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     Page<PeriodEntity> findAllByDeleteStatusIsNotNullAndDeleteStatusEquals(Long deleteStatus, Pageable pageable);
 
     @EntityGraph(value = "PeriodEntity.findPeriodSubGraphFieldApi", type = EntityGraph.EntityGraphType.LOAD)
-//    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
     Page<PeriodEntity> findAllByPeriodApi_FieldPublicId(String fieldPublicId, Pageable pageable);
 
     @Query(value = "select p from PeriodEntity p " +
@@ -61,8 +54,6 @@ public interface PeriodRepository extends CrudRepository<PeriodEntity, Long> {
     List<PeriodEntity> findAllByIdIn(List<Long> periodIds);
 
     @Query(name = "PeriodEntity.selectAllPeriodOnly", nativeQuery = true)
-    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
-            forCounting = true)
     List<PeriodOnly> findAllPeriodOnly();
 
 /*    @Query(name = "PeriodEntity.selectAllPeriodOnlyById", nativeQuery = true)

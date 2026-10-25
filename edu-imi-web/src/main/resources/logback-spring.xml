@@ -17,14 +17,4 @@
         <appender-ref ref="CONSOLE" />
     </logger>
 
-    <logger name="org.hibernate.cache" level="error" additivity="true">
-        <appender-ref ref="ROLLING-APPENDER"/>
-        <appender-ref ref="CONSOLE"/>
-    </logger>
-
-    <logger name="org.ehcache" level="error" additivity="true">
-        <appender-ref ref="ROLLING-APPENDER"/>
-        <appender-ref ref="CONSOLE"/>
-    </logger>
-
 </configuration>

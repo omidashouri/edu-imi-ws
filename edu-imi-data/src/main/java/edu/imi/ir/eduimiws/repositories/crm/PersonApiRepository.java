@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface PersonApiRepository extends CrudRepository<PersonApiEntity,Long> {
 
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     PersonApiEntity findByPersonId(Long personId);
 
     @EntityGraph("PersonApiEntity.personApiFastGraph")
@@ -26,13 +26,11 @@ public interface PersonApiRepository extends CrudRepository<PersonApiEntity,Long
 
     @EntityGraph(value = "PersonApiEntity.findPersonApiWithPersonRolePrivilegeSubGraph",
             type = EntityGraph.EntityGraphType.FETCH)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     PersonApiEntity readByPersonPublicId(String personPublicId);
 
     Page<PersonApiEntity> findAll(Pageable pageable);
 
-/*    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")},
-            forCounting = true)*/
     @Query(name = "PersonApiEntity.findAllPersonApiIdProjection", nativeQuery = true)
     List<PersonApiIdProjection> findAllPersonApiIdProjection();
 

@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws.services.edu;
 
 import edu.imi.ir.eduimiws.domain.edu.RegisterEntity;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,7 +22,6 @@ public interface RegisterService {
 
     CompletableFuture<List<RegisterEntity>> findAllByDeleteStatusIsNotNullThread() throws ExecutionException, InterruptedException;
 
-    //@Cacheable(value = "register")
     Page<RegisterEntity> findAllWithStudentPeriodNameByOrderPageable(Pageable pageable);
 
     RegisterEntity findByRegisterPublicId(String registerPublicId);

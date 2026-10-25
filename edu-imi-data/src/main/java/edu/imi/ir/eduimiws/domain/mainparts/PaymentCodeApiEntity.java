@@ -8,7 +8,6 @@ import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ExpenseCodeApiEntity;
 import edu.imi.ir.eduimiws.domain.pmis.ProjectEntity;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
@@ -79,8 +78,6 @@ import java.sql.Timestamp;
 
 
 
-//@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Getter
 @Setter
 @NoArgsConstructor

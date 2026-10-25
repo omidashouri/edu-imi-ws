@@ -17,7 +17,7 @@ public interface PeriodCertificateSmsApiRepository extends CrudRepository<Period
 
 
     @Query(name = "PeriodCertificateSmsApiEntity.queryByPeriodCertificateSmsApi")
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     List<PeriodCertificateSmsApiProjection> queryByPeriodCertificateSmsApi(@Param("periodCertificateActivityStatus") Long periodCertificateActivityStatus,
                                                                            @Param("registerFinalStatus") String registerFinalStatus,
                                                                            @Param("registerType") String registerType,

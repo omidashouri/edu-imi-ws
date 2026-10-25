@@ -4,7 +4,6 @@ package edu.imi.ir.eduimiws.domain.edu;
 import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import jakarta.persistence.*;
 
@@ -53,10 +52,10 @@ import jakarta.persistence.*;
                         " LEFT JOIN tpg.professor prf " +
                         " ORDER BY tpg.createDate DESC ",
                 hints = { @QueryHint(name = QueryHints.HINT_CACHE_MODE,value = "put"),
-                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
-                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
-                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
-                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+                        @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_FLUSH_MODE, value = "AUTO"),
+                        @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_CACHEABLE, value = "true"),
+                        @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"),
+                        @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_COMMENT, value = "use cache for named query")
                 }
         )
 })*/
@@ -72,10 +71,10 @@ import jakarta.persistence.*;
                         " LEFT JOIN edu.tbl_period                     pr ON tpc.period_id = pr.id " +
                         " LEFT JOIN edu.tbl_term                       trm ON tpc.term_id = trm.id ",*//*
                 hints = {@QueryHint(name = QueryHints.HINT_CACHE_MODE,value = "put"),
-                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_FLUSH_MODE, value = "AUTO"),
-                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true"),
-                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"),
-                        @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "use cache for named query")
+                        @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_FLUSH_MODE, value = "AUTO"),
+                        @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_CACHEABLE, value = "true"),
+                        @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"),
+                        @QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_COMMENT, value = "use cache for named query")
                 }
                 ,resultClass = TermPresentedGroupEntity.class
         ),
@@ -86,8 +85,6 @@ import jakarta.persistence.*;
         )
 })*/
 
-//@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Getter
 @Setter
 @NoArgsConstructor

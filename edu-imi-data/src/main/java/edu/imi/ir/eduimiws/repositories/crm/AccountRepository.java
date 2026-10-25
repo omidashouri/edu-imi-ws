@@ -18,7 +18,7 @@ public interface AccountRepository extends CrudRepository<AccountEntity, Long> {
 
 
     @EntityGraph(value = "AccountEntity.findAccountContactCompany", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     AccountEntity findByAccountApi_AccountPublicId(String accountPublicId);
 
     @EntityGraph(value = "AccountEntity.findAllJoins", type = EntityGraph.EntityGraphType.LOAD)

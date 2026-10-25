@@ -14,9 +14,6 @@ import edu.imi.ir.eduimiws.utilities.ErpPasswordEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.restclient.RestTemplateBuilder;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.jcache.JCacheCacheManager;
-import org.springframework.cache.jcache.JCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -29,7 +26,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -38,7 +34,6 @@ import java.util.Properties;
         @PropertySource("classpath:application.properties"),
         @PropertySource("classpath:security.properties")
 })
-//@EnableCaching
 public class AppConfig {
 
     @Bean
@@ -50,72 +45,6 @@ public class AppConfig {
     public ErpPasswordEncoder erpPasswordEncoder() {
         return new ErpPasswordEncoder();
     }
-
-//    EhCacheCacheManager caching type:
-/*    @Bean
-    public CacheManager cacheManager() {
-        EhCacheCacheManager cacheManager = new EhCacheCacheManager();
-        cacheManager.setCacheManager(ehCacheCacheManagerFactory().getObject());
-        cacheManager.setTransactionAware(true);
-        return cacheManager;
-    }
-
-    @Bean
-    public EhCacheManagerFactoryBean ehCacheCacheManagerFactory() {
-        EhCacheManagerFactoryBean cacheManagerFactoryBean = new EhCacheManagerFactoryBean();
-        cacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.txt"));
-        cacheManagerFactoryBean.setShared(true);
-        return cacheManagerFactoryBean;
-    }*/
-
-//  ConcurrentMapCacheManager caching type:
-/*    @Bean
-    public CacheManager cacheManager() {
-        ConcurrentMapCacheManager concurrentMapCacheManager = new ConcurrentMapCacheManager();
-        concurrentMapCacheManager.setCacheNames(Arrays.asList("periodDescriptive"));
-        return concurrentMapCacheManager;
-    }*/
-
-/*    @Bean
-    public KeyGenerator multiplyKeyGenerator() {
-        return (Object target, Method method, Object... params) ->
-                method.getName() + "_" + Arrays.toString(params);
-    }*/
-
-//  org.ehcache.CacheManager(V3) caching type:
-/*    @Bean
-    public CacheManager ehCacheV3Manager() {
-        CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-                .with(CacheManagerBuilder
-                        .persistence("/run/media/omidashouri/Archive/0_0/cacheV3" *//*+ File.separator + "ss"*//*))
-                .withCache("myEhv3Cache", CacheConfigurationBuilder
-                        .newCacheConfigurationBuilder(Long.class, String.class,
-                                ResourcePoolsBuilder
-                                        .newResourcePoolsBuilder()
-                                        .heap(2000, EntryUnit.ENTRIES)
-                                        .disk(50, MemoryUnit.MB, true)
-                                        .offheap(10, MemoryUnit.MB))
-                        .withExpiry(ExpiryPolicyBuilder.
-                                timeToLiveExpiration(Duration.ofSeconds(5)))
-                        .withExpiry(ExpiryPolicyBuilder
-                                .timeToIdleExpiration(Duration.ofMinutes(20))))
-                .build(true);
-        return cacheManager;
-    }*/
-
-/*    @Bean
-    public JCacheCacheManager jCacheCacheManager(JCacheManagerFactoryBean jCacheManagerFactoryBean) {
-        JCacheCacheManager jCacheCacheManager = new JCacheCacheManager();
-        jCacheCacheManager.setCacheManager(jCacheManagerFactoryBean.getObject());
-        return jCacheCacheManager;
-    }
-
-    @Bean
-    public JCacheManagerFactoryBean jCacheManagerFactoryBean() throws URISyntaxException {
-        JCacheManagerFactoryBean jCacheManagerFactoryBean = new JCacheManagerFactoryBean();
-        jCacheManagerFactoryBean.setCacheManagerUri(getClass().getResource("/ehcache.xml").toURI());
-        return jCacheManagerFactoryBean;
-    }*/
 
     @Bean
     public SpringApplicationContext springApplicationContext() {

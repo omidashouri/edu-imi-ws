@@ -4,7 +4,6 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.CompanyEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import jakarta.persistence.*;
 
@@ -16,8 +15,6 @@ import jakarta.persistence.*;
         )
 })
 
-//@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Getter
 @Setter
 @NoArgsConstructor

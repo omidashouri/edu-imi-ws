@@ -4,7 +4,7 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.jpa.QueryHints;
+import org.hibernate.jpa.HibernateHints;
 
 import jakarta.persistence.*;
 
@@ -79,7 +79,7 @@ import jakarta.persistence.*;
 @NamedQueries({
         @NamedQuery(name = "PersonEntity.selectPersonEntityByIdM",
         query = "select per.id from PersonEntity per where per.id > :personId",
-                hints = @QueryHint(name = QueryHints.HINT_READONLY,value = "true")
+                hints = @QueryHint(name = HibernateHints.HINT_READ_ONLY,value = "true")
         )
 })
 @Getter

@@ -17,20 +17,20 @@ import jakarta.persistence.QueryHint;
 public interface ProjectRepository extends CrudRepository<ProjectEntity, Long> {
 
     @EntityGraph(value = "ProjectEntity.findProjectProjectApi", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     Page<ProjectEntity> findAll(Pageable pageable);
 
 
     @EntityGraph(value = "ProjectEntity.findProjectProjectApi", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     ProjectEntity findByProjectApi_ProjectPublicId(String projectPublicId);
 
     @EntityGraph(value = "ProjectEntity.findProjectProjectApi", type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     ProjectEntity findByProjectCodeAndLastVersion(String projectCode, String lastVersion);
 
     @Query(name = "ProjectEntity.queryPageablePaymentCodeApiProjection")
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     Page<ProjectForPaymentCodeProjection> queryPageableProjectForPaymentCodeProjection(
             @Param("id") Long id,
             @Param("projectPublicId") String projectPublicId,

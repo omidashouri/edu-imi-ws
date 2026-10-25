@@ -6,7 +6,6 @@ import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
 import edu.imi.ir.eduimiws.models.projections.edu.StudentOnly;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import jakarta.persistence.*;
 
@@ -62,8 +61,6 @@ import jakarta.persistence.*;
         )
 })
 
-//@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "student")
 @Getter
 @Setter
 @NoArgsConstructor

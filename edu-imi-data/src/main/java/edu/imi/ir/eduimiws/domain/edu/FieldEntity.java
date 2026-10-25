@@ -4,7 +4,6 @@ import edu.imi.ir.eduimiws.domain.BaseEntity;
 import edu.imi.ir.eduimiws.domain.crm.*;
 import edu.imi.ir.eduimiws.models.projections.edu.FieldOnly;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.*;
@@ -93,8 +92,6 @@ import jakarta.persistence.*;
         )
 })
 
-//@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)//, region = "field")
 @Getter
 @Setter
 @NoArgsConstructor

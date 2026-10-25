@@ -44,7 +44,7 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     PersonEntity findByPersonApiEntity_PersonPublicId(String personPublicId);
 
     @EntityGraph(value = "PersonEntity.findPersonSubGraphPersonApiSelectedLanguage",type = EntityGraph.EntityGraphType.LOAD)
-    @QueryHints(@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_READONLY, value = "true"))
+    @QueryHints(@QueryHint(name = org.hibernate.jpa.HibernateHints.HINT_READ_ONLY, value = "true"))
     PersonEntity readByPersonApiEntity_PersonPublicId(String personPublicId);
 
     Page<PersonEntity> findAll(Pageable pageable);

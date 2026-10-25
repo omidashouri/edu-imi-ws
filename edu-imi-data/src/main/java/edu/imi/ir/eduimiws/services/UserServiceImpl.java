@@ -321,7 +321,7 @@ public class UserServiceImpl implements UserService {
         return currentUser;
     }
 
-    public final Collection<? extends GrantedAuthority> getAuthorities(final Collection<RoleApiEntity> roles) {
+    public Collection<? extends GrantedAuthority> getAuthorities(final Collection<RoleApiEntity> roles) {
         return roles
                 .stream()
                 .flatMap(role -> role.getPrivileges().stream())
