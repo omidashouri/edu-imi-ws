@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
@@ -28,7 +28,7 @@ class EduImiWsApplicationTests {
 
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
 
 
     @BeforeEach

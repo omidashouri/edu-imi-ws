@@ -36,13 +36,11 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <org.springdoc.version>3.1.1</org.springdoc.version>
         <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
-        <!-- jjwt 0.9.x API still used in web security; do not bump to 0.12+ without code changes -->
-        <io.jsonwebtoken.version>0.9.1</io.jsonwebtoken.version>
+        <io.jsonwebtoken.version>0.12.6</io.jsonwebtoken.version>
         <com.sun.xml.ws.version>4.0.5</com.sun.xml.ws.version>
         <!-- CXF codegen only (runtime CXF not used); 3.6.x stays on javax.* -->
         <org.apache.cxf.cxf-codegen-plugin.version>3.6.13</org.apache.cxf.cxf-codegen-plugin.version>
         <org.codehaus.mojo.jaxb2-maven-plugin.version>2.5.0</org.codehaus.mojo.jaxb2-maven-plugin.version>
-        <httpclient.version>4.5.14</httpclient.version>
         <guava.version>33.7.2-jre</guava.version>
         <bouncycastle.version>1.86</bouncycastle.version>
         <ir.ghasemkiani.version>2.1.7</ir.ghasemkiani.version>
@@ -72,7 +70,17 @@
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${io.jsonwebtoken.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${io.jsonwebtoken.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
                 <version>${io.jsonwebtoken.version}</version>
             </dependency>
             <dependency>
@@ -84,11 +92,6 @@
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk18on</artifactId>
                 <version>${bouncycastle.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -103,10 +106,6 @@
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
             <version>${jaxb-impl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-jackson2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

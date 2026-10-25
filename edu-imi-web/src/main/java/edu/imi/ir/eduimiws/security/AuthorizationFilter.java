@@ -7,11 +7,9 @@ import edu.imi.ir.eduimiws.models.user.MyPrincipleUser;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.crm.PersonApiService;
 import edu.imi.ir.eduimiws.utilities.AppProperties;
+import edu.imi.ir.eduimiws.utilities.JwtKeyUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,13 +17,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -72,11 +69,10 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             Claims claims;
 
             try {
-                claims = Jwts.parser()
-                        .setSigningKey(appProperties.getTokenSecret())
-                        .parseClaimsJws(token)
-                        .getBody();
-            } catch (ExpiredJwtException expiredJwtException){
+                claims = JwtKeyUtil.parser(appProperties.getTokenSecret())
+                        .parseSignedClaims(token)
+                        .getPayload();
+            } catch (ExpiredJwtException expiredJwtException) {
                 throw new ExpiredJwtTokenException(expiredJwtException.getHeader(),
                         expiredJwtException.getClaims(), expiredJwtException.getMessage());
             }

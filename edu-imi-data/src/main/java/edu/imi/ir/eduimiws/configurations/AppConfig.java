@@ -1,9 +1,5 @@
 package edu.imi.ir.eduimiws.configurations;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.hibernate7.Hibernate7Module;
 import edu.imi.ir.eduimiws.models.helper.DefaultValues;
 import edu.imi.ir.eduimiws.security.ApiUrlSecurityCredential;
 import edu.imi.ir.eduimiws.security.AuthenticationCredential;
@@ -18,13 +14,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
+import org.springframework.integration.support.json.JacksonJsonObjectMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Map;
 import java.util.Properties;
@@ -62,20 +58,8 @@ public class AppConfig {
     }
 
     @Bean
-    public Jackson2JsonObjectMapper jackson2JsonObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-        return new Jackson2JsonObjectMapper(mapper);
-    }
-
-    @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.registerModule(new Hibernate7Module());
-        jsonConverter.setObjectMapper(objectMapper);
-        return jsonConverter;
+    public JacksonJsonObjectMapper jacksonJsonObjectMapper(JsonMapper jsonMapper) {
+        return new JacksonJsonObjectMapper(jsonMapper);
     }
 
     @Bean
@@ -139,11 +123,5 @@ public class AppConfig {
     public FarapayamakCredential farapayamakCredential() {
         return new FarapayamakCredential();
     }
-
-/*    @PostConstruct
-    public void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        System.out.println("Date in UTC: " + new Date().toString());
-    }*/
 
 }

@@ -14,29 +14,24 @@ import edu.imi.ir.eduimiws.security.BehdadCredential;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
 import edu.imi.ir.eduimiws.services.api.reqres.SOAPConnector;
 import edu.imi.ir.eduimiws.services.api.reqres.SoapClientImpl2;
-import org.apache.http.Header;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.protocol.RequestDefaultHeaders;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicHeader;
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.core.io.Resource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.ws.transport.http.HttpComponentsMessageSender;
+import org.springframework.ws.transport.http.HttpComponents5ClientFactory;
+import org.springframework.ws.transport.http.HttpComponents5MessageSender;
+import org.springframework.ws.transport.http.SimpleHttpComponents5MessageSender;
 
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 
 @Configuration
 @PropertySources({
@@ -118,16 +113,18 @@ public class CommonWebServiceClientConfig {
     }*/
 
     @Bean
-    public HttpComponentsMessageSender httpComponentsMessageSender() {
-        HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
+    public HttpComponents5MessageSender httpComponentsMessageSender() {
+        HttpComponents5MessageSender httpComponentsMessageSender = new HttpComponents5MessageSender();
         httpComponentsMessageSender.setCredentials(usernamePasswordCredentials());
         return httpComponentsMessageSender;
     }
 
     @Bean
     public UsernamePasswordCredentials usernamePasswordCredentials() {
-        return new UsernamePasswordCredentials(digitalPaymentCredential.getBehpardakhtCredential().getUsername(),
-                digitalPaymentCredential.getBehpardakhtCredential().getPassword());
+        String password = digitalPaymentCredential.getBehpardakhtCredential().getPassword();
+        return new UsernamePasswordCredentials(
+                digitalPaymentCredential.getBehpardakhtCredential().getUsername(),
+                password != null ? password.toCharArray() : new char[0]);
     }
 
 /*    @Bean
@@ -167,20 +164,17 @@ public class CommonWebServiceClientConfig {
         return encodedAuthorization;
     }
 
-    private HttpClient httpClient(String username, String password) throws Exception {
-        List<Header> headers = new ArrayList<>();
-        BasicHeader authHeader = new BasicHeader("Authorization", "Basic " + base64authUserPassword(username, password));
-        headers.add(authHeader);
-        RequestDefaultHeaders reqHeader = new RequestDefaultHeaders(headers);
-        return HttpClientBuilder.create()
-                .addInterceptorFirst(new HttpComponentsMessageSender.RemoveSoapHeadersInterceptor())
-                .addInterceptorLast(reqHeader).build();
+    private HttpClient httpClient(String username, String password) {
+        String authorization = "Basic " + base64authUserPassword(username, password);
+        return HttpClients.custom()
+                .addRequestInterceptorFirst(new HttpComponents5ClientFactory.RemoveSoapHeadersInterceptor())
+                .addRequestInterceptorLast((request, entity, context) ->
+                        request.setHeader("Authorization", authorization))
+                .build();
     }
 
-    private HttpComponentsMessageSender httpComponentsMessageSender(String userName, String password) throws Exception {
-        HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
-        httpComponentsMessageSender.setHttpClient(httpClient(userName, password));
-        return httpComponentsMessageSender;
+    private SimpleHttpComponents5MessageSender httpComponentsMessageSender(String userName, String password) {
+        return new SimpleHttpComponents5MessageSender(httpClient(userName, password));
     }
 
 

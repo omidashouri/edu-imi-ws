@@ -3,15 +3,16 @@ package edu.imi.ir.eduimiws.utilities;
 import edu.imi.ir.eduimiws.security.MelliCredential;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
@@ -26,15 +27,14 @@ public class MelliTripleDesImpl implements MelliTripleDes{
     public String encrypt(String unencryptedMessage) {
         Cipher encryptCipher;
         String base64EncryptedMessageString = null;
-        byte[] messageBytes, encryptedMessageBytes, base64EncryptedMessageBytes;
+        byte[] messageBytes, encryptedMessageBytes;
 
         try {
             encryptCipher = Cipher.getInstance(melliCredential.getEncryptionAlgorithm(),new BouncyCastleProvider());
             encryptCipher.init(Cipher.ENCRYPT_MODE, this.getSecretKey());
             messageBytes = unencryptedMessage.getBytes(melliCredential.getUnicodeFormat());
             encryptedMessageBytes = encryptCipher.doFinal(messageBytes);
-            base64EncryptedMessageBytes = Base64.encodeBase64(encryptedMessageBytes);
-            base64EncryptedMessageString = new String(base64EncryptedMessageBytes);
+            base64EncryptedMessageString = Base64.getEncoder().encodeToString(encryptedMessageBytes);
 
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             log.debug(e.getMessage());
@@ -53,7 +53,7 @@ public class MelliTripleDesImpl implements MelliTripleDes{
         String decryptedMessage = null;
 
         try{
-            base64EncryptedMessage = Base64.decodeBase64(encryptedMessage.getBytes());
+            base64EncryptedMessage = Base64.getDecoder().decode(encryptedMessage.getBytes(StandardCharsets.UTF_8));
             decryptCipher = Cipher.getInstance(melliCredential.getEncryptionAlgorithm(),
                     new BouncyCastleProvider());
             decryptCipher.init(Cipher.DECRYPT_MODE, this.getSecretKey());
@@ -67,8 +67,8 @@ public class MelliTripleDesImpl implements MelliTripleDes{
     }
 
     protected SecretKey getSecretKey() {
-        byte[] secretKeyBytes = melliCredential.getEncryptionKey().getBytes();
-        byte[] secretKey64Bytes = Base64.decodeBase64(secretKeyBytes);
+        byte[] secretKey64Bytes = Base64.getDecoder()
+                .decode(melliCredential.getEncryptionKey().getBytes(StandardCharsets.UTF_8));
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey64Bytes,
                 melliCredential.getDataEncryptionStandardAlgorithm());
         return secretKeySpec;
@@ -79,6 +79,6 @@ public class MelliTripleDesImpl implements MelliTripleDes{
         Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS7Padding", new BouncyCastleProvider());
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] buf = cipher.doFinal(message.getBytes("UTF-8"));
-        return Base64.encodeBase64String(buf);
+        return Base64.getEncoder().encodeToString(buf);
     }
 }

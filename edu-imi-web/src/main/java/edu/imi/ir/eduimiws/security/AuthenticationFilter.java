@@ -1,14 +1,11 @@
 package edu.imi.ir.eduimiws.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
 import edu.imi.ir.eduimiws.models.user.MyErpUser;
 import edu.imi.ir.eduimiws.utilities.AppProperties;
+import edu.imi.ir.eduimiws.utilities.JwtKeyUtil;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,14 +14,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
+import tools.jackson.databind.json.JsonMapper;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
-
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Arrays;
@@ -33,33 +30,28 @@ import java.util.Date;
 @Component
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    //    this class is import with extending  UsernamePasswordAuthenticationFilter
     private final AuthenticationManager authenticationManager1;
+    private final JsonMapper jsonMapper;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager1) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager1, JsonMapper jsonMapper) {
         super(authenticationManager1);
         this.authenticationManager1 = authenticationManager1;
+        this.jsonMapper = jsonMapper;
     }
 
     @Autowired
     private AppProperties appProperties;
-    //omiddo:    remove later myUserDetailsService
 
-    @PostConstruct  // This ensures it's set after bean construction
+    @PostConstruct
     public void init() {
         this.setFilterProcessesUrl("/api/users/login");
     }
 
-    //    this method is used for authenticating user when request come to server
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-
-//           String contentType = req.getHeader("Accept");
-
-//            our class model for reading username and password
-            UserLoginRequestModel creds = new ObjectMapper()
+            UserLoginRequestModel creds = jsonMapper
                     .readValue(req.getInputStream(), UserLoginRequestModel.class);
 
 /*
@@ -100,12 +92,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String userName = ((User) auth.getPrincipal()).getUsername();
         String userPublicId = ((MyErpUser) auth.getPrincipal()).getUserPublicId();
 
-        String token = Jwts
-                .builder()
-                .setSubject(userName)
-                .claim("userPublicId", userPublicId)
-                .setExpiration(Date.from(Instant.now().plusMillis(Long.valueOf(appProperties.getExpirationTime()))))
-                .signWith(SignatureAlgorithm.HS512, appProperties.getTokenSecret())
+        String token = JwtKeyUtil.sign(Jwts.builder()
+                        .subject(userName)
+                        .claim("userPublicId", userPublicId)
+                        .expiration(Date.from(Instant.now().plusMillis(Long.parseLong(appProperties.getExpirationTime())))),
+                appProperties.getTokenSecret())
                 .compact();
 
 //        new Date(System.currentTimeMillis() + Long.valueOf(appProperties.getExpirationTime()).intValue())
