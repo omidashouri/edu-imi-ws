@@ -66,6 +66,15 @@ public class OpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi authenticationV2Api(){
+        return GroupedOpenApi.builder()
+                .group("Authentication-v2")
+                .pathsToMatch("/api/v2/auth/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi userApi(){
         return GroupedOpenApi.builder()
                 .group("Users")

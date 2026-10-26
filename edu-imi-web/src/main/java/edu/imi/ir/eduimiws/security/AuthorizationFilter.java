@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 @Component
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 
+    private static final String BEARER_PREFIX = "Bearer ";
+
     private final AppProperties appProperties;
     private final PersonApiService personApiService;
 
@@ -48,7 +50,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
         String header = request.getHeader(appProperties.getHeaderString());
 
-        if (header == null || !header.startsWith(appProperties.getTokenPrefix())) {
+        if (header == null || resolveTokenPrefix(header) == null) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -64,7 +66,11 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(appProperties.getHeaderString());
 
         if (token != null) {
-            token = token.replace(appProperties.getTokenPrefix(), "");
+            String prefix = resolveTokenPrefix(token);
+            if (prefix == null) {
+                return null;
+            }
+            token = token.substring(prefix.length()).trim();
 
             Claims claims;
 
@@ -117,5 +123,18 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
         return Arrays.asList(new SimpleGrantedAuthority(role));                 // RM
     }
 
+    /**
+     * Accepts the legacy v1 prefix ({@code IMI }) and the v2 {@code Bearer } scheme.
+     */
+    private String resolveTokenPrefix(String authorizationHeader) {
+        String legacyPrefix = appProperties.getTokenPrefix();
+        if (legacyPrefix != null && authorizationHeader.startsWith(legacyPrefix)) {
+            return legacyPrefix;
+        }
+        if (authorizationHeader.startsWith(BEARER_PREFIX)) {
+            return BEARER_PREFIX;
+        }
+        return null;
+    }
 
 }
