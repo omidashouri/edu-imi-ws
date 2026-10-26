@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.assemblers.pmis;
 
-import edu.imi.ir.eduimiws.controllers.pmis.v1.ProjectController;
+import edu.imi.ir.eduimiws.controllers.v1.pmis.ProjectController;
 import edu.imi.ir.eduimiws.mapper.pmis.ProjectResponseForPaymentCodeProjectDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;
 import edu.imi.ir.eduimiws.models.response.pmis.ProjectResponseForPaymentCode;

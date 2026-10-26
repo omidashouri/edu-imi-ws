@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.assemblers.crm;
 
-import edu.imi.ir.eduimiws.controllers.crm.v1.AccountController;
+import edu.imi.ir.eduimiws.controllers.v1.crm.AccountController;
 import edu.imi.ir.eduimiws.mapper.crm.AccountResponseForPaymentCodeAccountDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
 import edu.imi.ir.eduimiws.models.response.crm.AccountResponseForPaymentCode;

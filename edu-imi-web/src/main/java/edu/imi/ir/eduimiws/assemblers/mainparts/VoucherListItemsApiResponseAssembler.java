@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.assemblers.mainparts;
 
-import edu.imi.ir.eduimiws.controllers.mainparts.v1.VoucherListItemsController;
+import edu.imi.ir.eduimiws.controllers.v1.mainparts.VoucherListItemsController;
 import edu.imi.ir.eduimiws.mapper.mainparts.VoucherListItemsApiResponseMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.VoucherListItemsApiDto;
 import edu.imi.ir.eduimiws.models.response.mainparts.VoucherListItemsApiResponse;

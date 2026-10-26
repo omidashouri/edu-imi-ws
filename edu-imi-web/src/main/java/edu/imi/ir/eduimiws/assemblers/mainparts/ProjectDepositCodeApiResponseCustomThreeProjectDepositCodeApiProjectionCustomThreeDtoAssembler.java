@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.assemblers.mainparts;
 
 
-import edu.imi.ir.eduimiws.controllers.mainparts.v1.ProjectDepositCodeApiController;
+import edu.imi.ir.eduimiws.controllers.v1.mainparts.ProjectDepositCodeApiController;
 import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiResponseCustomThreeProjectDepositCodeApiProjectionCustomThreeDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiProjectionCustomThreeDto;
 import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponseCustomThree;

@@ -1,9 +1,9 @@
 package edu.imi.ir.eduimiws.assemblers.edu;
 
-import edu.imi.ir.eduimiws.controllers.edu.v1.EduCategoryController;
-import edu.imi.ir.eduimiws.controllers.edu.v1.FieldController;
-import edu.imi.ir.eduimiws.controllers.edu.v1.LevelController;
-import edu.imi.ir.eduimiws.controllers.edu.v1.PeriodController;
+import edu.imi.ir.eduimiws.controllers.v1.edu.EduCategoryController;
+import edu.imi.ir.eduimiws.controllers.v1.edu.FieldController;
+import edu.imi.ir.eduimiws.controllers.v1.edu.LevelController;
+import edu.imi.ir.eduimiws.controllers.v1.edu.PeriodController;
 import edu.imi.ir.eduimiws.mapper.edu.PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.edu.PeriodProjectionCustomTwoDto;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseCustomTwo;

@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.assemblers.mainparts;
 
 
-import edu.imi.ir.eduimiws.controllers.mainparts.v1.VoucherDeleteItemsController;
+import edu.imi.ir.eduimiws.controllers.v1.mainparts.VoucherDeleteItemsController;
 import edu.imi.ir.eduimiws.mapper.mainparts.VoucherDeleteItemsApiResponseMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.VoucherDeleteItemsApiDto;
 import edu.imi.ir.eduimiws.models.response.mainparts.VoucherDeleteItemsApiResponse;

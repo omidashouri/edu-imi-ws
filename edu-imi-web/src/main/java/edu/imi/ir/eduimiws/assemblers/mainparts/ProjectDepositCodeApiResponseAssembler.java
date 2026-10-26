@@ -1,9 +1,9 @@
 package edu.imi.ir.eduimiws.assemblers.mainparts;
 
-import edu.imi.ir.eduimiws.controllers.crm.v1.UserController;
-import edu.imi.ir.eduimiws.controllers.mainparts.v1.ProjectDepositCodeApiController;
-import edu.imi.ir.eduimiws.controllers.mainparts.v1.VoucherListItemsController;
-import edu.imi.ir.eduimiws.controllers.pmis.v1.ProjectController;
+import edu.imi.ir.eduimiws.controllers.v1.crm.UserController;
+import edu.imi.ir.eduimiws.controllers.v1.mainparts.ProjectDepositCodeApiController;
+import edu.imi.ir.eduimiws.controllers.v1.mainparts.VoucherListItemsController;
+import edu.imi.ir.eduimiws.controllers.v1.pmis.ProjectController;
 import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiResponseMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
 import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponse;

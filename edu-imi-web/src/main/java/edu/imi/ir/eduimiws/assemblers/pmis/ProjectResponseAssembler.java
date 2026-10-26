@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.assemblers.pmis;
 
-import edu.imi.ir.eduimiws.controllers.crm.v1.UserController;
-import edu.imi.ir.eduimiws.controllers.pmis.v1.ProjectController;
+import edu.imi.ir.eduimiws.controllers.v1.crm.UserController;
+import edu.imi.ir.eduimiws.controllers.v1.pmis.ProjectController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.pmis.ProjectResponseProjectDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.pmis.ProjectDto;

@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.models.request.EmailForm;
-import edu.imi.ir.eduimiws.servces.EmailService;
+import edu.imi.ir.eduimiws.services.EmailService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

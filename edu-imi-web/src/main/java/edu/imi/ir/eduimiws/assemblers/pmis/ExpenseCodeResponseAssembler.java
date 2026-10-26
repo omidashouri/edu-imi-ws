@@ -1,6 +1,6 @@
 package edu.imi.ir.eduimiws.assemblers.pmis;
 
-import edu.imi.ir.eduimiws.controllers.pmis.v1.ExpenseCodeController;
+import edu.imi.ir.eduimiws.controllers.v1.pmis.ExpenseCodeController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.pmis.ExpenseCodeResponseMapper;
 import edu.imi.ir.eduimiws.models.dto.pmis.ExpenseCodeApiDto;

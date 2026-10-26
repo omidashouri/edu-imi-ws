@@ -1,7 +1,7 @@
 package edu.imi.ir.eduimiws.assemblers.mainparts;
 
-import edu.imi.ir.eduimiws.controllers.mainparts.v1.PaymentCodeController;
-import edu.imi.ir.eduimiws.controllers.pmis.v1.ExpenseCodeController;
+import edu.imi.ir.eduimiws.controllers.v1.mainparts.PaymentCodeController;
+import edu.imi.ir.eduimiws.controllers.v1.pmis.ExpenseCodeController;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeResponseMapper;
 import edu.imi.ir.eduimiws.mapper.pmis.ExpenseCodeResponseMapper;
