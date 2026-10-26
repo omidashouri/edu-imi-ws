@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fa" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>سازمان مدیریت صنعتی | API</title>
+    <link rel="stylesheet" th:href="@{/css/swagger-login.css}"/>
+</head>
+<body>
+<div class="card">
+    <div class="brand">
+        <img th:src="@{/swagger-assets/logo-imi-w.png}" alt="سازمان مدیریت صنعتی"/>
+        <h1>سازمان مدیریت صنعتی</h1>
+        <p>Industrial Management Institute · API documentation</p>
+    </div>
+
+    <p class="message error" th:if="${param.error}">نام کاربری/رمز عبور صحیح نمی باشد</p>
+
+    <form th:action="@{/swagger-login}" method="post">
+        <label for="username">نام کاربری</label>
+        <input id="username" name="username" type="text" autocomplete="username" required="required"
+               oninvalid="this.setCustomValidity('لطفا نام کاربری/رمزعبور خود را وارد نمایید')"
+               oninput="this.setCustomValidity('')"/>
+
+        <label for="password">رمز عبور</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required="required"
+               oninvalid="this.setCustomValidity('لطفا نام کاربری/رمزعبور خود را وارد نمایید')"
+               oninput="this.setCustomValidity('')"/>
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button id="login-button" type="submit">ورود</button>
+    </form>
+    <script th:src="@{/js/swagger-login.js}"></script>
+    <p class="foot">Education, consulting, and research · imi.ir</p>
+</div>
+</body>
+</html>

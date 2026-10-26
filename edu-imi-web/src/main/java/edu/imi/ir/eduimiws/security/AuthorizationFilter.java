@@ -48,6 +48,16 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
 
+        String path = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        if (contextPath != null && !contextPath.isEmpty() && path.startsWith(contextPath)) {
+            path = path.substring(contextPath.length());
+        }
+        if (path == null || !path.startsWith("/api/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String header = request.getHeader(appProperties.getHeaderString());
 
         if (header == null || resolveTokenPrefix(header) == null) {
@@ -55,9 +65,10 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = getAuthentication(request);
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
+        if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
         filterChain.doFilter(request, response);
     }
 

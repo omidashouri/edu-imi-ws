@@ -1,0 +1,14 @@
+.git
+.idea
+*.md
+.env
+.env.*
+!**/.env.example
+
+# Ignore module build outputs except the Boot jar used by the runtime Dockerfile
+edu-imi-data/target
+edu-imi-web/target/**
+!edu-imi-web/target/edu-imi-web.jar
+
+# Do not send host Maven/IDE caches into the image context
+**/.mvn/wrapper/maven-wrapper.jar
