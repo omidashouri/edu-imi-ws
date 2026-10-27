@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -15,7 +16,13 @@ import jakarta.persistence.Table;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-@SequenceGenerator(name = "entity_sequence", schema = "CRM",sequenceName = "SEQ_PERSON_ROLE_API",allocationSize = 1)
-@Table(schema = "CRM",name = "TBL_PERSON_ROLE_API")
+@SequenceGenerator(name = "entity_sequence", schema = "CRM", sequenceName = "SEQ_PERSON_ROLE_API", allocationSize = 1)
+@Table(schema = "CRM", name = "TBL_PERSON_ROLE_API")
 public class PersonRoleEntity extends BaseEntity {
+
+    @Column(name = "PERSON_API_ID")
+    private Long personApiId;
+
+    @Column(name = "ROLE_API_ID")
+    private Long roleApiId;
 }

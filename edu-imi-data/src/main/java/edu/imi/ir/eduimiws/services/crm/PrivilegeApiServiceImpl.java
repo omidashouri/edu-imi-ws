@@ -115,14 +115,15 @@ public class PrivilegeApiServiceImpl implements PrivilegeApiService {
 
     @Override
     public PrivilegeApiEntity createPrivilegeByName(String privilegeName) {
+        if (privilegeName == null || privilegeName.isBlank()) {
+            throw new RoleServiceException("Privilege name is required");
+        }
 
-        String correctedPrivilegeName = (new StringBuilder())
-                .append(privilegeName.trim().toUpperCase())
-                .append("_PRIVILEGE").toString();
+        String correctedPrivilegeName = normalizePrivilegeName(privilegeName);
 
         Collection<PrivilegeApiEntity> findPrivileges = this
                 .findAllByPrivilegeName(correctedPrivilegeName);
-        if (!findPrivileges.isEmpty() || findPrivileges.size() > 0) {
+        if (!findPrivileges.isEmpty()) {
             throw new RoleServiceException("Duplicate Privilege Found For " + privilegeName);
         }
 
@@ -131,8 +132,35 @@ public class PrivilegeApiServiceImpl implements PrivilegeApiService {
         newPrivilege.setPrivilegePublicId(generatePrivilegePublicId());
         newPrivilege.setCreateDateTs(new Timestamp(new Date().getTime()));
 
-        PrivilegeApiEntity savedPrivilege = privilegeApiRepository.save(newPrivilege);
-        return savedPrivilege;
+        return privilegeApiRepository.save(newPrivilege);
+    }
+
+    @Override
+    public PrivilegeApiEntity updatePrivilegeByName(String privilegePublicId, String privilegeName) {
+        PrivilegeApiEntity privilegeApi = privilegeApiRepository.findByPrivilegePublicId(privilegePublicId);
+        if (privilegeApi == null) {
+            throw new RoleServiceException("requested privilege not found");
+        }
+        if (privilegeName == null || privilegeName.isBlank()) {
+            throw new RoleServiceException("Privilege name is required");
+        }
+
+        String correctedPrivilegeName = normalizePrivilegeName(privilegeName);
+        Collection<PrivilegeApiEntity> findPrivileges = this.findAllByPrivilegeName(correctedPrivilegeName);
+        boolean duplicate = findPrivileges != null && findPrivileges.stream()
+                .anyMatch(existing -> !existing.getId().equals(privilegeApi.getId()));
+        if (duplicate) {
+            throw new RoleServiceException("Duplicate Privilege Found For " + privilegeName);
+        }
+
+        privilegeApi.setName(correctedPrivilegeName);
+        privilegeApi.setEditDateTs(new Timestamp(new Date().getTime()));
+        return privilegeApiRepository.save(privilegeApi);
+    }
+
+    private String normalizePrivilegeName(String privilegeName) {
+        String trimmed = privilegeName.trim().toUpperCase();
+        return trimmed.endsWith("_PRIVILEGE") ? trimmed : trimmed + "_PRIVILEGE";
     }
 
     @Override

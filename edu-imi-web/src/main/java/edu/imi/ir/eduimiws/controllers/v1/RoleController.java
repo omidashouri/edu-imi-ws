@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.RoleResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.BadRequestException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.RoleFastDtoMapper;
@@ -11,7 +12,6 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.crm.PrivilegeResponse;
 import edu.imi.ir.eduimiws.models.response.crm.RoleResponse;
 import edu.imi.ir.eduimiws.services.crm.RoleApiService;
-import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,7 +43,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasAnyAuthority('ROLE_MANAGE_PRIVILEGE') or hasRole('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/v1/roles")
 @RequiredArgsConstructor
@@ -127,7 +127,7 @@ public class RoleController {
                 .collect(Collectors.toList());
 
         List<RoleFastDto> roleFastDtos = roleFastDtoMapper
-                .toRoleFastDtos(roleEntities,new CycleAvoidingMappingContext());
+                .toRoleFastDtos(roleEntities, new CycleAvoidingMappingContext());
 
         CollectionModel<RoleResponse> roleResponseCollectionModel =
                 roleResponseAssembler.toCollectionModel(roleFastDtos);
@@ -152,7 +152,7 @@ public class RoleController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "student not found",
+                            description = "role not found",
                             content = @Content(
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
@@ -170,25 +170,24 @@ public class RoleController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getRoleByRolePublicId(@PathVariable String rolePublicId) {
 
-            RoleApiEntity roleApi = roleApiService.findByRolePublicId(rolePublicId);
-            if (roleApi == null) {
-                throw new NotFoundException("requested role not found");
-            }
+        RoleApiEntity roleApi = roleApiService.findByRolePublicId(rolePublicId);
+        if (roleApi == null) {
+            throw new NotFoundException("requested role not found");
+        }
 
-            RoleFastDto roleFastDto = roleFastDtoMapper
-                    .toRoleFastDto(roleApi, new CycleAvoidingMappingContext());
+        RoleFastDto roleFastDto = roleFastDtoMapper
+                .toRoleFastDto(roleApi, new CycleAvoidingMappingContext());
 
-            RoleResponse roleResponse =
-                    roleResponseAssembler.toModel(roleFastDto);
+        RoleResponse roleResponse =
+                roleResponseAssembler.toModel(roleFastDto);
 
-            return ResponseEntity.ok(roleResponse);
+        return ResponseEntity.ok(roleResponse);
 
     }
 
     @Operation(
-            hidden = true,
             summary = "Create Role",
-            description = "Role ",
+            description = "Create a new role and optionally assign privileges",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -225,28 +224,93 @@ public class RoleController {
                     )
             }
     )
-    @DisableMethod
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createRole(@RequestBody RoleForm roleForm) {
+        if (roleForm == null || roleForm.getRoleName() == null || roleForm.getRoleName().isBlank()) {
+            throw new BadRequestException("Role name is required");
+        }
+        RoleApiEntity savedRole = roleApiService.createRoleByRoleForm(roleForm);
+        return ResponseEntity.ok(toRoleResponse(savedRole));
+    }
 
+    @Operation(
+            summary = "Update Role",
+            description = "Update role name",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(schema = @Schema(implementation = RoleResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "role not found",
+                            content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            }
+    )
+    @PutMapping(path = "/{rolePublicId}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> updateRole(@PathVariable String rolePublicId,
+                                        @RequestBody RoleForm roleForm) {
+        RoleApiEntity savedRole = roleApiService.updateRoleByRoleForm(rolePublicId, roleForm);
+        return ResponseEntity.ok(toRoleResponse(savedRole));
+    }
+
+    @Operation(
+            summary = "Replace Role Privileges",
+            description = "Set the full privilege list for an existing role",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(schema = @Schema(implementation = RoleResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "role not found",
+                            content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            }
+    )
+    @PutMapping(path = "/{rolePublicId}/privileges",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> replaceRolePrivileges(@PathVariable String rolePublicId,
+                                                   @RequestBody RoleForm roleForm) {
+        if (roleForm == null || roleForm.getPrivilegePublicId() == null) {
+            throw new BadRequestException("Privilege Public Id is Empty");
+        }
+        RoleApiEntity savedRole = roleApiService.replacePrivileges(rolePublicId, roleForm.getPrivilegePublicId());
+        return ResponseEntity.ok(toRoleResponse(savedRole));
+    }
+
+    private RoleResponse toRoleResponse(RoleApiEntity savedRole) {
         RoleResponse returnValue = new RoleResponse();
-        RoleApiEntity savedRole = new RoleApiEntity();
-
-//        omiddo: check if roleName is null return exception
-
-        String roleName = roleForm.getRoleName();
-
-        savedRole = roleApiService.createRoleByRoleForm(roleForm);
-
         returnValue.setRolePublicId(savedRole.getRolePublicId());
         returnValue.setName(savedRole.getName());
-
-//        omiddo: handle it with mapper
-        if(savedRole.getPrivileges()!=null && savedRole.getPrivileges().size()>0){
+        if (savedRole.getPrivileges() != null && !savedRole.getPrivileges().isEmpty()) {
             Set<PrivilegeResponse> privilegeResponses = new HashSet<>();
-            savedRole.getPrivileges().forEach(privilege->{
+            savedRole.getPrivileges().forEach(privilege -> {
                 PrivilegeResponse privilegeResponse = new PrivilegeResponse();
                 privilegeResponse.setName(privilege.getName());
                 privilegeResponse.setPrivilegePublicId(privilege.getPrivilegePublicId());
@@ -254,6 +318,6 @@ public class RoleController {
             });
             returnValue.setPrivilegeResponses(privilegeResponses);
         }
-        return ResponseEntity.ok(returnValue);
+        return returnValue;
     }
 }

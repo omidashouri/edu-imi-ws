@@ -15,6 +15,10 @@ public interface RoleApiService {
 
     RoleApiEntity createRoleByRoleForm(RoleForm roleForm);
 
+    RoleApiEntity updateRoleByRoleForm(String rolePublicId, RoleForm roleForm);
+
+    RoleApiEntity replacePrivileges(String rolePublicId, Collection<String> privilegePublicIds);
+
     Collection<RoleApiEntity> findAllByRoleName(String roleName);
 
     Collection<RoleApiEntity> findAllByRoleNameAndPrivileges(String roleName,Collection<PrivilegeApiEntity> privileges);

@@ -24,10 +24,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class AuthorizationFilter extends BasicAuthenticationFilter {
@@ -106,32 +109,45 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             PersonApiService personApiService = (PersonApiService) SpringApplicationContext.getBean("personApiServiceImpl");
             PersonApiEntity personApi = personApiService.findByPersonPublicIdWithPersonAndRole(userPublicId);
 
-            if (user != null) {
-//                omiddo: later remove granted authority (user when chek method authority)
-                List<? extends GrantedAuthority> authorities;
-                if (personApi.getRoles() != null && personApi.getRoles().size()>0) {
-                    authorities = personApi
-                            .getRoles()
-                            .stream()
-                            .map(p -> new SimpleGrantedAuthority(p.getName()))
-                            .distinct()
-                            .collect(Collectors.toList());
-                } else {
-                    authorities = this.getAuthorities("ROLE_ANONYMOUS")
-                            .stream()
-                            .collect(Collectors.toList());
-                }
-
-                return new UsernamePasswordAuthenticationToken(new MyPrincipleUser(personApi), personApi.getPerson().getPassword(), authorities);
+            if (user != null && personApi != null) {
+                List<? extends GrantedAuthority> authorities = resolveAuthorities(personApi);
+                return new UsernamePasswordAuthenticationToken(
+                        new MyPrincipleUser(personApi),
+                        personApi.getPerson().getPassword(),
+                        authorities);
             }
             return null;
         }
         return null;
     }
 
+    /**
+     * Grants both role names ({@code hasRole}/{@code hasAnyRole}) and privilege names
+     * ({@code hasAuthority}/{@code hasAnyAuthority}).
+     */
+    private List<? extends GrantedAuthority> resolveAuthorities(PersonApiEntity personApi) {
+        if (personApi.getRoles() == null || personApi.getRoles().isEmpty()) {
+            return new ArrayList<>(getAuthorities("ROLE_ANONYMOUS"));
+        }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(String role) { // RM
-        return Arrays.asList(new SimpleGrantedAuthority(role));                 // RM
+        Stream<String> roleNames = personApi.getRoles().stream()
+                .map(role -> role.getName())
+                .filter(Objects::nonNull);
+
+        Stream<String> privilegeNames = personApi.getRoles().stream()
+                .filter(role -> role.getPrivileges() != null)
+                .flatMap(role -> role.getPrivileges().stream())
+                .map(privilege -> privilege.getName())
+                .filter(Objects::nonNull);
+
+        return Stream.concat(roleNames, privilegeNames)
+                .distinct()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
+        return Arrays.asList(new SimpleGrantedAuthority(role));
     }
 
     /**

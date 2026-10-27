@@ -4,7 +4,6 @@ import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
 import edu.imi.ir.eduimiws.exceptions.services.RoleServiceException;
 import edu.imi.ir.eduimiws.models.request.RoleForm;
-import edu.imi.ir.eduimiws.repositories.crm.PrivilegeApiRepository;
 import edu.imi.ir.eduimiws.repositories.crm.RoleApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 public class RoleApiServiceImpl implements RoleApiService {
 
     private final RoleApiRepository roleApiRepository;
-    private final PrivilegeApiRepository privilegeApiRepository;
     private final PrivilegeApiService privilegeApiService;
     private final PublicIdUtil publicIdUtil;
 
@@ -44,84 +43,83 @@ public class RoleApiServiceImpl implements RoleApiService {
     @Override
     public RoleApiEntity createRoleByRoleForm(RoleForm roleForm) {
 
-        String correctedRoleName = (new StringBuilder())
-                .append("ROLE_")
-                .append(roleForm.getRoleName().trim().toUpperCase())
-                .toString();
-        Collection<String> privilegePublicIds;
-        Collection<PrivilegeApiEntity> privilegeApis = null;
-        Collection<RoleApiEntity> duplicatedRoles;
-
-/*        Collection<RoleApiEntity> findRoles = this
-                .findAllByRoleName(correctedRoleName);
-        if (!findRoles.isEmpty() || findRoles.size() > 0) {
-            throw new RoleServiceException("Duplicate Role Found For " + roleForm.getRoleName());
-        }*/
-
-        RoleApiEntity newRole = new RoleApiEntity();
-
-        if (roleForm.getPrivilegePublicId() != null) {
-            privilegePublicIds = roleForm.getPrivilegePublicId();
-
-            privilegeApis = privilegeApiService.
-                    findAllByPrivilegePublicIds(privilegePublicIds.stream().collect(Collectors.toList()));
-
-            if (privilegeApis != null && privilegeApis.size() > 0) {
-                AtomicInteger duplicateFounded = new AtomicInteger();
-                List<String> roleNames = privilegeApis.stream()
-                        .map(PrivilegeApiEntity::getRoles)
-                        .flatMap(Collection::stream)
-                        .map(RoleApiEntity::getName)
-                        .collect(Collectors.toList());
-
-                if (roleNames != null && roleNames.size() == privilegeApis.size()) {
-                    roleNames
-                            .stream()
-                            .filter(correctedRoleName::equalsIgnoreCase)
-                            .findAny().ifPresent(n -> {
-                        duplicateFounded.getAndIncrement();
-                    });
-                    if (duplicateFounded.intValue() == privilegeApis.size()) {
-                        throw new RoleServiceException("Duplicate Role Found For " + roleForm.getRoleName());
-                    }
-                }
-/*                duplicatedRoles = roleApiRepository
-                        .findAllByNameAndPrivilegesIn(correctedRoleName, privilegeApis.stream().collect(Collectors.toList()));*/
-
-                newRole.setPrivileges(privilegeApis.stream().collect(Collectors.toSet()));
-            } else {
-                duplicatedRoles = roleApiRepository.findAllByName(correctedRoleName);
-                if (duplicatedRoles != null && duplicatedRoles.size() > 0) {
-
-                    boolean duplicateRoleWihOutPrivilege =
-                            duplicatedRoles
-                                    .stream()
-                                    .filter(r -> r.getPrivileges().size() == 0)
-                                    .findAny()
-                                    .isPresent();
-
-                    if (duplicateRoleWihOutPrivilege) {
-                        throw new RoleServiceException("Duplicate Role Found For " + roleForm.getRoleName());
-                    }
-                }
-            }
+        if (roleForm.getRoleName() == null || roleForm.getRoleName().isBlank()) {
+            throw new RoleServiceException("Role name is required");
         }
 
+        String correctedRoleName = normalizeRoleName(roleForm.getRoleName());
+        Collection<RoleApiEntity> existingByName = roleApiRepository.findAllByName(correctedRoleName);
+        if (existingByName != null && !existingByName.isEmpty()) {
+            throw new RoleServiceException("Duplicate Role Found For " + roleForm.getRoleName());
+        }
 
+        RoleApiEntity newRole = new RoleApiEntity();
         newRole.setName(correctedRoleName);
         newRole.setCreateDateTs(new Timestamp(new Date().getTime()));
         newRole.setRolePublicId(this.generateRolePublicId());
-/*        Collection<PrivilegeApiEntity> newPrivileges = privilegeApiService.getFullPrivilege();
-        newPrivileges.stream().forEachOrdered(np -> np.setRoles(Arrays.asList(newRole)));
-        newRole.setPrivileges(newPrivileges.stream().collect(Collectors.toSet()));
-//        privilegeApiRepository.saveAll(newPrivileges);
-        privilegeApiService.saveAllPrivilegeApis(newPrivileges);*/
-        RoleApiEntity savedRole = roleApiRepository.save(newRole);
-/*        privilegeApis
-                .stream()
-                .forEachOrdered(np -> np.setRoles(Arrays.asList(savedRole)));
-        privilegeApiService.saveAllPrivilegeApis(privilegeApis);*/
-        return savedRole;
+        if (roleForm.getPrivilegePublicId() != null && !roleForm.getPrivilegePublicId().isEmpty()) {
+            newRole.setPrivileges(resolvePrivilegesAsSet(roleForm.getPrivilegePublicId()));
+        }
+        return roleApiRepository.save(newRole);
+    }
+
+    @Override
+    public RoleApiEntity updateRoleByRoleForm(String rolePublicId, RoleForm roleForm) {
+        RoleApiEntity roleApi = requireRole(rolePublicId);
+        if (roleForm.getRoleName() != null && !roleForm.getRoleName().isBlank()) {
+            String correctedRoleName = normalizeRoleName(roleForm.getRoleName());
+            Collection<RoleApiEntity> existingByName = roleApiRepository.findAllByName(correctedRoleName);
+            boolean duplicate = existingByName != null && existingByName.stream()
+                    .anyMatch(existing -> !Objects.equals(existing.getId(), roleApi.getId()));
+            if (duplicate) {
+                throw new RoleServiceException("Duplicate Role Found For " + roleForm.getRoleName());
+            }
+            roleApi.setName(correctedRoleName);
+        }
+        roleApi.setEditDateTs(new Timestamp(new Date().getTime()));
+        return roleApiRepository.save(roleApi);
+    }
+
+    @Override
+    public RoleApiEntity replacePrivileges(String rolePublicId, Collection<String> privilegePublicIds) {
+        RoleApiEntity roleApi = requireRole(rolePublicId);
+        if (privilegePublicIds == null) {
+            throw new RoleServiceException("Privilege Public Id is Empty");
+        }
+        roleApi.setPrivileges(resolvePrivilegesAsSet(privilegePublicIds));
+        roleApi.setEditDateTs(new Timestamp(new Date().getTime()));
+        return roleApiRepository.save(roleApi);
+    }
+
+    private RoleApiEntity requireRole(String rolePublicId) {
+        RoleApiEntity roleApi = roleApiRepository.findByRolePublicId(rolePublicId);
+        if (roleApi == null) {
+            throw new RoleServiceException("requested role not found");
+        }
+        return roleApi;
+    }
+
+    private Set<PrivilegeApiEntity> resolvePrivilegesAsSet(Collection<String> privilegePublicIds) {
+        List<String> publicIds = privilegePublicIds.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(id -> !id.isEmpty())
+                .distinct()
+                .collect(Collectors.toList());
+        if (publicIds.isEmpty()) {
+            return java.util.Collections.emptySet();
+        }
+        Collection<PrivilegeApiEntity> privilegeApis =
+                privilegeApiService.findAllByPrivilegePublicIds(publicIds);
+        if (privilegeApis == null || privilegeApis.size() != publicIds.size()) {
+            throw new RoleServiceException("One or more privileges were not found");
+        }
+        return privilegeApis.stream().collect(Collectors.toSet());
+    }
+
+    private String normalizeRoleName(String roleName) {
+        String trimmed = roleName.trim().toUpperCase();
+        return trimmed.startsWith("ROLE_") ? trimmed : "ROLE_" + trimmed;
     }
 
     @Override

@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.controllers.v1;
 
 import edu.imi.ir.eduimiws.assemblers.crm.PrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
+import edu.imi.ir.eduimiws.exceptions.controllers.BadRequestException;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PrivilegeFastDtoMapper;
@@ -10,7 +11,6 @@ import edu.imi.ir.eduimiws.models.request.PrivilegeForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.crm.PrivilegeResponse;
 import edu.imi.ir.eduimiws.services.crm.PrivilegeApiService;
-import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasAnyAuthority('ROLE_MANAGE_PRIVILEGE') or hasRole('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/v1/privileges")
 @RequiredArgsConstructor
@@ -123,7 +123,7 @@ public class PrivilegeController {
                 .collect(Collectors.toList());
 
         List<PrivilegeFastDto> privilegeFastDtos = privilegeFastDtoMapper
-                .toPrivilegeFastDtos(privilegeEntities,new CycleAvoidingMappingContext());
+                .toPrivilegeFastDtos(privilegeEntities, new CycleAvoidingMappingContext());
 
         CollectionModel<PrivilegeResponse> privilegeResponseCollectionModel =
                 privilegeResponseAssembler.toCollectionModel(privilegeFastDtos);
@@ -147,7 +147,7 @@ public class PrivilegeController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "student not found",
+                            description = "privilege not found",
                             content = @Content(
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
@@ -165,25 +165,24 @@ public class PrivilegeController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getPrivilegeByPrivilegePublicId(@PathVariable String privilegePublicId) {
 
-            PrivilegeApiEntity privilegeApi = privilegeApiService.findByPrivilegePublicId(privilegePublicId);
-            if (privilegeApi == null) {
-                throw new NotFoundException("requested privilege not found");
-            }
+        PrivilegeApiEntity privilegeApi = privilegeApiService.findByPrivilegePublicId(privilegePublicId);
+        if (privilegeApi == null) {
+            throw new NotFoundException("requested privilege not found");
+        }
 
-            PrivilegeFastDto privilegeFastDto = privilegeFastDtoMapper
-                    .toPrivilegeFastDto(privilegeApi, new CycleAvoidingMappingContext());
+        PrivilegeFastDto privilegeFastDto = privilegeFastDtoMapper
+                .toPrivilegeFastDto(privilegeApi, new CycleAvoidingMappingContext());
 
-            PrivilegeResponse privilegeResponse =
-                    privilegeResponseAssembler.toModel(privilegeFastDto);
+        PrivilegeResponse privilegeResponse =
+                privilegeResponseAssembler.toModel(privilegeFastDto);
 
-            return ResponseEntity.ok(privilegeResponse);
+        return ResponseEntity.ok(privilegeResponse);
 
     }
 
     @Operation(
-            hidden = true,
             summary = "Create Privilege",
-            description = "Privilege ",
+            description = "Create a new privilege",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -220,22 +219,64 @@ public class PrivilegeController {
                     )
             }
     )
-    @DisableMethod
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> createPrivilege(@RequestBody PrivilegeForm privilegeForm) {
+        if (privilegeForm == null || privilegeForm.getPrivilegeName() == null
+                || privilegeForm.getPrivilegeName().isBlank()) {
+            throw new BadRequestException("Privilege name is required");
+        }
+
+        PrivilegeApiEntity savedPrivilege =
+                privilegeApiService.createPrivilegeByName(privilegeForm.getPrivilegeName());
 
         PrivilegeResponse returnValue = new PrivilegeResponse();
-        PrivilegeApiEntity savedPrivilege = new PrivilegeApiEntity();
-
-        String privilegeName = privilegeForm.getPrivilegeName();
-
-        savedPrivilege = privilegeApiService.createPrivilegeByName(privilegeName);
-
         returnValue.setPrivilegePublicId(savedPrivilege.getPrivilegePublicId());
         returnValue.setName(savedPrivilege.getName());
+        return ResponseEntity.ok(returnValue);
+    }
 
+    @Operation(
+            summary = "Update Privilege",
+            description = "Update privilege name",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(schema = @Schema(implementation = PrivilegeResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "privilege not found",
+                            content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            }
+    )
+    @PutMapping(path = "/{privilegePublicId}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> updatePrivilege(@PathVariable String privilegePublicId,
+                                             @RequestBody PrivilegeForm privilegeForm) {
+        if (privilegeForm == null || privilegeForm.getPrivilegeName() == null
+                || privilegeForm.getPrivilegeName().isBlank()) {
+            throw new BadRequestException("Privilege name is required");
+        }
+
+        PrivilegeApiEntity savedPrivilege = privilegeApiService
+                .updatePrivilegeByName(privilegePublicId, privilegeForm.getPrivilegeName());
+
+        PrivilegeResponse returnValue = new PrivilegeResponse();
+        returnValue.setPrivilegePublicId(savedPrivilege.getPrivilegePublicId());
+        returnValue.setName(savedPrivilege.getName());
         return ResponseEntity.ok(returnValue);
     }
 

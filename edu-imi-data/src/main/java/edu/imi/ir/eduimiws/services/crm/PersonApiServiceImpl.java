@@ -2,7 +2,6 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
-import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiIdProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.crm.PersonApiMapper;
@@ -32,7 +31,7 @@ public class PersonApiServiceImpl implements PersonApiService {
 
     private final PersonApiRepository personApiRepository;
     private final PersonApiIdProjectionMapper personApiIdProjectionMapper;
-    private final RoleApiService roleApiService;
+    private final PersonRoleApiService personRoleApiService;
 //    private final ContactApiService contactWebServiceService;
     private final PublicIdUtil publicIdUtil;
     private final PersonApiMapper personApiMapper;
@@ -209,13 +208,7 @@ public class PersonApiServiceImpl implements PersonApiService {
 
     @Override
     public PersonApiEntity updateByPersonApiAndRoleName(PersonApiEntity personApi, Collection<String> rolePublicIds) {
-
-        Collection<RoleApiEntity> newRoles = roleApiService
-                .findAllByRolePublicIdsIn(rolePublicIds.stream().collect(Collectors.toList()));
-
-        personApi.setRoles(newRoles);
-        PersonApiEntity savedPersonApi =  personApiRepository.save(personApi);
-        return savedPersonApi;
+        return personRoleApiService.replaceRoles(personApi, rolePublicIds);
     }
 
     private String generateUniquePersonWebServicePublicId() {

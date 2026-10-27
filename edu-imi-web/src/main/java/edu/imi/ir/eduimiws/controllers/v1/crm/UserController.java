@@ -25,6 +25,7 @@ import edu.imi.ir.eduimiws.proxies.crm.CrmServiceProxy;
 import edu.imi.ir.eduimiws.security.ActiveUserService2;
 import edu.imi.ir.eduimiws.services.UserService;
 import edu.imi.ir.eduimiws.services.crm.PersonApiService;
+import edu.imi.ir.eduimiws.services.crm.PersonRoleApiService;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.utilities.DisableMethod;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
@@ -71,6 +72,7 @@ public class UserController {
     private final CrmServiceProxy crmServiceProxy;
     private final PersonService personService;
     private final PersonApiService personApiService;
+    private final PersonRoleApiService personRoleApiService;
     private final UserService userService;
     private final PersonApiUserContactFastDtoMapper personApiUserContactFastDtoMapper;
     private final UserFastDtoMapper userFastDtoMapper;
@@ -665,9 +667,8 @@ public class UserController {
 
 
     @Operation(
-            hidden = true,
-            summary = "Role User",
-            description = "role User",
+            summary = "Replace user roles",
+            description = "Replace all roles assigned to the user with the given role public ids",
             security = @SecurityRequirement(name = "imi-security-key")
     )
     @ApiResponses(
@@ -704,26 +705,98 @@ public class UserController {
                     )
             }
     )
-    @DisableMethod
     @PostMapping(path = "/{userPublicId}/role",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<?> createUserRole(@PathVariable String userPublicId,
-                                            @RequestBody UserRolePrivilege userRolePrivilege) {
+    public ResponseEntity<?> replaceUserRoles(@PathVariable String userPublicId,
+                                              @RequestBody UserRolePrivilege userRolePrivilege) {
+        return ResponseEntity.ok(applyUserRoleChange(userPublicId, userRolePrivilege, RoleChangeType.REPLACE));
+    }
 
-        List<String> rolePublicIds = null;
+    @Operation(
+            summary = "Add user roles",
+            description = "Add roles to the user without removing existing roles",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(schema = @Schema(implementation = UserRolePrivilegeResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            }
+    )
+    @PostMapping(path = "/{userPublicId}/roles/add",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> addUserRoles(@PathVariable String userPublicId,
+                                          @RequestBody UserRolePrivilege userRolePrivilege) {
+        return ResponseEntity.ok(applyUserRoleChange(userPublicId, userRolePrivilege, RoleChangeType.ADD));
+    }
 
-        if (userRolePrivilege.getRolePublicId().isEmpty() || userRolePrivilege.getRolePublicId().size() == 0) {
+    @Operation(
+            summary = "Remove user roles",
+            description = "Remove the given roles from the user",
+            security = @SecurityRequirement(name = "imi-security-key")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(schema = @Schema(implementation = UserRolePrivilegeResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            }
+    )
+    @PostMapping(path = "/{userPublicId}/roles/remove",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> removeUserRoles(@PathVariable String userPublicId,
+                                             @RequestBody UserRolePrivilege userRolePrivilege) {
+        return ResponseEntity.ok(applyUserRoleChange(userPublicId, userRolePrivilege, RoleChangeType.REMOVE));
+    }
 
-           throw new BadRequestException("Role Public Id is Empty");
-        } else {
-            rolePublicIds = userRolePrivilege.getRolePublicId();
+    private UserRolePrivilegeResponse applyUserRoleChange(String userPublicId,
+                                                          UserRolePrivilege userRolePrivilege,
+                                                          RoleChangeType changeType) {
+        if (userRolePrivilege == null
+                || userRolePrivilege.getRolePublicId() == null
+                || userRolePrivilege.getRolePublicId().isEmpty()) {
+            throw new BadRequestException("Role Public Id is Empty");
         }
 
         PersonEntity person = personService.findPersonEntityByPersonApiPublicId(userPublicId);
+        if (person == null || person.getPersonApiEntity() == null) {
+            throw new NotFoundException("requested user not found");
+        }
 
-        PersonApiEntity savedPersonApi = personApiService
-                .updateByPersonApiAndRoleName(person.getPersonApiEntity(), rolePublicIds);
+        PersonApiEntity savedPersonApi;
+        switch (changeType) {
+            case ADD:
+                savedPersonApi = personRoleApiService
+                        .addRoles(person.getPersonApiEntity(), userRolePrivilege.getRolePublicId());
+                break;
+            case REMOVE:
+                savedPersonApi = personRoleApiService
+                        .removeRoles(person.getPersonApiEntity(), userRolePrivilege.getRolePublicId());
+                break;
+            case REPLACE:
+            default:
+                savedPersonApi = personRoleApiService
+                        .replaceRoles(person.getPersonApiEntity(), userRolePrivilege.getRolePublicId());
+                break;
+        }
 
         PersonEntity savedPerson = personService
                 .findPersonEntityByPersonApiPublicId(savedPersonApi.getPersonPublicId());
@@ -731,9 +804,10 @@ public class UserController {
         UserFastDto userFastDto = userFastDtoMapper
                 .toUserFastDto(savedPerson, new CycleAvoidingMappingContext());
 
-        UserRolePrivilegeResponse userRolePrivilegeResponse =
-                userRolePrivilegeResponseAssembler.toModel(userFastDto);
+        return userRolePrivilegeResponseAssembler.toModel(userFastDto);
+    }
 
-        return ResponseEntity.ok(userRolePrivilegeResponse);
+    private enum RoleChangeType {
+        ADD, REMOVE, REPLACE
     }
 }

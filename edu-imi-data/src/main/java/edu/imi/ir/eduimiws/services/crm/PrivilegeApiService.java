@@ -16,6 +16,7 @@ public interface PrivilegeApiService {
     Collection<PrivilegeApiEntity> createFullPrivilege();
     Collection<PrivilegeApiEntity> saveAllPrivilegeApis(Collection<PrivilegeApiEntity> privilegeApis);
     PrivilegeApiEntity createPrivilegeByName(String roleName);
+    PrivilegeApiEntity updatePrivilegeByName(String privilegePublicId, String privilegeName);
     Collection<PrivilegeApiEntity> findAllByPrivilegeName(String privilegeName);
     Collection<PrivilegeApiEntity> findAllByPrivilegePublicIds(List<String> privilegePublicIds);
     Page<PrivilegeApiEntity> findAllPrivilegeEntityPagesOrderByCreateDateDesc(Pageable pageable);

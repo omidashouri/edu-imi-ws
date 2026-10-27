@@ -110,8 +110,7 @@ public class OpenApiConfig {
                 .build();
     }
 
-//    Later correct Them
-/*    @Bean
+@Bean
     public GroupedOpenApi roleApi(){
         return GroupedOpenApi.builder()
                 .group("Roles")
@@ -127,7 +126,7 @@ public class OpenApiConfig {
                 .pathsToMatch("/api/v1/privileges/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
-    }*/
+    }
 
     @Bean
     public GroupedOpenApi registerApi(){
