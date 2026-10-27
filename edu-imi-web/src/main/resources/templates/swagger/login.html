@@ -15,6 +15,7 @@
     </div>
 
     <p class="message error" th:if="${param.error}">نام کاربری/رمز عبور صحیح نمی باشد</p>
+    <p class="message error" th:if="${param.captchaError}">کد امنیتی صحیح نمی باشد</p>
 
     <form th:action="@{/swagger-login}" method="post">
         <label for="username">نام کاربری</label>
@@ -26,6 +27,20 @@
         <input id="password" name="password" type="password" autocomplete="current-password" required="required"
                oninvalid="this.setCustomValidity('لطفا نام کاربری/رمزعبور خود را وارد نمایید')"
                oninput="this.setCustomValidity('')"/>
+
+        <label for="captcha">کد امنیتی</label>
+        <div class="captcha-row">
+            <img id="captcha-image"
+                 th:src="@{/swagger-captcha}"
+                 alt="کد امنیتی"
+                 title="برای دریافت کد جدید کلیک کنید"
+                 width="160"
+                 height="48"/>
+            <input id="captcha" name="captcha" type="text" autocomplete="off" required="required"
+                   maxlength="8"
+                   oninvalid="this.setCustomValidity('لطفا کد امنیتی را وارد نمایید')"
+                   oninput="this.setCustomValidity('')"/>
+        </div>
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <button id="login-button" type="submit">ورود</button>

@@ -99,6 +99,31 @@ input[type="password"] {
     text-align: right;
 }
 
+.captcha-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.captcha-row img {
+    flex: 0 0 auto;
+    width: 160px;
+    height: 48px;
+    border: 1px solid #d7d1c5;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.captcha-row input {
+    flex: 1 1 auto;
+    margin-bottom: 0;
+    letter-spacing: 0.08em;
+    direction: ltr;
+    text-align: left;
+}
+
 input:focus {
     outline: 2px solid rgba(198, 161, 91, 0.55);
     border-color: var(--gold);

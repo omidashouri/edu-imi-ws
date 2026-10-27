@@ -1,5 +1,6 @@
 package edu.imi.ir.eduimiws.security;
 
+import edu.imi.ir.eduimiws.services.SwaggerCaptchaService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Browser login for Swagger only. API requests stay on the stateless JWT chain.
@@ -20,9 +22,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SwaggerDocsSecurity {
 
     private final AuthenticationProvider daoAuthenticationProvider;
+    private final SwaggerCaptchaService swaggerCaptchaService;
 
-    public SwaggerDocsSecurity(AuthenticationProvider daoAuthenticationProvider) {
+    public SwaggerDocsSecurity(AuthenticationProvider daoAuthenticationProvider,
+                               SwaggerCaptchaService swaggerCaptchaService) {
         this.daoAuthenticationProvider = daoAuthenticationProvider;
+        this.swaggerCaptchaService = swaggerCaptchaService;
     }
 
     @Bean
@@ -38,11 +43,13 @@ public class SwaggerDocsSecurity {
                         "/configuration/**",
                         "/webjars/**",
                         "/swagger-login",
+                        "/swagger-captcha",
                         "/swagger-session-end",
                         "/swagger-assets/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-login",
+                                "/swagger-captcha",
                                 "/swagger-session-end",
                                 "/swagger-assets/**",
                                 "/css/**").permitAll()
@@ -64,7 +71,9 @@ public class SwaggerDocsSecurity {
                         "/swagger-session-end"))
                 .headers(headers -> headers.cacheControl(Customizer.withDefaults()))
                 .authenticationProvider(daoAuthenticationProvider)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .addFilterBefore(new SwaggerCaptchaFilter(swaggerCaptchaService),
+                        UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }
