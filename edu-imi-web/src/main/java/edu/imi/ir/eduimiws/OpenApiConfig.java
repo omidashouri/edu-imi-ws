@@ -4,7 +4,6 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
@@ -42,14 +41,12 @@ public class OpenApiConfig {
                 )
                 .info(new Info()
                     .title("IMI Education API")
-                    .version("3.0.3")
-                    .description("IMI Education Web Service API")
-                    .termsOfService("http://imi.ir/terms/")
-                    .license(new License().name("Apache 2.0").url("http://springdoc.org"))
+                    .version("2.0.0")
+                    .description("Web Service for IMI Education Web Site")
                     .contact(new Contact()
                             .name("Industrial Management Institute")
                             .email("info@imi.ir")
-                            .url("http://imi.ir"))
+                            .url("https://www.imi.ir"))
                 )
 //                .servers(Arrays.asList(productionServer))
                 .addSecurityItem(
@@ -59,7 +56,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi loginApi(){
         return GroupedOpenApi.builder()
-                .group("Authentication-login")
+                .group("Authentication-Login")
                 .pathsToMatch("/api/users/login")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -68,8 +65,17 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi authenticationV2Api(){
         return GroupedOpenApi.builder()
-                .group("Authentication-v2")
+                .group("Authentication-Login-v2")
                 .pathsToMatch("/api/v2/auth/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi clientsV2Api(){
+        return GroupedOpenApi.builder()
+                .group("Clients-Management-v2")
+                .pathsToMatch("/api/v2/clients/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
     }
@@ -158,7 +164,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi educationCategoryApi(){
         return GroupedOpenApi.builder()
-                .group("Education Categories")
+                .group("Education-Categories")
                 .pathsToMatch("/api/v1/eduCategories/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -185,7 +191,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi periodCourseApi() {
         return GroupedOpenApi.builder()
-                .group("PeriodCourses")
+                .group("Period-Courses")
                 .pathsToMatch("/api/v1/periodCourses/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -194,7 +200,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi periodCourseProfessorApi() {
         return GroupedOpenApi.builder()
-                .group("PeriodCourseProfessors")
+                .group("Period-Course-Professors")
                 .pathsToMatch("/api/v1/periodCourseProfessors/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -221,7 +227,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi fieldCourseApi() {
         return GroupedOpenApi.builder()
-                .group("FieldCourses")
+                .group("Field-Courses")
                 .pathsToMatch("/api/v1/fieldCourses/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -230,7 +236,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi termPresentedCourseApi() {
         return GroupedOpenApi.builder()
-                .group("TermPresentedCourses")
+                .group("Term-Presented-Courses")
                 .pathsToMatch("/api/v1/termPresentedCourses/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -239,7 +245,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi termCourseProfessorApi() {
         return GroupedOpenApi.builder()
-                .group("TermCourseProfessors")
+                .group("Term-Course-Professors")
                 .pathsToMatch("/api/v1/termCourseProfessors/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -275,7 +281,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi paymentCodeApi() {
         return GroupedOpenApi.builder()
-                .group("PaymentCodes")
+                .group("Payment-Codes")
                 .pathsToMatch("/api/v1/paymentCodes/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -284,7 +290,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi melliCodeApi() {
         return GroupedOpenApi.builder()
-                .group("MelliPayments")
+                .group("Melli-Payments")
                 .pathsToMatch("/api/v1/sadadPayments/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -293,7 +299,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi hamkaranCodeApi() {
         return GroupedOpenApi.builder()
-                .group("HamkaranApi")
+                .group("Hamkaran-Api")
                 .pathsToMatch("/api/v1/hamkarans/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -302,7 +308,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi voucherListItemsApi() {
         return GroupedOpenApi.builder()
-                .group("VoucherListItems")
+                .group("Voucher-List-Items")
                 .pathsToMatch("/api/v1/voucherListItems/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -311,7 +317,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi voucherDeleteItemsApi() {
         return GroupedOpenApi.builder()
-                .group("VoucherDeleteItems")
+                .group("Voucher-Delete-Items")
                 .pathsToMatch("/api/v1/voucherDeleteItems/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -338,7 +344,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi behdadAccountApi() {
         return GroupedOpenApi.builder()
-                .group("BehdadAccounts")
+                .group("Behdad-Accounts")
                 .pathsToMatch("/api/v1/behdad/accounts/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -347,7 +353,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi behdadIdentifierApi() {
         return GroupedOpenApi.builder()
-                .group("BehdadIdentifiers")
+                .group("Behdad-Identifiers")
                 .pathsToMatch("/api/v1/behdad/identifiers/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -356,7 +362,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi projectDepositCodeApi() {
         return GroupedOpenApi.builder()
-                .group("ProjectDepositCodeApis")
+                .group("Project-Deposit-Code-Apis")
                 .pathsToMatch("/api/v1/projectDepositCodeApis/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();
@@ -365,7 +371,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi attendanceApi() {
         return GroupedOpenApi.builder()
-                .group("AttendanceApis")
+                .group("Attendance-Apis")
                 .pathsToMatch("/api/v1/attendance/**")
                 .packagesToScan("edu.imi.ir.eduimiws")
                 .build();

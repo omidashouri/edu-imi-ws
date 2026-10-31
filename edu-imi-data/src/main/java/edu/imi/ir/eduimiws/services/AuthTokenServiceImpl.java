@@ -1,10 +1,13 @@
 package edu.imi.ir.eduimiws.services;
 
+import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.BadRequestException;
 import edu.imi.ir.eduimiws.models.dto.crm.AuthTokenDto;
+import edu.imi.ir.eduimiws.models.request.ClientTokenRequestModel;
 import edu.imi.ir.eduimiws.models.request.RefreshTokenRequestModel;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
 import edu.imi.ir.eduimiws.models.user.MyErpUser;
+import edu.imi.ir.eduimiws.services.crm.ClientApiService;
 import edu.imi.ir.eduimiws.utilities.JwtKeyUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -31,17 +34,20 @@ public class AuthTokenServiceImpl implements AuthTokenService {
     private static final String ACCESS_TOKEN_TYPE = "Bearer";
 
     private final AuthenticationManager authenticationManager1;
+    private final ClientApiService clientApiService;
     private final String tokenSecret;
     private final String expirationTime;
     private final String refreshTokenSecret;
     private final String refreshTokenExpirationTime;
 
     public AuthTokenServiceImpl(AuthenticationManager authenticationManager1,
+                                 ClientApiService clientApiService,
                                  @Value("${token.secret}") String tokenSecret,
                                  @Value("${expiration.time}") String expirationTime,
                                  @Value("${refresh.token.secret}") String refreshTokenSecret,
                                  @Value("${refresh.token.expiration.time}") String refreshTokenExpirationTime) {
         this.authenticationManager1 = authenticationManager1;
+        this.clientApiService = clientApiService;
         this.tokenSecret = tokenSecret;
         this.expirationTime = expirationTime;
         this.refreshTokenSecret = refreshTokenSecret;
@@ -63,6 +69,24 @@ public class AuthTokenServiceImpl implements AuthTokenService {
 
         String username = ((User) authentication.getPrincipal()).getUsername();
         String userPublicId = ((MyErpUser) authentication.getPrincipal()).getUserPublicId();
+        return issueTokens(username, userPublicId);
+    }
+
+    @Override
+    public AuthTokenDto clientLogin(ClientTokenRequestModel clientTokenRequest) {
+        if (clientTokenRequest == null) {
+            throw new BadRequestException("request body is required");
+        }
+
+        PersonApiEntity personApi = clientApiService
+                .authenticateByCredentialsBase64(clientTokenRequest.getCredentials());
+
+        String username = personApi.getUserName();
+        String userPublicId = personApi.getPersonPublicId();
+        if (username == null || username.isBlank() || userPublicId == null || userPublicId.isBlank()) {
+            throw new BadRequestException("linked person api is incomplete");
+        }
+
         return issueTokens(username, userPublicId);
     }
 

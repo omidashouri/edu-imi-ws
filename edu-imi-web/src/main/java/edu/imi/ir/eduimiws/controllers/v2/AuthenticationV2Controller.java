@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v2;
 
 import edu.imi.ir.eduimiws.mapper.crm.AuthTokenResponseMapper;
+import edu.imi.ir.eduimiws.models.request.ClientTokenRequestModel;
 import edu.imi.ir.eduimiws.models.request.RefreshTokenRequestModel;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
@@ -64,6 +65,37 @@ public class AuthenticationV2Controller {
     public ResponseEntity<AuthTokenResponse> login(@RequestBody UserLoginRequestModel loginRequest) {
         return ResponseEntity.ok(
                 authTokenResponseMapper.toAuthTokenResponse(authTokenService.login(loginRequest)));
+    }
+
+    @Operation(
+            summary = "B2B client token",
+            description = "Authenticate with Base64(clientId:clientSecret). "
+                    + "Use the clientCredentialsBase64 value returned when the client was created. "
+                    + "Checks client enabled status and linked person activityStatus == '1'."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "successful operation",
+                            content = @Content(
+                                    schema = @Schema(implementation = AuthTokenResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+            })
+    @PostMapping(path = "/token",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<AuthTokenResponse> clientToken(@RequestBody ClientTokenRequestModel clientTokenRequest) {
+        return ResponseEntity.ok(
+                authTokenResponseMapper.toAuthTokenResponse(authTokenService.clientLogin(clientTokenRequest)));
     }
 
     @Operation(
