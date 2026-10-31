@@ -51,7 +51,6 @@ import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/levels")
 @RequiredArgsConstructor
@@ -100,6 +99,7 @@ public class LevelController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_LEVEL_LIST')")
     public ResponseEntity<PagedModel<LevelResponse>> getLevels(@Parameter(hidden = true)
                                                                      @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                      @PageableDefault(page = 0, size = 10, value = 10)
@@ -122,6 +122,7 @@ public class LevelController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_LEVEL_LIST_ALL')")
     public ResponseEntity<CollectionModel<LevelResponse>> getAllLevels(
             @Parameter(hidden = true)
             @SortDefault(sort = "id", direction = Sort.Direction.DESC)
@@ -176,6 +177,7 @@ public class LevelController {
     )
     @GetMapping(path = "/description/{LevelDescription}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_LEVEL_READ_BY_DESCRIPTION')")
     public ResponseEntity<?> getLevelByLevelTitle(@PathVariable String LevelDescription) {
 
 
@@ -228,6 +230,7 @@ public class LevelController {
     )
     @GetMapping(path = "/publicId/{levelPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_LEVEL_READ')")
     public ResponseEntity<?> getLevelByLevelPublicId(@PathVariable String levelPublicId) {
 
             LevelEntity level = levelService.findByLevelPublicId(levelPublicId);
@@ -284,6 +287,7 @@ public class LevelController {
     @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_LEVEL_COUNT_NEW')")
     public ResponseEntity<?> getNewLevelCount() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -361,6 +365,7 @@ public class LevelController {
     @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_LEVEL_GENERATE_PUBLIC_ID')")
     public ResponseEntity<?> createLevelApiPublicId() {
 
         OperationStatus returnValue = new OperationStatus();

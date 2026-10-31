@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/mails")
 @RequiredArgsConstructor
@@ -25,6 +24,7 @@ public class EmailController {
     @PostMapping(path = "/imi/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_EMAIL_SEND')")
     public String sendEmailFromImi(@RequestBody EmailForm emailForm) {
 
         List<String> emailReceivers = emailForm.getToEmails();

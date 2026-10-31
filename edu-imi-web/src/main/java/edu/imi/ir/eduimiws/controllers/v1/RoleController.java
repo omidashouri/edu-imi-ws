@@ -43,7 +43,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyAuthority('ROLE_MANAGE_PRIVILEGE') or hasRole('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/v1/roles")
 @RequiredArgsConstructor
@@ -91,6 +90,7 @@ public class RoleController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_ROLE_LIST')")
     public ResponseEntity<PagedModel<RoleResponse>> getRoles(@Parameter(hidden = true)
                                                                  @SortDefault(sort = "createDateTs", direction = Sort.Direction.DESC)
                                                                  @PageableDefault(page = 0, size = 10, value = 10)
@@ -113,6 +113,7 @@ public class RoleController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_ROLE_LIST_ALL')")
     public ResponseEntity<CollectionModel<RoleResponse>> getAllRoles(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDateTs", direction = Sort.Direction.DESC)
@@ -168,6 +169,7 @@ public class RoleController {
     )
     @GetMapping(path = "/{rolePublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_ROLE_READ')")
     public ResponseEntity<?> getRoleByRolePublicId(@PathVariable String rolePublicId) {
 
         RoleApiEntity roleApi = roleApiService.findByRolePublicId(rolePublicId);
@@ -227,6 +229,7 @@ public class RoleController {
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_ROLE_CREATE')")
     public ResponseEntity<?> createRole(@RequestBody RoleForm roleForm) {
         if (roleForm == null || roleForm.getRoleName() == null || roleForm.getRoleName().isBlank()) {
             throw new BadRequestException("Role name is required");
@@ -262,6 +265,7 @@ public class RoleController {
     @PutMapping(path = "/{rolePublicId}",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_ROLE_UPDATE')")
     public ResponseEntity<?> updateRole(@PathVariable String rolePublicId,
                                         @RequestBody RoleForm roleForm) {
         RoleApiEntity savedRole = roleApiService.updateRoleByRoleForm(rolePublicId, roleForm);
@@ -295,6 +299,7 @@ public class RoleController {
     @PutMapping(path = "/{rolePublicId}/privileges",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_ROLE_REPLACE_PRIVILEGE')")
     public ResponseEntity<?> replaceRolePrivileges(@PathVariable String rolePublicId,
                                                    @RequestBody RoleForm roleForm) {
         if (roleForm == null || roleForm.getPrivilegePublicId() == null) {

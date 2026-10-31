@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/v1/sabtahval")
 @RequiredArgsConstructor
@@ -43,6 +42,7 @@ public class SabtahvalController {
 
     @GetMapping(path = "/version",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SABTAHVAL_VERSION_READ')")
     public ResponseEntity<?> getVersion() {
 
 
@@ -116,6 +116,7 @@ public class SabtahvalController {
     )
     @GetMapping(path = "/estelam",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SABTAHVAL_ESTELAM_QUERY')")
     public ResponseEntity<?> estelamUser(EstelamPersonInfoRequest estelamPersonInfoRequest) {
 
         PersonInfoDto personInfoDto = new PersonInfoDto();

@@ -53,7 +53,6 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER','ROLE_PROJECTDEPOSITCODE')")
 @RestController
 @RequestMapping("/api/v1/projectDepositCodeApis")
 @RequiredArgsConstructor
@@ -109,6 +108,7 @@ public class ProjectDepositCodeApiController {
     )
     @GetMapping(path = "/publicId/{publicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_READ')")
     public ResponseEntity<?> getByPublicId(@PathVariable String publicId) {
 
         ProjectDepositCodeApiDto projectDepositCodeApiDto =
@@ -166,6 +166,7 @@ public class ProjectDepositCodeApiController {
     )
     @PostMapping(path = "/projectDepositCodeApiRequest",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_CREATE')")
     public ResponseEntity<?> createProjectDepositCodeApiRequest(@RequestBody ProjectDepositCodeApiRequest projectDepositCodeApiRequest) {
 
 
@@ -229,6 +230,7 @@ public class ProjectDepositCodeApiController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/all",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_LIST')")
     public ResponseEntity<PagedModel<ProjectDepositCodeApiResponse>> getProjectDepositCodes(@Parameter(hidden = true)
                                                                                             @SortDefault(sort = "id",
                                                                                                     direction = Sort.Direction.DESC)
@@ -282,6 +284,7 @@ public class ProjectDepositCodeApiController {
     )
     @GetMapping(path = "/projectName/{projectName}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_LIST_BY_PROJECT_NAME')")
     public ResponseEntity<?> getProjectDepositCodeApiByProjectName(@PathVariable String projectName,
                                                                    @Parameter(hidden = true)
                                                                    @SortDefault(sort = "project.projectName",
@@ -346,6 +349,7 @@ public class ProjectDepositCodeApiController {
             })
     @DeleteMapping(path = "/publicId/{publicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_DELETE')")
     public ResponseEntity<?> deleteProjectDepositCodeApiByPublicId(@PathVariable String publicId) {
 
         ProjectDepositCodeApiDto projectDepositCodeApiDto = projectDepositCodeApiService
@@ -402,6 +406,7 @@ public class ProjectDepositCodeApiController {
     @PutMapping(path = "/projectDepositCodeApiRequest",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_UPDATE')")
     public ResponseEntity<?> updateProjectDepositCodeApi(@RequestBody ProjectDepositCodeApiRequest
                                                                  projectDepositCodeApiRequest) {
         String projectDepositCodeApiPublicId = projectDepositCodeApiRequest.getPublicId();
@@ -480,6 +485,7 @@ public class ProjectDepositCodeApiController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/all/deleted",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_LIST_DELETED')")
     public ResponseEntity<PagedModel<ProjectDepositCodeApiResponse>> getProjectDepositCodesDeleted(@Parameter(hidden = true)
                                                                                                    @SortDefault(sort = "id",
                                                                                                            direction = Sort.Direction.DESC)
@@ -539,6 +545,7 @@ public class ProjectDepositCodeApiController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/projectDepositCodeApiResponseCustomTwo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_SEARCH_CUSTOM_TWO')")
     public ResponseEntity<PagedModel<ProjectDepositCodeApiResponseCustomTwo>> getProjectDepositCodeApiCustomTwo(
             @RequestParam("publicId") Optional<String> publicId,
             @RequestParam("depositCode") Optional<String> depositCode,
@@ -617,6 +624,7 @@ public class ProjectDepositCodeApiController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/projectDepositCodeApiResponseCustomThree",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_SEARCH_CUSTOM_THREE')")
     public ResponseEntity<PagedModel<ProjectDepositCodeApiResponseCustomThree>> getProjectDepositCodeApiCustomThree(
             @RequestParam("publicId") Optional<String> publicId,
             @RequestParam("depositCode") Optional<String> depositCode,
@@ -732,6 +740,7 @@ public class ProjectDepositCodeApiController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/projectDepositCodeApiResponseCustomThreeDepositNull",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_SEARCH_CUSTOM_THREE_NULL')")
     public ResponseEntity<PagedModel<ProjectDepositCodeApiResponseCustomThree>> getProjectDepositCodeApiCustomThreeDepositNull(
             @RequestParam("publicId") Optional<String> publicId,
             @RequestParam("depositCode") Optional<String> depositCode,

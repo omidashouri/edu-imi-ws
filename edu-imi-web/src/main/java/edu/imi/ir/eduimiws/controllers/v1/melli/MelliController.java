@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/sadadPayments")
 @RequiredArgsConstructor
@@ -97,6 +96,7 @@ public class MelliController {
     @PostMapping(path = "/merchant/getToken",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MELLI_SADAD_PAYMENT_GET_TOKEN')")
     public ResponseEntity<?> merchantGetTokens(@RequestBody PaymentRequestMerchant paymentRequestMerchant) {
 
 
@@ -188,6 +188,7 @@ public class MelliController {
     )
     @GetMapping(path = "/merchant/publicId/{paymentRequestPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MELLI_SADAD_PAYMENT_READ')")
     public ResponseEntity<?> getMelliDigitalPaymentRequestDataByDigitalPaymentPublicId(@PathVariable String paymentRequestPublicId) {
 
         try {
@@ -252,6 +253,7 @@ public class MelliController {
     )
     @GetMapping(path = "/verify/{digitalPaymentRequestPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MELLI_SADAD_PAYMENT_VERIFY')")
     public ResponseEntity<?> verify(@PathVariable(value = "digitalPaymentRequestPublicId") String digitalPaymentRequestPublicId) {
 
         MelliVerifyDto melliVerifyDto;

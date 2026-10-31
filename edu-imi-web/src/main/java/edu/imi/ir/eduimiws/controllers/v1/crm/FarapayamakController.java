@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/farapayamaks")
 @RequiredArgsConstructor
@@ -89,6 +88,7 @@ public class FarapayamakController {
     )
     @PostMapping(path = "/sendSms",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_FARAPAYAMAK_SEND_SMS')")
     public ResponseEntity<?> sendSmsFarapayamak(@RequestBody SendSmsRequestForFarapayamak sendSmsRequestForFarapayamak) {
 
 
@@ -154,6 +154,7 @@ public class FarapayamakController {
     )
     @PostMapping(path = "/getBasePrice",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_FARAPAYAMAK_READ_BASE_PRICE')")
     public ResponseEntity<?> getBasePriceFarapayamak() {
 
         FarapayamakReturnedSendSmsDto farapayamakReturnedSendSmsDto = farapayamakService.getBasePrice();
@@ -194,6 +195,7 @@ public class FarapayamakController {
     )
     @PostMapping(path = "/getCredit",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_FARAPAYAMAK_READ_CREDIT')")
     public ResponseEntity<?> getCreditFarapayamak() {
 
         FarapayamakReturnedSendSmsDto farapayamakReturnedSendSmsDto = farapayamakService.getCredit();
@@ -233,6 +235,7 @@ public class FarapayamakController {
     )
     @PostMapping(path = "/getUserNumbers",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_FARAPAYAMAK_LIST_USER_NUMBER')")
     public ResponseEntity<?> getUserNumbersFarapayamak() {
 
         FarapayamakReturnedSendSmsDto farapayamakReturnedSendSmsDto = farapayamakService.getUserNumbers();
@@ -273,6 +276,7 @@ public class FarapayamakController {
     )
     @PostMapping(path = "/getMessagesFromFarapayamak",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_FARAPAYAMAK_LIST_MESSAGE')")
     public ResponseEntity<?> getMessagesFromFarapayamak(@RequestBody GetMessagesRequestForFarapayamak
                                                                 getMessagesRequestForFarapayamak) {
 
@@ -300,6 +304,7 @@ public class FarapayamakController {
 
     @PostMapping(path = "/getDeliveries2Farapayamak",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_FARAPAYAMAK_LIST_DELIVERY')")
     public ResponseEntity<?> getDeliveries2Farapayamak(@RequestBody GetDeliveries2RequestForFarapayamak getDeliveries2RequestForFarapayamak) {
 
         FarapayamakSendSmsDto farapayamakSendSmsDto = getDeliveries2RequestForFarapayamakToFarapayamakSendSmsDtoMapper

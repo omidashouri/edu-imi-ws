@@ -53,7 +53,6 @@ import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/fields")
 @RequiredArgsConstructor
@@ -105,6 +104,7 @@ public class FieldController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_LIST')")
     public ResponseEntity<PagedModel<FieldResponse>> getFields(@Parameter(hidden = true)
                                                                      @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                      @PageableDefault(page = 0, size = 10, value = 10)
@@ -127,6 +127,7 @@ public class FieldController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_LIST_ALL')")
     public ResponseEntity<CollectionModel<FieldResponse>> getAllFields(
             @Parameter(hidden = true)
             @SortDefault(sort = "id", direction = Sort.Direction.DESC)
@@ -181,6 +182,7 @@ public class FieldController {
     )
     @GetMapping(path = "/{fieldPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_READ')")
     public ResponseEntity<?> getFieldByFieldPublicId(@PathVariable String fieldPublicId) {
 
             FieldEntity field = fieldService.findByFieldPublicId(fieldPublicId);
@@ -233,6 +235,7 @@ public class FieldController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/descriptive",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_LIST_DESCRIPTIVE')")
     public ResponseEntity<PagedModel<FieldResponse>> getFieldsWithStudentPeriodName(@Parameter(hidden = true)
                                                                                           @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                                           @PageableDefault(page = 0, size = 10, value = 10)
@@ -255,6 +258,7 @@ public class FieldController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel/descriptive",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_LIST_ALL_DESCRIPTIVE')")
     public ResponseEntity<CollectionModel<FieldResponse>> getAllFieldsWithStudentPeriodName(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -309,6 +313,7 @@ public class FieldController {
     )
     @GetMapping(path = "/descriptive/{fieldPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_READ_DESCRIPTIVE')")
     public ResponseEntity<?> getFieldWithStudentPeriodNameByFieldPublicId(@PathVariable String fieldPublicId) {
 
             FieldEntity field = fieldService
@@ -359,6 +364,7 @@ public class FieldController {
     )
     @GetMapping(path = "/descriptive/levels/{levelPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_LIST_BY_LEVEL')")
     public ResponseEntity<?> getFieldsDescriptiveByLevelPublicId(@PathVariable String levelPublicId,
                                                                  @Parameter(hidden = true)
                                                                  @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -410,6 +416,7 @@ public class FieldController {
     )
     @GetMapping(path = "/descriptive/eduCategories/{eduCategoryPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_LIST_BY_EDU_CATEGORY')")
     public ResponseEntity<?> getFieldsDescriptiveByEduCategoryPublicId(@PathVariable String eduCategoryPublicId,
                                                                        @Parameter(hidden = true)
                                                                        @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -468,6 +475,7 @@ public class FieldController {
     @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_COUNT_NEW')")
     public ResponseEntity<?> getNewFieldCount() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -545,6 +553,7 @@ public class FieldController {
     @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_GENERATE_PUBLIC_ID')")
     public ResponseEntity<?> createFieldApiPublicId() {
 
         OperationStatus returnValue = new OperationStatus();

@@ -27,7 +27,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/v2/clients")
 @RequiredArgsConstructor
@@ -54,6 +53,7 @@ public class ClientApiController {
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V2_CRM_CLIENT_CREATE')")
     public ResponseEntity<ClientApiResponse> createClient(@RequestBody ClientApiCreateRequest request) {
         return ResponseEntity.ok(clientApiMapper.toClientApiResponse(clientApiService.create(request)));
     }
@@ -71,6 +71,7 @@ public class ClientApiController {
     })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V2_CRM_CLIENT_LIST')")
     public ResponseEntity<Page<ClientApiResponse>> getClients(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDateTs", direction = Sort.Direction.DESC)
@@ -94,6 +95,7 @@ public class ClientApiController {
     })
     @GetMapping(path = "/{clientPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V2_CRM_CLIENT_READ')")
     public ResponseEntity<ClientApiResponse> getClientByPublicId(@PathVariable String clientPublicId) {
         return ResponseEntity.ok(
                 clientApiMapper.toClientApiResponse(clientApiService.findByClientPublicId(clientPublicId)));
@@ -116,6 +118,7 @@ public class ClientApiController {
     @PutMapping(path = "/{clientPublicId}",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V2_CRM_CLIENT_UPDATE')")
     public ResponseEntity<ClientApiResponse> updateClient(@PathVariable String clientPublicId,
                                                           @RequestBody ClientApiUpdateRequest request) {
         return ResponseEntity.ok(
@@ -135,6 +138,7 @@ public class ClientApiController {
     })
     @DeleteMapping(path = "/{clientPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V2_CRM_CLIENT_DELETE')")
     public ResponseEntity<ClientApiResponse> deleteClient(@PathVariable String clientPublicId) {
         return ResponseEntity.ok(
                 clientApiMapper.toClientApiResponse(clientApiService.softDelete(clientPublicId)));

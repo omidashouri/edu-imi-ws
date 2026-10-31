@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyAuthority('ROLE_MANAGE_PRIVILEGE') or hasRole('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/v1/privileges")
 @RequiredArgsConstructor
@@ -87,6 +86,7 @@ public class PrivilegeController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_PRIVILEGE_LIST')")
     public ResponseEntity<PagedModel<PrivilegeResponse>> getPrivileges(@Parameter(hidden = true)
                                                              @SortDefault(sort = "createDateTs", direction = Sort.Direction.DESC)
                                                              @PageableDefault(page = 0, size = 10, value = 10)
@@ -109,6 +109,7 @@ public class PrivilegeController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_PRIVILEGE_LIST_ALL')")
     public ResponseEntity<CollectionModel<PrivilegeResponse>> getAllPrivileges(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDateTs", direction = Sort.Direction.DESC)
@@ -163,6 +164,7 @@ public class PrivilegeController {
     )
     @GetMapping(path = "/{privilegePublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_PRIVILEGE_READ')")
     public ResponseEntity<?> getPrivilegeByPrivilegePublicId(@PathVariable String privilegePublicId) {
 
         PrivilegeApiEntity privilegeApi = privilegeApiService.findByPrivilegePublicId(privilegePublicId);
@@ -222,6 +224,7 @@ public class PrivilegeController {
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_PRIVILEGE_CREATE')")
     public ResponseEntity<?> createPrivilege(@RequestBody PrivilegeForm privilegeForm) {
         if (privilegeForm == null || privilegeForm.getPrivilegeName() == null
                 || privilegeForm.getPrivilegeName().isBlank()) {
@@ -264,6 +267,7 @@ public class PrivilegeController {
     @PutMapping(path = "/{privilegePublicId}",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_SECURITY_PRIVILEGE_UPDATE')")
     public ResponseEntity<?> updatePrivilege(@PathVariable String privilegePublicId,
                                              @RequestBody PrivilegeForm privilegeForm) {
         if (privilegeForm == null || privilegeForm.getPrivilegeName() == null

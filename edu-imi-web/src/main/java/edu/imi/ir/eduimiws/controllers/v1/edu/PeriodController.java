@@ -67,7 +67,6 @@ import java.util.stream.StreamSupport;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 //___periodfour
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/periods")
 @RequiredArgsConstructor
@@ -123,6 +122,7 @@ public class PeriodController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_LIST')")
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriods(@Parameter(hidden = true)
                                                                  @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                  @PageableDefault(page = 0, size = 10, value = 10)
@@ -145,6 +145,7 @@ public class PeriodController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_LIST_ALL')")
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriods(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -204,6 +205,7 @@ public class PeriodController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/{periodName}/descriptive",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_LIST_DESCRIPTIVE')")
     public ResponseEntity<PagedModel<PeriodResponse>>
     getPeriodsDescriptiveByPeriodName(@PathVariable(name = "periodName", required = false)
                                               Optional<String> periodName,
@@ -267,6 +269,7 @@ public class PeriodController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/fields/{fieldPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_LIST_BY_FIELD')")
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriodsFields(@PathVariable String fieldPublicId,
                                                                        @Parameter(hidden = true)
                                                                        @SortDefault(sort = "createDate",
@@ -293,6 +296,7 @@ public class PeriodController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/fields/{fieldPublicId}/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_LIST_ALL_BY_FIELD')")
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriodsFields(
             @PathVariable String fieldPublicId,
             @Parameter(hidden = true)
@@ -350,6 +354,7 @@ public class PeriodController {
     )
     @GetMapping(path = "/{periodPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_READ')")
     public ResponseEntity<?> getPeriodByPeriodPublicId(@PathVariable String periodPublicId) {
 
         PeriodEntity period = periodService.findPeriodEntityByPeriodApiPublicId(periodPublicId);
@@ -404,6 +409,7 @@ public class PeriodController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/periodResponseCustomTwo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_SEARCH_CUSTOM_TWO')")
     public ResponseEntity<PagedModel<PeriodResponseCustomTwo>> queryPeriods(
             @RequestParam("periodPublicId") Optional<String> periodPublicId,
             @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
@@ -528,6 +534,7 @@ public class PeriodController {
             })
     @GetMapping(path = "/periodResponseCustomFour",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_SEARCH_CUSTOM_FOUR')")
     public ResponseEntity<List<PeriodResponseCustomFour>> queryPeriodsCustomFour(
             @RequestParam("periodPublicId") Optional<String> periodPublicId,
             @RequestParam("fieldPublicId") Optional<String> fieldPublicId,
@@ -641,6 +648,7 @@ public class PeriodController {
     )
     @GetMapping(path = "/periodResponseCustomTwo/{periodPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_READ_CUSTOM_TWO')")
     public ResponseEntity<?> getPeriodResponseCustomTwoByPeriodPublicId(@PathVariable String periodPublicId) {
 
         PeriodProjectionCustomTwo periodProjectionCustomTwo = periodService.queryPeriodsCustomTwoByPeriodPublicId(periodPublicId);
@@ -701,6 +709,7 @@ public class PeriodController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/executors/{executorPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_LIST_BY_EXECUTOR')")
     public ResponseEntity<PagedModel<PeriodResponse>> getPeriodExecutors(@PathVariable String executorPublicId,
                                                                          @Parameter(hidden = true)
                                                                          @SortDefault(sort = "createDate",
@@ -726,6 +735,7 @@ public class PeriodController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/executors/{executorPublicId}/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_LIST_ALL_BY_EXECUTOR')")
     public ResponseEntity<CollectionModel<PeriodResponse>> getAllPeriodsByExecutorPublicId(@PathVariable String executorPublicId,
                                                                                            @Parameter(hidden = true)
                                                                                            @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -785,6 +795,7 @@ public class PeriodController {
     @DisableMethod
     @PostMapping(path = "/new/executors",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_GENERATE_EXECUTOR_PUBLIC_ID')")
     public ResponseEntity<?> generateExecutorPublicId() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -859,6 +870,7 @@ public class PeriodController {
     @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_COUNT_NEW')")
     public ResponseEntity<?> getNewPeriodCount() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -937,6 +949,7 @@ public class PeriodController {
     @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_GENERATE_PUBLIC_ID')")
     public ResponseEntity<?> createPeriodApiPublicId() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -1010,6 +1023,7 @@ public class PeriodController {
     @DisableMethod
     @PutMapping(path = "/fields/update/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_SYNC_FIELD_PUBLIC_ID')")
     public ResponseEntity<?> updatePeriodApiFieldPublicId() {
 
         OperationStatus returnValue = new OperationStatus();

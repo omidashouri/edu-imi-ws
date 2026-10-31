@@ -44,7 +44,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/accounts")
 @RequiredArgsConstructor
@@ -99,6 +98,7 @@ public class AccountController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/forPaymentCodes",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_ACCOUNT_LIST_FOR_PAYMENT_CODE')")
     public ResponseEntity<PagedModel<AccountResponseForPaymentCode>> getAccountsForPaymentCode(@Parameter(hidden = true)
                                                                                                @SortDefault(sort = "accountName",
                                                                                                        direction = Sort.Direction.DESC)
@@ -151,6 +151,7 @@ public class AccountController {
     )
     @GetMapping(path = "/publicId/{accountPublicId}/forPaymentCode",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_ACCOUNT_READ_FOR_PAYMENT_CODE')")
     public ResponseEntity<?> getAccountByAccountPublicId(@PathVariable String accountPublicId) {
 
 
@@ -207,6 +208,7 @@ public class AccountController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/economicalCode/{economicalCode}/forPaymentCode",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_ACCOUNT_LIST_BY_ECONOMICAL_CODE')")
     public ResponseEntity<PagedModel<?>> getAccountForPaymentCodeByEconomicalCode(@PathVariable String economicalCode,
                                                                                   @Parameter(hidden = true)
                                                                                   @SortDefault(sort = "lastName", direction = Sort.Direction.DESC)
@@ -269,6 +271,7 @@ public class AccountController {
     @PutMapping(path = "/forPaymentCode",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_ACCOUNT_UPDATE_FOR_PAYMENT_CODE')")
     public ResponseEntity<?> updateAccountForPaymentCodeByAccountPublicId(@RequestBody AccountRequestForPaymentCode
                                                                                   accountRequestForPaymentCode) {
 
@@ -342,6 +345,7 @@ public class AccountController {
     @PostMapping(path = "/forPaymentCode",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_ACCOUNT_CREATE_FOR_PAYMENT_CODE')")
     public ResponseEntity<?> createAccountForPaymentCode(@RequestBody AccountRequestForPaymentCode
                                                                  accountRequestForPaymentCode) {
 

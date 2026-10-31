@@ -24,10 +24,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
-//@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/behdad/accounts")
 @RequiredArgsConstructor
@@ -82,6 +82,7 @@ public class BehdadAccountController {
             })
     @GetMapping(path = "/accountNumbers",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_LIST_NUMBER')")
     public ResponseEntity<?> getAccountNumbers() {
 
         List<String> accountNumbers = null;
@@ -127,6 +128,7 @@ public class BehdadAccountController {
             })
     @GetMapping(path = "/accountBalance/{accountNumber}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_READ_BALANCE')")
     public ResponseEntity<?> getAccountBalance(@PathVariable String accountNumber) {
 
 /*        List<String> accountNumbers = null;
@@ -175,6 +177,7 @@ public class BehdadAccountController {
             })
     @PostMapping(path = "/getBankTransactionsDetails",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_LIST_TRANSACTION')")
     public ResponseEntity<?> getBankTransactionsDetails(@RequestBody PagedAccountTransactionFilterRequest pagedAccountTransactionFilter) {
 
 /*        AccountTransactionFilterDto accountTransactionFilterDto = accountTransactionFilterMapper
@@ -227,6 +230,7 @@ public class BehdadAccountController {
             })
     @PostMapping(path = "/pagedDestinationSideTransactions",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_LIST_DESTINATION_TXN')")
     public ResponseEntity<?> getPagedDestinationSideTransactions(@RequestBody PagedSideTransactionsRequest pagedSideTransactionsRequest) {
 
 /*        SideTransactionsRequestDto sideTransactionsRequestDto = sideTransactionsRequestMapper
@@ -275,6 +279,7 @@ public class BehdadAccountController {
             })
     @GetMapping(path = "/getDestinationSideTransactions/accountNumber/{accountNumber}/transactionId/{transactionId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_READ_DESTINATION_TXN')")
     public ResponseEntity<?> getDestinationSideTransactions(@PathVariable String accountNumber,
                                                             @PathVariable long transactionId) {
 
@@ -325,6 +330,7 @@ public class BehdadAccountController {
             })
     @PostMapping(path = "/getPagedSourceSideTransactions",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_LIST_SOURCE_TXN')")
     public ResponseEntity<?> getPagedSourceSideTransactions(@RequestBody PagedSourceSideTransactionRequest pagedSourceSideTransactionRequest) {
 
 /*        SideTransactionsRequestDto sideTransactionsRequestDto = sideTransactionsRequestMapper
@@ -375,6 +381,7 @@ public class BehdadAccountController {
             })
     @GetMapping(path = "/getSourceSideTransactions/accountNumber/{accountNumber}/transactionId/{transactionId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_READ_SOURCE_TXN')")
     public ResponseEntity<?> getSourceSideTransactions(@PathVariable String accountNumber,
                                                        @PathVariable long transactionId) {
 
@@ -424,6 +431,7 @@ public class BehdadAccountController {
             })
     @GetMapping(path = "/getPendingTransactions/accountNumber/{accountNumber}/pageNumber/{pageNumber}/recordCount/{recordCount}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_LIST_PENDING_TXN')")
     public ResponseEntity<?> getPendingTransactions(@PathVariable String accountNumber,
                                                     @PathVariable Integer pageNumber,
                                                     @PathVariable Integer recordCount) {
@@ -471,6 +479,7 @@ public class BehdadAccountController {
             })
     @GetMapping(path = "/accountControlType/accountNumber/{accountNumber}/identifierType/{identifierType}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_READ_CONTROL_TYPE')")
     public ResponseEntity<?> getAccountControlType(@PathVariable String accountNumber,
                                                    @PathVariable String identifierType) {
 
@@ -515,6 +524,7 @@ public class BehdadAccountController {
             })
     @DeleteMapping(path = "/accountControlType/accountNumber/{accountNumber}/identifierType/{identifierType}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_DELETE_CONTROL_TYPE')")
     public ResponseEntity<?> clearAccountControlType(@PathVariable String accountNumber,
                                                      @PathVariable String identifierType) {
 
@@ -561,6 +571,7 @@ public class BehdadAccountController {
             })
     @PostMapping(path = "/accountControlType",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_SET_CONTROL_TYPE')")
     public ResponseEntity<?> setAccountControlType(){
 //            (@RequestBody AccountControlCreateModel accountControlCreateModel) {
 
@@ -610,6 +621,7 @@ public class BehdadAccountController {
             })
     @PostMapping(path = "/multipleAccountTransactionsDetails",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_LIST_MULTI_TXN')")
     public ResponseEntity<?> getMultipleAccountTransactionsDetails(@RequestBody PagedMultipleAccountTransactionsDetailsRequest pagedMultipleAccountTransactionsDetailsRequest) {
 
 /*        MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto = multipleAccountTransactionFilterMapper
@@ -660,6 +672,7 @@ public class BehdadAccountController {
             })
     @PostMapping(path = "/changePassword",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_ACCOUNT_CHANGE_PASSWORD')")
     public ResponseEntity<?> changePassword(){
 //    (@RequestBody ChangePasswordRequest changePasswordRequest) {
 

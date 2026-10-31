@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/terms")
 @RequiredArgsConstructor
@@ -89,6 +88,7 @@ public class TermController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_TERM_LIST')")
     public ResponseEntity<PagedModel<TermResponse>> getTerms(@Parameter(hidden = true)
                                                              @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                              @PageableDefault(page = 0, size = 10, value = 10)
@@ -111,6 +111,7 @@ public class TermController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_TERM_LIST_ALL')")
     public ResponseEntity<CollectionModel<TermResponse>> getAllTerms(
             @Parameter(hidden = true)
             @SortDefault(sort = "id", direction = Sort.Direction.DESC)
@@ -165,6 +166,7 @@ public class TermController {
     )
     @GetMapping(path = "/{termPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_TERM_READ')")
     public ResponseEntity<?> getTermByTermPublicId(@PathVariable String termPublicId) {
 
             TermEntity term = termService.findByTermPublicId(termPublicId);

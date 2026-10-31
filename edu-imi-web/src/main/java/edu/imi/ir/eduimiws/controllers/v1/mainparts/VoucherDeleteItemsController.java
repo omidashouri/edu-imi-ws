@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/voucherDeleteItems")
 @RequiredArgsConstructor
@@ -86,6 +85,7 @@ public class VoucherDeleteItemsController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_VOUCHER_DELETE_ITEM_LIST')")
     public ResponseEntity<PagedModel<VoucherDeleteItemsApiResponse>> getVoucherDeleteItems(@Parameter(hidden = true)
                                                                                        @SortDefault(sort = "dateOfRemoval", direction = Sort.Direction.DESC)
                                                                                        @PageableDefault(page = 0, size = 10, value = 10)
@@ -138,6 +138,7 @@ public class VoucherDeleteItemsController {
     )
     @GetMapping(path = "/{voucherDeleteItemsPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_VOUCHER_DELETE_ITEM_READ')")
     public ResponseEntity<?> findByPublicId(@PathVariable String voucherDeleteItemsPublicId) {
 
         VoucherDeleteItemsApiEntity voucherDeleteItemsApi = voucherDeleteItemsService.findByPublicId(voucherDeleteItemsPublicId);
@@ -189,6 +190,7 @@ public class VoucherDeleteItemsController {
     )
     @GetMapping(path = "/lastRecordOrderByIdApi",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_VOUCHER_DELETE_ITEM_READ_LAST')")
     public ResponseEntity<?> findLastInsertedRecord() {
 
         VoucherDeleteItemsApiEntity voucherDeleteItemsApi = voucherDeleteItemsService.findLastRecordOrderByApiId();

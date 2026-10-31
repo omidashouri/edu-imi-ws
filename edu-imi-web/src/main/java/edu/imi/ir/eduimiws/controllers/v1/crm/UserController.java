@@ -62,7 +62,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -87,6 +86,7 @@ public class UserController {
 
     @GetMapping(path = "/active",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_LIST_ACTIVE')")
     public ResponseEntity<List<UserResponse>> getAllActive() {
 
         List<String> activeUserNames = activeUserService.getAllActiveUserNames();
@@ -148,6 +148,7 @@ public class UserController {
     )
     @GetMapping(path = "/{userPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_READ')")
     public ResponseEntity<?> getUserByUserPublicId(@PathVariable String userPublicId) {
 
 //            PersonEntity person = personService.findPersonEntityByPersonApiPublicId(userPublicId);
@@ -205,6 +206,7 @@ public class UserController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_LIST')")
     public ResponseEntity<PagedModel<UserResponse>> getUsers(@Parameter(hidden = true)
                                                              @SortDefault(sort = "personalCode",
                                                                      direction = Sort.Direction.DESC)
@@ -263,6 +265,7 @@ public class UserController {
     @DisableMethod
     @GetMapping(path = "/specification",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_SEARCH')")
     public ResponseEntity<?> getPersonQuerySpecification(@RequestParam(value = "firstName", required = false)String  firstName,
                                          @RequestParam Optional<String> lastName,
                                          @Parameter(hidden = true)
@@ -293,6 +296,7 @@ public class UserController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_LIST_ALL')")
     public ResponseEntity<CollectionModel<UserResponse>> getAllUsers(
             @Parameter(hidden = true)
             @SortDefault(sort = "personalCode", direction = Sort.Direction.DESC)
@@ -351,6 +355,7 @@ public class UserController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/username/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_LIST_BY_USERNAME')")
     public ResponseEntity<PagedModel<UserResponse>> getUsersByUserName(@PathVariable String username,
                                                                        @Parameter(hidden = true)
                                                                        @SortDefault(sort = "personalCode",
@@ -375,6 +380,7 @@ public class UserController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/username/{username}/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_LIST_ALL_BY_USERNAME')")
     public ResponseEntity<CollectionModel<UserResponse>> getAllUsersByUserName(@PathVariable String username,
                                                                                @Parameter(hidden = true)
                                                                                @SortDefault(sort = "personalCode", direction = Sort.Direction.DESC)
@@ -437,6 +443,7 @@ public class UserController {
     @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_COUNT_NEW')")
     public ResponseEntity<?> getNewUserCount() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -509,6 +516,7 @@ public class UserController {
     )
     @GetMapping(path = "/nationalCode/{nationalCode}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_READ_BY_NATIONAL_CODE')")
     public ResponseEntity<?> getUserByNationalCode(@PathVariable String nationalCode) {
 
         List<PersonEntity> persons = personService.findPersonsByNationalCode(nationalCode);
@@ -571,6 +579,7 @@ public class UserController {
     @PostMapping(path = "/register",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_CREATE')")
     public ResponseEntity<?> createUser(@RequestBody UserRegister userRegister) {
 
         UserResponse returnValue = new UserResponse();
@@ -645,6 +654,7 @@ public class UserController {
     )
     @GetMapping(path = "/{userPublicId}/role",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_READ_ROLE')")
     public ResponseEntity<?> getUserRoleByUserPublicId(@PathVariable String userPublicId) {
 
 
@@ -708,6 +718,7 @@ public class UserController {
     @PostMapping(path = "/{userPublicId}/role",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_REPLACE_ROLE')")
     public ResponseEntity<?> replaceUserRoles(@PathVariable String userPublicId,
                                               @RequestBody UserRolePrivilege userRolePrivilege) {
         return ResponseEntity.ok(applyUserRoleChange(userPublicId, userRolePrivilege, RoleChangeType.REPLACE));
@@ -735,6 +746,7 @@ public class UserController {
     @PostMapping(path = "/{userPublicId}/roles/add",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_ADD_ROLE')")
     public ResponseEntity<?> addUserRoles(@PathVariable String userPublicId,
                                           @RequestBody UserRolePrivilege userRolePrivilege) {
         return ResponseEntity.ok(applyUserRoleChange(userPublicId, userRolePrivilege, RoleChangeType.ADD));
@@ -762,6 +774,7 @@ public class UserController {
     @PostMapping(path = "/{userPublicId}/roles/remove",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_USER_REMOVE_ROLE')")
     public ResponseEntity<?> removeUserRoles(@PathVariable String userPublicId,
                                              @RequestBody UserRolePrivilege userRolePrivilege) {
         return ResponseEntity.ok(applyUserRoleChange(userPublicId, userRolePrivilege, RoleChangeType.REMOVE));

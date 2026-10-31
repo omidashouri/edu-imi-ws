@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/voucherListItems")
 @RequiredArgsConstructor
@@ -90,6 +89,7 @@ public class VoucherListItemsController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_VOUCHER_LIST_ITEM_LIST')")
     public ResponseEntity<PagedModel<VoucherListItemsApiResponse>> getVoucherListItems(@Parameter(hidden = true)
                                                                                        @SortDefault(sort = "lastCreateDateMiladi", direction = Sort.Direction.DESC)
                                                                                        @PageableDefault(page = 0, size = 10, value = 10)
@@ -140,6 +140,7 @@ public class VoucherListItemsController {
     )
     @GetMapping(path = "/{voucherListItemsPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_VOUCHER_LIST_ITEM_READ')")
     public ResponseEntity<?> findByPublicId(@PathVariable String voucherListItemsPublicId) {
 
         VoucherListItemsApiEntity voucherListItemsApi = voucherListItemsService.findByPublicId(voucherListItemsPublicId);
@@ -191,6 +192,7 @@ public class VoucherListItemsController {
     )
     @GetMapping(path = "/lastCreatedRecord",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_VOUCHER_LIST_ITEM_READ_LAST_CREATED')")
     public ResponseEntity<?> findLastCreatedRecord() {
 
         VoucherListItemsApiEntity voucherListItemsApi = voucherListItemsService.findLastRecordOrderByCreateDate();
@@ -242,6 +244,7 @@ public class VoucherListItemsController {
     )
     @GetMapping(path = "/lastEditedRecord",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_VOUCHER_LIST_ITEM_READ_LAST_EDITED')")
     public ResponseEntity<?> findLastEditedRecord() {
 
         VoucherListItemsApiEntity voucherListItemsApi = voucherListItemsService.findLastRecordOrderByEditDate();
@@ -293,6 +296,7 @@ public class VoucherListItemsController {
     )
     @GetMapping(path = "/lastDeletedRecord",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_VOUCHER_LIST_ITEM_READ_LAST_DELETED')")
     public ResponseEntity<?> findLastDeletedRecord() {
 
         VoucherListItemsApiEntity voucherListItemsApi = voucherListItemsService.findLastRecordOrderByDeleteDateTs();

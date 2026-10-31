@@ -52,7 +52,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/paymentCodes")
 @RequiredArgsConstructor
@@ -109,6 +108,7 @@ public class PaymentCodeController {
     @SwaggerUtil.PaymentCodeResponseDescriptiveAsQueryParam
     @GetMapping(path = "/paymentCodeDescriptive",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PAYMENT_CODE_LIST_DESCRIPTIVE')")
     public ResponseEntity<PagedModel<PaymentCodeResponseDescriptive>> getPaymentCodeDescriptive(@Parameter(hidden = true)
                                                                                                 @RequestParam Map<String, String> queryParams) {
 
@@ -160,6 +160,7 @@ public class PaymentCodeController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PAYMENT_CODE_LIST')")
     public ResponseEntity<PagedModel<PaymentCodeResponse>> getPaymentCodes(@Parameter(hidden = true)
                                                                            @SortDefault(sort = "paymentCode", direction = Sort.Direction.DESC)
                                                                            @PageableDefault(page = 0, size = 10, value = 10)
@@ -209,6 +210,7 @@ public class PaymentCodeController {
     )
     @GetMapping(path = "/publicId/{paymentCodePublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PAYMENT_CODE_READ')")
     public ResponseEntity<?> getPaymentCodeByPaymentCodePublicId(@PathVariable String paymentCodePublicId) {
 
         PaymentCodeApiEntity paymentCode = paymentCodeService.findByPaymentCodePublicId(paymentCodePublicId);
@@ -257,6 +259,7 @@ public class PaymentCodeController {
     )
     @GetMapping(path = "/paymentCode/{paymentCode}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PAYMENT_CODE_READ_BY_CODE')")
     public ResponseEntity<?> getPaymentCodeByPaymentCode(@PathVariable String paymentCode,
                                                          @Parameter(hidden = true)
                                                          @SortDefault(sort = "paymentCode", direction = Sort.Direction.DESC)
@@ -316,6 +319,7 @@ public class PaymentCodeController {
     )
     @PostMapping(path = "/paymentCodeRequest",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PAYMENT_CODE_CREATE')")
     public ResponseEntity<?> createPaymentByPaymentCodeRequest(@RequestBody PaymentCodeRequest paymentCodeRequest) {
 
 
@@ -386,6 +390,7 @@ public class PaymentCodeController {
     @DisableMethod
     @PostMapping(path = "/nationalCode/{nationalCode}/expensePublicId/{expensePublicId}/projectPublicId/{projectPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PAYMENT_CODE_CREATE_BY_KEYS')")
     public ResponseEntity<?> createPaymentByNationalAndExpenseCodePublicIdAndProjectPublicId(@PathVariable String nationalCode,
                                                                                              @PathVariable String expensePublicId,
                                                                                              @PathVariable String projectPublicId) {

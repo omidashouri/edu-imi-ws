@@ -57,7 +57,6 @@ import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/students")
 @RequiredArgsConstructor
@@ -110,6 +109,7 @@ public class StudentController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_STUDENT_LIST')")
     public ResponseEntity<PagedModel<StudentResponse>> getStudents(@Parameter(hidden = true)
                                                                    @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                    @PageableDefault(page = 0, size = 10, value = 10)
@@ -132,6 +132,7 @@ public class StudentController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_STUDENT_LIST_ALL')")
     public ResponseEntity<CollectionModel<StudentResponse>> getAllStudents(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -187,6 +188,7 @@ public class StudentController {
     )
     @GetMapping(path = "/{studentPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_STUDENT_READ')")
     public ResponseEntity<?> getStudentByStudentPublicId(@PathVariable String studentPublicId) {
 
             StudentEntity student = studentService.findByStudentPublicIdOrderByCreateDateDesc(studentPublicId);
@@ -242,6 +244,7 @@ public class StudentController {
     @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_STUDENT_COUNT_NEW')")
     public ResponseEntity<?> getNewStudentCount() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -320,6 +323,7 @@ public class StudentController {
     @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_STUDENT_GENERATE_PUBLIC_ID')")
     public ResponseEntity<?> createStudentApiPublicId() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -401,6 +405,7 @@ public class StudentController {
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_STUDENT_CREATE')")
     public ResponseEntity<?> createNewStudent(@RequestBody StudentForm studentForm) {
 
         OperationStatus returnValue = new OperationStatus();

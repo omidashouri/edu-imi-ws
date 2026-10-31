@@ -50,7 +50,6 @@ import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/eduCategories")
 @RequiredArgsConstructor
@@ -99,6 +98,7 @@ public class EduCategoryController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_CATEGORY_LIST')")
     public ResponseEntity<PagedModel<EduCategoryResponse>> getEduCategorys(@Parameter(hidden = true)
                                                                @SortDefault(sort = "id", direction = Sort.Direction.DESC)
                                                                @PageableDefault(page = 0, size = 10, value = 10)
@@ -121,6 +121,7 @@ public class EduCategoryController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_CATEGORY_LIST_ALL')")
     public ResponseEntity<CollectionModel<EduCategoryResponse>> getAllEduCategorys(
             @Parameter(hidden = true)
             @SortDefault(sort = "id", direction = Sort.Direction.DESC)
@@ -175,6 +176,7 @@ public class EduCategoryController {
     )
     @GetMapping(path = "/publicId/{eduCategoryPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_CATEGORY_READ')")
     public ResponseEntity<?> getEduCategoryByEduCategoryPublicId(@PathVariable String eduCategoryPublicId) {
 
             EduCategoryEntity eduCategory = eduCategoryService.findByEduCategoryPublicId(eduCategoryPublicId);
@@ -225,6 +227,7 @@ public class EduCategoryController {
     )
     @GetMapping(path = "/title/{eduCategoryTitle}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_CATEGORY_READ_BY_TITLE')")
     public ResponseEntity<?> getEduCategoryByEduCategoryTitle(@PathVariable String eduCategoryTitle) {
 
 
@@ -280,6 +283,7 @@ public class EduCategoryController {
     )
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_CATEGORY_COUNT_NEW')")
     public ResponseEntity<?> getNewEduCategoryCount() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -357,6 +361,7 @@ public class EduCategoryController {
     @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_CATEGORY_GENERATE_PUBLIC_ID')")
     public ResponseEntity<?> createEduCategoryApiPublicId() {
 
         OperationStatus returnValue = new OperationStatus();

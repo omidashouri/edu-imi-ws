@@ -87,7 +87,6 @@ import java.util.stream.Collectors;
 //    ---
 //    todo: read new api from old erp
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_HAMKARAN')")
 @RestController
 @RequestMapping("/api/v1/hamkarans")
 @RequiredArgsConstructor
@@ -132,6 +131,7 @@ public class HamkaranController {
     )
     @GetMapping(path = "/token",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_HAMKARAN_TOKEN_OBTAIN')")
     public ResponseEntity<?> authenticationGetToken(@RequestParam(name = "code") String code) {
 
         HamkaranAuthenticationTokenDto hamkaranAuthenticationTokenDto = new HamkaranAuthenticationTokenDto();
@@ -177,6 +177,7 @@ public class HamkaranController {
     )
     @GetMapping(path = "/financial/searchQuery",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_HAMKARAN_FINANCIAL_SEARCH')")
     public ResponseEntity<?> getFinancialBySearchQuery(@RequestParam Optional<String> limit,
                                                                                    @RequestParam Optional<String> salemali,
                                                                                    @RequestParam Optional<String> createDateTime,
@@ -248,6 +249,7 @@ public class HamkaranController {
     @SwaggerUtil.HamkaranGreaterThanDateTimeAsQueryParam
     @GetMapping(path = "/financial/greaterThanDateTime",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_HAMKARAN_FINANCIAL_LIST_SINCE')")
     public ResponseEntity<?> getFinancialGreaterThanFromCreateDateTime(@Parameter(hidden = true)
                                                                            @RequestParam Map<String, String> allParams
     ) {
@@ -304,6 +306,7 @@ public class HamkaranController {
     @SwaggerUtil.HamkaranDeletedFinancialAsQueryParam
     @GetMapping(path = "/deletedFinancial/searchQuery",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_HAMKARAN_DELETED_FINANCIAL_SEARCH')")
     public ResponseEntity<?> getDeletedFinancialBySearchQuery(@Parameter(hidden = true)
                                                               @RequestParam Map<String, String> allParams
     ) {
@@ -361,6 +364,7 @@ public class HamkaranController {
     )
     @GetMapping(path = "/humanResource/searchQuery",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_HAMKARAN_HUMAN_RESOURCE_SEARCH')")
     public ResponseEntity<?> getHumanResourceBySearchQuery(@RequestParam Optional<String> limit,
                                                        @RequestParam Optional<String> yearmonth,
                                                        @RequestParam Optional<String> shomare_personeli,

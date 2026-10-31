@@ -55,7 +55,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/contacts")
 @RequiredArgsConstructor
@@ -111,6 +110,7 @@ public class ContactController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_LIST')")
     public ResponseEntity<PagedModel<ContactResponse>> getContacts(@Parameter(hidden = true)
                                                                    @SortDefault(sort = "createDate",
                                                                            direction = Sort.Direction.DESC)
@@ -135,6 +135,7 @@ public class ContactController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_LIST_ALL')")
     public ResponseEntity<CollectionModel<ContactResponse>> getAllContacts(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -192,6 +193,7 @@ public class ContactController {
     @DisableMethod
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_UPDATE')")
     public ResponseEntity<?> updateContactByContactPublicId(@RequestBody ContactResponse contactResponse) {
 
         String contactPublicId = contactResponse.getContactPublicId();
@@ -249,6 +251,7 @@ public class ContactController {
     )
     @GetMapping(path = "/{contactPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_READ')")
     public ResponseEntity<?> getContactByContactPublicId(@PathVariable String contactPublicId) {
 
         ContactEntity contact = contactService.findContactEntityByContactApiPublicId(contactPublicId);
@@ -301,6 +304,7 @@ public class ContactController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/search/{criteria}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_SEARCH')")
     public ResponseEntity<?> getContactBySearch(@PathVariable String criteria,
                                                 @Parameter(hidden = true)
                                                 @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -371,9 +375,9 @@ public class ContactController {
                     )
             }
     )
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/{nationalCode}/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_COUNT_BY_NATIONAL_CODE')")
     public ResponseEntity<?> getContactCountByNationalCode(@PathVariable String nationalCode) {
 
         Long contactCount;
@@ -427,6 +431,7 @@ public class ContactController {
     )
     @GetMapping(path = "/nationalCode/{nationalCode}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_READ_BY_NATIONAL_CODE')")
     public ResponseEntity<?> getContactByNationalCode(@PathVariable String nationalCode) {
 
         List<ContactFastDto> contactFastDtos = contactService.findContactByNationalCode(nationalCode);
@@ -476,6 +481,7 @@ public class ContactController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/nationalCode/{nationalCode}/forPaymentCode",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_LIST_FOR_PAYMENT_CODE')")
     public ResponseEntity<PagedModel<?>> getContactForPaymentCodeByNationalCode(@PathVariable String nationalCode,
                                                                                 @Parameter(hidden = true)
                                                                                 @SortDefault(sort = "lastName", direction = Sort.Direction.DESC)
@@ -532,6 +538,7 @@ public class ContactController {
     @PutMapping(path = "/forPaymentCode",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_UPDATE_FOR_PAYMENT_CODE')")
     public ResponseEntity<?> updateContactForPaymentCodeByContactPublicId(@RequestBody ContactRequestForPaymentCode
                                                                                   contactRequestForPaymentCode) {
 
@@ -602,6 +609,7 @@ public class ContactController {
     @PostMapping(path = "/forPaymentCode",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_CREATE_FOR_PAYMENT_CODE')")
     public ResponseEntity<?> createContactForPaymentCode(@RequestBody ContactRequestForPaymentCode
                                                                      contactRequestForPaymentCode) {
 

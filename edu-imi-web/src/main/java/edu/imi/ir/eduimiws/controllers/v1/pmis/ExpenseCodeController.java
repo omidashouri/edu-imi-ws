@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/expenseCodes")
 @RequiredArgsConstructor
@@ -84,6 +83,7 @@ public class ExpenseCodeController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_EXPENSE_CODE_LIST')")
     public ResponseEntity<PagedModel<ExpenseCodeResponse>> getExpenseCodes(@Parameter(hidden = true)
                                                                    @SortDefault(sort = "expenseTitle", direction = Sort.Direction.DESC)
                                                                    @PageableDefault(page = 0, size = 10, value = 10)
@@ -134,6 +134,7 @@ public class ExpenseCodeController {
     )
     @GetMapping(path = "/publicId/{expenseCodePublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_EXPENSE_CODE_READ')")
     public ResponseEntity<?> getExpenseCodeByExpenseCodePublicId(@PathVariable String expenseCodePublicId) {
 
         try {
@@ -187,6 +188,7 @@ public class ExpenseCodeController {
     )
     @GetMapping(path = "/expenseCode/{expenseCode}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_EXPENSE_CODE_READ_BY_CODE')")
     public ResponseEntity<?> getExpenseCodeByExpenseCode(@PathVariable String expenseCode) {
 
         try {
@@ -240,6 +242,7 @@ public class ExpenseCodeController {
     )
     @GetMapping(path = "/expenseTitle/{expenseTitle}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_EXPENSE_CODE_LIST_BY_TITLE')")
     public ResponseEntity<?> getExpenseCodeByExpenseTitle(@PathVariable String expenseTitle,
                                                           @Parameter(hidden = true)
                                                           @SortDefault(sort = "expenseTitle", direction = Sort.Direction.DESC)

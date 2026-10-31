@@ -1,0 +1,98 @@
+Person-Role-Controller access map
+=================================
+Source: CRM.TBL_PERSON_ROLE_API (current rows)
+Controller mapping: OLD @PreAuthorize role checks (before API_* privilege changes)
+Generated: 2026-10-31
+
+------------------------------------------------------------------------------
+1) Person -> Role
+------------------------------------------------------------------------------
+Person_Role_ID | Person_API_ID | Person_Public_ID                                                  | Person_ID | First_Name              | Last_Name                 | Username     | Email                      | Role_API_ID | Role_Name
+21             | 173697        | 573506207A079B7CF1A20965D242AC9EA31C82E2B7318EBDA6723389AD2EF5FB | 391141    | حسين                   | نوروزي                   | 1063639158   | norouzi.hosein@gmail.com   | 1           | ROLE_ADMIN
+101            | 176966        | CEAC8466E4435C1E75E3956B452A31DB385A2A2FA64C55D15B157E16B1255A68 | 395465    | دلارام                 | شريفي ليمائي             | 2210008719   | d.sharifi@imi.ir           | 1           | ROLE_ADMIN
+41             | 204           | A64810EC7D6A0120BECA0449B604C841D4625A93281CB13303445AE1248E4FB6 | 227       | عاطفه                  | نژادجعفري                | 8034         | atefejafari61@gmail.com    | 1           | ROLE_ADMIN
+102            | 71038         | C4C0D67871EDD3F6B95F47B9AEB3AAA222FD74B057D24B78AF711BA8270CB787 | 275780    | سعيد                   | اسکندري                  | 81104        | sr.eskandari@gmail.com     | 1           | ROLE_ADMIN
+141            | 71172         | 0DE6455C506F7F6B6D67EEFCD67EF075B780859A3A8E0D3D8BE98EECA4428749 | 275932    | آزاده                  | تهمتن                    | 83111        | azadeh.tahamtan@gmail.com  | 1           | ROLE_ADMIN
+22             | 240           | A4A9786E38318AE5675DD2D0DA8220E554A0AFD4B3EAB24129F8944F05DD8200 | 264       | سيد طاها               | طاهايي فرد               | 8943         | a.tahaei@imi.ir            | 1           | ROLE_ADMIN
+1              | 3847          | 43FC60E39D7922FBB2696D003BAB42BA905CE16B50D055EE34206E0ACC5BDC69 | 100160    | اميد                   | عاشوري                   | 9057         | omidashouri@gmail.com      | 1           | ROLE_ADMIN
+81             | 124123        | 064B1ADB18AC005AE1ECDE94029578342A7F5CE10F911AF4DA40EB885C344DFE | 339322    | زهرا سادات             | شمس دولت آبادي           | 9318         | lvlona.shd@gmail.com       | 1           | ROLE_ADMIN
+161            | 200425        | 809E1BACC9E357E53542DAFCC34C430478D07794FCD3C290C51BBD10DBF63A23 | 415680    | شناسه                  | واريز                    | depositCode1402 | (empty)                 | 1           | ROLE_ADMIN
+62             | 191259        | 10C2EC11073BE5C4A0E02E51EF0231F75E90CB5AA8D603C87941A8CE3E226E80 | 406554    | admin                  | همكاران سيستم وب سرويس   | admin_3      | omidashouri@gmail.com      | 21          | ROLE_HAMKARAN
+
+Compact view:
+- اميد عاشوري (9057)                            -> ROLE_ADMIN
+- سيد طاها طاهايي فرد (8943)                   -> ROLE_ADMIN
+- عاطفه نژادجعفري (8034)                       -> ROLE_ADMIN
+- حسين نوروزي (1063639158)                     -> ROLE_ADMIN
+- زهرا سادات شمس دولت آبادي (9318)             -> ROLE_ADMIN
+- دلارام شريفي ليمائي (2210008719)             -> ROLE_ADMIN
+- سعيد اسکندري (81104)                         -> ROLE_ADMIN
+- آزاده تهمتن (83111)                          -> ROLE_ADMIN
+- شناسه واريز (depositCode1402)                -> ROLE_ADMIN
+- admin همكاران سيستم وب سرويس (admin_3)       -> ROLE_HAMKARAN
+
+------------------------------------------------------------------------------
+2) Role -> Controllers (OLD access model, before API_* privileges)
+------------------------------------------------------------------------------
+
+ROLE_ADMIN
+  Accepted by (alone or with other roles) on these controllers:
+  - ClientApiController                  (/api/v2/clients)                 [ROLE_ADMIN only]
+  - UserController                       (/api/v1/users)
+  - ContactController                    (/api/v1/contacts)
+  - AccountController                    (/api/v1/accounts)
+  - EmailController                      (/api/v1/mails)
+  - FarapayamakController                (/api/v1/farapayamaks)
+  - PrivilegeController                  (/api/v1/privileges)              [or ROLE_MANAGE_PRIVILEGE]
+  - RoleController                       (/api/v1/roles)                   [or ROLE_MANAGE_PRIVILEGE]
+  - CourseController                     (/api/v1/courses)
+  - EduCategoryController                (/api/v1/eduCategories)
+  - FieldController                      (/api/v1/fields)
+  - FieldCourseController                (/api/v1/fieldCourses)
+  - LevelController                      (/api/v1/levels)
+  - PeriodController                     (/api/v1/periods)
+  - PeriodCourseController               (/api/v1/periodCourses)
+  - PeriodCourseProfessorController      (/api/v1/periodCourseProfessors)
+  - ProfessorController                  (/api/v1/professors)
+  - RegisterController                   (/api/v1/registers)
+  - StudentController                    (/api/v1/students)
+  - TermController                       (/api/v1/terms)
+  - TermPresentedCourseController        (/api/v1/termPresentedCourses)
+  - TermPresentedGroupController         (/api/v1/termCourseProfessors)
+  - ProjectController                    (/api/v1/projects)
+  - ExpenseCodeController                (/api/v1/expenseCodes)
+  - PaymentCodeController                (/api/v1/paymentCodes)
+  - VoucherListItemsController           (/api/v1/voucherListItems)
+  - VoucherDeleteItemsController         (/api/v1/voucherDeleteItems)
+  - ProjectDepositCodeApiController      (/api/v1/projectDepositCodeApis)
+  - MelliController                      (/api/v1/sadadPayments)
+  - SabtahvalController                  (/api/v1/sabtahval)               [ROLE_ADMIN only]
+  - HamkaranController                   (/api/v1/hamkarans)
+
+ROLE_HAMKARAN
+  Accepted by:
+  - HamkaranController                   (/api/v1/hamkarans)               [ROLE_ADMIN or ROLE_HAMKARAN]
+
+ROLE_EDUPOWERUSER
+  Existed in TBL_ROLE_API and was accepted by many EDU/CRM/PMIS/MAINPARTS controllers
+  together with ROLE_ADMIN, but NO person currently has this role in TBL_PERSON_ROLE_API.
+
+ROLE_PROJECTDEPOSITCODE
+  Existed in TBL_ROLE_API and was accepted by ProjectDepositCodeApiController
+  together with ROLE_ADMIN / ROLE_EDUPOWERUSER, but NO person currently has this role
+  in TBL_PERSON_ROLE_API.
+
+------------------------------------------------------------------------------
+3) Controllers that were NOT gated by these person-role rows (no class-level role check)
+------------------------------------------------------------------------------
+- BehdadIdentifierController
+- AttendanceController
+- PeriodCertificateSmsApiController
+- BehdadAccountController (old class-level PreAuthorize was commented out)
+
+------------------------------------------------------------------------------
+4) Important note after privilege migration
+------------------------------------------------------------------------------
+After the API_* privilege changes, ROLE_ADMIN alone is no longer enough for method
+access unless ROLE_ADMIN is linked to the new privileges in CRM.TBL_ROLE_PRIVILEGE_API
+(see sql/naming-privilege.sql).

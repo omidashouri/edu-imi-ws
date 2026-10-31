@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.math.BigDecimal;
 
@@ -79,6 +80,7 @@ public class BehdadIdentifierController {
             })
     @PostMapping(path = "/isVerhoeff",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_VERIFY_VERHOEFF')")
     public ResponseEntity<?> isVerhoeff(@RequestBody IdentifierIsVerhoeffRequest verhoeffRequest) {
 
 /*        IsVerhoeffRequestDto isVerhoeffRequestDto = isVerhoeffRequestMapper.toIsVerhoeffRequestDto(verhoeffRequest);
@@ -124,6 +126,7 @@ public class BehdadIdentifierController {
             })
     @GetMapping(path = "/isValid/identifierCode/{identifierCode}/accountNumber/{accountNumber}/transactionAmount/{transactionAmount}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_VERIFY_VALID')")
     public ResponseEntity<?> isValidIdentifier(@PathVariable String identifierCode, @PathVariable String accountNumber,
                                                @PathVariable BigDecimal transactionAmount) {
 
@@ -170,6 +173,7 @@ public class BehdadIdentifierController {
             })
     @GetMapping(path = "/isEffective/identifierCode/{identifierCode}/accountNumber/{accountNumber}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_VERIFY_EFFECTIVE')")
     public ResponseEntity<?> isEffectiveIdentifier(@PathVariable String identifierCode, @PathVariable String accountNumber) {
 
 /*        Boolean isEffective = behdadIdentifierService
@@ -215,6 +219,7 @@ public class BehdadIdentifierController {
             })
     @GetMapping(path = "/isExist/identifierCode/{identifierCode}/accountNumber/{accountNumber}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_VERIFY_EXIST')")
     public ResponseEntity<?> isExistIdentifier(@PathVariable String identifierCode, @PathVariable String accountNumber) {
 
 /*        Boolean isEffective = behdadIdentifierService
@@ -262,6 +267,7 @@ public class BehdadIdentifierController {
             })
     @PostMapping(path = "/addIdentifier",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_CREATE')")
     public ResponseEntity<?> addIdentifier(@RequestBody IdentifierInfoRequest identifierInfoRequest) {
 
 
@@ -311,6 +317,7 @@ public class BehdadIdentifierController {
             })
     @PostMapping(path = "/addIdentifiers",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_CREATE_BATCH')")
     public ResponseEntity<?> addIdentifiers(@RequestBody BatchIdentifierInfoRequest batchIdentifierInfo) {
 
 /*        BatchIdentifierInfoDto batchIdentifierInfoDto = batchIdentifierInfoMapper
@@ -362,6 +369,7 @@ public class BehdadIdentifierController {
             })
     @PostMapping(path = "/generateIdentifierByOrganInfo",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_GENERATE')")
     public ResponseEntity<?> generateIdentifierByOrganInfo(){
 //            (@RequestBody GenerateIdentifierByOrganRequest generateIdentifierByOrganRequest) {
 
@@ -410,6 +418,7 @@ public class BehdadIdentifierController {
             })
     @DeleteMapping(path = "/removeIdentifier/identifierCode/{identifierCode}/accountNumber/{accountNumber}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_DELETE')")
     public ResponseEntity<?> removeIdentifier(@PathVariable String identifierCode, @PathVariable String accountNumber) {
 
 /*        behdadIdentifierService
@@ -457,6 +466,7 @@ public class BehdadIdentifierController {
             })
     @PostMapping(path = "/removeIdentifiers",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_DELETE_BATCH')")
     public ResponseEntity<?> removeIdentifiers(){
 //            (@RequestBody BatchIdentifierRemoveInfo batchIdentifierRemoveInfo) {
 
@@ -509,6 +519,7 @@ public class BehdadIdentifierController {
             })
     @GetMapping(path = "/getActiveIdentifiers/accountNumber/{accountNumber}/startShamsiDate/{startShamsiDate}/endShamsiDate/{endShamsiDate}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_MAINPARTS_BEHDAD_IDENTIFIER_LIST_ACTIVE')")
     public ResponseEntity<?> getActiveIdentifiers(@PathVariable String identifierCode, @PathVariable String startShamsiDate,
                                                   @PathVariable String endShamsiDate) {
 

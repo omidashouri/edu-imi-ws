@@ -47,7 +47,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/projects")
 @RequiredArgsConstructor
@@ -99,6 +98,7 @@ public class ProjectController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_LIST')")
     public ResponseEntity<PagedModel<ProjectResponse>> getProjects(@Parameter(hidden = true)
                                                                    @SortDefault(sort = "createDate",
                                                                            direction = Sort.Direction.DESC)
@@ -123,6 +123,7 @@ public class ProjectController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_LIST_ALL')")
     public ResponseEntity<CollectionModel<ProjectResponse>> getAllProjects(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -177,6 +178,7 @@ public class ProjectController {
     )
     @GetMapping(path = "/{projectPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_READ')")
     public ResponseEntity<?> getProjectByProjectPublicId(@PathVariable String projectPublicId) {
 
         ProjectEntity project = projectService.findProjectEntityByProjectApiPublicId(projectPublicId);
@@ -227,6 +229,7 @@ public class ProjectController {
     )
     @GetMapping(path = "/lastVersionByProjectCode",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_READ_LAST_VERSION')")
     public ResponseEntity<?> getProjectLastVersionByProjectCode(@RequestParam("projectCode") String projectCode) {
 
         if (projectCode == null || projectCode.length() < 8) {
@@ -296,6 +299,7 @@ public class ProjectController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/forPaymentCodes",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_LIST_FOR_PAYMENT_CODE')")
     public ResponseEntity<PagedModel<ProjectResponseForPaymentCode>> getProjectsForPaymentCode(@Parameter(hidden = true)
                                                                                                @SortDefault(sort = "projectName",
                                                                                                        direction = Sort.Direction.DESC)
@@ -349,6 +353,7 @@ public class ProjectController {
     @DisableMethod
     @GetMapping(path = "/publicId/{projectPublicId}/forPaymentCode",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_READ_FOR_PAYMENT_CODE')")
     public ResponseEntity<?> getProjectByProjectPublicIdForPaymentCode(@PathVariable String projectPublicId) {
 
 
@@ -407,6 +412,7 @@ public class ProjectController {
     @SwaggerUtil.ProjectResponseForPaymentCodeAsQueryParam
     @GetMapping(path = "/forPaymentCodes/parameterized",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_SEARCH_FOR_PAYMENT_CODE')")
     public ResponseEntity<PagedModel<ProjectResponseForPaymentCode>> getProjectResponseForPaymentCodeWithParameter(@Parameter(hidden = true)
                                                                                                 @RequestParam Map<String, String> queryParams) {
 
@@ -463,6 +469,7 @@ public class ProjectController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/forDepositCodeApi",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_LIST_FOR_DEPOSIT_CODE')")
     public ResponseEntity<PagedModel<ProjectResponseForPaymentCode>> getProjectsForDepositCode(@Parameter(hidden = true)
                                                                                                @SortDefault(sort = "projectName",
                                                                                                        direction = Sort.Direction.DESC)
@@ -520,6 +527,7 @@ public class ProjectController {
     @SwaggerUtil.ProjectResponseForPaymentCodeAsQueryParam
     @GetMapping(path = "/forDepositCodeApi/parameterized",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_PMIS_PROJECT_SEARCH_FOR_DEPOSIT_CODE')")
     public ResponseEntity<PagedModel<ProjectResponseForPaymentCode>> getProjectResponseForDepositCodeApiWithParameter(@Parameter(hidden = true)
                                                                                                                    @RequestParam Map<String, String> queryParams) {
 

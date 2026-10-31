@@ -67,7 +67,6 @@ import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/registers")
 @RequiredArgsConstructor
@@ -128,6 +127,7 @@ public class RegisterController {
             })
     @DisableMethod
     @GetMapping(path = "/unpaged", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_LIST_UNPAGED')")
     public ResponseEntity<List<RegisterResponse>> getRegisters() {
 
 //        Pageable pageable = Pageable.unpaged();
@@ -227,6 +227,7 @@ public class RegisterController {
     @Operation(hidden = true)
     @DisableMethod
     @GetMapping(path = "/unpagedAsync", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_LIST_UNPAGED_ASYNC')")
     public @ResponseBody CompletableFuture<ResponseEntity<List<RegisterResponse>>> getRegisters2() throws ExecutionException, InterruptedException {
         return registerService.findAllByDeleteStatusIsNotNullThread()
                 .thenApply(re->registerFastDtoMapper.toRegisterFastDtos(re, new CycleAvoidingMappingContext()))
@@ -269,6 +270,7 @@ public class RegisterController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_LIST')")
     public ResponseEntity<PagedModel<RegisterResponse>> getRegisters(@Parameter(hidden = true)
                                                                      @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                      @PageableDefault(page = 0, size = 10, value = 10)
@@ -291,6 +293,7 @@ public class RegisterController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_LIST_ALL')")
     public ResponseEntity<CollectionModel<RegisterResponse>> getAllRegisters(
             @Parameter(hidden = true)
             @SortDefault(sort = "id", direction = Sort.Direction.DESC)
@@ -345,6 +348,7 @@ public class RegisterController {
     )
     @GetMapping(path = "/{registerPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_READ')")
     public ResponseEntity<?> getRegisterByRegisterPublicId(@PathVariable String registerPublicId) {
 
             RegisterEntity register = registerService.findByRegisterPublicId(registerPublicId);
@@ -397,6 +401,7 @@ public class RegisterController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/descriptive", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_LIST_DESCRIPTIVE')")
     public ResponseEntity<PagedModel<RegisterResponse>> getRegistersWithStudentPeriodName(@Parameter(hidden = true)
                                                                                           @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                                           @PageableDefault(page = 0, size = 10, value = 10)
@@ -419,6 +424,7 @@ public class RegisterController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel/descriptive",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_LIST_ALL_DESCRIPTIVE')")
     public ResponseEntity<CollectionModel<RegisterResponse>> getAllRegistersWithStudentPeriodName(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -473,6 +479,7 @@ public class RegisterController {
     )
     @GetMapping(path = "/descriptive/{registerPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_READ_DESCRIPTIVE')")
     public ResponseEntity<?> getRegisterWithStudentPeriodNameByRegisterPublicId(@PathVariable String registerPublicId) {
 
             RegisterEntity register = registerService
@@ -536,6 +543,7 @@ public class RegisterController {
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_CREATE')")
     public ResponseEntity<?> registerStudentInPeriod(@RequestBody RegisterForm registerForm) {
 
         OperationStatus returnValue = new OperationStatus();
@@ -663,6 +671,7 @@ public class RegisterController {
     @DisableMethod
     @GetMapping(path = "/new/count",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_COUNT_NEW')")
     public ResponseEntity<?> getNewRegisterCount() {
 
         OperationStatus returnValue = new OperationStatus();
@@ -740,6 +749,7 @@ public class RegisterController {
     @DisableMethod
     @PostMapping(path = "/new/publicId",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_GENERATE_PUBLIC_ID')")
     public ResponseEntity<?> createRegisterApiPublicId() {
 
         OperationStatus returnValue = new OperationStatus();

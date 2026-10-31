@@ -43,7 +43,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/periodCourseProfessors")
 @RequiredArgsConstructor
@@ -90,6 +89,7 @@ public class PeriodCourseProfessorController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_COURSE_PROFESSOR_LIST')")
     public ResponseEntity<PagedModel<PeriodCourseProfessorResponse>> getPeriods(@Parameter(hidden = true)
                                                                                 @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                                 @PageableDefault(page = 0, size = 10, value = 10)
@@ -112,6 +112,7 @@ public class PeriodCourseProfessorController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_COURSE_PROFESSOR_LIST_ALL')")
     public ResponseEntity<CollectionModel<PeriodCourseProfessorResponse>> getAllPeriodCourseProfessors(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -167,6 +168,7 @@ public class PeriodCourseProfessorController {
     )
     @GetMapping(path = "/{periodCourseProfessorPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_COURSE_PROFESSOR_READ')")
     public ResponseEntity<?> getPeriodCourseProfessorByPeriodCourseProfessorPublicId(
             @PathVariable String periodCourseProfessorPublicId) {
 
@@ -223,6 +225,7 @@ public class PeriodCourseProfessorController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/descriptive", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_COURSE_PROFESSOR_LIST_DESCRIPTIVE')")
     public ResponseEntity<PagedModel<PeriodCourseProfessorResponse>> getPeriodCourseProfessorsWithCourseProfessorPeriodName(@Parameter(hidden = true)
                                                                                                                             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                                                                             @PageableDefault(page = 0, size = 10, value = 10)

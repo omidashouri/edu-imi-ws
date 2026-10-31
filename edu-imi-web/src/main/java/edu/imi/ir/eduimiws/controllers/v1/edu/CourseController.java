@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/courses")
 @RequiredArgsConstructor
@@ -88,6 +87,7 @@ public class CourseController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_COURSE_LIST')")
     public ResponseEntity<PagedModel<CourseResponse>> getPeriods(@Parameter(hidden = true)
                                                                  @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                  @PageableDefault(page = 0, size = 10, value = 10)
@@ -110,6 +110,7 @@ public class CourseController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_COURSE_LIST_ALL')")
     public ResponseEntity<CollectionModel<CourseResponse>> getAllCourses(
             @Parameter(hidden = true)
             @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
@@ -165,6 +166,7 @@ public class CourseController {
     )
     @GetMapping(path = "/{coursePublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_COURSE_READ')")
     public ResponseEntity<?> getCourseByCoursePublicId(@PathVariable String coursePublicId) {
 
             CourseEntity course = courseService.findByCoursePublicId(coursePublicId);

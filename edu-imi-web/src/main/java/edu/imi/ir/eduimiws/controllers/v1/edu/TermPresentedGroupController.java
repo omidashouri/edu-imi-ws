@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDUPOWERUSER')")
 @RestController
 @RequestMapping("/api/v1/termCourseProfessors")
 @RequiredArgsConstructor
@@ -89,6 +88,7 @@ public class TermPresentedGroupController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_TERM_PRESENTED_GROUP_LIST')")
     public ResponseEntity<PagedModel<TermPresentedGroupResponse>> getTermPresentedGroups(@Parameter(hidden = true)
                                                                                          @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                                          @PageableDefault(page = 0, size = 10, value = 10)
@@ -111,6 +111,7 @@ public class TermPresentedGroupController {
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/collectionModel",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_TERM_PRESENTED_GROUP_LIST_ALL')")
     public ResponseEntity<CollectionModel<TermPresentedGroupResponse>> getAllTermPresentedGroups(
             @Parameter(hidden = true)
             @SortDefault(sort = "id", direction = Sort.Direction.DESC)
@@ -165,6 +166,7 @@ public class TermPresentedGroupController {
     )
     @GetMapping(path = "/{termCourseProfessorPublicId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_TERM_PRESENTED_GROUP_READ')")
     public ResponseEntity<?> getTermPresentedGroupByTermPresentedGroupPublicId(@PathVariable String termPresentedGroupPublicId) {
 
 
@@ -219,6 +221,7 @@ public class TermPresentedGroupController {
             })
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/descriptive", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PreAuthorize("hasAuthority('API_V1_EDU_TERM_PRESENTED_GROUP_LIST_DESCRIPTIVE')")
     public ResponseEntity<PagedModel<TermPresentedGroupResponse>> getTermPresentedGroupsWithStudentPeriodName(@Parameter(hidden = true)
                                                                                                               @SortDefault(sort = "createDate", direction = Sort.Direction.DESC)
                                                                                                               @PageableDefault(page = 0, size = 10, value = 10)
