@@ -26,6 +26,8 @@ public class MessageReceiverServiceImpl implements MessageReceiverService {
 
     @Override
     public List<MessageReceiverDto> saveAll(List<MessageReceiverDto> messageReceiverDtos) {
+        log.info("MessageReceiverService.saveAll - messageReceiverDtosSize: {}",
+                messageReceiverDtos == null ? null : messageReceiverDtos.size());
 
         List<MessageReceiverEntity> newMessageReceivers = messageReceiverMapper
                 .toMessageReceiverEntities(messageReceiverDtos, new CycleAvoidingMappingContext());
@@ -37,14 +39,19 @@ public class MessageReceiverServiceImpl implements MessageReceiverService {
                 .stream(savedMessageReceiversIterable.spliterator(), false)
                 .collect(Collectors.toList());
 
-        return messageReceiverMapper.toMessageReceiverDtos(savedMessageReceivers, new CycleAvoidingMappingContext());
+        List<MessageReceiverDto> result = messageReceiverMapper.toMessageReceiverDtos(savedMessageReceivers, new CycleAvoidingMappingContext());
+        log.info("MessageReceiverService.saveAll - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public MessageReceiverDto save(MessageReceiverDto messageReceiverDto) {
+        log.info("MessageReceiverService.save - messageReceiverDto: {}", messageReceiverDto);
         MessageReceiverEntity newMessageReceiver = messageReceiverMapper.toMessageReceiverEntity(messageReceiverDto,
                 new CycleAvoidingMappingContext());
         MessageReceiverEntity savedMessageReceiver = messageReceiverRepository.save(newMessageReceiver);
-        return messageReceiverMapper.toMessageReceiverDto(savedMessageReceiver, new CycleAvoidingMappingContext());
+        MessageReceiverDto result = messageReceiverMapper.toMessageReceiverDto(savedMessageReceiver, new CycleAvoidingMappingContext());
+        log.info("MessageReceiverService.save - result: {}", result);
+        return result;
     }
 }

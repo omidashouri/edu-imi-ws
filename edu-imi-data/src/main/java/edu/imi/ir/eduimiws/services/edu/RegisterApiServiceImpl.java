@@ -28,16 +28,23 @@ public class RegisterApiServiceImpl implements RegisterApiService {
 
     @Override
     public RegisterApiEntity selectLastRecord() {
-        return registerApiRepository.findFirstByOrderByIdDesc();
+        log.info("RegisterApiService.selectLastRecord - start");
+        RegisterApiEntity result = registerApiRepository.findFirstByOrderByIdDesc();
+        log.info("RegisterApiService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Long registerApiCount() {
-        return registerApiRepository.count();
+        log.info("RegisterApiService.registerApiCount - start");
+        Long result = registerApiRepository.count();
+        log.info("RegisterApiService.registerApiCount - result: {}", result);
+        return result;
     }
 
     @Override
     public List<RegisterApiEntity> generateRegisterApiPublicId(List<RegisterEntity> newRegisters) {
+        log.info("RegisterApiService.generateRegisterApiPublicId - newRegisters: {}", newRegisters);
         List<RegisterApiEntity> newRegisterApis = new ArrayList<>();
         final int chunkSize = 900;
         final AtomicInteger counterPeriod = new AtomicInteger();
@@ -158,6 +165,7 @@ public class RegisterApiServiceImpl implements RegisterApiService {
 
         registerApiRepository.saveAll(newRegisterApis);
 
+        log.info("RegisterApiService.generateRegisterApiPublicId - resultSize: {}", newRegisterApis == null ? null : newRegisterApis.size());
         return newRegisterApis;
     }
 

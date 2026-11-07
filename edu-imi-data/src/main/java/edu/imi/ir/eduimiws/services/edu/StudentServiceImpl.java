@@ -27,72 +27,100 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Long countStudentByIdLessThanEqual(Long studentId) {
-        Long studentCount = studentRepository.countByIdLessThanEqual(studentId);
-        return studentCount;
+        log.info("StudentService.countStudentByIdLessThanEqual - studentId: {}", studentId);
+        Long result = studentRepository.countByIdLessThanEqual(studentId);
+        log.info("StudentService.countStudentByIdLessThanEqual - result: {}", result);
+        return result;
     }
 
     @Override
     public StudentEntity selectLastRecord() {
-        return studentRepository.findFirstByOrderByIdDesc();
+        log.info("StudentService.selectLastRecord - start");
+        StudentEntity result = studentRepository.findFirstByOrderByIdDesc();
+        log.info("StudentService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<StudentEntity> findAllByOrderByCreateDateDesc(Pageable pageable) {
-        Page<StudentEntity> studentPages = studentRepository
+        log.info("StudentService.findAllByOrderByCreateDateDesc - pageable: {}", pageable);
+        Page<StudentEntity> result = studentRepository
                 .findAllByDeleteStatusIsNotNullOrderByCreateDateDesc(pageable);
-        return studentPages;
+        log.info("StudentService.findAllByOrderByCreateDateDesc - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public StudentEntity findByStudentPublicIdOrderByCreateDateDesc(String studentPublicId) {
-        StudentEntity student = studentRepository
+        log.info("StudentService.findByStudentPublicIdOrderByCreateDateDesc - studentPublicId: {}", studentPublicId);
+        StudentEntity result = studentRepository
                 .findByStudentApi_StudentPublicIdAndDeleteStatusNotNullOrderByCreateDateDesc(studentPublicId);
-        return student;
+        log.info("StudentService.findByStudentPublicIdOrderByCreateDateDesc - result: {}", result);
+        return result;
     }
 
     @Override
     public StudentEntity findByStudentPublicId(String studentPublicId) {
-        StudentEntity student = studentRepository
+        log.info("StudentService.findByStudentPublicId - studentPublicId: {}", studentPublicId);
+        StudentEntity result = studentRepository
                 .findByStudentApi_StudentPublicId(studentPublicId);
-        return student;
+        log.info("StudentService.findByStudentPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public List<StudentEntity> findAllStudentOnlyByIdBetween(Long startId, Long endId) {
+        log.info("StudentService.findAllStudentOnlyByIdBetween - startId: {}, endId: {}", startId, endId);
         List<StudentOnly> allStudentOnlys = studentRepository.findAllStudentOnlyByIdBetween(startId, endId);
-        List<StudentEntity> allStudents = studentOnlyMapper
+        List<StudentEntity> result = studentOnlyMapper
                 .toStudentEntities(allStudentOnlys, new CycleAvoidingMappingContext());
-        return allStudents;
+        log.info("StudentService.findAllStudentOnlyByIdBetween - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<StudentEntity> selectAllStudentOnly() {
+        log.info("StudentService.selectAllStudentOnly - start");
         List<StudentOnly> studentOnlys = studentRepository.findAllStudentOnly();
         studentOnlys.sort(Comparator.comparing(StudentOnly::getId));
-        List<StudentEntity> allStudents = studentOnlyMapper
+        List<StudentEntity> result = studentOnlyMapper
                 .toStudentEntities(studentOnlys, new CycleAvoidingMappingContext());
-        return allStudents;
+        log.info("StudentService.selectAllStudentOnly - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public StudentEntity findFirstByIdLessThanOrderByIdDesc(Long studentId) {
-        StudentEntity student = studentRepository.findFirstByIdLessThanEqualOrderByIdDesc(studentId);
-        return student;
+        log.info("StudentService.findFirstByIdLessThanOrderByIdDesc - studentId: {}", studentId);
+        StudentEntity result = studentRepository.findFirstByIdLessThanEqualOrderByIdDesc(studentId);
+        log.info("StudentService.findFirstByIdLessThanOrderByIdDesc - result: {}", result);
+        return result;
     }
 
     @Override
     public Long selectStudentLastSequenceNumber() {
-        return studentRepository.selectLastSequenceNumber();
+        log.info("StudentService.selectStudentLastSequenceNumber - start");
+        Long result = studentRepository.selectLastSequenceNumber();
+        log.info("StudentService.selectStudentLastSequenceNumber - result: {}", result);
+        return result;
     }
 
     @Override
     public StudentEntity saveNewStudent(StudentEntity newStudent) {
-        return studentRepository.save(newStudent);
+        log.info("StudentService.saveNewStudent - newStudent: {}", newStudent);
+        StudentEntity result = studentRepository.save(newStudent);
+        log.info("StudentService.saveNewStudent - result: {}", result);
+        return result;
     }
 
     @Override
     public List<StudentEntity> findAllByPerson(PersonEntity person) {
-        return studentRepository.findAllByPerson(person);
+        log.info("StudentService.findAllByPerson - person: {}", person);
+        List<StudentEntity> result = studentRepository.findAllByPerson(person);
+        log.info("StudentService.findAllByPerson - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
 

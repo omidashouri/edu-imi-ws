@@ -26,16 +26,23 @@ public class FieldApiServiceImpl implements FieldApiService{
 
     @Override
     public FieldApiEntity selectLastRecord() {
-        return fieldApiRepository.findFirstByOrderByIdDesc();
+        log.info("FieldApiService.selectLastRecord - start");
+        FieldApiEntity result = fieldApiRepository.findFirstByOrderByIdDesc();
+        log.info("FieldApiService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Long fieldApiCount() {
-        return fieldApiRepository.count();
+        log.info("FieldApiService.fieldApiCount - start");
+        Long result = fieldApiRepository.count();
+        log.info("FieldApiService.fieldApiCount - result: {}", result);
+        return result;
     }
 
     @Override
     public List<FieldApiEntity> generateFieldApiPublicId(List<FieldEntity> newFields) {
+        log.info("FieldApiService.generateFieldApiPublicId - newFields: {}", newFields);
         List<FieldApiEntity> newFieldApis = new ArrayList<>();
         final int chunkSize = 900;
         final AtomicInteger atomicLevel = new AtomicInteger();
@@ -129,13 +136,16 @@ public class FieldApiServiceImpl implements FieldApiService{
                             fieldApi.getEduCategory().getId())));
 
         fieldApiRepository.saveAll(newFieldApis);
+        log.info("FieldApiService.generateFieldApiPublicId - resultSize: {}", newFieldApis == null ? null : newFieldApis.size());
         return newFieldApis;
     }
 
     @Override
     public List<FieldApiEntity> findAllByFieldIdIn(List<Long> fieldIds) {
-        List<FieldApiEntity> fieldApis = fieldApiRepository
+        log.info("FieldApiService.findAllByFieldIdIn - fieldIds: {}", fieldIds);
+        List<FieldApiEntity> result = fieldApiRepository
                 .findAllByFieldIdIn(fieldIds);
-        return fieldApis;
+        log.info("FieldApiService.findAllByFieldIdIn - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 }

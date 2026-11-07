@@ -50,6 +50,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
 
     @Override
     public List<String> getAccountNumbers() {
+        log.info("BehdadAccountService.getAccountNumbers - start");
       /*  List<String> list = new ArrayList<>();
         try {
             return accountServiceBehdad.getAccountNumbers(credentialAccount);
@@ -62,11 +63,15 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         } catch (UserTemporarilySuspendedException_Exception e) {
             throw new UserTemporarilySuspendedException();
         }*/
-        return null;
+        List<String> result = null;
+        log.info("BehdadAccountService.getAccountNumbers - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public void changePassword(ChangePasswordRequestDto changePasswordRequestDto) {
+        log.info("BehdadAccountService.changePassword - username: {}, password: [REDACTED], newPassword: [REDACTED]",
+                changePasswordRequestDto != null ? changePasswordRequestDto.getUsername() : null);
        /* ChangePasswordRequest changePasswordRequest = changePasswordRequestMapper
                 .toChangePasswordRequest(changePasswordRequestDto);
         try {
@@ -82,10 +87,12 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         } catch (UserTemporarilySuspendedException_Exception e) {
             throw new UserTemporarilySuspendedException();
         }*/
+        log.info("BehdadAccountService.changePassword - completed");
     }
 
     @Override
     public void clearAccountControlType(String accountNumber, String identifierType)  {
+        log.info("BehdadAccountService.clearAccountControlType - accountNumber: {}, identifierType: {}", accountNumber, identifierType);
 /*        try {
             accountServiceBehdad.clearAccountControlType(credentialAccount, accountNumber, identifierType);
         } catch (InvalidCredentialException_Exception e) {
@@ -99,10 +106,12 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         } catch (UserTemporarilySuspendedException_Exception e) {
             throw new UserTemporarilySuspendedException();
         }*/
+        log.info("BehdadAccountService.clearAccountControlType - completed");
     }
 
     @Override
     public BalanceInfoDto getAccountBalance(String accountNumber)  {
+        log.info("BehdadAccountService.getAccountBalance - accountNumber: {}", accountNumber);
 /*        BalanceInfo balanceInfo = null;
         try {
             balanceInfo = accountServiceBehdad.getAccountBalance(credentialAccount, accountNumber);
@@ -116,11 +125,14 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new UserTemporarilySuspendedException();
         }
         return balanceInfoMapper.toBalanceInfoDto(balanceInfo);*/
-        return null;
+        BalanceInfoDto result = null;
+        log.info("BehdadAccountService.getAccountBalance - result: {}", result);
+        return result;
     }
 
     @Override
     public String getAccountControlType(String accountNumber, String identifierType) {
+        log.info("BehdadAccountService.getAccountControlType - accountNumber: {}, identifierType: {}", accountNumber, identifierType);
         String accountControlType = null;
 /*        try {
             accountControlType = accountServiceBehdad.getAccountControlType(credentialAccount, accountNumber, identifierType);
@@ -135,6 +147,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         } catch (UserTemporarilySuspendedException_Exception e) {
             throw new UserTemporarilySuspendedException();
         }*/
+        log.info("BehdadAccountService.getAccountControlType - result: {}", accountControlType);
         return accountControlType;
     }
 
@@ -142,6 +155,8 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
     public PagedDataDto getBankTransactionDetails(
             AccountTransactionFilterDto accountTransactionFilterDto,
             PagingDto pagingDto)  {
+        log.info("BehdadAccountService.getBankTransactionDetails - accountTransactionFilterDto: {}, pagingDto: {}",
+                accountTransactionFilterDto, pagingDto);
 /*        AccountTransactionFilter accountTransactionFilter = accountTransactionFilterMapper.toAccountTransactionFilter(accountTransactionFilterDto);
         Paging paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
@@ -167,11 +182,16 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordIsNotStrongException();
         }
         return pagedDataMapper.toPagedDataDto(pagedData);*/
-        return null;
+        PagedDataDto result = null;
+        log.info("BehdadAccountService.getBankTransactionDetails - resultSize: {}, totalElements: {}",
+                result == null || result.getCurrentPageData() == null ? null : result.getCurrentPageData().size(),
+                result == null ? null : result.getTotalCount());
+        return result;
     }
 
     @Override
     public List<AccountTransactionInfoDto> getDestinationSideTransactions(String accountNumber, long transactionId) {
+        log.info("BehdadAccountService.getDestinationSideTransactions - accountNumber: {}, transactionId: {}", accountNumber, transactionId);
 /*        List<AccountTransactionInfo> accountTransactionInfos = null;
         try {
             accountTransactionInfos = accountServiceBehdad.getDestinationSideTransactions(credentialAccount, accountNumber, transactionId);
@@ -195,13 +215,17 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordIsNotStrongException();
         }
         return accountTransactionInfoMapper.toAccountTransactionInfoDtos(accountTransactionInfos);*/
-        return null;
+        List<AccountTransactionInfoDto> result = null;
+        log.info("BehdadAccountService.getDestinationSideTransactions - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public PagedDataDto getMultipleAccountTransactionsDetails(
             MultipleAccountTransactionFilterDto multipleAccountTransactionFilterDto,
             PagingDto pagingDto)  {
+        log.info("BehdadAccountService.getMultipleAccountTransactionsDetails - multipleAccountTransactionFilterDto: {}, pagingDto: {}",
+                multipleAccountTransactionFilterDto, pagingDto);
 
 /*        MultipleAccountTransactionFilter multipleAccountTransactionFilter = multipleAccountTransactionFilterMapper.toMultipleAccountTransactionFilter(multipleAccountTransactionFilterDto);
         Paging paging = getPagingFromPagingDto(pagingDto);
@@ -230,13 +254,19 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordIsNotStrongException();
         }
         return pagedDataMapper.toPagedDataDto(pagedData);*/
-        return null;
+        PagedDataDto result = null;
+        log.info("BehdadAccountService.getMultipleAccountTransactionsDetails - resultSize: {}, totalElements: {}",
+                result == null || result.getCurrentPageData() == null ? null : result.getCurrentPageData().size(),
+                result == null ? null : result.getTotalCount());
+        return result;
     }
 
     @Override
     public PagedDataDto getPagedDestinationSideTransactions(
             SideTransactionsRequestDto sideTransactionsRequestDto,
             PagingDto pagingDto) {
+        log.info("BehdadAccountService.getPagedDestinationSideTransactions - sideTransactionsRequestDto: {}, pagingDto: {}",
+                sideTransactionsRequestDto, pagingDto);
  /*       SideTransactionsRequest sideTransactionsRequest = sideTransactionsRequestMapper.toSideTransactionsRequest(sideTransactionsRequestDto);
         Paging paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData;
@@ -262,13 +292,19 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordIsNotStrongException();
         }
         return pagedDataMapper.toPagedDataDto(pagedData);*/
-        return null;
+        PagedDataDto result = null;
+        log.info("BehdadAccountService.getPagedDestinationSideTransactions - resultSize: {}, totalElements: {}",
+                result == null || result.getCurrentPageData() == null ? null : result.getCurrentPageData().size(),
+                result == null ? null : result.getTotalCount());
+        return result;
     }
 
     @Override
     public PagedDataDto getPagedSourceSideTransactions(
             SideTransactionsRequestDto sideTransactionsRequestDto,
             PagingDto pagingDto)  {
+        log.info("BehdadAccountService.getPagedSourceSideTransactions - sideTransactionsRequestDto: {}, pagingDto: {}",
+                sideTransactionsRequestDto, pagingDto);
 /*        SideTransactionsRequest sideTransactionsRequest = sideTransactionsRequestMapper.toSideTransactionsRequest(sideTransactionsRequestDto);
         Paging paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
@@ -294,11 +330,16 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordIsNotStrongException();
         }
         return pagedDataMapper.toPagedDataDto(pagedData);*/
-        return null;
+        PagedDataDto result = null;
+        log.info("BehdadAccountService.getPagedSourceSideTransactions - resultSize: {}, totalElements: {}",
+                result == null || result.getCurrentPageData() == null ? null : result.getCurrentPageData().size(),
+                result == null ? null : result.getTotalCount());
+        return result;
     }
 
     @Override
     public PagedDataDto getPendingTransactions(String accountNumber, PagingDto pagingDto)  {
+        log.info("BehdadAccountService.getPendingTransactions - accountNumber: {}, pagingDto: {}", accountNumber, pagingDto);
  /*       Paging paging = getPagingFromPagingDto(pagingDto);
         PagedData pagedData = null;
         try {
@@ -313,11 +354,16 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new UserTemporarilySuspendedException();
         }
         return pagedDataMapper.toPagedDataDto(pagedData);*/
-        return null;
+        PagedDataDto result = null;
+        log.info("BehdadAccountService.getPendingTransactions - resultSize: {}, totalElements: {}",
+                result == null || result.getCurrentPageData() == null ? null : result.getCurrentPageData().size(),
+                result == null ? null : result.getTotalCount());
+        return result;
     }
 
     @Override
     public List<AccountTransactionInfoDto> getSourceSideTransactions(String accountNumber, long transactionId)  {
+        log.info("BehdadAccountService.getSourceSideTransactions - accountNumber: {}, transactionId: {}", accountNumber, transactionId);
 /*        List<AccountTransactionInfo> accountTransactionInfos = null;
         try {
             accountTransactionInfos = accountServiceBehdad
@@ -342,11 +388,14 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
             throw new PasswordIsNotStrongException();
         }
         return accountTransactionInfoMapper.toAccountTransactionInfoDtos(accountTransactionInfos);*/
-        return null;
+        List<AccountTransactionInfoDto> result = null;
+        log.info("BehdadAccountService.getSourceSideTransactions - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public void setAccountControlType(AccountControlCreateModelDto accountControlCreateModelDto)  {
+        log.info("BehdadAccountService.setAccountControlType - accountControlCreateModelDto: {}", accountControlCreateModelDto);
 /*        AccountControlCreateModel accountControlCreateModel = accountControlCreateModelMapper.toAccountControlCreateModel(accountControlCreateModelDto);
         try {
             accountServiceBehdad.setAccountControlType(credentialAccount, accountControlCreateModel);
@@ -365,6 +414,7 @@ public class BehdadAccountServiceImpl implements BehdadAccountService {
         } catch (PasswordIsNotStrongException_Exception e) {
             throw new PasswordIsNotStrongException();
         }*/
+        log.info("BehdadAccountService.setAccountControlType - completed");
     }
 
 /*    private Paging getPagingFromPagingDto(PagingDto pagingDto) {

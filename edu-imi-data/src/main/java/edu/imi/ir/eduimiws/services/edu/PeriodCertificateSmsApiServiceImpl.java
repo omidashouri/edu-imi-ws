@@ -43,6 +43,8 @@ public class PeriodCertificateSmsApiServiceImpl implements PeriodCertificateSmsA
                                                                            String registerFinalStatus,
                                                                            String registerType,
                                                                            Long registerFinancialStatus) {
+        log.info("PeriodCertificateSmsApiService.queryByPeriodCertificateSmsApi - periodCertificateActivityStatus: {}, registerFinalStatus: {}, registerType: {}, registerFinancialStatus: {}",
+                periodCertificateActivityStatus, registerFinalStatus, registerType, registerFinancialStatus);
         List<PeriodCertificateSmsApiProjection> periodCertificateSmsApiProjections = periodCertificateSmsApiRepository
                 .queryByPeriodCertificateSmsApi(periodCertificateActivityStatus,
                         registerFinalStatus,
@@ -95,31 +97,41 @@ public class PeriodCertificateSmsApiServiceImpl implements PeriodCertificateSmsA
             farapayamakReturnedSendSmsDtos.add(farapayamakReturnedSendSmsDto);
         });
 
-        return periodCertificateSmsApiProjectionMapper
+        List<PeriodCertificateSmsApiDto> result = periodCertificateSmsApiProjectionMapper
                 .toPeriodCertificateSmsApiProjectionDtos(periodCertificateSmsApiProjections, new CycleAvoidingMappingContext());
+        log.info("PeriodCertificateSmsApiService.queryByPeriodCertificateSmsApi - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public Map<String, List<PeriodCertificateSmsApiDto>> mapPeriodCertificateSmsApiByRegisterType
             (List<PeriodCertificateSmsApiDto> periodCertificateSmsApiDtos) {
-        Map<String, List<PeriodCertificateSmsApiDto>> mapPeriodCertificateSmsApiDtoByRegisterType = periodCertificateSmsApiDtos
+        log.info("PeriodCertificateSmsApiService.mapPeriodCertificateSmsApiByRegisterType - periodCertificateSmsApiDtos: {}", periodCertificateSmsApiDtos);
+        Map<String, List<PeriodCertificateSmsApiDto>> result = periodCertificateSmsApiDtos
                 .stream()
                 .filter(pcs -> Objects.nonNull(pcs.getRegisterType()))
                 .collect(Collectors.groupingBy(
                         PeriodCertificateSmsApiDto::getRegisterType,
                         Collectors.mapping(Function.identity(),
                                 Collectors.toList())));
-        return mapPeriodCertificateSmsApiDtoByRegisterType;
+        log.info("PeriodCertificateSmsApiService.mapPeriodCertificateSmsApiByRegisterType - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<FarapayamakSendSmsDto> findPeriodCertificateReadyToSendByPcsaId(List<Long> periodCertificateSmsApiIds) {
-        return null;
+        log.info("PeriodCertificateSmsApiService.findPeriodCertificateReadyToSendByPcsaId - periodCertificateSmsApiIds: {}", periodCertificateSmsApiIds);
+        List<FarapayamakSendSmsDto> result = null;
+        log.info("PeriodCertificateSmsApiService.findPeriodCertificateReadyToSendByPcsaId - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<FarapayamakSendSmsDto> periodCertificateSendSmsApiToPersonalStudent(List<PeriodCertificateSmsApiDto> periodCertificateSmsApiDtos) {
-        return null;
+        log.info("PeriodCertificateSmsApiService.periodCertificateSendSmsApiToPersonalStudent - periodCertificateSmsApiDtos: {}", periodCertificateSmsApiDtos);
+        List<FarapayamakSendSmsDto> result = null;
+        log.info("PeriodCertificateSmsApiService.periodCertificateSendSmsApiToPersonalStudent - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
 

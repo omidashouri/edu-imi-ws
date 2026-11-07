@@ -21,23 +21,30 @@ public class PeriodCourseServiceImpl implements PeriodCourseService {
 
     @Override
     public Page<PeriodCourseEntity> findAllByPageable(Pageable pageable) {
-        Page<PeriodCourseEntity> periodCoursePages = periodCourseRepository
+        log.info("PeriodCourseService.findAllByPageable - pageable: {}", pageable);
+        Page<PeriodCourseEntity> result = periodCourseRepository
                 .findAllBy(pageable);
-        return periodCoursePages;
+        log.info("PeriodCourseService.findAllByPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public PeriodCourseEntity findByPeriodCoursePublicId(String periodCoursePublicId) {
-        PeriodCourseEntity periodCourse = periodCourseRepository
+        log.info("PeriodCourseService.findByPeriodCoursePublicId - periodCoursePublicId: {}", periodCoursePublicId);
+        PeriodCourseEntity result = periodCourseRepository
                 .findByPeriodCourseApi_PeriodCoursePublicId(periodCoursePublicId);
-        return periodCourse;
+        log.info("PeriodCourseService.findByPeriodCoursePublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public List<PeriodCourseEntity> findAllByPeriodIdAndPeriodType(Long periodId, String periodType) {
-        List<PeriodCourseEntity> periodCourses = periodCourseRepository
+        log.info("PeriodCourseService.findAllByPeriodIdAndPeriodType - periodId: {}, periodType: {}", periodId, periodType);
+        List<PeriodCourseEntity> result = periodCourseRepository
                 .findAllByPeriod_IdAndPeriod_Type(periodId, periodType);
-        return periodCourses;
+        log.info("PeriodCourseService.findAllByPeriodIdAndPeriodType - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 }
-

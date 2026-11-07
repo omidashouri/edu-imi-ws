@@ -50,17 +50,30 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
 
     @Override
     public Page<PaymentCodeApiEntity> findAll(Pageable pageable) {
-        return paymentCodeRepository.findAll(pageable);
+        log.info("PaymentCodeService.findAll - pageable: {}", pageable);
+        Page<PaymentCodeApiEntity> result = paymentCodeRepository.findAll(pageable);
+        log.info("PaymentCodeService.findAll - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public Page<PaymentCodeApiEntity> findAllByPaymentCodeContaining(String paymentCode, Pageable pageable) {
-        return paymentCodeRepository.findAllByPaymentCodeContaining(paymentCode, pageable);
+        log.info("PaymentCodeService.findAllByPaymentCodeContaining - paymentCode: {}, pageable: {}", paymentCode, pageable);
+        Page<PaymentCodeApiEntity> result = paymentCodeRepository.findAllByPaymentCodeContaining(paymentCode, pageable);
+        log.info("PaymentCodeService.findAllByPaymentCodeContaining - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public PaymentCodeApiEntity findByPaymentCodePublicId(String paymentCodePublicId) {
-        return paymentCodeRepository.findByPaymentCodePublicId(paymentCodePublicId);
+        log.info("PaymentCodeService.findByPaymentCodePublicId - paymentCodePublicId: {}", paymentCodePublicId);
+        PaymentCodeApiEntity result = paymentCodeRepository.findByPaymentCodePublicId(paymentCodePublicId);
+        log.info("PaymentCodeService.findByPaymentCodePublicId - result: {}", result);
+        return result;
     }
 
     @Override
@@ -68,6 +81,12 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
                                                                                                    ProjectEntity project,
                                                                                                    ExpenseCodeApiEntity expenseCodeApi,
                                                                                                    String bankTwoDigitPaymentCode) {
+        log.info("PaymentCodeService.generatePaymentCodeByNationalCodeProjectEntityAndPaymentCodeEntity - nationalCode: {}, projectId: {}, expenseCode: {}, bankTwoDigitPaymentCode: {}",
+                nationalCode,
+                project != null ? project.getId() : null,
+                expenseCodeApi != null ? expenseCodeApi.getExpenseCode() : null,
+                bankTwoDigitPaymentCode);
+
         this.checkAllInputCodesForPaymentCode(nationalCode,
                 String.valueOf(expenseCodeApi.getExpenseCode()), project.getProjectCode(), bankTwoDigitPaymentCode);
 
@@ -85,11 +104,18 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         newPaymentCodeApi.setExpenseCodeApi(expenseCodeApi);
         newPaymentCodeApi.setCreator(this.getPersonFromContext());
 
+        log.info("PaymentCodeService.generatePaymentCodeByNationalCodeProjectEntityAndPaymentCodeEntity - result: paymentCodePublicId={}, paymentCode={}, projectCode={}, expenseCode={}",
+                newPaymentCodeApi.getPaymentCodePublicId(), newPaymentCodeApi.getPaymentCode(),
+                newPaymentCodeApi.getProjectCode(), newPaymentCodeApi.getExpenseCode());
         return newPaymentCodeApi;
     }
 
     @Override
     public PaymentCodeApiEntity generatePaymentCodeAndPublicId(PaymentCodeApiEntity paymentCodeApi) {
+        log.info("PaymentCodeService.generatePaymentCodeAndPublicId - paymentCodePublicId: {}, nationalCode: {}, projectCode: {}",
+                paymentCodeApi != null ? paymentCodeApi.getPaymentCodePublicId() : null,
+                paymentCodeApi != null ? paymentCodeApi.getNationalCode() : null,
+                paymentCodeApi != null ? paymentCodeApi.getProjectCode() : null);
 
         String paymentCode = this.concatenateAllEntityInputsForPaymentCode(paymentCodeApi.getNationalCode(),
                 paymentCodeApi.getProject(), paymentCodeApi.getExpenseCodeApi(),
@@ -98,16 +124,27 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         paymentCodeApi.setPaymentCode(paymentCode);
         paymentCodeApi.setPaymentCodePublicId(this.generatePublicId());
         paymentCodeApi.setCreateDateTs(dateConvertor.getCurrentTimeStampWithZoneIdTehran());
+        log.info("PaymentCodeService.generatePaymentCodeAndPublicId - result: paymentCodePublicId={}, paymentCode={}",
+                paymentCodeApi.getPaymentCodePublicId(), paymentCodeApi.getPaymentCode());
         return paymentCodeApi;
     }
 
     @Override
     public PaymentCodeApiEntity save(PaymentCodeApiEntity paymentCodeApiEntity) {
+        log.info("PaymentCodeService.save - paymentCodePublicId: {}, paymentCode: {}, nationalCode: {}",
+                paymentCodeApiEntity != null ? paymentCodeApiEntity.getPaymentCodePublicId() : null,
+                paymentCodeApiEntity != null ? paymentCodeApiEntity.getPaymentCode() : null,
+                paymentCodeApiEntity != null ? paymentCodeApiEntity.getNationalCode() : null);
 
         PersonEntity creatorPerson = ((MyPrincipleUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         paymentCodeApiEntity.setCreator(creatorPerson);
 
-        return paymentCodeRepository.save(paymentCodeApiEntity);
+        PaymentCodeApiEntity result = paymentCodeRepository.save(paymentCodeApiEntity);
+        log.info("PaymentCodeService.save - result: id={}, paymentCodePublicId={}, paymentCode={}",
+                result != null ? result.getId() : null,
+                result != null ? result.getPaymentCodePublicId() : null,
+                result != null ? result.getPaymentCode() : null);
+        return result;
     }
 
     @Override
@@ -115,6 +152,8 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
                                                      String expenseCode,
                                                      String projectCode,
                                                      String bankTwoDigitPaymentCode) {
+        log.info("PaymentCodeService.concatenateAllInputsForPaymentCode - nationalCode: {}, expenseCode: {}, projectCode: {}, bankTwoDigitPaymentCode: {}",
+                nationalCode, expenseCode, projectCode, bankTwoDigitPaymentCode);
 
         String nationalEconomicCode = nationalCode;
 
@@ -132,6 +171,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         if (!checkStringByLength.test(paymentCode, 17))
             throw new NotAcceptableException("expense code is not acceptable");
 
+        log.info("PaymentCodeService.concatenateAllInputsForPaymentCode - result: {}", paymentCode);
         return paymentCode;
     }
 
@@ -140,6 +180,8 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
                                                  String expenseCode,
                                                  String projectCode,
                                                  String bankTwoDigitPaymentCode) {
+        log.info("PaymentCodeService.checkAllInputCodesForPaymentCode - nationalCode: {}, expenseCode: {}, projectCode: {}, bankTwoDigitPaymentCode: {}",
+                nationalCode, expenseCode, projectCode, bankTwoDigitPaymentCode);
 
         if (checkStringIsNull.test(nationalCode))
             throw new NotAcceptableException("national code is null");
@@ -159,10 +201,18 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
         if (!checkStringByLength.test(projectCode, 8))
             throw new NotAcceptableException("project code length is not acceptable");
 
+        log.info("PaymentCodeService.checkAllInputCodesForPaymentCode - completed");
     }
 
     @Override
     public void validatePaymentCodeRequestNullInputs(PaymentCodeRequest paymentCodeRequest) {
+        log.info("PaymentCodeService.validatePaymentCodeRequestNullInputs - nationalCode: {}, projectPublicId: {}, bankApiPublicId: {}, payerContactPublicId: {}, accountPublicId: {}",
+                paymentCodeRequest != null ? paymentCodeRequest.getNationalCode() : null,
+                paymentCodeRequest != null ? paymentCodeRequest.getProjectPublicId() : null,
+                paymentCodeRequest != null ? paymentCodeRequest.getBankApiPublicId() : null,
+                paymentCodeRequest != null ? paymentCodeRequest.getPayerContactPublicId() : null,
+                paymentCodeRequest != null ? paymentCodeRequest.getAccountPublicId() : null);
+
         if (isInputNullOrEqualString().test(paymentCodeRequest.getNationalCode()))
             throw new NotAcceptableException("national/economic code is null");
         if (isInputNullOrEqualString().test(paymentCodeRequest.getProjectPublicId()))
@@ -182,10 +232,16 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
                 && isInputNullOrEqualString().test(paymentCodeRequest.getAccountPublicId())) {
             throw new NotAcceptableException("contactPublicId or accountPublicId should have value");
         }
+        log.info("PaymentCodeService.validatePaymentCodeRequestNullInputs - completed");
     }
 
     @Override
     public void validatePaymentCodeApiDtoNulls(PaymentCodeApiDto paymentCodeApiDto) {
+        log.info("PaymentCodeService.validatePaymentCodeApiDtoNulls - paymentCodePublicId: {}, nationalCode: {}, paymentCode: {}",
+                paymentCodeApiDto != null ? paymentCodeApiDto.getPaymentCodePublicId() : null,
+                paymentCodeApiDto != null ? paymentCodeApiDto.getNationalCode() : null,
+                paymentCodeApiDto != null ? paymentCodeApiDto.getPaymentCode() : null);
+
         if (isNull().test(paymentCodeApiDto.getBankApi())) {
             paymentCodeApiDto.setBankApi(this.findBankApiDtoByBunkPublicId());
         }
@@ -199,6 +255,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
 
         if (isNull().test(paymentCodeApiDto.getPayerContact()) && isNull().test(paymentCodeApiDto.getAccount()))
             throw new NotFoundException("contact or account Not Found");
+        log.info("PaymentCodeService.validatePaymentCodeApiDtoNulls - completed");
     }
 
     protected Predicate<String> checkStringIsNull =
@@ -250,6 +307,7 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
 
     @Override
     public Page<PaymentCodeApiProjection> queryAllPaymentCodeProjection(Map<String, String> queryParams) {
+        log.info("PaymentCodeService.queryAllPaymentCodeProjection - queryParams: {}", queryParams);
 
         String paymentCode, requestDescription, nationalCode,
                 expenseCode, expenseTitle, projectCode, projectName,
@@ -269,11 +327,15 @@ public class PaymentCodeServiceImpl implements PaymentCodeService {
 
         Pageable pageable = convertorUtil.getPageableFromQueryParam(queryParams, "nationalCode");
 
-        return paymentCodeRepository.queryAllPaymentCodeApiProjection(paymentCode, requestDescription,
+        Page<PaymentCodeApiProjection> result = paymentCodeRepository.queryAllPaymentCodeApiProjection(paymentCode, requestDescription,
                 nationalCode, expenseCode, expenseTitle,
                 projectCode, projectName,
                 payerContactMobilePhone, payerContactFullName, economicalCode,
                 accountName, pageable);
+        log.info("PaymentCodeService.queryAllPaymentCodeProjection - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
 }

@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.services;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.security.SecureRandom;
 
 @Service
+@Slf4j
 public class SwaggerCaptchaServiceImpl implements SwaggerCaptchaService {
 
     private static final String SESSION_KEY = "SWAGGER_CAPTCHA_CODE";
@@ -26,19 +28,32 @@ public class SwaggerCaptchaServiceImpl implements SwaggerCaptchaService {
 
     @Override
     public byte[] createCaptchaPng(HttpSession session) throws IOException {
+        log.info("SwaggerCaptchaService.createCaptchaPng - sessionId: {}",
+                session != null ? session.getId() : null);
+
         String code = randomCode();
         session.setAttribute(SESSION_KEY, code);
-        return toPng(drawImage(code));
+        byte[] result = toPng(drawImage(code));
+        log.info("SwaggerCaptchaService.createCaptchaPng - resultSize: {}",
+                result != null ? result.length : 0);
+        return result;
     }
 
     @Override
     public boolean validateAndClear(HttpSession session, String submitted) {
+        log.info("SwaggerCaptchaService.validateAndClear - sessionId: {}, submitted: [REDACTED]",
+                session != null ? session.getId() : null);
+
         Object stored = session.getAttribute(SESSION_KEY);
         session.removeAttribute(SESSION_KEY);
+        boolean result;
         if (stored == null || submitted == null || submitted.isBlank()) {
-            return false;
+            result = false;
+        } else {
+            result = stored.toString().equalsIgnoreCase(submitted.trim());
         }
-        return stored.toString().equalsIgnoreCase(submitted.trim());
+        log.info("SwaggerCaptchaService.validateAndClear - result: {}", result);
+        return result;
     }
 
     private String randomCode() {

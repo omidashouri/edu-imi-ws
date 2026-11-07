@@ -39,6 +39,7 @@ public class PersonApiServiceImpl implements PersonApiService {
 
     @Override
     public List<PersonApiEntity> findAllListByPageAndSize(int page, int size) {
+        log.info("PersonApiService.findAllListByPageAndSize - page: {}, size: {}", page, size);
 
         if (page > 0) {
             page--;
@@ -47,11 +48,14 @@ public class PersonApiServiceImpl implements PersonApiService {
 
         Page<PersonApiEntity> pagedResult = personApiRepository.findAll(pageable);
 
+        List<PersonApiEntity> result;
         if (pagedResult.hasContent()) {
-            return pagedResult.getContent();
+            result = pagedResult.getContent();
         } else {
-            return new ArrayList<PersonApiEntity>();
+            result = new ArrayList<PersonApiEntity>();
         }
+        log.info("PersonApiService.findAllListByPageAndSize - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 //NU
 /*    @Override
@@ -69,14 +73,19 @@ public class PersonApiServiceImpl implements PersonApiService {
 
     @Override
     public PersonApiEntity findByPersonId(Long personId) {
+        log.info("PersonApiService.findByPersonId - personId: {}", personId);
 
         PersonApiEntity personApiEntity = personApiRepository.findByPersonId(personId);
+        log.info("PersonApiService.findByPersonId - result: {}", personApiEntity);
         return personApiEntity;
     }
 
     @Override
     public String findPersonPublicIdByPersonId(Long personId) {
-        return this.findByPersonId(personId).getPersonPublicId();
+        log.info("PersonApiService.findPersonPublicIdByPersonId - personId: {}", personId);
+        String result = this.findByPersonId(personId).getPersonPublicId();
+        log.info("PersonApiService.findPersonPublicIdByPersonId - result: {}", result);
+        return result;
     }
 //NU
 /*    @Override
@@ -86,27 +95,36 @@ public class PersonApiServiceImpl implements PersonApiService {
 
     @Override
     public PersonApiEntity findByUserNameFast(String userName) {
+        log.info("PersonApiService.findByUserNameFast - userName: {}", userName);
         PersonApiEntity personApiEntity = personApiRepository.findByUserName(userName);
+        log.info("PersonApiService.findByUserNameFast - result: {}", personApiEntity);
         return personApiEntity;
     }
 
     @Override
     public PersonApiEntity findPersonApiEntityByUserPublicId(String userPublicId) {
+        log.info("PersonApiService.findPersonApiEntityByUserPublicId - userPublicId: {}", userPublicId);
         PersonApiEntity userWS = personApiRepository.findByPersonPublicId(userPublicId);
         if (null == userWS) {
             throw new UsernameNotFoundException("user can not found for " + userPublicId);
         }
 
+        log.info("PersonApiService.findPersonApiEntityByUserPublicId - result: {}", userWS);
         return userWS;
     }
 
     @Override
     public PersonApiEntity savePersonApiEntity(PersonApiEntity personApiEntity) {
-        return personApiRepository.save(personApiEntity);
+        log.info("PersonApiService.savePersonApiEntity - personApiEntity: {}", personApiEntity);
+        PersonApiEntity result = personApiRepository.save(personApiEntity);
+        log.info("PersonApiService.savePersonApiEntity - result: {}", result);
+        return result;
     }
 
     @Override
     public PersonApiEntity savePersonApiByPublicPersonIdAndPublicContactIdAndPersonEntity(String publicPersonId, String publicContactId, PersonEntity personEntity) {
+        log.info("PersonApiService.savePersonApiByPublicPersonIdAndPublicContactIdAndPersonEntity - publicPersonId: {}, publicContactId: {}, personEntity: {}",
+                publicPersonId, publicContactId, personEntity);
         PersonApiEntity newPersonWebService = new PersonApiEntity();
         newPersonWebService.setContactId(personEntity.getContactId());
         newPersonWebService.setContact(personEntity.getContact());
@@ -117,17 +135,22 @@ public class PersonApiServiceImpl implements PersonApiService {
         newPersonWebService.setEncryptedPassword(personEntity.getPassword());
         newPersonWebService.setCreator(personEntity);
 //        newPersonWebService.setCreateDateTs(new Timestamp(new Date().getTime()));
-        return personApiRepository.save(newPersonWebService);
+        PersonApiEntity result = personApiRepository.save(newPersonWebService);
+        log.info("PersonApiService.savePersonApiByPublicPersonIdAndPublicContactIdAndPersonEntity - result: {}", result);
+        return result;
     }
 
     @Override
     public PersonApiEntity findByPersonPublicIdWithPersonAndRole(String userPublicId) {
+        log.info("PersonApiService.findByPersonPublicIdWithPersonAndRole - userPublicId: {}", userPublicId);
         PersonApiEntity personApi = personApiRepository.readByPersonPublicId(userPublicId);
+        log.info("PersonApiService.findByPersonPublicIdWithPersonAndRole - result: {}", personApi);
         return personApi;
     }
 
     @Override
     public List<PersonApiEntity> findAllPersonApiIdProjection() {
+        log.info("PersonApiService.findAllPersonApiIdProjection - start");
 
         List<PersonApiIdProjection> personApiIdProjections =
                 personApiRepository.findAllPersonApiIdProjection();
@@ -136,21 +159,31 @@ public class PersonApiServiceImpl implements PersonApiService {
                 personApiIdProjectionMapper
                         .toPersonWebServiceEntitys(personApiIdProjections,
                                 new CycleAvoidingMappingContext());
+        log.info("PersonApiService.findAllPersonApiIdProjection - resultSize: {}",
+                personWebServiceEntities == null ? null : personWebServiceEntities.size());
         return personWebServiceEntities;
     }
 
     @Override
     public Long personApiCount() {
-        return personApiRepository.count();
+        log.info("PersonApiService.personApiCount - start");
+        Long result = personApiRepository.count();
+        log.info("PersonApiService.personApiCount - result: {}", result);
+        return result;
     }
 
     @Override
     public PersonApiEntity selectLastRecord() {
-        return personApiRepository.findFirstByOrderByIdDesc();
+        log.info("PersonApiService.selectLastRecord - start");
+        PersonApiEntity result = personApiRepository.findFirstByOrderByIdDesc();
+        log.info("PersonApiService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public List<PersonApiEntity> generatePersonApiPublicId(List<PersonEntity> newPersons) {
+        log.info("PersonApiService.generatePersonApiPublicId - newPersonsSize: {}",
+                newPersons == null ? null : newPersons.size());
         List<PersonApiEntity> newPersonApies = new ArrayList<>();
 
         newPersons
@@ -196,19 +229,26 @@ public class PersonApiServiceImpl implements PersonApiService {
                 .stream(savedIterablePersonWebService.spliterator(), false)
                 .collect(Collectors.toCollection(ArrayList::new));
 
+        log.info("PersonApiService.generatePersonApiPublicId - resultSize: {}",
+                savedPersonApies == null ? null : savedPersonApies.size());
         return savedPersonApies;
     }
 
     @Override
     public List<PersonApiEntity> findAllByPersonIdIn(List<Long> personIds) {
+        log.info("PersonApiService.findAllByPersonIdIn - personIds: {}", personIds);
         List<PersonApiEntity> personApis = personApiRepository
                 .findAllByPersonIdIn(personIds);
+        log.info("PersonApiService.findAllByPersonIdIn - resultSize: {}", personApis == null ? null : personApis.size());
         return personApis;
     }
 
     @Override
     public PersonApiEntity updateByPersonApiAndRoleName(PersonApiEntity personApi, Collection<String> rolePublicIds) {
-        return personRoleApiService.replaceRoles(personApi, rolePublicIds);
+        log.info("PersonApiService.updateByPersonApiAndRoleName - personApi: {}, rolePublicIds: {}", personApi, rolePublicIds);
+        PersonApiEntity result = personRoleApiService.replaceRoles(personApi, rolePublicIds);
+        log.info("PersonApiService.updateByPersonApiAndRoleName - result: {}", result);
+        return result;
     }
 
     private String generateUniquePersonWebServicePublicId() {

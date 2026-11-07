@@ -32,87 +32,122 @@ public class RegisterServiceImpl implements RegisterService{
 
     @Override
     public Long countRegisterByIdLessThanEqual(Long registerId) {
-        Long registerCount = registerRepository.countByIdLessThanEqual(registerId);
-        return registerCount;
+        log.info("RegisterService.countRegisterByIdLessThanEqual - registerId: {}", registerId);
+        Long result = registerRepository.countByIdLessThanEqual(registerId);
+        log.info("RegisterService.countRegisterByIdLessThanEqual - result: {}", result);
+        return result;
     }
 
     @Override
     public RegisterEntity selectLastRecord() {
-        return registerRepository.findFirstByOrderByIdDesc();
+        log.info("RegisterService.selectLastRecord - start");
+        RegisterEntity result = registerRepository.findFirstByOrderByIdDesc();
+        log.info("RegisterService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public RegisterEntity saveNewRegister(RegisterEntity newRegister) {
-        return registerRepository.save(newRegister);
+        log.info("RegisterService.saveNewRegister - newRegister: {}", newRegister);
+        RegisterEntity result = registerRepository.save(newRegister);
+        log.info("RegisterService.saveNewRegister - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<RegisterEntity> findAllByOrderPageable(Pageable pageable) {
-        Page<RegisterEntity> registerPages = registerRepository
+        log.info("RegisterService.findAllByOrderPageable - pageable: {}", pageable);
+        Page<RegisterEntity> result = registerRepository
                 .findAllByDeleteStatusIsNotNull(pageable);
-        return registerPages;
+        log.info("RegisterService.findAllByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public List<RegisterEntity> findAllByDeleteStatusIsNotNull() {
-        return registerRepository.findAllByDeleteStatusIsNotNull();
+        log.info("RegisterService.findAllByDeleteStatusIsNotNull - start");
+        List<RegisterEntity> result = registerRepository.findAllByDeleteStatusIsNotNull();
+        log.info("RegisterService.findAllByDeleteStatusIsNotNull - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Async("asyncExecutor")
     @Override
     public CompletableFuture<List<RegisterEntity>> findAllByDeleteStatusIsNotNullThread() throws ExecutionException, InterruptedException {
+        log.info("RegisterService.findAllByDeleteStatusIsNotNullThread - start");
         System.out.println(" >>> is currently running in " + Thread.currentThread().getName());
 //        final  List<RegisterEntity> registers = registerRepository.findAllByDeleteStatusIsNotNull();
-        return  CompletableFuture.completedFuture(registerRepository.findAllByDeleteStatusIsNotNull());
+        CompletableFuture<List<RegisterEntity>> result = CompletableFuture.completedFuture(registerRepository.findAllByDeleteStatusIsNotNull());
+        log.info("RegisterService.findAllByDeleteStatusIsNotNullThread - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<RegisterEntity> findAllWithStudentPeriodNameByOrderPageable(Pageable pageable) {
-        Page<RegisterEntity> registerPages = registerRepository
+        log.info("RegisterService.findAllWithStudentPeriodNameByOrderPageable - pageable: {}", pageable);
+        Page<RegisterEntity> result = registerRepository
                 .readAllByDeleteStatusIsNotNull(pageable);
-        return registerPages;
+        log.info("RegisterService.findAllWithStudentPeriodNameByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public RegisterEntity findByRegisterPublicId(String registerPublicId) {
-        RegisterEntity register = registerRepository
+        log.info("RegisterService.findByRegisterPublicId - registerPublicId: {}", registerPublicId);
+        RegisterEntity result = registerRepository
                 .findByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(registerPublicId);
-        return register;
+        log.info("RegisterService.findByRegisterPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public RegisterEntity findWithStudentPeriodNameByRegisterPublicId(String registerPublicId) {
-        RegisterEntity register = registerRepository
+        log.info("RegisterService.findWithStudentPeriodNameByRegisterPublicId - registerPublicId: {}", registerPublicId);
+        RegisterEntity result = registerRepository
                 .readByRegisterApi_RegisterPublicIdAndDeleteStatusNotNull(registerPublicId);
-        return register;
+        log.info("RegisterService.findWithStudentPeriodNameByRegisterPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public List<RegisterEntity> findAllRegisterOnlyByIdBetween(Long startId, Long endId) {
+        log.info("RegisterService.findAllRegisterOnlyByIdBetween - startId: {}, endId: {}", startId, endId);
         List<RegisterOnly> allRegisterOnlys = registerRepository.findAllRegisterOnlyByIdBetween(startId,endId);
-        List<RegisterEntity> allRegisters = registerOnlyMapper
+        List<RegisterEntity> result = registerOnlyMapper
                 .toRegisterEntities(allRegisterOnlys, new CycleAvoidingMappingContext());
-        return allRegisters;
+        log.info("RegisterService.findAllRegisterOnlyByIdBetween - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<RegisterEntity> selectAllRegisterOnly() {
+        log.info("RegisterService.selectAllRegisterOnly - start");
         List<RegisterOnly> registerOnlys = registerRepository.findAllRegisterOnly();
         registerOnlys.sort(Comparator.comparing(RegisterOnly::getId));
-        List<RegisterEntity> allRegisters = registerOnlyMapper
+        List<RegisterEntity> result = registerOnlyMapper
                 .toRegisterEntities(registerOnlys, new CycleAvoidingMappingContext());
-        return allRegisters;
+        log.info("RegisterService.selectAllRegisterOnly - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public RegisterEntity findFirstByIdLessThanOrderByIdDesc(Long registerId) {
-        RegisterEntity register = registerRepository
+        log.info("RegisterService.findFirstByIdLessThanOrderByIdDesc - registerId: {}", registerId);
+        RegisterEntity result = registerRepository
                 .findFirstByIdLessThanEqualOrderByIdDesc(registerId);
-        return register;
+        log.info("RegisterService.findFirstByIdLessThanOrderByIdDesc - result: {}", result);
+        return result;
     }
 
     @Override
     public Long selectRegisterLastSequenceNumber() {
-        return registerRepository.selectLastSequenceNumber();
+        log.info("RegisterService.selectRegisterLastSequenceNumber - start");
+        Long result = registerRepository.selectLastSequenceNumber();
+        log.info("RegisterService.selectRegisterLastSequenceNumber - result: {}", result);
+        return result;
     }
 }

@@ -26,6 +26,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendMail(List<String> toEmails, String subject, String message) {
+        log.info("EmailService.sendMail - toEmails: {}, subject: {}, message: {}", toEmails, subject, message);
 
         simpleMailMessage.setFrom("edusupport@imi.ir");
         simpleMailMessage.setTo(toEmails.stream().toArray(String[]::new));
@@ -33,12 +34,16 @@ public class EmailServiceImpl implements EmailService {
         simpleMailMessage.setText(message);
 
         javaMailSender.send(simpleMailMessage);
+        log.info("EmailService.sendMail - completed");
     }
 
     @Override
     public void sendMailWithAttachment(List<String> toEmails, String subject, String message,
                                        String attachmentName, InputStreamSource attachment)
             throws MessagingException, IOException {
+        log.info("EmailService.sendMailWithAttachment - toEmails: {}, subject: {}, message: {}, attachmentName: {}",
+                toEmails, subject, message, attachmentName);
+
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
@@ -49,5 +54,6 @@ public class EmailServiceImpl implements EmailService {
         mimeMessageHelper.setText(message,true);
         mimeMessageHelper.addAttachment(attachmentName,attachment);
         javaMailSender.send(mimeMessage);
+        log.info("EmailService.sendMailWithAttachment - completed");
     }
 }

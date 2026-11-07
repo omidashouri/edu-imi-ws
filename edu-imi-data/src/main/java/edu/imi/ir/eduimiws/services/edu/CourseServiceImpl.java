@@ -19,15 +19,21 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseEntity> findAllByPageable(Pageable pageable) {
-        Page<CourseEntity> coursePages = courseRepository
+        log.info("CourseService.findAllByPageable - pageable: {}", pageable);
+        Page<CourseEntity> result = courseRepository
                 .findAllBy(pageable);
-        return coursePages;
+        log.info("CourseService.findAllByPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public CourseEntity findByCoursePublicId(String coursePublicId) {
-        CourseEntity course = courseRepository
+        log.info("CourseService.findByCoursePublicId - coursePublicId: {}", coursePublicId);
+        CourseEntity result = courseRepository
                 .findByCourseApi_CoursePublicId(coursePublicId);
-        return course;
+        log.info("CourseService.findByCoursePublicId - result: {}", result);
+        return result;
     }
 }

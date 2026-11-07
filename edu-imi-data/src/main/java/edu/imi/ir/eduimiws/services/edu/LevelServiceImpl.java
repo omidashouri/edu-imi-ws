@@ -29,70 +29,91 @@ public class LevelServiceImpl implements LevelService {
 
     @Override
     public Long countLevelByIdLessThanEqual(Long levelId) {
-        Long levelCount = levelRepository.countByIdLessThanEqual(levelId);
-        return levelCount;
+        log.info("LevelService.countLevelByIdLessThanEqual - levelId: {}", levelId);
+        Long result = levelRepository.countByIdLessThanEqual(levelId);
+        log.info("LevelService.countLevelByIdLessThanEqual - result: {}", result);
+        return result;
     }
 
     @Override
     public LevelEntity selectLastRecord() {
-        return levelRepository.findFirstByOrderByIdDesc();
+        log.info("LevelService.selectLastRecord - start");
+        LevelEntity result = levelRepository.findFirstByOrderByIdDesc();
+        log.info("LevelService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<LevelEntity> findAllByOrderPageable(Pageable pageable) {
-        Page<LevelEntity> levelPages = levelRepository
+        log.info("LevelService.findAllByOrderPageable - pageable: {}", pageable);
+        Page<LevelEntity> result = levelRepository
                 .readBy(pageable);
-        return levelPages;
+        log.info("LevelService.findAllByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
 
     }
 
     @Override
     public LevelEntity findByLevelPublicId(String levelPublicId) {
-        LevelEntity level = levelRepository
+        log.info("LevelService.findByLevelPublicId - levelPublicId: {}", levelPublicId);
+        LevelEntity result = levelRepository
                 .findByLevelApi_LevelPublicId(levelPublicId);
-        return level;
+        log.info("LevelService.findByLevelPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public List<LevelEntity> findAllLevelProjectionByIdBetween(Long startId, Long endId) {
+        log.info("LevelService.findAllLevelProjectionByIdBetween - startId: {}, endId: {}", startId, endId);
         List<LevelProjection> allLevelProjections = levelRepository
                 .findAllByIdBetween(startId, endId);
         List<LevelDto> levelDtos = levelProjectionLevelDtoMapper
                 .toLevelDtos(allLevelProjections, new CycleAvoidingMappingContext());
-        List<LevelEntity> allLevels = levelDtoMapper
+        List<LevelEntity> result = levelDtoMapper
                 .toLevelEntities(levelDtos, new CycleAvoidingMappingContext());
-        return allLevels;
+        log.info("LevelService.findAllLevelProjectionByIdBetween - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<LevelEntity> selectAllLevelProjection() {
+        log.info("LevelService.selectAllLevelProjection - start");
         List<LevelProjection> levelProjections = levelRepository
                 .findBy();
         levelProjections.sort(Comparator.comparing(LevelProjection::getId));
         List<LevelDto> levelDtos = levelProjectionLevelDtoMapper
                 .toLevelDtos(levelProjections, new CycleAvoidingMappingContext());
-        List<LevelEntity> allLevels = levelDtoMapper
+        List<LevelEntity> result = levelDtoMapper
                 .toLevelEntities(levelDtos, new CycleAvoidingMappingContext());
-        return allLevels;
+        log.info("LevelService.selectAllLevelProjection - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<LevelEntity> findAllByLevelDescription(String levelDescription) {
-        List<LevelEntity> levels = levelRepository
+        log.info("LevelService.findAllByLevelDescription - levelDescription: {}", levelDescription);
+        List<LevelEntity> result = levelRepository
                 .findAllByDescriptionContains(levelDescription);
-        return levels;
+        log.info("LevelService.findAllByLevelDescription - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public LevelEntity findFirstByIdLessThanOrderByIdDesc(Long levelId) {
-        LevelEntity level = levelRepository
+        log.info("LevelService.findFirstByIdLessThanOrderByIdDesc - levelId: {}", levelId);
+        LevelEntity result = levelRepository
                 .findFirstByIdLessThanEqualOrderByIdDesc(levelId);
-        return level;
+        log.info("LevelService.findFirstByIdLessThanOrderByIdDesc - result: {}", result);
+        return result;
     }
 
     @Override
     public Long selectLevelLastSequenceNumber() {
-        log.info("salam");
-        return levelRepository.selectLastSequenceNumber();
+        log.info("LevelService.selectLevelLastSequenceNumber - start");
+        Long result = levelRepository.selectLastSequenceNumber();
+        log.info("LevelService.selectLevelLastSequenceNumber - result: {}", result);
+        return result;
     }
 }

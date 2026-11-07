@@ -37,118 +37,163 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<ContactFastDto> findContactByNationalCode(String nationalCode) {
+        log.info("ContactService.findContactByNationalCode - nationalCode: {}", nationalCode);
         List<ContactEntity> contactEntities = contactRepository
                 .findContactEntitiesByNationCode(nationalCode);
 
         List<ContactFastDto> contactFastDtos = contactFastDtoMapper
                 .toContactFastDtos(contactEntities, new CycleAvoidingMappingContext());
+        log.info("ContactService.findContactByNationalCode - resultSize: {}",
+                contactFastDtos == null ? null : contactFastDtos.size());
         return contactFastDtos;
     }
 
     @Override
     public Page<ContactFastDto> findContactByNationalCodeForPaymentCode(String nationalCode, Pageable pageable) {
+        log.info("ContactService.findContactByNationalCodeForPaymentCode - nationalCode: {}, pageable: {}",
+                nationalCode, pageable);
         Page<ContactForPaymentCodeProjection> contactForPaymentCodeProjections = contactRepository
                 .queryPageableContactForPaymentCodeProjection(null, null, nationalCode, null,
                         null, null, null, null, null, pageable);
 
-        return contactForPaymentCodeProjections
+        Page<ContactFastDto> result = contactForPaymentCodeProjections
                 .map(contactForPaymentCodeProjectionContactFastDtoMapper::contactForPaymentCodeProjectionToContactFastDto);
+        log.info("ContactService.findContactByNationalCodeForPaymentCode - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public ContactFastDto updateContactForPaymentCode(ContactFastDto newContactFastDto, ContactEntity editableContact) {
+        log.info("ContactService.updateContactForPaymentCode - newContactFastDto: {}, editableContact: {}",
+                newContactFastDto, editableContact);
 
         contactFastDtoMapper.updateContactByContactFactDtoForPaymentCode(newContactFastDto, editableContact);
 
         ContactEntity updatedContact = contactRepository.save(editableContact);
 
-        return contactFastDtoMapper.toContactFastDto(updatedContact, new CycleAvoidingMappingContext());
+        ContactFastDto result = contactFastDtoMapper.toContactFastDto(updatedContact, new CycleAvoidingMappingContext());
+        log.info("ContactService.updateContactForPaymentCode - result: {}", result);
+        return result;
 
     }
 
     @Override
     public ContactFastDto createContactForPaymentCode(ContactFastDto newContactFastDto) {
+        log.info("ContactService.createContactForPaymentCode - newContactFastDto: {}", newContactFastDto);
 
         ContactEntity newContact = contactFastDtoMapper
                 .updateContactByContactFactDtoForPaymentCode(newContactFastDto);
 
         ContactEntity savedContact = contactRepository.save(newContact);
 
-        return contactFastDtoMapper.toContactFastDto(savedContact, new CycleAvoidingMappingContext());
+        ContactFastDto result = contactFastDtoMapper.toContactFastDto(savedContact, new CycleAvoidingMappingContext());
+        log.info("ContactService.createContactForPaymentCode - result: {}", result);
+        return result;
     }
 
     @Override
     public Long getContactNumberByNationalCode(String nationalCode) {
+        log.info("ContactService.getContactNumberByNationalCode - nationalCode: {}", nationalCode);
 
         Long contactCount = contactRepository
                 .countByNationCode(nationalCode);
+        log.info("ContactService.getContactNumberByNationalCode - result: {}", contactCount);
         return contactCount;
     }
 
     @Override
     public Page<ContactEntity> findAllContactEntityPages(Pageable pageable) {
+        log.info("ContactService.findAllContactEntityPages - pageable: {}", pageable);
         Page<ContactEntity> contactPages = contactRepository
                 .findAll(pageable);
+        log.info("ContactService.findAllContactEntityPages - resultSize: {}, totalElements: {}",
+                contactPages == null ? null : contactPages.getNumberOfElements(),
+                contactPages == null ? null : contactPages.getTotalElements());
         return contactPages;
     }
 
     @Override
     public ContactEntity findContactEntityByContactApiPublicId(String contactPublicId) {
+        log.info("ContactService.findContactEntityByContactApiPublicId - contactPublicId: {}", contactPublicId);
         ContactEntity contact = contactRepository
                 .findByContactWebService_ContactPublicId(contactPublicId);
+        log.info("ContactService.findContactEntityByContactApiPublicId - result: {}", contact);
         return contact;
     }
 
     @Override
     public ContactDto findContactDtoByContactApiPublicId(String contactPublicId) {
-        return contactMapper
+        log.info("ContactService.findContactDtoByContactApiPublicId - contactPublicId: {}", contactPublicId);
+        ContactDto result = contactMapper
                 .toContactDto(this.findContactEntityByContactApiPublicId(contactPublicId),
                         new CycleAvoidingMappingContext());
+        log.info("ContactService.findContactDtoByContactApiPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public List<ContactEntity> findCotactsByIds(List<Long> contactIds) {
+        log.info("ContactService.findCotactsByIds - contactIds: {}", contactIds);
         List<ContactEntity> contacts = contactRepository
                 .findByIdIn(contactIds);
+        log.info("ContactService.findCotactsByIds - resultSize: {}", contacts == null ? null : contacts.size());
         return contacts;
     }
 
     @Override
     public ContactFastDto findContactById(Long contactId) {
+        log.info("ContactService.findContactById - contactId: {}", contactId);
         ContactEntity contact = contactRepository.readById(contactId);
         ContactFastDto contactFastDto = Optional.of(contact)
                 .filter(Objects::nonNull)
                 .map(ce -> contactFastDtoMapper.toContactFastDto(ce, new CycleAvoidingMappingContext()))
                 .orElse(new ContactFastDto());
+        log.info("ContactService.findContactById - result: {}", contactFastDto);
         return contactFastDto;
     }
 
     @Override
     public ContactEntity saveContact(ContactEntity newContact) {
-        return contactRepository.save(newContact);
+        log.info("ContactService.saveContact - newContact: {}", newContact);
+        ContactEntity result = contactRepository.save(newContact);
+        log.info("ContactService.saveContact - result: {}", result);
+        return result;
     }
 
     @Override
     public ContactEntity updateContact(ContactFastDto contactFastDto) {
+        log.info("ContactService.updateContact - contactFastDto: {}", contactFastDto);
         ContactEntity contact;
 
-        return null;
+        ContactEntity result = null;
+        log.info("ContactService.updateContact - result: {}", result);
+        return result;
     }
 
     @Override
     public Long countByPredicate(Predicate predicate) {
+        log.info("ContactService.countByPredicate - predicate: {}", predicate);
 //        Object o = contactQueryDslRepository.count(predicate);
 //        Long contactCount = Long.valueOf(contactQueryDslRepository.count(predicate));
 //        return contactCount != null ? contactCount.longValue() : null;
-        return null;
+        Long result = null;
+        log.info("ContactService.countByPredicate - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<ContactEntity> findAllByPredicate(Predicate predicate, Pageable pageable) {
+        log.info("ContactService.findAllByPredicate - predicate: {}, pageable: {}", predicate, pageable);
 //        later check usage
 /*        Page<ContactEntity> contactPages = contactQueryDslRepository.findAll(predicate, pageable);
         return contactPages;*/
-        return null;
+        Page<ContactEntity> result = null;
+        log.info("ContactService.findAllByPredicate - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
 //NU

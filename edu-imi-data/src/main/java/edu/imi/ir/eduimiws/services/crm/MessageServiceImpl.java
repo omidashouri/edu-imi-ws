@@ -27,6 +27,8 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     public List<MessageDto> saveAllMessages(List<MessageDto> messageDtos) {
+        log.info("MessageService.saveAllMessages - messageDtosSize: {}",
+                messageDtos == null ? null : messageDtos.size());
         List<MessageEntity> newMessages = messageMapper
                 .toMessageEntities(messageDtos, new CycleAvoidingMappingContext());
 
@@ -40,24 +42,30 @@ public class MessageServiceImpl implements MessageService{
                 .stream(messageIterable.spliterator(), false)
                 .collect(Collectors.toList());
 
-        return messageMapper.toMessageDtos(savedMessages, new CycleAvoidingMappingContext());
+        List<MessageDto> result = messageMapper.toMessageDtos(savedMessages, new CycleAvoidingMappingContext());
+        log.info("MessageService.saveAllMessages - resultSize: {}", result == null ? null : result.size());
+        return result;
 
     }
 
     @Override
     public MessageDto saveMessage(MessageDto messageDto) {
+        log.info("MessageService.saveMessage - messageDto: {}", messageDto);
         MessageEntity newMessage = messageMapper.toMessageEntity(messageDto, new CycleAvoidingMappingContext());
         newMessage.setUserCreator(securityUtil.getPersonEntityFromSecurityContext());
         MessageEntity savedMessage = messageRepository.save(newMessage);
         MessageDto savedMessageDto = messageMapper.toMessageDto(savedMessage, new CycleAvoidingMappingContext());
+        log.info("MessageService.saveMessage - result: {}", savedMessageDto);
         return savedMessageDto;
     }
 
     @Override
     public MessageDto saveMessageAsync(MessageDto messageDto) {
+        log.info("MessageService.saveMessageAsync - messageDto: {}", messageDto);
         MessageEntity newMessage = messageMapper.toMessageEntity(messageDto, new CycleAvoidingMappingContext());
         MessageEntity savedMessage = messageRepository.save(newMessage);
         MessageDto savedMessageDto = messageMapper.toMessageDto(savedMessage, new CycleAvoidingMappingContext());
+        log.info("MessageService.saveMessageAsync - result: {}", savedMessageDto);
         return savedMessageDto;
     }
 

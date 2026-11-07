@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PersonApiFastDto getUserFastDto(String userName) {
+        log.info("UserService.getUserFastDto - userName: {}", userName);
 
         PersonApiEntity user = personApiService.findByUserNameFast(userName);
 
@@ -51,12 +52,18 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("user name not found for " + userName);
         }
 
-        PersonApiFastDto userFastDto = personApiFastMapper.PersonWebServiceEntityToPersonWebServiceFastDto(user, new CycleAvoidingMappingContext());
-        return userFastDto;
+        PersonApiFastDto result = personApiFastMapper.PersonWebServiceEntityToPersonWebServiceFastDto(user, new CycleAvoidingMappingContext());
+        log.info("UserService.getUserFastDto - result: userName={}, personPublicId={}",
+                result.getUserName(), result.getPersonPublicId());
+        return result;
     }
 
     @Override
     public PersonEntity saveUserByUserFastDto(UserFastDto userFastDto) {
+        log.info("UserService.saveUserByUserFastDto - username: {}, personPublicId: {}",
+                userFastDto != null ? userFastDto.getUsername() : null,
+                userFastDto != null ? userFastDto.getPersonPublicId() : null);
+
         PersonEntity newPerson = userFastDtoSaveMapper
                 .toPersonForSaveFromUserRegister(userFastDto);
 
@@ -91,14 +98,16 @@ public class UserServiceImpl implements UserService {
         ContactEntity savedContact = contactService.saveContact(newContact);
 
         newPerson.setContact(savedContact);
-        PersonEntity savedPerson = personService.savePerson(newPerson);
-
-        return savedPerson;
+        PersonEntity result = personService.savePerson(newPerson);
+        log.info("UserService.saveUserByUserFastDto - result: id={}, username={}",
+                result.getId(), result.getUsername());
+        return result;
     }
 
     @Override
     public List<PersonEntity> generateContactPersonPublicIdByPersons(List<PersonEntity> newPersons) {
-
+        log.info("UserService.generateContactPersonPublicIdByPersons - newPersonsSize: {}",
+                newPersons != null ? newPersons.size() : null);
 
         List<PersonEntity> savedPersons = new ArrayList<>();
         List<PersonEntity> distinctSavedPerson = new ArrayList<>();
@@ -160,11 +169,15 @@ public class UserServiceImpl implements UserService {
             distinctSavedPerson = this.distinctSortPersonsById(savedPersons);
         }
 
+        log.info("UserService.generateContactPersonPublicIdByPersons - resultSize: {}",
+                distinctSavedPerson != null ? distinctSavedPerson.size() : null);
         return distinctSavedPerson;
     }
 
     @Override
     public List<PersonEntity> generatePersonPublicIdByPersons(List<PersonEntity> newPersons) {
+        log.info("UserService.generatePersonPublicIdByPersons - newPersonsSize: {}",
+                newPersons != null ? newPersons.size() : null);
 
         List<Long> personIds = newPersons
                 .stream()
@@ -179,16 +192,20 @@ public class UserServiceImpl implements UserService {
         List<PersonApiEntity> savedPersonApis = personApiService
                 .generatePersonApiPublicId(persons);
 
-        List<PersonEntity> savedPersons = savedPersonApis
+        List<PersonEntity> result = savedPersonApis
                 .stream()
                 .map(PersonApiEntity::getPerson)
                 .collect(Collectors.toList());
 
-        return savedPersons;
+        log.info("UserService.generatePersonPublicIdByPersons - resultSize: {}", result.size());
+        return result;
     }
 
     @Override
     public List<PersonEntity> generateContactPublicIdByPersons(List<PersonEntity> newPersons) {
+        log.info("UserService.generateContactPublicIdByPersons - newPersonsSize: {}",
+                newPersons != null ? newPersons.size() : null);
+
         List<Long> contactIds = newPersons
                 .stream()
                 .filter(Objects::nonNull)
@@ -205,7 +222,7 @@ public class UserServiceImpl implements UserService {
         List<ContactApiEntity> savedContactWebServices = contactApiService
                 .generateContactApiPublicId(newContacts);
 
-        List<PersonEntity> savedPersons =
+        List<PersonEntity> result =
                 savedContactWebServices
                         .stream()
                         .map(p -> p.getContact())
@@ -213,12 +230,14 @@ public class UserServiceImpl implements UserService {
                         .map(ContactEntity::getPersons)
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
-        return savedPersons;
+        log.info("UserService.generateContactPublicIdByPersons - resultSize: {}", result.size());
+        return result;
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("UserService.loadUserByUsername - username: {}", username);
 
 //        check username has public id -> if not generate public ID for contact and person
 
@@ -291,7 +310,9 @@ public class UserServiceImpl implements UserService {
                 true,
                 this.getAuthorities(userWebServiceEntity.getRoles()));*/
 
-        return new MyErpUser(user);
+        UserDetails result = new MyErpUser(user);
+        log.info("UserService.loadUserByUsername - result: username={}", result.getUsername());
+        return result;
     }
 
     private User buildUserForAuthentication(PersonEntity user) {
@@ -322,11 +343,14 @@ public class UserServiceImpl implements UserService {
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(final Collection<RoleApiEntity> roles) {
-        return roles
+        log.info("UserService.getAuthorities - rolesSize: {}", roles != null ? roles.size() : null);
+        Collection<? extends GrantedAuthority> result = roles
                 .stream()
                 .flatMap(role -> role.getPrivileges().stream())
                 .map(p -> new SimpleGrantedAuthority(p.getName()))
                 .collect(Collectors.toList());
+        log.info("UserService.getAuthorities - resultSize: {}", result.size());
+        return result;
     }
 
     private PersonApiEntity savePersonApi(String publicPersonId, String publicContactId, PersonEntity user) {

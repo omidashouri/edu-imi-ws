@@ -29,15 +29,19 @@ public class PersonRoleApiServiceImpl implements PersonRoleApiService {
 
     @Override
     public PersonApiEntity addRoles(PersonApiEntity personApi, Collection<String> rolePublicIds) {
+        log.info("PersonRoleApiService.addRoles - personApi: {}, rolePublicIds: {}", personApi, rolePublicIds);
         Collection<RoleApiEntity> rolesToAdd = resolveRoles(rolePublicIds);
         Map<Long, RoleApiEntity> merged = toRoleMap(personApi.getRoles());
         rolesToAdd.forEach(role -> merged.put(role.getId(), role));
         personApi.setRoles(new ArrayList<>(merged.values()));
-        return personApiRepository.save(personApi);
+        PersonApiEntity result = personApiRepository.save(personApi);
+        log.info("PersonRoleApiService.addRoles - result: {}", result);
+        return result;
     }
 
     @Override
     public PersonApiEntity removeRoles(PersonApiEntity personApi, Collection<String> rolePublicIds) {
+        log.info("PersonRoleApiService.removeRoles - personApi: {}, rolePublicIds: {}", personApi, rolePublicIds);
         Collection<RoleApiEntity> rolesToRemove = resolveRoles(rolePublicIds);
         Set<Long> removeIds = rolesToRemove.stream()
                 .map(RoleApiEntity::getId)
@@ -47,14 +51,19 @@ public class PersonRoleApiServiceImpl implements PersonRoleApiService {
                 .filter(role -> !removeIds.contains(role.getId()))
                 .collect(Collectors.toCollection(ArrayList::new));
         personApi.setRoles(remaining);
-        return personApiRepository.save(personApi);
+        PersonApiEntity result = personApiRepository.save(personApi);
+        log.info("PersonRoleApiService.removeRoles - result: {}", result);
+        return result;
     }
 
     @Override
     public PersonApiEntity replaceRoles(PersonApiEntity personApi, Collection<String> rolePublicIds) {
+        log.info("PersonRoleApiService.replaceRoles - personApi: {}, rolePublicIds: {}", personApi, rolePublicIds);
         Collection<RoleApiEntity> newRoles = resolveRoles(rolePublicIds);
         personApi.setRoles(new ArrayList<>(newRoles));
-        return personApiRepository.save(personApi);
+        PersonApiEntity result = personApiRepository.save(personApi);
+        log.info("PersonRoleApiService.replaceRoles - result: {}", result);
+        return result;
     }
 
     private Collection<RoleApiEntity> resolveRoles(Collection<String> rolePublicIds) {

@@ -21,31 +21,51 @@ public class VoucherListItemsServiceImpl implements VoucherListItemsService{
 
     @Override
     public Page<VoucherListItemsApiEntity> findAllByDeleteStatusIsNull(Pageable pageable) {
-        return voucherListItemsApiRepository.findAllByDeleteDateTsIsNull(pageable);
+        log.info("VoucherListItemsService.findAllByDeleteStatusIsNull - pageable: {}", pageable);
+        Page<VoucherListItemsApiEntity> result = voucherListItemsApiRepository.findAllByDeleteDateTsIsNull(pageable);
+        log.info("VoucherListItemsService.findAllByDeleteStatusIsNull - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public VoucherListItemsApiEntity findByPublicId(String publicId) {
-        return voucherListItemsApiRepository.findByPublicId(publicId);
+        log.info("VoucherListItemsService.findByPublicId - publicId: {}", publicId);
+        VoucherListItemsApiEntity result = voucherListItemsApiRepository.findByPublicId(publicId);
+        log.info("VoucherListItemsService.findByPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public VoucherListItemsApiEntity findLastRecordOrderByCreateDate(){
-        return voucherListItemsApiRepository.findTopByOrderByLastCreateDateMiladiDescIdApiDesc();
+        log.info("VoucherListItemsService.findLastRecordOrderByCreateDate - start");
+        VoucherListItemsApiEntity result = voucherListItemsApiRepository.findTopByOrderByLastCreateDateMiladiDescIdApiDesc();
+        log.info("VoucherListItemsService.findLastRecordOrderByCreateDate - result: {}", result);
+        return result;
     }
 
     @Override
     public VoucherListItemsApiEntity findLastRecordOrderByEditDate() {
-        return voucherListItemsApiRepository.findTopByOrderByLastEditDateMiladiDescIdApiDesc();
+        log.info("VoucherListItemsService.findLastRecordOrderByEditDate - start");
+        VoucherListItemsApiEntity result = voucherListItemsApiRepository.findTopByOrderByLastEditDateMiladiDescIdApiDesc();
+        log.info("VoucherListItemsService.findLastRecordOrderByEditDate - result: {}", result);
+        return result;
     }
 
     @Override
     public VoucherListItemsApiEntity findLastRecordOrderByDeleteDateTs() {
-        return voucherListItemsApiRepository.findTopByDeleteDateTsIsNotNullOrderByDeleteDateTsDescIdApiDesc();
+        log.info("VoucherListItemsService.findLastRecordOrderByDeleteDateTs - start");
+        VoucherListItemsApiEntity result = voucherListItemsApiRepository.findTopByDeleteDateTsIsNotNullOrderByDeleteDateTsDescIdApiDesc();
+        log.info("VoucherListItemsService.findLastRecordOrderByDeleteDateTs - result: {}", result);
+        return result;
     }
 
     @Override
     public List<VoucherListItemsApiEntity> findAllByPublicIdIn(List<String> publicIds) {
-        return voucherListItemsApiRepository.findAllByPublicIdIn(publicIds);
+        log.info("VoucherListItemsService.findAllByPublicIdIn - publicIds: {}", publicIds);
+        List<VoucherListItemsApiEntity> result = voucherListItemsApiRepository.findAllByPublicIdIn(publicIds);
+        log.info("VoucherListItemsService.findAllByPublicIdIn - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 }

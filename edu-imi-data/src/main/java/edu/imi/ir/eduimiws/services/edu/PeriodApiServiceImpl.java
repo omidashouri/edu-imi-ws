@@ -32,12 +32,15 @@ public class PeriodApiServiceImpl implements PeriodApiService {
 
     @Override
     public Long periodApiCount() {
-        return periodApiRepository.count();
+        log.info("PeriodApiService.periodApiCount - start");
+        Long result = periodApiRepository.count();
+        log.info("PeriodApiService.periodApiCount - result: {}", result);
+        return result;
     }
 
     @Override
     public List<PeriodApiEntity> generatePeriodApiPublicId(List<PeriodEntity> newPeriods) {
-
+        log.info("PeriodApiService.generatePeriodApiPublicId - newPeriods: {}", newPeriods);
         List<PeriodApiEntity> newPeriodApis = new ArrayList<>();
         final int chunkSize = 900;
         final AtomicInteger atomicField = new AtomicInteger();
@@ -90,33 +93,40 @@ public class PeriodApiServiceImpl implements PeriodApiService {
                 });
 
         periodApiRepository.saveAll(newPeriodApis);
+        log.info("PeriodApiService.generatePeriodApiPublicId - resultSize: {}", newPeriodApis == null ? null : newPeriodApis.size());
         return newPeriodApis;
     }
 
     @Override
     public List<PeriodApiEntity> findAllByPeriodIdIn(List<Long> periodIds) {
-        List<PeriodApiEntity> periodApis = periodApiRepository
+        log.info("PeriodApiService.findAllByPeriodIdIn - periodIds: {}", periodIds);
+        List<PeriodApiEntity> result = periodApiRepository
                 .findAllByPeriodIdIn(periodIds);
-        return periodApis;
+        log.info("PeriodApiService.findAllByPeriodIdIn - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<PeriodApiEntity> findAllByPeriodIdInAndPeriodPublicIdIsNotNull(List<Long> periodIds) {
-        List<PeriodApiEntity> periodApis = periodApiRepository
+        log.info("PeriodApiService.findAllByPeriodIdInAndPeriodPublicIdIsNotNull - periodIds: {}", periodIds);
+        List<PeriodApiEntity> result = periodApiRepository
                 .findAllByPeriodIdInAndPeriodPublicIdIsNotNull(periodIds);
-        return periodApis;
+        log.info("PeriodApiService.findAllByPeriodIdInAndPeriodPublicIdIsNotNull - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<PeriodApiEntity> findAllPeriodApisByFieldPublicIdIsNull() {
-        List<PeriodApiEntity> periodApis = periodApiRepository
+        log.info("PeriodApiService.findAllPeriodApisByFieldPublicIdIsNull - start");
+        List<PeriodApiEntity> result = periodApiRepository
                 .findAllByFieldPublicIdIsNull();
-        return periodApis;
+        log.info("PeriodApiService.findAllPeriodApisByFieldPublicIdIsNull - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<PeriodApiEntity> updatePeriodApiByFieldPublicId(List<PeriodApiEntity> newPeriodApis) {
-
+        log.info("PeriodApiService.updatePeriodApiByFieldPublicId - newPeriodApis: {}", newPeriodApis);
         final int chunkSize = 900;
         final AtomicInteger atomicPeriod = new AtomicInteger();
 
@@ -207,12 +217,16 @@ public class PeriodApiServiceImpl implements PeriodApiService {
                 });
 
         periodApiRepository.saveAll(newPeriodApis);
+        log.info("PeriodApiService.updatePeriodApiByFieldPublicId - resultSize: {}", newPeriodApis == null ? null : newPeriodApis.size());
         return newPeriodApis;
     }
 
     @Override
     public PeriodApiEntity selectLastRecord() {
-        return periodApiRepository.findFirstByOrderByIdDesc();
+        log.info("PeriodApiService.selectLastRecord - start");
+        PeriodApiEntity result = periodApiRepository.findFirstByOrderByIdDesc();
+        log.info("PeriodApiService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     private String generatePeriodApiPublicId() {

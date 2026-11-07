@@ -39,6 +39,8 @@ public class HamkaranServiceImpl implements HamkaranService {
 
     @Override
     public HamkaranAuthenticationTokenDto getToken(HamkaranAuthenticationTokenDto hamkaranAuthenticationTokenDto) {
+        log.info("HamkaranService.getToken - code: {}, token: [REDACTED]",
+                hamkaranAuthenticationTokenDto != null ? hamkaranAuthenticationTokenDto.getCode() : null);
 
         String completeGetTokenUri = String.format(hamkaranCredential.getApiUriGetToken(),
                 hamkaranAuthenticationTokenDto.getCode());
@@ -54,11 +56,17 @@ public class HamkaranServiceImpl implements HamkaranService {
         hamkaranAuthenticationTokenResponseMapper
                 .updateHamkaranAuthenticationTokenDtoByHamkaranAuthenticationTokenResponse(hamkaranAuthenticationTokenDto, hamkaranAuthenticationTokenResponse);
 
+        log.info("HamkaranService.getToken - result: code={}, success={}, message={}, token=[REDACTED]",
+                hamkaranAuthenticationTokenDto != null ? hamkaranAuthenticationTokenDto.getCode() : null,
+                hamkaranAuthenticationTokenDto != null ? hamkaranAuthenticationTokenDto.getSuccess() : null,
+                hamkaranAuthenticationTokenDto != null ? hamkaranAuthenticationTokenDto.getMessage() : null);
         return hamkaranAuthenticationTokenDto;
     }
 
     @Override
     public HamkaranFinancialResponseDto searchHamkaranFinancialResponseBySearchQuery(HamkaranFinancialResponseDto hamkaranFinancialResponseDto) {
+        log.info("HamkaranService.searchHamkaranFinancialResponseBySearchQuery - searchQuery: {}",
+                hamkaranFinancialResponseDto != null ? hamkaranFinancialResponseDto.getSearchQuery() : null);
 
         HamkaranFinancialResponse hamkaranFinancialResponse;
 
@@ -81,11 +89,14 @@ public class HamkaranServiceImpl implements HamkaranService {
 
         hamkaranFinancialResponseDto.setSearchQuery(searchQuery);
 
+        log.info("HamkaranService.searchHamkaranFinancialResponseBySearchQuery - result: {}", hamkaranFinancialResponseDto);
         return hamkaranFinancialResponseDto;
     }
 
     @Override
     public HamkaranHumanResourceResponseDto searchHamkaranHumanResourceResponseBySearchQuery(HamkaranHumanResourceResponseDto hamkaranHumanResourceResponseDto) {
+        log.info("HamkaranService.searchHamkaranHumanResourceResponseBySearchQuery - searchQuery: {}",
+                hamkaranHumanResourceResponseDto != null ? hamkaranHumanResourceResponseDto.getSearchQuery() : null);
 
         HamkaranHumanResourceResponse hamkaranHumanResourceResponse;
         String searchQuery = hamkaranHumanResourceResponseDto.getSearchQuery();
@@ -107,11 +118,14 @@ public class HamkaranServiceImpl implements HamkaranService {
 
         hamkaranHumanResourceResponseDto.setSearchQuery(searchQuery);
 
+        log.info("HamkaranService.searchHamkaranHumanResourceResponseBySearchQuery - result: {}", hamkaranHumanResourceResponseDto);
         return hamkaranHumanResourceResponseDto;
     }
 
     @Override
     public HamkaranDeletedFinancialResponseDto searchHamkaranDeletedFinancialResponseBySearchQuery(HamkaranDeletedFinancialResponseDto hamkaranDeletedFinancialResponseDto) {
+        log.info("HamkaranService.searchHamkaranDeletedFinancialResponseBySearchQuery - searchQuery: {}",
+                hamkaranDeletedFinancialResponseDto != null ? hamkaranDeletedFinancialResponseDto.getSearchQuery() : null);
 
         HamkaranDeletedFinancialResponse hamkaranDeletedFinancialResponse;
 
@@ -134,6 +148,7 @@ public class HamkaranServiceImpl implements HamkaranService {
 
         hamkaranDeletedFinancialResponseDto.setSearchQuery(searchQuery);
 
+        log.info("HamkaranService.searchHamkaranDeletedFinancialResponseBySearchQuery - result: {}", hamkaranDeletedFinancialResponseDto);
         return hamkaranDeletedFinancialResponseDto;
     }
 

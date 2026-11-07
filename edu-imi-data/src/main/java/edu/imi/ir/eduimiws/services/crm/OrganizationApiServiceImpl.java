@@ -22,17 +22,23 @@ public class OrganizationApiServiceImpl implements OrganizationApiService{
 
     @Override
     public OrganizationApiEntity findByOrganizationPublicId(String organizationPublicId) {
-        return organizationApiRepository
+        log.info("OrganizationApiService.findByOrganizationPublicId - organizationPublicId: {}", organizationPublicId);
+        OrganizationApiEntity result = organizationApiRepository
                 .findByOrganizationPublicId(organizationPublicId)
                 .orElse(new OrganizationApiEntity());
+        log.info("OrganizationApiService.findByOrganizationPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public OrganizationEntity findOrganizationByOrganizationPublicId(String organizationPublicId) {
-        return Optional
+        log.info("OrganizationApiService.findOrganizationByOrganizationPublicId - organizationPublicId: {}", organizationPublicId);
+        OrganizationEntity result = Optional
                 .of(this.findByOrganizationPublicId(organizationPublicId))
                 .filter(Objects::nonNull)
                 .map(OrganizationApiEntity::getOrganization)
                 .orElse(new OrganizationEntity());
+        log.info("OrganizationApiService.findOrganizationByOrganizationPublicId - result: {}", result);
+        return result;
     }
 }

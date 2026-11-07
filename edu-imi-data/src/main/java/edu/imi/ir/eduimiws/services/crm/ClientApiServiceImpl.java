@@ -13,6 +13,7 @@ import edu.imi.ir.eduimiws.repositories.crm.ClientApiRepository;
 import edu.imi.ir.eduimiws.repositories.crm.PersonApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,6 +28,7 @@ import java.util.Date;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ClientApiServiceImpl implements ClientApiService {
 
     private static final Long ENABLED_YES = 1L;
@@ -40,6 +42,12 @@ public class ClientApiServiceImpl implements ClientApiService {
 
     @Override
     public ClientApiDto create(ClientApiCreateRequest request) {
+        log.info("ClientApiService.create - clientId: {}, personPublicId: {}, companyName: {}, description: {}, enabled: {}, clientSecret: [REDACTED]",
+                request != null ? request.getClientId() : null,
+                request != null ? request.getPersonPublicId() : null,
+                request != null ? request.getCompanyName() : null,
+                request != null ? request.getDescription() : null,
+                request != null ? request.getEnabled() : null);
         validateCreateRequest(request);
 
         if (clientApiRepository.existsByClientIdAndDeleteDateTsIsNull(request.getClientId().trim())) {
@@ -69,24 +77,41 @@ public class ClientApiServiceImpl implements ClientApiService {
         dto.setPersonPublicId(personApi.getPersonPublicId());
         dto.setClientSecret(plaintextSecret);
         dto.setClientCredentialsBase64(encodeCredentials(clientId, plaintextSecret));
+        log.info("ClientApiService.create - result: [REDACTED], clientPublicId: {}, clientId: {}, personPublicId: {}",
+                dto.getClientPublicId(), dto.getClientId(), dto.getPersonPublicId());
         return dto;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<ClientApiDto> findAllActive(Pageable pageable) {
-        return clientApiRepository.findAllByDeleteDateTsIsNull(pageable)
+        log.info("ClientApiService.findAllActive - pageable: {}", pageable);
+        Page<ClientApiDto> result = clientApiRepository.findAllByDeleteDateTsIsNull(pageable)
                 .map(clientApiMapper::toClientApiDto);
+        log.info("ClientApiService.findAllActive - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ClientApiDto findByClientPublicId(String clientPublicId) {
-        return clientApiMapper.toClientApiDto(requireActiveClient(clientPublicId));
+        log.info("ClientApiService.findByClientPublicId - clientPublicId: {}", clientPublicId);
+        ClientApiDto result = clientApiMapper.toClientApiDto(requireActiveClient(clientPublicId));
+        log.info("ClientApiService.findByClientPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public ClientApiDto update(String clientPublicId, ClientApiUpdateRequest request) {
+        log.info("ClientApiService.update - clientPublicId: {}, clientId: {}, personPublicId: {}, companyName: {}, description: {}, enabled: {}, clientSecret: [REDACTED]",
+                clientPublicId,
+                request != null ? request.getClientId() : null,
+                request != null ? request.getPersonPublicId() : null,
+                request != null ? request.getCompanyName() : null,
+                request != null ? request.getDescription() : null,
+                request != null ? request.getEnabled() : null);
         if (request == null) {
             throw new BadRequestException("request body is required");
         }
@@ -139,20 +164,26 @@ public class ClientApiServiceImpl implements ClientApiService {
             entity = clientApiRepository.save(entity);
         }
 
-        return clientApiMapper.toClientApiDto(entity);
+        ClientApiDto result = clientApiMapper.toClientApiDto(entity);
+        log.info("ClientApiService.update - result: {}", result);
+        return result;
     }
 
     @Override
     public ClientApiDto softDelete(String clientPublicId) {
+        log.info("ClientApiService.softDelete - clientPublicId: {}", clientPublicId);
         ClientApiEntity entity = requireActiveClient(clientPublicId);
         entity.setDeleteDateTs(now());
         entity.setEditDateTs(now());
-        return clientApiMapper.toClientApiDto(clientApiRepository.save(entity));
+        ClientApiDto result = clientApiMapper.toClientApiDto(clientApiRepository.save(entity));
+        log.info("ClientApiService.softDelete - result: {}", result);
+        return result;
     }
 
     @Override
     @Transactional(readOnly = true)
     public PersonApiEntity authenticateByCredentialsBase64(String credentialsBase64) {
+        log.info("ClientApiService.authenticateByCredentialsBase64 - credentialsBase64: [REDACTED]");
         if (!hasText(credentialsBase64)) {
             throw new BadRequestException("credentials are required");
         }
@@ -182,6 +213,7 @@ public class ClientApiServiceImpl implements ClientApiService {
             throw new BadRequestException("linked person is not active");
         }
 
+        log.info("ClientApiService.authenticateByCredentialsBase64 - result: {}, clientId: {}", personApi, clientId);
         return personApi;
     }
 

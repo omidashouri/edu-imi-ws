@@ -35,32 +35,47 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
 
     @Override
     public Page<ProjectDepositCodeApiDto> findAllAndDeleteDateTsIsNull(Pageable pageable) {
-        return projectDepositCodeApiRepository
+        log.info("ProjectDepositCodeApiService.findAllAndDeleteDateTsIsNull - pageable: {}", pageable);
+        Page<ProjectDepositCodeApiDto> result = projectDepositCodeApiRepository
                 .findAllByDeleteDateTsIsNull(pageable)
                 .map(p -> projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+        log.info("ProjectDepositCodeApiService.findAllAndDeleteDateTsIsNull - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public Page<ProjectDepositCodeApiDto> findAllByDeleteDateTsNotNull(Pageable pageable) {
-        return projectDepositCodeApiRepository.findAllByDeleteDateTsNotNull(pageable)
+        log.info("ProjectDepositCodeApiService.findAllByDeleteDateTsNotNull - pageable: {}", pageable);
+        Page<ProjectDepositCodeApiDto> result = projectDepositCodeApiRepository.findAllByDeleteDateTsNotNull(pageable)
                 .map(p -> projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+        log.info("ProjectDepositCodeApiService.findAllByDeleteDateTsNotNull - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
 
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByPublicId(String publicId) {
+        log.info("ProjectDepositCodeApiService.findProjectDepositCodeApiDtoByPublicId - publicId: {}", publicId);
 
         ProjectDepositCodeApiEntity projectDepositCodeApi =
                 projectDepositCodeApiRepository.findByPublicIdAndDeleteDateTsIsNull(publicId);
 
-        return projectDepositCodeApiMapper
+        ProjectDepositCodeApiDto result = projectDepositCodeApiMapper
                 .toProjectDepositCodeApiDto(projectDepositCodeApi);
+        log.info("ProjectDepositCodeApiService.findProjectDepositCodeApiDtoByPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByProjectPublicId(String projectPublicId) {
-
-        return null;
+        log.info("ProjectDepositCodeApiService.findProjectDepositCodeApiDtoByProjectPublicId - projectPublicId: {}", projectPublicId);
+        ProjectDepositCodeApiDto result = null;
+        log.info("ProjectDepositCodeApiService.findProjectDepositCodeApiDtoByProjectPublicId - result: {}", result);
+        return result;
     }
 
 /*    @Override
@@ -77,6 +92,7 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
 
     @Override
     public ProjectDepositCodeApiDto save(ProjectDepositCodeApiDto newProjectDepositCodeApiDto) {
+        log.info("ProjectDepositCodeApiService.save - newProjectDepositCodeApiDto: {}", newProjectDepositCodeApiDto);
 
 //         newProjectDepositCodeApi = new ProjectDepositCodeApiEntity();
 //      projectDepositCodeApiMapper.setPublicIdCreatorCreateDateTs(newProjectDepositCodeApiDto, personMapper);
@@ -87,55 +103,77 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
         ProjectDepositCodeApiEntity savedProjectDepositCodeApi =
                 projectDepositCodeApiRepository.save(newProjectDepositCodeApi);
 
-        return projectDepositCodeApiMapper
+        ProjectDepositCodeApiDto result = projectDepositCodeApiMapper
                 .toProjectDepositCodeApiDto(savedProjectDepositCodeApi);
+        log.info("ProjectDepositCodeApiService.save - result: {}", result);
+        return result;
     }
 
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiEntityPublicId(String publicId) {
+        log.info("ProjectDepositCodeApiService.findProjectDepositCodeApiEntityPublicId - publicId: {}", publicId);
 
         ProjectDepositCodeApiEntity projectDepositCodeApi =
                 projectDepositCodeApiRepository
                         .findProjectDepositCodeApiEntityByPublicIdAndDeleteDateTsIsNull(publicId);
 
-        return projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApi);
+        ProjectDepositCodeApiDto result = projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApi);
+        log.info("ProjectDepositCodeApiService.findProjectDepositCodeApiEntityPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<ProjectDepositCodeApiDto> findByDepositCode(String depositCode, Pageable pageable) {
+        log.info("ProjectDepositCodeApiService.findByDepositCode - depositCode: {}, pageable: {}", depositCode, pageable);
 
-        return projectDepositCodeApiRepository
+        Page<ProjectDepositCodeApiDto> result = projectDepositCodeApiRepository
                 .findByDeleteDateTsIsNullAndDepositCode(depositCode, pageable)
                 .map(p -> projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+        log.info("ProjectDepositCodeApiService.findByDepositCode - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public ProjectDepositCodeApiDto findProjectDepositCodeApiDtoByProjectCodeAndDepositCode(String projectCode, String depositCode) {
-        return projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApiRepository
+        log.info("ProjectDepositCodeApiService.findProjectDepositCodeApiDtoByProjectCodeAndDepositCode - projectCode: {}, depositCode: {}", projectCode, depositCode);
+        ProjectDepositCodeApiDto result = projectDepositCodeApiMapper.toProjectDepositCodeApiDto(projectDepositCodeApiRepository
                 .findByDeleteDateTsIsNullAndProject_ProjectCodeAndDepositCode(projectCode, depositCode));
+        log.info("ProjectDepositCodeApiService.findProjectDepositCodeApiDtoByProjectCodeAndDepositCode - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<ProjectDepositCodeApiDto> findByProjectNameContaining(String projectName, Pageable pageable) {
-        return projectDepositCodeApiRepository
+        log.info("ProjectDepositCodeApiService.findByProjectNameContaining - projectName: {}, pageable: {}", projectName, pageable);
+        Page<ProjectDepositCodeApiDto> result = projectDepositCodeApiRepository
                 .findByDeleteDateTsIsNullAndProject_ProjectNameContaining(projectName, pageable)
                 .map(p -> projectDepositCodeApiMapper.toProjectDepositCodeApiDto(p));
+        log.info("ProjectDepositCodeApiService.findByProjectNameContaining - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
 
     @Override
     public void validateProjectDepositCodeApiRequestNullInputs(ProjectDepositCodeApiRequest projectDepositCodeApiRequest) {
+        log.info("ProjectDepositCodeApiService.validateProjectDepositCodeApiRequestNullInputs - projectDepositCodeApiRequest: {}", projectDepositCodeApiRequest);
         if (isInputNullOrEqualString().test(projectDepositCodeApiRequest.getDepositCode()))
             throw new NotAcceptableException("deposit code is null");
 
         if (isInputNullOrEqualString().test(projectDepositCodeApiRequest.getProjectPublicId()))
             throw new NotAcceptableException("project public id is null");
+        log.info("ProjectDepositCodeApiService.validateProjectDepositCodeApiRequestNullInputs - completed");
     }
 
     @Override
     public void validateProjectDepositCodeApiDtoNulls(ProjectDepositCodeApiDto projectDepositCodeApiDto) {
+        log.info("ProjectDepositCodeApiService.validateProjectDepositCodeApiDtoNulls - projectDepositCodeApiDto: {}", projectDepositCodeApiDto);
         if (isNull().test(projectDepositCodeApiDto.getProjectDto()))
             throw new NotFoundException("Project Not Found");
+        log.info("ProjectDepositCodeApiService.validateProjectDepositCodeApiDtoNulls - completed");
     }
 
     @Override
@@ -145,6 +183,8 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
                                                                                                  String projectName, String projectCode,
                                                                                                  String creatorFullName, String editorFullName,
                                                                                                  Pageable pageable) {
+        log.info("ProjectDepositCodeApiService.queryAllProjectDepositCodeApiCustomTwo - publicId: {}, depositCode: {}, description: {}, createDateTs: {}, editDateTs: {}, deleteDateTs: {}, projectName: {}, projectCode: {}, creatorFullName: {}, editorFullName: {}, pageable: {}",
+                publicId, depositCode, description, createDateTs, editDateTs, deleteDateTs, projectName, projectCode, creatorFullName, editorFullName, pageable);
 
 
         String encodedProjectName = convertorUtil.characterEncodingInputStringForDb.apply(projectName);
@@ -158,6 +198,9 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
                                 encodedProjectName, projectCode, encodedCreatorFullName,
                                 encodedEditorFullName, pageable);
 
+        log.info("ProjectDepositCodeApiService.queryAllProjectDepositCodeApiCustomTwo - resultSize: {}, totalElements: {}",
+                projectDepositCodeApiProjectionCustomTwoPages == null ? null : projectDepositCodeApiProjectionCustomTwoPages.getNumberOfElements(),
+                projectDepositCodeApiProjectionCustomTwoPages == null ? null : projectDepositCodeApiProjectionCustomTwoPages.getTotalElements());
         return projectDepositCodeApiProjectionCustomTwoPages;
     }
 
@@ -182,6 +225,8 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
                                                                                                      String executor,
                                                                                                      String projectPublicId,
                                                                                                      Pageable pageable) {
+        log.info("ProjectDepositCodeApiService.queryAllProjectDepositCodeApiCustomThree - publicId: {}, depositCode: {}, description: {}, createDateTs: {}, editDateTs: {}, deleteDateTs: {}, projectName: {}, projectCode: {}, projectCreateDate: {}, projectStatusId: {}, projectTypeName: {}, startDatePlan: {}, endDatePlan: {}, lastVersion: {}, statusForTimeshit: {}, creatorFullName: {}, editorFullName: {}, executor: {}, projectPublicId: {}, pageable: {}",
+                publicId, depositCode, description, createDateTs, editDateTs, deleteDateTs, projectName, projectCode, projectCreateDate, projectStatusId, projectTypeName, startDatePlan, endDatePlan, lastVersion, statusForTimeshit, creatorFullName, editorFullName, executor, projectPublicId, pageable);
 
         String encodedProjectName = convertorUtil.characterEncodingInputStringForDb.apply(projectName);
         String encodedCreatorFullName = convertorUtil.characterEncodingInputStringForDb.apply(creatorFullName);
@@ -205,6 +250,9 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
                                                                   encodedEditorFullName,
                                                                   executor,projectPublicId,pageable);
 
+        log.info("ProjectDepositCodeApiService.queryAllProjectDepositCodeApiCustomThree - resultSize: {}, totalElements: {}",
+                projectDepositCodeApiProjectionCustomThreePages == null ? null : projectDepositCodeApiProjectionCustomThreePages.getNumberOfElements(),
+                projectDepositCodeApiProjectionCustomThreePages == null ? null : projectDepositCodeApiProjectionCustomThreePages.getTotalElements());
         return projectDepositCodeApiProjectionCustomThreePages;
     }
 

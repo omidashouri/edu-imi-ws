@@ -46,96 +46,135 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonEntity findByUserNameFast(String userName) {
+        log.info("PersonService.findByUserNameFast - userName: {}", userName);
         PersonEntity personEntity = personRepository.findByUsername(userName);
 //        omiddo: check person is not null or person is not duplicate
+        log.info("PersonService.findByUserNameFast - result: {}", personEntity);
         return personEntity;
     }
 
     @Override
     public Long personCount() {
-        return personRepository.count();
+        log.info("PersonService.personCount - start");
+        Long result = personRepository.count();
+        log.info("PersonService.personCount - result: {}", result);
+        return result;
     }
 
     @Override
     public PersonEntity selectLastRecord() {
-        return personRepository.findFirstByOrderByIdDesc();
+        log.info("PersonService.selectLastRecord - start");
+        PersonEntity result = personRepository.findFirstByOrderByIdDesc();
+        log.info("PersonService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public List<PersonEntity> findPersonUserProjectionsByIdGreaterThan(Long id) {
+        log.info("PersonService.findPersonUserProjectionsByIdGreaterThan - id: {}", id);
         List<PersonUserProjection> personUserProjections =
                 personRepository.findPersonUserProjectionsByIdGreaterThan(id);
         List<PersonEntity> persons = personUserProjectionMapper
                 .toPersonEntitys(personUserProjections, new CycleAvoidingMappingContext());
+        log.info("PersonService.findPersonUserProjectionsByIdGreaterThan - resultSize: {}",
+                persons == null ? null : persons.size());
         return persons;
     }
 
     @Override
     public List<PersonEntity> findAllPersonUserProjectionOrderById() {
+        log.info("PersonService.findAllPersonUserProjectionOrderById - start");
         List<PersonUserProjection> personUserProjections = personRepository
                 .findAllPersonUserProjection();
         personUserProjections.sort(Comparator.comparing(edu.imi.ir.eduimiws.models.projections.crm.PersonUserProjection::getId));
         List<PersonEntity> persons = personUserProjectionMapper
                 .toPersonEntitys(personUserProjections, new CycleAvoidingMappingContext());
+        log.info("PersonService.findAllPersonUserProjectionOrderById - resultSize: {}",
+                persons == null ? null : persons.size());
         return persons;
     }
 
     @Override
     public Long selectPersonLastSequenceNumber() {
-        return personRepository.selectLastSequenceNumber();
+        log.info("PersonService.selectPersonLastSequenceNumber - start");
+        Long result = personRepository.selectLastSequenceNumber();
+        log.info("PersonService.selectPersonLastSequenceNumber - result: {}", result);
+        return result;
     }
 
     @Override
     public PersonEntity findPersonEntityByPersonApiPublicId(String personPublicId) {
+        log.info("PersonService.findPersonEntityByPersonApiPublicId - personPublicId: {}", personPublicId);
         PersonEntity person = personRepository
                 .findByPersonApiEntity_PersonPublicId(personPublicId);
+        log.info("PersonService.findPersonEntityByPersonApiPublicId - result: {}", person);
         return person;
     }
 
     @Override
     public PersonDto findPersonDtoByPersonApiPublicId(String personPublicId) {
+        log.info("PersonService.findPersonDtoByPersonApiPublicId - personPublicId: {}", personPublicId);
         PersonDto newPersonDto = personMapper
                 .personEntityToPersonDto(personRepository.readByPersonApiEntity_PersonPublicId(personPublicId),
                         new CycleAvoidingMappingContext());
+        log.info("PersonService.findPersonDtoByPersonApiPublicId - result: {}", newPersonDto);
         return newPersonDto;
     }
 
     @Override
     public Page<PersonEntity> findAllPersonEntityPages(Pageable pageable) {
+        log.info("PersonService.findAllPersonEntityPages - pageable: {}", pageable);
         Page<PersonEntity> personPages = personRepository
                 .findAll(pageable);
+        log.info("PersonService.findAllPersonEntityPages - resultSize: {}, totalElements: {}",
+                personPages == null ? null : personPages.getNumberOfElements(),
+                personPages == null ? null : personPages.getTotalElements());
         return personPages;
     }
 
     @Override
     public Page<PersonEntity> findAllPersonEntityPagesByUserName(Pageable pageable, String userName) {
+        log.info("PersonService.findAllPersonEntityPagesByUserName - pageable: {}, userName: {}", pageable, userName);
         Page<PersonEntity> personPages = personRepository
                 .findAllByUsername(pageable, userName);
+        log.info("PersonService.findAllPersonEntityPagesByUserName - resultSize: {}, totalElements: {}",
+                personPages == null ? null : personPages.getNumberOfElements(),
+                personPages == null ? null : personPages.getTotalElements());
         return personPages;
     }
 
     @Override
     public List<PersonEntity> findPersonsByNationalCode(String nationalCode) {
+        log.info("PersonService.findPersonsByNationalCode - nationalCode: {}", nationalCode);
         List<PersonEntity> personEntities = personRepository
                 .findPersonEntitiesByContact_NationCode(nationalCode);
+        log.info("PersonService.findPersonsByNationalCode - resultSize: {}",
+                personEntities == null ? null : personEntities.size());
         return personEntities;
     }
 
     @Override
     public List<PersonEntity> findAllPersonEntitiesByIdIn(List<Long> personIds) {
+        log.info("PersonService.findAllPersonEntitiesByIdIn - personIds: {}", personIds);
         List<PersonEntity> newPersons =
                 personRepository.findAllPersonEntitiesByIdIn(personIds);
+        log.info("PersonService.findAllPersonEntitiesByIdIn - resultSize: {}",
+                newPersons == null ? null : newPersons.size());
         return newPersons;
     }
 
     @Override
     public PersonEntity savePerson(PersonEntity newPerson) {
-        return personRepository.save(newPerson);
+        log.info("PersonService.savePerson - newPerson: {}", newPerson);
+        PersonEntity result = personRepository.save(newPerson);
+        log.info("PersonService.savePerson - result: {}", result);
+        return result;
     }
 
     @Override
     public Specification<PersonEntity> getPersonQuerySpecification(String firstName, String lastName) {
-        return (root, query, criteriaBuilder) -> {
+        log.info("PersonService.getPersonQuerySpecification - firstName: {}, lastName: {}", firstName, lastName);
+        Specification<PersonEntity> result = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
            /* predicates.add(criteriaBuilder.equal(root.get("domainId"), domainId));
@@ -154,11 +193,18 @@ public class PersonServiceImpl implements PersonService {
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
+        log.info("PersonService.getPersonQuerySpecification - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<PersonEntity> findAllPersonEntitySpecificationPages(Pageable pageable, Specification specification) {
-        return personRepositorySpecification.findAll(specification, pageable);
+        log.info("PersonService.findAllPersonEntitySpecificationPages - pageable: {}, specification: {}", pageable, specification);
+        Page<PersonEntity> result = personRepositorySpecification.findAll(specification, pageable);
+        log.info("PersonService.findAllPersonEntitySpecificationPages - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
 

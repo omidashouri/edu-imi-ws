@@ -19,15 +19,21 @@ public class FieldCourseServiceImpl implements FieldCourseService {
 
     @Override
     public Page<FieldCourseEntity> findAllByOrderPageable(Pageable pageable) {
-        Page<FieldCourseEntity> fieldCoursePages = fieldCourseRepository
+        log.info("FieldCourseService.findAllByOrderPageable - pageable: {}", pageable);
+        Page<FieldCourseEntity> result = fieldCourseRepository
                 .findAllBy(pageable);
-        return fieldCoursePages;
+        log.info("FieldCourseService.findAllByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public FieldCourseEntity findByFieldCoursePublicId(String fieldCoursePublicId) {
-        FieldCourseEntity fieldCourse = fieldCourseRepository
+        log.info("FieldCourseService.findByFieldCoursePublicId - fieldCoursePublicId: {}", fieldCoursePublicId);
+        FieldCourseEntity result = fieldCourseRepository
                 .findByFieldCourseApi_FieldCoursePublicId(fieldCoursePublicId);
-        return fieldCourse;
+        log.info("FieldCourseService.findByFieldCoursePublicId - result: {}", result);
+        return result;
     }
 }

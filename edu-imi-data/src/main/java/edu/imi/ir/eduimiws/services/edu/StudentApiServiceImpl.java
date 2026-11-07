@@ -30,16 +30,23 @@ public class StudentApiServiceImpl implements StudentApiService {
 
     @Override
     public StudentApiEntity selectLastRecord() {
-        return studentApiRepository.findFirstByOrderByIdDesc();
+        log.info("StudentApiService.selectLastRecord - start");
+        StudentApiEntity result = studentApiRepository.findFirstByOrderByIdDesc();
+        log.info("StudentApiService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Long studentApiCount() {
-        return studentApiRepository.count();
+        log.info("StudentApiService.studentApiCount - start");
+        Long result = studentApiRepository.count();
+        log.info("StudentApiService.studentApiCount - result: {}", result);
+        return result;
     }
 
     @Override
     public List<StudentApiEntity> generateStudentApiPublicId(List<StudentEntity> newStudentEntities) {
+        log.info("StudentApiService.generateStudentApiPublicId - newStudentEntities: {}", newStudentEntities);
         List<StudentApiEntity> newStudentApiEntities = new ArrayList<>();
 
         newStudentEntities.forEach(s -> {
@@ -106,21 +113,26 @@ public class StudentApiServiceImpl implements StudentApiService {
 
         studentApiRepository.saveAll(newStudentApiEntities);
 
+        log.info("StudentApiService.generateStudentApiPublicId - resultSize: {}", newStudentApiEntities == null ? null : newStudentApiEntities.size());
         return newStudentApiEntities;
     }
 
     @Override
     public List<StudentApiEntity> findAllByStudentIdIn(List<Long> studentIds) {
-        List<StudentApiEntity> studentApis = studentApiRepository
+        log.info("StudentApiService.findAllByStudentIdIn - studentIds: {}", studentIds);
+        List<StudentApiEntity> result = studentApiRepository
                 .findAllByStudentIdIn(studentIds);
-        return studentApis;
+        log.info("StudentApiService.findAllByStudentIdIn - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<StudentApiEntity> findAllByStudentIdInAndStudentPublicIdIsNotNull(List<Long> studentIds) {
-        List<StudentApiEntity> studentApis = studentApiRepository
+        log.info("StudentApiService.findAllByStudentIdInAndStudentPublicIdIsNotNull - studentIds: {}", studentIds);
+        List<StudentApiEntity> result = studentApiRepository
                 .findAllByStudentIdInAndStudentPublicIdIsNotNull(studentIds);
-        return studentApis;
+        log.info("StudentApiService.findAllByStudentIdInAndStudentPublicIdIsNotNull - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     private String generateStudentApiPublicId() {

@@ -19,15 +19,21 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Page<ProfessorEntity> findAllByPageable(Pageable pageable) {
-        Page<ProfessorEntity> professorPages = professorRepository
+        log.info("ProfessorService.findAllByPageable - pageable: {}", pageable);
+        Page<ProfessorEntity> result = professorRepository
                 .findAllBy(pageable);
-        return professorPages;
+        log.info("ProfessorService.findAllByPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public ProfessorEntity findByProfessorPublicId(String professorPublicId) {
-        ProfessorEntity professor = professorRepository
+        log.info("ProfessorService.findByProfessorPublicId - professorPublicId: {}", professorPublicId);
+        ProfessorEntity result = professorRepository
                 .findByProfessorApi_ProfessorPublicId(professorPublicId);
-        return professor;
+        log.info("ProfessorService.findByProfessorPublicId - result: {}", result);
+        return result;
     }
 }

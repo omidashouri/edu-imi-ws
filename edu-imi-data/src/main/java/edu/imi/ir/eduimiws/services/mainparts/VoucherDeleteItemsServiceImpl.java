@@ -19,16 +19,27 @@ public class VoucherDeleteItemsServiceImpl implements VoucherDeleteItemsService{
 
     @Override
     public Page<VoucherDeleteItemsApiEntity> findAllByDeleteStatusIsNull(Pageable pageable) {
-        return voucherDeleteItemsApiRepository.findAllByDeleteDateTsIsNull(pageable);
+        log.info("VoucherDeleteItemsService.findAllByDeleteStatusIsNull - pageable: {}", pageable);
+        Page<VoucherDeleteItemsApiEntity> result = voucherDeleteItemsApiRepository.findAllByDeleteDateTsIsNull(pageable);
+        log.info("VoucherDeleteItemsService.findAllByDeleteStatusIsNull - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public VoucherDeleteItemsApiEntity findByPublicId(String publicId) {
-        return voucherDeleteItemsApiRepository.findByPublicId(publicId);
+        log.info("VoucherDeleteItemsService.findByPublicId - publicId: {}", publicId);
+        VoucherDeleteItemsApiEntity result = voucherDeleteItemsApiRepository.findByPublicId(publicId);
+        log.info("VoucherDeleteItemsService.findByPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public VoucherDeleteItemsApiEntity findLastRecordOrderByApiId() {
-        return voucherDeleteItemsApiRepository.findTopByOrderByIdApiDesc();
+        log.info("VoucherDeleteItemsService.findLastRecordOrderByApiId - start");
+        VoucherDeleteItemsApiEntity result = voucherDeleteItemsApiRepository.findTopByOrderByIdApiDesc();
+        log.info("VoucherDeleteItemsService.findLastRecordOrderByApiId - result: {}", result);
+        return result;
     }
 }

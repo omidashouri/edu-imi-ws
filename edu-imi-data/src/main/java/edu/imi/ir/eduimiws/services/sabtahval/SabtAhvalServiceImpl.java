@@ -30,6 +30,7 @@ public class SabtAhvalServiceImpl implements SabtahvalService{
 
     @Override
     public EstelamVersionResponse getVersion() throws Exception {
+        log.info("SabtahvalService.getVersion - start");
 
         GetVersion getVersion = new GetVersion();
         EstelamVersionResponse estelamVersionResponse = new EstelamVersionResponse();
@@ -45,11 +46,13 @@ public class SabtAhvalServiceImpl implements SabtahvalService{
          estelamVersionResponse = estelamVersionResponseMapper
                  .toEstelamVersionResponse(getVersionResponseDto, new CycleAvoidingMappingContext());
 
+        log.info("SabtahvalService.getVersion - result: {}", estelamVersionResponse);
         return estelamVersionResponse;
     }
 
     @Override
     public GetEstelam3ResponseDto getEstelam3DtoFromPersonInfoDto(PersonInfoDto personInfoDto) throws Exception {
+        log.info("SabtahvalService.getEstelam3DtoFromPersonInfoDto - personInfoDto: {}", personInfoDto);
 
         PersonInfo personInfo = personInfoMapper.toPersonInfo(personInfoDto, new CycleAvoidingMappingContext());
 
@@ -63,11 +66,13 @@ public class SabtAhvalServiceImpl implements SabtahvalService{
         GetEstelam3ResponseDto getEstelam3ResponseDto =  getEstelam3ResponseMapper
                 .toGetEstelam3ResponseDto(getEstelam3Response, new CycleAvoidingMappingContext());
 
+        log.info("SabtahvalService.getEstelam3DtoFromPersonInfoDto - result: {}", getEstelam3ResponseDto);
         return getEstelam3ResponseDto;
     }
 
     @Override
     public EstelamResultResponse getEstelamResultResponse(PersonInfoDto personInfoDto) throws Exception {
+        log.info("SabtahvalService.getEstelamResultResponse - personInfoDto: {}", personInfoDto);
 
         GetEstelam3ResponseDto getEstelam3ResponseDto = this.getEstelam3DtoFromPersonInfoDto(personInfoDto);
 
@@ -76,6 +81,7 @@ public class SabtAhvalServiceImpl implements SabtahvalService{
         EstelamResultResponse estelamResultResponse =  estelamResultResponseMapper
                 .toEstelamResultResponse(estelamResult3Dto, new CycleAvoidingMappingContext());
 
+        log.info("SabtahvalService.getEstelamResultResponse - result: {}", estelamResultResponse);
         return estelamResultResponse;
     }
 

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -33,116 +34,161 @@ public class PeriodServiceImpl implements PeriodService {
 
     @Override
     public Page<PeriodEntity> findAllByDeleteStatusEqualsOneAndOrderPageable(Pageable pageable) {
-        Page<PeriodEntity> periodPages = periodRepository
+        log.info("PeriodService.findAllByDeleteStatusEqualsOneAndOrderPageable - pageable: {}", pageable);
+        Page<PeriodEntity> result = periodRepository
                 .findAllByDeleteStatusIsNotNullAndDeleteStatusEquals(1L, pageable);
-        return periodPages;
+        log.info("PeriodService.findAllByDeleteStatusEqualsOneAndOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public Page<PeriodEntity> findAllByPeriodApi_FieldPublicIdPageable(String fieldPublicId, Pageable pageable) {
-        Page<PeriodEntity> periodPages = periodRepository
+        log.info("PeriodService.findAllByPeriodApi_FieldPublicIdPageable - fieldPublicId: {}, pageable: {}", fieldPublicId, pageable);
+        Page<PeriodEntity> result = periodRepository
                 .findAllByPeriodApi_FieldPublicId(fieldPublicId, pageable);
-        return periodPages;
+        log.info("PeriodService.findAllByPeriodApi_FieldPublicIdPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public Long countPeriodByIdLessThanEqual(Long periodId) {
-        Long periodCount = periodRepository.countByIdLessThanEqual(periodId);
-        return periodCount;
+        log.info("PeriodService.countPeriodByIdLessThanEqual - periodId: {}", periodId);
+        Long result = periodRepository.countByIdLessThanEqual(periodId);
+        log.info("PeriodService.countPeriodByIdLessThanEqual - result: {}", result);
+        return result;
     }
 
     @Override
     public Long periodCount() {
-        return periodRepository.count();
+        log.info("PeriodService.periodCount - start");
+        Long result = periodRepository.count();
+        log.info("PeriodService.periodCount - result: {}", result);
+        return result;
     }
 
     @Override
     public PeriodEntity selectLastRecord() {
-        return periodRepository.findFirstByOrderByIdDesc();
+        log.info("PeriodService.selectLastRecord - start");
+        PeriodEntity result = periodRepository.findFirstByOrderByIdDesc();
+        log.info("PeriodService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<PeriodEntity> findAllPeriodEntityPagesOrderByCreateDateDesc(Pageable pageable) {
-        Page<PeriodEntity> periodPages = periodRepository
+        log.info("PeriodService.findAllPeriodEntityPagesOrderByCreateDateDesc - pageable: {}", pageable);
+        Page<PeriodEntity> result = periodRepository
                 .findAllPeriodEntityPagesOrderByCreateDateDesc(pageable);
         ;
-        return periodPages;
+        log.info("PeriodService.findAllPeriodEntityPagesOrderByCreateDateDesc - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public PeriodEntity findPeriodEntityByPeriodApiPublicId(String periodPublicId) {
-
-        PeriodEntity period = periodRepository.findByPeriodApi_PeriodPublicId(periodPublicId);
-        return period;
+        log.info("PeriodService.findPeriodEntityByPeriodApiPublicId - periodPublicId: {}", periodPublicId);
+        PeriodEntity result = periodRepository.findByPeriodApi_PeriodPublicId(periodPublicId);
+        log.info("PeriodService.findPeriodEntityByPeriodApiPublicId - result: {}", result);
+        return result;
     }
 
     public List<PeriodEntity> findAllPeriodOnly() {
+        log.info("PeriodService.findAllPeriodOnly - start");
         List<PeriodOnly> allPeriodOnlys = periodRepository.findAllPeriodOnly();
         allPeriodOnlys.sort(Comparator.comparing(PeriodOnly::getId));
-        List<PeriodEntity> allPeriods = periodOnlyMapper
+        List<PeriodEntity> result = periodOnlyMapper
                 .PeriodOnliesToPeriodEntities(allPeriodOnlys, new CycleAvoidingMappingContext());
-        return allPeriods;
+        log.info("PeriodService.findAllPeriodOnly - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<PeriodEntity> findAllPeriodOnlyByIdGreaterThan(Long id) {
+        log.info("PeriodService.findAllPeriodOnlyByIdGreaterThan - id: {}", id);
         List<PeriodOnly> allPeriodOnlys = periodRepository.findPeriodOnlyByIdGreaterThan(id);
-        List<PeriodEntity> allPeriods = periodOnlyMapper.PeriodOnliesToPeriodEntities(allPeriodOnlys, new CycleAvoidingMappingContext());
-        return allPeriods;
+        List<PeriodEntity> result = periodOnlyMapper.PeriodOnliesToPeriodEntities(allPeriodOnlys, new CycleAvoidingMappingContext());
+        log.info("PeriodService.findAllPeriodOnlyByIdGreaterThan - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public Iterable<PeriodEntity> findAllByDeleteStatusIsNotNullAndExecuterIsNotNull() {
-        Iterable<PeriodEntity> periodEntities =
+        log.info("PeriodService.findAllByDeleteStatusIsNotNullAndExecuterIsNotNull - start");
+        Iterable<PeriodEntity> result =
                 periodRepository.findAllByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntityIsNull();
-        return periodEntities;
+        log.info("PeriodService.findAllByDeleteStatusIsNotNullAndExecuterIsNotNull - resultSize: {}",
+                result == null ? null : (result instanceof Collection ? ((Collection<?>) result).size() : null));
+        return result;
     }
 
     @Override
     public Page<PeriodEntity> findAllPageableByExecutorPublicId(Pageable pageable, String executorPublicId) {
-        Page<PeriodEntity> pageablePeriods =
+        log.info("PeriodService.findAllPageableByExecutorPublicId - pageable: {}, executorPublicId: {}", pageable, executorPublicId);
+        Page<PeriodEntity> result =
                 periodRepository
                         .findByDeleteStatusIsNotNullAndExecuterIsNotNullAndExecuter_PersonApiEntity_PersonPublicId
                                 (pageable, executorPublicId);
-        return pageablePeriods;
+        log.info("PeriodService.findAllPageableByExecutorPublicId - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public List<PeriodEntity> findAllPeriodOnlyByIdBetween(Long startId, Long endId) {
+        log.info("PeriodService.findAllPeriodOnlyByIdBetween - startId: {}, endId: {}", startId, endId);
         List<PeriodOnly> allPeriodOnlys = periodRepository
                 .findAllPeriodOnlyByIdBetween(startId, endId);
-        List<PeriodEntity> allPeriods = periodOnlyMapper
+        List<PeriodEntity> result = periodOnlyMapper
                 .PeriodOnliesToPeriodEntities(allPeriodOnlys, new CycleAvoidingMappingContext());
-        return allPeriods;
+        log.info("PeriodService.findAllPeriodOnlyByIdBetween - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public PeriodEntity findFirstByIdLessThanOrderByIdDesc(Long periodId) {
-        PeriodEntity period = periodRepository
+        log.info("PeriodService.findFirstByIdLessThanOrderByIdDesc - periodId: {}", periodId);
+        PeriodEntity result = periodRepository
                 .findFirstByIdLessThanEqualOrderByIdDesc(periodId);
-        return period;
+        log.info("PeriodService.findFirstByIdLessThanOrderByIdDesc - result: {}", result);
+        return result;
     }
 
     @Override
     public Long selectPeriodLastSequenceNumber() {
-        return periodRepository.selectLastSequenceNumber();
+        log.info("PeriodService.selectPeriodLastSequenceNumber - start");
+        Long result = periodRepository.selectLastSequenceNumber();
+        log.info("PeriodService.selectPeriodLastSequenceNumber - result: {}", result);
+        return result;
     }
 
     @Override
     public List<PeriodEntity> findAllById(List<Long> periodIds) {
-        List<PeriodEntity> periods = periodRepository
+        log.info("PeriodService.findAllById - periodIds: {}", periodIds);
+        List<PeriodEntity> result = periodRepository
                 .findAllByIdIn(periodIds);
-        return periods;
+        log.info("PeriodService.findAllById - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public Page<PeriodEntity>
     findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable(String periodName, Pageable pageable) {
-        Page<PeriodEntity> periodPages = periodRepository
+        log.info("PeriodService.findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable - periodName: {}, pageable: {}", periodName, pageable);
+        Page<PeriodEntity> result = periodRepository
                 .readAllByDeleteStatusIsNotNullAndDeleteStatusEqualsAndNameContains(1L,
                         periodName,
                         pageable);
-        return periodPages;
+        log.info("PeriodService.findAllDescriptiveByDeleteStatusEqualsOneAndPeriodNameAndOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
@@ -160,13 +206,19 @@ public class PeriodServiceImpl implements PeriodService {
                                                                     Long periodTotalUnit, Long periodId,
                                                                     String periodExecutorFirstName, String periodExecutorLastName,
                                                                     String periodExecutorFullName, Pageable pageable) {
+        log.info("PeriodService.queryAllPeriodsCustomTwo - periodPublicId: {}, fieldPublicId: {}, eduCategoryPublicId: {}, levelPublicId: {}, fieldCode: {}, periodOfferNumber: {}, periodName: {}, levelDescription: {}, fieldName: {}, eduCategoryName: {}, periodStartDate: {}, periodEndDate: {}, registerStartDate: {}, registerEndDate: {}, periodMaxCapacity: {}, periodHoldingType: {}, periodCanRegisterOnline: {}, periodType: {}, periodFee: {}, periodDiscount: {}, periodSchedule: {}, periodActivityStatus: {}, periodDeleteStatus: {}, periodTotalUnit: {}, periodId: {}, periodExecutorFirstName: {}, periodExecutorLastName: {}, periodExecutorFullName: {}, pageable: {}",
+                periodPublicId, fieldPublicId, eduCategoryPublicId, levelPublicId, fieldCode, periodOfferNumber,
+                periodName, levelDescription, fieldName, eduCategoryName, periodStartDate, periodEndDate,
+                registerStartDate, registerEndDate, periodMaxCapacity, periodHoldingType, periodCanRegisterOnline,
+                periodType, periodFee, periodDiscount, periodSchedule, periodActivityStatus, periodDeleteStatus,
+                periodTotalUnit, periodId, periodExecutorFirstName, periodExecutorLastName, periodExecutorFullName, pageable);
 
         String encodedPeriodName = convertorUtil.characterEncodingInputStringForDb.apply(periodName);
         String encodedFieldName = convertorUtil.characterEncodingInputStringForDb.apply(fieldName);
         String encodedEduCategoryName = convertorUtil.characterEncodingInputStringForDb.apply(eduCategoryName);
 
 
-        Page<PeriodProjectionCustomTwo> periodProjectionCustomTwoPages = periodRepository.queryAllPeriodCustomTwo(periodPublicId,
+        Page<PeriodProjectionCustomTwo> result = periodRepository.queryAllPeriodCustomTwo(periodPublicId,
                 fieldPublicId,
                 eduCategoryPublicId, levelPublicId,
                 fieldCode, periodOfferNumber,
@@ -182,7 +234,10 @@ public class PeriodServiceImpl implements PeriodService {
                 periodExecutorFirstName, periodExecutorLastName,
                 periodExecutorFullName, pageable);
 
-        return periodProjectionCustomTwoPages;
+        log.info("PeriodService.queryAllPeriodsCustomTwo - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
 
@@ -208,6 +263,12 @@ public class PeriodServiceImpl implements PeriodService {
                                                                       String betweenRegStartDate,
                                                                       String betweenRegEndDate,
                                                                       String fullName) {
+        log.info("PeriodService.queryAllPeriodsCustomFour - periodPublicId: {}, fieldPublicId: {}, eduCategoryPublicId: {}, levelPublicId: {}, fieldCode: {}, offerNumber: {}, periodName: {}, levelTitle: {}, fieldName: {}, eduCategoryTitle: {}, startDate: {}, endDate: {}, regStartDate: {}, regEndDate: {}, maxCapacity: {}, holdingType: {}, canRegisterOnline: {}, type: {}, fee: {}, periodDiscount: {}, schedule: {}, activityStatus: {}, deleteStatus: {}, totalUnit: {}, executorFirstName: {}, executorLastName: {}, depositCode: {}, projectCode: {}, projectName: {}, projectPublicId: {}, publicId: {}, planId: {}, betweenRegStartDate: {}, betweenRegEndDate: {}, fullName: {}",
+                periodPublicId, fieldPublicId, eduCategoryPublicId, levelPublicId, fieldCode, offerNumber,
+                periodName, levelTitle, fieldName, eduCategoryTitle, startDate, endDate, regStartDate, regEndDate,
+                maxCapacity, holdingType, canRegisterOnline, type, fee, periodDiscount, schedule, activityStatus,
+                deleteStatus, totalUnit, executorFirstName, executorLastName, depositCode, projectCode, projectName,
+                projectPublicId, publicId, planId, betweenRegStartDate, betweenRegEndDate, fullName);
 
         String encodedPeriodName = convertorUtil.characterEncodingInputStringForDb.apply(periodName);
         String encodedFieldName = convertorUtil.characterEncodingInputStringForDb.apply(fieldName);
@@ -217,7 +278,7 @@ public class PeriodServiceImpl implements PeriodService {
         String encodedLevelTitle = convertorUtil.characterEncodingInputStringForDb.apply(levelTitle);
 
 
-        List<PeriodProjectionCustomFour> periodProjectionCustomFours =
+        List<PeriodProjectionCustomFour> result =
             periodRepository.queryAllPeriodCustomFour(this.checkNullLongParam(null),
                                                        this.checkNullLongParam(offerNumber),
                                                        this.checkNullLongParam(totalUnit),
@@ -257,12 +318,16 @@ public class PeriodServiceImpl implements PeriodService {
                                                        this.checkNullStringParam(betweenRegEndDate),
                                                         this.checkNullStringParam(encodedExecutorFullName)
                 );
-        return periodProjectionCustomFours;
+        log.info("PeriodService.queryAllPeriodsCustomFour - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public PeriodProjectionCustomTwo queryPeriodsCustomTwoByPeriodPublicId(String periodPublicId) {
-        return periodRepository.queryPeriodCustomTwoByPeriodPublicId(periodPublicId);
+        log.info("PeriodService.queryPeriodsCustomTwoByPeriodPublicId - periodPublicId: {}", periodPublicId);
+        PeriodProjectionCustomTwo result = periodRepository.queryPeriodCustomTwoByPeriodPublicId(periodPublicId);
+        log.info("PeriodService.queryPeriodsCustomTwoByPeriodPublicId - result: {}", result);
+        return result;
     }
 
     protected Predicate<Object> isValueDefault = (input) -> {

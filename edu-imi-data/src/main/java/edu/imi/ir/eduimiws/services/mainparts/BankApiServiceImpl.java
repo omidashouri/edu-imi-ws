@@ -25,16 +25,21 @@ public class BankApiServiceImpl implements BankApiService{
 
     @Override
     public BankApiEntity findByBankPublicId(String bankPublicId) {
-        return bankApiRepository.findByBankPublicId(bankPublicId);
+        log.info("BankApiService.findByBankPublicId - bankPublicId: {}", bankPublicId);
+        BankApiEntity result = bankApiRepository.findByBankPublicId(bankPublicId);
+        log.info("BankApiService.findByBankPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public BankApiDto findBankDtoByBankPublicId(String bankPublicId) {
+        log.info("BankApiService.findBankDtoByBankPublicId - bankPublicId: {}", bankPublicId);
         BankApiDto bankApiDto =  bankApiManager
                 .toBankApiDto(this.findByBankPublicId(bankPublicId),new CycleAvoidingMappingContext());
         if(bankApiDto==null){
             throw new NotFoundException("bank Not Found");
         }else {
+            log.info("BankApiService.findBankDtoByBankPublicId - result: {}", bankApiDto);
             return bankApiDto;
         }
     }

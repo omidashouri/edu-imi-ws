@@ -42,6 +42,11 @@ public class MelliVerifyServiceImpl implements MelliVerifyService{
 
     @Override
     public MelliVerifyDto verify(MelliVerifyDto melliVerifyDto) {
+        log.info("MelliVerifyService.verify - publicId: {}, amount: {}, melliDigitalPaymentPublicId: {}, orderId: {}, token: [REDACTED]",
+                melliVerifyDto != null ? melliVerifyDto.getPublicId() : null,
+                melliVerifyDto != null ? melliVerifyDto.getAmount() : null,
+                melliVerifyDto != null ? melliVerifyDto.getMelliDigitalPaymentPublicId() : null,
+                melliVerifyDto != null ? melliVerifyDto.getOrderId() : null);
 
         VerifyRequestBank verifyRequestBank = verifyRequestBankMapper
                 .melliVerifyDtoToVerifyRequestBank(melliVerifyDto, melliTripleDes);
@@ -61,11 +66,18 @@ public class MelliVerifyServiceImpl implements MelliVerifyService{
 
         melliVerifyMapper.updateMelliVerifyDtoByMelliVerifyEntityAfterSave(melliVerifyDto, melliVerifySaved);
 
+        log.info("MelliVerifyService.verify - result: id={}, publicId={}, succeed={}, resCode={}, amount={}, token=[REDACTED]",
+                melliVerifyDto != null ? melliVerifyDto.getId() : null,
+                melliVerifyDto != null ? melliVerifyDto.getPublicId() : null,
+                melliVerifyDto != null ? melliVerifyDto.getSucceed() : null,
+                melliVerifyDto != null ? melliVerifyDto.getResCode() : null,
+                melliVerifyDto != null ? melliVerifyDto.getAmount() : null);
         return melliVerifyDto;
     }
 
     @Override
     public MelliVerifyDto findByMelliDigitalPaymentPublicId(String melliDigitalPaymentPublicId) {
+        log.info("MelliVerifyService.findByMelliDigitalPaymentPublicId - melliDigitalPaymentPublicId: {}", melliDigitalPaymentPublicId);
 
         MelliVerifyEntity melliVerify = melliVerifyRepository
                 .findByMelliDigitalPaymentPublicId(melliDigitalPaymentPublicId);
@@ -73,6 +85,11 @@ public class MelliVerifyServiceImpl implements MelliVerifyService{
         MelliVerifyDto melliVerifyDto = melliVerifyMapper
                 .toMelliVerifyDto(melliVerify);
 
+        log.info("MelliVerifyService.findByMelliDigitalPaymentPublicId - result: id={}, publicId={}, succeed={}, resCode={}, token=[REDACTED]",
+                melliVerifyDto != null ? melliVerifyDto.getId() : null,
+                melliVerifyDto != null ? melliVerifyDto.getPublicId() : null,
+                melliVerifyDto != null ? melliVerifyDto.getSucceed() : null,
+                melliVerifyDto != null ? melliVerifyDto.getResCode() : null);
         return melliVerifyDto;
     }
 

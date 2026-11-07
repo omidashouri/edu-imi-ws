@@ -19,24 +19,33 @@ public class TermPresentedGroupServiceImpl implements TermPresentedGroupService 
 
     @Override
     public Page<TermPresentedGroupEntity> findAllByOrderPageable(Pageable pageable) {
-        Page<TermPresentedGroupEntity> termPresentedGroupPages = termPresentedGroupRepository
+        log.info("TermPresentedGroupService.findAllByOrderPageable - pageable: {}", pageable);
+        Page<TermPresentedGroupEntity> result = termPresentedGroupRepository
                 .findAllBy(pageable);
-        return termPresentedGroupPages;
+        log.info("TermPresentedGroupService.findAllByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public TermPresentedGroupEntity findByTermPresentedGroupPublicId(String termPresentedGroupPublicId) {
-        TermPresentedGroupEntity termPresentedGroup = termPresentedGroupRepository
+        log.info("TermPresentedGroupService.findByTermPresentedGroupPublicId - termPresentedGroupPublicId: {}", termPresentedGroupPublicId);
+        TermPresentedGroupEntity result = termPresentedGroupRepository
                 .findByTermPresentedGroupApi_TermPresentedGroupPublicId(termPresentedGroupPublicId);
-        return termPresentedGroup;
+        log.info("TermPresentedGroupService.findByTermPresentedGroupPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<TermPresentedGroupEntity>
     selectAllWithCoursePeriodTermProfessorFieldCourseTermPresentedCourseByOrderPageable(Pageable pageable) {
-
-        Page<TermPresentedGroupEntity> termPresentedGroupPages = termPresentedGroupRepository
+        log.info("TermPresentedGroupService.selectAllWithCoursePeriodTermProfessorFieldCourseTermPresentedCourseByOrderPageable - pageable: {}", pageable);
+        Page<TermPresentedGroupEntity> result = termPresentedGroupRepository
                 .readAllBy(pageable);
-        return termPresentedGroupPages;
+        log.info("TermPresentedGroupService.selectAllWithCoursePeriodTermProfessorFieldCourseTermPresentedCourseByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 }

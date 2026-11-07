@@ -37,11 +37,19 @@ public class MelliDigitalPaymentServiceImpl implements MelliDigitalPaymentServic
 
     @Override
     public Long queryLastOrderId() {
-        return melliDigitalPaymentRepository.queryLastOrderId();
+        log.info("MelliDigitalPaymentService.queryLastOrderId - start");
+        Long result = melliDigitalPaymentRepository.queryLastOrderId();
+        log.info("MelliDigitalPaymentService.queryLastOrderId - result: {}", result);
+        return result;
     }
 
     @Override
     public MelliDigitalPaymentDto getToken(MelliDigitalPaymentDto melliDigitalPaymentDto) {
+        log.info("MelliDigitalPaymentService.getToken - publicId: {}, amount: {}, orderId: {}, token: [REDACTED]",
+                melliDigitalPaymentDto != null ? melliDigitalPaymentDto.getPublicId() : null,
+                melliDigitalPaymentDto != null ? melliDigitalPaymentDto.getAmount() : null,
+                melliDigitalPaymentDto != null ? melliDigitalPaymentDto.getOrderId() : null);
+
         PaymentRequestBank paymentRequestBank = paymentRequestBankMapper
                 .melliDigitalPaymentDtoToPaymentRequestBank(melliDigitalPaymentDto, melliCredential);
 
@@ -55,17 +63,40 @@ public class MelliDigitalPaymentServiceImpl implements MelliDigitalPaymentServic
         paymentResponseBankMapper.
                 updateMelliDigitalPaymentDtoByPaymentResponseBank(melliDigitalPaymentDto, paymentResponseBank);
 
+        log.info("MelliDigitalPaymentService.getToken - result: publicId={}, amount={}, orderId={}, resCode={}, token=[REDACTED]",
+                melliDigitalPaymentDto != null ? melliDigitalPaymentDto.getPublicId() : null,
+                melliDigitalPaymentDto != null ? melliDigitalPaymentDto.getAmount() : null,
+                melliDigitalPaymentDto != null ? melliDigitalPaymentDto.getOrderId() : null,
+                melliDigitalPaymentDto != null ? melliDigitalPaymentDto.getResCode() : null);
         return melliDigitalPaymentDto;
     }
 
     @Override
     public MelliDigitalPaymentEntity saveMelliDigitalPaymentEntity(MelliDigitalPaymentEntity melliDigitalPayment){
-        return melliDigitalPaymentRepository.save(melliDigitalPayment);
+        log.info("MelliDigitalPaymentService.saveMelliDigitalPaymentEntity - id: {}, publicId: {}, amount: {}, orderId: {}, token: [REDACTED]",
+                melliDigitalPayment != null ? melliDigitalPayment.getId() : null,
+                melliDigitalPayment != null ? melliDigitalPayment.getPublicId() : null,
+                melliDigitalPayment != null ? melliDigitalPayment.getAmount() : null,
+                melliDigitalPayment != null ? melliDigitalPayment.getOrderId() : null);
+        MelliDigitalPaymentEntity result = melliDigitalPaymentRepository.save(melliDigitalPayment);
+        log.info("MelliDigitalPaymentService.saveMelliDigitalPaymentEntity - result: id={}, publicId={}, amount={}, orderId={}, token=[REDACTED]",
+                result != null ? result.getId() : null,
+                result != null ? result.getPublicId() : null,
+                result != null ? result.getAmount() : null,
+                result != null ? result.getOrderId() : null);
+        return result;
     }
 
     @Override
     public MelliDigitalPaymentEntity findByPublicId(String publicId) {
-        return melliDigitalPaymentRepository.findByPublicId(publicId);
+        log.info("MelliDigitalPaymentService.findByPublicId - publicId: {}", publicId);
+        MelliDigitalPaymentEntity result = melliDigitalPaymentRepository.findByPublicId(publicId);
+        log.info("MelliDigitalPaymentService.findByPublicId - result: id={}, publicId={}, amount={}, orderId={}, token=[REDACTED]",
+                result != null ? result.getId() : null,
+                result != null ? result.getPublicId() : null,
+                result != null ? result.getAmount() : null,
+                result != null ? result.getOrderId() : null);
+        return result;
     }
 
     protected String uriComponentsBuilderToString(String stringUri){

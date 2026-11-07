@@ -22,18 +22,24 @@ public class CompanyApiServiceImpl implements CompanyApiService {
 
     @Override
     public CompanyApiEntity findByCompanyPublicId(String companyPublicId) {
-        return companyApiRepository
+        log.info("CompanyApiService.findByCompanyPublicId - companyPublicId: {}", companyPublicId);
+        CompanyApiEntity result = companyApiRepository
                 .findByCompanyPublicId(companyPublicId)
                 .orElse(new CompanyApiEntity());
+        log.info("CompanyApiService.findByCompanyPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public CompanyEntity findCompanyByCompanyPublicId(String companyPublicId) {
-        return Optional
+        log.info("CompanyApiService.findCompanyByCompanyPublicId - companyPublicId: {}", companyPublicId);
+        CompanyEntity result = Optional
                 .of(this.findByCompanyPublicId(companyPublicId))
                 .filter(Objects::nonNull)
                 .map(CompanyApiEntity::getCompany)
                 .orElse(new CompanyEntity());
+        log.info("CompanyApiService.findCompanyByCompanyPublicId - result: {}", result);
+        return result;
     }
 
 

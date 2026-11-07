@@ -36,11 +36,17 @@ public class FarapayamakServiceImpl implements FarapayamakService {
 
     @Override
     public FarapayamakCredential getFarapayamakCredential() {
-        return farapayamakCredential;
+        log.info("FarapayamakService.getFarapayamakCredential - start");
+        FarapayamakCredential result = farapayamakCredential;
+        log.info("FarapayamakService.getFarapayamakCredential - result: [REDACTED]");
+        return result;
     }
 
     @Override
     public FarapayamakReturnedSendSmsDto sendSMS(FarapayamakSendSmsDto farapayamakSendSmsDto) {
+        log.info("FarapayamakService.sendSMS - farapayamakSendSmsDto: [REDACTED], to: {}, from: {}",
+                farapayamakSendSmsDto != null ? farapayamakSendSmsDto.getTo() : null,
+                farapayamakSendSmsDto != null ? farapayamakSendSmsDto.getFrom() : null);
 
         String completeFinancialUri = String.format(farapayamakCredential.getSendSmsUrl());
 
@@ -73,11 +79,13 @@ public class FarapayamakServiceImpl implements FarapayamakService {
             messageReceiverService.save(newMessageReceiverDto);
         }
 
+        log.info("FarapayamakService.sendSMS - result: {}", farapayamakReturnedSendSmsDto);
         return farapayamakReturnedSendSmsDto;
     }
 
     @Override
     public FarapayamakReturnedSendSmsDto getBasePrice() {
+        log.info("FarapayamakService.getBasePrice - start");
         String completeGetBasePriceUri = String.format(farapayamakCredential.getGetBasePriceUrl());
 
         HttpEntity<?> userNamePasswordRequestEntity = getUserNamePasswordRequestEntity();
@@ -87,11 +95,14 @@ public class FarapayamakServiceImpl implements FarapayamakService {
                         HttpMethod.POST, userNamePasswordRequestEntity,
                         FarapayamakReturnedSendSmsDto.class);
 
-        return farapayamakReturnedSendSmsDto.getBody();
+        FarapayamakReturnedSendSmsDto result = farapayamakReturnedSendSmsDto.getBody();
+        log.info("FarapayamakService.getBasePrice - result: {}", result);
+        return result;
     }
 
     @Override
     public FarapayamakReturnedSendSmsDto getCredit() {
+        log.info("FarapayamakService.getCredit - start");
         String completeGetCreditUri = String.format(farapayamakCredential.getGetCreditUrl());
 
         HttpEntity<?> userNamePasswordRequestEntity = getUserNamePasswordRequestEntity();
@@ -101,11 +112,14 @@ public class FarapayamakServiceImpl implements FarapayamakService {
                         HttpMethod.POST, userNamePasswordRequestEntity,
                         FarapayamakReturnedSendSmsDto.class);
 
-        return farapayamakReturnedSendSmsDto.getBody();
+        FarapayamakReturnedSendSmsDto result = farapayamakReturnedSendSmsDto.getBody();
+        log.info("FarapayamakService.getCredit - result: {}", result);
+        return result;
     }
 
     @Override
     public FarapayamakReturnedSendSmsDto getUserNumbers() {
+        log.info("FarapayamakService.getUserNumbers - start");
         String completeGetUserNumbersUri = String.format(farapayamakCredential.getGetCreditUrl());
 
         HttpEntity<?> userNamePasswordRequestEntity = getUserNamePasswordRequestEntity();
@@ -115,11 +129,17 @@ public class FarapayamakServiceImpl implements FarapayamakService {
                         HttpMethod.POST, userNamePasswordRequestEntity,
                         FarapayamakReturnedSendSmsDto.class);
 
-        return farapayamakReturnedSendSmsDto.getBody();
+        FarapayamakReturnedSendSmsDto result = farapayamakReturnedSendSmsDto.getBody();
+        log.info("FarapayamakService.getUserNumbers - result: {}", result);
+        return result;
     }
 
     @Override
     public FarapayamakReturnedSendSmsDto getMessagesFromFarapayamak(FarapayamakSendSmsDto farapayamakSendSmsDto) {
+        log.info("FarapayamakService.getMessagesFromFarapayamak - farapayamakSendSmsDto: [REDACTED], location: {}, index: {}, count: {}",
+                farapayamakSendSmsDto != null ? farapayamakSendSmsDto.getLocation() : null,
+                farapayamakSendSmsDto != null ? farapayamakSendSmsDto.getIndex() : null,
+                farapayamakSendSmsDto != null ? farapayamakSendSmsDto.getCount() : null);
         String completeGetMessagesUri = String.format(farapayamakCredential.getGetMessagesUrl());
 
 
@@ -143,11 +163,15 @@ public class FarapayamakServiceImpl implements FarapayamakService {
 
         farapayamakReturnedSendSmsDto.toString();
 
-        return farapayamakReturnedSendSmsDto.getBody();
+        FarapayamakReturnedSendSmsDto result = farapayamakReturnedSendSmsDto.getBody();
+        log.info("FarapayamakService.getMessagesFromFarapayamak - result: {}", result);
+        return result;
     }
 
     @Override
     public FarapayamakReturnedSendSmsDto getDeliveries2(FarapayamakSendSmsDto farapayamakSendSmsDto) {
+        log.info("FarapayamakService.getDeliveries2 - farapayamakSendSmsDto: [REDACTED], recId: {}",
+                farapayamakSendSmsDto != null ? farapayamakSendSmsDto.getRecId() : null);
         String completeGetDeliveries2Uri = String.format(farapayamakCredential.getGetDeliveries2Url());
 
         HttpEntity<?> userNamePasswordRequestEntity = getUserNamePasswordRequestEntity();
@@ -158,7 +182,9 @@ public class FarapayamakServiceImpl implements FarapayamakService {
                         HttpMethod.POST, this.requestHttpEntity(farapayamakSendSmsDto),
                         FarapayamakReturnedSendSmsDto.class);
         /* farapayamakReturnedSendSmsDto.toString();*/
-        return farapayamakReturnedSendSmsDto.getBody();
+        FarapayamakReturnedSendSmsDto result = farapayamakReturnedSendSmsDto.getBody();
+        log.info("FarapayamakService.getDeliveries2 - result: {}", result);
+        return result;
 
     }
 

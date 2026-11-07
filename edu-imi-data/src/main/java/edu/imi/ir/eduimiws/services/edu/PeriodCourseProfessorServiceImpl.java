@@ -19,23 +19,33 @@ public class PeriodCourseProfessorServiceImpl implements PeriodCourseProfessorSe
 
     @Override
     public Page<PeriodCourseProfessorEntity> findAllByPageable(Pageable pageable) {
-        Page<PeriodCourseProfessorEntity> periodCourseProfessorPages = periodCourseProfessorRepository
+        log.info("PeriodCourseProfessorService.findAllByPageable - pageable: {}", pageable);
+        Page<PeriodCourseProfessorEntity> result = periodCourseProfessorRepository
                 .findAllBy(pageable);
-        return periodCourseProfessorPages;
+        log.info("PeriodCourseProfessorService.findAllByPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public PeriodCourseProfessorEntity findByPeriodCourseProfessorPublicId(String periodCourseProfessorPublicId) {
-        PeriodCourseProfessorEntity periodCourseProfessor = periodCourseProfessorRepository
+        log.info("PeriodCourseProfessorService.findByPeriodCourseProfessorPublicId - periodCourseProfessorPublicId: {}", periodCourseProfessorPublicId);
+        PeriodCourseProfessorEntity result = periodCourseProfessorRepository
                 .findByPeriodCourseProfessorApi_PriodCoursProfesorPublicId(periodCourseProfessorPublicId);
-        return periodCourseProfessor;
+        log.info("PeriodCourseProfessorService.findByPeriodCourseProfessorPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<PeriodCourseProfessorEntity> findAllByPeriodCourseProfessorFieldNamePageable(Pageable pageable) {
-        Page<PeriodCourseProfessorEntity> periodCourseProfessorPages = periodCourseProfessorRepository
+        log.info("PeriodCourseProfessorService.findAllByPeriodCourseProfessorFieldNamePageable - pageable: {}", pageable);
+        Page<PeriodCourseProfessorEntity> result = periodCourseProfessorRepository
                 .readAllBy(pageable);
-        return periodCourseProfessorPages;
+        log.info("PeriodCourseProfessorService.findAllByPeriodCourseProfessorFieldNamePageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
 }

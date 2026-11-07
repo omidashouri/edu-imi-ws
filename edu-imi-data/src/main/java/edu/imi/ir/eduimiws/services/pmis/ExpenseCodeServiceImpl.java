@@ -31,32 +31,52 @@ public class ExpenseCodeServiceImpl implements ExpenseCodeService {
 
     @Override
     public Page<ExpenseCodeApiEntity> findAll(Pageable pageable) {
-        return expenseCodeRepository.findAll(pageable);
+        log.info("ExpenseCodeService.findAll - pageable: {}", pageable);
+        Page<ExpenseCodeApiEntity> result = expenseCodeRepository.findAll(pageable);
+        log.info("ExpenseCodeService.findAll - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public Page<ExpenseCodeApiEntity> findAllByExpenseTitleContaining(String expenseTitle, Pageable pageable) {
-        return expenseCodeRepository.findAllByExpenseTitleContaining(expenseTitle, pageable);
+        log.info("ExpenseCodeService.findAllByExpenseTitleContaining - expenseTitle: {}, pageable: {}", expenseTitle, pageable);
+        Page<ExpenseCodeApiEntity> result = expenseCodeRepository.findAllByExpenseTitleContaining(expenseTitle, pageable);
+        log.info("ExpenseCodeService.findAllByExpenseTitleContaining - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public ExpenseCodeApiEntity findByExpenseCodePublicId(String expenseCodePublicId) {
-        return expenseCodeRepository.findByExpenseCodePublicId(expenseCodePublicId);
+        log.info("ExpenseCodeService.findByExpenseCodePublicId - expenseCodePublicId: {}", expenseCodePublicId);
+        ExpenseCodeApiEntity result = expenseCodeRepository.findByExpenseCodePublicId(expenseCodePublicId);
+        log.info("ExpenseCodeService.findByExpenseCodePublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public ExpenseCodeApiEntity findByExpenseCode(Long expenseCode) {
-        return expenseCodeRepository.findByExpenseCode(expenseCode);
+        log.info("ExpenseCodeService.findByExpenseCode - expenseCode: {}", expenseCode);
+        ExpenseCodeApiEntity result = expenseCodeRepository.findByExpenseCode(expenseCode);
+        log.info("ExpenseCodeService.findByExpenseCode - result: {}", result);
+        return result;
     }
 
     @Override
     public ExpenseCodeApiDto findExpenseCodeApiDtoByExpenseCodePublicId(String expenseCodePublicId) {
-        return expenseCodeApiFastMapper
+        log.info("ExpenseCodeService.findExpenseCodeApiDtoByExpenseCodePublicId - expenseCodePublicId: {}", expenseCodePublicId);
+        ExpenseCodeApiDto result = expenseCodeApiFastMapper
                 .toExpenseCodeApiDto(this.findByExpenseCodePublicId(expenseCodePublicId), new CycleAvoidingMappingContext());
+        log.info("ExpenseCodeService.findExpenseCodeApiDtoByExpenseCodePublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public String findExpenseCodePublicIdByProjectPublicId(String projectPublicId) {
+        log.info("ExpenseCodeService.findExpenseCodePublicIdByProjectPublicId - projectPublicId: {}", projectPublicId);
 
         ProjectEntity project = projectService.findProjectEntityByProjectApiPublicId(projectPublicId);
 
@@ -64,19 +84,24 @@ public class ExpenseCodeServiceImpl implements ExpenseCodeService {
             throw new NotFoundException("cannot find any project by project public id ");
 
         String expenseCodePublicId = this.midProjectCodeExpenseCodePublicIdMap().get(Long.valueOf(project.getProjectCode().substring(2, 5)));
-        return expenseCodePublicId == null ? "91842E74E2BD57F1613A943B2CC48D1016615A70FBBED819694D78403F1875DD" : expenseCodePublicId;
+        String result = expenseCodePublicId == null ? "91842E74E2BD57F1613A943B2CC48D1016615A70FBBED819694D78403F1875DD" : expenseCodePublicId;
+        log.info("ExpenseCodeService.findExpenseCodePublicIdByProjectPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public ExpenseCodeApiDto findExpenseCodeApiByProjectPublicId(String projectPublicId) {
+        log.info("ExpenseCodeService.findExpenseCodeApiByProjectPublicId - projectPublicId: {}", projectPublicId);
 
         String expenseCodePublicId = this.findExpenseCodePublicIdByProjectPublicId(projectPublicId);
         ExpenseCodeApiDto expenseCodeApiDto = this.findExpenseCodeApiDtoByExpenseCodePublicId(expenseCodePublicId);
+        log.info("ExpenseCodeService.findExpenseCodeApiByProjectPublicId - result: {}", expenseCodeApiDto);
         return expenseCodeApiDto;
     }
 
 
     public Map<Long, String> midProjectCodeExpenseCodePublicIdMap() {
+        log.info("ExpenseCodeService.midProjectCodeExpenseCodePublicIdMap - start");
         Map<Long, String> midProjectCodeExpenseCodeMap = new HashMap<>();
         midProjectCodeExpenseCodeMap.put(212L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(212)); //O
         midProjectCodeExpenseCodeMap.put(221L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(221)); //1
@@ -89,6 +114,7 @@ public class ExpenseCodeServiceImpl implements ExpenseCodeService {
         midProjectCodeExpenseCodeMap.put(230L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(230)); //8
         midProjectCodeExpenseCodeMap.put(234L, ExpenseCodes.getExpensePublicIdFromMidProjectCode(234)); //8
 //        all other code return 9
+        log.info("ExpenseCodeService.midProjectCodeExpenseCodePublicIdMap - resultSize: {}", midProjectCodeExpenseCodeMap.size());
         return midProjectCodeExpenseCodeMap;
     }
 }

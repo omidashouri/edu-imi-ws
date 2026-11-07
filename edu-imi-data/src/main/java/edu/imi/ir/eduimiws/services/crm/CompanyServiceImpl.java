@@ -24,11 +24,15 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public String getImiCompanyPublicId() {
-        return defaultValues.getImiCompanyPublicId();
+        log.info("CompanyService.getImiCompanyPublicId - start");
+        String result = defaultValues.getImiCompanyPublicId();
+        log.info("CompanyService.getImiCompanyPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public CompanyDto getImiCompanyDtoById() {
+        log.info("CompanyService.getImiCompanyDtoById - start");
         CompanyDto companyDto = new CompanyDto();
         companyDto.setId(defaultValues.getImiCompanyId());
         companyDto.setCompanyPublicId(defaultValues.getImiCompanyPublicId());
@@ -37,6 +41,7 @@ public class CompanyServiceImpl implements CompanyService{
         companyApiDto.setId(defaultValues.getImiCompanyApiId());
         companyDto.setCompanyApi(companyApiDto);
 
+        log.info("CompanyService.getImiCompanyDtoById - result: {}", companyDto);
         return companyDto;
 
 /*        return Optional.of(companyRepository.readById(defaultValues.getImiCompanyId()))
@@ -47,12 +52,14 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public CompanyEntity getImiCompanyEntity() {
+        log.info("CompanyService.getImiCompanyEntity - start");
         CompanyEntity company = new CompanyEntity();
         company.setId(defaultValues.getImiCompanyId());
         CompanyApiEntity companyApi = new CompanyApiEntity();
         companyApi.setId(defaultValues.getImiCompanyApiId());
         companyApi.setCompanyPublicId(defaultValues.getImiCompanyPublicId());
         company.setCompanyApi(companyApi);
+        log.info("CompanyService.getImiCompanyEntity - result: {}", company);
         return company;
     }
 

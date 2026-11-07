@@ -22,10 +22,12 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 
     @Override
     public List<StudentCourseEntity> saveAllStudentCourses(List<StudentCourseEntity> newStudentCourses) {
+        log.info("StudentCourseService.saveAllStudentCourses - newStudentCourses: {}", newStudentCourses);
         Iterable<StudentCourseEntity> studentCourseIterable = studentCourseRepository.saveAll(newStudentCourses);
-        List<StudentCourseEntity> studentCourses = StreamSupport
+        List<StudentCourseEntity> result = StreamSupport
                 .stream(studentCourseIterable.spliterator(), false)
                 .collect(Collectors.toList());
-        return studentCourses;
+        log.info("StudentCourseService.saveAllStudentCourses - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 }

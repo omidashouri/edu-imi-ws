@@ -32,43 +32,61 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Page<ProjectEntity> findAllProjectEntityPages(Pageable pageable) {
+        log.info("ProjectService.findAllProjectEntityPages - pageable: {}", pageable);
         Page<ProjectEntity> projectPages = projectRepository
                 .findAll(pageable);
+        log.info("ProjectService.findAllProjectEntityPages - resultSize: {}, totalElements: {}",
+                projectPages == null ? null : projectPages.getNumberOfElements(),
+                projectPages == null ? null : projectPages.getTotalElements());
         return projectPages;
     }
 
     @Override
     public ProjectEntity findProjectEntityByProjectApiPublicId(String projectPublicId) {
+        log.info("ProjectService.findProjectEntityByProjectApiPublicId - projectPublicId: {}", projectPublicId);
         ProjectEntity project = projectRepository
                 .findByProjectApi_ProjectPublicId(projectPublicId);
+        log.info("ProjectService.findProjectEntityByProjectApiPublicId - result: {}", project);
         return project;
     }
 
 
     @Override
     public ProjectDto findProjectDtoByProjectApiPublicId(String projectPublicId) {
-        return projectFastMapper
+        log.info("ProjectService.findProjectDtoByProjectApiPublicId - projectPublicId: {}", projectPublicId);
+        ProjectDto result = projectFastMapper
                 .toProjectDto(this.findProjectEntityByProjectApiPublicId(projectPublicId),
                         new CycleAvoidingMappingContext());
+        log.info("ProjectService.findProjectDtoByProjectApiPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public ProjectDto findProjectDtoByProjectCodeAndLastVersion(String projectCode, String lastVersion) {
-        return projectFastMapper
+        log.info("ProjectService.findProjectDtoByProjectCodeAndLastVersion - projectCode: {}, lastVersion: {}", projectCode, lastVersion);
+        ProjectDto result = projectFastMapper
                 .toProjectDto(projectRepository.findByProjectCodeAndLastVersion(projectCode, lastVersion),
                         new CycleAvoidingMappingContext());
+        log.info("ProjectService.findProjectDtoByProjectCodeAndLastVersion - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<ProjectDto> findAllPageableProjectForPaymentCode(Pageable pageable) {
+        log.info("ProjectService.findAllPageableProjectForPaymentCode - pageable: {}", pageable);
         Page<ProjectForPaymentCodeProjection> projectForPaymentCodeProjections = projectRepository
                 .queryPageableProjectForPaymentCodeProjection(null, null,
                         null, null, "y", pageable);
-        return projectForPaymentCodeProjections.map(projectForPaymentCodeProjectionProjectDtoMapper::projectForPaymentCodeProjectionToProjectDto);
+        Page<ProjectDto> result = projectForPaymentCodeProjections.map(projectForPaymentCodeProjectionProjectDtoMapper::projectForPaymentCodeProjectionToProjectDto);
+        log.info("ProjectService.findAllPageableProjectForPaymentCode - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public Page<ProjectDto> findAllPageableProjectForPaymentCodeByQueryParam(Map<String, String> queryParams) {
+        log.info("ProjectService.findAllPageableProjectForPaymentCodeByQueryParam - queryParams: {}", queryParams);
 
         String projectName, projectCode, projectPublicId;
 
@@ -92,7 +110,11 @@ public class ProjectServiceImpl implements ProjectService {
         Page<ProjectForPaymentCodeProjection> projectForPaymentCodeProjections = projectRepository
                 .queryPageableProjectForPaymentCodeProjection(null, projectPublicId,
                         projectCode, projectName, "y", pageable);
-        return projectForPaymentCodeProjections
+        Page<ProjectDto> result = projectForPaymentCodeProjections
                 .map(projectForPaymentCodeProjectionProjectDtoMapper::projectForPaymentCodeProjectionToProjectDto);
+        log.info("ProjectService.findAllPageableProjectForPaymentCodeByQueryParam - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 }

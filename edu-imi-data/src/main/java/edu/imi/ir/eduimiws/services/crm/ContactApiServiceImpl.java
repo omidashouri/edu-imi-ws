@@ -37,49 +37,67 @@ public class ContactApiServiceImpl implements ContactApiService {
 
     @Override
     public ContactApiEntity saveContactApiByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {
+        log.info("ContactApiService.saveContactApiByPublicContactIdAndPersonEntity - publicContactId: {}, person: {}",
+                publicContactId, person);
         ContactApiEntity newContactApi = new ContactApiEntity();
         newContactApi.setContactPublicId(publicContactId);
         newContactApi.setContact(person.getContact());
         newContactApi.setCreator(person);
 //        newContactApi.setCreateDateTs(new Timestamp(new Date().getTime()));
-        return contactApiRepository.save(newContactApi);
+        ContactApiEntity result = contactApiRepository.save(newContactApi);
+        log.info("ContactApiService.saveContactApiByPublicContactIdAndPersonEntity - result: {}", result);
+        return result;
     }
 
     @Override
     public ContactEntity findContactByContactPublicId(String contactPublicId) {
-        return contactApiRepository
+        log.info("ContactApiService.findContactByContactPublicId - contactPublicId: {}", contactPublicId);
+        ContactEntity result = contactApiRepository
                 .findByContactPublicId(contactPublicId)
                 .filter(Objects::nonNull)
                 .map(ContactApiEntity::getContact)
                 .orElse(new ContactEntity());
+        log.info("ContactApiService.findContactByContactPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public ContactApiDto findContactApiDtoByContactPublicId(String contactPublicId) {
-        return contactApiRepository
+        log.info("ContactApiService.findContactApiDtoByContactPublicId - contactPublicId: {}", contactPublicId);
+        ContactApiDto result = contactApiRepository
                 .findByContactPublicId(contactPublicId)
                 .filter(Objects::nonNull)
                 .map(ca-> contactApiMapper.contactApiEntityToContactApiDto(ca,new CycleAvoidingMappingContext()))
                 .orElse(null);
+        log.info("ContactApiService.findContactApiDtoByContactPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public Long findContactIdByContactPublicId(String contactPublicId) {
-        return Optional
+        log.info("ContactApiService.findContactIdByContactPublicId - contactPublicId: {}", contactPublicId);
+        Long result = Optional
                 .of(this.findContactByContactPublicId(contactPublicId))
                 .filter(Objects::nonNull)
                 .map(ContactEntity::getId)
                 .orElse(null);
+        log.info("ContactApiService.findContactIdByContactPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public ContactApiEntity findContactApiEntityByContactEntityFast(ContactEntity contact) {
+        log.info("ContactApiService.findContactApiEntityByContactEntityFast - contact: {}", contact);
 //        omiddo:add NamedEntityGraph later for contact
-        return contactApiRepository.findByContact(contact);
+        ContactApiEntity result = contactApiRepository.findByContact(contact);
+        log.info("ContactApiService.findContactApiEntityByContactEntityFast - result: {}", result);
+        return result;
     }
 
     @Override
     public List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactApis) {
+        log.info("ContactApiService.saveAllContactApi - contactApisSize: {}",
+                contactApis == null ? null : contactApis.size());
         Iterable<ContactApiEntity> iterableContactApis = new ArrayList<>();
         contactApis.sort(Comparator.comparing(ContactApiEntity::getContactId));
         iterableContactApis = contactApiRepository
@@ -87,11 +105,15 @@ public class ContactApiServiceImpl implements ContactApiService {
         List<ContactApiEntity> newContactApis = StreamSupport
                 .stream(iterableContactApis.spliterator(), false)
                 .collect(Collectors.toList());
+        log.info("ContactApiService.saveAllContactApi - resultSize: {}",
+                newContactApis == null ? null : newContactApis.size());
         return newContactApis;
     }
 
     @Override
     public List<ContactApiEntity> generateContactApiPublicId(List<ContactEntity> newContacts) {
+        log.info("ContactApiService.generateContactApiPublicId - newContactsSize: {}",
+                newContacts == null ? null : newContacts.size());
         List<ContactApiEntity> newContactApis = new ArrayList<>();
 
         newContacts
@@ -121,6 +143,8 @@ public class ContactApiServiceImpl implements ContactApiService {
                 .stream(savedIterableContactApi.spliterator(), false)
                 .collect(Collectors.toCollection(ArrayList::new));
 
+        log.info("ContactApiService.generateContactApiPublicId - resultSize: {}",
+                savedContactApis == null ? null : savedContactApis.size());
         return savedContactApis;
     }
 
@@ -129,4 +153,3 @@ public class ContactApiServiceImpl implements ContactApiService {
     }
 
 }
-

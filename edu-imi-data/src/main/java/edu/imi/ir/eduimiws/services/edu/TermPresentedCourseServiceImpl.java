@@ -19,15 +19,21 @@ public class TermPresentedCourseServiceImpl implements TermPresentedCourseServic
 
     @Override
     public Page<TermPresentedCourseEntity> findAllByOrderPageable(Pageable pageable) {
-        Page<TermPresentedCourseEntity> termPresentedCoursePages = termPresentedCourseRepository
+        log.info("TermPresentedCourseService.findAllByOrderPageable - pageable: {}", pageable);
+        Page<TermPresentedCourseEntity> result = termPresentedCourseRepository
                 .findAllBy(pageable);
-        return termPresentedCoursePages;
+        log.info("TermPresentedCourseService.findAllByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public TermPresentedCourseEntity findByTermPresentedCoursePublicId(String termPresentedCoursePublicId) {
-        TermPresentedCourseEntity termPresentedCourse = termPresentedCourseRepository
+        log.info("TermPresentedCourseService.findByTermPresentedCoursePublicId - termPresentedCoursePublicId: {}", termPresentedCoursePublicId);
+        TermPresentedCourseEntity result = termPresentedCourseRepository
                 .findByTermPresentedCourseApi_TrmPresentedCoursePublicId(termPresentedCoursePublicId);
-        return termPresentedCourse;
+        log.info("TermPresentedCourseService.findByTermPresentedCoursePublicId - result: {}", result);
+        return result;
     }
 }

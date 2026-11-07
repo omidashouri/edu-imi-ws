@@ -13,6 +13,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class AuthTokenServiceImpl implements AuthTokenService {
 
     private static final String CLAIM_USER_PUBLIC_ID = "userPublicId";
@@ -56,11 +58,15 @@ public class AuthTokenServiceImpl implements AuthTokenService {
 
     @Override
     public AuthTokenDto login(UserLoginRequestModel loginRequest) {
+        String role = loginRequest != null && loginRequest.getRole() != null
+                ? loginRequest.getRole() : "ROLE_ANONYMOUS";
+        log.info("AuthTokenService.login - username: {}, role: {}",
+                loginRequest != null ? loginRequest.getUsername() : null, role);
+
         if (loginRequest == null || loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
             throw new BadRequestException("username and password are required");
         }
 
-        String role = loginRequest.getRole() != null ? loginRequest.getRole() : "ROLE_ANONYMOUS";
         Authentication authentication = authenticationManager1.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -69,11 +75,17 @@ public class AuthTokenServiceImpl implements AuthTokenService {
 
         String username = ((User) authentication.getPrincipal()).getUsername();
         String userPublicId = ((MyErpUser) authentication.getPrincipal()).getUserPublicId();
-        return issueTokens(username, userPublicId);
+        AuthTokenDto result = issueTokens(username, userPublicId);
+        log.info("AuthTokenService.login - result: userPublicId={}, tokenType={}, tokensIssued=[REDACTED], accessTokenExpiresIn={}, refreshTokenExpiresIn={}",
+                result.getUserPublicId(), result.getTokenType(),
+                result.getAccessTokenExpiresIn(), result.getRefreshTokenExpiresIn());
+        return result;
     }
 
     @Override
     public AuthTokenDto clientLogin(ClientTokenRequestModel clientTokenRequest) {
+        log.info("AuthTokenService.clientLogin - credentials: [REDACTED]");
+
         if (clientTokenRequest == null) {
             throw new BadRequestException("request body is required");
         }
@@ -87,11 +99,17 @@ public class AuthTokenServiceImpl implements AuthTokenService {
             throw new BadRequestException("linked person api is incomplete");
         }
 
-        return issueTokens(username, userPublicId);
+        AuthTokenDto result = issueTokens(username, userPublicId);
+        log.info("AuthTokenService.clientLogin - result: username={}, userPublicId={}, tokenType={}, tokensIssued=[REDACTED], accessTokenExpiresIn={}, refreshTokenExpiresIn={}",
+                username, result.getUserPublicId(), result.getTokenType(),
+                result.getAccessTokenExpiresIn(), result.getRefreshTokenExpiresIn());
+        return result;
     }
 
     @Override
     public AuthTokenDto refresh(RefreshTokenRequestModel refreshTokenRequest) {
+        log.info("AuthTokenService.refresh - refreshToken: [REDACTED]");
+
         if (refreshTokenRequest == null || refreshTokenRequest.getRefreshToken() == null
                 || refreshTokenRequest.getRefreshToken().isBlank()) {
             throw new BadRequestException("refreshToken is required");
@@ -118,7 +136,11 @@ public class AuthTokenServiceImpl implements AuthTokenService {
             throw new BadRequestException("refresh token is invalid");
         }
 
-        return issueTokens(username, userPublicId);
+        AuthTokenDto result = issueTokens(username, userPublicId);
+        log.info("AuthTokenService.refresh - result: username={}, userPublicId={}, tokenType={}, tokensIssued=[REDACTED], accessTokenExpiresIn={}, refreshTokenExpiresIn={}",
+                username, result.getUserPublicId(), result.getTokenType(),
+                result.getAccessTokenExpiresIn(), result.getRefreshTokenExpiresIn());
+        return result;
     }
 
     private AuthTokenDto issueTokens(String username, String userPublicId) {

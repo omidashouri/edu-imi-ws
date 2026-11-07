@@ -26,69 +26,97 @@ public class FieldServiceImpl implements FieldService{
 
     @Override
     public Long countFieldByIdLessThanEqual(Long fieldId) {
-        Long fieldCount = fieldRepository.countByIdLessThanEqual(fieldId);
-        return fieldCount;
+        log.info("FieldService.countFieldByIdLessThanEqual - fieldId: {}", fieldId);
+        Long result = fieldRepository.countByIdLessThanEqual(fieldId);
+        log.info("FieldService.countFieldByIdLessThanEqual - result: {}", result);
+        return result;
     }
 
     @Override
     public FieldEntity selectLastRecord() {
-        return fieldRepository.findFirstByOrderByIdDesc();
+        log.info("FieldService.selectLastRecord - start");
+        FieldEntity result = fieldRepository.findFirstByOrderByIdDesc();
+        log.info("FieldService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<FieldEntity> findAllByOrderPageable(Pageable pageable) {
-        Page<FieldEntity> fieldPages = fieldRepository
+        log.info("FieldService.findAllByOrderPageable - pageable: {}", pageable);
+        Page<FieldEntity> result = fieldRepository
                 .findAll(pageable);
-        return fieldPages;
+        log.info("FieldService.findAllByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public FieldEntity findByFieldPublicId(String fieldPublicId) {
-        FieldEntity field = fieldRepository
+        log.info("FieldService.findByFieldPublicId - fieldPublicId: {}", fieldPublicId);
+        FieldEntity result = fieldRepository
                 .findByFieldApi_FieldPublicId(fieldPublicId);
-        return field;
+        log.info("FieldService.findByFieldPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public Page<FieldEntity> findAllByLevelPublicIdPageable(String levelPublicId, Pageable pageable) {
-        Page<FieldEntity> fieldPages = fieldRepository
+        log.info("FieldService.findAllByLevelPublicIdPageable - levelPublicId: {}, pageable: {}", levelPublicId, pageable);
+        Page<FieldEntity> result = fieldRepository
                 .findByFieldApiIsNotNullAndFieldApi_LevelPublicId(levelPublicId, pageable);
-        return fieldPages;
+        log.info("FieldService.findAllByLevelPublicIdPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public Page<FieldEntity> findAllByEduCategoryPublicIdPageable(String eduCategoryPublicId, Pageable pageable) {
-        Page<FieldEntity> fieldPages = fieldRepository
+        log.info("FieldService.findAllByEduCategoryPublicIdPageable - eduCategoryPublicId: {}, pageable: {}", eduCategoryPublicId, pageable);
+        Page<FieldEntity> result = fieldRepository
                 .findByFieldApiIsNotNullAndFieldApi_EduCategoryPublicId(eduCategoryPublicId, pageable);
-        return fieldPages;
+        log.info("FieldService.findAllByEduCategoryPublicIdPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public List<FieldEntity> findAllFieldOnlyByIdBetween(Long startId, Long endId) {
+        log.info("FieldService.findAllFieldOnlyByIdBetween - startId: {}, endId: {}", startId, endId);
         List<FieldOnly> allFieldOnlys = fieldRepository.findAllFieldOnlyByIdBetween(startId, endId);
-        List<FieldEntity> allFields = fieldOnlyMapper
+        List<FieldEntity> result = fieldOnlyMapper
                 .toFieldEntities(allFieldOnlys, new CycleAvoidingMappingContext());
-        return allFields;
+        log.info("FieldService.findAllFieldOnlyByIdBetween - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<FieldEntity> selectAllFieldOnly() {
+        log.info("FieldService.selectAllFieldOnly - start");
         List<FieldOnly> fieldOnlys = fieldRepository.findAllFieldOnly();
         fieldOnlys.sort(Comparator.comparing(FieldOnly::getId));
-        List<FieldEntity> allFields = fieldOnlyMapper
+        List<FieldEntity> result = fieldOnlyMapper
                 .toFieldEntities(fieldOnlys, new CycleAvoidingMappingContext());
-        return allFields;
+        log.info("FieldService.selectAllFieldOnly - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public FieldEntity findFirstByIdLessThanOrderByIdDesc(Long fieldId) {
-        FieldEntity field = fieldRepository
+        log.info("FieldService.findFirstByIdLessThanOrderByIdDesc - fieldId: {}", fieldId);
+        FieldEntity result = fieldRepository
                 .findFirstByIdLessThanEqualOrderByIdDesc(fieldId);
-        return field;
+        log.info("FieldService.findFirstByIdLessThanOrderByIdDesc - result: {}", result);
+        return result;
     }
 
     @Override
     public Long selectFieldLastSequenceNumber() {
-        return fieldRepository.selectLastSequenceNumber();
+        log.info("FieldService.selectFieldLastSequenceNumber - start");
+        Long result = fieldRepository.selectLastSequenceNumber();
+        log.info("FieldService.selectFieldLastSequenceNumber - result: {}", result);
+        return result;
     }
 }

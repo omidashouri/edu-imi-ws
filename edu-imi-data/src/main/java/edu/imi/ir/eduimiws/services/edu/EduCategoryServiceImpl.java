@@ -31,69 +31,91 @@ public class EduCategoryServiceImpl implements EduCategoryService{
 
     @Override
     public Long countEduCategoryByIdLessThanEqual(Long eduCategoryId) {
-        Long eduCategoryCount = eduCategoryRepository.countByIdLessThanEqual(eduCategoryId);
-        return eduCategoryCount;
+        log.info("EduCategoryService.countEduCategoryByIdLessThanEqual - eduCategoryId: {}", eduCategoryId);
+        Long result = eduCategoryRepository.countByIdLessThanEqual(eduCategoryId);
+        log.info("EduCategoryService.countEduCategoryByIdLessThanEqual - result: {}", result);
+        return result;
     }
 
     @Override
     public EduCategoryEntity selectLastRecord() {
-        return eduCategoryRepository.findFirstByOrderByIdDesc();
+        log.info("EduCategoryService.selectLastRecord - start");
+        EduCategoryEntity result = eduCategoryRepository.findFirstByOrderByIdDesc();
+        log.info("EduCategoryService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @PerformanceLogger
     @Override
     public Page<EduCategoryEntity> findAllByOrderPageable(Pageable pageable) {
-        Page<EduCategoryEntity> eduCategoryPages = eduCategoryRepository
+        log.info("EduCategoryService.findAllByOrderPageable - pageable: {}", pageable);
+        Page<EduCategoryEntity> result = eduCategoryRepository
                 .findAll(pageable);
-        return eduCategoryPages;
+        log.info("EduCategoryService.findAllByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public EduCategoryEntity findByEduCategoryPublicId(String eduCategoryPublicId) {
-        EduCategoryEntity eduCategory = eduCategoryRepository
+        log.info("EduCategoryService.findByEduCategoryPublicId - eduCategoryPublicId: {}", eduCategoryPublicId);
+        EduCategoryEntity result = eduCategoryRepository
                 .findByEduCategoryApi_EduCategoryPublicId(eduCategoryPublicId);
-        return eduCategory;
+        log.info("EduCategoryService.findByEduCategoryPublicId - result: {}", result);
+        return result;
     }
 
     @Override
     public List<EduCategoryEntity> findAllEduCategoryProjectionByIdBetween(Long startId, Long endId) {
+        log.info("EduCategoryService.findAllEduCategoryProjectionByIdBetween - startId: {}, endId: {}", startId, endId);
         List<EduCategoryProjection> allEduCategoryProjections = eduCategoryRepository
                 .findAllByIdBetween(startId, endId);
         List<EduCategoryDto> eduCategoryDtos = eduCategoryProjectionEduCategoryDtoMapper
                 .toEduCategoryDtos(allEduCategoryProjections, new CycleAvoidingMappingContext());
-        List<EduCategoryEntity> allEduCategorys = eduCategoryDtoMapper
+        List<EduCategoryEntity> result = eduCategoryDtoMapper
                 .toEduCategoryEntities(eduCategoryDtos, new CycleAvoidingMappingContext());
-        return allEduCategorys;
+        log.info("EduCategoryService.findAllEduCategoryProjectionByIdBetween - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<EduCategoryEntity> selectAllEduCategoryProjection() {
+        log.info("EduCategoryService.selectAllEduCategoryProjection - start");
         List<EduCategoryProjection> eduCategoryProjections = eduCategoryRepository
                 .findBy();
         eduCategoryProjections.sort(Comparator.comparing(EduCategoryProjection::getId));
         List<EduCategoryDto> eduCategoryDtos = eduCategoryProjectionEduCategoryDtoMapper
                 .toEduCategoryDtos(eduCategoryProjections, new CycleAvoidingMappingContext());
-        List<EduCategoryEntity> allEduCategorys = eduCategoryDtoMapper
+        List<EduCategoryEntity> result = eduCategoryDtoMapper
                 .toEduCategoryEntities(eduCategoryDtos, new CycleAvoidingMappingContext());
-        return allEduCategorys;
+        log.info("EduCategoryService.selectAllEduCategoryProjection - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public List<EduCategoryEntity> findAllByEduCategoryTitle(String eduCategoryTitle) {
-        List<EduCategoryEntity> eduCategories = eduCategoryRepository
+        log.info("EduCategoryService.findAllByEduCategoryTitle - eduCategoryTitle: {}", eduCategoryTitle);
+        List<EduCategoryEntity> result = eduCategoryRepository
                 .findAllByTitleContains(eduCategoryTitle);
-        return eduCategories;
+        log.info("EduCategoryService.findAllByEduCategoryTitle - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public EduCategoryEntity findFirstByIdLessThanOrderByIdDesc(Long eduCategoryId) {
-        EduCategoryEntity eduCategory = eduCategoryRepository
+        log.info("EduCategoryService.findFirstByIdLessThanOrderByIdDesc - eduCategoryId: {}", eduCategoryId);
+        EduCategoryEntity result = eduCategoryRepository
                 .findFirstByIdLessThanEqualOrderByIdDesc(eduCategoryId);
-        return eduCategory;
+        log.info("EduCategoryService.findFirstByIdLessThanOrderByIdDesc - result: {}", result);
+        return result;
     }
 
     @Override
     public Long selectEduCategoryLastSequenceNumber() {
-        return eduCategoryRepository.selectLastSequenceNumber();
+        log.info("EduCategoryService.selectEduCategoryLastSequenceNumber - start");
+        Long result = eduCategoryRepository.selectLastSequenceNumber();
+        log.info("EduCategoryService.selectEduCategoryLastSequenceNumber - result: {}", result);
+        return result;
     }
 }

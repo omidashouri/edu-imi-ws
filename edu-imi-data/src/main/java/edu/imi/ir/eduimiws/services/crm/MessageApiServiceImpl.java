@@ -23,7 +23,10 @@ public class MessageApiServiceImpl implements MessageApiService{
 
     @Override
     public MessageApiEntity findEntityByMessageId(Long messageId) {
-        return messageApiRepository.findByMessageId(messageId);
+        log.info("MessageApiService.findEntityByMessageId - messageId: {}", messageId);
+        MessageApiEntity result = messageApiRepository.findByMessageId(messageId);
+        log.info("MessageApiService.findEntityByMessageId - result: {}", result);
+        return result;
     }
 
 //    @Override

@@ -26,28 +26,38 @@ public class LevelApiServiceImpl implements LevelApiService{
 
     @Override
     public LevelApiEntity selectLastRecord() {
-        return levelApiRepository.findFirstByOrderByIdDesc();
+        log.info("LevelApiService.selectLastRecord - start");
+        LevelApiEntity result = levelApiRepository.findFirstByOrderByIdDesc();
+        log.info("LevelApiService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Long levelApiCount() {
-        return levelApiRepository.count();
+        log.info("LevelApiService.levelApiCount - start");
+        Long result = levelApiRepository.count();
+        log.info("LevelApiService.levelApiCount - result: {}", result);
+        return result;
     }
 
     @Override
     public List<LevelApiEntity> generateLevelApiPublicId(List<LevelEntity> newLevelEntities) {
+        log.info("LevelApiService.generateLevelApiPublicId - newLevelEntities: {}", newLevelEntities);
         List<LevelApiEntity> newLevelApis = new ArrayList<>();
         newLevelApis = levelApiLevelEntityHandlePublicIdMapper
                 .toLevelApis(newLevelEntities, new CycleAvoidingMappingContext());
         newLevelApis.sort(Comparator.comparing(LevelApiEntity::getLevelId));
         levelApiRepository.saveAll(newLevelApis);
+        log.info("LevelApiService.generateLevelApiPublicId - resultSize: {}", newLevelApis == null ? null : newLevelApis.size());
         return newLevelApis;
     }
 
     @Override
     public List<LevelApiEntity> findAllByLevelIdIn(List<Long> levelIds) {
-        List<LevelApiEntity> levelApis = levelApiRepository
+        log.info("LevelApiService.findAllByLevelIdIn - levelIds: {}", levelIds);
+        List<LevelApiEntity> result = levelApiRepository
                 .findAllByLevelIdIn(levelIds);
-        return levelApis;
+        log.info("LevelApiService.findAllByLevelIdIn - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 }

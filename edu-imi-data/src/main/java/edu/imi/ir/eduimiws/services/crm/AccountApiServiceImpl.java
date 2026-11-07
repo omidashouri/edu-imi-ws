@@ -24,10 +24,13 @@ public class AccountApiServiceImpl implements AccountApiService{
 
     @Override
     public AccountEntity findAccountByAccountPublicId(String accountPublicId) {
-        return accountApiRepository
+        log.info("AccountApiService.findAccountByAccountPublicId - accountPublicId: {}", accountPublicId);
+        AccountEntity result = accountApiRepository
                 .findByAccountPublicId(accountPublicId)
                 .map(AccountApiEntity::getAccount)
                 .orElse(new AccountEntity());
+        log.info("AccountApiService.findAccountByAccountPublicId - result: {}", result);
+        return result;
     }
 
 /*    @Override

@@ -34,14 +34,18 @@ public class RoleApiServiceImpl implements RoleApiService {
 
     @Override
     public Collection<RoleApiEntity> getDefaultUserRole() {
+        log.info("RoleApiService.getDefaultUserRole - start");
         RoleApiEntity userRole = new RoleApiEntity();
         userRole.setName("ROLE_USER");
         userRole.setCreateDateTs(new Timestamp(new Date().getTime()));
-        return Arrays.asList(userRole);
+        Collection<RoleApiEntity> result = Arrays.asList(userRole);
+        log.info("RoleApiService.getDefaultUserRole - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 
     @Override
     public RoleApiEntity createRoleByRoleForm(RoleForm roleForm) {
+        log.info("RoleApiService.createRoleByRoleForm - roleForm: {}", roleForm);
 
         if (roleForm.getRoleName() == null || roleForm.getRoleName().isBlank()) {
             throw new RoleServiceException("Role name is required");
@@ -60,11 +64,14 @@ public class RoleApiServiceImpl implements RoleApiService {
         if (roleForm.getPrivilegePublicId() != null && !roleForm.getPrivilegePublicId().isEmpty()) {
             newRole.setPrivileges(resolvePrivilegesAsSet(roleForm.getPrivilegePublicId()));
         }
-        return roleApiRepository.save(newRole);
+        RoleApiEntity result = roleApiRepository.save(newRole);
+        log.info("RoleApiService.createRoleByRoleForm - result: {}", result);
+        return result;
     }
 
     @Override
     public RoleApiEntity updateRoleByRoleForm(String rolePublicId, RoleForm roleForm) {
+        log.info("RoleApiService.updateRoleByRoleForm - rolePublicId: {}, roleForm: {}", rolePublicId, roleForm);
         RoleApiEntity roleApi = requireRole(rolePublicId);
         if (roleForm.getRoleName() != null && !roleForm.getRoleName().isBlank()) {
             String correctedRoleName = normalizeRoleName(roleForm.getRoleName());
@@ -77,18 +84,23 @@ public class RoleApiServiceImpl implements RoleApiService {
             roleApi.setName(correctedRoleName);
         }
         roleApi.setEditDateTs(new Timestamp(new Date().getTime()));
-        return roleApiRepository.save(roleApi);
+        RoleApiEntity result = roleApiRepository.save(roleApi);
+        log.info("RoleApiService.updateRoleByRoleForm - result: {}", result);
+        return result;
     }
 
     @Override
     public RoleApiEntity replacePrivileges(String rolePublicId, Collection<String> privilegePublicIds) {
+        log.info("RoleApiService.replacePrivileges - rolePublicId: {}, privilegePublicIds: {}", rolePublicId, privilegePublicIds);
         RoleApiEntity roleApi = requireRole(rolePublicId);
         if (privilegePublicIds == null) {
             throw new RoleServiceException("Privilege Public Id is Empty");
         }
         roleApi.setPrivileges(resolvePrivilegesAsSet(privilegePublicIds));
         roleApi.setEditDateTs(new Timestamp(new Date().getTime()));
-        return roleApiRepository.save(roleApi);
+        RoleApiEntity result = roleApiRepository.save(roleApi);
+        log.info("RoleApiService.replacePrivileges - result: {}", result);
+        return result;
     }
 
     private RoleApiEntity requireRole(String rolePublicId) {
@@ -124,37 +136,50 @@ public class RoleApiServiceImpl implements RoleApiService {
 
     @Override
     public Collection<RoleApiEntity> findAllByRoleName(String roleName) {
+        log.info("RoleApiService.findAllByRoleName - roleName: {}", roleName);
         Collection<RoleApiEntity> returnedRoleApis;
         returnedRoleApis = roleApiRepository.findAllByName(roleName);
+        log.info("RoleApiService.findAllByRoleName - resultSize: {}", returnedRoleApis == null ? null : returnedRoleApis.size());
         return returnedRoleApis;
     }
 
     @Override
     public Collection<RoleApiEntity> findAllByRoleNameAndPrivileges(String roleName, Collection<PrivilegeApiEntity> privileges) {
+        log.info("RoleApiService.findAllByRoleNameAndPrivileges - roleName: {}, privilegesSize: {}",
+                roleName, privileges == null ? null : privileges.size());
         List<PrivilegeApiEntity> pa = privileges.stream().collect(Collectors.toList());
         Collection<RoleApiEntity> returnedRoles = roleApiRepository
                 .findAllByNameAndPrivilegesIn(roleName, pa);
+        log.info("RoleApiService.findAllByRoleNameAndPrivileges - resultSize: {}", returnedRoles == null ? null : returnedRoles.size());
         return returnedRoles;
     }
 
     @Override
     public Page<RoleApiEntity> findAllRoleEntityPagesOrderByCreateDateDesc(Pageable pageable) {
+        log.info("RoleApiService.findAllRoleEntityPagesOrderByCreateDateDesc - pageable: {}", pageable);
         Page<RoleApiEntity> roleApiPages = roleApiRepository
                 .findAllByOrderByCreateDateTsDesc(pageable);
+        log.info("RoleApiService.findAllRoleEntityPagesOrderByCreateDateDesc - resultSize: {}, totalElements: {}",
+                roleApiPages == null ? null : roleApiPages.getNumberOfElements(),
+                roleApiPages == null ? null : roleApiPages.getTotalElements());
         return roleApiPages;
     }
 
     @Override
     public RoleApiEntity findByRolePublicId(String rolePublicId) {
+        log.info("RoleApiService.findByRolePublicId - rolePublicId: {}", rolePublicId);
         RoleApiEntity roleApi = roleApiRepository
                 .findByRolePublicId(rolePublicId);
+        log.info("RoleApiService.findByRolePublicId - result: {}", roleApi);
         return roleApi;
     }
 
     @Override
     public Collection<RoleApiEntity> findAllByRolePublicIdsIn(List<String> rolePublicIds) {
+        log.info("RoleApiService.findAllByRolePublicIdsIn - rolePublicIds: {}", rolePublicIds);
         Collection<RoleApiEntity> returnRoles = roleApiRepository
                 .findAllByRolePublicIdIn(rolePublicIds);
+        log.info("RoleApiService.findAllByRolePublicIdsIn - resultSize: {}", returnRoles == null ? null : returnRoles.size());
         return returnRoles;
     }
 

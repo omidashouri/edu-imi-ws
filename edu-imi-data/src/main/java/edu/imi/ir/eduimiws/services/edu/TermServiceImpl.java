@@ -19,15 +19,21 @@ public class TermServiceImpl implements TermService {
 
     @Override
     public Page<TermEntity> findAllByOrderPageable(Pageable pageable) {
-        Page<TermEntity> termPages = termRepository
+        log.info("TermService.findAllByOrderPageable - pageable: {}", pageable);
+        Page<TermEntity> result = termRepository
                 .findAllBy(pageable);
-        return termPages;
+        log.info("TermService.findAllByOrderPageable - resultSize: {}, totalElements: {}",
+                result == null ? null : result.getNumberOfElements(),
+                result == null ? null : result.getTotalElements());
+        return result;
     }
 
     @Override
     public TermEntity findByTermPublicId(String termPublicId) {
-        TermEntity term = termRepository
+        log.info("TermService.findByTermPublicId - termPublicId: {}", termPublicId);
+        TermEntity result = termRepository
                 .findByTermApi_TermPublicId(termPublicId);
-        return term;
+        log.info("TermService.findByTermPublicId - result: {}", result);
+        return result;
     }
 }

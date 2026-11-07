@@ -26,29 +26,38 @@ public class EduCategoryApiServiceImpl implements EduCategoryApiService{
 
     @Override
     public EduCategoryApiEntity selectLastRecord() {
-        return eduCategoryApiRepository.findFirstByOrderByIdDesc();
+        log.info("EduCategoryApiService.selectLastRecord - start");
+        EduCategoryApiEntity result = eduCategoryApiRepository.findFirstByOrderByIdDesc();
+        log.info("EduCategoryApiService.selectLastRecord - result: {}", result);
+        return result;
     }
 
     @Override
     public Long eduCategoryApiCount() {
-        return eduCategoryApiRepository.count();
+        log.info("EduCategoryApiService.eduCategoryApiCount - start");
+        Long result = eduCategoryApiRepository.count();
+        log.info("EduCategoryApiService.eduCategoryApiCount - result: {}", result);
+        return result;
     }
 
     @Override
     public List<EduCategoryApiEntity> generateEduCategoryApiPublicId(List<EduCategoryEntity> newEduCategories) {
-
+        log.info("EduCategoryApiService.generateEduCategoryApiPublicId - newEduCategories: {}", newEduCategories);
         List<EduCategoryApiEntity> newEduCategoryApis = new ArrayList<>();
         newEduCategoryApis = eduCategoryApiEduCategoryEntityHandlePublicIdMapper
                 .toEduCategoryApis(newEduCategories, new CycleAvoidingMappingContext());
         newEduCategoryApis.sort(Comparator.comparing(EduCategoryApiEntity::getEduCategoryId));
         eduCategoryApiRepository.saveAll(newEduCategoryApis);
+        log.info("EduCategoryApiService.generateEduCategoryApiPublicId - resultSize: {}", newEduCategoryApis == null ? null : newEduCategoryApis.size());
         return newEduCategoryApis;
     }
 
     @Override
     public List<EduCategoryApiEntity> findAllByEduCategoryIdIn(List<Long> eduCategoryIds) {
-        List<EduCategoryApiEntity> eduCategoryApis = eduCategoryApiRepository
+        log.info("EduCategoryApiService.findAllByEduCategoryIdIn - eduCategoryIds: {}", eduCategoryIds);
+        List<EduCategoryApiEntity> result = eduCategoryApiRepository
                 .findAllByEduCategoryIdIn(eduCategoryIds);
-        return eduCategoryApis;
+        log.info("EduCategoryApiService.findAllByEduCategoryIdIn - resultSize: {}", result == null ? null : result.size());
+        return result;
     }
 }
