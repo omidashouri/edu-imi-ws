@@ -43,11 +43,6 @@ public class CompanyServiceImpl implements CompanyService{
 
         log.info("CompanyService.getImiCompanyDtoById - result: {}", companyDto);
         return companyDto;
-
-/*        return Optional.of(companyRepository.readById(defaultValues.getImiCompanyId()))
-                .filter(Objects::nonNull)
-                .map(ce-> companyMapper.toCompanyDto(ce,new CycleAvoidingMappingContext()))
-                .orElse(new CompanyDto());*/
     }
 
     @Override

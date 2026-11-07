@@ -32,13 +32,4 @@ public class AccountApiServiceImpl implements AccountApiService{
         log.info("AccountApiService.findAccountByAccountPublicId - result: {}", result);
         return result;
     }
-
-/*    @Override
-    public Long findAccountIdByAccountPublicId(String accountPublicId) {
-        return Optional
-                .of(this.findByAccountPublicId(accountPublicId))
-                .filter(Objects::nonNull)
-                .map(AccountEntity::getId)
-                .orElse(null);
-    }*/
 }

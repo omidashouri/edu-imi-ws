@@ -122,7 +122,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
                     .getPayload();
         } catch (ExpiredJwtException expiredJwtException) {
             throw new BadRequestException("refresh token is expired");
-        } catch (JwtException | IllegalArgumentException exception) {
+        } catch (JwtException | IllegalArgumentException _) {
             throw new BadRequestException("refresh token is invalid");
         }
 

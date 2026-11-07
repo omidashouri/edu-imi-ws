@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -29,11 +28,6 @@ public class ContactApiServiceImpl implements ContactApiService {
     private final ContactApiRepository contactApiRepository;
     private final ContactApiMapper contactApiMapper;
     private final PublicIdUtil publicIdUtil;
-//NU
-/*    @Override
-    public ContactApiEntity saveContactWebServiceEntity(ContactApiEntity contactWebServiceEntity) {
-        return contactWebServiceRepository.save(contactWebServiceEntity);
-    }*/
 
     @Override
     public ContactApiEntity saveContactApiByPublicContactIdAndPersonEntity(String publicContactId, PersonEntity person) {
@@ -43,7 +37,6 @@ public class ContactApiServiceImpl implements ContactApiService {
         newContactApi.setContactPublicId(publicContactId);
         newContactApi.setContact(person.getContact());
         newContactApi.setCreator(person);
-//        newContactApi.setCreateDateTs(new Timestamp(new Date().getTime()));
         ContactApiEntity result = contactApiRepository.save(newContactApi);
         log.info("ContactApiService.saveContactApiByPublicContactIdAndPersonEntity - result: {}", result);
         return result;
@@ -88,7 +81,6 @@ public class ContactApiServiceImpl implements ContactApiService {
     @Override
     public ContactApiEntity findContactApiEntityByContactEntityFast(ContactEntity contact) {
         log.info("ContactApiService.findContactApiEntityByContactEntityFast - contact: {}", contact);
-//        omiddo:add NamedEntityGraph later for contact
         ContactApiEntity result = contactApiRepository.findByContact(contact);
         log.info("ContactApiService.findContactApiEntityByContactEntityFast - result: {}", result);
         return result;
@@ -98,13 +90,10 @@ public class ContactApiServiceImpl implements ContactApiService {
     public List<ContactApiEntity> saveAllContactApi(List<ContactApiEntity> contactApis) {
         log.info("ContactApiService.saveAllContactApi - contactApisSize: {}",
                 contactApis == null ? null : contactApis.size());
-        Iterable<ContactApiEntity> iterableContactApis = new ArrayList<>();
         contactApis.sort(Comparator.comparing(ContactApiEntity::getContactId));
-        iterableContactApis = contactApiRepository
-                .saveAll(contactApis);
         List<ContactApiEntity> newContactApis = StreamSupport
-                .stream(iterableContactApis.spliterator(), false)
-                .collect(Collectors.toList());
+                .stream(contactApiRepository.saveAll(contactApis).spliterator(), false)
+                .toList();
         log.info("ContactApiService.saveAllContactApi - resultSize: {}",
                 newContactApis == null ? null : newContactApis.size());
         return newContactApis;
@@ -114,7 +103,6 @@ public class ContactApiServiceImpl implements ContactApiService {
     public List<ContactApiEntity> generateContactApiPublicId(List<ContactEntity> newContacts) {
         log.info("ContactApiService.generateContactApiPublicId - newContactsSize: {}",
                 newContacts == null ? null : newContacts.size());
-        List<ContactApiEntity> newContactApis = new ArrayList<>();
 
         newContacts
                 .stream()
@@ -128,20 +116,15 @@ public class ContactApiServiceImpl implements ContactApiService {
                     c.setContactWebService(newContactApi);
                 });
 
-        newContactApis = newContacts
+        List<ContactApiEntity> newContactApis = newContacts
                 .stream()
                 .map(ContactEntity::getContactWebService)
-                .collect(Collectors.toList());
-
-        newContactApis
-                .sort(Comparator.comparing(ContactApiEntity::getContactId));
-
-        Iterable<ContactApiEntity> savedIterableContactApi =
-                contactApiRepository.saveAll(newContactApis);
+                .sorted(Comparator.comparing(ContactApiEntity::getContactId))
+                .toList();
 
         List<ContactApiEntity> savedContactApis = StreamSupport
-                .stream(savedIterableContactApi.spliterator(), false)
-                .collect(Collectors.toCollection(ArrayList::new));
+                .stream(contactApiRepository.saveAll(newContactApis).spliterator(), false)
+                .toList();
 
         log.info("ContactApiService.generateContactApiPublicId - resultSize: {}",
                 savedContactApis == null ? null : savedContactApis.size());

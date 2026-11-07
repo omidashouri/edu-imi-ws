@@ -105,59 +105,18 @@ public class ClientApiServiceImpl implements ClientApiService {
 
     @Override
     public ClientApiDto update(String clientPublicId, ClientApiUpdateRequest request) {
-        log.info("ClientApiService.update - clientPublicId: {}, clientId: {}, personPublicId: {}, companyName: {}, description: {}, enabled: {}, clientSecret: [REDACTED]",
-                clientPublicId,
-                request != null ? request.getClientId() : null,
-                request != null ? request.getPersonPublicId() : null,
-                request != null ? request.getCompanyName() : null,
-                request != null ? request.getDescription() : null,
-                request != null ? request.getEnabled() : null);
+        logUpdateRequest(clientPublicId, request);
         if (request == null) {
             throw new BadRequestException("request body is required");
         }
 
         ClientApiEntity entity = requireActiveClient(clientPublicId);
-        boolean changed = false;
-
-        if (hasText(request.getClientId())) {
-            String newClientId = request.getClientId().trim();
-            if (!newClientId.equals(entity.getClientId())
-                    && clientApiRepository.existsByClientIdAndDeleteDateTsIsNullAndIdNot(newClientId, entity.getId())) {
-                throw new BadRequestException("clientId already exists");
-            }
-            entity.setClientId(newClientId);
-            changed = true;
-        }
-
-        if (hasText(request.getClientSecret())) {
-            entity.setClientSecretHash(bCryptPasswordEncoder.encode(request.getClientSecret().trim()));
-            changed = true;
-        }
-
-        if (hasText(request.getPersonPublicId())) {
-            PersonApiEntity personApi = resolvePersonApi(request.getPersonPublicId().trim());
-            if (!personApi.getId().equals(entity.getPersonApiId())
-                    && clientApiRepository.existsByPersonApi_IdAndDeleteDateTsIsNullAndIdNot(personApi.getId(), entity.getId())) {
-                throw new BadRequestException("a client already exists for this personPublicId");
-            }
-            entity.setPersonApi(personApi);
-            changed = true;
-        }
-
-        if (hasText(request.getCompanyName())) {
-            entity.setCompanyName(request.getCompanyName().trim());
-            changed = true;
-        }
-
-        if (hasText(request.getDescription())) {
-            entity.setDescription(request.getDescription().trim());
-            changed = true;
-        }
-
-        if (request.getEnabled() != null) {
-            entity.setEnabled(request.getEnabled());
-            changed = true;
-        }
+        boolean changed = applyClientIdUpdate(entity, request);
+        changed |= applyClientSecretUpdate(entity, request);
+        changed |= applyPersonPublicIdUpdate(entity, request);
+        changed |= applyCompanyNameUpdate(entity, request);
+        changed |= applyDescriptionUpdate(entity, request);
+        changed |= applyEnabledUpdate(entity, request);
 
         if (changed) {
             entity.setEditDateTs(now());
@@ -217,6 +176,78 @@ public class ClientApiServiceImpl implements ClientApiService {
         return personApi;
     }
 
+    private void logUpdateRequest(String clientPublicId, ClientApiUpdateRequest request) {
+        if (request == null) {
+            log.info("ClientApiService.update - clientPublicId: {}, request: null, clientSecret: [REDACTED]", clientPublicId);
+            return;
+        }
+        log.info("ClientApiService.update - clientPublicId: {}, clientId: {}, personPublicId: {}, companyName: {}, description: {}, enabled: {}, clientSecret: [REDACTED]",
+                clientPublicId,
+                request.getClientId(),
+                request.getPersonPublicId(),
+                request.getCompanyName(),
+                request.getDescription(),
+                request.getEnabled());
+    }
+
+    private boolean applyClientIdUpdate(ClientApiEntity entity, ClientApiUpdateRequest request) {
+        if (!hasText(request.getClientId())) {
+            return false;
+        }
+        String newClientId = request.getClientId().trim();
+        if (!newClientId.equals(entity.getClientId())
+                && clientApiRepository.existsByClientIdAndDeleteDateTsIsNullAndIdNot(newClientId, entity.getId())) {
+            throw new BadRequestException("clientId already exists");
+        }
+        entity.setClientId(newClientId);
+        return true;
+    }
+
+    private boolean applyClientSecretUpdate(ClientApiEntity entity, ClientApiUpdateRequest request) {
+        if (!hasText(request.getClientSecret())) {
+            return false;
+        }
+        entity.setClientSecretHash(bCryptPasswordEncoder.encode(request.getClientSecret().trim()));
+        return true;
+    }
+
+    private boolean applyPersonPublicIdUpdate(ClientApiEntity entity, ClientApiUpdateRequest request) {
+        if (!hasText(request.getPersonPublicId())) {
+            return false;
+        }
+        PersonApiEntity personApi = resolvePersonApi(request.getPersonPublicId().trim());
+        if (!personApi.getId().equals(entity.getPersonApiId())
+                && clientApiRepository.existsByPersonApi_IdAndDeleteDateTsIsNullAndIdNot(personApi.getId(), entity.getId())) {
+            throw new BadRequestException("a client already exists for this personPublicId");
+        }
+        entity.setPersonApi(personApi);
+        return true;
+    }
+
+    private boolean applyCompanyNameUpdate(ClientApiEntity entity, ClientApiUpdateRequest request) {
+        if (!hasText(request.getCompanyName())) {
+            return false;
+        }
+        entity.setCompanyName(request.getCompanyName().trim());
+        return true;
+    }
+
+    private boolean applyDescriptionUpdate(ClientApiEntity entity, ClientApiUpdateRequest request) {
+        if (!hasText(request.getDescription())) {
+            return false;
+        }
+        entity.setDescription(request.getDescription().trim());
+        return true;
+    }
+
+    private boolean applyEnabledUpdate(ClientApiEntity entity, ClientApiUpdateRequest request) {
+        if (request.getEnabled() == null) {
+            return false;
+        }
+        entity.setEnabled(request.getEnabled());
+        return true;
+    }
+
     private ClientApiEntity requireActiveClient(String clientPublicId) {
         if (!hasText(clientPublicId)) {
             throw new BadRequestException("clientPublicId is required");
@@ -252,7 +283,7 @@ public class ClientApiServiceImpl implements ClientApiService {
         String decoded;
         try {
             decoded = new String(Base64.getDecoder().decode(credentialsBase64), StandardCharsets.UTF_8);
-        } catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException _) {
             throw new BadRequestException("credentials must be valid Base64 of clientId:clientSecret");
         }
 

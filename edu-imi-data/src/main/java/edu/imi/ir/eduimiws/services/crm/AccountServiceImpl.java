@@ -104,9 +104,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto createAccountForPaymentCode(AccountDto newAccountDto) {
         log.info("AccountService.createAccountForPaymentCode - newAccountDto: {}", newAccountDto);
-        AccountEntity newAccount = new AccountEntity();
-
-        newAccount =  accountMapper.toAccountEntity(newAccountDto, new CycleAvoidingMappingContext());
+        AccountEntity newAccount = accountMapper.toAccountEntity(newAccountDto, new CycleAvoidingMappingContext());
 
         AccountEntity savedAccount = accountRepository.save(newAccount);
 
