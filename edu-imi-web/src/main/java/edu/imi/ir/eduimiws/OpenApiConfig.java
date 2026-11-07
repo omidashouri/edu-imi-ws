@@ -81,6 +81,15 @@ public class OpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi versionApi(){
+        return GroupedOpenApi.builder()
+                .group("Version")
+                .pathsToMatch("/api/v1/version/**")
+                .packagesToScan("edu.imi.ir.eduimiws")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi userApi(){
         return GroupedOpenApi.builder()
                 .group("Users")
