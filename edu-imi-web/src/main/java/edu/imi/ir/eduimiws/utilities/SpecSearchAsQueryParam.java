@@ -31,5 +31,5 @@ import java.lang.annotation.Target;
                 content = @Content(schema = @Schema(type = "string", example = "lastName:عاشوری,'firstName:امید"))
         )
 })
-public @interface QueryDslAsQueryParam {
+public @interface SpecSearchAsQueryParam {
 }

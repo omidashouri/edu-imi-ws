@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.models.projections.crm.ContactForPaymentCodeProjectio
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
@@ -15,20 +16,10 @@ import jakarta.persistence.QueryHint;
 import java.util.List;
 
 @Repository
-public interface ContactRepository extends CrudRepository<ContactEntity, Long>
-//        , QuerydslPredicateExecutor<ContactEntity>, QuerydslBinderCustomizer<QContactEntity>
-{
+public interface ContactRepository extends CrudRepository<ContactEntity, Long>,
+        JpaSpecificationExecutor<ContactEntity> {
 //NU
 //    List<ContactEntity> findAllByPersonsIn(List<PersonEntity> personEntities);
-
-/*      @Override
-      default public void customize(
-              QuerydslBindings bindings, QContactEntity root) {
-            bindings.bind(String.class)
-                    .first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
-            bindings.excluding(root.id);
-      }*/
-
 
     Long countByNationCode(String nationCode);
 

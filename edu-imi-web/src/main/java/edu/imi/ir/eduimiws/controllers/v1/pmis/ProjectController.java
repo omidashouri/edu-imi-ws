@@ -239,16 +239,6 @@ public class ProjectController {
         ProjectDto projectDto = projectService
                 .findProjectDtoByProjectCodeAndLastVersion(projectCode, LAST_VERSION_YES);
 
-            /*Page<ProjectEntity> projectPages =
-                    projectService.findAllByPredicate(expression, pageable);
-
-            Page<ProjectDto> projectFastDtoPage = projectPages
-                    .map(cp -> projectFastMapper
-                            .toProjectDto(cp, new CycleAvoidingMappingContext()));
-
-            PagedModel<ProjectResponse> projectResponsePagedModel = projectPagedResourcesAssembler
-                    .toModel(projectFastDtoPage, projectResponseAssembler);*/
-
         if (projectDto == null)
             throw new NotFoundException(String.format("Not Found Any Project with project Code: %s", projectCode));
 

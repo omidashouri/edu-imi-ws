@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 
-import com.querydsl.core.types.Predicate;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.ContactFastDtoMapper;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,6 @@ import java.util.Optional;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
-//    private final ContactQueryDslRepository contactQueryDslRepository;
     private final ContactFastDtoMapper contactFastDtoMapper;
     private final ContactForPaymentCodeProjectionContactFastDtoMapper contactForPaymentCodeProjectionContactFastDtoMapper;
     private final ContactMapper contactMapper;
@@ -173,24 +172,18 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Long countByPredicate(Predicate predicate) {
-        log.info("ContactService.countByPredicate - predicate: {}", predicate);
-//        Object o = contactQueryDslRepository.count(predicate);
-//        Long contactCount = Long.valueOf(contactQueryDslRepository.count(predicate));
-//        return contactCount != null ? contactCount.longValue() : null;
-        Long result = null;
-        log.info("ContactService.countByPredicate - result: {}", result);
+    public Long countBySpecification(Specification<ContactEntity> specification) {
+        log.info("ContactService.countBySpecification - specification: {}", specification);
+        Long result = contactRepository.count(specification);
+        log.info("ContactService.countBySpecification - result: {}", result);
         return result;
     }
 
     @Override
-    public Page<ContactEntity> findAllByPredicate(Predicate predicate, Pageable pageable) {
-        log.info("ContactService.findAllByPredicate - predicate: {}, pageable: {}", predicate, pageable);
-//        later check usage
-/*        Page<ContactEntity> contactPages = contactQueryDslRepository.findAll(predicate, pageable);
-        return contactPages;*/
-        Page<ContactEntity> result = null;
-        log.info("ContactService.findAllByPredicate - resultSize: {}, totalElements: {}",
+    public Page<ContactEntity> findAllBySpecification(Specification<ContactEntity> specification, Pageable pageable) {
+        log.info("ContactService.findAllBySpecification - specification: {}, pageable: {}", specification, pageable);
+        Page<ContactEntity> result = contactRepository.findAll(specification, pageable);
+        log.info("ContactService.findAllBySpecification - resultSize: {}, totalElements: {}",
                 result == null ? null : result.getNumberOfElements(),
                 result == null ? null : result.getTotalElements());
         return result;

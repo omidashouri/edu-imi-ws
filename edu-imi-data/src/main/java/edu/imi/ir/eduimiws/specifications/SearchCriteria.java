@@ -4,21 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
 public class SearchCriteria {
 
     private String key;
     private SearchOperation operation;
     private Object value;
+    private boolean orPredicate;
+
+    public SearchCriteria(String key, SearchOperation operation, Object value) {
+        this(key, operation, value, false);
+    }
 
     public boolean isOrPredicate() {
-        return false;
+        return orPredicate;
     }
 }

@@ -1,13 +1,13 @@
 package edu.imi.ir.eduimiws.services.crm;
 
 
-import com.querydsl.core.types.Predicate;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactDto;
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -44,10 +44,8 @@ public interface ContactService {
 
     ContactEntity updateContact(ContactFastDto contactFastDto);
 
-    Long countByPredicate(Predicate predicate);
+    Long countBySpecification(Specification<ContactEntity> specification);
 
-    Page<ContactEntity> findAllByPredicate(Predicate predicate, Pageable pageable);
+    Page<ContactEntity> findAllBySpecification(Specification<ContactEntity> specification, Pageable pageable);
 
 }
-
-

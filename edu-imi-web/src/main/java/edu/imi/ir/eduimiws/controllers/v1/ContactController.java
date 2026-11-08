@@ -1,7 +1,6 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseForPaymentCodeAssembler;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
@@ -20,10 +19,7 @@ import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponseForPaymentCode;
-import edu.imi.ir.eduimiws.predicates.v2.QueryDSLPredicatesBuilder;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
-import edu.imi.ir.eduimiws.specifications.crm.ContactPredicateBuilder;
-import edu.imi.ir.eduimiws.specifications.crm.ContactSpecification;
 import edu.imi.ir.eduimiws.specifications.crm.ContactSpecificationBuilder;
 import edu.imi.ir.eduimiws.utilities.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +37,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
@@ -69,9 +66,6 @@ public class ContactController {
     private final ContactResponseAssembler contactResponseAssembler;
     private final ContactResponseForPaymentCodeAssembler contactResponseForPaymentCodeAssembler;
     private final PagedResourcesAssembler<ContactFastDto> contactPagedResourcesAssembler;
-    private final ContactSpecificationBuilder contactSpecificationBuilder;
-    private final ContactSpecification contactSpecification;
-    private final ContactPredicateBuilder contactPredicateBuilder;
     private final CommonUtils commonUtils;
     private final ConvertorUtil convertorUtil;
 
@@ -300,7 +294,7 @@ public class ContactController {
                     )
             }
     )
-    @QueryDslAsQueryParam
+    @SpecSearchAsQueryParam
     @SwaggerUtil.PageableAsQueryParam
     @GetMapping(path = "/search/{criteria}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -316,11 +310,11 @@ public class ContactController {
             throw new NotFoundException("requested contact not found");
         }
         try {
-            BooleanExpression expression = new QueryDSLPredicatesBuilder<>(ContactEntity.class)
+            Specification<ContactEntity> specification = new ContactSpecificationBuilder()
                     .with(criteria).build();
 
             Page<ContactEntity> contactPages =
-                    contactService.findAllByPredicate(expression, pageable);
+                    contactService.findAllBySpecification(specification, pageable);
 
             Page<ContactFastDto> contactFastDtoPage = contactPages
                     .map(cp -> contactFastDtoMapper
