@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- defaults.xml only: no console appender (file-only logging). -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!-- CONSOLE uses logging.pattern.console (IDE/local). Docker logging.driver=none discards stdout. -->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
     <include resource="logback-rolling-appender.xml"/>
 
     <root level="INFO">
         <appender-ref ref="ROLLING-APPENDER"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 
     <logger name="ir.imi" level="error" additivity="false">
         <appender-ref ref="ROLLING-APPENDER"/>
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
 </configuration>

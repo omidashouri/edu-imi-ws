@@ -8,7 +8,8 @@
     <appender name="ROLLING-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/spring_boot_logger.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</Pattern>
+            <!-- Same tokens as logging.pattern.console, without %clr (file-friendly). -->
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %-5level %X{traceId}  %X{spanId} - %msg%n</Pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">

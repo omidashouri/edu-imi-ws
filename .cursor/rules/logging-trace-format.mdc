@@ -1,0 +1,70 @@
+---
+description: Console log format with Micrometer Brave traceId/spanId (portable across Spring Boot projects)
+globs: "**/application*.{yaml,yml,properties},**/pom.xml"
+alwaysApply: false
+---
+
+# Logging format (traceId + spanId)
+
+Use this console layout everywhere. Do not invent a different pattern, logger-name field, or MDC key names.
+
+## Expected line shape
+
+```text
+yyyy-MM-dd HH:mm:ss.SSS  LEVEL traceId  spanId - message
+```
+
+Example:
+
+```text
+2026-11-08 14:44:17.615  TRACE 6af0598884bbdcff38d1f7601c397a50  6152133d646b6078 - Completed 200 OK, headers={masked}
+```
+
+Field order (fixed):
+
+1. Timestamp — `yyyy-MM-dd HH:mm:ss.SSS`
+2. Level — left-padded to 5 (`%-5level`)
+3. `traceId` then `spanId` from MDC (`%X{traceId}`, `%X{spanId}`)
+4. Message — `%msg` (no logger name, no thread name)
+
+## Dependencies (Maven)
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-tracing-bridge-brave</artifactId>
+</dependency>
+```
+
+## Configuration
+
+YAML:
+
+```yaml
+logging:
+  pattern:
+    console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){cyan}  %clr(%-5level) %clr(%X{traceId}  %X{spanId}){magenta} - %msg%n'
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+```
+
+Properties equivalent:
+
+```properties
+logging.pattern.console=%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){cyan}  %clr(%-5level) %clr(%X{traceId}  %X{spanId}){magenta} - %msg%n
+management.tracing.sampling.probability=1.0
+```
+
+## Rules
+
+- Always use MDC keys `traceId` and `spanId` (Brave / Micrometer defaults). Never rename them.
+- Keep the exact spacing: two spaces after the timestamp, one space after level, two spaces between traceId and spanId, then ` - `.
+- Prefer `%clr(...)` colors as above for local/dev consoles; keep the same tokens if a non-colored pattern is required.
+- Sampling `1.0` is the default for environments that must always emit IDs; lower it only when explicitly requested for production load.
