@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="true">
-<!--    if changed to defaults.xml read the location for appender from its defaults-->
-    <include resource="org/springframework/boot/logging/logback/base.xml" />
+<configuration>
+    <!-- defaults.xml only: no console appender (file-only logging). -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="logback-rolling-appender.xml"/>
 
-
-    <!-- LOG everything at INFO level -->
     <root level="INFO">
-        <appender-ref ref="ROLLING-APPENDER" />
-        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ROLLING-APPENDER"/>
     </root>
 
-    <!-- LOG "com.baeldung*" at TRACE level -->
     <logger name="ir.imi" level="error" additivity="false">
-        <appender-ref ref="ROLLING-APPENDER" />
-        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ROLLING-APPENDER"/>
     </logger>
 
 </configuration>

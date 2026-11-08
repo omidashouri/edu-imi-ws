@@ -6,13 +6,37 @@ services:
     image: edu-imi-ws:local
     env_file:
       - .env
+    environment:
+      LOG_PATH: /app/logs
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
       - ./certs:/certs:ro
+      - edu-imi-ws-logs:/app/logs
+    # App writes only to the volume; no Docker stdout/stderr log capture.
+    logging:
+      driver: "none"
     networks:
       - app
     restart: unless-stopped
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "${PORTAINER_HTTP_PORT:-9000}:9000"
+      - "${PORTAINER_HTTPS_PORT:-9443}:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+      - edu-imi-ws-logs:/logs/edu-imi-ws:ro
+    networks:
+      - app
+    restart: unless-stopped
+
+volumes:
+  edu-imi-ws-logs:
+  portainer-data:
 
 networks:
   app:
