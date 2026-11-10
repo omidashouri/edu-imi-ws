@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
 import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.ContactResponseForPaymentCodeAssembler;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
@@ -14,9 +16,11 @@ import edu.imi.ir.eduimiws.mapper.crm.ContactResponseForPaymentCodeContactFactDt
 import edu.imi.ir.eduimiws.models.dto.crm.ContactFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
+import edu.imi.ir.eduimiws.models.request.crm.ContactCreateRequestForPaymentCode;
 import edu.imi.ir.eduimiws.models.request.crm.ContactRequestForPaymentCode;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
+import edu.imi.ir.eduimiws.models.response.crm.ContactCreateResponseForPaymentCode;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponse;
 import edu.imi.ir.eduimiws.models.response.crm.ContactResponseForPaymentCode;
 import edu.imi.ir.eduimiws.services.crm.ContactService;
@@ -572,7 +576,7 @@ public class ContactController {
             description = "Create contact for Payment Code",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(schema = @Schema(implementation = ContactRequestForPaymentCode.class))
+                    content = @Content(schema = @Schema(implementation = ContactCreateRequestForPaymentCode.class))
             )
     )
     @ApiResponses(
@@ -600,11 +604,12 @@ public class ContactController {
                     )
             }
     )
+    @LoggedOperation(LoggedBusinessOperation.CONTACT_FOR_PAYMENT_CODE)
     @PostMapping(path = "/forPaymentCode",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_CRM_CONTACT_CREATE_FOR_PAYMENT_CODE')")
-    public ResponseEntity<?> createContactForPaymentCode(@RequestBody ContactRequestForPaymentCode
+    public ResponseEntity<?> createContactForPaymentCode(@RequestBody ContactCreateRequestForPaymentCode
                                                                      contactRequestForPaymentCode) {
 
         Page<ContactFastDto> contactFastDtoPage= null;
@@ -623,14 +628,14 @@ public class ContactController {
         }
 
         ContactFastDto newContactFastDto = contactRequestForPaymentCodeContactFactDtoMapper
-                .contactRequestForPaymentCodeToContactFastDto(contactRequestForPaymentCode);
+                .contactCreateRequestForPaymentCodeToContactFastDto(contactRequestForPaymentCode);
 
        ContactFastDto savedContactFastDto = contactService.createContactForPaymentCode(newContactFastDto);
 
         ContactFastDto foundContactFastDto = contactService.findContactById(savedContactFastDto.getId());
 
-       ContactResponseForPaymentCode contactResponseForPaymentCode = contactResponseForPaymentCodeContactFactDtoMapper
-                .contactFastDtoToContactResponseForPaymentCode(foundContactFastDto);
+       ContactCreateResponseForPaymentCode contactResponseForPaymentCode = contactResponseForPaymentCodeContactFactDtoMapper
+                .contactFastDtoToContactCreateResponseForPaymentCode(foundContactFastDto);
 
         convertorUtil.changeInstanceCharAndNumSetByType(contactResponseForPaymentCode, "persian");
 

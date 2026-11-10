@@ -1,5 +1,8 @@
 package edu.imi.ir.eduimiws.controllers.v1.edu;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
+
 import edu.imi.ir.eduimiws.assemblers.edu.RegisterResponseRegisterDtoAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.RegisterResponseRegisterFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
@@ -19,6 +22,7 @@ import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.request.edu.v1.RegisterForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
+import edu.imi.ir.eduimiws.models.response.v2.OperationStatusCreateResponse;
 import edu.imi.ir.eduimiws.models.response.edu.RegisterResponse;
 import edu.imi.ir.eduimiws.services.crm.AccountService;
 import edu.imi.ir.eduimiws.services.edu.*;
@@ -540,13 +544,14 @@ public class RegisterController {
             }
     )
     @DisableMethod
+    @LoggedOperation(LoggedBusinessOperation.REGISTER_CREATE)
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_EDU_REGISTER_CREATE')")
     public ResponseEntity<?> registerStudentInPeriod(@RequestBody RegisterForm registerForm) {
 
-        OperationStatus returnValue = new OperationStatus();
+        OperationStatusCreateResponse returnValue = new OperationStatusCreateResponse();
         boolean personNotFound = true;
         long lastStudentCode;
         String periodPublicId;

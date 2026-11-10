@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.mapper.mainparts;
 
 import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
+import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiCreateRequest;
 import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiRequest;
 import edu.imi.ir.eduimiws.services.pmis.ProjectService;
 import org.mapstruct.*;
@@ -26,6 +27,18 @@ public interface ProjectDepositCodeApiRequestMapper {
     })
     @BeanMapping(ignoreByDefault = true)
     ProjectDepositCodeApiDto toProjectDepositCodeApiDto(ProjectDepositCodeApiRequest source);
+
+    @Named("toProjectDepositCodeApiDtoFromCreate")
+    @Mappings({
+            @Mapping(source = "publicId", target = "publicId"),
+            @Mapping(source = "projectPublicId", target = "projectDto",
+                    qualifiedBy = {MappingUtil.ProjectService.class,
+                            MappingUtil.ProjectPublicIdToProjectDto.class}),
+            @Mapping(source = "depositCode", target = "depositCode"),
+            @Mapping(source = "description", target = "description")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    ProjectDepositCodeApiDto toProjectDepositCodeApiDto(ProjectDepositCodeApiCreateRequest source);
 
     @IterableMapping(qualifiedByName = "toProjectDepositCodeApiDto")
     List<ProjectDepositCodeApiDto> toProjectDepositCodeApiDtos(List<ProjectDepositCodeApiRequest> sources);

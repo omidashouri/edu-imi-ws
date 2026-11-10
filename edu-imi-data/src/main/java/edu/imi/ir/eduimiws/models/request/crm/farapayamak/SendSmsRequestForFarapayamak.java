@@ -1,13 +1,16 @@
 package edu.imi.ir.eduimiws.models.request.crm.farapayamak;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import edu.imi.ir.eduimiws.models.request.v2.BaseRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.*;
-import org.springframework.hateoas.RepresentationModel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.util.ArrayList;
@@ -15,16 +18,15 @@ import java.util.List;
 
 @Tag(name = "farapayamaks")
 @Schema(name = "sendSmsRequestForFarapayamak", description = "Class representing a send sms from farapayamak in the application.")
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @JsonRootName(value = "sendSmsRequestForFarapayamak")
 @Relation(collectionRelation = "sendSmsRequestForFarapayamaks")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class SendSmsRequestForFarapayamak extends RepresentationModel<SendSmsRequestForFarapayamak> {
-
+@SuperBuilder
+public class SendSmsRequestForFarapayamak extends BaseRequestDto {
 
     @Schema(title = "mobile_numbers", maxLength = 20)
     @JsonProperty("mobile_numbers")
@@ -34,9 +36,7 @@ public class SendSmsRequestForFarapayamak extends RepresentationModel<SendSmsReq
     @JsonProperty("message_text")
     private String messageText;
 
-
     @Schema(title = "is_message_flash", maxLength = 1)
     @JsonProperty("is_message_flash")
     private Boolean isMessageFlash;
-
 }

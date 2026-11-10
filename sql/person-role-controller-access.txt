@@ -95,4 +95,4 @@ ROLE_PROJECTDEPOSITCODE
 ------------------------------------------------------------------------------
 After the API_* privilege changes, ROLE_ADMIN alone is no longer enough for method
 access unless ROLE_ADMIN is linked to the new privileges in CRM.TBL_ROLE_PRIVILEGE_API
-(see sql/naming-privilege.sql).
+(see sql/naming-privilege_seed.sql).

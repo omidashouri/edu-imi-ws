@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.mapper.mainparts;
 
 
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
+import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiCreateResponse;
 import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponse;
 import org.mapstruct.*;
 
@@ -29,6 +30,24 @@ public interface ProjectDepositCodeApiResponseMapper {
     })
     @BeanMapping(ignoreByDefault = true)
     ProjectDepositCodeApiResponse toProjectDepositCodeApiResponse(ProjectDepositCodeApiDto source);
+
+    @Named("toProjectDepositCodeApiCreateResponse")
+    @Mappings({
+            @Mapping(source = "publicId", target = "publicId"),
+            @Mapping(source = "depositCode", target = "depositCode"),
+            @Mapping(source = "description", target = "description"),
+            @Mapping(source = "projectDto.projectPublicId", target = "projectPublicId"),
+            @Mapping(source = "projectDto.projectCode", target = "projectCode"),
+            @Mapping(source = "projectDto.projectName", target = "projectName"),
+            @Mapping(source = "creatorPublicId", target = "creatorPublicId"),
+            @Mapping(source = "creatorFullName", target = "creatorFullName"),
+            @Mapping(source = "createDateTs", target = "createDateTs"),
+            @Mapping(source = "editorPublicId", target = "editorPublicId"),
+            @Mapping(source = "editDateTs", target = "editDateTs"),
+            @Mapping(source = "deleteDateTs", target = "deleteDateTs")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    ProjectDepositCodeApiCreateResponse toProjectDepositCodeApiCreateResponse(ProjectDepositCodeApiDto source);
 
     @IterableMapping(qualifiedByName = "toProjectDepositCodeApiResponse")
     List<ProjectDepositCodeApiResponse> toProjectDepositCodeApiResponses(List<ProjectDepositCodeApiDto> sources);

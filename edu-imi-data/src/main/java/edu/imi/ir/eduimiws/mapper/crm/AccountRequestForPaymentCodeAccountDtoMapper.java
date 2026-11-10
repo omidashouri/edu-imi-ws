@@ -6,6 +6,7 @@ import edu.imi.ir.eduimiws.domain.crm.LanguageEntity;
 import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
 import edu.imi.ir.eduimiws.models.dto.crm.LanguageDto;
 import edu.imi.ir.eduimiws.models.helper.DefaultValues;
+import edu.imi.ir.eduimiws.models.request.crm.AccountCreateRequestForPaymentCode;
 import edu.imi.ir.eduimiws.models.request.crm.AccountRequestForPaymentCode;
 import edu.imi.ir.eduimiws.services.crm.CompanyService;
 import edu.imi.ir.eduimiws.utilities.PersistenceUtils;
@@ -29,6 +30,17 @@ public interface AccountRequestForPaymentCodeAccountDtoMapper {
     })
     @BeanMapping(ignoreByDefault = true)
     AccountDto accountRequestForPaymentCodeToAccountDto(AccountRequestForPaymentCode source);
+
+    @Named("accountCreateRequestForPaymentCodeToAccountDto")
+    @Mappings({
+            @Mapping(source = "accountPublicId", target = "accountPublicId"),
+            @Mapping(source = "economicalCode", target = "economicalCode"),
+            @Mapping(source = "accountName", target = "accountName"),
+            @Mapping(source = "mainPhone", target = "mainPhone"),
+            @Mapping(source = "otherPhone", target = "otherPhone")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    AccountDto accountCreateRequestForPaymentCodeToAccountDto(AccountCreateRequestForPaymentCode source);
 
     @IterableMapping(qualifiedByName = "accountRequestForPaymentCodeToAccountDto")
     List<AccountDto> accountResponseForPaymentCodesToAccountDtos(List<AccountRequestForPaymentCode> sources);

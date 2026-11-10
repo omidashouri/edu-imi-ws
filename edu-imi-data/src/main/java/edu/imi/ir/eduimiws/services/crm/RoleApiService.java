@@ -2,6 +2,7 @@ package edu.imi.ir.eduimiws.services.crm;
 
 import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
+import edu.imi.ir.eduimiws.models.request.RoleCreateForm;
 import edu.imi.ir.eduimiws.models.request.RoleForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,7 @@ public interface RoleApiService {
 
     Collection<RoleApiEntity> getDefaultUserRole();
 
-    RoleApiEntity createRoleByRoleForm(RoleForm roleForm);
+    RoleApiEntity createRoleByRoleForm(RoleCreateForm roleForm);
 
     RoleApiEntity updateRoleByRoleForm(String rolePublicId, RoleForm roleForm);
 

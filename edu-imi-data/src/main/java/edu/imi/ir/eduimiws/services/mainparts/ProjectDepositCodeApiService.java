@@ -5,6 +5,7 @@ import edu.imi.ir.eduimiws.mapper.MappingUtil;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
 import edu.imi.ir.eduimiws.models.projections.mainparts.ProjectDepositCodeApiProjectionCustomThree;
 import edu.imi.ir.eduimiws.models.projections.mainparts.ProjectDepositCodeApiProjectionCustomTwo;
+import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiCreateRequest;
 import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,8 @@ public interface ProjectDepositCodeApiService {
     Page<ProjectDepositCodeApiDto> findByProjectNameContaining(String projectName, Pageable pageable);
 
     void validateProjectDepositCodeApiRequestNullInputs(ProjectDepositCodeApiRequest projectDepositCodeApiRequest);
+
+    void validateProjectDepositCodeApiRequestNullInputs(ProjectDepositCodeApiCreateRequest projectDepositCodeApiRequest);
 
     void validateProjectDepositCodeApiDtoNulls(ProjectDepositCodeApiDto projectDepositCodeApiDto);
 

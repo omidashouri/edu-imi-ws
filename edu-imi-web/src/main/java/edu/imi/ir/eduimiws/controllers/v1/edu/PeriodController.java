@@ -1,5 +1,8 @@
 package edu.imi.ir.eduimiws.controllers.v1.edu;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
+
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponseCustomTwoPeriodProjectionCustomTwoDtoAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.PeriodResponsePeriodFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
@@ -19,8 +22,10 @@ import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomFour;
 import edu.imi.ir.eduimiws.models.projections.edu.PeriodProjectionCustomTwo;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
+import edu.imi.ir.eduimiws.models.request.edu.v1.PeriodPublicIdCreateRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
+import edu.imi.ir.eduimiws.models.response.v2.OperationStatusCreateResponse;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponse;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseCustomFour;
 import edu.imi.ir.eduimiws.models.response.edu.PeriodResponseCustomTwo;
@@ -900,7 +905,7 @@ public class PeriodController {
 
             Link link = WebMvcLinkBuilder
                     .linkTo(methodOn(PeriodController.class)
-                            .createPeriodApiPublicId())
+                            .createPeriodApiPublicId(null))
                     .withRel("new public id");
 
             returnValue.add(link);
@@ -947,12 +952,14 @@ public class PeriodController {
             }
     )
     @DisableMethod
+    @LoggedOperation(LoggedBusinessOperation.PERIOD_CREATE)
     @PostMapping(path = "/new/publicId",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_EDU_PERIOD_GENERATE_PUBLIC_ID')")
-    public ResponseEntity<?> createPeriodApiPublicId() {
+    public ResponseEntity<?> createPeriodApiPublicId(@RequestBody PeriodPublicIdCreateRequest request) {
 
-        OperationStatus returnValue = new OperationStatus();
+        OperationStatusCreateResponse returnValue = new OperationStatusCreateResponse();
         Long periodApiCount;
         PeriodApiEntity periodApiLastRecord;
         PeriodEntity periodLastRecord;

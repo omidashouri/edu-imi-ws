@@ -3,6 +3,7 @@ package edu.imi.ir.eduimiws.services.crm;
 import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
 import edu.imi.ir.eduimiws.exceptions.services.RoleServiceException;
+import edu.imi.ir.eduimiws.models.request.RoleCreateForm;
 import edu.imi.ir.eduimiws.models.request.RoleForm;
 import edu.imi.ir.eduimiws.repositories.crm.RoleApiRepository;
 import edu.imi.ir.eduimiws.utilities.PublicIdUtil;
@@ -44,7 +45,7 @@ public class RoleApiServiceImpl implements RoleApiService {
     }
 
     @Override
-    public RoleApiEntity createRoleByRoleForm(RoleForm roleForm) {
+    public RoleApiEntity createRoleByRoleForm(RoleCreateForm roleForm) {
         log.info("RoleApiService.createRoleByRoleForm - roleForm: {}", roleForm);
 
         if (roleForm.getRoleName() == null || roleForm.getRoleName().isBlank()) {

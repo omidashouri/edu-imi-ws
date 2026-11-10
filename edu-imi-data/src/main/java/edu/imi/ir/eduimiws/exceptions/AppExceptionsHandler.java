@@ -12,13 +12,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 
 
-//@ControllerAdvice
+/**
+ * Legacy error envelope ({@link ErrorMessage}) for third-party v1 APIs.
+ * Scoped to {@code controllers.v1} so it does not clash with
+ * {@link edu.imi.ir.eduimiws.exceptions.v2.GeneralExceptionHandler} on the same exception types.
+ */
+@RestControllerAdvice(basePackages = "edu.imi.ir.eduimiws.controllers.v1")
 public class AppExceptionsHandler {
 
     String dateTime = LocalDateTime.now().toString();

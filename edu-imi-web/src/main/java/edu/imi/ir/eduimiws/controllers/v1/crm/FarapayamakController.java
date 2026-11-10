@@ -1,6 +1,8 @@
 package edu.imi.ir.eduimiws.controllers.v1.crm;
 
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
 import edu.imi.ir.eduimiws.mapper.crm.*;
 import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakReturnedSendSmsDto;
 import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakSendSmsDto;
@@ -86,6 +88,7 @@ public class FarapayamakController {
                     )
             }
     )
+    @LoggedOperation(LoggedBusinessOperation.FARAPAYAMAK_SEND_SMS)
     @PostMapping(path = "/sendSms",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_CRM_FARAPAYAMAK_SEND_SMS')")
@@ -111,11 +114,11 @@ public class FarapayamakController {
 
         });
 
-        SendSmsResponseForFarapayamak sendSmsResponseForFarapayamak = new SendSmsResponseForFarapayamak();
+        SendSmsCreateResponseForFarapayamak sendSmsResponseForFarapayamak = new SendSmsCreateResponseForFarapayamak();
 
         farapayamakReturnedSendSmsDtos
                 .stream()
-                .map(sendSmsResponseForFarapayamakFarapayamakReturnedSendSmsDtoMapper::toSendSmsResponseForFarapayamak)
+                .map(sendSmsResponseForFarapayamakFarapayamakReturnedSendSmsDtoMapper::toSendSmsCreateResponseForFarapayamak)
                 .forEach(ssrf -> {
                     sendSmsResponseForFarapayamakFarapayamakReturnedSendSmsDtoMapper
                             .addNewFarapayamakReturnedSendSmsDto(sendSmsResponseForFarapayamak, ssrf);

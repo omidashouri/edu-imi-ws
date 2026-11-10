@@ -1,0 +1,271 @@
+---
+description: Portable guide to implement InternalRequestResponseLoggingFilter idempotency + audit logging (adapted for destination projects using schema crm)
+globs: "**/InternalRequest*.java,**/InternalResponse*.java,**/LoggedOperation.java,**/CachedBodyHttpServletRequest.java,**/InternalLoggingFilterConfig.java,**/BaseRequestEnrichmentAdvice.java,**/BaseResponseEnrichmentAdvice.java,**/*internal*request*log*.sql"
+alwaysApply: false
+---
+
+# Internal Request/Response Logging + Idempotency
+
+Portable implementation guide derived from deposit's opening module.
+Destination adaptations (do **not** copy deposit 1:1):
+
+- Oracle schema = `crm` (not `DPS`)
+- `TBL_INTERNAL_REQUEST_LOG` has **no** `BRANCH_CODE` / `CHANNEL_ID`
+- Keep `OPERATOR_ID`; resolve it from the **security token**, not an HTTP header
+- `TBL_INTERNAL_RESPONSE_LOG` has **no** `REQUEST_ID` (redundant with request log)
+- Filter inquiry API has **no** required query fields
+- Inquiry/filter responses return the **full** request JSON map
+- Reuse deposit's exception/envelope structure (`ErrorEnum`, `BusinessException`,
+  `BadRequestException`, `ConflictException`, `RaiseError`, `Response<T>`)
+- DDL companion: `.cursor/rules/crm-internal-request-response-log-schema.sql`
+
+Reference sources in this repo (behavior + layering):
+`opening/.../common/advice/InternalRequestResponseLoggingFilter.java`,
+`CachedBodyHttpServletRequest.java`, `LoggedOperation.java`,
+`InternalLoggingFilterConfig.java`, `BaseRequestEnrichmentAdvice.java`,
+`BaseResponseEnrichmentAdvice.java`, `InternalRequestLogService(Impl)`,
+`InternalRequestLogMapper`, entities/repos/spec, `InternalRequestController`.
+
+## Purpose
+
+For opted-in POST commands annotated `@LoggedOperation(...)`:
+
+1. Extract `requestId` from JSON body (UUID, client-generated, mandatory).
+2. **Claim** by inserting `TBL_INTERNAL_REQUEST_LOG` **before** business runs
+   (`REQUEST_ID` globally unique). Duplicate → HTTP **409** (no replay).
+3. Run the filter chain.
+4. Always persist `TBL_INTERNAL_RESPONSE_LOG` for the claim (any HTTP status).
+5. Claims are never deleted; burned `requestId` must not be reused.
+
+Non-POST, or POST without `@LoggedOperation`, pass through untouched.
+
+Alongside the filter, v2 command responses echo the body `requestId` and fill
+`traceNo` / `effectiveDate` via the enrichment advices (see below). Those
+advices are **not** the idempotency claim path — they only bridge request →
+response DTO fields for POST/PUT that use the v2 base DTOs.
+
+## Artifact checklist
+
+| Layer | Type | Notes |
+| --- | --- | --- |
+| Annotation | `@LoggedOperation` | Method-level; value = enum whose `name()` matches `TBL_BUSINESS_OPERATION.OPERATION_NAME` |
+| Enum | `LoggedBusinessOperation` | Project-specific operation names; seed matching rows in `crm.TBL_BUSINESS_OPERATION` |
+| Filter | `InternalRequestResponseLoggingFilter` | Extends `OncePerRequestFilter`; not a `@Component` |
+| Body cache | `CachedBodyHttpServletRequest` | Buffer request body so filter + controllers can both read it |
+| Config | `InternalLoggingFilterConfig` | `FilterRegistrationBean` scoped to command URL pattern (e.g. `/v2/*`) |
+| Request advice | `BaseRequestEnrichmentAdvice` | `RequestBodyAdviceAdapter`; stashes body `requestId` on servlet attribute (POST/PUT) |
+| Response advice | `BaseResponseEnrichmentAdvice` | `ResponseBodyAdvice`; echoes `requestId`, sets `traceNo` + `effectiveDate` on v2 `BaseResponseDto` (POST/PUT) |
+| Record | `InternalRequestResponseLogData` | Claim payload (no branch/channel) |
+| Service | `InternalRequestLogService` + `Impl` | `claimRequest`, `logResponse`, `findByRequestId`, `filter` |
+| Mapper | `InternalRequestLogMapper` (MapStruct abstract class) | Entity <-> DTO; full JSON map for responses |
+| Entities | `BusinessOperationEntity`, `InternalRequestLogEntity`, `InternalResponseLogEntity` | `@Table(name = "TBL_...", schema = "crm")` + `@SequenceGenerator` (`SEQ_*_ID`) |
+| Repos | JPA + `JpaSpecificationExecutor` on request log | |
+| Spec | `InternalRequestLogSpec` | All filter predicates optional |
+| DTOs | Filter request + inquiry/filter response | No `branchCode` / `channelId` |
+| Controller | Inquiry API (`GET` filter + `GET` by `requestId`) | Inject service directly (no facade) |
+| Errors | `ErrorEnum` + messages + handler | Same structure as deposit `common.exception` |
+
+## v2 request/response enrichment (bridge, not claim)
+
+`requestId` lives in the JSON body (`BaseRequestDto`), not a header. Controllers
+return `ResponseEntity<Response<SomeV2ResponseDto>>`, so `ResponseBodyAdvice`
+never sees the request DTO directly. Bridge them with a servlet request
+attribute — never read `requestId` from an HTTP header.
+
+### `BaseRequestEnrichmentAdvice` (`RequestBodyAdviceAdapter`)
+
+- `@RestControllerAdvice(basePackages = {"ir.bmi"})`.
+- `supports`: target type is assignable from v2 `BaseRequestDto`.
+- `afterBodyRead` (POST/PUT only): if body `requestId` is non-null/non-blank,
+  stash it on the servlet request as attribute
+  `ir.bmi.deposit.v2.requestId` (`REQUEST_ID_ATTRIBUTE`).
+- **Does not** generate a server-side `requestId` when blank/missing — the
+  filter (and `@NotBlank` on `BaseRequestDto`) owns validation/claim.
+- Other HTTP methods are untouched; body is always returned unchanged.
+
+### `BaseResponseEnrichmentAdvice` (`ResponseBodyAdvice<Object>`)
+
+- Same package-wide `@RestControllerAdvice`.
+- Controllers never return a `BaseResponseDto` subtype directly; the object
+  handed to Jackson/`beforeBodyWrite` is the `Response` envelope, with the
+  v2 DTO nested in `responseDto`.
+- `supports`: resolve nested `T` of `ResponseEntity<Response<T>>` (or bare
+  `Response<T>`) via `ResolvableType`; match only when `T` is assignable from
+  **v2** `ir.bmi...opening.dto.response.v2.BaseResponseDto`. Do **not** use
+  `returnType.getParameterType()` (resolves to `ResponseEntity`/`Response`
+  only). Unrelated v1 `common.base.BaseResponseDto` must never match.
+- `beforeBodyWrite` (POST/PUT only): unwrap `Response::responseDto` when it is
+  a v2 `BaseResponseDto`, then:
+  1. Echo `requestId` from `REQUEST_ID_ATTRIBUTE` (blank/missing → leave as-is).
+  2. Set `traceNo` from MDC key `traceId` when non-blank (matches log `%X{traceId}`).
+  3. Set `effectiveDate` to `LocalDate.now()`.
+- GET and other methods: no enrichment. v2 read-only DTOs that do not extend
+  v2 `BaseResponseDto` are never matched.
+
+## Destination deltas vs deposit
+
+### Columns / headers
+
+- **Do not** read or persist `branchCode` / `channelId`.
+- **Do** persist `operatorId`:
+  - Add a protected/overridable hook on the filter, e.g.
+    `protected String resolveOperatorId(HttpServletRequest request)`.
+  - Default may return `null`; destination project overrides with token/JWT
+    extraction (implement when wiring security in that project).
+  - Do **not** use an `operatorId` HTTP header.
+
+### `InternalRequestResponseLogData` (record)
+
+```text
+businessOperationName, requestUrl, httpMethod, queryString,
+requestId, operatorId, ipAddress, requestJson
+```
+
+### Filter claim call
+
+```java
+internalRequestLogService.claimRequest(new InternalRequestResponseLogData(
+        loggedOperation.value().name(),
+        cachedRequest.getRequestURI(),
+        cachedRequest.getMethod(),
+        cachedRequest.getQueryString(),
+        requestId,
+        resolveOperatorId(cachedRequest),
+        cachedRequest.getRemoteAddr(),
+        rawRequestBody.isBlank() ? null : rawRequestBody));
+```
+
+### Filter flow (must keep)
+
+1. Method ≠ POST → chain.
+2. Resolve `@LoggedOperation` via `RequestMappingHandlerMapping` + `HandlerMethod`.
+3. Wrap request with `CachedBodyHttpServletRequest`; read body UTF-8.
+4. Parse JSON `requestId`; blank/missing/invalid → **400** `REQUEST_ID_INVALID`
+   (write envelope in filter; do not claim).
+5. `claimRequest` in `REQUIRES_NEW`; UK violation → **409** `REQUEST_ID_DUPLICATE_SUCCESS`.
+6. Store claim id on request attribute; wrap response with `ContentCachingResponseWrapper`.
+7. `filterChain.doFilter`; in `finally`: `logResponse(claimId, status, body)` then
+   `copyBodyToResponse()`. Response persist failures are logged, not rethrown.
+
+### Early error writing inside filter
+
+Build `RaiseError` from `ErrorEnum` + `MessageSource` locale, wrap in `Response`,
+write JSON with `ObjectMapper`. Same envelope as the rest of the API.
+
+## Persistence rules
+
+### `claimRequest`
+
+- Lookup `BusinessOperationEntity` by `operationName` + `active=true`;
+  missing → `BusinessException(RECORD_NOT_FOUND)`.
+- Map record → `InternalRequestLogEntity`; `saveAndFlush`.
+- Catch `DataIntegrityViolationException` → `ConflictException(REQUEST_ID_DUPLICATE_SUCCESS)`.
+- `@Transactional(propagation = Propagation.REQUIRES_NEW)`.
+
+### `logResponse`
+
+- Load request log by claim id; map to `InternalResponseLogEntity`
+  (status + JSON only; **no** denormalized `requestId` field).
+- `@Transactional(propagation = Propagation.REQUIRES_NEW)`.
+
+### Inquiry
+
+- `findByRequestId`: request + response required; either missing →
+  `BusinessException(INTERNAL_REQUEST_RESPONSE_NOT_FOUND)`.
+- `filter`: JPA Spec, all criteria optional; empty page → controller returns **204**.
+- Batch-load responses with `findByInternalRequestLog_IdIn` for the page.
+
+## Entities (`schema = "crm"`)
+
+Use `@Table(name = "TBL_...")` and `@SequenceGenerator` with `SEQ_*_ID`
+(`SEQ_BUSINESS_OPERATION_ID`, `SEQ_INTERNAL_REQUEST_LOG_ID`,
+`SEQ_INTERNAL_RESPONSE_LOG_ID`). Do **not** use identity columns.
+
+### `BusinessOperationEntity` extends audit base (like deposit `BaseEntity`)
+
+- Table `TBL_BUSINESS_OPERATION`
+- `ID`, `OPERATION_NAME` (unique), `DESCRIPTION`, audit columns, `IS_ACTIVE`
+
+### `InternalRequestLogEntity` (no BaseEntity / soft-delete)
+
+- Table `TBL_INTERNAL_REQUEST_LOG`
+- `ID`, `BUSINESS_OPERATION_ID` (ManyToOne LAZY, `NO_CONSTRAINT`),
+  `REQUEST_URL`, `HTTP_METHOD`, `QUERY_STRING`,
+  `REQUEST_ID` (NOT NULL, unique), `OPERATOR_ID`, `IP_ADDRESS`,
+  `REQUEST_JSON` (LOB LAZY), `REQUEST_TIMESTAMP` (`@PrePersist` default now)
+- **No** `branchCode`, **no** `channelId`
+
+### `InternalResponseLogEntity`
+
+- Table `TBL_INTERNAL_RESPONSE_LOG`
+- `ID`, `INTERNAL_REQUEST_ID` (OneToOne LAZY, unique, `NO_CONSTRAINT`),
+  `RESPONSE_STATUS`, `RESPONSE_JSON` (LOB LAZY), `RESPONSE_TIMESTAMP`
+- **No** `requestId` column/field
+
+## Mapper rules
+
+- MapStruct abstract `@Mapper(componentModel = "spring")`.
+- `toRequestLog` / `toResponseLog` / `toResponseDto` / `toFilterDto`.
+- Inquiry/filter: `requestJson` → full `Map<String, Object>` via `ObjectMapper`
+  (not a single-field projection).
+- `errorMessage`: if status ≠ 200, parse response JSON `raiseError.message`; else null.
+
+## DTOs / API
+
+### Filter request DTO — all optional
+
+`requestId`, `ipAddress`, `operatorId`, `operationName`, `responseStatus`, `requestDateTime`  
+(no `@NotBlank` / `@NotNull` required fields; no branch/channel)
+
+### Spec predicates
+
+Only the optional fields above. Drop branch/channel predicates.
+
+### Response DTOs
+
+`businessOperation`, `requestId`, `operatorId`, `requestJson` (full map),
+`requestTimestamp`, `responseStatus`, `responseTimestamp`, `errorMessage`  
+(no branch/channel)
+
+### Controller (mirror deposit shape)
+
+```text
+GET  {base}/requests/filter   → Page<InternalResponseFilterDto> (204 if empty)
+GET  {base}/requests/{requestId} → InternalResponseInquiryDto
+```
+
+Use `@Validated`, Persian `@Tag`/`@Operation`, `Response<T>` envelope, inject service.
+
+## Errors to port (same structure as deposit)
+
+| Enum | Key | Typical HTTP | When |
+| --- | --- | --- | --- |
+| `REQUEST_ID_INVALID` | `request.id.invalid` | 400 | missing/blank `requestId` before claim |
+| `REQUEST_ID_DUPLICATE_SUCCESS` | `request.id.duplicate.success` | 409 | UK on `REQUEST_ID` |
+| `INTERNAL_REQUEST_RESPONSE_NOT_FOUND` | `internal.request.response.not.found` | 422/`BusinessException` | inquiry miss |
+| `RECORD_NOT_FOUND` | `record.not.found` | 422 | unknown/inactive `TBL_BUSINESS_OPERATION` |
+
+Port the exception types + `RaiseError` + `Response` + `@RestControllerAdvice`
+mapping used in deposit (`ConflictException`→409, `BadRequestException`→400,
+`BusinessException`→422). Add matching `messages*.properties` keys. Error **codes**
+may use the destination module prefix; keys/behavior stay the same.
+
+## Config notes
+
+- Register filter only via `FilterRegistrationBean` (avoid double registration).
+- URL pattern: destination command prefix (deposit uses `/v2/*`).
+- Seed `crm.TBL_BUSINESS_OPERATION` rows whose `OPERATION_NAME` equals each
+  `LoggedBusinessOperation.name()` before enabling `@LoggedOperation` endpoints.
+  Use `crm.SEQ_BUSINESS_OPERATION_ID.NEXTVAL` for `ID`.
+
+## OperatorId from token (destination TODO)
+
+Leave `resolveOperatorId` as the single extension point. When implementing in
+the other project, extract operator/user id from the authenticated token /
+`SecurityContext` inside that method (or a dedicated resolver bean injected
+into the filter). Do not document a header fallback.
+
+## SQL
+
+Run `.cursor/rules/crm-internal-request-response-log-schema.sql` on the
+destination Oracle DB (schema `crm`).

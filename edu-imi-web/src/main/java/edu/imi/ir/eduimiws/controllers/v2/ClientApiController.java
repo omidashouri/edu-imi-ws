@@ -1,11 +1,15 @@
 package edu.imi.ir.eduimiws.controllers.v2;
 
-import edu.imi.ir.eduimiws.mapper.crm.ClientApiMapper;
-import edu.imi.ir.eduimiws.models.request.ClientApiCreateRequest;
-import edu.imi.ir.eduimiws.models.request.ClientApiUpdateRequest;
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
+import edu.imi.ir.eduimiws.mapper.crm.v2.ClientApiMapper;
+import edu.imi.ir.eduimiws.models.request.crm.v2.ClientApiCreateRequest;
+import edu.imi.ir.eduimiws.models.request.crm.v2.ClientApiUpdateRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
-import edu.imi.ir.eduimiws.models.response.crm.ClientApiResponse;
-import edu.imi.ir.eduimiws.services.crm.ClientApiService;
+import edu.imi.ir.eduimiws.models.response.Response;
+import edu.imi.ir.eduimiws.models.response.crm.v2.ClientApiCreateResponse;
+import edu.imi.ir.eduimiws.models.response.crm.v2.ClientApiResponse;
+import edu.imi.ir.eduimiws.services.crm.v2.ClientApiService;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,18 +48,21 @@ public class ClientApiController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
-                    content = @Content(schema = @Schema(implementation = ClientApiResponse.class))),
+                    content = @Content(schema = @Schema(implementation = ClientApiCreateResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "404", description = "Person not found",
                     content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
+    @LoggedOperation(LoggedBusinessOperation.CLIENT_CREATE)
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V2_CRM_CLIENT_CREATE')")
-    public ResponseEntity<ClientApiResponse> createClient(@RequestBody ClientApiCreateRequest request) {
-        return ResponseEntity.ok(clientApiMapper.toClientApiResponse(clientApiService.create(request)));
+    public ResponseEntity<Response<ClientApiCreateResponse>> createClient(@RequestBody ClientApiCreateRequest request) {
+        return ResponseEntity.ok(Response.<ClientApiCreateResponse>builder()
+                .responseDto(clientApiMapper.toClientApiCreateResponse(clientApiService.create(request)))
+                .build());
     }
 
     @Operation(

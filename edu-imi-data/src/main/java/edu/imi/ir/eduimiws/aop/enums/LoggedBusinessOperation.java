@@ -1,0 +1,20 @@
+package edu.imi.ir.eduimiws.aop.enums;
+
+/**
+ * Enum constant {@link #name()} must match {@code TBL_BUSINESS_OPERATION.OPERATION_NAME}.
+ */
+public enum LoggedBusinessOperation {
+    USER_REGISTER,
+    CLIENT_CREATE,
+    PRIVILEGE_CREATE,
+    ROLE_CREATE,
+    PAYMENT_CODE_REQUEST,
+    PROJECT_DEPOSIT_CODE_API_REQUEST,
+    CONTACT_FOR_PAYMENT_CODE,
+    ACCOUNT_FOR_PAYMENT_CODE,
+    PERIOD_CREATE,
+    FIELD_CREATE,
+    STUDENT_CREATE,
+    REGISTER_CREATE,
+    FARAPAYAMAK_SEND_SMS
+}

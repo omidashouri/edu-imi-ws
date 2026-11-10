@@ -1,11 +1,12 @@
 package edu.imi.ir.eduimiws.models.request.edu.v1;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
+import edu.imi.ir.eduimiws.models.request.v2.BaseRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.springframework.hateoas.server.core.Relation;
 
 @Schema(name = "register", description = "Register student in period")
@@ -14,8 +15,8 @@ import org.springframework.hateoas.server.core.Relation;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class RegisterForm {
+@SuperBuilder
+public class RegisterForm extends BaseRequestDto {
 
     private String studentPublicId;
     private String periodPublicId;

@@ -1,12 +1,12 @@
 package edu.imi.ir.eduimiws.controllers.v2;
 
-import edu.imi.ir.eduimiws.mapper.crm.AuthTokenResponseMapper;
-import edu.imi.ir.eduimiws.models.request.ClientTokenRequestModel;
-import edu.imi.ir.eduimiws.models.request.RefreshTokenRequestModel;
+import edu.imi.ir.eduimiws.mapper.crm.v2.AuthTokenResponseMapper;
+import edu.imi.ir.eduimiws.models.request.crm.v2.ClientTokenRequestModel;
+import edu.imi.ir.eduimiws.models.request.crm.v2.RefreshTokenRequestModel;
 import edu.imi.ir.eduimiws.models.request.UserLoginRequestModel;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
-import edu.imi.ir.eduimiws.models.response.crm.AuthTokenResponse;
-import edu.imi.ir.eduimiws.services.AuthTokenService;
+import edu.imi.ir.eduimiws.models.response.crm.v2.AuthTokenResponse;
+import edu.imi.ir.eduimiws.services.v2.AuthTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

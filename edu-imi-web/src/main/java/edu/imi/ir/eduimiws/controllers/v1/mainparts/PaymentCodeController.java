@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1.mainparts;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
 import edu.imi.ir.eduimiws.assemblers.mainparts.PaymentCodeResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.mainparts.PaymentCodeResponseDescriptiveAssembler;
 import edu.imi.ir.eduimiws.domain.mainparts.PaymentCodeApiEntity;
@@ -11,11 +13,13 @@ import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiDtoFarapayamakSendSmsD
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeApiProjectionMapper;
 import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeRequestMapper;
+import edu.imi.ir.eduimiws.mapper.mainparts.PaymentCodeResponseMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.farapayamak.FarapayamakSendSmsDto;
 import edu.imi.ir.eduimiws.models.dto.mainparts.PaymentCodeApiDto;
 import edu.imi.ir.eduimiws.models.projections.mainparts.PaymentCodeApiProjection;
 import edu.imi.ir.eduimiws.models.request.mainparts.PaymentCodeRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeCreateResponse;
 import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponse;
 import edu.imi.ir.eduimiws.models.response.mainparts.PaymentCodeResponseDescriptive;
 import edu.imi.ir.eduimiws.security.DigitalPaymentCredential;
@@ -68,6 +72,7 @@ public class PaymentCodeController {
     private final PagedResourcesAssembler<PaymentCodeApiDto> paymentCodeApiDtoPagedResourcesAssembler;
     private final DigitalPaymentCredential digitalPaymentCredential;
     private final PaymentCodeRequestMapper paymentCodeRequestMapper;
+    private final PaymentCodeResponseMapper paymentCodeResponseMapper;
     private final FarapayamakServiceAsync farapayamakServiceAsync;
     private final PaymentCodeApiDtoFarapayamakSendSmsDtoMapper paymentCodeApiDtoFarapayamakSendSmsDtoMapper;
     private final FarapayamakCredential farapayamakCredential;
@@ -317,6 +322,7 @@ public class PaymentCodeController {
                     )
             }
     )
+    @LoggedOperation(LoggedBusinessOperation.PAYMENT_CODE_REQUEST)
     @PostMapping(path = "/paymentCodeRequest",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PAYMENT_CODE_CREATE')")
@@ -341,8 +347,8 @@ public class PaymentCodeController {
         PaymentCodeApiDto savedPaymentCodeApiDto = paymentCodeMapper
                 .toPaymentCodeApiDto(savedPaymentCodeApi, new CycleAvoidingMappingContext());
 
-        PaymentCodeResponse paymentCodeResponse =
-                paymentCodeResponseAssembler.toModel(savedPaymentCodeApiDto);
+        PaymentCodeCreateResponse paymentCodeResponse =
+                paymentCodeResponseMapper.toPaymentCodeCreateResponse(savedPaymentCodeApiDto, new CycleAvoidingMappingContext());
 
         if (savedPaymentCodeApi.getPayerContact() != null && savedPaymentCodeApi.getPayerContact().getMobilePhone() != null) {
             FarapayamakSendSmsDto farapayamakSendSmsDto = paymentCodeApiDtoFarapayamakSendSmsDtoMapper

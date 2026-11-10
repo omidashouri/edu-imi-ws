@@ -7,6 +7,7 @@ import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiMapper;
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiDto;
 import edu.imi.ir.eduimiws.models.projections.mainparts.ProjectDepositCodeApiProjectionCustomThree;
 import edu.imi.ir.eduimiws.models.projections.mainparts.ProjectDepositCodeApiProjectionCustomTwo;
+import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiCreateRequest;
 import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiRequest;
 import edu.imi.ir.eduimiws.repositories.mainparts.ProjectDepositCodeApiRepository;
 import edu.imi.ir.eduimiws.utilities.ConvertorUtil;
@@ -166,6 +167,17 @@ public class ProjectDepositCodeApiServiceImpl implements ProjectDepositCodeApiSe
         if (isInputNullOrEqualString().test(projectDepositCodeApiRequest.getProjectPublicId()))
             throw new NotAcceptableException("project public id is null");
         log.info("ProjectDepositCodeApiService.validateProjectDepositCodeApiRequestNullInputs - completed");
+    }
+
+    @Override
+    public void validateProjectDepositCodeApiRequestNullInputs(ProjectDepositCodeApiCreateRequest projectDepositCodeApiRequest) {
+        log.info("ProjectDepositCodeApiService.validateProjectDepositCodeApiRequestNullInputs - createRequest: {}", projectDepositCodeApiRequest);
+        if (isInputNullOrEqualString().test(projectDepositCodeApiRequest.getDepositCode()))
+            throw new NotAcceptableException("deposit code is null");
+
+        if (isInputNullOrEqualString().test(projectDepositCodeApiRequest.getProjectPublicId()))
+            throw new NotAcceptableException("project public id is null");
+        log.info("ProjectDepositCodeApiService.validateProjectDepositCodeApiRequestNullInputs - create completed");
     }
 
     @Override

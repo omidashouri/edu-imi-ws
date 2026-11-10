@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
 import edu.imi.ir.eduimiws.assemblers.crm.PrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PrivilegeApiEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.BadRequestException;
@@ -7,8 +9,10 @@ import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.PrivilegeFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.PrivilegeFastDto;
+import edu.imi.ir.eduimiws.models.request.PrivilegeCreateForm;
 import edu.imi.ir.eduimiws.models.request.PrivilegeForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.models.response.crm.PrivilegeCreateResponse;
 import edu.imi.ir.eduimiws.models.response.crm.PrivilegeResponse;
 import edu.imi.ir.eduimiws.services.crm.PrivilegeApiService;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
@@ -221,11 +225,12 @@ public class PrivilegeController {
                     )
             }
     )
+    @LoggedOperation(LoggedBusinessOperation.PRIVILEGE_CREATE)
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_SECURITY_PRIVILEGE_CREATE')")
-    public ResponseEntity<?> createPrivilege(@RequestBody PrivilegeForm privilegeForm) {
+    public ResponseEntity<?> createPrivilege(@RequestBody PrivilegeCreateForm privilegeForm) {
         if (privilegeForm == null || privilegeForm.getPrivilegeName() == null
                 || privilegeForm.getPrivilegeName().isBlank()) {
             throw new BadRequestException("Privilege name is required");
@@ -234,7 +239,7 @@ public class PrivilegeController {
         PrivilegeApiEntity savedPrivilege =
                 privilegeApiService.createPrivilegeByName(privilegeForm.getPrivilegeName());
 
-        PrivilegeResponse returnValue = new PrivilegeResponse();
+        PrivilegeCreateResponse returnValue = new PrivilegeCreateResponse();
         returnValue.setPrivilegePublicId(savedPrivilege.getPrivilegePublicId());
         returnValue.setName(savedPrivilege.getName());
         return ResponseEntity.ok(returnValue);

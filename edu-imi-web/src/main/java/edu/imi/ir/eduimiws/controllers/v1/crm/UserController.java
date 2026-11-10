@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1.crm;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
 import edu.imi.ir.eduimiws.assemblers.crm.UserResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.crm.UserRolePrivilegeResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.PersonApiEntity;
@@ -16,6 +18,7 @@ import edu.imi.ir.eduimiws.models.dto.crm.UserFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.request.UserRegister;
+import edu.imi.ir.eduimiws.models.response.crm.UserCreateResponse;
 import edu.imi.ir.eduimiws.models.request.UserRolePrivilege;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
@@ -576,16 +579,14 @@ public class UserController {
             }
     )
     @DisableMethod
+    @LoggedOperation(LoggedBusinessOperation.USER_REGISTER)
     @PostMapping(path = "/register",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_CRM_USER_CREATE')")
     public ResponseEntity<?> createUser(@RequestBody UserRegister userRegister) {
 
-        UserResponse returnValue = new UserResponse();
-        List<PersonEntity> savedPersons = new ArrayList<>();
-        String nationalCode = null;
-        Long userCount;
+        String nationalCode;
 
         if (userRegister.getNationCode().isEmpty()) {
             throw new BadRequestException("national code is null");
@@ -607,17 +608,20 @@ public class UserController {
         PersonEntity newPerson = userService
                 .saveUserByUserFastDto(userFastDto);
 
-//        with new trigger, no more need to this
-/*        savedPersons = userService
-                .generateContactPersonPublicIdByPersons(Arrays.asList(newPerson));*/
+        UserCreateResponse returnValue = new UserCreateResponse();
+        returnValue.setPersonPublicId(newPerson.getPersonApiEntity() != null
+                ? newPerson.getPersonApiEntity().getPersonPublicId() : null);
+        returnValue.setContactPublicId(newPerson.getContact() != null && newPerson.getContact().getContactWebService() != null
+                ? newPerson.getContact().getContactWebService().getContactPublicId() : null);
+        returnValue.setFirstName(newPerson.getFirstName());
+        returnValue.setLastName(newPerson.getLastName());
+        returnValue.setNationCode(newPerson.getContact() != null ? newPerson.getContact().getNationCode() : nationalCode);
+        returnValue.setTel(userRegister.getTel());
+        returnValue.setAddress(userRegister.getAddress());
+        returnValue.setEmail(userRegister.getEmail());
+        returnValue.setUsername(userFastDto.getUsername());
 
-        List<UserFastDto> savedUserFastDto = userFastDtoMapper
-                .toUserFastDtos(savedPersons, new CycleAvoidingMappingContext());
-
-        CollectionModel<UserResponse> userResponseCollectionModel =
-                userResponseAssembler.toCollectionModel(savedUserFastDto);
-
-        return ResponseEntity.ok(userResponseCollectionModel);
+        return ResponseEntity.ok(returnValue);
     }
 
 

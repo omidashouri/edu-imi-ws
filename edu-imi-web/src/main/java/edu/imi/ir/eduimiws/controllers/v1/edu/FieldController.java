@@ -1,5 +1,8 @@
 package edu.imi.ir.eduimiws.controllers.v1.edu;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
+
 import edu.imi.ir.eduimiws.assemblers.edu.FieldResponseFieldDtoAssembler;
 import edu.imi.ir.eduimiws.assemblers.edu.FieldResponseFieldFastDtoAssembler;
 import edu.imi.ir.eduimiws.domain.edu.FieldApiEntity;
@@ -13,8 +16,10 @@ import edu.imi.ir.eduimiws.models.dto.edu.FieldDto;
 import edu.imi.ir.eduimiws.models.dto.edu.FieldFastDto;
 import edu.imi.ir.eduimiws.models.request.RequestOperationName;
 import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
+import edu.imi.ir.eduimiws.models.request.edu.v1.FieldPublicIdCreateRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
+import edu.imi.ir.eduimiws.models.response.v2.OperationStatusCreateResponse;
 import edu.imi.ir.eduimiws.models.response.edu.FieldResponse;
 import edu.imi.ir.eduimiws.services.edu.FieldApiService;
 import edu.imi.ir.eduimiws.services.edu.FieldService;
@@ -505,7 +510,7 @@ public class FieldController {
 
             Link link = WebMvcLinkBuilder
                     .linkTo(methodOn(FieldController.class)
-                            .createFieldApiPublicId())
+                            .createFieldApiPublicId(null))
                     .withRel("new public id");
 
             returnValue.add(link);
@@ -551,12 +556,14 @@ public class FieldController {
             }
     )
     @DisableMethod
+    @LoggedOperation(LoggedBusinessOperation.FIELD_CREATE)
     @PostMapping(path = "/new/publicId",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_EDU_FIELD_GENERATE_PUBLIC_ID')")
-    public ResponseEntity<?> createFieldApiPublicId() {
+    public ResponseEntity<?> createFieldApiPublicId(@RequestBody FieldPublicIdCreateRequest request) {
 
-        OperationStatus returnValue = new OperationStatus();
+        OperationStatusCreateResponse returnValue = new OperationStatusCreateResponse();
         Long fieldApiCount;
         FieldApiEntity fieldApiLastRecord;
         FieldEntity fieldLastRecord;

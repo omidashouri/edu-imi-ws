@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
 import edu.imi.ir.eduimiws.assemblers.crm.RoleResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.RoleApiEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.BadRequestException;
@@ -7,9 +9,11 @@ import edu.imi.ir.eduimiws.exceptions.controllers.NotFoundException;
 import edu.imi.ir.eduimiws.mapper.CycleAvoidingMappingContext;
 import edu.imi.ir.eduimiws.mapper.crm.RoleFastDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.RoleFastDto;
+import edu.imi.ir.eduimiws.models.request.RoleCreateForm;
 import edu.imi.ir.eduimiws.models.request.RoleForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.crm.PrivilegeResponse;
+import edu.imi.ir.eduimiws.models.response.crm.RoleCreateResponse;
 import edu.imi.ir.eduimiws.models.response.crm.RoleResponse;
 import edu.imi.ir.eduimiws.services.crm.RoleApiService;
 import edu.imi.ir.eduimiws.utilities.SwaggerUtil;
@@ -226,16 +230,17 @@ public class RoleController {
                     )
             }
     )
+    @LoggedOperation(LoggedBusinessOperation.ROLE_CREATE)
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_SECURITY_ROLE_CREATE')")
-    public ResponseEntity<?> createRole(@RequestBody RoleForm roleForm) {
+    public ResponseEntity<?> createRole(@RequestBody RoleCreateForm roleForm) {
         if (roleForm == null || roleForm.getRoleName() == null || roleForm.getRoleName().isBlank()) {
             throw new BadRequestException("Role name is required");
         }
         RoleApiEntity savedRole = roleApiService.createRoleByRoleForm(roleForm);
-        return ResponseEntity.ok(toRoleResponse(savedRole));
+        return ResponseEntity.ok(toRoleCreateResponse(savedRole));
     }
 
     @Operation(
@@ -311,6 +316,23 @@ public class RoleController {
 
     private RoleResponse toRoleResponse(RoleApiEntity savedRole) {
         RoleResponse returnValue = new RoleResponse();
+        returnValue.setRolePublicId(savedRole.getRolePublicId());
+        returnValue.setName(savedRole.getName());
+        if (savedRole.getPrivileges() != null && !savedRole.getPrivileges().isEmpty()) {
+            Set<PrivilegeResponse> privilegeResponses = new HashSet<>();
+            savedRole.getPrivileges().forEach(privilege -> {
+                PrivilegeResponse privilegeResponse = new PrivilegeResponse();
+                privilegeResponse.setName(privilege.getName());
+                privilegeResponse.setPrivilegePublicId(privilege.getPrivilegePublicId());
+                privilegeResponses.add(privilegeResponse);
+            });
+            returnValue.setPrivilegeResponses(privilegeResponses);
+        }
+        return returnValue;
+    }
+
+    private RoleCreateResponse toRoleCreateResponse(RoleApiEntity savedRole) {
+        RoleCreateResponse returnValue = new RoleCreateResponse();
         returnValue.setRolePublicId(savedRole.getRolePublicId());
         returnValue.setName(savedRole.getName());
         if (savedRole.getPrivileges() != null && !savedRole.getPrivileges().isEmpty()) {

@@ -1,5 +1,8 @@
 package edu.imi.ir.eduimiws.controllers.v1.edu;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
+
 import edu.imi.ir.eduimiws.assemblers.edu.StudentResponseAssembler;
 import edu.imi.ir.eduimiws.domain.crm.ContactEntity;
 import edu.imi.ir.eduimiws.domain.crm.PersonEntity;
@@ -17,6 +20,7 @@ import edu.imi.ir.eduimiws.models.request.RequestOperationStatus;
 import edu.imi.ir.eduimiws.models.request.edu.v1.StudentForm;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
 import edu.imi.ir.eduimiws.models.response.OperationStatus;
+import edu.imi.ir.eduimiws.models.response.v2.OperationStatusCreateResponse;
 import edu.imi.ir.eduimiws.models.response.edu.StudentResponse;
 import edu.imi.ir.eduimiws.services.crm.PersonService;
 import edu.imi.ir.eduimiws.services.edu.StudentApiService;
@@ -402,13 +406,14 @@ public class StudentController {
             }
     )
     @DisableMethod
+    @LoggedOperation(LoggedBusinessOperation.STUDENT_CREATE)
     @PostMapping(path = "/new",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_EDU_STUDENT_CREATE')")
     public ResponseEntity<?> createNewStudent(@RequestBody StudentForm studentForm) {
 
-        OperationStatus returnValue = new OperationStatus();
+        OperationStatusCreateResponse returnValue = new OperationStatusCreateResponse();
         boolean personNotFound = true;
         long lastStudentCode;
         String studentPublicId;

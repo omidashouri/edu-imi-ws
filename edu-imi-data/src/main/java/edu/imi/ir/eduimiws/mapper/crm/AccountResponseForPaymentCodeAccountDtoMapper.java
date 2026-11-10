@@ -1,6 +1,7 @@
 package edu.imi.ir.eduimiws.mapper.crm;
 
 import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
+import edu.imi.ir.eduimiws.models.response.crm.AccountCreateResponseForPaymentCode;
 import edu.imi.ir.eduimiws.models.response.crm.AccountResponseForPaymentCode;
 import org.mapstruct.*;
 
@@ -21,6 +22,17 @@ public interface AccountResponseForPaymentCodeAccountDtoMapper {
     })
     @BeanMapping(ignoreByDefault = true)
     AccountResponseForPaymentCode accountDtoToAccountResponseForPaymentCode(AccountDto source);
+
+    @Named("accountDtoToAccountCreateResponseForPaymentCode")
+    @Mappings({
+            @Mapping(source = "accountPublicId", target = "accountPublicId"),
+            @Mapping(source = "economicalCode", target = "economicalCode"),
+            @Mapping(source = "accountName", target = "accountName"),
+            @Mapping(source = "mainPhone", target = "mainPhone"),
+            @Mapping(source = "otherPhone", target = "otherPhone")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    AccountCreateResponseForPaymentCode accountDtoToAccountCreateResponseForPaymentCode(AccountDto source);
 
     @IterableMapping(qualifiedByName = "accountDtoToAccountResponseForPaymentCode")
     List<AccountResponseForPaymentCode> accountResponseForPaymentCodeToAccountDtos(List<AccountDto> sources);

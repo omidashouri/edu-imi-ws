@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1.mainparts;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
 import edu.imi.ir.eduimiws.assemblers.mainparts.ProjectDepositCodeApiResponseAssembler;
 import edu.imi.ir.eduimiws.assemblers.mainparts.ProjectDepositCodeApiResponseCustomThreeProjectDepositCodeApiProjectionCustomThreeDtoAssembler;
 import edu.imi.ir.eduimiws.assemblers.mainparts.ProjectDepositCodeApiResponseCustomTwoProjectDepositCodeApiProjectionCustomTwoDtoAssembler;
@@ -15,8 +17,11 @@ import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiProjectionC
 import edu.imi.ir.eduimiws.models.dto.mainparts.ProjectDepositCodeApiProjectionCustomTwoDto;
 import edu.imi.ir.eduimiws.models.projections.mainparts.ProjectDepositCodeApiProjectionCustomThree;
 import edu.imi.ir.eduimiws.models.projections.mainparts.ProjectDepositCodeApiProjectionCustomTwo;
+import edu.imi.ir.eduimiws.mapper.mainparts.ProjectDepositCodeApiResponseMapper;
+import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiCreateRequest;
 import edu.imi.ir.eduimiws.models.request.mainparts.ProjectDepositCodeApiRequest;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiCreateResponse;
 import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponse;
 import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponseCustomThree;
 import edu.imi.ir.eduimiws.models.response.mainparts.ProjectDepositCodeApiResponseCustomTwo;
@@ -63,6 +68,7 @@ public class ProjectDepositCodeApiController {
     private final ProjectDepositCodeApiResponseAssembler projectDepositCodeApiResponseAssembler;
     private final PagedResourcesAssembler<ProjectDepositCodeApiDto> projectDepositCodeApiDtoPagedResourcesAssembler;
     private final ProjectDepositCodeApiRequestMapper depositCodeApiRequestMapper;
+    private final ProjectDepositCodeApiResponseMapper projectDepositCodeApiResponseMapper;
     private final ProjectDepositCodeApiMapper projectDepositCodeApiMapper;
     private final ProjectDepositCodeApiProjectionCustomTwoMapper projectDepositCodeApiProjectionCustomTwoMapper;
     private final ProjectDepositCodeApiProjectionCustomThreeMapper projectDepositCodeApiProjectionCustomThreeMapper;
@@ -132,7 +138,7 @@ public class ProjectDepositCodeApiController {
             description = "Create Project Deposit Code Api Response by Project Public Id and deposit code and description",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(schema = @Schema(implementation = ProjectDepositCodeApiRequest.class))
+                    content = @Content(schema = @Schema(implementation = ProjectDepositCodeApiCreateRequest.class))
             )
     )
     @Tags(value = {
@@ -164,10 +170,11 @@ public class ProjectDepositCodeApiController {
                     )
             }
     )
+    @LoggedOperation(LoggedBusinessOperation.PROJECT_DEPOSIT_CODE_API_REQUEST)
     @PostMapping(path = "/projectDepositCodeApiRequest",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_MAINPARTS_PROJECT_DEPOSIT_CODE_CREATE')")
-    public ResponseEntity<?> createProjectDepositCodeApiRequest(@RequestBody ProjectDepositCodeApiRequest projectDepositCodeApiRequest) {
+    public ResponseEntity<?> createProjectDepositCodeApiRequest(@RequestBody ProjectDepositCodeApiCreateRequest projectDepositCodeApiRequest) {
 
 
         projectDepositCodeApiService.validateProjectDepositCodeApiRequestNullInputs(projectDepositCodeApiRequest);
@@ -183,12 +190,12 @@ public class ProjectDepositCodeApiController {
         ProjectDepositCodeApiDto savedProjectDepositCodeApiDto =
                 projectDepositCodeApiService.save(projectDepositCodeApiDto);
 
-        ProjectDepositCodeApiResponse projectDepositCodeApiResponse =
-                projectDepositCodeApiResponseAssembler.toModel(savedProjectDepositCodeApiDto);
+        ProjectDepositCodeApiCreateResponse projectDepositCodeApiResponse =
+                projectDepositCodeApiResponseMapper.toProjectDepositCodeApiCreateResponse(savedProjectDepositCodeApiDto);
 
         //        todo: optional for sending SMS
 
-        changeInstanceToPersianCharAndNum(List.of(projectDepositCodeApiResponse));
+        convertorUtil.changeInstanceCharAndNumSetByType(projectDepositCodeApiResponse, "persian");
 
         return ResponseEntity.ok(projectDepositCodeApiResponse);
     }

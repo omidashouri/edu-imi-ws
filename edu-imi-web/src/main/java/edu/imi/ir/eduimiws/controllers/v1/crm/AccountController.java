@@ -1,5 +1,7 @@
 package edu.imi.ir.eduimiws.controllers.v1.crm;
 
+import edu.imi.ir.eduimiws.aop.annotation.LoggedOperation;
+import edu.imi.ir.eduimiws.aop.enums.LoggedBusinessOperation;
 import edu.imi.ir.eduimiws.assemblers.crm.AccountResponseForPaymentCodeAssembler;
 import edu.imi.ir.eduimiws.domain.crm.AccountEntity;
 import edu.imi.ir.eduimiws.exceptions.controllers.NotAcceptableException;
@@ -10,8 +12,10 @@ import edu.imi.ir.eduimiws.mapper.crm.AccountRequestForPaymentCodeAccountDtoMapp
 import edu.imi.ir.eduimiws.mapper.crm.AccountResponseForPaymentCodeAccountDtoMapper;
 import edu.imi.ir.eduimiws.models.dto.crm.AccountDto;
 import edu.imi.ir.eduimiws.models.helper.DefaultValues;
+import edu.imi.ir.eduimiws.models.request.crm.AccountCreateRequestForPaymentCode;
 import edu.imi.ir.eduimiws.models.request.crm.AccountRequestForPaymentCode;
 import edu.imi.ir.eduimiws.models.response.ErrorMessage;
+import edu.imi.ir.eduimiws.models.response.crm.AccountCreateResponseForPaymentCode;
 import edu.imi.ir.eduimiws.models.response.crm.AccountResponseForPaymentCode;
 import edu.imi.ir.eduimiws.services.crm.AccountService;
 import edu.imi.ir.eduimiws.services.crm.CompanyService;
@@ -314,7 +318,7 @@ public class AccountController {
             description = "Create account for Payment Code",
             security = @SecurityRequirement(name = "imi-security-key"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(schema = @Schema(implementation = AccountRequestForPaymentCode.class))
+                    content = @Content(schema = @Schema(implementation = AccountCreateRequestForPaymentCode.class))
             )
     )
     @ApiResponses(
@@ -342,11 +346,12 @@ public class AccountController {
                     )
             }
     )
+    @LoggedOperation(LoggedBusinessOperation.ACCOUNT_FOR_PAYMENT_CODE)
     @PostMapping(path = "/forPaymentCode",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasAuthority('API_V1_CRM_ACCOUNT_CREATE_FOR_PAYMENT_CODE')")
-    public ResponseEntity<?> createAccountForPaymentCode(@RequestBody AccountRequestForPaymentCode
+    public ResponseEntity<?> createAccountForPaymentCode(@RequestBody AccountCreateRequestForPaymentCode
                                                                  accountRequestForPaymentCode) {
 
         Page<AccountDto> accountDtoPage = null;
@@ -365,7 +370,7 @@ public class AccountController {
         }
 
         AccountDto newAccountDto = accountRequestForPaymentCodeAccountDtoMapper
-                .accountRequestForPaymentCodeToAccountDto(accountRequestForPaymentCode);
+                .accountCreateRequestForPaymentCodeToAccountDto(accountRequestForPaymentCode);
 
         accountRequestForPaymentCodeAccountDtoMapper
                 .setDefaultCompanyForCreateAccountDto(newAccountDto, companyService);
@@ -374,8 +379,8 @@ public class AccountController {
 
         AccountDto foundAccountDto = accountService.findAccountById(savedAccountDto.getId());
 
-        AccountResponseForPaymentCode accountResponseForPaymentCode = accountResponseForPaymentCodeAccountDtoMapper
-                .accountDtoToAccountResponseForPaymentCode(foundAccountDto);
+        AccountCreateResponseForPaymentCode accountResponseForPaymentCode = accountResponseForPaymentCodeAccountDtoMapper
+                .accountDtoToAccountCreateResponseForPaymentCode(foundAccountDto);
 
         convertorUtil.changeInstanceCharAndNumSetByType(accountResponseForPaymentCode, "persian");
 
